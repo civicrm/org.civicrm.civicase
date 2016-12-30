@@ -1,0 +1,31 @@
+/* CSS rules for Angular module "civicase" */
+#bootstrap-theme .cb-dot {
+  position: absolute;
+  left: -1.5em;
+  top: -.3em;
+  width: 3em;
+  height: 3em;
+  background-color: blue;
+  border-radius: 1.5em;
+  color: white;
+  font-size: 1.75em;
+  text-align: center;
+  padding-top: .2em;
+  border: .5em solid white;
+}
+
+#bootstrap-theme a.cb-activity-feed-item {
+  margin-left: 1em;
+  padding-left: 3em;
+  border-top: 0 none;
+  border-right: 0 none;
+  border-bottom: 0 none;
+}
+
+#bootstrap-theme .cb-activity-feed-item h4 .cc-subject {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+  margin-right: 2em;
+}

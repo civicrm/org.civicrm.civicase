@@ -1,47 +1,24 @@
-<div class="crm-container">
-  <div crm-ui-debug="myContact"></div>
+<div crm-ui-debug="activities"></div>
+<div id="bootstrap-theme">
 
-  <form name="myForm" crm-ui-id-scope>
-
-    <div class="help">
-      <p>{{ts('This is an auto-generated skeletal page.')}}</p>
-
-      <p>{{ts('To view more debugging information, edit the URL and include "?angularDebug=1".')}}</p>
-    </div>
-
-    <div crm-ui-accordion="{title: ts('Greeting')}">
-      <p ng-show="myContact.first_name">{{ ts('Hello, %1.', {1: myContact.first_name}) }}</p>
-
-      <p ng-show="!myContact.first_name">{{ ts('Hello, stranger.') }}</p>
-    </div>
-
-    <div crm-ui-accordion="{title: ts('About Me')}">
-      <div class="crm-block">
-        <div class="crm-group">
-          <div crm-ui-field="{name: 'myForm.first_name', title: ts('Name'), help: hs('full_name')}">
-            <input
-              crm-ui-id="myForm.first_name"
-              name="first_name"
-              ng-model="myContact.first_name"
-              class="crm-form-text"
-              placeholder="{{ts('First')}}"
-              />
-            <input
-              crm-ui-id="myForm.last_name"
-              name="last_name"
-              ng-model="myContact.last_name"
-              class="crm-form-text"
-              placeholder="{{ts('Last')}}"
-              />
+  <div class="panel panel-default" >
+    <div class="panel-body">
+      <div class="list-group">
+        <a href="#" class="list-group-item cb-activity-feed-item" ng-repeat="activity in activities" ng-click="">
+          <div class="cb-dot" title="{{ activity['activity_type_id.label'] }} ({{ activity['status_id.label'] }})">
+            <i class="fa {{ activity['activity_type_id.icon'] }}"></i>
           </div>
-        </div>
-      </div>
-
-      <div>
-        <button ng-click="save()">{{ts('Save')}}</button>
+          <h4>
+            <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
+            <span class="act-subject" ng-if="!activity.subject">{{ activity['activity_type_id.label'] }}</span>
+            <span class="act-star">
+              <i class="crm-i fa-star-o"></i>
+            </span>
+          </h4>
+          <div class="act-details" ng-bind-html="activity.details">
+          </div>
+        </a>
       </div>
     </div>
-
-  </form>
-
+  </div>
 </div>
