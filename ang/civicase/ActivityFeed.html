@@ -1,24 +1,78 @@
 <div crm-ui-debug="activities"></div>
 <div id="bootstrap-theme">
 
-  <div class="panel panel-default" >
+  <div class="panel panel-default">
+    <div class="panel-header">
+      <form class="form-inline act-filters">
+        <div class="btn-group btn-group-sm">
+          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">{{ ts('Filters') }} &nbsp; <span class="caret"></span></button>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="(name, label) in availableFilters">
+              <input type="checkbox" id="availableFilter_{{ name }}" ng-model="exposedFilters[name]" />
+              <label for="availableFilter_{{ name }}">{{ label }}</label>
+            </li>
+          </ul>
+        </div>
+        <input class="form-control" crm-entityref="{entity: 'OptionValue', api: {params: {option_group_id: 'activity_type'}}, select: {allowClear: true, multiple: true, placeholder: availableFilters.activity_type_id}}" ng-model="filters.activity_type_id" ng-show="exposedFilters.activity_type_id" />
+        <input class="form-control" crm-entityref="{entity: 'OptionValue', api: {params: {option_group_id: 'activity_status'}}, select: {allowClear: true, multiple: true, placeholder: availableFilters.status_id}}" ng-model="filters.status_id" ng-show="exposedFilters.status_id" />
+        <input type="search" class="form-control" placeholder="{{ ts('Subject') }}" ng-model="filters.subject" ng-show="exposedFilters.subject" />
+        <input type="search" class="form-control" placeholder="{{ ts('Details') }}" ng-model="filters.details" ng-show="exposedFilters.details" />
+        <input class="form-control" crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('With')}}" ng-model="filters.target_contact_id" ng-show="exposedFilters.target_contact_id" />
+        <input class="form-control" crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('Assigned to')}}" ng-model="filters.assignee_contact_id" ng-show="exposedFilters.assignee_contact_id" />
+        <input class="form-control" crm-entityref="{entity: 'Tag', api: {params: {used_for: {LIKE: '%civicrm_activity%'}}}, select: {allowClear: true, multiple: true, placeholder: ts('Tagged')}}" ng-model="filters.tag_id" ng-show="exposedFilters.tag_id" />
+        <input class="form-control" crm-entityref="{entity: 'Campaign', select: {allowClear: true, multiple: true, placeholder: ts('Campaign')}}" ng-model="filters.campaign_id" ng-show="exposedFilters.campaign_id" />
+      </form>
+    </div>
     <div class="panel-body">
-      <div class="list-group">
-        <a href="#" class="list-group-item cb-activity-feed-item" ng-repeat="activity in activities" ng-click="">
-          <div class="cb-dot" title="{{ activity['activity_type_id.label'] }} ({{ activity['status_id.label'] }})">
-            <i class="fa {{ activity['activity_type_id.icon'] }}"></i>
-          </div>
-          <h4>
-            <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
-            <span class="act-subject" ng-if="!activity.subject">{{ activity['activity_type_id.label'] }}</span>
-            <span class="act-star">
-              <i class="crm-i fa-star-o"></i>
-            </span>
+      <ul class="list-group act-feed-list-group">
+        <li href="#" class="list-group-item" ng-repeat="activity in activities" ng-click="">
+          <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, activities[$index-1].activity_date_time)">
+            {{ CRM.utils.formatDate(activity.activity_date_time) }}
           </h4>
-          <div class="act-details" ng-bind-html="activity.details">
+          <div class="act-feed-item">
+            <div class="cb-dot" title="{{ activity['activity_type_id.label'] }} ({{ activity['status_id.label'] }})" style="background-color: {{ activity['status_id.color'] }};">
+              <i class="fa {{ activity['activity_type_id.icon'] }}"></i>
+            </div>
+            <h4>
+              <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
+              <span class="act-subject" ng-if="!activity.subject">{{ activity['activity_type_id.label'] }}</span>
+              <a class="act-star" ng-click="star()" href="#">
+                <i class="crm-i fa-star-o" title="{{ ts('Add star') }}"></i>
+              </a>
+              <a class="act-attachment" ng-repeat="file in activity['api.Attachment.get'].values" title="{{ file.name }}" href="{{ file.url }}">
+                <i class="crm-i fa-paperclip"></i>
+              </a>
+            </h4>
+            <div class="act-tags">
+              <span
+                class="label label-default"
+                ng-repeat="tag in activity['api.EntityTag.get'].values"
+                style="background-color: {{ tag['tag_id.color'] }};"
+                title="{{ tag['tag_id.description'] }}"
+              >
+                {{ tag['tag_id.name'] }}
+              </span>
+            </div>
+            <div class="act-details" ng-bind-html="activity.details"></div>
+            <div class="act-contacts clearfix">
+              <div class="act-contacts-target" ng-if="activity.target_contact_name">
+                <strong>{{ ts('With:') }}</strong>
+                <span ng-repeat="(cid, display_name) in activity.target_contact_name">
+                  <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
+                  {{$last ? '' : ', '}}
+                </span>
+              </div>
+              <div class="act-contacts-assignee" ng-if="activity.assignee_contact_name">
+                <strong>{{ ts('Assigned to:') }}</strong>
+                <span ng-repeat="(cid, display_name) in activity.assignee_contact_name">
+                  <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
+                  {{$last ? '' : ', '}}
+                </span>
+              </div>
+            </div>
           </div>
-        </a>
-      </div>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
