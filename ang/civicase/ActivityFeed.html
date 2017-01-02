@@ -31,10 +31,13 @@
           </h4>
           <div class="act-feed-item">
             <div class="cb-dot" title="{{ activity['activity_type_id.label'] }} ({{ activity['status_id.label'] }})" style="background-color: {{ activity['status_id.color'] }};">
-              <i class="fa {{ activity['activity_type_id.icon'] }}"></i>
+              <i ng-if="activity['activity_type_id.icon']" class="fa {{ activity['activity_type_id.icon'] }}"></i>
+              <strong ng-if="!activity['activity_type_id.icon']">{{ activity['activity_type_id.label'][0] }}</strong>
             </div>
             <div class="act-actions-menu btn-group btn-group-sm">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="crm-i fa-ellipsis-v"></span></button>
+              <button type="button" class="btn btn-default dropdown-toggle act-actions-button" data-toggle="dropdown" title="{{ ts('Actions') }}">
+                <span class="crm-i fa-ellipsis-v"></span>
+              </button>
               <ul class="dropdown-menu dropdown-menu-right" role="menu">
                 <li><a class="crm-popup" href="{{ CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('View') }}</a></li>
                 <li><a class="crm-popup" href="{{ CRM.url('civicrm/activity/add', {action: 'update', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('Edit') }}</a></li>
