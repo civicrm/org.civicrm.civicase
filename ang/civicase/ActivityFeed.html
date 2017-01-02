@@ -33,6 +33,14 @@
             <div class="cb-dot" title="{{ activity['activity_type_id.label'] }} ({{ activity['status_id.label'] }})" style="background-color: {{ activity['status_id.color'] }};">
               <i class="fa {{ activity['activity_type_id.icon'] }}"></i>
             </div>
+            <div class="act-actions-menu btn-group btn-group-sm">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="crm-i fa-ellipsis-v"></span></button>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a class="crm-popup" href="{{ CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('View') }}</a></li>
+                <li><a class="crm-popup" href="{{ CRM.url('civicrm/activity/add', {action: 'update', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('Edit') }}</a></li>
+                <li><a class="crm-popup small-popup" href="{{ CRM.url('civicrm/activity', {action: 'delete', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('Delete') }}</a></li>
+              </ul>
+            </div>
             <h4>
               <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
               <span class="act-subject" ng-if="!activity.subject">{{ activity['activity_type_id.label'] }}</span>

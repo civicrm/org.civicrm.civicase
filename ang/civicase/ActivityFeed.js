@@ -57,7 +57,7 @@
         sequential: 1,
         activity_type_id: {'<' : 4},
         options: {sort: 'activity_date_time DESC'},
-        return: ['subject', 'details', 'activity_type_id.label', 'activity_type_id.icon', 'status_id.label', 'status_id.color', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time'],
+        return: ['subject', 'details', 'activity_type_id', 'activity_type_id.label', 'activity_type_id.icon', 'status_id.label', 'status_id.color', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time'],
         "api.EntityTag.get": {entity_table: 'civicrm_activity', return: ['tag_id.name', 'tag_id.color', 'tag_id.description']},
         "api.Attachment.get": {entity_table: 'civicrm_activity'}
       };
@@ -84,6 +84,11 @@
         }
       });
     });
+
+    // Respond to activities edited in popups.
+    // Fixme - properly scope event listner
+    $('#crm-container').on('crmPopupFormSuccess', getActivities);
+
   });
 
 })(angular, CRM.$, CRM._);
