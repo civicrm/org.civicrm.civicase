@@ -13,8 +13,8 @@
             </li>
           </ul>
         </div>
-        <input class="form-control" crm-entityref="{entity: 'OptionValue', api: {params: {option_group_id: 'activity_type'}}, select: {allowClear: true, multiple: true, placeholder: availableFilters.activity_type_id}}" ng-model="filters.activity_type_id" ng-show="exposedFilters.activity_type_id" />
-        <input class="form-control" crm-entityref="{entity: 'OptionValue', api: {params: {option_group_id: 'activity_status'}}, select: {allowClear: true, multiple: true, placeholder: availableFilters.status_id}}" ng-model="filters.status_id" ng-show="exposedFilters.status_id" />
+        <input class="form-control" crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.activity_type_id, data: activityTypeOptions}" ng-model="filters.activity_type_id" ng-show="exposedFilters.activity_type_id" />
+        <input class="form-control" crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.status_id, data: activityStatusOptions}" ng-model="filters.status_id" ng-show="exposedFilters.status_id" />
         <input type="search" class="form-control" placeholder="{{ ts('Subject') }}" ng-model="filters.subject" ng-show="exposedFilters.subject" />
         <input type="search" class="form-control" placeholder="{{ ts('Details') }}" ng-model="filters.details" ng-show="exposedFilters.details" />
         <input class="form-control" crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('With')}}" ng-model="filters.target_contact_id" ng-show="exposedFilters.target_contact_id" />
@@ -30,9 +30,9 @@
             {{ CRM.utils.formatDate(activity.activity_date_time) }}
           </h4>
           <div class="act-feed-item">
-            <div class="cb-dot" title="{{ activity['activity_type_id.label'] }} ({{ activity['status_id.label'] }})" style="background-color: {{ activity['status_id.color'] }};">
-              <i ng-if="activity['activity_type_id.icon']" class="fa {{ activity['activity_type_id.icon'] }}"></i>
-              <strong ng-if="!activity['activity_type_id.icon']">{{ activity['activity_type_id.label'][0] }}</strong>
+            <div class="cb-dot" title="{{ activityTypes[activity.activity_type_id].label }} ({{ activityStatuses[activity.status_id].label }})" style="background-color: {{ activityStatuses[activity.status_id].color }};">
+              <i ng-if="activityTypes[activity.activity_type_id].icon" class="fa {{ activityTypes[activity.activity_type_id].icon }}"></i>
+              <strong ng-if="!activityTypes[activity.activity_type_id].icon">{{ activityTypes[activity.activity_type_id].label[0] }}</strong>
             </div>
             <div class="act-actions-menu btn-group btn-group-sm">
               <button type="button" class="btn btn-default dropdown-toggle act-actions-button" data-toggle="dropdown" title="{{ ts('Actions') }}">
@@ -46,9 +46,10 @@
             </div>
             <h4>
               <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
-              <span class="act-subject" ng-if="!activity.subject">{{ activity['activity_type_id.label'] }}</span>
-              <a class="act-star" ng-click="star()" href="#">
-                <i class="crm-i fa-star-o" title="{{ ts('Add star') }}"></i>
+              <span class="act-subject" ng-if="!activity.subject">{{ activityTypes[activity.activity_type_id].label }}</span>
+              <a class="act-star" ng-click="star(activity)" href>
+                <i class="crm-i fa-star-o" ng-if="activity.is_star === '0'" title="{{ ts('Add star') }}"></i>
+                <i class="crm-i fa-star" ng-if="activity.is_star === '1'" title="{{ ts('Unstar') }}"></i>
               </a>
               <a class="act-attachment" ng-repeat="file in activity['api.Attachment.get'].values" title="{{ file.name }}" href="{{ file.url }}">
                 <i class="crm-i fa-paperclip"></i>
