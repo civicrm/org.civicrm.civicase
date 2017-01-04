@@ -70,7 +70,8 @@
 
     $scope.star = function star(act) {
       act.is_star = act.is_star === '1' ? '0' : '1';
-      crmApi('Activity', 'create', {id: act.id, is_star: act.is_star}, {});
+      // Setvalue api avoids messy revisioning issues
+      crmApi('Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}, {});
     };
 
     $scope.isSameDate = function(d1, d2) {

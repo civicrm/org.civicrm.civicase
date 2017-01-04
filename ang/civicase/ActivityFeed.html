@@ -47,12 +47,11 @@
             <h4>
               <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
               <span class="act-subject" ng-if="!activity.subject">{{ activityTypes[activity.activity_type_id].label }}</span>
-              <a class="act-star" ng-click="star(activity)" href>
+              <a class="act-star crm-i" ng-click="star(activity)" href>
                 <i class="crm-i fa-star-o" ng-if="activity.is_star === '0'" title="{{ ts('Add star') }}"></i>
                 <i class="crm-i fa-star" ng-if="activity.is_star === '1'" title="{{ ts('Unstar') }}"></i>
               </a>
-              <a class="act-attachment" ng-repeat="file in activity['api.Attachment.get'].values" title="{{ file.name }}" href="{{ file.url }}">
-                <i class="crm-i fa-paperclip"></i>
+              <a class="act-attachment fa fa-paperclip" ng-repeat="file in activity['api.Attachment.get'].values" title="{{ file.name }}" href="{{ file.url }}">
               </a>
             </h4>
             <div class="act-tags">

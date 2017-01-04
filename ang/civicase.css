@@ -70,6 +70,21 @@
   color: #ECA67F;
 }
 
+#bootstrap-theme .act-feed-list-group .act-star:hover,
+#bootstrap-theme .act-feed-list-group .act-star:focus {
+  color: #f1965a;
+}
+
+#bootstrap-theme .act-feed-list-group .act-attachment {
+  margin-right: .2em;
+  color: inherit;
+}
+
+#bootstrap-theme .act-feed-list-group .act-attachment:hover,
+#bootstrap-theme .act-feed-list-group .act-attachment:focus {
+  color: #2a8197;
+}
+
 #bootstrap-theme .act-feed-list-group .act-details {
   overflow: hidden;
   max-height: 9em;
