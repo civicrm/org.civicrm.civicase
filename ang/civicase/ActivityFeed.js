@@ -4,14 +4,11 @@
       $routeProvider.when('/activity/feed', {
         controller: 'CivicaseActivityFeed',
         templateUrl: '~/civicase/ActivityFeed.html',
-
-        // If you need to look up data when opening the page, list it out
-        // under "resolve".
         resolve: {
           data: function(crmApi) {
             return crmApi({
-              statuses: ['optionValue', 'get', {options: {limit: 0}, 'option_group_id': 'activity_status'}],
-              types: ['optionValue', 'get', {options: {limit: 0}, 'option_group_id': 'activity_type'}]
+              statuses: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_status'}],
+              types: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_type'}]
             });
           }
         }
@@ -19,9 +16,7 @@
     }
   );
 
-  // The controller uses *injection*. This default injects a few things:
-  //   $scope -- This is the set of variables shared between JS and HTML.
-  //   crmApi, crmStatus, crmUiHelp -- These are services provided by civicrm-core.
+  // ActivityFeed controller
   angular.module('civicase').controller('CivicaseActivityFeed', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, data) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
@@ -79,10 +74,10 @@
     };
 
     function getActivities() {
-      $('.panel-body').block();
+      $('.act-feed-panel .panel-body').block();
       crmThrottle(_loadActivities).then(function(result) {
         $scope.activities = result.values;
-        $('.panel-body').unblock();
+        $('.act-feed-panel .panel-body').unblock();
       });
     }
 
@@ -119,8 +114,7 @@
     });
 
     // Respond to activities edited in popups.
-    // Fixme - properly scope event listner
-    $('#crm-container').on('crmPopupFormSuccess', getActivities);
+    $('#crm-container').on('crmPopupFormSuccess', '.act-feed-panel', getActivities);
 
   });
 
