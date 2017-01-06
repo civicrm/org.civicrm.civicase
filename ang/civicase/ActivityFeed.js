@@ -23,24 +23,20 @@
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
     $scope.CRM = CRM;
 
-    function makeSelectOptions(opts) {
-      var out = [];
-      _.each(opts, function(opt) {
-        out.push({
-          id: opt.value,
-          text: opt.label,
-          color: opt.color,
-          icon: opt.icon
-        });
-      });
-      return out;
+    function mapSelectOptions(opt) {
+      return {
+        id: opt.value,
+        text: opt.label,
+        color: opt.color,
+        icon: opt.icon
+      };
     }
 
     // We have data available in JS. We also want to reference in HTML.
     activityTypes = $scope.activityTypes = _.indexBy(data.types.values, 'value');
     activityStatuses = $scope.activityStatuses = _.indexBy(data.statuses.values, 'value');
-    $scope.activityTypeOptions = makeSelectOptions(data.types.values);
-    $scope.activityStatusOptions = makeSelectOptions(data.statuses.values);
+    $scope.activityTypeOptions = _.map(data.types.values, mapSelectOptions);
+    $scope.activityStatusOptions = _.map(data.statuses.values, mapSelectOptions);
     $scope.activities = {};
 
     $scope.availableFilters = {
@@ -58,10 +54,14 @@
 
     $scope.filters = {};
 
-    $scope.exposedFilters = {
-      activity_type_id: true,
-      status_id: true
-    };
+    if (window.localStorage && localStorage.getItem('activityFeedFilters')) {
+      $scope.exposedFilters = JSON.parse(localStorage.getItem('activityFeedFilters'));
+    } else {
+      $scope.exposedFilters = {
+        activity_type_id: true,
+        status_id: true
+      };
+    }
 
     $scope.star = function star(act) {
       act.is_star = act.is_star === '1' ? '0' : '1';
@@ -106,6 +106,9 @@
     $scope.$watchCollection('filters', getActivities);
 
     $scope.$watchCollection('exposedFilters', function() {
+      if (window.localStorage) {
+        localStorage.setItem('activityFeedFilters', JSON.stringify($scope.exposedFilters));
+      }
       _.each($scope.filters, function(val, key) {
         if (val && !$scope.exposedFilters[key]) {
           delete $scope.filters[key];
