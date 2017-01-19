@@ -54,14 +54,10 @@
 
     $scope.filters = {};
 
-    if (window.localStorage && localStorage.getItem('activityFeedFilters')) {
-      $scope.exposedFilters = JSON.parse(localStorage.getItem('activityFeedFilters'));
-    } else {
-      $scope.exposedFilters = {
-        activity_type_id: true,
-        status_id: true
-      };
-    }
+    $scope.exposedFilters = CRM.cache.get('activityFeedFilters', {
+      activity_type_id: true,
+      status_id: true
+    });
 
     $scope.star = function star(act) {
       act.is_star = act.is_star === '1' ? '0' : '1';
@@ -106,9 +102,7 @@
     $scope.$watchCollection('filters', getActivities);
 
     $scope.$watchCollection('exposedFilters', function() {
-      if (window.localStorage) {
-        localStorage.setItem('activityFeedFilters', JSON.stringify($scope.exposedFilters));
-      }
+      CRM.cache.set('activityFeedFilters', $scope.exposedFilters);
       _.each($scope.filters, function(val, key) {
         if (val && !$scope.exposedFilters[key]) {
           delete $scope.filters[key];
