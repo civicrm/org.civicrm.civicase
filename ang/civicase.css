@@ -5,7 +5,7 @@
   top: -.9em;
   width: 2.7em;
   height: 2.7em;
-  background-color: #ddd;
+  background-color: #c2cfd8;
   border-radius: 1.5em;
   color: white;
   font-size: 1.5em;
@@ -47,7 +47,6 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-item {
-  position: relative;
   padding: 10px 15px;
 }
 
@@ -64,6 +63,14 @@
 
 #bootstrap-theme .act-feed-list-group .act-category-task .act-feed-inner {
   padding-left: 5em;
+}
+
+#bootstrap-theme .act-feed-list-group .act-category-alert.is-incomplete .act-subject {
+  font-weight: bold;
+}
+
+#bootstrap-theme .act-feed-list-group .act-category-alert.is-incomplete .cb-dot {
+  background-color: #e6807f;
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-item:hover {

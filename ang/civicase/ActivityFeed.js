@@ -82,6 +82,9 @@
         act.status = activityStatuses[act.status_id].label;
         act.is_completed = activityStatuses[act.status_id].name === 'Completed';
         act.color = activityStatuses[act.status_id].color || '#42afcb';
+        if (act.category.indexOf('alert') > -1) {
+          act.color = ''; // controlled by css
+        }
       });
       return values;
     }
@@ -100,6 +103,7 @@
         source_contact_id: 'user_contact_id',
         options: {sort: 'activity_date_time DESC'},
         is_current_revision: 1,
+        is_deleted: 0,
         return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star'],
         "api.EntityTag.get": {entity_table: 'civicrm_activity', return: ['tag_id.name', 'tag_id.color', 'tag_id.description']},
         "api.Attachment.get": {entity_table: 'civicrm_activity'}

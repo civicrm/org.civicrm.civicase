@@ -23,6 +23,28 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     foreach ($communicationTypes['values'] as $type) {
       civicrm_api3('OptionValue', 'setvalue', ['id' => $type['id'], 'field' => 'grouping', 'value' => 'communication']);
     }
+    // Create Alert activity type
+    $existing = civicrm_api3('OptionValue', 'get', ['option_group_id' => 'activity_type', 'name' => 'Alert', 'return' => 'id', 'options' => ['limit' => 1]]);
+    $params = [
+      'option_group_id' => 'activity_type',
+      'label' => ts('Alert'),
+      'name' => 'Alert',
+      'grouping' => 'alert',
+      'is_reserved' => 0,
+      'description' => ts('Alerts to display in cases'),
+      'component_id' => 'CiviCase',
+      'icon' => 'fa-exclamation',
+    ];
+    if (!empty($existing['id'])) {
+      $params['id'] = $existing['id'];
+    }
+    else {
+      $sql = "SELECT MAX(ROUND(value)) + 1 FROM civicrm_option_value WHERE option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type')";
+      $params['value'] = CRM_Core_DAO::singleValueQuery($sql);
+      $sql = "SELECT MAX(ROUND(weight)) + 1 FROM civicrm_option_value WHERE option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type')";
+      $params['weight'] = CRM_Core_DAO::singleValueQuery($sql);
+    }
+    civicrm_api3('OptionValue', 'create', $params);
   }
 
   /**
@@ -35,17 +57,38 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    * Example: Run an external SQL script when the module is uninstalled.
    */
   public function uninstall() {
-    civicrm_api3('OptionValue', 'get', [
-      'return' => ['id'],
-      'option_group_id' => 'activity_category',
-      'options' => ['limit' => 0],
-      'api.OptionValue.delete' => [],
-    ]);
-    civicrm_api3('OptionGroup', 'get', [
-      'return' => ['id'],
-      'name' => 'activity_category',
-      'api.OptionGroup.delete' => [],
-    ]);
+    try {
+      civicrm_api3('OptionValue', 'get', [
+        'return' => ['id'],
+        'option_group_id' => 'activity_category',
+        'options' => ['limit' => 0],
+        'api.OptionValue.delete' => [],
+      ]);
+    } catch (Exception $e) {
+    }
+    try {
+      civicrm_api3('OptionGroup', 'get', [
+        'return' => ['id'],
+        'name' => 'activity_category',
+        'api.OptionGroup.delete' => [],
+      ]);
+    } catch (Exception $e) {
+    }
+    // Delete alert activity type if unused
+    try {
+      $alerts = civicrm_api3('Activity', 'getcount', [
+        'activity_type_id' => 'Alert',
+      ]);
+      if (empty($alerts['result'])) {
+        civicrm_api3('OptionValue', 'get', [
+          'return' => ['id'],
+          'option_group_id' => 'activity_type',
+          'name' => 'Alert',
+          'api.OptionValue.delete' => [],
+        ]);
+      }
+    } catch (Exception $e) {
+    }
   }
 
   /**

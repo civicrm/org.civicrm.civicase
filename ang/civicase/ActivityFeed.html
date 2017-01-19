@@ -35,7 +35,7 @@
                 <i ng-if="activity.icon" class="fa {{ activity.icon }}"></i>
                 <strong ng-if="!activity.icon">{{ activity.type[0] }}</strong>
               </div>
-              <div class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)">
+              <div class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
                 <i class="fa fa-{{ activity.is_completed ? 'check-' : '' }}square-o"></i>
               </div>
               <div class="act-actions-menu btn-group btn-group-sm">
@@ -51,7 +51,7 @@
               <h4>
                 <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
                 <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
-                <a class="act-star crm-i" ng-click="star(activity)" href>
+                <a class="act-star crm-i" ng-click="star(activity)" href ng-if="activity.category.indexOf('alert') < 0">
                   <i class="crm-i fa-star-o" ng-if="activity.is_star === '0'" title="{{ ts('Add star') }}"></i>
                   <i class="crm-i fa-star" ng-if="activity.is_star === '1'" title="{{ ts('Unstar') }}"></i>
                 </a>
