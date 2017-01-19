@@ -69,10 +69,21 @@
       return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
     };
 
+    function formatActivities(values) {
+      _.each(values, function(act) {
+        act.category = (activityTypes[act.activity_type_id].grouping || 'none').split(',');
+        act.icon = activityTypes[act.activity_type_id].icon;
+        act.type = activityTypes[act.activity_type_id].label;
+        act.status = activityStatuses[act.status_id].label;
+        act.color = activityStatuses[act.status_id].color || '#42afcb';
+      });
+      return values;
+    }
+
     function getActivities() {
       $('.act-feed-panel .panel-body').block();
       crmThrottle(_loadActivities).then(function(result) {
-        $scope.activities = result.values;
+        $scope.activities = formatActivities(result.values);
         $('.act-feed-panel .panel-body').unblock();
       });
     }

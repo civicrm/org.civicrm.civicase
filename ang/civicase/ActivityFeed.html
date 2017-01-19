@@ -25,14 +25,14 @@
     </div>
     <div class="panel-body">
       <ul class="list-group act-feed-list-group">
-        <li href="#" class="list-group-item" ng-repeat="activity in activities" ng-click="">
+        <li class="list-group-item act-category-{{ activity.category.join(' act-category-') }}" ng-repeat="activity in activities">
           <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, activities[$index-1].activity_date_time)">
             {{ CRM.utils.formatDate(activity.activity_date_time) }}
           </h4>
           <div class="act-feed-item">
-            <div class="cb-dot" title="{{ activityTypes[activity.activity_type_id].label }} ({{ activityStatuses[activity.status_id].label }})" style="background-color: {{ activityStatuses[activity.status_id].color }};">
-              <i ng-if="activityTypes[activity.activity_type_id].icon" class="fa {{ activityTypes[activity.activity_type_id].icon }}"></i>
-              <strong ng-if="!activityTypes[activity.activity_type_id].icon">{{ activityTypes[activity.activity_type_id].label[0] }}</strong>
+            <div class="cb-dot" title="{{ activity.type }} ({{ activity.status }})" style="background-color: {{ activity.color }};">
+              <i ng-if="activity.icon" class="fa {{ activity.icon }}"></i>
+              <strong ng-if="!activity.icon">{{ activity.type[0] }}</strong>
             </div>
             <div class="act-actions-menu btn-group btn-group-sm">
               <button type="button" class="btn btn-default dropdown-toggle act-actions-button" data-toggle="dropdown" title="{{ ts('Actions') }}">
@@ -46,7 +46,7 @@
             </div>
             <h4>
               <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
-              <span class="act-subject" ng-if="!activity.subject">{{ activityTypes[activity.activity_type_id].label }}</span>
+              <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
               <a class="act-star crm-i" ng-click="star(activity)" href>
                 <i class="crm-i fa-star-o" ng-if="activity.is_star === '0'" title="{{ ts('Add star') }}"></i>
                 <i class="crm-i fa-star" ng-if="activity.is_star === '1'" title="{{ ts('Unstar') }}"></i>

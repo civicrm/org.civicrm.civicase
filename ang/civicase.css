@@ -33,11 +33,22 @@
   border: 0 none;
 }
 
+#bootstrap-theme .act-feed-list-group .act-category-milestone {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-left: 5px solid #8ec68a;
+  border-right: 5px solid #8ec68a;
+}
+
 #bootstrap-theme .act-feed-list-group .act-feed-item {
   margin-left: 1em;
   padding-left: 3em;
   border-left: 1px solid #ddd;
   position: relative;
+}
+
+#bootstrap-theme .act-feed-list-group .act-category-milestone .act-feed-item {
+  border-left: 0 none;
 }
 
 #bootstrap-theme .act-feed-list-group .list-group-item:hover {
@@ -63,6 +74,10 @@
   max-width: 70%;
   margin-right: 1em;
   display: inline-block;
+}
+
+#bootstrap-theme .act-feed-list-group .act-category-milestone .act-subject {
+  font-weight: bold;
 }
 
 #bootstrap-theme .act-feed-list-group .act-star {
