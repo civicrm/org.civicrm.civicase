@@ -124,18 +124,30 @@ function civicase_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _civicase_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-/**
- * Functions below this ship commented out. Uncomment as required.
- *
 
 /**
- * Implements hook_civicrm_preProcess().
+ * Implements hook_civicrm_buildForm().
  *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function civicase_civicrm_preProcess($formName, &$form) {
-
-} // */
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ */
+function civicase_civicrm_buildForm($formName, &$form) {
+  if ($formName == 'CRM_Admin_Form_Options' && $form->getVar('_gName') == 'activity_type') {
+    $options = civicrm_api3('optionValue', 'get', [
+      'option_group_id' => 'activity_category',
+      'is_active' => 1,
+      'options' => ['limit' => 0, 'order' => 'weight'],
+    ]);
+    $opts = [];
+    foreach ($options['values'] as $opt) {
+      $opts[] = [
+        'id' => $opt['name'],
+        'text' => $opt['label'],
+      ];
+    }
+    $form->add('select2', 'grouping', ts('Display as'), $opts, FALSE, ['class' => 'crm-select2', 'multiple' => TRUE]);
+  }
+}
 
 /**
  * Implements hook_civicrm_navigationMenu().
