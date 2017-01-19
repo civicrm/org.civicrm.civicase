@@ -8,10 +8,14 @@
   background-color: #ddd;
   border-radius: 1.5em;
   color: white;
-  font-size: 1.75em;
+  font-size: 1.5em;
   text-align: center;
   padding-top: .2em;
   border: .4em solid white;
+}
+
+#bootstrap-theme div.act-feed-panel .panel-body {
+  padding: 0;
 }
 
 #bootstrap-theme div.act-actions-menu {
@@ -31,40 +35,62 @@
 
 #bootstrap-theme .act-feed-list-group .list-group-item {
   border: 0 none;
+  padding: 0;
+  margin: 0;
 }
 
-#bootstrap-theme .act-feed-list-group .act-category-milestone {
+#bootstrap-theme .act-feed-list-group .act-category-milestone .act-feed-item {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  border-left: 5px solid #8ec68a;
-  border-right: 5px solid #8ec68a;
+  border-left: 5px solid;
+  border-right: 5px solid;
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-item {
+  position: relative;
+  padding: 10px 15px;
+}
+
+#bootstrap-theme .act-feed-list-group .act-feed-inner {
   margin-left: 1em;
   padding-left: 3em;
   border-left: 1px solid #ddd;
   position: relative;
 }
 
-#bootstrap-theme .act-feed-list-group .act-category-milestone .act-feed-item {
+#bootstrap-theme .act-feed-list-group .act-category-milestone .act-feed-inner {
   border-left: 0 none;
 }
 
-#bootstrap-theme .act-feed-list-group .list-group-item:hover {
+#bootstrap-theme .act-feed-list-group .act-category-task .act-feed-inner {
+  padding-left: 5em;
+}
+
+#bootstrap-theme .act-feed-list-group .act-feed-item:hover {
   color: #555;
   background-color: #f5f5f5;
 }
 
-#bootstrap-theme .act-feed-list-group .list-group-item:hover .cb-dot {
-  border: .4em solid #f5f5f5;
+#bootstrap-theme .act-feed-list-group .act-feed-item:hover .cb-dot {
+  border-color: #f5f5f5;
 }
 
 #bootstrap-theme .act-feed-list-group .act-date {
   font-weight: bold;
-  position: relative;
-  top: -0.7em;
-  left: -0.7em;
+  padding-left: 1em;
+}
+
+#bootstrap-theme .act-feed-list-group .act-task-checkbox {
+  position: absolute;
+  color: #586277;
+  left: 34px;
+  top: -6px;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+#bootstrap-theme .act-feed-list-group .act-task-checkbox:hover {
+  color: #272c34;
 }
 
 #bootstrap-theme .act-feed-list-group .act-subject {

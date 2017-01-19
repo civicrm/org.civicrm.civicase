@@ -59,10 +59,15 @@
       status_id: true
     });
 
-    $scope.star = function star(act) {
+    $scope.star = function(act) {
       act.is_star = act.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues
       crmApi('Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}, {});
+    };
+
+    $scope.markCompleted = function(act) {
+      $('.act-feed-panel .panel-body').block();
+      crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {}).then(getActivities);
     };
 
     $scope.isSameDate = function(d1, d2) {
@@ -71,10 +76,11 @@
 
     function formatActivities(values) {
       _.each(values, function(act) {
-        act.category = (activityTypes[act.activity_type_id].grouping || 'none').split(',');
+        act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
         act.icon = activityTypes[act.activity_type_id].icon;
         act.type = activityTypes[act.activity_type_id].label;
         act.status = activityStatuses[act.status_id].label;
+        act.is_completed = activityStatuses[act.status_id].name === 'Completed';
         act.color = activityStatuses[act.status_id].color || '#42afcb';
       });
       return values;
