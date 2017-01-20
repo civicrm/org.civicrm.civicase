@@ -12,7 +12,7 @@ return array (
   ),
   'css' => 
   array (
-    0 => 'ang/civicase.css',
+    0 => 'ang/activityFeed.css',
   ),
   'partials' => 
   array (
