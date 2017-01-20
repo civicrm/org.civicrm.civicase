@@ -1,0 +1,65 @@
+<ul class="list-group act-feed-list-group">
+  <li class="list-group-item act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in activities">
+    <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, activities[$index-1].activity_date_time)">
+      {{ CRM.utils.formatDate(activity.activity_date_time) }}
+    </h4>
+    <div class="act-feed-item" style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};">
+      <div class="act-feed-inner">
+        <div class="cb-dot" title="{{ activity.type }} ({{ activity.status }})" style="background-color: {{ activity.color }};">
+          <i ng-if="activity.icon" class="fa {{ activity.icon }}"></i>
+          <strong ng-if="!activity.icon">{{ activity.type[0] }}</strong>
+        </div>
+        <div class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
+          <i class="fa fa-{{ activity.is_completed ? 'check-' : '' }}square-o"></i>
+        </div>
+        <div class="act-actions-menu btn-group btn-group-sm">
+          <button type="button" class="btn btn-default dropdown-toggle act-actions-button" data-toggle="dropdown" title="{{ ts('Actions') }}">
+            <span class="crm-i fa-ellipsis-v"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <li><a class="crm-popup" href="{{ CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('View') }}</a></li>
+            <li><a class="crm-popup" href="{{ CRM.url('civicrm/activity/add', {action: 'update', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('Edit') }}</a></li>
+            <li><a class="crm-popup small-popup" href="{{ CRM.url('civicrm/activity', {action: 'delete', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('Delete') }}</a></li>
+          </ul>
+        </div>
+        <h4>
+          <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
+          <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
+          <a class="act-star crm-i" ng-click="star(activity)" href ng-if="activity.category.indexOf('alert') < 0">
+            <i class="crm-i fa-star-o" ng-if="activity.is_star === '0'" title="{{ ts('Add star') }}"></i>
+            <i class="crm-i fa-star" ng-if="activity.is_star === '1'" title="{{ ts('Unstar') }}"></i>
+          </a>
+          <a class="act-attachment fa fa-paperclip" ng-repeat="file in activity['api.Attachment.get'].values" title="{{ file.name }}" href="{{ file.url }}">
+          </a>
+        </h4>
+        <div class="act-tags">
+                <span
+                  class="label label-default"
+                  ng-repeat="tag in activity['api.EntityTag.get'].values"
+                  style="background-color: {{ tag['tag_id.color'] }};"
+                  title="{{ tag['tag_id.description'] }}"
+                >
+                  {{ tag['tag_id.name'] }}
+                </span>
+        </div>
+        <div class="act-details" ng-bind-html="activity.details"></div>
+        <div class="act-contacts clearfix">
+          <div class="act-contacts-target" ng-if="activity.target_contact_name">
+            <strong>{{ ts('With:') }}</strong>
+                  <span ng-repeat="(cid, display_name) in activity.target_contact_name">
+                    <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
+                    {{$last ? '' : ', '}}
+                  </span>
+          </div>
+          <div class="act-contacts-assignee" ng-if="activity.assignee_contact_name">
+            <strong>{{ ts('Assigned to:') }}</strong>
+                  <span ng-repeat="(cid, display_name) in activity.assignee_contact_name">
+                    <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
+                    {{$last ? '' : ', '}}
+                  </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
+</ul>
