@@ -45,6 +45,20 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       $params['weight'] = CRM_Core_DAO::singleValueQuery($sql);
     }
     civicrm_api3('OptionValue', 'create', $params);
+    // Set status colors
+    $colors = [
+      'Scheduled' => '#42afcb',
+      'Completed' => '#8ec68a',
+      'Left Message' => '#eca67f',
+      'Available' => '#5bc0de',
+    ];
+    foreach ($colors as $name => $color) {
+      civicrm_api3('OptionValue', 'get', [
+        'option_group_id' => 'activity_status',
+        'name' => $name,
+        'api.OptionValue.setvalue' => ['field' => 'color', 'value' => $color],
+      ]);
+    }
   }
 
   /**
