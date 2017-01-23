@@ -24,8 +24,14 @@
   top: -.5em;
 }
 
-#bootstrap-theme .act-actions-button {
+#bootstrap-theme div.act-attachment-menu {
+  display: inline-block;
+}
+
+#bootstrap-theme .act-feed-list-group div.btn-group-sm>button.btn {
   background-color: transparent;
+  font-size: 16px;
+  font-weight: normal;
 }
 
 #bootstrap-theme .act-filters .btn-group,
@@ -75,11 +81,11 @@
 
 #bootstrap-theme .act-feed-list-group .act-feed-item:hover {
   color: #555;
-  background-color: #f5f5f5;
+  background-color: #F3F6F7;
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-item:hover .cb-dot {
-  border-color: #f5f5f5;
+  border-color: #F3F6F7;
 }
 
 #bootstrap-theme .act-feed-list-group .act-date {
@@ -121,16 +127,6 @@
 #bootstrap-theme .act-feed-list-group .act-star:hover,
 #bootstrap-theme .act-feed-list-group .act-star:focus {
   color: #f1965a;
-}
-
-#bootstrap-theme .act-feed-list-group .act-attachment {
-  margin-right: .2em;
-  color: inherit;
-}
-
-#bootstrap-theme .act-feed-list-group .act-attachment:hover,
-#bootstrap-theme .act-feed-list-group .act-attachment:focus {
-  color: #2a8197;
 }
 
 #bootstrap-theme .act-feed-list-group .act-details {

@@ -14,7 +14,7 @@
         </div>
         <div class="act-actions-menu btn-group btn-group-sm">
           <button type="button" class="btn btn-default dropdown-toggle act-actions-button" data-toggle="dropdown" title="{{ ts('Actions') }}">
-            <span class="crm-i fa-ellipsis-v"></span>
+            <i class="crm-i fa-ellipsis-v"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-right" role="menu">
             <li><a class="crm-popup" href="{{ CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('View') }}</a></li>
@@ -29,8 +29,16 @@
             <i class="crm-i fa-star-o" ng-if="activity.is_star === '0'" title="{{ ts('Add star') }}"></i>
             <i class="crm-i fa-star" ng-if="activity.is_star === '1'" title="{{ ts('Unstar') }}"></i>
           </a>
-          <a class="act-attachment fa fa-paperclip" ng-repeat="file in activity['api.Attachment.get'].values" title="{{ file.name }}" href="{{ file.url }}">
-          </a>
+          <div ng-if="activity['api.Attachment.get'].count" class="act-attachment-menu btn-group btn-group-sm">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="{{ ts('Attachments') }}">
+              <i class="crm-i fa-paperclip"></i>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li ng-repeat="file in activity['api.Attachment.get'].values">
+                <a title="{{ ts('Download File') }}" href="{{ file.url }}"><i class="crm-i {{ file.icon }}"></i> &nbsp;{{ file.name }}</a>
+              </li>
+            </ul>
+          </div>
         </h4>
         <div class="act-tags">
                 <span
