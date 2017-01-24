@@ -14,6 +14,16 @@
   border: .4em solid white;
 }
 
+#bootstrap-theme .dropdown-menu>li>span {
+  display: block;
+  padding: 11px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.5384615385;
+  color: #727E8A;
+  white-space: nowrap;
+}
+
 #bootstrap-theme div.act-feed-panel .panel-body {
   padding: 0;
 }
@@ -43,6 +53,12 @@
   border: 0 none;
   padding: 0;
   margin: 0;
+}
+
+#bootstrap-theme .act-feed-list-group .act-list-controls {
+  padding: .2em 0;
+  margin: 0 .5em;
+  border-bottom: 1px solid #ddd;
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-milestone .act-feed-item {
@@ -121,11 +137,16 @@
 
 #bootstrap-theme .act-feed-list-group .act-star {
   margin-right: .5em;
+  color: #c2cfd8;
+}
+
+#bootstrap-theme .act-feed-list-group .act-star .fa-star {
   color: #ECA67F;
 }
 
 #bootstrap-theme .act-feed-list-group .act-star:hover,
-#bootstrap-theme .act-feed-list-group .act-star:focus {
+#bootstrap-theme .act-feed-list-group .act-star:focus,
+.act-list-controls .fa-star {
   color: #f1965a;
 }
 
@@ -148,6 +169,13 @@
   text-overflow: ellipsis;
 }
 
+#bootstrap-theme .act-list-controls label.btn {
+  border-color: lightgrey;
+  color: grey;
+}
+#bootstrap-theme .act-list-controls label.btn.active {
+  color: #4D5663;
+}
 #bootstrap-theme .act-tags .label {
   margin-right: 1em;
 }

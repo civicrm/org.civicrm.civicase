@@ -3,15 +3,16 @@
     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">{{ ts('Filters') }} &nbsp; <span class="caret"></span></button>
     <ul class="dropdown-menu" role="menu">
       <li ng-repeat="(name, label) in availableFilters">
-        <input type="checkbox" id="availableFilter_{{ name }}" ng-model="exposedFilters[name]" />
-        <label for="availableFilter_{{ name }}">{{ label }}</label>
+        <span>
+          <input type="checkbox" id="availableFilter_{{ name }}" ng-model="exposedFilters[name]" />
+          <label for="availableFilter_{{ name }}">{{ label }}</label>
+        </span>
       </li>
     </ul>
   </div>
   <input class="form-control" crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.activity_type_id, data: activityTypeOptions}" ng-model="filters.activity_type_id" ng-show="exposedFilters.activity_type_id" />
   <input class="form-control" crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.status_id, data: activityStatusOptions}" ng-model="filters.status_id" ng-show="exposedFilters.status_id" />
-  <input type="search" class="form-control" placeholder="{{ ts('Subject') }}" ng-model="filters.subject" ng-show="exposedFilters.subject" />
-  <input type="search" class="form-control" placeholder="{{ ts('Details') }}" ng-model="filters.details" ng-show="exposedFilters.details" />
+  <input type="search" class="form-control" placeholder="{{ availableFilters.text }}" ng-model="filters.text" ng-show="exposedFilters.text" />
   <input class="form-control" crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('With')}}" ng-model="filters.target_contact_id" ng-show="exposedFilters.target_contact_id" />
   <input class="form-control" crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('Assigned to')}}" ng-model="filters.assignee_contact_id" ng-show="exposedFilters.assignee_contact_id" />
   <input class="form-control" crm-entityref="{entity: 'Tag', api: {params: {used_for: {LIKE: '%civicrm_activity%'}}}, select: {allowClear: true, multiple: true, placeholder: ts('Tagged')}}" ng-model="filters.tag_id" ng-show="exposedFilters.tag_id" />

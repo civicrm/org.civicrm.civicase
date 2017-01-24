@@ -1,4 +1,5 @@
 <ul class="list-group act-feed-list-group">
+  <li class="list-group-item act-list-controls" ng-include="'~/civicase/ActivityControls.html'"></li>
   <li class="list-group-item act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in activities">
     <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, activities[$index-1].activity_date_time)">
       {{ CRM.utils.formatDate(activity.activity_date_time) }}
@@ -41,14 +42,14 @@
           </div>
         </h4>
         <div class="act-tags">
-                <span
-                  class="label label-default"
-                  ng-repeat="tag in activity['api.EntityTag.get'].values"
-                  style="background-color: {{ tag['tag_id.color'] }};"
-                  title="{{ tag['tag_id.description'] }}"
-                >
-                  {{ tag['tag_id.name'] }}
-                </span>
+          <span
+            class="label label-default"
+            ng-repeat="tag in activity.tag_id || []"
+            style="background-color: {{ tags[tag].color }};"
+            title="{{ tags[tag].description }}"
+          >
+            {{ tags[tag].name }}
+          </span>
         </div>
         <div class="act-details" ng-bind-html="activity.details"></div>
         <div class="act-contacts clearfix">
