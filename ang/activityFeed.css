@@ -179,3 +179,6 @@
 #bootstrap-theme .act-tags .label {
   margin-right: 1em;
 }
+#bootstrap-theme .pager-loading {
+  height: 200px;
+}

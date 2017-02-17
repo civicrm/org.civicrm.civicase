@@ -23,6 +23,8 @@
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
+    var ITEMS_PER_PAGE = 25,
+      pageNum = 0;
     $scope.CRM = CRM;
 
     function mapSelectOptions(opt) {
@@ -42,6 +44,7 @@
     $scope.activityTypeOptions = _.map(data.types.values, mapSelectOptions);
     $scope.activityStatusOptions = _.map(data.statuses.values, mapSelectOptions);
     $scope.activities = {};
+    $scope.remaining = true;
     $scope.availableFilters = {
       activity_type_id: ts('Activity type'),
       status_id: ts('Status'),
@@ -87,6 +90,11 @@
       return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
     };
 
+    $scope.nextPage = function() {
+      ++pageNum;
+      getActivities(true);
+    };
+
     function formatActivities(values) {
       _.each(values, function(act) {
         act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
@@ -102,24 +110,42 @@
       return values;
     }
 
-    function getActivities() {
+    function getActivities(nextPage) {
       $('.act-feed-panel .panel-body').block();
+      if (nextPage !== true) {
+        pageNum = 0;
+      }
       crmThrottle(_loadActivities).then(function(result) {
-        $scope.activities = formatActivities(result.values);
+        var newActivities = formatActivities(result.acts.values);
+        if (pageNum) {
+          $scope.activities = $scope.activities.concat(newActivities);
+        } else {
+          $scope.activities = newActivities;
+        }
+        var remaining = result.count - (ITEMS_PER_PAGE * (pageNum + 1));
+        $scope.remaining = remaining > 0 ? remaining : 0;
+        if (!result.count && !pageNum) {
+          $scope.remaining = false;
+        }
         $('.act-feed-panel .panel-body').unblock();
       });
     }
 
     function _loadActivities() {
-      var params = {
+      var returnParams = {
         sequential: 1,
-        is_current_revision: 1,
-        is_deleted: 0,
         return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id'],
         "api.Attachment.get": {entity_table: 'civicrm_activity'},
         options: {
-          sort: 'activity_date_time DESC'
+          sort: 'activity_date_time DESC',
+          limit: ITEMS_PER_PAGE,
+          offset: ITEMS_PER_PAGE * pageNum
         }
+      };
+      var params = {
+        is_current_revision: 1,
+        is_deleted: 0,
+        options: {}
       };
       _.each($scope.filters, function(val, key) {
         if (val) {
@@ -141,7 +167,10 @@
       if (involving.delegated && !params.assignee_contact_id) {
         params.assignee_contact_id = {'!=': 'user_contact_id'};
       }
-      return crmApi('Activity', 'get', $.extend(true, returnParams, params));
+      return crmApi({
+        acts: ['Activity', 'get', $.extend(true, returnParams, params)],
+        count: ['Activity', 'getcount', params]
+      });
     }
 
     $scope.$watchCollection('filters', getActivities);
