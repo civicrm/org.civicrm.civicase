@@ -7,7 +7,6 @@
         resolve: {
           data: function(crmApi) {
             return crmApi({
-              tags: ['tag', 'get', {options: {limit: 0}, used_for: {LIKE: '%civicrm_activity%'}, return: ['color', 'name', 'description']}],
               statuses: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_status', is_active: 1}],
               types: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_type', is_active: 1}],
               categories: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_category', is_active: 1}]
@@ -40,7 +39,6 @@
     var activityTypes = $scope.activityTypes = _.indexBy(data.types.values, 'value');
     var activityStatuses = $scope.activityStatuses = _.indexBy(data.statuses.values, 'value');
     var activityCategories = $scope.activityCategories = _.indexBy(data.categories.values, 'value');
-    var tags = $scope.tags = data.tags.values;
     $scope.activityTypeOptions = _.map(data.types.values, mapSelectOptions);
     $scope.activityStatusOptions = _.map(data.statuses.values, mapSelectOptions);
     $scope.activities = {};
@@ -134,7 +132,7 @@
     function _loadActivities() {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id'],
+        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color'],
         "api.Attachment.get": {entity_table: 'civicrm_activity'},
         options: {
           sort: 'activity_date_time DESC',

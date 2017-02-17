@@ -45,10 +45,10 @@
           <span
             class="label label-default"
             ng-repeat="tag in activity.tag_id || []"
-            style="background-color: {{ tags[tag].color }};"
-            title="{{ tags[tag].description }}"
+            style="background-color: {{ tag['tag_id.color'] }};"
+            title="{{ tag['tag_id.description'] }}"
           >
-            {{ tags[tag].name }}
+            {{ tag['tag_id.name'] }}
           </span>
         </div>
         <div class="act-details" ng-bind-html="activity.details"></div>
