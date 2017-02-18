@@ -93,6 +93,20 @@
       getActivities(true);
     };
 
+    $scope.getAttachments = function(activity) {
+      if (!activity.attachments) {
+        activity.attachments = [];
+        CRM.api3('Attachment', 'get', {
+          entity_table: 'civicrm_activity',
+          entity_id: activity.id,
+          sequential: 1
+        }).done(function(data) {
+          activity.attachments = data.values;
+          $scope.$digest();
+        });
+      }
+    };
+
     function formatActivities(values) {
       _.each(values, function(act) {
         act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
@@ -132,8 +146,7 @@
     function _loadActivities() {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color'],
-        "api.Attachment.get": {entity_table: 'civicrm_activity'},
+        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id'],
         options: {
           sort: 'activity_date_time DESC',
           limit: ITEMS_PER_PAGE,

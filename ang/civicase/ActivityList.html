@@ -30,13 +30,22 @@
             <i class="crm-i fa-star-o" ng-if="activity.is_star === '0'" title="{{ ts('Add star') }}"></i>
             <i class="crm-i fa-star" ng-if="activity.is_star === '1'" title="{{ ts('Unstar') }}"></i>
           </a>
-          <div ng-if="activity['api.Attachment.get'].count" class="act-attachment-menu btn-group btn-group-sm">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="{{ ts('Attachments') }}">
+          <div ng-if="activity.file_id" class="act-attachment-menu btn-group btn-group-sm">
+            <button
+              type="button"
+              class="btn btn-default dropdown-toggle"
+              data-toggle="dropdown"
+              title="{{ activity.file_id.length === 1 ? ts('1 Attachment') : ts('%1 Attachments', {1: activity.file_id.length}) }}"
+              ng-click="getAttachments(activity)"
+            >
               <i class="crm-i fa-paperclip"></i>
             </button>
             <ul class="dropdown-menu" role="menu">
-              <li ng-repeat="file in activity['api.Attachment.get'].values">
-                <a title="{{ ts('Download File') }}" href="{{ file.url }}"><i class="crm-i {{ file.icon }}"></i> &nbsp;{{ file.name }}</a>
+              <li ng-if="!activity.attachments || !activity.attachments.length">
+                <span><i class="crm-i fa-spinner fa-pulse fa-fw"></i> &nbsp;{{ ts('Loading...') }}</span>
+              </li>
+              <li ng-repeat="file in activity.attachments || []">
+                <a title="{{ file.description || ts('Download File') }}" href="{{ file.url }}"><i class="crm-i {{ file.icon }}"></i> &nbsp;{{ file.name }}</a>
               </li>
             </ul>
           </div>
