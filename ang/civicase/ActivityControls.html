@@ -17,11 +17,11 @@
     </ul>
   </div>
   <div class="btn-group btn-group-sm" data-toggle="buttons">
-    <label class="btn btn-default" title="{{ ts('Show only activities created by, involving or assigned to me') }}" ng-click="involving.myActivities = !involving.myActivities">
+    <label class="btn btn-{{involving.myActivities ? 'primary' : 'default'}}" title="{{ ts('Show only activities created by, involving or assigned to me') }}" ng-click="involving.myActivities = !involving.myActivities">
       <input type="checkbox" autocomplete="off" />
       {{ ts('My Activities') }}
     </label>
-    <label class="btn btn-default" title="{{ ts('Show only activities assigned to someone other than me') }}" ng-click="involving.delegated = !involving.delegated">
+    <label class="btn btn-{{involving.delegated ? 'primary' : 'default'}}" title="{{ ts('Show only activities assigned to someone other than me') }}" ng-click="involving.delegated = !involving.delegated">
       <input type="checkbox" autocomplete="off" />
       {{ ts('Delegated') }}
     </label>
@@ -34,7 +34,12 @@
       </select>
     </div>
     <div class="btn-group btn-group-sm">
-      <button class="btn btn-default" ng-click="filters.is_star = filters.is_star ? null : '1'" title="{{ ts('Show only starred items') }}">
+      <button class="btn btn-{{filters.file_id ? 'primary active' : 'default'}}" ng-click="filters.file_id = filters.file_id ? null : {'IS NOT NULL': 1}" title="{{ ts('Show only activities with attachments') }}">
+        <i class="fa fa-paperclip"></i>
+      </button>
+    </div>
+    <div class="btn-group btn-group-sm">
+      <button class="btn btn-{{filters.is_star ? 'primary active' : 'default'}}" ng-click="filters.is_star = filters.is_star ? null : '1'" title="{{ ts('Show only starred items') }}">
         <i class="fa fa-star{{ filters.is_star ? '' : '-o' }}"></i>
       </button>
     </div>

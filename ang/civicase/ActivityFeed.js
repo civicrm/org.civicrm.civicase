@@ -167,8 +167,10 @@
           }
           else if (key === 'activity_type_id.grouping') {
             params[key] = {LIKE: '%' + val + '%'};
-          } else {
+          } else if (typeof val === 'string') {
             params[key] = {IN: val.split(',')};
+          } else {
+            params[key] = val;
           }
         }
       });

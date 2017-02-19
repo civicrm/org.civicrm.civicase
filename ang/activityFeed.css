@@ -39,9 +39,11 @@
 }
 
 #bootstrap-theme .act-feed-list-group div.btn-group-sm>button.btn {
-  background-color: transparent;
   font-size: 16px;
-  font-weight: normal;
+}
+
+#bootstrap-theme .act-feed-item div.btn-group-sm>button.btn {
+  background-color: transparent;
 }
 
 #bootstrap-theme .act-filters .btn-group,
@@ -171,10 +173,6 @@
 
 #bootstrap-theme .act-list-controls label.btn {
   border-color: lightgrey;
-  color: grey;
-}
-#bootstrap-theme .act-list-controls label.btn.active {
-  color: #4D5663;
 }
 #bootstrap-theme .act-tags .label {
   margin-right: 1em;
