@@ -133,19 +133,19 @@ function civicase_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  */
 function civicase_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Admin_Form_Options' && $form->getVar('_gName') == 'activity_type') {
-    $options = civicrm_api3('optionValue', 'get', [
+    $options = civicrm_api3('optionValue', 'get', array(
       'option_group_id' => 'activity_category',
       'is_active' => 1,
-      'options' => ['limit' => 0, 'order' => 'weight'],
-    ]);
-    $opts = [];
+      'options' => array('limit' => 0, 'order' => 'weight'),
+    ));
+    $opts = array();
     foreach ($options['values'] as $opt) {
-      $opts[] = [
+      $opts[] = array(
         'id' => $opt['name'],
         'text' => $opt['label'],
-      ];
+      );
     }
-    $form->add('select2', 'grouping', ts('Display as'), $opts, FALSE, ['class' => 'crm-select2', 'multiple' => TRUE]);
+    $form->add('select2', 'grouping', ts('Display as'), $opts, FALSE, array('class' => 'crm-select2', 'multiple' => TRUE));
   }
 }
 

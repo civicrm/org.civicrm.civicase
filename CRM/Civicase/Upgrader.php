@@ -15,17 +15,17 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     CRM_Core_BAO_ConfigSetting::enableComponent('CiviCase');
 
     // Set activity categories
-    $communicationTypes = civicrm_api3('OptionValue', 'get', [
-      'return' => ['id'],
+    $communicationTypes = civicrm_api3('OptionValue', 'get', array(
+      'return' => array('id'),
       'option_group_id' => 'activity_type',
-      'name' => ['IN' => ["Meeting", "Phone Call", "Email", "SMS", "Inbound Email", "Follow up"]],
-    ]);
+      'name' => array('IN' => array("Meeting", "Phone Call", "Email", "SMS", "Inbound Email", "Follow up")),
+    ));
     foreach ($communicationTypes['values'] as $type) {
-      civicrm_api3('OptionValue', 'setvalue', ['id' => $type['id'], 'field' => 'grouping', 'value' => 'communication']);
+      civicrm_api3('OptionValue', 'setvalue', array('id' => $type['id'], 'field' => 'grouping', 'value' => 'communication'));
     }
     // Create Alert activity type
-    $existing = civicrm_api3('OptionValue', 'get', ['option_group_id' => 'activity_type', 'name' => 'Alert', 'return' => 'id', 'options' => ['limit' => 1]]);
-    $params = [
+    $existing = civicrm_api3('OptionValue', 'get', array('option_group_id' => 'activity_type', 'name' => 'Alert', 'return' => 'id', 'options' => array('limit' => 1)));
+    $params = array(
       'option_group_id' => 'activity_type',
       'label' => ts('Alert'),
       'name' => 'Alert',
@@ -34,7 +34,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'description' => ts('Alerts to display in cases'),
       'component_id' => 'CiviCase',
       'icon' => 'fa-exclamation',
-    ];
+    );
     if (!empty($existing['id'])) {
       $params['id'] = $existing['id'];
     }
@@ -46,18 +46,18 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     }
     civicrm_api3('OptionValue', 'create', $params);
     // Set status colors
-    $colors = [
+    $colors = array(
       'Scheduled' => '#42afcb',
       'Completed' => '#8ec68a',
       'Left Message' => '#eca67f',
       'Available' => '#5bc0de',
-    ];
+    );
     foreach ($colors as $name => $color) {
-      civicrm_api3('OptionValue', 'get', [
+      civicrm_api3('OptionValue', 'get', array(
         'option_group_id' => 'activity_status',
         'name' => $name,
-        'api.OptionValue.setvalue' => ['field' => 'color', 'value' => $color],
-      ]);
+        'api.OptionValue.setvalue' => array('field' => 'color', 'value' => $color),
+      ));
     }
   }
 
@@ -72,34 +72,34 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    */
   public function uninstall() {
     try {
-      civicrm_api3('OptionValue', 'get', [
-        'return' => ['id'],
+      civicrm_api3('OptionValue', 'get', array(
+        'return' => array('id'),
         'option_group_id' => 'activity_category',
-        'options' => ['limit' => 0],
-        'api.OptionValue.delete' => [],
-      ]);
+        'options' => array('limit' => 0),
+        'api.OptionValue.delete' => array(),
+      ));
     } catch (Exception $e) {
     }
     try {
-      civicrm_api3('OptionGroup', 'get', [
-        'return' => ['id'],
+      civicrm_api3('OptionGroup', 'get', array(
+        'return' => array('id'),
         'name' => 'activity_category',
-        'api.OptionGroup.delete' => [],
-      ]);
+        'api.OptionGroup.delete' => array(),
+      ));
     } catch (Exception $e) {
     }
     // Delete alert activity type if unused
     try {
-      $alerts = civicrm_api3('Activity', 'getcount', [
+      $alerts = civicrm_api3('Activity', 'getcount', array(
         'activity_type_id' => 'Alert',
-      ]);
+      ));
       if (empty($alerts['result'])) {
-        civicrm_api3('OptionValue', 'get', [
-          'return' => ['id'],
+        civicrm_api3('OptionValue', 'get', array(
+          'return' => array('id'),
           'option_group_id' => 'activity_type',
           'name' => 'Alert',
-          'api.OptionValue.delete' => [],
-        ]);
+          'api.OptionValue.delete' => array(),
+        ));
       }
     } catch (Exception $e) {
     }
