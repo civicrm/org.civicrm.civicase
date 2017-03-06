@@ -1,0 +1,24 @@
+/* CSS rules for Angular civicase list */
+#bootstrap-theme .case-list-table th,
+#bootstrap-theme .case-list-table td {
+  padding: 10px;
+  position: relative;
+}
+#bootstrap-theme .case-list-table th:first-child,
+#bootstrap-theme .case-list-table td:first-child {
+  border-right: 1px solid #ddd;
+}
+#bootstrap-theme .case-list-table tr {
+  border-top: 1px solid #ddd;
+}
+#bootstrap-theme .case-list-checkbox {
+  position: absolute;
+  top: 18px;
+  left: 15px;
+}
+#bootstrap-theme .case-list-checkbox input {
+  transform: scale(1.2);
+}
+#bootstrap-theme .case-list-checkbox + div {
+  margin-left: 30px;
+}

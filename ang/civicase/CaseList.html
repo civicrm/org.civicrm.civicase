@@ -8,7 +8,23 @@
     <table class="case-list-table">
       <thead>
         <tr>
-          <th></th>
+          <th>
+            <div class="case-list-checkbox">
+              <input type="checkbox" ng-click="selectAll($event)" ng-checked="isSelection('all')" />
+            </div>
+            <div class="btn-group btn-group-sm">
+              <button type="button" class="btn btn-default dropdown-toggle {{ isSelection('any') ? '' : 'disabled' }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ ts('Actions') }}
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href>{{ ts('Add Role') }}</a></li>
+                <li><a href>{{ ts('Reassign Cases') }}</a></li>
+                <li><a href>{{ ts('Delete Cases') }}</a></li>
+                <li class="{{ isSelection(2) ? '' : 'disabled' }}"><a href>{{ ts('Merge 2 Cases') }}</a></li>
+              </ul>
+            </div>
+          </th>
           <th>{{ ts('Subject') }}</th>
           <th>{{ ts('Status') }}</th>
           <th>{{ ts('Type') }}</th>
@@ -18,18 +34,23 @@
       <tbody>
         <tr ng-repeat="case in cases">
           <td>
-            <h4>{{ case.client.sort_name }}</h4>
-            <div ng-if="case.client.email">
-              <strong>{{ ts('Email:') }}</strong>
-              {{ case.client.email }}
-            </div>
-            <div ng-if="case.client.phone">
-              <strong>{{ ts('Phone:') }}</strong>
-              {{ case.client.phone }}
+            <div class="case-list-checkbox">
+              <input type="checkbox" ng-model="case.selected" />
             </div>
             <div>
-              <strong>{{ ts('Case ID:') }}</strong>
-              {{ case.id }}
+              <h4>{{ case.client.sort_name }}</h4>
+              <div ng-if="case.client.email">
+                <strong>{{ ts('Email:') }}</strong>
+                {{ case.client.email }}
+              </div>
+              <div ng-if="case.client.phone">
+                <strong>{{ ts('Phone:') }}</strong>
+                {{ case.client.phone }}
+              </div>
+              <div>
+                <strong>{{ ts('Case ID:') }}</strong>
+                {{ case.id }}
+              </div>
             </div>
           </td>
           <td>{{ case.subject }}</td>

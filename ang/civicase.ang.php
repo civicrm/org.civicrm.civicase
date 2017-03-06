@@ -17,7 +17,7 @@ return array (
   ),
   'css' => 
   array (
-    0 => 'ang/activityFeed.css',
+    0 => 'ang/*.css',
   ),
   'partials' => 
   array (

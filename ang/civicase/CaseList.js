@@ -26,15 +26,35 @@
     var caseTypes = $scope.caseTypes = data.types.values;
     var caseStatuses = $scope.caseStatuses = data.statuses.values;
 
+    $scope.cases = [];
+
     $scope.nextPage = function() {
       ++pageNum;
       getCases(true);
+    };
+
+    $scope.selectAll = function(e) {
+      var checked = e.target.checked;
+      _.each($scope.cases, function(item) {
+        item.selected = checked;
+      });
+    };
+
+    $scope.isSelection = function(condition) {
+      var count = _.filter($scope.cases, 'selected').length;
+      if (condition === 'all') {
+        return count === $scope.cases.length;
+      } else if (condition === 'any') {
+        return !!count;
+      }
+      return count === condition;
     };
 
     function formatCase(item) {
       item.myRole = [];
       item.status = caseStatuses[item.status_id];
       item.case_type = caseTypes[item.case_type_id];
+      item.selected = false;
       _.each(item.contacts, function(contact) {
         if (!item.client && contact.role === ts('Client')) {
           item.client = contact;
