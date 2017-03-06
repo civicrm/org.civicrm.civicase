@@ -107,19 +107,16 @@
       }
     };
 
-    function formatActivities(values) {
-      _.each(values, function(act) {
-        act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
-        act.icon = activityTypes[act.activity_type_id].icon;
-        act.type = activityTypes[act.activity_type_id].label;
-        act.status = activityStatuses[act.status_id].label;
-        act.is_completed = activityStatuses[act.status_id].name === 'Completed';
-        act.color = activityStatuses[act.status_id].color || '#42afcb';
-        if (act.category.indexOf('alert') > -1) {
-          act.color = ''; // controlled by css
-        }
-      });
-      return values;
+    function formatActivity(act) {
+      act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
+      act.icon = activityTypes[act.activity_type_id].icon;
+      act.type = activityTypes[act.activity_type_id].label;
+      act.status = activityStatuses[act.status_id].label;
+      act.is_completed = activityStatuses[act.status_id].name === 'Completed';
+      act.color = activityStatuses[act.status_id].color || '#42afcb';
+      if (act.category.indexOf('alert') > -1) {
+        act.color = ''; // controlled by css
+      }
     }
 
     function getActivities(nextPage) {
@@ -128,7 +125,7 @@
         pageNum = 0;
       }
       crmThrottle(_loadActivities).then(function(result) {
-        var newActivities = formatActivities(result.acts.values);
+        var newActivities = _.each(result.acts.values, formatActivity);
         if (pageNum) {
           $scope.activities = $scope.activities.concat(newActivities);
         } else {

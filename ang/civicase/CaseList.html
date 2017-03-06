@@ -1,0 +1,44 @@
+<div crm-ui-debug="cases"></div>
+<div crm-ui-debug="caseTypes"></div>
+<div crm-ui-debug="caseStatuses"></div>
+<div id="bootstrap-theme">
+
+  <div class="panel panel-default case-list-panel">
+
+    <table class="case-list-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>{{ ts('Subject') }}</th>
+          <th>{{ ts('Status') }}</th>
+          <th>{{ ts('Type') }}</th>
+          <th>{{ ts('My Role') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="case in cases">
+          <td>
+            <h4>{{ case.client.sort_name }}</h4>
+            <div ng-if="case.client.email">
+              <strong>{{ ts('Email:') }}</strong>
+              {{ case.client.email }}
+            </div>
+            <div ng-if="case.client.phone">
+              <strong>{{ ts('Phone:') }}</strong>
+              {{ case.client.phone }}
+            </div>
+            <div>
+              <strong>{{ ts('Case ID:') }}</strong>
+              {{ case.id }}
+            </div>
+          </td>
+          <td>{{ case.subject }}</td>
+          <td>{{ case.status }}</td>
+          <td>{{ case.case_type }}</td>
+          <td>{{ case.myRole.join(', ') }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-center" ng-include="'~/civicase/Pager.html'"></div>
+  </div>
+</div>
