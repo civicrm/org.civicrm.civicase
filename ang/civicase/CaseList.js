@@ -7,8 +7,9 @@
         resolve: {
           data: function(crmApi) {
             return crmApi({
+              activityTypes: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_type', is_active: 1}],
               statuses: ['Case', 'getoptions', {field: 'status_id'}],
-              types: ['Case', 'getoptions', {field: 'case_type_id'}]
+              caseTypes: ['Case', 'getoptions', {field: 'case_type_id'}]
             })
           }
         }
@@ -22,9 +23,11 @@
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25,
       pageNum = 0;
+    $scope.CRM = CRM;
 
-    var caseTypes = $scope.caseTypes = data.types.values;
+    var caseTypes = $scope.caseTypes = data.caseTypes.values;
     var caseStatuses = $scope.caseStatuses = data.statuses.values;
+    var activityTypes = $scope.activityTypes = _.indexBy(data.activityTypes.values, 'value');
 
     $scope.cases = [];
 
@@ -52,15 +55,19 @@
 
     function formatCase(item) {
       item.myRole = [];
+      item.client = [];
       item.status = caseStatuses[item.status_id];
       item.case_type = caseTypes[item.case_type_id];
       item.selected = false;
       _.each(item.contacts, function(contact) {
-        if (!item.client && contact.role === ts('Client')) {
-          item.client = contact;
+        if (!contact.relationship_type_id) {
+          item.client.push(contact);
         }
         if (contact.contact_id == CRM.config.user_contact_id) {
           item.myRole.push(contact.role);
+        }
+        if (contact.manager) {
+          item.manager = contact;
         }
       });
     }
@@ -97,7 +104,7 @@
         is_deleted: 0
       };
       return crmApi({
-        cases: ['Case', 'get', $.extend(true, returnParams, params)],
+        cases: ['Case', 'getwithactivities', $.extend(true, returnParams, params)],
         count: ['Case', 'getcount', params]
       });
     }

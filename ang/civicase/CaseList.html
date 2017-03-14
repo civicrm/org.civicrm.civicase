@@ -28,7 +28,10 @@
           <th>{{ ts('Subject') }}</th>
           <th>{{ ts('Status') }}</th>
           <th>{{ ts('Type') }}</th>
+          <th>{{ ts('Case Manager') }}</th>
           <th>{{ ts('My Role') }}</th>
+          <th>{{ ts('Next Milestone') }}</th>
+          <th>{{ ts('Next Task') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -38,25 +41,47 @@
               <input type="checkbox" ng-model="case.selected" />
             </div>
             <div>
-              <h4>{{ case.client.sort_name }}</h4>
-              <div ng-if="case.client.email">
+              <h4>
+                {{ case.client[0].sort_name }}
+                <span class="badge overdue-activities" ng-if="case.activities.overdue.length" title="{{ ts('Overdue activities') }}">
+                  {{ case.activities.overdue.length }}
+                </span>
+              </h4>
+              <div ng-if="case.client[0].email">
                 <strong>{{ ts('Email:') }}</strong>
-                {{ case.client.email }}
+                {{ case.client[0].email }}
               </div>
-              <div ng-if="case.client.phone">
+              <div ng-if="case.client[0].phone">
                 <strong>{{ ts('Phone:') }}</strong>
-                {{ case.client.phone }}
+                {{ case.client[0].phone }}
               </div>
               <div>
                 <strong>{{ ts('Case ID:') }}</strong>
                 {{ case.id }}
+              </div>
+              <div ng-if="case.activities.alert.length" class="case-alerts">
+                <i class="crm-i fa-exclamation-triangle"></i>
+                {{ case.activities.alert.length }}
               </div>
             </div>
           </td>
           <td>{{ case.subject }}</td>
           <td>{{ case.status }}</td>
           <td>{{ case.case_type }}</td>
+          <td>{{ case.manager.display_name }}</td>
           <td>{{ case.myRole.join(', ') }}</td>
+          <td>
+            <div ng-if="case.activities.milestone.length">
+              <div>{{ activityTypes[case.activities.milestone[0].activity_type_id].label }}</div>
+              <div>{{ CRM.utils.formatDate(case.activities.milestone[0].activity_date_time) }}</div>
+            </div>
+          </td>
+          <td>
+            <div ng-if="case.activities.task.length">
+              <div>{{ activityTypes[case.activities.task[0].activity_type_id].label }}</div>
+              <div>{{ CRM.utils.formatDate(case.activities.task[0].activity_date_time) }}</div>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

@@ -22,3 +22,10 @@
 #bootstrap-theme .case-list-checkbox + div {
   margin-left: 30px;
 }
+#bootstrap-theme .case-list-table .badge.overdue-activities {
+  background-color: #d9534f;
+  float: right;
+}
+#bootstrap-theme .case-list-table .case-alerts {
+  color: #d9534f;
+}
