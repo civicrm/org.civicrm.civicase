@@ -8,22 +8,17 @@ Civi::resources()->addSetting(array(
     'user_contact_id' => CRM_Core_Session::getLoggedInContactID(),
   ),
 ));
-return array (
-  'js' => 
-  array (
-    0 => 'ang/civicase.js',
-    1 => 'ang/civicase/*.js',
-    2 => 'ang/civicase/*/*.js',
+return array(
+  'js' => array(
+    'ang/civicase.js',
+    'ang/civicase/*.js',
+    'ang/civicase/*/*.js',
   ),
-  'css' => 
-  array (
-    0 => 'ang/*.css',
+  'css' => array(
+    'ang/*.css',
   ),
-  'partials' => 
-  array (
-    0 => 'ang/civicase',
+  'partials' => array(
+    'ang/civicase',
   ),
-  'settings' => 
-  array (
-  ),
+  'settings' => array(),
 );
