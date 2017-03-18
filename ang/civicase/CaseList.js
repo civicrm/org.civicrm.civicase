@@ -94,7 +94,7 @@
     function _loadCases() {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'case_type_id', 'status_id', 'contacts'],
+        return: ['subject', 'case_type_id', 'status_id', 'contacts', 'activity_summary'],
         options: {
           limit: ITEMS_PER_PAGE,
           offset: ITEMS_PER_PAGE * pageNum
@@ -104,7 +104,7 @@
         is_deleted: 0
       };
       return crmApi({
-        cases: ['Case', 'getwithactivities', $.extend(true, returnParams, params)],
+        cases: ['Case', 'getdetails', $.extend(true, returnParams, params)],
         count: ['Case', 'getcount', params]
       });
     }

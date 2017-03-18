@@ -1,6 +1,4 @@
 <div crm-ui-debug="cases"></div>
-<div crm-ui-debug="caseTypes"></div>
-<div crm-ui-debug="caseStatuses"></div>
 <div id="bootstrap-theme">
 
   <div class="panel panel-default case-list-panel">
@@ -43,8 +41,8 @@
             <div>
               <h4>
                 {{ case.client[0].sort_name }}
-                <span class="badge overdue-activities" ng-if="case.activities.overdue.length" title="{{ ts('Overdue activities') }}">
-                  {{ case.activities.overdue.length }}
+                <span class="badge overdue-activities" ng-if="case.activity_summary.overdue.length" title="{{ ts('Overdue activities') }}">
+                  {{ case.activity_summary.overdue.length }}
                 </span>
               </h4>
               <div ng-if="case.client[0].email">
@@ -59,9 +57,9 @@
                 <strong>{{ ts('Case ID:') }}</strong>
                 {{ case.id }}
               </div>
-              <div ng-if="case.activities.alert.length" class="case-alerts">
+              <div ng-if="case.activity_summary.alert.length" class="case-alerts">
                 <i class="crm-i fa-exclamation-triangle"></i>
-                {{ case.activities.alert.length }}
+                {{ case.activity_summary.alert.length }}
               </div>
             </div>
           </td>
@@ -71,15 +69,15 @@
           <td>{{ case.manager.display_name }}</td>
           <td>{{ case.myRole.join(', ') }}</td>
           <td>
-            <div ng-if="case.activities.milestone.length">
-              <div>{{ activityTypes[case.activities.milestone[0].activity_type_id].label }}</div>
-              <div>{{ CRM.utils.formatDate(case.activities.milestone[0].activity_date_time) }}</div>
+            <div ng-if="case.activity_summary.milestone.length">
+              <div>{{ activityTypes[case.activity_summary.milestone[0].activity_type_id].label }}</div>
+              <div>{{ CRM.utils.formatDate(case.activity_summary.milestone[0].activity_date_time) }}</div>
             </div>
           </td>
           <td>
-            <div ng-if="case.activities.task.length">
-              <div>{{ activityTypes[case.activities.task[0].activity_type_id].label }}</div>
-              <div>{{ CRM.utils.formatDate(case.activities.task[0].activity_date_time) }}</div>
+            <div ng-if="case.activity_summary.task.length">
+              <div>{{ activityTypes[case.activity_summary.task[0].activity_type_id].label }}</div>
+              <div>{{ CRM.utils.formatDate(case.activity_summary.task[0].activity_date_time) }}</div>
             </div>
           </td>
         </tr>
