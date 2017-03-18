@@ -8,7 +8,7 @@
           data: function(crmApi) {
             return crmApi({
               activityTypes: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_type', is_active: 1}],
-              statuses: ['Case', 'getoptions', {field: 'status_id'}],
+              caseStatuses: ['Case', 'getoptions', {field: 'status_id'}],
               caseTypes: ['Case', 'getoptions', {field: 'case_type_id'}]
             })
           }
@@ -26,7 +26,7 @@
     $scope.CRM = CRM;
 
     var caseTypes = $scope.caseTypes = data.caseTypes.values;
-    var caseStatuses = $scope.caseStatuses = data.statuses.values;
+    var caseStatuses = $scope.caseStatuses = data.caseStatuses.values;
     var activityTypes = $scope.activityTypes = _.indexBy(data.activityTypes.values, 'value');
 
     $scope.cases = [];

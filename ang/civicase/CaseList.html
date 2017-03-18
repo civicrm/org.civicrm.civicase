@@ -40,7 +40,18 @@
             </div>
             <div>
               <h4>
-                {{ case.client[0].sort_name }}
+                {{ case.client[0].display_name }}
+                <div class="btn-group btn-group-sm" ng-if="case.client.length > 1">
+                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Additional clients') }}">
+                    +{{ case.client.length - 1 }}
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" >
+                    <li ng-repeat="(index, client) in case.client" ng-if="index">
+                      <span>{{ client.display_name }}</span>
+                    </li>
+                  </ul>
+                </div>
                 <span class="badge overdue-activities" ng-if="case.activity_summary.overdue.length" title="{{ ts('Overdue activities') }}">
                   {{ case.activity_summary.overdue.length }}
                 </span>
