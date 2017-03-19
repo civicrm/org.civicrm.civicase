@@ -13,13 +13,33 @@
   });
 
   // CaseList directive controller
-  function caseListController($scope, crmApi) {
+  function caseListController($scope, crmApi, isActivityOverdue) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
-    var caseStatuses = CRM.civicase.caseStatuses;
+    var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
+    $scope.activityTypes = CRM.civicase.activityTypes;
+    $scope.isActivityOverdue = isActivityOverdue;
     $scope.CRM = CRM;
-    $scope.info = null;
+    $scope.item = null;
+
+    var caseGetParams = {
+      id: $scope.caseId,
+      return: ['subject', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+      sequential: 1
+    };
+
+    $scope.activeTab = 'summary';
+    $scope.tabs = [
+      {name: 'summary', label: ts('Summary')},
+      {name: 'activities', label: ts('Activities')},
+      {name: 'people', label: ts('People')},
+      {name: 'files', label: ts('Files')}
+    ];
+
+    $scope.selectTab = function(tab) {
+      $scope.activeTab = tab;
+    };
 
     function formatCase(item) {
       item.myRole = [];
@@ -41,12 +61,13 @@
       return item;
     }
 
-    crmApi('Case', 'getdetails', {
-      id: $scope.caseId,
-      return: ['subject', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
-      sequential: 1
-    }).then(function(info) {
-      $scope.info = formatCase(info.values[0]);
+    $scope.changeCaseStatus = function(statusId) {
+      // Todo: business logic for this is currently stuck in the form layer.
+      // @see CRM_Case_Form_Activity_ChangeCaseStatus
+    };
+
+    crmApi('Case', 'getdetails', caseGetParams).then(function(info) {
+      $scope.item = formatCase(info.values[0]);
     });
   }
 
@@ -54,7 +75,7 @@
     return {
       restrict: 'A',
       template:
-        '<div class="panel panel-default civicase-view-panel" ng-if="info">' +
+        '<div class="panel panel-default civicase-view-panel" ng-if="item">' +
           '<div class="panel-header" ng-include="\'~/civicase/CaseHeader.html\'"></div>' +
           '<div class="panel-body" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
         '</div>',

@@ -1,35 +1,50 @@
-<div crm-ui-debug="info"></div>
+<div crm-ui-debug="item"></div>
 <div class="civicase-view-header">
-  <div class="case-id css_right">
-    {{ ts('Case Id: %1', {1: info.id}) }}
+  <div class="case-id pull-right">
+    {{ ts('Case Id: %1', {1: item.id}) }}
+  </div>
+  <div class="btn-group btn-group-sm case-status-menu pull-right">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Change case status') }}">
+      {{ item.status }}
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" >
+      <li ng-repeat="(id, status) in caseStatuses" ng-if="id != item.status_id">
+        <a href ng-click="changeCaseStatus(id)">{{ status.label }}</a>
+      </li>
+    </ul>
   </div>
   <h2>
-    {{ info.client[0].display_name }}
-    <span ng-if="info.client.length === 2"> &amp; {{ info.client[1].display_name }}</span>
-    <div class="btn-group btn-group-sm" ng-if="info.client.length > 2">
+    {{ item.client[0].display_name }}
+    <span ng-if="item.client.length === 2"> &amp; {{ item.client[1].display_name }}</span>
+    <div class="btn-group btn-group-sm" ng-if="item.client.length > 2">
       <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Additional clients') }}">
-        {{ ts('%1 Others', {1: info.client.length - 1}) }}
+        {{ ts('%1 Others', {1: item.client.length - 1}) }}
       </button>
       <ul class="dropdown-menu" >
-        <li ng-repeat="(index, client) in info.client" ng-if="index">
+        <li ng-repeat="(index, client) in item.client" ng-if="index">
           <span>{{ client.display_name }}</span>
         </li>
       </ul>
     </div>
   </h2>
-  <div class="case-dates">
-    <span class="case-start-date">{{ CRM.utils.formatDate(info.start_date) }}</span> -
-    <span class="case-end-date" ng-if="info.end_date">{{ CRM.utils.formatDate(info.end_date) }}</span>
-    <span class="case-end-date" ng-if="!info.end_date">{{ ts('Ongoing') }}</span>
+  <div class="civicase-dates">
+    <span class="case-start-date">{{ CRM.utils.formatDate(item.start_date) }}</span> -
+    <span class="case-end-date" ng-if="item.end_date">{{ CRM.utils.formatDate(item.end_date) }}</span>
+    <span class="case-end-date" ng-if="!item.end_date">{{ ts('Ongoing') }}</span>
   </div>
-  <div class="case-tags">
+  <div class="civicase-tags">
     <span
       class="label label-default"
-      ng-repeat="tag in info.tag_id || []"
+      ng-repeat="tag in item.tag_id || []"
       style="background-color: {{ tag['tag_id.color'] }};"
       title="{{ tag['tag_id.description'] }}"
     >
       {{ tag['tag_id.name'] }}
     </span>
+  </div>
+  <div class="civicase-type-and-manager">
+    <div class="civicase-manager pull-right"><strong>{{ ts('Manager:') }}</strong> {{ item.manager.display_name }}</div>
+    <strong class="civicase-type">{{ item.case_type }}</strong>
   </div>
 </div>

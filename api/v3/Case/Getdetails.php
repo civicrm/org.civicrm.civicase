@@ -57,7 +57,7 @@ function civicrm_api3_case_getdetails($params) {
         'case_id' => array('IN' => $ids),
         'is_current_revision' => 1,
         'is_test' => 0,
-        'status_id' => array('!=' => 'Completed'),
+        'status_id' => array('NOT IN' => array('Completed', 'Cancelled')),
         'activity_type_id' => array('IN' => array_unique($allTypes)),
         'activity_date_time' => array('<' => 'now'),
         'options' => array(

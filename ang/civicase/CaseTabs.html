@@ -1,0 +1,14 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+      <ul class="nav navbar-nav">
+        <li ng-repeat="tab in tabs" ng-class="{active: activeTab === tab.name}">
+          <a href ng-click="selectTab(tab.name)">
+            {{ tab.label }}
+            <span class="sr-only" ng-if="activeTab === tab.name">{{ ts('Current') }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+</nav>
+<div ng-show="activeTab === 'summary'" ng-include="'~/civicase/CaseSummaryTab.html'"></div>
+<div ng-if="activeTab === 'activities'" civicase-activity-feed="{case_id: item.id}"></div>

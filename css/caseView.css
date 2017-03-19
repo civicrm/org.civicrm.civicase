@@ -5,6 +5,25 @@
 #bootstrap-theme .civicase-view-header h2 {
   margin-top: 0;
 }
-#bootstrap-theme .case-tags .label {
+#bootstrap-theme .civicase-tags .label {
   margin-right: 1em;
+}
+#bootstrap-theme .case-status-menu {
+  clear: both;
+  margin-top: 5px;
+}
+#bootstrap-theme .civicase-type-and-manager {
+  margin-top: 5px;
+  border-top: 1px solid #c2cfd8;
+}
+#bootstrap-theme .civicase-view-panel .panel-body {
+  padding: 0;
+}
+#bootstrap-theme .civicase-case-subject {
+  width: 50%;
+  float: left;
+}
+#bootstrap-theme .civicase-next-milestone {
+  width: 40%;
+  float: right;
 }
