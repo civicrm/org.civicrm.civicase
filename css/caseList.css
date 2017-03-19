@@ -1,12 +1,38 @@
 /* CSS rules for Angular civicase list */
+#bootstrap-theme .case-list-panel {
+  position: relative;
+}
+#bootstrap-theme .case-list-panel,
+#bootstrap-theme table.case-list-table,
+#bootstrap-theme .case-list-panel.viewing-case th:first-child,
+#bootstrap-theme .case-list-panel.viewing-case td:first-child {
+  width: 100%;
+}
+#bootstrap-theme .case-list-panel.viewing-case {
+  width: 25%;
+}
 #bootstrap-theme .case-list-table th,
 #bootstrap-theme .case-list-table td {
   padding: 10px;
   position: relative;
 }
+#bootstrap-theme .case-list-table td:first-child {
+  cursor: pointer;
+}
 #bootstrap-theme .case-list-table th:first-child,
 #bootstrap-theme .case-list-table td:first-child {
   border-right: 1px solid #ddd;
+  width: 25%;
+}
+#bootstrap-theme .case-list-table td:first-child:hover {
+  background-color: #f2f9fc;
+}
+#bootstrap-theme .viewing-case .case-list-table td.case-selected-for-view {
+  background-color: #d9edf7;
+}
+
+#bootstrap-theme .case-list-table td:first-child h4 {
+  margin: 0;
 }
 #bootstrap-theme .case-list-table tr {
   border-top: 1px solid #ddd;
@@ -25,7 +51,34 @@
 #bootstrap-theme .case-list-table .badge.overdue-activities {
   background-color: #d9534f;
   float: right;
+  margin-top: 5px;
 }
 #bootstrap-theme .case-list-table .case-alerts {
   color: #d9534f;
+}
+#bootstrap-theme .civicase-table-expander {
+  position: absolute;
+  top: 50%;
+  right: -15px;
+  height: 30px;
+  width: 15px;
+  cursor: pointer;
+  margin-top: -15px;
+  overflow: hidden;
+}
+#bootstrap-theme .civicase-table-expander div {
+  position: relative;
+  left: -15px;
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  color: white;
+  background-color: #777;
+  text-align: center;
+  font-size: 18px;
+  text-indent: 12px;
+  text-shadow: 1px 1px #303030;
+}
+#bootstrap-theme .civicase-table-expander:hover div {
+  background-color: #23527c;
 }

@@ -23,13 +23,14 @@
     $scope.CRM = CRM;
     $scope.item = null;
 
-    var caseGetParams = {
-      id: $scope.caseId,
-      return: ['subject', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
-      sequential: 1
-    };
+    function caseGetParams() {
+      return {
+        id: $scope.caseId,
+        return: ['subject', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+        sequential: 1
+      };
+    }
 
-    $scope.activeTab = 'summary';
     $scope.tabs = [
       {name: 'summary', label: ts('Summary')},
       {name: 'activities', label: ts('Activities')},
@@ -66,8 +67,12 @@
       // @see CRM_Case_Form_Activity_ChangeCaseStatus
     };
 
-    crmApi('Case', 'getdetails', caseGetParams).then(function(info) {
-      $scope.item = formatCase(info.values[0]);
+    $scope.$watch('caseId', function() {
+      $scope.item = null;
+      crmApi('Case', 'getdetails', caseGetParams()).then(function(info) {
+        $scope.activeTab = 'summary';
+        $scope.item = formatCase(info.values[0]);
+      });
     });
   }
 
@@ -75,9 +80,9 @@
     return {
       restrict: 'A',
       template:
-        '<div class="panel panel-default civicase-view-panel" ng-if="item">' +
-          '<div class="panel-header" ng-include="\'~/civicase/CaseHeader.html\'"></div>' +
-          '<div class="panel-body" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
+        '<div class="panel panel-default civicase-view-panel">' +
+          '<div class="panel-header" ng-if="item" ng-include="\'~/civicase/CaseHeader.html\'"></div>' +
+          '<div class="panel-body" ng-if="item" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
         '</div>',
       controller: caseListController,
       scope: {

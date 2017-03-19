@@ -1,4 +1,8 @@
 /* CSS rules for Angular civicase view */
+#bootstrap-theme .civicase-view-with-search {
+  width: 75%;
+  padding-left: 10px;
+}
 #bootstrap-theme .civicase-view-header {
   padding: 10px;
 }
@@ -19,6 +23,9 @@
 #bootstrap-theme .civicase-view-panel .panel-body {
   padding: 0;
 }
+#bootstrap-theme .civicase-summary-top {
+  padding: 0 10px;
+}
 #bootstrap-theme .civicase-case-subject {
   width: 50%;
   float: left;
@@ -26,4 +33,7 @@
 #bootstrap-theme .civicase-next-milestone {
   width: 40%;
   float: right;
+}
+#bootstrap-theme .milestone-overdue h4 span {
+  color: #d9534f;
 }

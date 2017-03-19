@@ -21,6 +21,13 @@
 
     $scope.cases = [];
 
+    $scope.viewingCase = null;
+    $scope.viewCase = function(id, $event) {
+      if (!$($event.target).is('input, button')) {
+        $scope.viewingCase = id;
+      }
+    };
+
     $scope.nextPage = function() {
       ++pageNum;
       getCases(true);

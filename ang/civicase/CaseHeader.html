@@ -9,6 +9,9 @@
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" >
+      <li>
+        <span class="list-group-item-info">{{ ts("Change status to:") }}</span>
+      </li>
       <li ng-repeat="(id, status) in caseStatuses" ng-if="id != item.status_id">
         <a href ng-click="changeCaseStatus(id)">{{ status.label }}</a>
       </li>

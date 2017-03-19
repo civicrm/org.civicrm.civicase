@@ -1,16 +1,18 @@
 <div crm-ui-debug="cases"></div>
-<div id="bootstrap-theme">
+<div crm-ui-debug="viewingCase"></div>
+<div id="bootstrap-theme" class="clearfix">
 
-  <div class="panel panel-default case-list-panel">
+  <div class="civicase-view-with-search pull-right" civicase-view="viewingCase" ng-show="viewingCase"></div>
+  <div class="panel panel-default case-list-panel" ng-class="{'viewing-case': viewingCase}">
 
     <table class="case-list-table">
       <thead>
         <tr>
           <th>
-            <div class="case-list-checkbox">
+            <div class="case-list-checkbox" ng-if="!viewingCase">
               <input type="checkbox" ng-click="selectAll($event)" ng-checked="isSelection('all')" />
             </div>
-            <div class="btn-group btn-group-sm">
+            <div class="btn-group btn-group-sm" ng-if="!viewingCase">
               <button type="button" class="btn btn-default dropdown-toggle {{ isSelection('any') ? '' : 'disabled' }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ ts('Actions') }}
                 <span class="caret"></span>
@@ -23,19 +25,19 @@
               </ul>
             </div>
           </th>
-          <th>{{ ts('Subject') }}</th>
-          <th>{{ ts('Status') }}</th>
-          <th>{{ ts('Type') }}</th>
-          <th>{{ ts('Case Manager') }}</th>
-          <th>{{ ts('My Role') }}</th>
-          <th>{{ ts('Next Milestone') }}</th>
-          <th>{{ ts('Next Task') }}</th>
+          <th ng-show="!viewingCase">{{ ts('Subject') }}</th>
+          <th ng-show="!viewingCase">{{ ts('Status') }}</th>
+          <th ng-show="!viewingCase">{{ ts('Type') }}</th>
+          <th ng-show="!viewingCase">{{ ts('Case Manager') }}</th>
+          <th ng-show="!viewingCase">{{ ts('My Role') }}</th>
+          <th ng-show="!viewingCase">{{ ts('Next Milestone') }}</th>
+          <th ng-show="!viewingCase">{{ ts('Next Task') }}</th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="item in cases">
-          <td>
-            <div class="case-list-checkbox">
+          <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}">
+            <div class="case-list-checkbox" ng-if="!viewingCase">
               <input type="checkbox" ng-model="item.selected" />
             </div>
             <div>
@@ -73,18 +75,18 @@
               </div>
             </div>
           </td>
-          <td>{{ item.subject }}</td>
-          <td>{{ item.status }}</td>
-          <td>{{ item.case_type }}</td>
-          <td>{{ item.manager.display_name }}</td>
-          <td>{{ item.myRole.join(', ') }}</td>
-          <td>
+          <td ng-show="!viewingCase">{{ item.subject }}</td>
+          <td ng-show="!viewingCase">{{ item.status }}</td>
+          <td ng-show="!viewingCase">{{ item.case_type }}</td>
+          <td ng-show="!viewingCase">{{ item.manager.display_name }}</td>
+          <td ng-show="!viewingCase">{{ item.myRole.join(', ') }}</td>
+          <td ng-show="!viewingCase">
             <div ng-if="item.activity_summary.milestone.length">
               <div>{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</div>
               <div>{{ CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
             </div>
           </td>
-          <td>
+          <td ng-show="!viewingCase">
             <div ng-if="item.activity_summary.task.length">
               <div>{{ activityTypes[item.activity_summary.task[0].activity_type_id].label }}</div>
               <div>{{ CRM.utils.formatDate(item.activity_summary.task[0].activity_date_time) }}</div>
@@ -93,6 +95,6 @@
         </tr>
       </tbody>
     </table>
-    <div class="text-center" ng-include="'~/civicase/Pager.html'"></div>
+    <div class="civicase-table-expander" ng-if="viewingCase" ng-click="viewCase(null, $event)"><div>&raquo;</div></div>
   </div>
 </div>
