@@ -2,7 +2,7 @@
 </div>
 <div class="pager-no-more" ng-if="!remaining">
   <button class="btn btn-default" disabled>
-    {{ remaining === false ? ts('None Found') : ts('No more items') }}
+    {{ remaining === false ? ts('None Found') : ts('Showing all %1', {1: totalCount}) }}
   </button>
 </div>
 <div class="pager-show-more" ng-if="remaining && remaining !== true">

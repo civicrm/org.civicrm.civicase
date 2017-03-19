@@ -3,31 +3,22 @@
   angular.module('civicase').config(function($routeProvider) {
       $routeProvider.when('/case/list', {
         controller: 'CivicaseCaseList',
-        templateUrl: '~/civicase/CaseList.html',
-        resolve: {
-          data: function(crmApi) {
-            return crmApi({
-              activityTypes: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_type', is_active: 1}],
-              caseStatuses: ['Case', 'getoptions', {field: 'status_id'}],
-              caseTypes: ['Case', 'getoptions', {field: 'case_type_id'}]
-            })
-          }
-        }
+        templateUrl: '~/civicase/CaseList.html'
       });
     }
   );
 
   // CaseList controller
-  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, data) {
+  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25,
       pageNum = 0;
     $scope.CRM = CRM;
 
-    var caseTypes = $scope.caseTypes = data.caseTypes.values;
-    var caseStatuses = $scope.caseStatuses = data.caseStatuses.values;
-    var activityTypes = $scope.activityTypes = _.indexBy(data.activityTypes.values, 'value');
+    var caseTypes = CRM.civicase.caseTypes;
+    var caseStatuses = CRM.civicase.caseStatuses;
+    $scope.activityTypes = CRM.civicase.activityTypes;
 
     $scope.cases = [];
 
@@ -56,8 +47,8 @@
     function formatCase(item) {
       item.myRole = [];
       item.client = [];
-      item.status = caseStatuses[item.status_id];
-      item.case_type = caseTypes[item.case_type_id];
+      item.status = caseStatuses[item.status_id].label;
+      item.case_type = caseTypes[item.case_type_id].title;
       item.selected = false;
       _.each(item.contacts, function(contact) {
         if (!contact.relationship_type_id) {
@@ -84,6 +75,7 @@
           $scope.cases = newCases;
         }
         var remaining = result.count - (ITEMS_PER_PAGE * (pageNum + 1));
+        $scope.totalCount = result.count;
         $scope.remaining = remaining > 0 ? remaining : 0;
         if (!result.count && !pageNum) {
           $scope.remaining = false;

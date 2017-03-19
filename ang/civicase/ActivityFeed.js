@@ -3,26 +3,23 @@
   angular.module('civicase').config(function($routeProvider) {
       $routeProvider.when('/activity/feed', {
         controller: 'CivicaseActivityFeed',
-        templateUrl: '~/civicase/ActivityFeed.html',
-        resolve: {
-          data: function(crmApi) {
-            return crmApi({
-              statuses: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_status', is_active: 1}],
-              types: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_type', is_active: 1}],
-              categories: ['optionValue', 'get', {options: {limit: 0, sort: 'weight'}, 'option_group_id': 'activity_category', is_active: 1}]
-            });
-          }
-        }
+        templateUrl: '~/civicase/ActivityFeed.html'
       });
     }
   );
 
-  // ActivityFeed controller
-  angular.module('civicase').controller('CivicaseActivityFeed', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, data) {
+  // ActivityFeed route controller
+  angular.module('civicase').controller('CivicaseActivityFeed', function($scope) {
+
+  });
+
+  // ActivityFeed directive controller
+  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
     var ITEMS_PER_PAGE = 25,
+      caseId = $scope.params ? $scope.params.case_id : null,
       pageNum = 0;
     $scope.CRM = CRM;
 
@@ -36,11 +33,11 @@
     }
 
     // We have data available in JS. We also want to reference in HTML.
-    var activityTypes = $scope.activityTypes = _.indexBy(data.types.values, 'value');
-    var activityStatuses = $scope.activityStatuses = _.indexBy(data.statuses.values, 'value');
-    var activityCategories = $scope.activityCategories = _.indexBy(data.categories.values, 'value');
-    $scope.activityTypeOptions = _.map(data.types.values, mapSelectOptions);
-    $scope.activityStatusOptions = _.map(data.statuses.values, mapSelectOptions);
+    var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
+    var activityStatuses = $scope.activityStatuses = CRM.civicase.activityStatuses;
+    $scope.activityCategories = CRM.civicase.activityCategories;
+    $scope.activityTypeOptions = _.map(activityTypes, mapSelectOptions);
+    $scope.activityStatusOptions = _.map(activityStatuses, mapSelectOptions);
     $scope.activities = {};
     $scope.remaining = true;
     $scope.availableFilters = {
@@ -132,6 +129,7 @@
           $scope.activities = newActivities;
         }
         var remaining = result.count - (ITEMS_PER_PAGE * (pageNum + 1));
+        $scope.totalCount = result.count;
         $scope.remaining = remaining > 0 ? remaining : 0;
         if (!result.count && !pageNum) {
           $scope.remaining = false;
@@ -153,6 +151,7 @@
       var params = {
         is_current_revision: 1,
         is_deleted: 0,
+        case_id: caseId ? caseId : {'IS NOT NULL': 1},
         options: {}
       };
       _.each($scope.filters, function(val, key) {
@@ -203,6 +202,21 @@
     // Respond to activities edited in popups.
     $('#crm-container').on('crmPopupFormSuccess', '.act-feed-panel', getActivities);
 
+  }
+
+  angular.module('civicase').directive('civicaseActivityFeed', function() {
+    return {
+      restrict: 'A',
+      template:
+        '<div class="panel panel-default act-feed-panel">' +
+          '<div class="panel-header" ng-include="\'~/civicase/ActivityFilters.html\'"></div>' +
+          '<div class="panel-body" ng-include="\'~/civicase/ActivityList.html\'"></div>' +
+        '</div>',
+      controller: activityFeedController,
+      scope: {
+        params: '=civicaseActivityFeed'
+      }
+    };
   });
 
 })(angular, CRM.$, CRM._);
