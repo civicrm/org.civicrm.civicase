@@ -40,10 +40,9 @@ return array(
   'js' => array(
     'ang/civicase.js',
     'ang/civicase/*.js',
-    'ang/civicase/*/*.js',
   ),
   'css' => array(
-    'ang/*.css',
+    'css/*.css',
   ),
   'partials' => array(
     'ang/civicase',

@@ -1,12 +1,11 @@
 (function(angular, $, _) {
 
   angular.module('civicase').config(function($routeProvider) {
-      $routeProvider.when('/activity/feed', {
-        controller: 'CivicaseActivityFeed',
-        templateUrl: '~/civicase/ActivityFeed.html'
-      });
-    }
-  );
+    $routeProvider.when('/activity/feed', {
+      controller: 'CivicaseActivityFeed',
+      template: '<div id="bootstrap-theme" civicase-activity-feed></div>'
+    });
+  });
 
   // ActivityFeed route controller
   angular.module('civicase').controller('CivicaseActivityFeed', function($scope) {

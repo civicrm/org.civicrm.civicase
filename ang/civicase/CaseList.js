@@ -1,12 +1,11 @@
 (function(angular, $, _) {
 
   angular.module('civicase').config(function($routeProvider) {
-      $routeProvider.when('/case/list', {
-        controller: 'CivicaseCaseList',
-        templateUrl: '~/civicase/CaseList.html'
-      });
-    }
-  );
+    $routeProvider.when('/case/list', {
+      controller: 'CivicaseCaseList',
+      templateUrl: '~/civicase/CaseList.html'
+    });
+  });
 
   // CaseList controller
   angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle) {

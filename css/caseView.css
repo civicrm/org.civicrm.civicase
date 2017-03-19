@@ -1,0 +1,10 @@
+/* CSS rules for Angular civicase view */
+#bootstrap-theme .civicase-view-header {
+  padding: 10px;
+}
+#bootstrap-theme .civicase-view-header h2 {
+  margin-top: 0;
+}
+#bootstrap-theme .case-tags .label {
+  margin-right: 1em;
+}

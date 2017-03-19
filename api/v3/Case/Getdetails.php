@@ -27,7 +27,7 @@ function civicrm_api3_case_getdetails($params) {
     $params['return'] = explode(',', str_replace(' ', '', $params['return']));
   }
   $toReturn = $params['return'];
-  $extraReturnProperties = array('activity_summary');
+  $extraReturnProperties = array('activity_summary', 'last_update');
   $params['return'] = array_diff($params['return'], $extraReturnProperties);
   $result = civicrm_api3_case_get(array('sequential' => 0) + $params);
   if (!empty($result['values'])) {
@@ -35,11 +35,7 @@ function civicrm_api3_case_getdetails($params) {
 
     // Get activity summary
     if (in_array('activity_summary', $toReturn)) {
-      $categories = array_fill_keys(array(
-        'alert',
-        'milestone',
-        'task'
-      ), array());
+      $categories = array_fill_keys(array('alert', 'milestone', 'task'), array());
       foreach ($result['values'] as &$case) {
         $case['activity_summary'] = $categories + array('overdue' => array());
       }
@@ -56,13 +52,7 @@ function civicrm_api3_case_getdetails($params) {
         }
       }
       $activities = civicrm_api3('Activity', 'get', array(
-        'return' => array(
-          'activity_type_id',
-          'subject',
-          'activity_date_time',
-          'status_id',
-          'case_id'
-        ),
+        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id'),
         'check_permissions' => !empty($params['check_permissions']),
         'case_id' => array('IN' => $ids),
         'is_current_revision' => 1,
@@ -87,6 +77,10 @@ function civicrm_api3_case_getdetails($params) {
           $case['activity_summary']['overdue'][] = $act;
         }
       }
+    }
+    // Get last update
+    if (in_array('last_update', $toReturn)) {
+      // todo
     }
     if (!empty($params['sequential'])) {
       $result['values'] = array_values($result['values']);
