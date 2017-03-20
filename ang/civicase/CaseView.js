@@ -26,7 +26,7 @@
     function caseGetParams() {
       return {
         id: $scope.caseId,
-        return: ['subject', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+        return: ['subject', 'case_type_id', 'case_type_id.definition', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
         sequential: 1
       };
     }

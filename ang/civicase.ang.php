@@ -36,6 +36,11 @@ foreach ($result['values'] as &$item) {
   CRM_Utils_Array::remove($item, 'id', 'definition', 'is_forkable', 'is_forked');
 }
 $options['caseTypes'] = $result['values'];
+$result = civicrm_api3('RelationshipType', 'get', array(
+  'is_active' => 1,
+  'options' => array('limit' => 0),
+));
+$options['relationshipTypes'] = $result['values'];
 return array(
   'js' => array(
     'ang/civicase.js',

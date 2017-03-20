@@ -1,0 +1,52 @@
+<div crm-ui-debug="caseRoles"></div>
+<div class="civicase-relationships-case">
+  <h3>{{ ts('Case Roles') }}</h3>
+  <table>
+    <thead><tr>
+      <th>{{ ts('Role') }}</th>
+      <th>{{ ts('Name') }}</th>
+      <th>{{ ts('Phone') }}</th>
+      <th>{{ ts('Email') }}</th>
+      <th>{{ ts('Actions') }}</th>
+    </tr></thead>
+    <tbody>
+      <tr ng-repeat="role in caseRoles">
+        <td>
+          <div><strong>{{ role.role }}</strong></div>
+          <div><em>{{ role.description }}</em></div>
+        </td>
+        <td>
+          <span ng-if="role.contact_id">{{ role.display_name }}</span>
+          <span ng-if="!role.contact_id"><em>{{ ts('Unassigned')  }}</em></span>
+        </td>
+        <td>{{ role.phone }}</td>
+        <td>{{ role.email }}</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="civicase-relationships-other">
+  <h3>{{ ts('Other Relationships') }}</h3>
+  <table>
+    <thead><tr>
+      <th>{{ ts('Client') }}</th>
+      <th>{{ ts('Relationship') }}</th>
+      <th>{{ ts('Name') }}</th>
+      <th>{{ ts('Phone') }}</th>
+      <th>{{ ts('Email') }}</th>
+    </tr></thead>
+    <tbody>
+      <tr ng-repeat="contact in people">
+        <td>{{ contact.client }}</td>
+        <td>{{ contact.relation }}</td>
+        <td>{{ contact.display_name }}</td>
+        <td>{{ contact.phone }}</td>
+        <td>{{ contact.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="civicase-relationships-other">
+
+</div>
