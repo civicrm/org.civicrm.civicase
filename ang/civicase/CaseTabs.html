@@ -1,14 +1,16 @@
-<nav class="navbar navbar-default">
+<nav class="navbar civicase-view-tab-bar navbar-inverse">
   <div class="container-fluid">
-      <ul class="nav navbar-nav">
-        <li ng-repeat="tab in tabs" ng-class="{active: activeTab === tab.name}">
-          <a href ng-click="selectTab(tab.name)">
-            {{ tab.label }}
-            <span class="sr-only" ng-if="activeTab === tab.name">{{ ts('Current') }}</span>
-          </a>
-        </li>
-      </ul>
-    </div>
+    <ul class="nav navbar-nav">
+      <li ng-repeat="tab in tabs" ng-class="{active: activeTab === tab.name}">
+        <a href ng-click="selectTab(tab.name)">
+          {{ tab.label }}
+          <span class="sr-only" ng-if="activeTab === tab.name">{{ ts('Current') }}</span>
+        </a>
+      </li>
+    </ul>
+      <button type="button" class="btn btn-sm navbar-btn pull-right"><i class="fa fa-plus"></i> {{ ts('Timeline') }}</button>
+      <button type="button" class="btn btn-sm navbar-btn pull-right"><i class="fa fa-plus"></i> {{ ts('Activity') }}</button>
+  </div>
 </nav>
 <div ng-show="activeTab === 'summary'" ng-include="'~/civicase/CaseViewSummary.html'"></div>
 <div ng-if="activeTab === 'activities'" civicase-activity-feed="{case_id: item.id}"></div>

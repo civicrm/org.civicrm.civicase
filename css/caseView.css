@@ -37,3 +37,27 @@
 #bootstrap-theme .milestone-overdue h4 span {
   color: #d9534f;
 }
+#bootstrap-theme nav.civicase-view-tab-bar {
+  background-color: #31b0d5;
+  border: 0 none;
+  border-radius: 0;
+  box-shadow: 0 5px 20px rgba(0,0,0,.2);
+}
+#bootstrap-theme .navbar.civicase-view-tab-bar .btn {
+  color: white;
+  border: 1px solid white;
+  background-color: transparent;
+  margin: 12px 12px 0 0;
+}
+#bootstrap-theme .navbar.civicase-view-tab-bar .navbar-nav li {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+#bootstrap-theme .navbar.civicase-view-tab-bar .navbar-nav > li > a {
+  border-bottom: 3px solid transparent;
+}
+#bootstrap-theme .navbar.civicase-view-tab-bar .navbar-nav > .active > a {
+  background-color: transparent;
+  border-bottom: 3px solid white;
+}
