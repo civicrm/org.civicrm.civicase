@@ -1,10 +1,10 @@
 <div crm-ui-debug="cases"></div>
 <div id="bootstrap-theme" class="clearfix">
 
-  <div class="civicase-view-with-search pull-right" civicase-view="viewingCase" ng-show="viewingCase"></div>
-  <div class="panel panel-default case-list-panel" ng-class="{'viewing-case': viewingCase}">
+  <div class="civicase-view-with-search pull-right" ng-class="{'case-is-focused': caseIsFocused}" civicase-view="viewingCase" civicase-focused="caseIsFocused" ng-show="viewingCase"></div>
+  <div class="panel panel-default case-list-panel" ng-class="{'viewing-case': viewingCase, 'case-is-focused': caseIsFocused}">
 
-    <table class="case-list-table">
+    <table ng-show="!caseIsFocused" class="case-list-table">
       <thead>
         <tr>
           <th>
@@ -94,6 +94,7 @@
         </tr>
       </tbody>
     </table>
-    <div class="civicase-table-expander" ng-if="viewingCase" ng-click="viewCase(null, $event)"><div>&raquo;</div></div>
+    <div class="civicase-table-expander" ng-if="viewingCase && !caseIsFocused" ng-click="viewCase(null, $event)"><div>&raquo;</div></div>
+    <div class="civicase-table-placeholder" ng-if="caseIsFocused" ng-click="unfocusCase()"><div>&raquo;</div></div>
   </div>
 </div>

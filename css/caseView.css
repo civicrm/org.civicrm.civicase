@@ -3,6 +3,10 @@
   width: 75%;
   padding-left: 10px;
 }
+#bootstrap-theme .civicase-view-with-search.case-is-focused {
+  width: 100%;
+  padding-left: 20px;
+}
 #bootstrap-theme .civicase-view-header {
   padding: 10px;
 }

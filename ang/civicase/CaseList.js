@@ -14,6 +14,7 @@
     var ITEMS_PER_PAGE = 25,
       pageNum = 0;
     $scope.CRM = CRM;
+    $scope.caseIsFocused = false;
 
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = CRM.civicase.caseStatuses;
@@ -24,8 +25,13 @@
     $scope.viewingCase = null;
     $scope.viewCase = function(id, $event) {
       if (!$($event.target).is('input, button')) {
+        $scope.caseIsFocused = false;
         $scope.viewingCase = id;
       }
+    };
+
+    $scope.unfocusCase = function() {
+      $scope.caseIsFocused = false;
     };
 
     $scope.nextPage = function() {

@@ -11,6 +11,9 @@
 #bootstrap-theme .case-list-panel.viewing-case {
   width: 25%;
 }
+#bootstrap-theme .case-list-panel.case-is-focused {
+  width: 15px;
+}
 #bootstrap-theme .case-list-table th,
 #bootstrap-theme .case-list-table td {
   padding: 10px;
@@ -81,4 +84,17 @@
 }
 #bootstrap-theme .civicase-table-expander:hover div {
   background-color: #23527c;
+}
+#bootstrap-theme .civicase-table-placeholder {
+  width: 15px;
+  height: 600px;
+  cursor: pointer;
+  position: relative;
+}
+#bootstrap-theme .civicase-table-placeholder div {
+  position: absolute;
+  top: 50%;
+  font-size: 18px;
+  left: 3px;
+  margin-top: -13px;
 }

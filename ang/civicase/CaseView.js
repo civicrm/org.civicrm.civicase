@@ -40,6 +40,7 @@
 
     $scope.selectTab = function(tab) {
       $scope.activeTab = tab;
+      $scope.isFocused = true;
     };
 
     function formatCase(item) {
@@ -86,7 +87,8 @@
         '</div>',
       controller: caseListController,
       scope: {
-        caseId: '=civicaseView'
+        caseId: '=civicaseView',
+        isFocused: '=civicaseFocused'
       }
     };
   });
