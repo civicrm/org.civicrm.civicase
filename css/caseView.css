@@ -65,3 +65,15 @@
   background-color: transparent;
   border-bottom: 3px solid white;
 }
+#bootstrap-theme .civicase-view-related-cases .panel-header h3 {
+  margin: 0;
+  padding: 5px;
+}
+#bootstrap-theme .civicase-view-related-cases .panel-body > a {
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+}
+#bootstrap-theme .civicase-view-related-cases .panel-body > a > i.fa-arrow-circle-o-right {
+  font-size: 18px;
+}

@@ -33,6 +33,11 @@ function civicrm_api3_case_getdetails($params) {
   if (!empty($result['values'])) {
     $ids = array_keys($result['values']);
 
+    // Remove legacy cruft
+    foreach ($result['values'] as &$case) {
+      unset($case['client_id']);
+    }
+
     // Get activity summary
     if (in_array('activity_summary', $toReturn)) {
       $categories = array_fill_keys(array('alert', 'milestone', 'task'), array());

@@ -26,7 +26,9 @@
     function caseGetParams() {
       return {
         id: $scope.caseId,
-        return: ['subject', 'case_type_id', 'case_type_id.definition', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+        return: ['subject', 'contact_id', 'case_type_id', 'case_type_id.definition', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+        // For the "related cases" section
+        'api.Case.get': {contact_id: {IN: "$value.contact_id"}, id: {"!=": "$value.id"}, is_deleted: 0, return: ['case_type_id', 'start_date', 'end_date', 'contact_id', 'status_id']},
         sequential: 1
       };
     }
@@ -59,6 +61,21 @@
         if (contact.manager) {
           item.manager = contact;
         }
+      });
+      // Format related cases
+      item.relatedCases = _.cloneDeep(item['api.Case.get'].values);
+      delete(item['api.Case.get']);
+      _.each(item.relatedCases, function(relCase) {
+        relCase.contact_id = _.toArray(relCase.contact_id);
+        delete(relCase.client_id);
+        relCase.case_type = caseTypes[relCase.case_type_id].title;
+        relCase.status = caseStatuses[relCase.status_id].label;
+        relCase.commonClients = [];
+        _.each(item.client, function(client) {
+          if (relCase.contact_id.indexOf(client.contact_id) >= 0) {
+            relCase.commonClients.push(client.display_name);
+          }
+        });
       });
       return item;
     }
