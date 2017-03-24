@@ -1,7 +1,7 @@
 <div crm-ui-debug="cases"></div>
 <div id="bootstrap-theme" class="clearfix">
 
-  <div class="civicase-view-with-search pull-right" ng-class="{'case-is-focused': caseIsFocused}" civicase-view="viewingCase" civicase-focused="caseIsFocused" ng-show="viewingCase"></div>
+  <div class="civicase-view-with-search pull-right" ng-class="{'case-is-focused': caseIsFocused, 'cc-zero-w': !viewingCase}" civicase-view="viewingCase" civicase-focused="caseIsFocused"></div>
   <div class="panel panel-default case-list-panel" ng-class="{'viewing-case': viewingCase, 'case-is-focused': caseIsFocused}">
 
     <table ng-show="!caseIsFocused" class="case-list-table">

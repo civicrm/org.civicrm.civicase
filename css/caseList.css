@@ -1,6 +1,8 @@
 /* CSS rules for Angular civicase list */
-#bootstrap-theme .case-list-panel {
+#bootstrap-theme .case-list-panel,
+#bootstrap-theme .civicase-view-with-search {
   position: relative;
+  transition: width .2s linear;
 }
 #bootstrap-theme .case-list-panel,
 #bootstrap-theme table.case-list-table,
@@ -17,6 +19,10 @@
 #bootstrap-theme .case-list-table {
   table-layout: fixed;
   word-wrap: break-word;
+}
+#bootstrap-theme .case-list-table thead tr {
+  height: 61px;
+  overflow: hidden;
 }
 #bootstrap-theme .case-list-table th,
 #bootstrap-theme .case-list-table td {

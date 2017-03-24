@@ -5,3 +5,14 @@
 #bootstrap-theme .panel .panel-header {
   background-color: #f3f6f7;
 }
+#bootstrap-theme .cc-zero-w {
+  width: 0%;
+  box-shadow: none;
+  padding: 0;
+  border: 0 none;
+  overflow: hidden;
+}
+#bootstrap-theme .cc-zero-h {
+  height: 0px;
+  transition: height .2s linear;
+}

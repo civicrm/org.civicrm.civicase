@@ -86,11 +86,13 @@
     };
 
     $scope.$watch('caseId', function() {
-      $scope.item = null;
-      crmApi('Case', 'getdetails', caseGetParams()).then(function(info) {
-        $scope.activeTab = 'summary';
-        $scope.item = formatCase(info.values[0]);
-      });
+      if ($scope.caseId) {
+        $scope.item = null;
+        crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
+          $scope.activeTab = 'summary';
+          $scope.item = formatCase(info.values[0]);
+        });
+      }
     });
   }
 

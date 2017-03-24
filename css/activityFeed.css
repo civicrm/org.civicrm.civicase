@@ -24,11 +24,22 @@
   white-space: nowrap;
 }
 
+#bootstrap-theme .act-feed-list-group,
+#bootstrap-theme .act-feed-view-activity {
+  position: relative;
+  transition: width .2s linear;
+  overflow: hidden;
+}
+
+#bootstrap-theme .act-feed-list-group {
+  width: 100%;
+}
+
 #bootstrap-theme div.act-feed-panel .panel-body {
   padding: 0;
 }
 
-#bootstrap-theme .act-feed-view-activity + .act-feed-list-group {
+#bootstrap-theme .act-feed-list-group.viewing-activity {
   width: 60%;
   float: left;
 }
