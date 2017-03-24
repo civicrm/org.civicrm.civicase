@@ -16,7 +16,7 @@ $options = array(
 );
 foreach ($options as &$option) {
   $result = civicrm_api3('OptionValue', 'get', array(
-    'return' => array('value', 'label', 'color', 'icon', 'name'),
+    'return' => array('value', 'label', 'color', 'icon', 'name', 'grouping'),
     'option_group_id' => $option,
     'is_active' => 1,
     'options' => array('limit' => 0, 'sort' => 'weight'),

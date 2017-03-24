@@ -1,3 +1,4 @@
+<div crm-ui-debug="activities"></div>
 <ul class="list-group act-feed-list-group">
   <li class="list-group-item act-list-controls" ng-include="'~/civicase/ActivityControls.html'"></li>
   <li class="list-group-item act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in activities">
