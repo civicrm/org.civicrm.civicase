@@ -39,6 +39,7 @@
     $scope.activityStatusOptions = _.map(activityStatuses, mapSelectOptions);
     $scope.activities = {};
     $scope.remaining = true;
+    $scope.viewingActivity = {};
     $scope.availableFilters = {
       activity_type_id: ts('Activity type'),
       status_id: ts('Status'),
@@ -100,6 +101,20 @@
           activity.attachments = data.values;
           $scope.$digest();
         });
+      }
+    };
+
+    $scope.viewActivity = function(id, e) {
+      if ($(e.target).closest('a, button').length) {
+        return;
+      }
+      if ($scope.viewingActivity && $scope.viewingActivity.id == id) {
+        $scope.viewingActivity = {};
+      } else {
+        $scope.viewingActivity = {
+          id: id,
+          type: _.find($scope.activities, {id: id}).type
+        };
       }
     };
 
@@ -209,7 +224,7 @@
       template:
         '<div class="panel panel-default act-feed-panel">' +
           '<div class="panel-header" ng-include="\'~/civicase/ActivityFilters.html\'"></div>' +
-          '<div class="panel-body" ng-include="\'~/civicase/ActivityList.html\'"></div>' +
+          '<div class="panel-body clearfix" ng-include="\'~/civicase/ActivityList.html\'"></div>' +
         '</div>',
       controller: activityFeedController,
       scope: {

@@ -1,11 +1,12 @@
 <div crm-ui-debug="activities"></div>
+<div class="act-feed-view-activity" civicase-activity-view="viewingActivity" ng-if="viewingActivity.id"></div>
 <ul class="list-group act-feed-list-group">
   <li class="list-group-item act-list-controls" ng-include="'~/civicase/ActivityControls.html'"></li>
   <li class="list-group-item act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in activities">
     <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, activities[$index-1].activity_date_time)">
       {{ CRM.utils.formatDate(activity.activity_date_time) }}
     </h4>
-    <div class="act-feed-item" style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};">
+    <div class="act-feed-item" style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};" ng-click="viewActivity(activity.id, $event)" ng-class="{'act-is-viewing': activity.id === viewingActivity.id}">
       <div class="act-feed-inner">
         <div class="cb-dot" title="{{ activity.type }} ({{ activity.status }})" style="background-color: {{ activity.color }};">
           <i ng-if="activity.icon" class="fa {{ activity.icon }}"></i>
@@ -14,22 +15,11 @@
         <div class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
           <i class="fa fa-{{ activity.is_completed ? 'check-' : '' }}square-o"></i>
         </div>
-        <div class="act-actions-menu btn-group btn-group-sm">
-          <button type="button" class="btn btn-default dropdown-toggle act-actions-button" data-toggle="dropdown" title="{{ ts('Actions') }}">
-            <i class="crm-i fa-ellipsis-v"></i>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-right" role="menu">
-            <li><a class="crm-popup" href="{{ CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('View') }}</a></li>
-            <li><a class="crm-popup" href="{{ CRM.url('civicrm/activity/add', {action: 'update', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('Edit') }}</a></li>
-            <li><a class="crm-popup small-popup" href="{{ CRM.url('civicrm/activity', {action: 'delete', id: activity.id, reset: 1, atype: activity.activity_type_id}) }}">{{ ts('Delete') }}</a></li>
-          </ul>
-        </div>
         <h4>
           <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
           <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
           <a class="act-star crm-i" ng-click="star(activity)" href ng-if="activity.category.indexOf('alert') < 0">
-            <i class="crm-i fa-star-o" ng-if="activity.is_star === '0'" title="{{ ts('Add star') }}"></i>
-            <i class="crm-i fa-star" ng-if="activity.is_star === '1'" title="{{ ts('Unstar') }}"></i>
+            <i class="crm-i" ng-class="{'fa-star-o': activity.is_star === '0', 'fa-star': activity.is_star === '1'}" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}"></i>
           </a>
           <div ng-if="activity.file_id" class="act-attachment-menu btn-group btn-group-sm">
             <button

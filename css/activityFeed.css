@@ -28,6 +28,17 @@
   padding: 0;
 }
 
+#bootstrap-theme .act-feed-view-activity + .act-feed-list-group {
+  width: 60%;
+  float: left;
+}
+
+#bootstrap-theme .act-feed-view-activity {
+  width: 40%;
+  float: right;
+  border-left: 1px solid #e7e7e7;
+}
+
 #bootstrap-theme div.act-actions-menu {
   position: absolute;
   right: -.5em;
@@ -72,6 +83,25 @@
 
 #bootstrap-theme .act-feed-list-group .act-feed-item {
   padding: 10px 15px;
+  cursor: pointer;
+}
+
+#bootstrap-theme .act-feed-list-group .act-feed-item.act-is-viewing {
+  color: #555;
+  background-color: #F3F6F7;
+}
+
+#bootstrap-theme .act-feed-list-group .act-feed-item.act-is-viewing .cb-dot {
+  border-color: #F3F6F7;
+}
+
+#bootstrap-theme .act-feed-list-group .act-feed-item:hover {
+  color: #555;
+  background-color: #F3F6F7;
+}
+
+#bootstrap-theme .act-feed-list-group .act-feed-item:hover .cb-dot {
+  border-color: #F3F6F7;
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-inner {
@@ -95,15 +125,6 @@
 
 #bootstrap-theme .act-feed-list-group .act-category-alert.is-incomplete .cb-dot {
   background-color: #e6807f;
-}
-
-#bootstrap-theme .act-feed-list-group .act-feed-item:hover {
-  color: #555;
-  background-color: #F3F6F7;
-}
-
-#bootstrap-theme .act-feed-list-group .act-feed-item:hover .cb-dot {
-  border-color: #F3F6F7;
 }
 
 #bootstrap-theme .act-feed-list-group .act-date {

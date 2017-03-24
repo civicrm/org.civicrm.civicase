@@ -1,0 +1,22 @@
+#bootstrap-theme .act-feed-view-activity nav {
+  margin: 0;
+  border: 0;
+  background-color: #F3F6F7;
+}
+#bootstrap-theme .act-feed-view-activity nav h3 {
+  display: inline-block;
+  margin-bottom: 0px;
+  margin-top: 15px;
+}
+#bootstrap-theme .act-view-container {
+  min-height: 200px;
+}
+#bootstrap-theme .act-view-container .crm-content-block {
+  box-shadow: none;
+}
+#bootstrap-theme .act-view-container .crm-content-block {
+  box-shadow: none;
+}
+#bootstrap-theme .act-view-container .crm-button_qf_Activity_cancel {
+  display: none !important;
+}
