@@ -2,7 +2,7 @@
 
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/case/:id', {
-      template: '<div id="bootstrap-theme" civicase-view="caseId"></div>',
+      template: '<div id="bootstrap-theme" class="civicase-main" civicase-view="caseId"></div>',
       controller: 'CivicaseCaseView'
     });
   });

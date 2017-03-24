@@ -3,7 +3,7 @@
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/activity/feed', {
       controller: 'CivicaseActivityFeed',
-      template: '<div id="bootstrap-theme" civicase-activity-feed></div>'
+      template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed></div>'
     });
   });
 
