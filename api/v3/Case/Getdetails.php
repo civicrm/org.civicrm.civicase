@@ -27,6 +27,7 @@ function civicrm_api3_case_getdetails($params) {
     $params['return'] = explode(',', str_replace(' ', '', $params['return']));
   }
   $toReturn = $params['return'];
+  $options = CRM_Utils_Array::value('options', $params, array());
   $extraReturnProperties = array('activity_summary', 'last_update');
   $params['return'] = array_diff($params['return'], $extraReturnProperties);
   $result = civicrm_api3_case_get(array('sequential' => 0) + $params);
@@ -40,7 +41,8 @@ function civicrm_api3_case_getdetails($params) {
 
     // Get activity summary
     if (in_array('activity_summary', $toReturn)) {
-      $categories = array_fill_keys(array('alert', 'milestone', 'task'), array());
+      $catetoryLimits = CRM_Utils_Array::value('categories', $options, array_fill_keys(array('alert', 'milestone', 'task', 'communication'), 0));
+      $categories = array_fill_keys(array_keys($catetoryLimits), array());
       foreach ($result['values'] as &$case) {
         $case['activity_summary'] = $categories + array('overdue' => array());
       }
@@ -75,7 +77,7 @@ function civicrm_api3_case_getdetails($params) {
         $case =& $result['values'][$act['case_id']];
         unset($act['case_id']);
         foreach ($categories as $category => $grouping) {
-          if (in_array($act['activity_type_id'], $grouping)) {
+          if (in_array($act['activity_type_id'], $grouping) && (!$catetoryLimits[$category] || count($case['activity_summary'][$category]) < $catetoryLimits[$category])) {
             $case['activity_summary'][$category][] = $act;
           }
         }

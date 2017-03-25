@@ -29,7 +29,18 @@
         return: ['subject', 'contact_id', 'case_type_id', 'case_type_id.definition', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
         // For the "related cases" section
         'api.Case.get': {contact_id: {IN: "$value.contact_id"}, id: {"!=": "$value.id"}, is_deleted: 0, return: ['case_type_id', 'start_date', 'end_date', 'contact_id', 'status_id']},
-        sequential: 1
+        // For the "recent communication" section
+        'api.Activity.get': {
+          case_id: "$value.id",
+          "activity_type_id.grouping": "communication",
+          activity_date_time: {'<=': 'now'},
+          options: {limit: 5},
+          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name']
+        },
+        sequential: 1,
+        options: {
+          categories: {communication: 1, task: 5, alert: 10}
+        }
       };
     }
 
@@ -81,6 +92,9 @@
       _.each(item.activity_summary, function(acts) {
         _.each(acts, formatActivity);
       });
+      // Recent communications
+      item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get'].values), formatActivity);
+      delete(item['api.Activity.get']);
       return item;
     }
 

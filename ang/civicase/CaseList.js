@@ -100,6 +100,7 @@
         sequential: 1,
         return: ['subject', 'case_type_id', 'status_id', 'contacts', 'activity_summary'],
         options: {
+          categories: {milestone: 1, task: 1, alert: 10},
           limit: ITEMS_PER_PAGE,
           offset: ITEMS_PER_PAGE * pageNum
         }

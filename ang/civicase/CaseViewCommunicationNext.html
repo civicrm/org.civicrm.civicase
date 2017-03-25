@@ -1,26 +1,30 @@
-<div class="panel panel-default civicase-view-tasks">
+<div class="panel panel-default civicase-view-communication-next">
   <div class="panel-header">
-    <h3>{{ ts('Tasks') }}</h3>
+    <h3>{{ ts('Next Communication') }}</h3>
   </div>
   <div class="panel-body">
-    <ul class="list-group act-feed-list-group">
-      <li class="list-group-item act-category-task {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.activity_summary.task">
+    <ul class="list-group act-feed-list-group" ng-if="item.activity_summary.communication.length">
+      <li class="list-group-item act-category-communication {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.activity_summary.communication.slice(0,1)">
         <div class="act-feed-item">
           <div class="act-feed-inner">
             <div class="cb-dot" title="{{ activity.type }} ({{ activity.status }})" style="background-color: {{ activity.color }};">
               <i ng-if="activity.icon" class="fa {{ activity.icon }}"></i>
               <strong ng-if="!activity.icon">{{ activity.type[0] }}</strong>
             </div>
-            <a href class="act-task-checkbox" ng-click="markCompleted(activity)" title="{{ ts('Mark complete') }}">
-              <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
-            </a>
             <h4>
               <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
               <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
             </h4>
-            <div class="clearfix">
-              {{ CRM.utils.formatDate(activity.activity_date_time) }}
-              <div class="pull-right" ng-if="activity.assignee_contact_name">
+            <div class="act-contacts clearfix">
+              <div class="act-contacts-target" ng-if="activity.target_contact_name">
+                <strong>{{ ts('With:') }}</strong>
+                <span ng-repeat="(cid, display_name) in activity.target_contact_name">
+                  <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
+                  {{$last ? '' : ', '}}
+                </span>
+              </div>
+              <div class="act-contacts-assignee" ng-if="activity.assignee_contact_name">
+                <strong>{{ ts('Assigned to:') }}</strong>
                 <span ng-repeat="(cid, display_name) in activity.assignee_contact_name">
                   <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
                   {{$last ? '' : ', '}}
