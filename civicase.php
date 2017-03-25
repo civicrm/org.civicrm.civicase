@@ -150,6 +150,18 @@ function civicase_civicrm_buildForm($formName, &$form) {
 }
 
 /**
+ * Implements hook_civicrm_alterAPIPermissions().
+ *
+ * @link https://docs.civicrm.org/dev/en/master/hooks/hook_civicrm_alterAPIPermissions/
+ */
+function civicase_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  $permissions['case']['get']['getfiles'] = array(
+    array('access my cases and activities', 'access all cases and activities'),
+    'access uploaded files',
+  );
+}
+
+/**
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
