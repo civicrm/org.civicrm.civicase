@@ -1,3 +1,11 @@
-FileList.html
+<div ng-hide="apiCtrl.result.count">
+  {{ts('No files found')}}
+</div>
 
-<div><b>the file list ({{fileQuery.apiResult.count}})</b></div>
+<ul ng-show="apiCtrl.result.count > 0">
+  <li ng-repeat="row in values">
+    Case: {{xref.case[row.case_id].subject}} (#{{row.case_id}})<br/>
+    Activity: {{xref.activity[row.activity_id].subject}} (#{{row.activity_id}}) ({{xref.activity[row.activity_id].color}})<br/>
+    File: {{xref.file[row.id].name}} (#{{row.id}})
+  </li>
+</ul>

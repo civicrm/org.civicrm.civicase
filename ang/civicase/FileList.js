@@ -1,8 +1,12 @@
 (function(angular, $, _) {
 
-  function FileListCtrl($scope, crmThrottle, crmApi) {
-    var ts = $scope.ts = CRM.ts('civicase'),
-      fileQuery = $scope.fileQuery;
+  function FileListCtrl($scope) {
+    var ts = $scope.ts = CRM.ts('civicase');
+    $scope.$watchCollection('apiCtrl.result', function(r){
+      // prettier html
+      $scope.values = r.values;
+      $scope.xref = r.xref;
+    });
   }
 
   angular.module('civicase').directive('civicaseFileList', function() {
@@ -11,7 +15,7 @@
       templateUrl: '~/civicase/FileList.html',
       controller: FileListCtrl,
       scope: {
-        fileQuery: '=civicaseFileList'
+        apiCtrl: '=civicaseFileList'
       }
     };
   });

@@ -1,8 +1,7 @@
 (function(angular, $, _) {
 
-  function FileFilterCtrl($scope, crmThrottle, crmApi) {
-    var ts = $scope.ts = CRM.ts('civicase'),
-      fileQuery = $scope.fileQuery;
+  function FileFilterCtrl($scope) {
+    var ts = $scope.ts = CRM.ts('civicase');
   }
 
   angular.module('civicase').directive('civicaseFileFilter', function() {
@@ -11,7 +10,7 @@
       templateUrl: '~/civicase/FileFilter.html',
       controller: FileFilterCtrl,
       scope: {
-        fileQuery: '=civicaseFileFilter'
+        apiCtrl: '=civicaseFileFilter'
       }
     };
   });

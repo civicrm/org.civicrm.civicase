@@ -31,5 +31,13 @@
 <div ng-if="activeTab === 'people'" civicase-view-people="item"></div>
 <div ng-if="activeTab === 'files'">
   <div civicase-uploader="item"></div>
-  <div civicase-view-files="item"></div>
+
+
+  <div civicase-api3-ctrl="getfiles" civicase-api3="['Case','getfiles', {case_id: item.id, text: '', options: {xref:1}}]">
+    <div crm-ui-debug="getfiles"></div>
+    <div class="panel panel-default act-feed-panel">
+      <div class="panel-header" civicase-file-filter="getfiles"></div>
+      <div class="panel-body clearfix" civicase-file-list="getfiles"></div>
+    </div>
+  </div>
 </div>
