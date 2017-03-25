@@ -65,7 +65,7 @@
   background-color: transparent;
   border-bottom: 3px solid white;
 }
-#bootstrap-theme .civicase-view-related-cases .panel-header h3 {
+#bootstrap-theme .civicase-view-summary .panel-header h3 {
   margin: 0;
   padding: 5px;
 }

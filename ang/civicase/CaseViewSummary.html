@@ -1,30 +1,23 @@
-<div class="civicase-summary-top clearfix">
-  <div class="civicase-case-subject">
-    <h4>{{ ts('Subject') }}</h4>
-    <p>{{ item.subject }}</p>
+<div class="civicase-view-summary">
+  <div class="civicase-summary-top clearfix">
+    <div class="civicase-case-subject">
+      <h4>{{ ts('Subject') }}</h4>
+      <p>{{ item.subject }}</p>
+    </div>
+    <div class="civicase-next-milestone" ng-class="{'milestone-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
+      <h4>
+        {{ ts('Next Milestone:') }}
+        <span ng-if="item.activity_summary.milestone.length">{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</span>
+      </h4>
+      <div ng-if="item.activity_summary.milestone.length">{{ ts("Due:") + ' ' + CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+    </div>
   </div>
-  <div class="civicase-next-milestone" ng-class="{'milestone-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
-    <h4>
-      {{ ts('Next Milestone:') }}
-      <span ng-if="item.activity_summary.milestone.length">{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</span>
-    </h4>
-    <div ng-if="item.activity_summary.milestone.length">{{ ts("Due:") + ' ' + CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+  <div class="civicase-summary-mid clearfix">
+    <div class="civicase-left-40">
+      <div ng-include="'~/civicase/CaseViewTasks.html'"></div>
+    </div>
+    <div class="civicase-right-60">
+    </div>
   </div>
-</div>
-<div class="panel panel-default civicase-view-related-cases" ng-if="item.relatedCases.length">
-  <div class="panel-header">
-    <h3>{{ ts('Other Cases') }}</h3>
-  </div>
-  <div class="panel-body">
-    <a ng-repeat="relCase in item.relatedCases" href="#case/{{ relCase.id }}">
-      {{ relCase.commonClients.slice(0, 2).join(', ') }}
-      <span ng-if="relCase.contact_id.length > relCase.commonClients.slice(0, 2).length">(+{{ relCase.contact_id.length - relCase.commonClients.slice(0, 2).length }})</span>
-      - {{ relCase.case_type }}
-      <span>{{ CRM.utils.formatDate(relCase.start_date) }}</span> -
-      <span ng-if="relCase.end_date">{{ CRM.utils.formatDate(relCase.end_date) }}</span>
-      <span ng-if="!relCase.end_date">{{ ts('Ongoing') }}</span>
-      - {{ relCase.status }}
-      <i class="pull-right fa fa-arrow-circle-o-right"></i>
-    </a>
-  </div>
+  <div ng-include="'~/civicase/CaseViewRelatedCases.html'"></div>
 </div>

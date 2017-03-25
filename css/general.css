@@ -20,3 +20,13 @@
   height: 0px;
   transition: height .2s linear;
 }
+#bootstrap-theme .civicase-left-40 {
+  float: left;
+  width: 40%;
+}
+#bootstrap-theme .civicase-right-60 {
+  float: right;
+  width: 60%;
+  padding-left: 15px;
+  box-sizing: border-box;
+}

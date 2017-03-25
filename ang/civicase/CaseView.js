@@ -13,7 +13,7 @@
   });
 
   // CaseList directive controller
-  function caseListController($scope, crmApi, isActivityOverdue) {
+  function caseListController($scope, crmApi, isActivityOverdue, formatActivity) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -77,8 +77,17 @@
           }
         });
       });
+      // Format activities
+      _.each(item.activity_summary, function(acts) {
+        _.each(acts, formatActivity);
+      });
       return item;
     }
+
+    $scope.markCompleted = function(act) {
+      crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {});
+      $scope.item.activity_summary.task.splice(_.findIndex($scope.item.activity_summary.task, {id: act.id}), 1);
+    };
 
     $scope.changeCaseStatus = function(statusId) {
       // Todo: business logic for this is currently stuck in the form layer.

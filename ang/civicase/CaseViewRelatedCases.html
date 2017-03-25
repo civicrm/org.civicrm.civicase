@@ -1,0 +1,17 @@
+<div class="panel panel-default civicase-view-related-cases" ng-if="item.relatedCases.length">
+  <div class="panel-header">
+    <h3>{{ ts('Other Cases') }}</h3>
+  </div>
+  <div class="panel-body">
+    <a ng-repeat="relCase in item.relatedCases" href="#case/{{ relCase.id }}">
+      {{ relCase.commonClients.slice(0, 2).join(', ') }}
+      <span ng-if="relCase.contact_id.length > relCase.commonClients.slice(0, 2).length">(+{{ relCase.contact_id.length - relCase.commonClients.slice(0, 2).length }})</span>
+      - {{ relCase.case_type }}
+      <span>{{ CRM.utils.formatDate(relCase.start_date) }}</span> -
+      <span ng-if="relCase.end_date">{{ CRM.utils.formatDate(relCase.end_date) }}</span>
+      <span ng-if="!relCase.end_date">{{ ts('Ongoing') }}</span>
+      - {{ relCase.status }}
+      <i class="pull-right fa fa-arrow-circle-o-right"></i>
+    </a>
+  </div>
+</div>

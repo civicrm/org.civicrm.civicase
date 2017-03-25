@@ -57,7 +57,7 @@ function civicrm_api3_case_getdetails($params) {
         }
       }
       $activities = civicrm_api3('Activity', 'get', array(
-        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id'),
+        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id', 'assignee_contact_name'),
         'check_permissions' => !empty($params['check_permissions']),
         'case_id' => array('IN' => $ids),
         'is_current_revision' => 1,
@@ -73,6 +73,7 @@ function civicrm_api3_case_getdetails($params) {
       ));
       foreach ($activities['values'] as $act) {
         $case =& $result['values'][$act['case_id']];
+        unset($act['case_id']);
         foreach ($categories as $category => $grouping) {
           if (in_array($act['activity_type_id'], $grouping)) {
             $case['activity_summary'][$category][] = $act;

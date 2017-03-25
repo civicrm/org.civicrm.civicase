@@ -12,9 +12,9 @@
           <i ng-if="activity.icon" class="fa {{ activity.icon }}"></i>
           <strong ng-if="!activity.icon">{{ activity.type[0] }}</strong>
         </div>
-        <div class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
-          <i class="fa fa-{{ activity.is_completed ? 'check-' : '' }}square-o"></i>
-        </div>
+        <a href class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
+          <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
+        </a>
         <h4>
           <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
           <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>

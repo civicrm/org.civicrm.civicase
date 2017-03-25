@@ -13,7 +13,7 @@
   });
 
   // ActivityFeed directive controller
-  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle) {
+  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
@@ -117,18 +117,6 @@
         };
       }
     };
-
-    function formatActivity(act) {
-      act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
-      act.icon = activityTypes[act.activity_type_id].icon;
-      act.type = activityTypes[act.activity_type_id].label;
-      act.status = activityStatuses[act.status_id].label;
-      act.is_completed = activityStatuses[act.status_id].name === 'Completed';
-      act.color = activityStatuses[act.status_id].color || '#42afcb';
-      if (act.category.indexOf('alert') > -1) {
-        act.color = ''; // controlled by css
-      }
-    }
 
     function getActivities(nextPage) {
       $('.act-feed-panel .panel-body').block();

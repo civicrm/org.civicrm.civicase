@@ -152,8 +152,8 @@
   cursor: pointer;
 }
 
-#bootstrap-theme .act-feed-list-group .act-task-checkbox:hover {
-  color: #272c34;
+#bootstrap-theme .act-feed-list-group .act-task-checkbox:hover i {
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
 
 #bootstrap-theme .act-feed-list-group .act-subject {
