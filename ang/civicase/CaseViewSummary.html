@@ -1,15 +1,17 @@
 <div class="civicase-view-summary">
-  <div class="civicase-summary-top clearfix">
-    <div class="civicase-case-subject">
-      <h4>{{ ts('Subject') }}</h4>
-      <p>{{ item.subject }}</p>
-    </div>
-    <div class="civicase-next-milestone" ng-class="{'milestone-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
-      <h4>
-        {{ ts('Next Milestone:') }}
-        <span ng-if="item.activity_summary.milestone.length">{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</span>
-      </h4>
-      <div ng-if="item.activity_summary.milestone.length">{{ ts("Due:") + ' ' + CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+  <div class="panel panel-default civicase-summary-top-outer">
+    <div class="civicase-summary-top clearfix panel-header">
+      <div class="civicase-case-subject">
+        <h3>{{ ts('Subject') }}</h3>
+        <p>{{ item.subject }}</p>
+      </div>
+      <div class="civicase-next-milestone" ng-class="{'milestone-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
+        <h3>
+          {{ ts('Next Milestone:') }}
+          <span ng-if="item.activity_summary.milestone.length">{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</span>
+        </h3>
+        <div ng-if="item.activity_summary.milestone.length">{{ ts("Due:") + ' ' + CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+      </div>
     </div>
   </div>
   <div class="civicase-summary-mid clearfix">

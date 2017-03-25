@@ -28,7 +28,7 @@
   padding: 0;
 }
 #bootstrap-theme .civicase-summary-top {
-  padding: 0 10px;
+  padding: 5px 10px 10px;
 }
 #bootstrap-theme .civicase-case-subject {
   width: 50%;
@@ -73,6 +73,12 @@
   display: block;
   padding: 5px;
   text-decoration: none;
+}
+#bootstrap-theme .civicase-view-related-cases .panel-body > a + a {
+  border-top: 1px solid #D3DEE2;
+}
+#bootstrap-theme .civicase-view-related-cases .panel-body > a:hover {
+  background-color: #F3F6F7;
 }
 #bootstrap-theme .civicase-view-related-cases .panel-body > a > i.fa-arrow-circle-o-right {
   font-size: 18px;
