@@ -4,21 +4,23 @@
     var ts = $scope.ts = CRM.ts('civicase'),
       item = $scope.item;
 
-    $scope.fileFilters = {text: ''};
-    $scope.fileData = {};
+    var fileQuery = $scope.fileQuery = {
+      apiParams: {
+        case_id: item.id,
+        text: '',
+        options: {xref: 1}
+      },
+      apiResult: {}
+    };
     function refresh() {
       crmThrottle(function(){
-        return crmApi('Case', 'getfiles', {
-          case_id: item.id,
-          text: $scope.fileFilters.text,
-          options: {xref: 1}
-        })
+        return crmApi('Case', 'getfiles', fileQuery.apiParams)
           .then(function(response){
-            $scope.fileData = response;
+            fileQuery.apiResult = response;
           });
       });
     }
-    $scope.$watchCollection("fileFilters", refresh);
+    $scope.$watchCollection("fileQuery.apiParams", refresh);
   }
 
   angular.module('civicase').directive('civicaseViewFiles', function() {
