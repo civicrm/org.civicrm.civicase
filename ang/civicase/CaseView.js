@@ -44,6 +44,18 @@
       };
     }
 
+    function getAllowedCaseStatuses(definition) {
+      var ret = _.cloneDeep(caseStatuses);
+      if (definition.statuses && definition.statuses.length) {
+        _.each(_.cloneDeep(ret), function(status, id) {
+          if (definition.statuses.indexOf(status.name) < 0) {
+            delete(ret[id]);
+          }
+        });
+      }
+      return ret;
+    }
+
     $scope.tabs = [
       {name: 'summary', label: ts('Summary')},
       {name: 'activities', label: ts('Activities')},
@@ -114,6 +126,7 @@
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.activeTab = 'summary';
           $scope.item = formatCase(info.values[0]);
+          $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item['case_type_id.definition']);
         });
       }
     });
