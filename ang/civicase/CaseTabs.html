@@ -29,3 +29,7 @@
 <div ng-show="activeTab === 'summary'" ng-include="'~/civicase/CaseViewSummary.html'"></div>
 <div ng-if="activeTab === 'activities'" civicase-activity-feed="{case_id: item.id}"></div>
 <div ng-if="activeTab === 'people'" civicase-view-people="item"></div>
+<div ng-if="activeTab === 'files'">
+  <div civicase-uploader="item"></div>
+  <div civicase-view-files="item"></div>
+</div>
