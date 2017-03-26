@@ -28,7 +28,7 @@ function civicrm_api3_case_getdetails($params) {
   }
   $toReturn = $params['return'];
   $options = CRM_Utils_Array::value('options', $params, array());
-  $extraReturnProperties = array('activity_summary', 'last_update');
+  $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count');
   $params['return'] = array_diff($params['return'], $extraReturnProperties);
   $result = civicrm_api3_case_get(array('sequential' => 0) + $params);
   if (!empty($result['values'])) {
@@ -83,6 +83,20 @@ function civicrm_api3_case_getdetails($params) {
         }
         if (strtotime($act['activity_date_time']) < time()) {
           $case['activity_summary']['overdue'][] = $act;
+        }
+      }
+    }
+    // Get activity count
+    if (in_array('activity_count', $toReturn)) {
+      foreach ($result['values'] as $id => &$case) {
+        $query = "SELECT COUNT(a.id) as count, a.activity_type_id
+          FROM civicrm_activity a
+          INNER JOIN civicrm_case_activity ca ON ca.activity_id = a.id
+          WHERE a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id = $id
+          GROUP BY a.activity_type_id";
+        $dao = CRM_Core_DAO::executeQuery($query);
+        while ($dao->fetch()) {
+          $case['activity_count'][$dao->activity_type_id] = $dao->count;
         }
       }
     }

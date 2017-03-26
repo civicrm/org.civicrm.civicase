@@ -47,11 +47,20 @@
   border-radius: 0;
   box-shadow: 0 5px 20px rgba(0,0,0,.2);
 }
+#bootstrap-theme .navbar.civicase-view-tab-bar .btn-group {
+  margin: 12px 12px 0 0;
+}
 #bootstrap-theme .navbar.civicase-view-tab-bar .btn {
   color: white;
   border: 1px solid white;
   background-color: transparent;
-  margin: 12px 12px 0 0;
+}
+#bootstrap-theme .navbar.civicase-view-tab-bar .btn-group.open .btn {
+  background-color: white;
+  color: #31b0d5;
+  box-shadow: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 #bootstrap-theme .navbar.civicase-view-tab-bar .navbar-nav li {
   margin-top: 0;

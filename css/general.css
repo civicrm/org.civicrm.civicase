@@ -30,3 +30,12 @@
   padding-left: 15px;
   box-sizing: border-box;
 }
+#bootstrap-theme .civicase-icon-placeholder {
+  color: white;
+  position: relative;
+  left: -11px;
+  font-size: 10px;
+  top: -1px;
+  width: 10px;
+  display: inline-block;
+}

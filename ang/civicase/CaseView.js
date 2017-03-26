@@ -18,7 +18,7 @@
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
-    $scope.activityTypes = CRM.civicase.activityTypes;
+    var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.isActivityOverdue = isActivityOverdue;
     $scope.CRM = CRM;
     $scope.item = null;
@@ -26,9 +26,14 @@
     function caseGetParams() {
       return {
         id: $scope.caseId,
-        return: ['subject', 'contact_id', 'case_type_id', 'case_type_id.definition', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+        return: ['subject', 'contact_id', 'case_type_id', 'case_type_id.definition', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
         // For the "related cases" section
-        'api.Case.get': {contact_id: {IN: "$value.contact_id"}, id: {"!=": "$value.id"}, is_deleted: 0, return: ['case_type_id', 'start_date', 'end_date', 'contact_id', 'status_id']},
+        'api.Case.get': {
+          contact_id: {IN: "$value.contact_id"},
+          id: {"!=": "$value.id"},
+          is_deleted: 0,
+          return: ['case_type_id', 'start_date', 'end_date', 'contact_id', 'status_id']
+        },
         // For the "recent communication" section
         'api.Activity.get': {
           case_id: "$value.id",
@@ -53,6 +58,17 @@
           }
         });
       }
+      return ret;
+    }
+
+    function getAvailableActivityTypes(activityCount, definition) {
+      var ret = [];
+      _.each(definition.activityTypes, function(actSpec) {
+        var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
+        if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances < activityCount[actTypeId])) {
+          ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
+        }
+      });
       return ret;
     }
 
@@ -125,8 +141,9 @@
         $scope.item = null;
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.activeTab = 'summary';
-          $scope.item = formatCase(info.values[0]);
-          $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item['case_type_id.definition']);
+          var item = $scope.item = formatCase(info.values[0]);
+          $scope.allowedCaseStatuses = getAllowedCaseStatuses(item['case_type_id.definition']);
+            $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item['case_type_id.definition']);
         });
       }
     });

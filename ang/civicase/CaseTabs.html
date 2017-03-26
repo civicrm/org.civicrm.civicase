@@ -8,8 +8,22 @@
         </a>
       </li>
     </ul>
-      <button type="button" class="btn btn-sm navbar-btn pull-right"><i class="fa fa-plus"></i> {{ ts('Timeline') }}</button>
-      <button type="button" class="btn btn-sm navbar-btn pull-right"><i class="fa fa-plus"></i> {{ ts('Activity') }}</button>
+    <div class="btn-group btn-group-sm pull-right">
+      <button type="button" class="btn" data-toggle="dropdown"><i class="fa fa-plus"></i> {{ ts('Timeline') }}</button>
+      <ul class="dropdown-menu" >
+        <li ng-repeat="timeline in item['case_type_id.definition'].activitySets">
+          <a href> {{ timeline.label }}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="btn-group btn-group-sm pull-right">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> {{ ts('Activity') }}</button>
+      <ul class="dropdown-menu" >
+        <li ng-repeat="actType in availableActivityTypes">
+          <a href><i class="fa fa-fw {{ actType.icon || 'fa-circle' }}"><span class="civicase-icon-placeholder" ng-if="!actType.icon">{{ actType.label[0] }}</span></i> {{ actType.label }}</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 <div ng-show="activeTab === 'summary'" ng-include="'~/civicase/CaseViewSummary.html'"></div>
