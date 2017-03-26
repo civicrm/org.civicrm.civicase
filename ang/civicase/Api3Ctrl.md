@@ -58,3 +58,16 @@ If you'd rather wait and trigger the refresh another way, then set the `civicase
 
 </div>
 ```
+
+And you conditionally execute some logic whenever a refresh occurs -- use
+`on-refresh`. Within the scope of this statement, you have access to the
+properties of the API object (`entity`, `action`, `params`, `result`).
+
+```html
+<div
+  civicase-api3-ctrl="apiData"
+  civicase-api3="['Contact','get', {display_name: ''}]"
+  on-refresh="doSomething(result)">
+  ...
+</div>
+```

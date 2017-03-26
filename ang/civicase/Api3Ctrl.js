@@ -6,7 +6,8 @@
       scope: {
         civicaseApi3Ctrl: '=',
         civicaseApi3: '@',
-        civicaseApi3Refresh: '@'
+        civicaseApi3Refresh: '@',
+        onRefresh: '@'
       },
       controllerAs: 'civicaseApi3Ctrl',
       controller: function($scope, $parse, crmThrottle, crmApi) {
@@ -24,6 +25,9 @@
             return crmApi(ctrl.entity, ctrl.action, ctrl.params)
               .then(function (response) {
                 ctrl.result = response;
+                if ($scope.onRefresh) {
+                  $scope.$parent.$eval($scope.onRefresh, ctrl);
+                }
               });
           });
         };
