@@ -12,8 +12,7 @@
         <div civicase-activity-dot="activity"></div>
 
         <h4>
-          <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
-          <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
+          <span class="act-subject">{{activity.type}}{{activity.subject ? ': ' : ''}}{{activity.subject}}</span>
         </h4>
 
         <div class="act-files clearfix">
