@@ -26,4 +26,21 @@
     };
   });
 
+  // Export a set of civicase-related utility functions.
+  // <div civicase-util="myhelper" />
+  angular.module('civicase').directive('civicaseUtil', function(){
+    return {
+      restrict: 'EA',
+      scope: {
+        civicaseUtil: '='
+      },
+      controller: function ($scope, formatActivity) {
+        var util = this;
+        util.formatActivity = function(a) {formatActivity(a);return a;};
+        util.formatActivities = function(rows) {_.each(rows, formatActivity);return rows;};
+        $scope.civicaseUtil = this;
+      }
+    };
+  });
+
 })(angular, CRM.$, CRM._);
