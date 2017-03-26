@@ -34,6 +34,16 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'component_id' => 'CiviCase',
       'icon' => 'fa-exclamation',
     ));
+    $this->createActivityType(array(
+      'option_group_id' => 'activity_type',
+      'label' => ts('File Upload'),
+      'name' => 'File Upload',
+      // 'grouping' => '',
+      'is_reserved' => 0,
+      'description' => ts('Add files to a case'),
+      'component_id' => 'CiviCase',
+      'icon' => 'fa-file',
+    ));
     // Set status colors
     $colors = array(
       'Scheduled' => '#42afcb',
@@ -156,6 +166,20 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     return TRUE;
   } // */
 
+  public function upgrade_4700() {
+    $this->ctx->log->info('Applying update 4700');
+    $this->createActivityType(array(
+      'option_group_id' => 'activity_type',
+      'label' => ts('File Upload'),
+      'name' => 'File Upload',
+      // 'grouping' => '',
+      'is_reserved' => 0,
+      'description' => ts('Add files to a case'),
+      'component_id' => 'CiviCase',
+      'icon' => 'fa-file',
+    ));
+    return TRUE;
+  }
 
   /**
    * Example: Run a slow upgrade process by breaking it up into smaller chunk.
