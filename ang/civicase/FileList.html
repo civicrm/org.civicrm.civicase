@@ -1,11 +1,26 @@
+<div crm-ui-debug="filesByAct"></div>
+
 <div ng-hide="apiCtrl.result.count">
   {{ts('No files found')}}
 </div>
 
-<ul ng-show="apiCtrl.result.count > 0">
-  <li ng-repeat="row in values">
-    Case: {{xref.case[row.case_id].subject}} (#{{row.case_id}})<br/>
-    Activity: {{xref.activity[row.activity_id].subject}} (#{{row.activity_id}}) ({{xref.activity[row.activity_id].color}})<br/>
-    File: {{xref.file[row.id].name}} (#{{row.id}})
+<ul class="list-group act-feed-list-group" ng-show="apiCtrl.result.count > 0">
+  <li class="list-group-item act-category-communication {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in apiCtrl.result.xref.activity">
+    <div class="act-feed-item">
+      <div class="act-feed-inner">
+
+        <div civicase-activity-dot="activity"></div>
+
+        <h4>
+          <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
+          <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
+        </h4>
+
+        <div class="act-files clearfix">
+          <div ng-repeat="file in filesByAct[activity.id]">{{file.name}}</div>
+        </div>
+
+      </div>
+    </div>
   </li>
 </ul>

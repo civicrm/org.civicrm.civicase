@@ -6,6 +6,14 @@
       // prettier html
       $scope.values = r.values;
       $scope.xref = r.xref;
+
+      $scope.filesByAct = {};
+      _.each(r.values, function(match){
+        if (!$scope.filesByAct[match.activity_id]) {
+          $scope.filesByAct[match.activity_id] = [];
+        }
+        $scope.filesByAct[match.activity_id].push(r.xref.file[match.id]);
+      });
     });
   }
 
