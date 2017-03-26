@@ -67,10 +67,9 @@ function _civicrm_api3_case_getfiles_find($params, $options) {
  */
 function _civicrm_api3_case_getfiles_select($params) {
   $select = CRM_Utils_SQL_Select::from('civicrm_case_activity caseact')
-    ->join('act', 'INNER JOIN civicrm_activity act ON ((caseact.id = act.id OR caseact.activity_id = act.original_id) AND act.is_current_revision=1)')
     ->join('ef', 'INNER JOIN civicrm_entity_file ef ON (ef.entity_table = "civicrm_activity" AND ef.entity_id = caseact.activity_id) ')
     ->join('f', 'INNER JOIN civicrm_file f ON ef.file_id = f.id')
-    ->select('caseact.case_id as case_id, act.id as activity_id, f.id as id')
+    ->select('caseact.case_id as case_id, caseact.activity_id as activity_id, f.id as id')
     ->distinct();
 
   if (isset($params['case_id'])) {
@@ -81,11 +80,12 @@ function _civicrm_api3_case_getfiles_select($params) {
   }
 
   if (isset($params['text'])) {
+    $select->join('act', 'INNER JOIN civicrm_activity act ON ((caseact.id = act.id OR caseact.activity_id = act.original_id) AND act.is_current_revision=1)');
     $select->where('act.subject LIKE @q OR act.details LIKE @q OR f.description LIKE @q OR f.uri LIKE @q',
       array('q' => '%' . $params['text'] . '%'));
   }
 
-  $select->orderBy(array('caseact.activity_id DESC, f.id ASC'));
+  $select->orderBy(array('case_id, activity_id, id'));
   return $select;
 }
 
