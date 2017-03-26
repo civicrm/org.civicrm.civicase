@@ -7,10 +7,7 @@
       <li class="list-group-item act-category-communication {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.activity_summary.communication.slice(0,1)">
         <div class="act-feed-item">
           <div class="act-feed-inner">
-            <div class="cb-dot" title="{{ activity.type }} ({{ activity.status }})" style="background-color: {{ activity.color }};">
-              <i ng-if="activity.icon" class="fa {{ activity.icon }}"></i>
-              <strong ng-if="!activity.icon">{{ activity.type[0] }}</strong>
-            </div>
+            <div civicase-activity-dot="activity"></div>
             <h4>
               <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
               <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>

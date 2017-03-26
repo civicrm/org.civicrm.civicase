@@ -8,10 +8,7 @@
     </h4>
     <div class="act-feed-item" style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};" ng-click="viewActivity(activity.id, $event)" ng-class="{'act-is-viewing': activity.id === viewingActivity.id}">
       <div class="act-feed-inner">
-        <div class="cb-dot" title="{{ activity.type }} ({{ activity.status }})" style="background-color: {{ activity.color }};">
-          <i ng-if="activity.icon" class="fa {{ activity.icon }}"></i>
-          <strong ng-if="!activity.icon">{{ activity.type[0] }}</strong>
-        </div>
+        <div civicase-activity-dot="activity"></div>
         <a href class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
           <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
         </a>
