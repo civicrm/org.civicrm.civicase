@@ -27,6 +27,9 @@
 #bootstrap-theme .civicase-view-panel .panel-body {
   padding: 0;
 }
+#bootstrap-theme .civicase-view-summary .panel-body ul {
+  margin: 0;
+}
 #bootstrap-theme .civicase-summary-top {
   padding: 5px 10px 10px;
 }

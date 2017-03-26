@@ -25,12 +25,16 @@
     $scope.viewingCase = null;
     $scope.viewCase = function(id, $event) {
       if (!$($event.target).is('input, button')) {
-        $scope.caseIsFocused = false;
-        $scope.viewingCase = id;
+        unfocusCase();
+        if ($scope.viewingCase === id) {
+          $scope.viewingCase = null;
+        } else {
+          $scope.viewingCase = id;
+        }
       }
     };
 
-    $scope.unfocusCase = function() {
+    var unfocusCase = $scope.unfocusCase = function() {
       $scope.caseIsFocused = false;
     };
 

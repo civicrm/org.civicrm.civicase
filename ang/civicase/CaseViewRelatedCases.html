@@ -1,4 +1,4 @@
-<div class="panel panel-default civicase-view-related-cases" ng-if="item.relatedCases.length">
+<div class="panel panel-default civicase-view-related-cases">
   <div class="panel-header">
     <h3>{{ ts('Other Cases') }}</h3>
   </div>
@@ -13,5 +13,9 @@
       - {{ relCase.status }}
       <i class="pull-right fa fa-arrow-circle-o-right"></i>
     </a>
+    <div class="civicase-panel-empty" ng-if="!item.relatedCases.length">
+      <span ng-if="item.client.length === 1">{{ ts('No other cases for %1.', {1: item.client[0].display_name}) }}</span>
+      <span ng-if="item.client.length > 1">{{ ts('No other cases for these clients.') }}</span>
+    </div>
   </div>
 </div>

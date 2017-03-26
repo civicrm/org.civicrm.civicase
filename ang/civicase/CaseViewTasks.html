@@ -28,5 +28,8 @@
         </div>
       </li>
     </ul>
+    <div class="civicase-panel-empty" ng-if="!item.activity_summary.task.length">
+      {{ ts('No scheduled tasks.') }}
+    </div>
   </div>
 </div>

@@ -32,5 +32,8 @@
         </div>
       </li>
     </ul>
+    <div class="civicase-panel-empty" ng-if="!item.activity_summary.communication.length">
+      {{ ts('No scheduled communications.') }}
+    </div>
   </div>
 </div>
