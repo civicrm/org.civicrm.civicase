@@ -24,8 +24,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       civicrm_api3('OptionValue', 'setvalue', array('id' => $type['id'], 'field' => 'grouping', 'value' => 'communication'));
     }
     // Create Alert activity type
-    $existing = civicrm_api3('OptionValue', 'get', array('option_group_id' => 'activity_type', 'name' => 'Alert', 'return' => 'id', 'options' => array('limit' => 1)));
-    $params = array(
+    $this->createActivityType(array(
       'option_group_id' => 'activity_type',
       'label' => ts('Alert'),
       'name' => 'Alert',
@@ -34,17 +33,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'description' => ts('Alerts to display in cases'),
       'component_id' => 'CiviCase',
       'icon' => 'fa-exclamation',
-    );
-    if (!empty($existing['id'])) {
-      $params['id'] = $existing['id'];
-    }
-    else {
-      $sql = "SELECT MAX(ROUND(value)) + 1 FROM civicrm_option_value WHERE option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type')";
-      $params['value'] = CRM_Core_DAO::singleValueQuery($sql);
-      $sql = "SELECT MAX(ROUND(weight)) + 1 FROM civicrm_option_value WHERE option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type')";
-      $params['weight'] = CRM_Core_DAO::singleValueQuery($sql);
-    }
-    civicrm_api3('OptionValue', 'create', $params);
+    ));
     // Set status colors
     $colors = array(
       'Scheduled' => '#42afcb',
@@ -103,6 +92,28 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       }
     } catch (Exception $e) {
     }
+  }
+
+  /**
+   * @param $params
+   */
+  protected function createActivityType($params) {
+    $existing = civicrm_api3('OptionValue', 'get', array(
+      'option_group_id' => 'activity_type',
+      'name' => $params['name'],
+      'return' => 'id',
+      'options' => array('limit' => 1),
+    ));
+    if (!empty($existing['id'])) {
+      $params['id'] = $existing['id'];
+    }
+    else {
+      $sql = "SELECT MAX(ROUND(value)) + 1 FROM civicrm_option_value WHERE option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type')";
+      $params['value'] = CRM_Core_DAO::singleValueQuery($sql);
+      $sql = "SELECT MAX(ROUND(weight)) + 1 FROM civicrm_option_value WHERE option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type')";
+      $params['weight'] = CRM_Core_DAO::singleValueQuery($sql);
+    }
+    civicrm_api3('OptionValue', 'create', $params);
   }
 
   /**
