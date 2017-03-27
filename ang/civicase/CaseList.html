@@ -24,11 +24,12 @@
               </ul>
             </div>
             <span class="civicase-table-header-label" ng-show="!viewingCase"> &nbsp; {{ ts('Case Client') }}</span>
-            <div class="btn-group btn-group-sm" ng-show="viewingCase">
+            <div class="btn-group btn-group-sm cc-sort-btn-group" ng-show="viewingCase">
               <button class="btn btn-default" ng-click="changeSortDir()">
                 <i class="fa" ng-class="{'fa-arrow-circle-up': sortDir === 'ASC', 'fa-arrow-circle-down': sortDir === 'DESC'}"></i>
               </button>
               <select class="btn btn-default" ng-model="sortField">
+                <option value="id">{{ ts('Case ID') }}</option>
                 <option value="contact_id.sort_name">{{ ts('Case Client') }}</option>
                 <option value="subject">{{ ts('Subject') }}</option>
                 <option value="status_id.label">{{ ts('Status') }}</option>

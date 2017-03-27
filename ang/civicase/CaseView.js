@@ -44,7 +44,7 @@
         },
         sequential: 1,
         options: {
-          categories: {communication: 1, task: 5, alert: 10}
+          categories: {communication: 1, task: 5, alert: 10, milestone: 1}
         }
       };
     }
@@ -69,7 +69,7 @@
           ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
         }
       });
-      return ret;
+      return _.sortBy(ret, 'label');
     }
 
     $scope.tabs = [

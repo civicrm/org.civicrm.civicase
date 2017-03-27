@@ -118,3 +118,6 @@
 #bootstrap-theme .viewing-case .cc-sort-icon {
   display: none;
 }
+#bootstrap-theme .cc-sort-btn-group button {
+  border-right: 2px solid #f4f7f8;
+}

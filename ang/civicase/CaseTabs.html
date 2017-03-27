@@ -20,7 +20,12 @@
       <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> {{ ts('Activity') }}</button>
       <ul class="dropdown-menu" >
         <li ng-repeat="actType in availableActivityTypes">
-          <a href><i class="fa fa-fw {{ actType.icon || 'fa-circle' }}"><span class="civicase-icon-placeholder" ng-if="!actType.icon">{{ actType.label[0] }}</span></i> {{ actType.label }}</a>
+          <a class="crm-popup" href="{{ CRM.url('civicrm/case/activity', {action: 'add', reset: 1, cid: item.client[0].contact_id, caseid: item.id, atype: actType.id}) }}">
+            <i class="fa fa-fw {{ actType.icon || 'fa-circle' }}">
+              <span class="civicase-icon-placeholder" ng-if="!actType.icon">{{ actType.label[0] }}</span>
+            </i>
+            {{ actType.label }}
+          </a>
         </li>
       </ul>
     </div>
