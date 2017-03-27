@@ -1,5 +1,42 @@
 (function(angular, $, _) {
 
+  angular.module('civicase').directive('civicaseSortheader', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+
+        function change() {
+          element.find('i.cc-sort-icon').remove();
+          if (attrs.civicaseSortheader === scope.sortField) {
+            element.append('<i class="cc-sort-icon fa fa-arrow-circle-' + (scope.sortDir === 'ASC' ? 'up' : 'down') + '"></i>');
+          }
+        }
+
+        scope.changeSortDir = function() {
+          scope.sortDir = (scope.sortDir === 'ASC' ? 'DESC' : 'ASC');
+        };
+
+        element
+          .addClass('civicase-sortable')
+          .on('click', function(e) {
+            if ($(e.target).is('th, .cc-sort-icon, .civicase-table-header-label') && !$(e.target).closest('.viewing-case').length) {
+              if (scope.sortField === attrs.civicaseSortheader) {
+                scope.changeSortDir();
+              } else {
+                scope.sortField = attrs.civicaseSortheader;
+                scope.sortDir = 'ASC';
+              }
+              scope.$digest();
+              scope.getCases();
+            }
+          });
+
+        scope.$watch('sortField', change);
+        scope.$watch('sortDir', change);
+      }
+    };
+  });
+
   angular.module('civicase').factory('isActivityOverdue', function(crmLegacy) {
     return function(act) {
       var statuses = crmLegacy.civicase.activityStatuses,

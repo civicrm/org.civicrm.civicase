@@ -15,6 +15,8 @@
       pageNum = 0;
     $scope.CRM = CRM;
     $scope.caseIsFocused = false;
+    $scope.sortField = 'contact_id.sort_name';
+    $scope.sortDir = 'ASC';
 
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = CRM.civicase.caseStatuses;
@@ -79,7 +81,7 @@
       });
     }
 
-    function getCases(nextPage) {
+    $scope.getCases = function getCases(nextPage) {
       if (nextPage !== true) {
         pageNum = 0;
       }
@@ -97,7 +99,7 @@
           $scope.remaining = false;
         }
       });
-    }
+    };
 
     function _loadCases() {
       var returnParams = {
@@ -105,6 +107,7 @@
         return: ['subject', 'case_type_id', 'status_id', 'contacts', 'activity_summary'],
         options: {
           categories: {milestone: 1, task: 1, alert: 10},
+          sort: $scope.sortField + ' ' + $scope.sortDir,
           limit: ITEMS_PER_PAGE,
           offset: ITEMS_PER_PAGE * pageNum
         }
@@ -118,7 +121,7 @@
       });
     }
 
-    getCases();
+    $scope.getCases();
 
   });
 

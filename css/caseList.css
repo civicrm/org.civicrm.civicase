@@ -109,3 +109,12 @@
   left: 3px;
   margin-top: -13px;
 }
+#bootstrap-theme th.civicase-sortable {
+  cursor: pointer;
+}
+#bootstrap-theme .cc-sort-icon {
+  margin-left: 10px;
+}
+#bootstrap-theme .viewing-case .cc-sort-icon {
+  display: none;
+}

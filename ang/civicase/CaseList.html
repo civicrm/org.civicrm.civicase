@@ -7,7 +7,7 @@
     <table ng-show="!caseIsFocused" class="case-list-table">
       <thead>
         <tr>
-          <th>
+          <th civicase-sortheader="contact_id.sort_name">
             <div class="case-list-checkbox" ng-if="!viewingCase">
               <input type="checkbox" ng-click="selectAll($event)" ng-checked="isSelection('all')" />
             </div>
@@ -23,10 +23,22 @@
                 <li class="{{ isSelection(2) ? '' : 'disabled' }}"><a href>{{ ts('Merge 2 Cases') }}</a></li>
               </ul>
             </div>
+            <span class="civicase-table-header-label" ng-show="!viewingCase"> &nbsp; {{ ts('Case Client') }}</span>
+            <div class="btn-group btn-group-sm" ng-show="viewingCase">
+              <button class="btn btn-default" ng-click="changeSortDir()">
+                <i class="fa" ng-class="{'fa-arrow-circle-up': sortDir === 'ASC', 'fa-arrow-circle-down': sortDir === 'DESC'}"></i>
+              </button>
+              <select class="btn btn-default" ng-model="sortField">
+                <option value="contact_id.sort_name">{{ ts('Case Client') }}</option>
+                <option value="subject">{{ ts('Subject') }}</option>
+                <option value="status_id.label">{{ ts('Status') }}</option>
+                <option value="case_type_id.title">{{ ts('Type') }}</option>
+              </select>
+            </div>
           </th>
-          <th ng-show="!viewingCase">{{ ts('Subject') }}</th>
-          <th ng-show="!viewingCase">{{ ts('Status') }}</th>
-          <th ng-show="!viewingCase">{{ ts('Type') }}</th>
+          <th ng-show="!viewingCase" civicase-sortheader="subject">{{ ts('Subject') }}</th>
+          <th ng-show="!viewingCase" civicase-sortheader="status_id.label">{{ ts('Status') }}</th>
+          <th ng-show="!viewingCase" civicase-sortheader="case_type_id.title">{{ ts('Type') }}</th>
           <th ng-show="!viewingCase">{{ ts('Case Manager') }}</th>
           <th ng-show="!viewingCase">{{ ts('My Role') }}</th>
           <th ng-show="!viewingCase">{{ ts('Next Milestone') }}</th>
