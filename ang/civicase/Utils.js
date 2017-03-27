@@ -27,7 +27,6 @@
                 scope.sortDir = 'ASC';
               }
               scope.$digest();
-              scope.getCases();
             }
           });
 

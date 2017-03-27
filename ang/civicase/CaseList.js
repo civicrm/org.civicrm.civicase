@@ -81,7 +81,7 @@
       });
     }
 
-    $scope.getCases = function getCases(nextPage) {
+    var getCases = $scope.getCases = function(nextPage) {
       if (nextPage !== true) {
         pageNum = 0;
       }
@@ -121,7 +121,8 @@
       });
     }
 
-    $scope.getCases();
+    $scope.$watch('sortField', getCases);
+    $scope.$watch('sortDir', getCases);
 
   });
 

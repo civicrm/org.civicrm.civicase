@@ -81,7 +81,9 @@
 
     $scope.selectTab = function(tab) {
       $scope.activeTab = tab;
-      $scope.isFocused = true;
+      if (typeof $scope.isFocused === 'boolean') {
+        $scope.isFocused = true;
+      }
     };
 
     function formatCase(item) {
