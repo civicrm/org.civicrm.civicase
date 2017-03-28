@@ -13,7 +13,7 @@
         <span class="list-group-item-info">{{ ts("Change status to:") }}</span>
       </li>
       <li ng-repeat="(id, status) in allowedCaseStatuses" ng-if="id != item.status_id">
-        <a href ng-click="changeCaseStatus(id)">{{ status.label }}</a>
+        <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" href="{{ CRM.url('civicrm/case/activity', {action: 'add', reset: 1, cid: item.client[0].contact_id, caseid: item.id, atype: getActivityType('Change Case Status'), case_status_id: id, civicase_reload: caseGetParams()}) }}">{{ status.label }}</a>
       </li>
     </ul>
   </div>

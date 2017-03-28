@@ -170,9 +170,13 @@
       $scope.item.tasks.splice(_.findIndex($scope.item.tasks, {id: act.id}), 1);
     };
 
-    $scope.changeCaseStatus = function(statusId) {
-      // Todo: business logic for this is currently stuck in the form layer.
-      // @see CRM_Case_Form_Activity_ChangeCaseStatus
+    $scope.getActivityType = function(name) {
+      return _.findKey(activityTypes, {name: name});
+    };
+
+    // Copied from ActivityList.js - used by the Recent Communication panel
+    $scope.isSameDate = function(d1, d2) {
+      return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
     };
 
     $scope.$watch('caseId', function() {
@@ -191,7 +195,7 @@
       restrict: 'A',
       template:
         '<div class="panel panel-default civicase-view-panel">' +
-          '<div class="panel-header" ng-if="item" ng-include="\'~/civicase/CaseHeader.html\'"></div>' +
+          '<div class="panel-header" ng-if="item" ng-include="\'~/civicase/CaseViewHeader.html\'"></div>' +
           '<div class="panel-body" ng-if="item" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
         '</div>',
       controller: caseListController,
