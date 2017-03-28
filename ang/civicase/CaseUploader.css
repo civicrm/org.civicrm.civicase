@@ -1,0 +1,26 @@
+#bootstrap-theme .cc-uploader-dropzone {
+  border: 0.2em dashed black;
+  margin: 1em;
+  text-align: center;
+  padding: 2em;
+}
+#bootstrap-theme .cc-uploader-detail {
+  border: 0.2em transparent;
+  margin: 1em;
+  padding: 0em 2em;
+}
+#bootstrap-theme .cc-uploader-dropzone i.fa { font-size: 2em; }
+#bootstrap-theme .cc-uploader-dropzone.cc-uploader-active {
+  width: 98%;
+  transition: visibility 0.5s, width 0.5s;
+}
+#bootstrap-theme .cc-uploader-dropzone.cc-uploader-inactive,
+#bootstrap-theme .cc-uploader-detail {
+  width: 49%;
+  transition: visibility 0.5s, width 0.5s;
+}
+#bootstrap-theme .cc-uploader > div {
+}
+/*.cc-uploader-detail {*/
+  /*float: right;*/
+/*}*/
