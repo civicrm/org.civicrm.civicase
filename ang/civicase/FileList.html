@@ -15,6 +15,9 @@
           <span class="act-subject">{{activity.type}}{{activity.subject ? ': ' : ''}}{{activity.subject}}</span>
         </h4>
 
+        <!-- FIXME: ellipsis or fade-out effect -->
+        <p ng-bind-html="activity.details" style="max-height: 3em; overflow: hidden"></p>
+
         <div class="act-files clearfix">
           <div ng-repeat="file in filesByAct[activity.id]">
             <a ng-href="{{file.url}}" title="Uploaded {{file.upload_date}}"><i class="fa {{file.icon}}"></i><code>{{file.name}}</code></a>
