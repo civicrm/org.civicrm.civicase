@@ -3,15 +3,17 @@
     <h3>{{ ts('Next Communication') }}</h3>
   </div>
   <div class="panel-body">
-    <ul class="list-group act-feed-list-group" ng-if="item.activity_summary.communication.length">
-      <li class="list-group-item act-category-communication {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.activity_summary.communication.slice(0,1)">
+    <ul class="list-group act-feed-list-group" ng-if="item.nextCommunication.length">
+      <li class="list-group-item act-category-communication {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.nextCommunication">
         <div class="act-feed-item">
           <div class="act-feed-inner">
             <div civicase-activity-dot="activity"></div>
             <h4>
               <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
               <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
+              {{ CRM.utils.formatDate(activity.activity_date_time) }}
             </h4>
+            <div class="act-details" ng-bind-html="activity.details"></div>
             <div class="act-contacts clearfix">
               <div class="act-contacts-target" ng-if="activity.target_contact_name">
                 <strong>{{ ts('With:') }}</strong>
@@ -32,7 +34,7 @@
         </div>
       </li>
     </ul>
-    <div class="civicase-panel-empty" ng-if="!item.activity_summary.communication.length">
+    <div class="civicase-panel-empty" ng-if="!item.nextCommunication.length">
       {{ ts('No scheduled communications.') }}
     </div>
   </div>

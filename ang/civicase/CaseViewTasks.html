@@ -3,8 +3,8 @@
     <h3>{{ ts('Tasks') }}</h3>
   </div>
   <div class="panel-body">
-    <ul class="list-group act-feed-list-group">
-      <li class="list-group-item act-category-task {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.activity_summary.task">
+    <ul class="list-group act-feed-list-group" ng-if="item.tasks.length">
+      <li class="list-group-item act-category-task {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.tasks">
         <div class="act-feed-item">
           <div class="act-feed-inner">
             <div civicase-activity-dot="activity"></div>
@@ -28,7 +28,7 @@
         </div>
       </li>
     </ul>
-    <div class="civicase-panel-empty" ng-if="!item.activity_summary.task.length">
+    <div class="civicase-panel-empty" ng-if="!item.tasks.length">
       {{ ts('No scheduled tasks.') }}
     </div>
   </div>

@@ -118,8 +118,11 @@
 #bootstrap-theme .act-feed-list-group .act-feed-inner {
   margin-left: 1em;
   padding-left: 3em;
-  border-left: 1px solid #ddd;
   position: relative;
+}
+
+#bootstrap-theme .activity-timeline .act-feed-inner {
+  border-left: 1px solid #ddd;
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-milestone .act-feed-inner {

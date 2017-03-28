@@ -1,6 +1,6 @@
 <div crm-ui-debug="activities"></div>
 <div class="act-feed-view-activity" civicase-activity-view="viewingActivity" ng-class="{'cc-zero-w': !viewingActivity.id, 'cc-zero-h': !viewingActivity.id}"></div>
-<ul class="list-group act-feed-list-group" ng-class="{'viewing-activity': viewingActivity.id}">
+<ul class="list-group act-feed-list-group activity-timeline" ng-class="{'viewing-activity': viewingActivity.id}">
   <li class="list-group-item act-list-controls" ng-include="'~/civicase/ActivityControls.html'"></li>
   <li class="list-group-item act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in activities">
     <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, activities[$index-1].activity_date_time)">
