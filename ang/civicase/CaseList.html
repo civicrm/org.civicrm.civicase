@@ -7,7 +7,7 @@
     <table ng-show="!caseIsFocused" class="case-list-table">
       <thead>
         <tr>
-          <th civicase-sortheader="contact_id.sort_name">
+          <th>
             <div class="case-list-checkbox" ng-if="!viewingCase">
               <input type="checkbox" ng-click="selectAll($event)" ng-checked="isSelection('all')" />
             </div>
@@ -23,8 +23,7 @@
                 <li class="{{ isSelection(2) ? '' : 'disabled' }}"><a href>{{ ts('Merge 2 Cases') }}</a></li>
               </ul>
             </div>
-            <span class="civicase-table-header-label" ng-show="!viewingCase"> &nbsp; {{ ts('Case Client') }}</span>
-            <div class="btn-group btn-group-sm cc-sort-btn-group" ng-show="viewingCase">
+            <div class="btn-group btn-group-sm cc-sort-btn-group" ng-class="{'pull-right': !viewingCase}">
               <button class="btn btn-default" ng-click="changeSortDir()">
                 <i class="fa" ng-class="{'fa-arrow-circle-up': sortDir === 'ASC', 'fa-arrow-circle-down': sortDir === 'DESC'}"></i>
               </button>

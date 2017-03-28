@@ -19,7 +19,7 @@
         element
           .addClass('civicase-sortable')
           .on('click', function(e) {
-            if ($(e.target).is('th, .cc-sort-icon, .civicase-table-header-label') && !$(e.target).closest('.viewing-case').length) {
+            if ($(e.target).is('th, .cc-sort-icon')) {
               if (scope.sortField === attrs.civicaseSortheader) {
                 scope.changeSortDir();
               } else {
