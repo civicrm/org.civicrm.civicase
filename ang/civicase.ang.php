@@ -48,6 +48,7 @@ return array(
   ),
   'css' => array(
     'css/*.css',
+    'ang/civicase/*.css',
   ),
   'partials' => array(
     'ang/civicase',
