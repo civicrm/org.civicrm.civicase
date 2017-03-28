@@ -102,6 +102,9 @@
   cursor: pointer;
   position: relative;
 }
+#bootstrap-theme .civicase-table-placeholder:hover {
+  background-color: #f3f6f7;
+}
 #bootstrap-theme .civicase-table-placeholder div {
   position: absolute;
   top: 50%;

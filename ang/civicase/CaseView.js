@@ -37,9 +37,9 @@
         // For the "recent communication" section
         'api.Activity.get': {
           case_id: "$value.id",
-          "activity_type_id.grouping": "communication",
-          activity_date_time: {'<=': 'now'},
-          options: {limit: 5},
+          "activity_type_id.grouping": {LIKE: "%communication%"},
+          status_id: 'Completed',
+          options: {limit: 5, sort: 'activity_date_time DESC'},
           return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name']
         },
         sequential: 1,
