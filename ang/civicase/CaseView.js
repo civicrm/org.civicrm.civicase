@@ -22,6 +22,9 @@
     $scope.isActivityOverdue = isActivityOverdue;
     $scope.CRM = CRM;
     $scope.item = null;
+    $scope.caseGetParams = function() {
+      return JSON.stringify(caseGetParams());
+    };
 
     function caseGetParams() {
       return {
@@ -128,6 +131,12 @@
       return item;
     }
 
+    $scope.pushCaseData = function(data) {
+      var item = $scope.item = formatCase(data);
+      $scope.allowedCaseStatuses = getAllowedCaseStatuses(item['case_type_id.definition']);
+      $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item['case_type_id.definition']);
+    };
+
     $scope.markCompleted = function(act) {
       crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {});
       $scope.item.activity_summary.task.splice(_.findIndex($scope.item.activity_summary.task, {id: act.id}), 1);
@@ -143,9 +152,7 @@
         $scope.item = null;
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.activeTab = 'summary';
-          var item = $scope.item = formatCase(info.values[0]);
-          $scope.allowedCaseStatuses = getAllowedCaseStatuses(item['case_type_id.definition']);
-            $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item['case_type_id.definition']);
+          $scope.pushCaseData(info.values[0]);
         });
       }
     });

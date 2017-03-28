@@ -147,6 +147,23 @@ function civicase_civicrm_buildForm($formName, &$form) {
     }
     $form->add('select2', 'grouping', ts('Display as'), $opts, FALSE, array('class' => 'crm-select2', 'multiple' => TRUE));
   }
+  if (!empty($_REQUEST['civicase_reload'])) {
+    $form->civicase_reload = json_decode($_REQUEST['civicase_reload'], TRUE);
+  }
+}
+
+
+/**
+ * Implements hook_civicrm_postProcess().
+ *
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ */
+function civicase_civicrm_postProcess($formName, &$form) {
+  if (!empty($form->civicase_reload)) {
+    $api = civicrm_api3('Case', 'getdetails', array('check_permissions' => 1) + $form->civicase_reload);
+    $form->ajaxResponse['civicase_reload'] = $api['values'];
+  }
 }
 
 /**
