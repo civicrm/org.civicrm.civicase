@@ -1,47 +1,51 @@
 <form>
-  <div crm-ui-debug="activity"></div>
-  <div crm-ui-debug="uploader.queue.length"></div>
+  <fieldset ng-disabled="block.check()">
+    <div crm-ui-debug="activity"></div>
+    <div crm-ui-debug="uploader.queue.length"></div>
 
-  <div class="clearfix">
+    <div class="clearfix">
 
-    <div class="cc-uploader-detail pull-right" ng-class="{'cc-zero-w': !isUploadActive(), 'cc-zero-h': !isUploadActive()}">
-
-      <div class="form-group">
-        <label for="uploadSubject">{{ts('Subject')}}</label>
-        <input type="text" class="form-control" id="uploadSubject" placeholder="" ng-model="activity.subject">
-      </div>
-
-      <div ng-repeat="item in uploader.queue">
-        <div class="clearfix">
-          <!--<a class="pull-right" ng-click="item.remove()">Remove</a>-->
-          <button class="btn btn-sm btn-danger-outline pull-right" ng-click="item.remove()">Remove</button>
-          <h4 ng-bind="item.file.name"></h4>
-        </div>
+      <div class="cc-uploader-detail pull-right" ng-class="{'cc-zero-w': !isUploadActive(), 'cc-zero-h': !isUploadActive()}">
 
         <div class="form-group">
-          <textarea type="textarea" class="form-control" placeholder="{{ts('Add file description')}}" rows="3" ng-model="item.crmData.description"></textarea>
+          <label for="uploadSubject">{{ts('Subject')}}</label>
+          <input type="text" class="form-control" id="uploadSubject" placeholder="" ng-model="activity.subject">
+        </div>
+
+        <div ng-repeat="item in uploader.queue">
+          <div class="clearfix">
+            <!--<a class="pull-right" ng-click="item.remove()">Remove</a>-->
+            <button class="btn btn-sm btn-danger-outline pull-right" ng-click="item.remove()">Remove</button>
+            <h4 ng-bind="item.file.name"></h4>
+          </div>
+          <div class="progress progress-striped">
+            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{width: item.progress + '%'}">{{item.progress}}</div>
+          </div>
+          <div class="form-group">
+            <textarea type="textarea" class="form-control" placeholder="{{ts('Add file description')}}" rows="3" ng-model="item.crmData.description"></textarea>
+          </div>
+        </div>
+
+        <div>
+          <button type="button" class="btn btn-danger-outline" ng-click="deleteActivity()" >
+            <span class="btn-icon"><i class="fa fa-times"></i></span> {{ts('Cancel')}}</button>
+          <button type="button" class="btn btn-primary" ng-click="saveActivity()" >
+            <span class="btn-icon"><i class="fa fa-upload"></i></span> {{ts('Upload')}}</button>
         </div>
       </div>
 
-      <div>
-        <button type="button" class="btn btn-danger" ng-click="deleteActivity()" ng-disabled="block.check()">
-          <span class="btn-icon"><i class="fa fa-trash"></i></span> {{ts('Delete')}}</button>
-        <button type="button" class="btn btn-primary" ng-click="saveActivity()" ng-disabled="block.check()">
-          <span class="btn-icon"><i class="fa fa-check"></i></span> {{ts('Send')}}</button>
-      </div>
-    </div>
+      <div class="center-block">
+        <div class="cc-uploader-dropzone"
+             ng-class="{'cc-uploader-active': !isUploadActive(), 'cc-uploader-inactive': isUploadActive()}"
+             nv-file-drop nv-file-over uploader="uploader">
+          <i class="fa fa-cloud-upload"></i><br/>
+          {{ts('Drop file here')}}<br/>
+        </div>
 
-    <div class="center-block">
-      <div class="cc-uploader-dropzone"
-           ng-class="{'cc-uploader-active': !isUploadActive(), 'cc-uploader-inactive': isUploadActive()}"
-           nv-file-drop nv-file-over uploader="uploader">
-        <i class="fa fa-cloud-upload"></i><br/>
-        {{ts('Drop file here')}}<br/>
+        <div><input type="file" nv-file-select uploader="uploader" multiple style="margin: 1em auto;"/></div>
       </div>
 
-      <div><input type="file" nv-file-select uploader="uploader" multiple style="margin: 1em auto;"/></div>
     </div>
 
-  </div>
-
+  </fieldset>
 </form>

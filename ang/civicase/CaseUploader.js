@@ -1,6 +1,6 @@
 (function(angular, $, _) {
 
-  function caseFilesController($scope, crmApi, crmBlocker, crmStatus, FileUploader) {
+  function caseFilesController($scope, crmApi, crmBlocker, crmStatus, FileUploader, $q, $timeout) {
     var ts = $scope.ts = CRM.ts('civicase'),
       ctx = $scope.ctx,
       block = $scope.block = crmBlocker();
@@ -25,20 +25,24 @@
         item.crmData = {description: ''};
       },
       onSuccessItem: function onSuccessItem(item, response, status, headers) {
-        console.log('onSuccessItem');
-        //   $scope.files.push(response.file.values[response.file.id]);
-        //   $scope.uploader.removeFromQueue(item);
+        var ok = status == 200 && _.isObject(response) && response.file && (response.file.is_error === 0);
+        if (!ok) {
+          this.onErrorItem(item, response, status, headers);
+        }
       },
       onErrorItem: function onErrorItem(item, response, status, headers) {
-        console.log('onErrorItem');
         var msg = (response && response.file && response.file.error_message) ? response.file.error_message : ts('Unknown error');
-        CRM.alert(item.file.name + ' - ' + msg, ts('Attachment failed'));
-        // $scope.uploader.removeFromQueue(item);
+        CRM.alert(item.file.name + ' - ' + msg, ts('Attachment failed'), 'error');
       },
-      onCompleteAll: function() {
-        console.log('onCompleteAll');
-        $scope.uploader.clearQueue();
-        initActivity();
+      /** Like uploadAll(), but it returns a promise. */
+      uploadAllWithPromise: function() {
+        var dfr = $q.defer(), self = this;
+        self.onCompleteAll = function() {
+          dfr.resolve();
+          self.onCompleteAll = null;
+        };
+        self.uploadAll();
+        return dfr.promise;
       }
     });
 
@@ -54,12 +58,23 @@
           _.each($scope.uploader.getNotUploadedItems(), function (item) {
             item.formData = [_.extend({crm_attachment_token: CRM.crmAttachment.token}, target, item.crmData)];
           });
-          $scope.uploader.uploadAll();
+          return $scope.uploader.uploadAllWithPromise();
+        }).then(function(){
+          return pwait(1000); // Let the user absorb what happened.
+        }).then(function(){
+          $scope.uploader.clearQueue();
+          initActivity();
         });
       return block(crmStatus({start: ts('Uploading...'), success: ts('Uploaded')}, promise));
     };
 
     // TODO: Test interrupted transfer.
+
+    function pwait(delay) {
+      var dfr = $q.defer();
+      $timeout(function(){ dfr.resolve(); }, delay);
+      return dfr.promise;
+    }
   }
 
   angular.module('civicase').directive('civicaseUploader', function() {
