@@ -9,7 +9,24 @@
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
 function _civicrm_api3_case_getfiles_spec(&$spec) {
-  $spec['case_id']['api.required'] = 1;
+  $spec['case_id'] = array(
+    'title' => 'Cases',
+    'description' => 'Find activities within specified cases.',
+    'type' => 1,
+    'FKClassName' => 'CRM_Case_DAO_Case',
+    'FKApiName' => 'Case',
+    'name' => 'case_id',
+    'api.required' => 1,
+  );
+  $spec['text'] = array(
+    'name' => 'text',
+    'title' => 'Textual filter',
+    'html' => array(
+      'type' => 'Text',
+      'maxlength' => 64,
+      'size' => 64,
+    ),
+  );
 }
 
 /**
