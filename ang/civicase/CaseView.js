@@ -174,6 +174,15 @@
       return _.findKey(activityTypes, {name: name});
     };
 
+    $scope.addTimeline = function(name) {
+      crmApi([
+        ['Case', 'addtimeline', {case_id: $scope.item.id, 'timeline': name}],
+        ['Case', 'getdetails', caseGetParams()]
+      ], true).then(function(result) {
+        $scope.pushCaseData(result[1].values[0]);
+      });
+    };
+
     // Copied from ActivityList.js - used by the Recent Communication panel
     $scope.isSameDate = function(d1, d2) {
       return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
