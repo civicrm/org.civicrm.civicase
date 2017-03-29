@@ -54,7 +54,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
       0 => 'Give bread a chance',
       1 => 'With a little butter and jam',
       2 => self::getFilePrefix() . 'theStuff.txt',
-      3 => '',
+      3 => array('text' => ''),
       4 => TRUE,
     );
     $cases[] = array(
@@ -62,7 +62,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
       0 => 'Give bread a chance',
       1 => 'With a little butter and jam',
       2 => self::getFilePrefix() . 'theStuff.txt',
-      3 => 'cheese',
+      3 => array('text' => 'cheese'),
       4 => FALSE,
     );
     $cases[] = array(
@@ -70,7 +70,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
       0 => 'Give cheese a chance',
       1 => '',
       2 => self::getFilePrefix() . 'theStuff.txt',
-      3 => 'cheese',
+      3 => array('text' => 'cheese'),
       4 => TRUE,
     );
     $cases[] = array(
@@ -78,7 +78,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
       0 => 'Give bread a chance',
       1 => 'But make it with cheesey goodness',
       2 => self::getFilePrefix() . 'theStuff.txt',
-      3 => 'cheese',
+      3 => array('text' => 'cheese'),
       4 => TRUE,
     );
     $cases[] = array(
@@ -86,7 +86,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
       0 => 'Give bread a chance',
       1 => '',
       2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
-      3 => 'cheese',
+      3 => array('text' => 'cheese'),
       4 => TRUE,
     );
     return $cases;
@@ -101,13 +101,14 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
    *   Set the activity's details.
    * @param string $fileName
    *   Set the attachment's file name.
-   * @param string $searchText
-   *   Search for the given text.
+   * @param array $searchParams
+   *   Search criteria.
+   *   Ex: array('text' => 'hello').
    * @param bool $expectMatch
    *   Whether the $searchText matches the activity.
    * @dataProvider getExamples
    */
-  public function testSearch($actSubject, $actDetails, $fileName, $searchText, $expectMatch) {
+  public function testSearch($actSubject, $actDetails, $fileName, $searchParams, $expectMatch) {
     $cases[0] = $this->callAPISuccess('Case', 'create', array(
       'contact_id' => 1,
       'creator_id' => 1,
@@ -138,9 +139,8 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
       'entity_id' => $medEval['id'],
     ));
 
-    $getfiles = $this->callAPISuccess('Case', 'getfiles', array(
+    $getfiles = $this->callAPISuccess('Case', 'getfiles', $searchParams + array(
       'case_id' => $cases[0]['id'],
-      'text' => $searchText,
     ));
     if ($expectMatch) {
       $attId = $attachment['id'];
@@ -165,13 +165,14 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
    *   Set the activity's details.
    * @param string $fileName
    *   Set the attachment's file name.
-   * @param string $searchText
-   *   Search for the given text.
+   * @param array $searchParams
+   *   Search criteria.
+   *   Ex: array('text' => 'hello').
    * @param bool $expectMatch
    *   Whether the $searchText matches the activity.
    * @dataProvider getExamples
    */
-  public function testReviseThenAttachThenSearch($actSubject, $actDetails, $fileName, $searchText, $expectMatch) {
+  public function testReviseThenAttachThenSearch($actSubject, $actDetails, $fileName, $searchParams, $expectMatch) {
     $cases[0] = $this->callAPISuccess('Case', 'create', array(
       'contact_id' => 1,
       'creator_id' => 1,
@@ -202,9 +203,8 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
       'entity_id' => $update['id'],
     ));
 
-    $getfiles = $this->callAPISuccess('Case', 'getfiles', array(
+    $getfiles = $this->callAPISuccess('Case', 'getfiles', $searchParams + array(
       'case_id' => $cases[0]['id'],
-      'text' => $searchText,
     ));
     if ($expectMatch) {
       $attId = $attachment['id'];
@@ -229,13 +229,14 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
    *   Set the activity's details.
    * @param string $fileName
    *   Set the attachment's file name.
-   * @param string $searchText
-   *   Search for the given text.
+   * @param array $searchParams
+   *   Search criteria.
+   *   Ex: array('text' => 'hello').
    * @param bool $expectMatch
    *   Whether the $searchText matches the activity.
    * @dataProvider getExamples
    */
-  public function testAttachThenReviseThenSearch($actSubject, $actDetails, $fileName, $searchText, $expectMatch) {
+  public function testAttachThenReviseThenSearch($actSubject, $actDetails, $fileName, $searchParams, $expectMatch) {
     $cases[0] = $this->callAPISuccess('Case', 'create', array(
       'contact_id' => 1,
       'creator_id' => 1,
@@ -266,9 +267,8 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
       'details' => $actDetails,
     ));
 
-    $getfiles = $this->callAPISuccess('Case', 'getfiles', array(
+    $getfiles = $this->callAPISuccess('Case', 'getfiles', $searchParams + array(
       'case_id' => $cases[0]['id'],
-      'text' => $searchText,
     ));
     if ($expectMatch) {
       $attId = $attachment['id'];
