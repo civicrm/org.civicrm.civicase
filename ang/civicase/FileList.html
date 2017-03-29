@@ -1,3 +1,5 @@
+<form><fieldset ng-disabled="block.check()">
+
 <div crm-ui-debug="filesByAct"></div>
 
 <div ng-hide="apiCtrl.result.count">
@@ -18,10 +20,29 @@
         <!-- FIXME: ellipsis or fade-out effect -->
         <p ng-bind-html="activity.details" style="max-height: 3em; overflow: hidden"></p>
 
-        <div class="act-files clearfix">
-          <div ng-repeat="file in filesByAct[activity.id]">
+        <div class="act-files">
+          <div ng-repeat="file in filesByAct[activity.id]" class="clearfix">
+            <div class="btn-group btn-group-sm pull-right">
+              <button
+                type="button"
+                class="btn btn-default-outline btn-xs dropdown-toggle"
+                data-toggle="dropdown"
+                title="{{ ts('Actions') }}"
+              ><i class="crm-i fa-bars"></i></button>
+              <ul class="dropdown-menu" role="menu">
+                <li>
+                  <a title="{{ ts('Download') }}" href="{{ file.url }}"><i class="crm-i fa-download"></i> &nbsp;{{ts('Download')}}</a>
+                </li>
+                <li>
+                  <a title="{{ ts('Delete') }}" ng-click="delete(activity, file)"><i class="crm-i fa-trash"></i> &nbsp;{{ts('Delete')}}</a>
+                </li>
+              </ul>
+            </div>
+
             <a ng-href="{{file.url}}" title="Uploaded {{file.upload_date}}"><i class="fa {{file.icon}}"></i><code>{{file.name}}</code></a>
+
             <p>{{file.description}}</p>
+
           </div>
         </div>
 
@@ -29,3 +50,5 @@
     </div>
   </li>
 </ul>
+
+</fieldset></form>

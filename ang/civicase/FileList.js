@@ -1,7 +1,9 @@
 (function(angular, $, _) {
 
-  function FileListCtrl($scope) {
-    var ts = $scope.ts = CRM.ts('civicase');
+  function FileListCtrl($scope, crmApi, crmBlocker, crmStatus) {
+    var ts = $scope.ts = CRM.ts('civicase'),
+      block = $scope.block = crmBlocker();
+
     $scope.$watchCollection('apiCtrl.result', function(r){
       // prettier html
       $scope.values = r.values;
@@ -14,6 +16,14 @@
         }
         $scope.filesByAct[match.activity_id].push(r.xref.file[match.id]);
       });
+
+      $scope.delete = function(activity, file) {
+        var p = crmApi('Attachment', 'delete', {id: file.id})
+          .then(function(){
+            $scope.apiCtrl.refresh();
+          });
+        return block(crmStatus({start: ts('Deleting...'), success: ts('Deleted')}, p));
+      }
     });
   }
 
