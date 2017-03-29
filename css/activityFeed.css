@@ -97,6 +97,10 @@
   cursor: pointer;
 }
 
+#bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item {
+  cursor: inherit;
+}
+
 #bootstrap-theme .act-feed-list-group .act-feed-item.act-is-viewing {
   color: #555;
   background-color: #F3F6F7;
@@ -109,6 +113,10 @@
 #bootstrap-theme .act-feed-list-group .act-feed-item:hover {
   color: #555;
   background-color: #F3F6F7;
+}
+
+#bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item:hover {
+  background: inherit;
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-item:hover .cb-dot {

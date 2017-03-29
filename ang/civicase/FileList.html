@@ -6,8 +6,8 @@
   {{ts('No files found')}}
 </div>
 
-<ul class="list-group act-feed-list-group" ng-show="apiCtrl.result.count > 0">
-  <li class="list-group-item act-category-communication {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in apiCtrl.result.xref.activity">
+<ul class="list-group act-feed-list-group act-feed-list-group-file" ng-show="apiCtrl.result.count > 0">
+  <li class="list-group-item {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in apiCtrl.result.xref.activity">
     <div class="act-feed-item">
       <div class="act-feed-inner">
 
