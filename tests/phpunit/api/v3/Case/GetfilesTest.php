@@ -50,7 +50,15 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
     // );
 
     $cases[] = array(
-      // Match any file if there's no textual filter.
+      // Match any file if there's no filter.
+      0 => 'Give bread a chance',
+      1 => 'With a little butter and jam',
+      2 => self::getFilePrefix() . 'theStuff.txt',
+      3 => array(),
+      4 => TRUE,
+    );
+    $cases[] = array(
+      // Match any file if the text filter is blank.
       0 => 'Give bread a chance',
       1 => 'With a little butter and jam',
       2 => self::getFilePrefix() . 'theStuff.txt',
@@ -89,6 +97,23 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements Headl
       3 => array('text' => 'cheese'),
       4 => TRUE,
     );
+    $cases[] = array(
+      // Match on file type (miss).
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array('mime_type' => 'text/html'),
+      4 => FALSE,
+    );
+    $cases[] = array(
+      // Match on file type.
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array('mime_type' => 'text/plain'),
+      4 => TRUE,
+    );
+
     return $cases;
   }
 
