@@ -32,4 +32,20 @@ class Utils {
     return $ret;
   }
 
+  /**
+   * Gets a list of manager roles for each case type.
+   *
+   * @return array
+   *   [caseTypeId => relationshipTypeId]
+   */
+  public static function getCompletedActivityStatuses() {
+    $statuses = civicrm_api3('OptionValue', 'get', array(
+      'option_group_id' => "activity_status",
+      'name' => array('IN' => array('Completed', 'Canceled')),
+      'return' => array('value'),
+      'sequential' => 1,
+    ));
+    return \CRM_Utils_Array::collect('value', $statuses['values']);
+  }
+
 }

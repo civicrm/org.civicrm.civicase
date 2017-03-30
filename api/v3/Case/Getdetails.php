@@ -69,7 +69,7 @@ function civicrm_api3_case_getdetails($params) {
         'case_id' => array('IN' => $ids),
         'is_current_revision' => 1,
         'is_test' => 0,
-        'status_id' => array('NOT IN' => array('Completed', 'Cancelled')),
+        'status_id' => array('NOT IN' => \Civi\CCase\Utils::getCompletedActivityStatuses()),
         'activity_type_id' => array('IN' => array_unique($allTypes)),
         'activity_date_time' => array('<' => 'now'),
         'options' => array(
@@ -134,9 +134,9 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
     foreach ($sort as $index => &$sortString) {
       // Get sort field and direction
       list($sortField, $dir) = array_pad(explode(' ', $sortString), 2, 'ASC');
-      list(, $sortField) = array_pad(explode('.', $sortField), 2, 'id');
+      list($sortJoin, $sortField) = array_pad(explode('.', $sortField), 2, 'id');
       // Sort by case manager
-      if (strpos($sortString, 'case_manager') === 0) {
+      if ($sortJoin == 'case_manager') {
         $caseTypeManagers = \Civi\CCase\Utils::getCaseManagerRelationshipTypes();
         // Validate inputs
         if (!array_key_exists($sortField, CRM_Contact_DAO_Contact::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
@@ -154,7 +154,7 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
         $sortString = '(1)';
       }
       // Sort by my role
-      elseif (strpos($sortString, 'my_role') === 0) {
+      elseif ($sortJoin == 'my_role') {
         $me = CRM_Core_Session::getLoggedInContactID();
         // Validate inputs
         if (!array_key_exists($sortField, CRM_Contact_DAO_RelationshipType::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
@@ -165,6 +165,32 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
         $sql->join('my_relationship_type', 'LEFT JOIN civicrm_relationship_type AS my_relationship_type ON my_relationship_type.id = my_relationship.relationship_type_id');
         $sql->orderBy("my_relationship_type.$sortField $dir", NULL, $index);
         $sortString = '(1)';
+      }
+      // Sort by upcoming activities
+      elseif (strpos($sortString, 'next_activity_category_') === 0) {
+        $sortString = '(1)';
+        $category = str_replace('next_activity_category_', '', $sortJoin);
+        $actTypes = civicrm_api3('OptionValue', 'get', array(
+          'sequential' => 1,
+          'option_group_id' => "activity_type",
+          'options' => array('limit' => 0),
+          'grouping' => array('LIKE' => "%$category%"),
+        ));
+        $actTypes = implode(',', CRM_Utils_Array::collect('value', $actTypes['values']));
+        $statuses = implode(',', \Civi\CCase\Utils::getCompletedActivityStatuses());
+        if (!$actTypes || !$statuses) {
+          continue;
+        }
+        // Validate inputs
+        if (!array_key_exists($sortField, CRM_Activity_DAO_Activity::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
+          throw new API_Exception("Unknown field specified for sort. Cannot order by '$sortString'");
+        }
+        $sql->join($sortJoin, "LEFT JOIN (
+            SELECT MIN(activity_date_time) as activity_date_time, case_id FROM civicrm_activity, civicrm_case_activity
+            WHERE civicrm_activity.id = civicrm_case_activity.activity_id AND activity_type_id IN ($actTypes) AND status_id NOT IN ($statuses)
+            GROUP BY case_id
+          ) AS $sortJoin ON $sortJoin.case_id = a.id");
+        $sql->orderBy("$sortJoin.activity_date_time $dir", NULL, $index);
       }
     }
     // Remove our extra sort params so the basic_get function doesn't see them
