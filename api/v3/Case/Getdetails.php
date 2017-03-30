@@ -181,10 +181,6 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
         if (!$actTypes || !$statuses) {
           continue;
         }
-        // Validate inputs
-        if (!array_key_exists($sortField, CRM_Activity_DAO_Activity::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
-          throw new API_Exception("Unknown field specified for sort. Cannot order by '$sortString'");
-        }
         $sql->join($sortJoin, "LEFT JOIN (
             SELECT MIN(activity_date_time) as activity_date_time, case_id FROM civicrm_activity, civicrm_case_activity
             WHERE civicrm_activity.id = civicrm_case_activity.activity_id AND activity_type_id IN ($actTypes) AND status_id NOT IN ($statuses)
