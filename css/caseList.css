@@ -24,6 +24,9 @@
   height: 61px;
   overflow: hidden;
 }
+#bootstrap-theme .case-list-table thead select.btn {
+  width: 120px;
+}
 #bootstrap-theme .case-list-table th,
 #bootstrap-theme .case-list-table td {
   padding: 10px;
@@ -122,7 +125,9 @@
   background-color: #d9edf7;
 }
 #bootstrap-theme .cc-sort-icon {
-  margin-left: 10px;
+  position: absolute;
+  right: 9px;
+  top: 24px;
 }
 #bootstrap-theme .cc-sort-btn-group button {
   border-right: 2px solid #f4f7f8;
