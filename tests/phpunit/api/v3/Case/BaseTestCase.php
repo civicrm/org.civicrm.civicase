@@ -3,7 +3,7 @@
 /**
  * Test the "Case.getfiles" API.
  */
-class api_v3_Case_BaseTestTest extends \PHPUnit_Framework_TestCase {
+class api_v3_Case_BaseTestCase extends \PHPUnit_Framework_TestCase {
 
   protected $_apiversion = 3;
   protected static $filePrefix = NULL;

@@ -20,7 +20,7 @@ require_once 'BaseTestCase.php';
  *
  * @group headless
  */
-class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestTest implements HeadlessInterface, HookInterface, TransactionalInterface {
+class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
 
   public function setUpHeadless() {
     // Civi\Test has many helpers, like install(), uninstall(), sql(), and sqlFile().
