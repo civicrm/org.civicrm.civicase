@@ -17,8 +17,8 @@ class CRM_Civicase_FileCategory {
   public static function getCategoryLabels() {
     return array(
       'archive' => ts('Archive'),
-      'av' => ts('Audio-Video'),
       'doc' => ts('Document'),
+      'media' => ts('Media'),
       'present' => ts('Presentation'),
       'sheet' => ts('Spreadsheet'),
       'other' => ts('Other'),
@@ -93,7 +93,7 @@ class CRM_Civicase_FileCategory {
         'application/gzip',
         'application/zip',
       ),
-      'av' => array(
+      'media' => array(
         'image/',
         'application/vnd.oasis.opendocument.graphics',
         'application/vnd.oasis.opendocument.image',
