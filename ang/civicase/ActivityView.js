@@ -8,7 +8,6 @@
     }
     scope.close = function() {
       delete(scope.activity.id);
-      console.log(scope);
     };
     scope.$watch('activity.id', loadActivity);
   }

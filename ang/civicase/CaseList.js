@@ -112,6 +112,13 @@
           offset: ITEMS_PER_PAGE * pageNum
         }
       };
+      // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
+      if ($scope.sortField !== 'id' && $scope.sortField !== 'contact_id.sort_name') {
+        returnParams.options.sort += ', contact_id.sort_name';
+      }
+      if ($scope.sortField !== 'id') {
+        returnParams.options.sort += ', id';
+      }
       var params = {
         is_deleted: 0
       };

@@ -115,6 +115,12 @@
 #bootstrap-theme th.civicase-sortable {
   cursor: pointer;
 }
+#bootstrap-theme th.civicase-sortable:hover {
+  background-color: #f2f9fc;
+}
+#bootstrap-theme th.civicase-sortable.sorting {
+  background-color: #d9edf7;
+}
 #bootstrap-theme .cc-sort-icon {
   margin-left: 10px;
 }

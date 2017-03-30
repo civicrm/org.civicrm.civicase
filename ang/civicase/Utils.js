@@ -6,6 +6,7 @@
       link: function(scope, element, attrs) {
 
         function change() {
+          element.toggleClass('sorting', attrs.civicaseSortheader === scope.sortField);
           element.find('i.cc-sort-icon').remove();
           if (attrs.civicaseSortheader === scope.sortField) {
             element.append('<i class="cc-sort-icon fa fa-arrow-circle-' + (scope.sortDir === 'ASC' ? 'up' : 'down') + '"></i>');

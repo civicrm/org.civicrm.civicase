@@ -30,7 +30,12 @@ function civicrm_api3_case_getdetails($params) {
   $options = CRM_Utils_Array::value('options', $params, array());
   $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count');
   $params['return'] = array_diff($params['return'], $extraReturnProperties);
-  $result = civicrm_api3_case_get(array('sequential' => 0) + $params);
+
+  // Support additional sort params
+  $sql = _civicrm_api3_case_getdetails_extrasort($params);
+
+  // Call the case api
+  $result = civicrm_api3_case_get(array('sequential' => 0) + $params, $sql);
   if (!empty($result['values'])) {
     $ids = array_keys($result['values']);
 
@@ -109,4 +114,50 @@ function civicrm_api3_case_getdetails($params) {
     }
   }
   return $result;
+}
+
+/**
+ * Support extra sorting in case.getdetails.
+ *
+ * @param $params
+ * @return \CRM_Utils_SQL_Select
+ * @throws \API_Exception
+ */
+function _civicrm_api3_case_getdetails_extrasort(&$params) {
+  $sql = CRM_Utils_SQL_Select::fragment();
+  $options = _civicrm_api3_get_options_from_params($params);
+
+  // Support additional sorting params
+  if (!empty($options['sort'])) {
+    $sort = explode(', ', $options['sort']);
+    foreach ($sort as $index => &$sortString) {
+      // Sort by case manager
+      if (strpos($sortString, 'case_manager') === 0) {
+        $caseTypeManagers = \Civi\CCase\Utils::getCaseManagerRelationshipTypes();
+        $contactSort = $sortString;
+        $sortString = '(1)';
+        // Get sort field and direction
+        list($sortField, $dir) = array_pad(explode(' ', $contactSort), 2, 'ASC');
+        list(, $sortField) = array_pad(explode('.', $sortField), 2, 'id');
+        // Validate inputs
+        if (!array_key_exists($sortField, CRM_Contact_DAO_Contact::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
+          throw new API_Exception("Unknown field specified for sort. Cannot order by '$contactSort'");
+        }
+        $managerTypeClause = array();
+        foreach ($caseTypeManagers as $caseTypeId => $relationshipTypeId) {
+          $managerTypeClause[] = "(a.case_type_id = $caseTypeId AND manager_relationship.relationship_type_id = $relationshipTypeId)";
+        }
+        $managerTypeClause = implode(' OR ', $managerTypeClause);
+        $sql->join('ccc', 'LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id');
+        $sql->join('manager_relationship', "LEFT JOIN civicrm_relationship AS manager_relationship ON ccc.contact_id = manager_relationship.contact_id_a AND manager_relationship.is_active AND ($managerTypeClause)");
+        $sql->join('manager', 'LEFT JOIN civicrm_contact AS manager ON manager_relationship.contact_id_b = manager.id');
+        $sql->orderBy("manager.$sortField $dir", NULL, $index);
+      }
+    }
+    // Remove our extra sort params so the basic_get function doesn't see them
+    $params['options']['sort'] = implode(', ', $sort);
+    unset($params['option_sort'], $params['option.sort'], $params['sort']);
+  }
+
+  return $sql;
 }

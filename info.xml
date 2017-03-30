@@ -21,6 +21,9 @@
     <ver>4.7</ver>
   </compatibility>
   <comments></comments>
+  <classloader>
+    <psr4 prefix="Civi\" path="Civi" />
+  </classloader>
   <civix>
     <namespace>CRM/Civicase</namespace>
   </civix>
