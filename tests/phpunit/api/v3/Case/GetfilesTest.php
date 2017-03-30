@@ -113,7 +113,22 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('mime_type' => 'text/plain'),
       4 => TRUE,
     );
-
+    $cases[] = array(
+      // Match on file category.
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array('mime_type_cat' => 'doc'),
+      4 => TRUE,
+    );
+    $cases[] = array(
+      // Match on file category (miss).
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array('mime_type_cat' => 'sheet'),
+      4 => FALSE,
+    );
     return $cases;
   }
 

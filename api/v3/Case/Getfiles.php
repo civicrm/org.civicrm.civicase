@@ -29,6 +29,24 @@ function _civicrm_api3_case_getfiles_spec(&$spec) {
   );
   $fileFields = CRM_Core_BAO_File::fields();
   $spec['mime_type'] = $fileFields['mime_type'];
+  $spec['mime_type_cat'] = array(
+    'name' => 'mime_type_cat',
+    'title' => 'General file category',
+    'description' => 'A general category. May be a single category ("doc") or multiple (["IN",["doc","sheet"]]).',
+
+    // Blerg, expect this to work, but it doesn't:
+    // $ cv api Case.getoptions field=mime_type_cat action=getfiles
+
+    // 'html' => array(
+    //   'type' => 'Select',
+    //   'maxlength' => 8,
+    //   'size' => 8,
+    // ),
+    // 'pseudoconstant' => array(
+    //   'callback' => 'CRM_Civicase_FileCategory::getCategoryLabels'
+    // ),
+  );
+
 }
 
 /**
@@ -103,6 +121,19 @@ function _civicrm_api3_case_getfiles_select($params) {
     $select->join('act', 'INNER JOIN civicrm_activity act ON ((caseact.id = act.id OR caseact.activity_id = act.original_id) AND act.is_current_revision=1)');
     $select->where('act.subject LIKE @q OR act.details LIKE @q OR f.description LIKE @q OR f.uri LIKE @q',
       array('q' => '%' . $params['text'] . '%'));
+  }
+
+  if (isset($params['mime_type_cat'])) {
+    if (is_string($params['mime_type_cat'])) {
+      $cats = array($params['mime_type_cat']);
+    }
+    elseif (is_array($params['mime_type_cat'][1]) && $params['mime_type_cat'][0] === 'IN') {
+      $cats = $params['mime_type_cat'][1];
+    }
+    else {
+      throw new \API_Exception("Field 'mime_type_cat' only supports string or IN values.");
+    }
+    $select->where(CRM_Civicase_FileCategory::createSqlFilter('f.mime_type', $cats));
   }
 
   if (isset($params['mime_type'])) {
