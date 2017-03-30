@@ -41,6 +41,7 @@ $result = civicrm_api3('RelationshipType', 'get', array(
   'options' => array('limit' => 0),
 ));
 $options['relationshipTypes'] = $result['values'];
+$options['fileCategories'] = CRM_Civicase_FileCategory::getCategories();
 return array(
   'js' => array(
     'ang/civicase.js',
