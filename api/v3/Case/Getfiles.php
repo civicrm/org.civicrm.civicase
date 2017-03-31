@@ -118,7 +118,7 @@ function _civicrm_api3_case_getfiles_select($params) {
   }
 
   if (isset($params['text'])) {
-    $select->join('act', 'INNER JOIN civicrm_activity act ON ((caseact.id = act.id OR caseact.activity_id = act.original_id) AND act.is_current_revision=1)');
+    $select->join('act', 'INNER JOIN civicrm_activity act ON ((caseact.activity_id = act.id OR caseact.activity_id = act.original_id) AND act.is_current_revision=1)');
     $select->where('act.subject LIKE @q OR act.details LIKE @q OR f.description LIKE @q OR f.uri LIKE @q',
       array('q' => '%' . $params['text'] . '%'));
   }
@@ -147,7 +147,7 @@ function _civicrm_api3_case_getfiles_select($params) {
     }
   }
 
-  $select->orderBy(array('case_id, activity_id, id'));
+  $select->orderBy(array('caseact.case_id, caseact.activity_id, f.id'));
   return $select;
 }
 
