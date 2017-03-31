@@ -75,6 +75,10 @@
         var util = this;
         util.formatActivity = function(a) {formatActivity(a);return a;};
         util.formatActivities = function(rows) {_.each(rows, formatActivity);return rows;};
+        util.isSameDate = function(d1, d2) {
+          return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
+        };
+
         $scope.civicaseUtil = this;
       }
     };

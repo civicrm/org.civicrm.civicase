@@ -3,11 +3,14 @@
   function FileListCtrl($scope, crmApi, crmBlocker, crmStatus) {
     var ts = $scope.ts = CRM.ts('civicase'),
       block = $scope.block = crmBlocker();
+    $scope.CRM = CRM;
 
     $scope.$watchCollection('apiCtrl.result', function(r){
       // prettier html
       $scope.values = r.values;
       $scope.xref = r.xref;
+      // Pre-sorting: (a) cast to array and (b) ensure stable check of isSameDate()
+      $scope.activities = r.xref ? _.sortBy(r.xref.activity, 'activity_date_time').reverse() : [];
 
       $scope.filesByAct = {};
       _.each(r.values, function(match){
