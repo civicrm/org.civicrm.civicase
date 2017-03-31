@@ -1,8 +1,17 @@
+input[type="file"]#cc-uploader-button {
+  display: none;
+}
 #bootstrap-theme .cc-uploader-dropzone {
   border: 0.2em dashed black;
   margin: 1em;
   text-align: center;
   padding: 2em;
+}
+#bootstrap-theme label[for=cc-uploader-button] {
+  cursor: pointer;
+}
+#bootstrap-theme label[for=cc-uploader-button]:hover {
+  opacity: .8;
 }
 #bootstrap-theme .cc-uploader-detail {
   border: 0.2em transparent;
@@ -19,8 +28,3 @@
   width: 49%;
   transition: visibility 0.5s, width 0.5s;
 }
-#bootstrap-theme .cc-uploader > div {
-}
-/*.cc-uploader-detail {*/
-  /*float: right;*/
-/*}*/

@@ -38,11 +38,15 @@
         <div class="cc-uploader-dropzone"
              ng-class="{'cc-uploader-active': !isUploadActive(), 'cc-uploader-inactive': isUploadActive()}"
              nv-file-drop nv-file-over uploader="uploader">
-          <i class="fa fa-cloud-upload"></i><br/>
-          {{ts('Drop file here')}}<br/>
+             <label for="cc-uploader-button">
+               <i class="fa fa-cloud-upload"></i><br/>
+               {{ts('Drop file here')}}<br/>
+               {{ts('or click here to browse')}}<br/>
+             </label>
         </div>
 
-        <div><input type="file" nv-file-select uploader="uploader" multiple style="margin: 1em auto;"/></div>
+        <input id="cc-uploader-button" type="file" multiple
+               nv-file-select uploader="uploader" />
       </div>
 
     </div>
