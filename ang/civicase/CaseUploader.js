@@ -64,6 +64,9 @@
         }).then(function(){
           $scope.uploader.clearQueue();
           initActivity();
+          if ($scope.onUpload) {
+            $scope.$parent.$eval($scope.onUpload);
+          }
         });
       return block(crmStatus({start: ts('Uploading...'), success: ts('Uploaded')}, promise));
     };
@@ -83,7 +86,8 @@
       templateUrl: '~/civicase/CaseUploader.html',
       controller: caseFilesController,
       scope: {
-        ctx: '=civicaseUploader'
+        ctx: '=civicaseUploader',
+        onUpload: '@'
       }
     };
   });
