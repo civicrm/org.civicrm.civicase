@@ -107,7 +107,7 @@ function _civicrm_api3_case_getfiles_select($params) {
     ->strict()
     ->join('ef', 'INNER JOIN civicrm_entity_file ef ON (ef.entity_table = "civicrm_activity" AND ef.entity_id = caseact.activity_id) ')
     ->join('f', 'INNER JOIN civicrm_file f ON ef.file_id = f.id')
-    ->select('caseact.case_id as case_id, caseact.activity_id as activity_id, f.id as id')
+    ->select('caseact.case_id as case_id, caseact.activity_id as activity_id, f.id as id, act.activity_date_time')
     ->distinct();
 
   if (isset($params['case_id'])) {
@@ -117,8 +117,8 @@ function _civicrm_api3_case_getfiles_select($params) {
     ));
   }
 
+  $select->join('act', 'INNER JOIN civicrm_activity act ON ((caseact.activity_id = act.id OR caseact.activity_id = act.original_id) AND act.is_current_revision=1)');
   if (isset($params['text'])) {
-    $select->join('act', 'INNER JOIN civicrm_activity act ON ((caseact.activity_id = act.id OR caseact.activity_id = act.original_id) AND act.is_current_revision=1)');
     $select->where('act.subject LIKE @q OR act.details LIKE @q OR f.description LIKE @q OR f.uri LIKE @q',
       array('q' => '%' . $params['text'] . '%'));
   }
@@ -147,7 +147,7 @@ function _civicrm_api3_case_getfiles_select($params) {
     }
   }
 
-  $select->orderBy(array('caseact.case_id, caseact.activity_id, f.id'));
+  $select->orderBy(array('act.activity_date_time DESC, act.id DESC, f.id DESC'));
   return $select;
 }
 
