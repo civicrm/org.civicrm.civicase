@@ -7,6 +7,9 @@ input[type="file"]#cc-uploader-button {
   text-align: center;
   padding: 2em;
 }
+#bootstrap-theme .cc-uploader-dropzone.nv-file-over {
+  border: 0.2em dashed #eca67f;
+}
 #bootstrap-theme label[for=cc-uploader-button] {
   cursor: pointer;
 }
