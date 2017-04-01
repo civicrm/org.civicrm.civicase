@@ -182,8 +182,9 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
           continue;
         }
         $sql->join($sortJoin, "LEFT JOIN (
-            SELECT MIN(activity_date_time) as activity_date_time, case_id FROM civicrm_activity, civicrm_case_activity
-            WHERE civicrm_activity.id = civicrm_case_activity.activity_id AND activity_type_id IN ($actTypes) AND status_id NOT IN ($statuses)
+            SELECT MIN(activity_date_time) as activity_date_time, case_id
+            FROM civicrm_activity, civicrm_case_activity
+            WHERE civicrm_activity.id = civicrm_case_activity.activity_id AND activity_type_id IN ($actTypes) AND status_id NOT IN ($statuses) AND is_current_revision = 1 AND is_test <> 1
             GROUP BY case_id
           ) AS $sortJoin ON $sortJoin.case_id = a.id");
         $sql->orderBy("$sortJoin.activity_date_time $dir", NULL, $index);

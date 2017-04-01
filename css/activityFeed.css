@@ -28,7 +28,6 @@
 #bootstrap-theme .act-feed-view-activity {
   position: relative;
   transition: width .2s linear;
-  overflow: hidden;
 }
 
 #bootstrap-theme .act-feed-list-group {
