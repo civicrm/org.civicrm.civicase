@@ -16,19 +16,44 @@ class CRM_Civicase_FileCategory {
    */
   public static function getCategoryLabels() {
     return array(
-      'archive' => ts('Archive'),
-      'doc' => ts('Document'),
-      'media' => ts('Media'),
-      'present' => ts('Presentation'),
-      'sheet' => ts('Spreadsheet'),
-      'other' => ts('Other'),
+      'archive' => array(
+        'text' => ts('Archive'),
+        'icon' => 'fa-file-archive-o',
+      ),
+      'doc' => array(
+        'text' => ts('Document'),
+        'icon' => 'fa-file-text-o',
+      ),
+      'media' => array(
+        'text' => ts('Media'),
+        'icon' => 'fa-file-image-o',
+      ),
+      'present' => array(
+        'text' => ts('Presentation'),
+        'icon' => 'fa-file-powerpoint-o',
+      ),
+      'sheet' => array(
+        'text' => ts('Spreadsheet'),
+        'icon' => 'fa-file-excel-o',
+      ),
+      'other' => array(
+        'text' => ts('Other'),
+        'icon' => 'fa-file-o',
+      ),
     );
   }
 
+  /**
+   * Get list of categories, labels & icons.
+   *
+   * Return format is suitable for a select2 input.
+   *
+   * @return array
+   */
   public static function getCategories() {
     $cats = array();
     foreach (self::getCategoryLabels() as $v => $l) {
-      $cats[$v] = array('value' => $v, 'label' => $l);
+      $cats[] = array('id' => $v) + $l;
     }
     return $cats;
   }

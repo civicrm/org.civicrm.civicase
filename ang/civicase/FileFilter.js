@@ -2,9 +2,7 @@
 
   function FileFilterCtrl($scope) {
     var ts = $scope.ts = CRM.ts('civicase');
-    $scope.fileCategoriesIT = _.map(CRM.civicase.fileCategories, function(v){
-      return {id: v.value, text: v.label};
-    });
+    $scope.fileCategoriesIT = CRM.civicase.fileCategories;
   }
 
   angular.module('civicase').directive('civicaseFileFilter', function() {
