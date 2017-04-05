@@ -1,0 +1,31 @@
+<div class="panel-header">
+  <div crm-ui-debug="filters"></div>
+  <form class="form-inline civicase-filters">
+    <input class="form-control" crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Case Type: Any'), data: caseTypeOptions}" ng-model="filters.case_type_id" />
+    <input class="form-control" crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
+    <button class="btn btn-primary btn-sm pull-right" ng-click="showMore()" ng-show="!expanded">
+      <i class="fa fa-gear"></i> {{ ts('Other Criteria') }}
+    </button>
+    <button class="btn btn-primary btn-sm pull-right" ng-click="doSearch()" ng-show="expanded">
+      <i class="fa fa-search"></i> {{ ts('Search') }}
+    </button>
+  </form>
+</div>
+<div class="panel-body" ng-show="expanded">
+  <div class="clearfix">
+    <div class="col-lg-6">
+      <label>{{ ts('Case ID') }}</label>
+      <input class="form-control" type="number" ng-model="filters.id" />
+      <label>{{ ts('Client') }}</label>
+      <input class="form-control" crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true}}" ng-model="filters.contact_id" />
+    </div>
+    <div class="col-lg-6">
+    </div>
+  </div>
+  <hr />
+  <div>
+    <button class="btn btn-primary btn-sm center-block" ng-click="doSearch()" ng-show="expanded">
+      <i class="fa fa-search"></i> {{ ts('Search') }}
+    </button>
+  </div>
+</div>

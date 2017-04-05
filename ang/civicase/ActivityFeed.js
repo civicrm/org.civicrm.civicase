@@ -2,14 +2,8 @@
 
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/activity/feed', {
-      controller: 'CivicaseActivityFeed',
       template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed></div>'
     });
-  });
-
-  // ActivityFeed route controller
-  angular.module('civicase').controller('CivicaseActivityFeed', function($scope) {
-
   });
 
   // ActivityFeed directive controller
