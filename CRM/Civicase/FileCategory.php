@@ -11,8 +11,6 @@ class CRM_Civicase_FileCategory {
    * Get a list of general file categories.
    *
    * @return array
-   *   Array(string $name => string $label).
-   *   Ex: array('doc' => 'Document').
    */
   public static function getCategoryLabels() {
     return array(
