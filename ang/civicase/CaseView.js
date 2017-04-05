@@ -2,7 +2,7 @@
 
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/case/:id', {
-      template: '<div id="bootstrap-theme" class="civicase-main" civicase-view="caseId"></div>',
+      template: '<h1 crm-page-title>{{ item ? item.client[0].display_name : ts("Loading") }} - {{ item.case_type }}</h1><div id="bootstrap-theme" class="civicase-main" civicase-view="caseId" civicase-item="item"></div>',
       controller: 'CivicaseCaseView'
     });
   });
@@ -10,10 +10,12 @@
   // CaseList route controller
   angular.module('civicase').controller('CivicaseCaseView', function($scope, $route) {
     $scope.caseId = $route.current.params.id;
+    $scope.ts = CRM.ts('civicase');
+    $scope.item = null;
   });
 
   // CaseList directive controller
-  function caseListController($scope, crmApi, isActivityOverdue, formatActivity) {
+  function caseViewController($scope, crmApi, isActivityOverdue, formatActivity) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -207,10 +209,11 @@
           '<div class="panel-header" ng-if="item" ng-include="\'~/civicase/CaseViewHeader.html\'"></div>' +
           '<div class="panel-body" ng-if="item" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
         '</div>',
-      controller: caseListController,
+      controller: caseViewController,
       scope: {
         caseId: '=civicaseView',
-        isFocused: '=civicaseFocused'
+        isFocused: '=civicaseFocused',
+        item: '=?civicaseItem'
       }
     };
   });

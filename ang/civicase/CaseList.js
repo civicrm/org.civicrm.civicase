@@ -19,6 +19,7 @@
     $scope.sortDir = 'ASC';
     $scope.filters = {};
     $scope.searchIsOpen = false;
+    $scope.pageTitle = '';
 
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = CRM.civicase.caseStatuses;
@@ -36,6 +37,7 @@
           $scope.viewingCase = id;
         }
       }
+      setPageTitle();
     };
 
     var unfocusCase = $scope.unfocusCase = function() {
@@ -64,6 +66,41 @@
       return count === condition;
     };
 
+    function setPageTitle() {
+      var viewingCase = $scope.viewingCase,
+        cases = $scope.cases,
+        filters = $scope.filters;
+      if (viewingCase) {
+        var item = _.findWhere(cases, {id: viewingCase});
+        if (item) {
+          $scope.pageTitle = item.client[0].display_name + ' - ' + item.case_type;
+        }
+        return;
+      }
+      if (_.size(_.omit(filters, ['status_id', 'case_type_id']))) {
+        $scope.pageTitle = ts('Case Search Results');
+      } else {
+        var status = [];
+        if (filters.status_id && filters.status_id.length) {
+          _.each(filters.status_id.split(','), function(s) {
+            status.push(_.findWhere(caseStatuses, {name: s}).label);
+          });
+        } else {
+          status = [ts('All Open')];
+        }
+        var type = [];
+        if (filters.case_type_id && filters.case_type_id.length) {
+          _.each(filters.case_type_id.split(','), function(t) {
+            type.push(_.findWhere(caseTypes, {name: t}).title);
+          });
+        }
+        $scope.pageTitle = status.join(' & ') + ' ' + type.join(' & ') + ' ' + ts('Cases');
+      }
+      if (typeof $scope.totalCount === 'number') {
+        $scope.pageTitle += ' (' + $scope.totalCount + ')';
+      }
+    }
+
     function formatCase(item) {
       item.myRole = [];
       item.client = [];
@@ -84,6 +121,7 @@
     }
 
     var getCases = $scope.getCases = function(nextPage) {
+      setPageTitle();
       if (nextPage !== true) {
         pageNum = 0;
       }
@@ -100,6 +138,7 @@
         if (!result.count && !pageNum) {
           $scope.remaining = false;
         }
+        setPageTitle();
       });
     };
 
@@ -147,6 +186,7 @@
     $scope.$watchCollection('filters', function() {
       // Only live-update filter results if search is collapsed
       if (!$scope.searchIsOpen) {
+        $scope.totalCount = null;
         getCases();
       }
     });
