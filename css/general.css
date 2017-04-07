@@ -43,3 +43,15 @@
   padding: 5px;
   color: #aaa;
 }
+#bootstrap-theme .crm-ui-date-range > span {
+  width: 50%;
+  display: inline-block;
+}
+#bootstrap-theme .crm-ui-date-range span.crm-form-date-wrapper {
+  width: 100%;
+  display: inline-block;
+}
+#bootstrap-theme .crm-ui-date-range .crm-form-date {
+  width: 80%;
+  display: inline-block;
+}

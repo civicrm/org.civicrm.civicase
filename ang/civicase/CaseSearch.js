@@ -42,7 +42,7 @@
           search[key] = val;
         }
       });
-      window.location.hash = 'case/list?search=' + JSON.stringify(search);
+      window.location.hash = 'case/list?search=' + encodeURIComponent(JSON.stringify(search));
     };
 
     var args = $location.search();

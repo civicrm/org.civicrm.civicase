@@ -167,6 +167,9 @@
         if (typeof val === 'number' && val) {
           params[filter] = val;
         }
+        else if (val && typeof val === 'object') {
+          params[filter] = val;
+        }
         else if (val && val.length) {
           params[filter] = {IN: val.split(',')};
         }

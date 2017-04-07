@@ -11,13 +11,17 @@
     </button>
   </form>
 </div>
-<div class="panel-body" ng-show="expanded">
+<form class="panel-body" ng-show="expanded">
   <div class="clearfix">
     <div class="col-lg-6">
       <label>{{ ts('Case ID') }}</label>
       <input class="form-control" type="number" ng-model="filters.id" />
       <label>{{ ts('Client') }}</label>
       <input class="form-control" crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true}}" ng-model="filters.contact_id" />
+      <label>{{ ts('Start Date') }}</label>
+      <div crm-ui-date-range="filters.start_date" />
+      <label>{{ ts('End Date') }}</label>
+      <div crm-ui-date-range="filters.end_date" />
     </div>
     <div class="col-lg-6">
     </div>
@@ -28,4 +32,4 @@
       <i class="fa fa-search"></i> {{ ts('Search') }}
     </button>
   </div>
-</div>
+</form>
