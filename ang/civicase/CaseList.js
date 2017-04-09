@@ -57,6 +57,9 @@
     };
 
     $scope.isSelection = function(condition) {
+      if (!$scope.cases) {
+        return false;
+      }
       var count = _.filter($scope.cases, 'selected').length;
       if (condition === 'all') {
         return count === $scope.cases.length;
@@ -82,7 +85,7 @@
       } else {
         var status = [];
         if (filters.status_id && filters.status_id.length) {
-          _.each(filters.status_id.split(','), function(s) {
+          _.each(filters.status_id, function(s) {
             status.push(_.findWhere(caseStatuses, {name: s}).label);
           });
         } else {
@@ -90,7 +93,7 @@
         }
         var type = [];
         if (filters.case_type_id && filters.case_type_id.length) {
-          _.each(filters.case_type_id.split(','), function(t) {
+          _.each(filters.case_type_id, function(t) {
             type.push(_.findWhere(caseTypes, {name: t}).title);
           });
         }
