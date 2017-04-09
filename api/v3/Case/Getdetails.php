@@ -10,6 +10,12 @@ require_once 'api/v3/Case.php';
 function _civicrm_api3_case_getdetails_spec(&$spec) {
   $result = civicrm_api3('Case', 'getfields', array('api_action' => 'get'));
   $spec = $result['values'];
+
+  $spec['case_manager'] = array(
+    'title' => 'Case Manager',
+    'description' => 'Contact id of the case manager',
+    'type' => CRM_Utils_Type::T_INT,
+  );
 }
 
 /**
@@ -33,6 +39,15 @@ function civicrm_api3_case_getdetails($params) {
 
   // Support additional sort params
   $sql = _civicrm_api3_case_getdetails_extrasort($params);
+
+  // Add clause to search by manager
+  if (!empty($params['case_manager'])) {
+    if (!is_array($params['case_manager'])) {
+      $params['case_manager'] = array('=' => $params['case_manager']);
+    }
+    _civicrm_api3_case_getdetails_join_on_manager($sql);
+    $sql->where(CRM_Core_DAO::createSQLFilter('manager.id', $params['case_manager']));
+  }
 
   // Call the case api
   $result = civicrm_api3_case_get(array('sequential' => 0) + $params, $sql);
@@ -137,19 +152,11 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
       list($sortJoin, $sortField) = array_pad(explode('.', $sortField), 2, 'id');
       // Sort by case manager
       if ($sortJoin == 'case_manager') {
-        $caseTypeManagers = \Civi\CCase\Utils::getCaseManagerRelationshipTypes();
         // Validate inputs
         if (!array_key_exists($sortField, CRM_Contact_DAO_Contact::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
           throw new API_Exception("Unknown field specified for sort. Cannot order by '$sortString'");
         }
-        $managerTypeClause = array();
-        foreach ($caseTypeManagers as $caseTypeId => $relationshipTypeId) {
-          $managerTypeClause[] = "(a.case_type_id = $caseTypeId AND manager_relationship.relationship_type_id = $relationshipTypeId)";
-        }
-        $managerTypeClause = implode(' OR ', $managerTypeClause);
-        $sql->join('ccc', 'LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id');
-        $sql->join('manager_relationship', "LEFT JOIN civicrm_relationship AS manager_relationship ON ccc.contact_id = manager_relationship.contact_id_a AND manager_relationship.is_active AND ($managerTypeClause) AND manager_relationship.case_id = a.id");
-        $sql->join('manager', 'LEFT JOIN civicrm_contact AS manager ON manager_relationship.contact_id_b = manager.id AND manager.is_deleted <> 1');
+        _civicrm_api3_case_getdetails_join_on_manager($sql);
         $sql->orderBy("manager.$sortField $dir", NULL, $index);
         $sortString = '(1)';
       }
@@ -196,4 +203,21 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
   }
 
   return $sql;
+}
+
+/**
+ * Add a case_manager join
+ *
+ * @param $sql
+ */
+function _civicrm_api3_case_getdetails_join_on_manager($sql) {
+  $caseTypeManagers = \Civi\CCase\Utils::getCaseManagerRelationshipTypes();
+  $managerTypeClause = array();
+  foreach ($caseTypeManagers as $caseTypeId => $relationshipTypeId) {
+    $managerTypeClause[] = "(a.case_type_id = $caseTypeId AND manager_relationship.relationship_type_id = $relationshipTypeId)";
+  }
+  $managerTypeClause = implode(' OR ', $managerTypeClause);
+  $sql->join('ccc', 'LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id');
+  $sql->join('manager_relationship', "LEFT JOIN civicrm_relationship AS manager_relationship ON ccc.contact_id = manager_relationship.contact_id_a AND manager_relationship.is_active AND ($managerTypeClause) AND manager_relationship.case_id = a.id");
+  $sql->join('manager', 'LEFT JOIN civicrm_contact AS manager ON manager_relationship.contact_id_b = manager.id AND manager.is_deleted <> 1');
 }

@@ -136,20 +136,3 @@
 #bootstrap-theme .cc-sort-btn-group button {
   border-right: 2px solid #f4f7f8;
 }
-#bootstrap-theme .civicase-filters {
-  padding: 15px;
-}
-#bootstrap-theme .civicase-filters input.form-control,
-#bootstrap-theme .civicase-filters div.form-control.select2-container {
-  width: 40% !important;
-  margin-right: 15px;
-}
-#bootstrap-theme .case-is-focused .civicase-filters,
-#bootstrap-theme .civicase-filters-placeholder {
-  display: none;
-}
-#bootstrap-theme .case-is-focused .civicase-filters-placeholder {
-  display: block;
-  cursor: pointer;
-  text-align: center;
-}

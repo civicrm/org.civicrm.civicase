@@ -164,14 +164,19 @@
         is_deleted: 0
       };
       _.each($scope.filters, function(val, filter) {
-        if (typeof val === 'number' && val) {
-          params[filter] = val;
-        }
-        else if (val && typeof val === 'object') {
-          params[filter] = val;
-        }
-        else if (val && val.length) {
-          params[filter] = {IN: val.split(',')};
+        if (val || typeof val === 'boolean') {
+          if (typeof val === 'number' || typeof val === 'boolean') {
+            params[filter] = val;
+          }
+          else if (typeof val === 'object' && !$.isArray(val)) {
+            params[filter] = val;
+          }
+          else if ($.isArray(val) && val.length) {
+            params[filter] = {IN: val};
+          }
+          else {
+            params[filter] = {LIKE: '%' + val + '%'};
+          }
         }
       });
       // If no status specified, default to all open cases

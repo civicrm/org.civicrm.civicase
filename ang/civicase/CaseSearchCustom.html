@@ -1,0 +1,27 @@
+<div class="clearfix civicase-search-custom">
+  <fieldset ng-repeat="group in customGroups" class="col-lg-6" ng-if="!filters.case_type_id || !group.caseTypes || _.intersection(group.caseTypes, filters.case_type_id.split(',')).length">
+    <legend>{{ group.title }}</legend>
+    <div ng-repeat="field in group.fields">
+      <label for="case_search_field_custom_{{ field.id }}">{{ field.label }}</label>
+      <div ng-switch="field.html_type">
+        <div ng-switch-when="Autocomplete-Select">
+          <input
+            crm-ui-conditional ng-list class="form-control"
+            id="case_search_field_custom_{{ field.id }}"
+            ng-model="filters['custom_' + field.id]"
+            crm-entityref="{entity: (field.data_type === 'ContactReference' ? 'Contact' : 'OptionValue'), select: {multiple: true}, api: {params: field.data_type === 'ContactReference' ? field.filter || {} : {option_group_id: field.option_group_id, option_sort: 'weight'}}}"
+          />
+        </div>
+        <div ng-switch-when="Select Date">
+          <div crm-ui-conditional id="case_search_field_custom_{{ field.id }}" crm-ui-date-range="filters['custom_' + field.id]"></div>
+        </div>
+        <div ng-switch-default>
+          <input crm-ui-conditional ng-if="!field.options" class="form-control" id="case_search_field_custom_{{ field.id }}" ng-model="filters['custom_' + field.id]" />
+          <select crm-ui-conditional ng-if="field.options" class="form-control" multiple id="case_search_field_custom_{{ field.id }}" multiple crm-ui-select ng-model="filters['custom_' + field.id]">
+            <option ng-repeat="opt in field.options" value="{{ opt.key }}">{{ opt.value }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
