@@ -16,3 +16,6 @@
   cursor: pointer;
   text-align: center;
 }
+#bootstrap-theme .civicase-search-description {
+  margin-right: 150px;
+}

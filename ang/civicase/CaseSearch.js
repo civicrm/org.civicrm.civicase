@@ -56,11 +56,76 @@
       window.location.hash = 'case/list?search=' + encodeURIComponent(JSON.stringify(search));
     };
 
+    $scope.clearSearch = function() {
+      window.location.hash = 'case/list';
+    };
+
     var args = $location.search();
     if (args && args.search) {
       $scope.filters = JSON.parse(args.search);
     }
 
+    // Describe selected filters when collapsed
+    var allSearchFields = {
+      id: {
+        label: ts('Case ID'),
+        html_type: 'Number'
+      },
+      contact_id: {
+        label: ts('Case Client')
+      },
+      case_manager: {
+        label: ts('Case Manager')
+      },
+      start_date: {
+        label: ts('Start Date')
+      },
+      end_date: {
+        label: ts('End Date')
+      },
+      is_deleted: {
+        label: ts('Deleted Cases')
+      }
+    };
+    _.each(CRM.civicase.customSearchFields, function(group) {
+      _.each(group.fields, function(field) {
+        allSearchFields['custom_' + field.id] = field;
+      });
+    });
+    var des = $scope.filterDescription = [];
+    _.each($scope.filters, function(val, key) {
+      var field = allSearchFields[key];
+      if (field) {
+        var d = {label: field.label};
+        if (field.options) {
+          var text = [];
+          _.each(val, function(o) {
+            text.push(_.findWhere(field.options, {key: o}).value);
+          });
+          d.text = text.join(', ');
+        } else if (key === 'case_manager' && $scope.caseManagerIsMe()) {
+          d.text = ts('Me');
+        } else if ($.isArray(val)) {
+          d.text = ts('%1 selected', {'1': val.length});
+        } else if ($.isPlainObject(val)) {
+          if (val.BETWEEN) {
+            d.text = val.BETWEEN[0] + ' - ' + val.BETWEEN[1];
+          } else if (val['<=']) {
+            d.text = '≤ ' + val['<='];
+          } else if (val['>=']) {
+            d.text = '≥ ' + val['>='];
+          } else {
+            var k = _.findKey(val, function() {return true;});
+            d.text = k + ' ' + val[k];
+          }
+        } else if (typeof val === 'boolean') {
+          d.text = val ? ts('Yes') : ts('No');
+        } else {
+          d.text = val;
+        }
+        des.push(d);
+      }
+    });
   }
 
   angular.module('civicase').directive('civicaseSearch', function() {

@@ -69,11 +69,17 @@ foreach ($result['values'] as $group) {
       if ($field['html_type'] != 'Autocomplete-Select') {
         $opts = civicrm_api('Case', 'getoptions', array(
           'version' => 3,
-          'sequential' => 1,
           'field' => "custom_{$field['id']}",
         ));
         if (!empty($opts['values'])) {
-          $field['options'] = $opts['values'];
+          $field['options'] = array();
+          // Javascript doesn't like php's fast & loose type switching; ensure everything is a string
+          foreach ($opts['values'] as $key => $val) {
+            $field['options'][] = array(
+              'key' => (string) $key,
+              'value' => (string) $val,
+            );
+          }
         }
       }
       // For contact ref fields
