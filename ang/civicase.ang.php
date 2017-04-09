@@ -84,6 +84,7 @@ foreach ($result['values'] as $group) {
           $field['filter']['group'] = explode(',', $field['filter']['group']);
         }
       }
+      $field['is_search_range'] = (bool) CRM_Utils_Array::value('is_search_range', $field);
     }
     $options['customSearchFields'][] = $group;
   }

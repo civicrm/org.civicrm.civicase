@@ -16,7 +16,8 @@
           <div crm-ui-conditional id="case_search_field_custom_{{ field.id }}" crm-ui-date-range="filters['custom_' + field.id]"></div>
         </div>
         <div ng-switch-default>
-          <input crm-ui-conditional ng-if="!field.options" class="form-control" id="case_search_field_custom_{{ field.id }}" ng-model="filters['custom_' + field.id]" />
+          <input crm-ui-conditional type="{{ field.data_type === 'Number' || field.data_type === 'Integer' ? 'number' : 'text' }}" ng-if="!field.options && !field.is_search_range" class="form-control" id="case_search_field_custom_{{ field.id }}" ng-model="filters['custom_' + field.id]" />
+          <div crm-ui-conditional ng-if="!field.options && field.is_search_range" id="case_search_field_custom_{{ field.id }}" crm-ui-number-range="filters['custom_' + field.id]"></div>
           <select crm-ui-conditional ng-if="field.options" class="form-control" multiple id="case_search_field_custom_{{ field.id }}" multiple crm-ui-select ng-model="filters['custom_' + field.id]">
             <option ng-repeat="opt in field.options" value="{{ opt.key }}">{{ opt.value }}</option>
           </select>
