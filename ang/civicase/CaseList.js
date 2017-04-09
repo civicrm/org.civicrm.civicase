@@ -163,9 +163,7 @@
       if ($scope.sortField !== 'id') {
         returnParams.options.sort += ', id';
       }
-      var params = {
-        is_deleted: 0
-      };
+      var params = {};
       _.each($scope.filters, function(val, filter) {
         if (val || typeof val === 'boolean') {
           if (typeof val === 'number' || typeof val === 'boolean') {
@@ -174,17 +172,18 @@
           else if (typeof val === 'object' && !$.isArray(val)) {
             params[filter] = val;
           }
-          else if ($.isArray(val) && val.length) {
-            params[filter] = {IN: val};
-          }
-          else {
-            params[filter] = {LIKE: '%' + val + '%'};
+          else if (val.length) {
+            params[filter] = $.isArray(val) ? {IN: val} : {LIKE: '%' + val + '%'};
           }
         }
       });
       // If no status specified, default to all open cases
-      if (!params.status_id) {
+      if (!params.status_id && !params.id) {
         params['status_id.grouping'] = 'Opened';
+      }
+      // Default to not deleted
+      if (!params.is_deleted && !params.id) {
+        params.is_deleted = 0;
       }
       return crmApi({
         cases: ['Case', 'getdetails', $.extend(true, returnParams, params)],

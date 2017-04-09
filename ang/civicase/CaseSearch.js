@@ -49,7 +49,7 @@
     $scope.doSearch = function() {
       var search = {};
       _.each($scope.filters, function(val, key) {
-        if (!_.isEmpty(val) || (typeof val === 'number' && val) || typeof val === 'boolean') {
+        if (!_.isEmpty(val) || (typeof val === 'number' && val) || typeof val === 'boolean' && val) {
           search[key] = val;
         }
       });
