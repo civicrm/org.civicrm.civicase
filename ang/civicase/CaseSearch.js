@@ -25,8 +25,8 @@
       };
     }
 
-    var caseTypes = CRM.civicase.caseTypes;
-    var caseStatuses = CRM.civicase.caseStatuses;
+    var caseTypes = CRM.civicase.caseTypes,
+      caseStatuses = CRM.civicase.caseStatuses;
 
     $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
     $scope.caseStatusOptions = _.map(caseStatuses, mapSelectOptions);
