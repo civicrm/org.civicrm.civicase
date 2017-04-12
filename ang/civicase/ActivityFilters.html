@@ -10,11 +10,11 @@
       </li>
     </ul>
   </div>
-  <input class="form-control" crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.activity_type_id, data: activityTypeOptions}" ng-model="filters.activity_type_id" ng-show="exposedFilters.activity_type_id" />
-  <input class="form-control" crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.status_id, data: activityStatusOptions}" ng-model="filters.status_id" ng-show="exposedFilters.status_id" />
+  <input class="form-control" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.activity_type_id, data: activityTypeOptions}" ng-model="filters.activity_type_id" ng-show="exposedFilters.activity_type_id" />
+  <input class="form-control" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.status_id, data: activityStatusOptions}" ng-model="filters.status_id" ng-show="exposedFilters.status_id" />
   <input type="search" class="form-control" placeholder="{{ availableFilters.text }}" ng-model="filters.text" ng-show="exposedFilters.text" />
-  <input class="form-control" crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('With')}}" ng-model="filters.target_contact_id" ng-show="exposedFilters.target_contact_id" />
-  <input class="form-control" crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('Assigned to')}}" ng-model="filters.assignee_contact_id" ng-show="exposedFilters.assignee_contact_id" />
-  <input class="form-control" crm-entityref="{entity: 'Tag', api: {params: {used_for: {LIKE: '%civicrm_activity%'}}}, select: {allowClear: true, multiple: true, placeholder: ts('Tagged')}}" ng-model="filters.tag_id" ng-show="exposedFilters.tag_id" />
-  <input class="form-control" crm-entityref="{entity: 'Campaign', select: {allowClear: true, multiple: true, placeholder: ts('Campaign')}}" ng-model="filters.campaign_id" ng-show="exposedFilters.campaign_id" />
+  <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('With')}}" ng-model="filters.target_contact_id" ng-show="exposedFilters.target_contact_id" />
+  <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('Assigned to')}}" ng-model="filters.assignee_contact_id" ng-show="exposedFilters.assignee_contact_id" />
+  <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {LIKE: '%civicrm_activity%'}}}, select: {allowClear: true, multiple: true, placeholder: ts('Tagged')}}" ng-model="filters.tag_id" ng-show="exposedFilters.tag_id" />
+  <input class="form-control" ng-list crm-entityref="{entity: 'Campaign', select: {allowClear: true, multiple: true, placeholder: ts('Campaign')}}" ng-model="filters.campaign_id" ng-show="exposedFilters.campaign_id" />
 </form>

@@ -16,9 +16,9 @@
       pageNum = 0;
     $scope.CRM = CRM;
 
-    function mapSelectOptions(opt) {
+    function mapSelectOptions(opt, id) {
       return {
-        id: opt.value,
+        id: id,
         text: opt.label,
         color: opt.color,
         icon: opt.icon
@@ -156,11 +156,10 @@
             params.subject = {LIKE: '%' + val + '%'};
             params.details = {LIKE: '%' + val + '%'};
             params.options.or = [['subject', 'details']];
-          }
-          else if (key === 'activity_type_id.grouping') {
+          } else if (_.isString(val)) {
             params[key] = {LIKE: '%' + val + '%'};
-          } else if (typeof val === 'string') {
-            params[key] = {IN: val.split(',')};
+          } else if (_.isArray(val)) {
+            params[key] = {IN: val};
           } else {
             params[key] = val;
           }

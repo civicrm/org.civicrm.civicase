@@ -137,7 +137,7 @@ function civicase_civicrm_buildForm($formName, &$form) {
     $options = civicrm_api3('optionValue', 'get', array(
       'option_group_id' => 'activity_category',
       'is_active' => 1,
-      'options' => array('limit' => 0, 'order' => 'weight'),
+      'options' => array('limit' => 0, 'sort' => 'weight'),
     ));
     $opts = array();
     if ($form->getVar('_gName') == 'activity_status') {
