@@ -132,26 +132,63 @@ function civicase_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  * @param CRM_Core_Form $form
  */
 function civicase_civicrm_buildForm($formName, &$form) {
-  if ($formName == 'CRM_Admin_Form_Options' && $form->getVar('_gName') == 'activity_type') {
+  // Display category option for activity types and activity statuses
+  if ($formName == 'CRM_Admin_Form_Options' && in_array($form->getVar('_gName'), array('activity_type', 'activity_status'))) {
     $options = civicrm_api3('optionValue', 'get', array(
       'option_group_id' => 'activity_category',
       'is_active' => 1,
       'options' => array('limit' => 0, 'order' => 'weight'),
     ));
     $opts = array();
+    if ($form->getVar('_gName') == 'activity_status') {
+      $placeholder = ts('All');
+      // Activity status can also apply to uncategorized activities
+      $opts[] = array(
+        'id' => 'none',
+        'text' => ts('Uncategorized'),
+      );
+    }
+    else {
+      $placeholder = ts('Uncategorized');
+    }
     foreach ($options['values'] as $opt) {
       $opts[] = array(
         'id' => $opt['name'],
         'text' => $opt['label'],
       );
     }
-    $form->add('select2', 'grouping', ts('Display as'), $opts, FALSE, array('class' => 'crm-select2', 'multiple' => TRUE));
+    $form->add('select2', 'grouping', ts('Activity Category'), $opts, FALSE, array('class' => 'crm-select2', 'multiple' => TRUE, 'placeholder' => $placeholder));
   }
+  // Only show relevant statuses when editing an activity
+  if (is_a($form, 'CRM_Activity_Form_Activity') && $form->_action & (CRM_Core_Action::ADD + CRM_Core_Action::UPDATE)) {
+    if (!empty($form->_activityTypeId) && $form->elementExists('status_id')) {
+      $el = $form->getElement('status_id');
+      $cat = civicrm_api3('OptionValue', 'getsingle', array(
+        'return' => 'grouping',
+        'option_group_id' => "activity_type",
+        'value' => $form->_activityTypeId,
+      ));
+      $cat = !empty($cat['grouping']) ? explode(',', $cat['grouping']) : array('none');
+      $options = civicrm_api3('OptionValue', 'get', array(
+        'return' => array('label', 'value', 'grouping'),
+        'option_group_id' => "activity_status",
+        'options' => array('limit' => 0, 'sort' => 'weight'),
+      ));
+      $newOptions = $el->_options = array();
+      $newOptions[''] = ts('- select -');
+      foreach ($options['values'] as $option) {
+        if (empty($option['grouping']) || array_intersect($cat, explode(',', $option['grouping']))) {
+          $newOptions[$option['value']] = $option['label'];
+        }
+      }
+      $el->loadArray($newOptions);
+    }
+  }
+  // If js requests a refresh of case data pass that request along
   if (!empty($_REQUEST['civicase_reload'])) {
     $form->civicase_reload = json_decode($_REQUEST['civicase_reload'], TRUE);
   }
 }
-
 
 /**
  * Implements hook_civicrm_postProcess().
