@@ -14,6 +14,14 @@
   border: .4em solid white;
 }
 
+#bootstrap-theme .cb-dot .act-direction-icon {
+  position: absolute;
+  left: -21px;
+  top: 11px;
+  font-size: 18px;
+  transform: scale(0.75, 1);
+}
+
 #bootstrap-theme .dropdown-menu>li>span {
   display: block;
   padding: 11px 20px;
@@ -123,7 +131,7 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-inner {
-  margin-left: 1em;
+  margin-left: 2em;
   padding-left: 3em;
   position: relative;
 }
