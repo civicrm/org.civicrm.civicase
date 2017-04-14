@@ -129,6 +129,44 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('mime_type_cat' => 'sheet'),
       4 => FALSE,
     );
+    $cases[] = array(
+      // Match on activity type (existing record).
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array('activity_type_id' => 'Medical evaluation'),
+      4 => TRUE,
+    );
+    $cases[] = array(
+      // Match on multiple activity types (existing record).
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array(
+        'activity_type_id' => array(
+          'IN',
+          array('Medical evaluation', 'Incoming Email'),
+        ),
+      ),
+      4 => TRUE,
+    );
+    $cases[] = array(
+      // Match on activity type (existent but unused type name).
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array('activity_type_id' => 'Incoming Email'),
+      4 => FALSE,
+    );
+    $cases[] = array(
+      // Match on activity type (non-existent type name).
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array('activity_type_id' => 'Federatd republic of blergistan'),
+      4 => FALSE,
+    );
+
     return $cases;
   }
 
