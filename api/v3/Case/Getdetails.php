@@ -34,7 +34,7 @@ function civicrm_api3_case_getdetails($params) {
   }
   $toReturn = $params['return'];
   $options = CRM_Utils_Array::value('options', $params, array());
-  $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count');
+  $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count', 'unread_email_count');
   $params['return'] = array_diff($params['return'], $extraReturnProperties);
 
   // Support additional sort params
@@ -118,6 +118,19 @@ function civicrm_api3_case_getdetails($params) {
         while ($dao->fetch()) {
           $case['activity_count'][$dao->activity_type_id] = $dao->count;
         }
+      }
+    }
+    // Unread email activity count
+    if (in_array('unread_email_count', $toReturn)) {
+      $query = "SELECT COUNT(a.id) as count, ca.case_id
+        FROM civicrm_activity a, civicrm_case_activity ca
+        WHERE ca.activity_id = a.id AND a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id IN (" . implode(',', $ids) . ")
+        AND a.activity_type_id = (SELECT value FROM civicrm_option_value WHERE name = 'Inbound Email' AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
+        AND a.status_id = (SELECT value FROM civicrm_option_value WHERE name = 'Unread' AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_status'))
+        GROUP BY ca.case_id";
+      $dao = CRM_Core_DAO::executeQuery($query);
+      while ($dao->fetch()) {
+        $result['values'][$dao->case_id]['unread_email_count'] = (int) $dao->count;
       }
     }
     // Get last update

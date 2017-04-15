@@ -64,7 +64,7 @@
 #bootstrap-theme .case-list-checkbox + div {
   margin-left: 30px;
 }
-#bootstrap-theme .case-list-table .badge.overdue-activities {
+#bootstrap-theme .case-list-table .badge.unread-emails {
   background-color: #d9534f;
   float: right;
   margin-top: 5px;

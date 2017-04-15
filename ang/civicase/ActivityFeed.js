@@ -105,10 +105,16 @@
       if ($scope.viewingActivity && $scope.viewingActivity.id == id) {
         $scope.viewingActivity = {};
       } else {
-        $scope.viewingActivity = {
-          id: id,
-          type: _.find($scope.activities, {id: id}).type
-        };
+        var act = _.find($scope.activities, {id: id});
+        // Mark email read
+        if (act.status === 'Unread') {
+          var statusId = _.findKey(CRM.civicase.activityStatuses, {name: 'Completed'});
+          crmApi('Activity', 'setvalue', {id: act.id, field: 'status_id', value: statusId}).then(function() {
+            act.status_id = statusId;
+            formatActivity(act);
+          });
+        }
+        $scope.viewingActivity = _.cloneDeep(act);
       }
     };
 

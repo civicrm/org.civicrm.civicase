@@ -78,8 +78,8 @@
                     </li>
                   </ul>
                 </div>
-                <span class="badge overdue-activities" ng-if="item.activity_summary.overdue.length" title="{{ ts('Overdue activities') }}">
-                  {{ item.activity_summary.overdue.length }}
+                <span class="badge unread-emails" ng-if="item.unread_email_count" title="{{ ts('Unread emails') }}">
+                  {{ item.unread_email_count }}
                 </span>
               </h4>
               <div ng-if="item.client[0].email">

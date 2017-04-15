@@ -148,7 +148,7 @@
     function _loadCases() {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'case_type_id', 'status_id', 'contacts', 'activity_summary'],
+        return: ['subject', 'case_type_id', 'status_id', 'contacts', 'activity_summary', 'unread_email_count'],
         options: {
           categories: {milestone: 1, task: 1, alert: 10},
           sort: $scope.sortField + ' ' + $scope.sortDir,
