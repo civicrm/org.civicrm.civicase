@@ -4,6 +4,7 @@
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 Civi::resources()
   ->addPermissions(array('administer CiviCase'))
+  ->addScriptFile('org.civicrm.civicase', 'packages/paging.min.js', 140, 'html-header')
   ->addSetting(array(
     'config' => array(
       'enableComponents' => CRM_Core_Config::singleton()->enableComponents,

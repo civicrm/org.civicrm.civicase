@@ -11,8 +11,8 @@
   angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
-    var ITEMS_PER_PAGE = 25,
-      pageNum = 0;
+    $scope.pageSize = 25;
+    $scope.pageNum = 1;
     $scope.CRM = CRM;
     $scope.caseIsFocused = false;
     $scope.sortField = 'contact_id.sort_name';
@@ -42,11 +42,6 @@
 
     var unfocusCase = $scope.unfocusCase = function() {
       $scope.caseIsFocused = false;
-    };
-
-    $scope.nextPage = function() {
-      ++pageNum;
-      getCases(true);
     };
 
     $scope.selectAll = function(e) {
@@ -123,24 +118,11 @@
       });
     }
 
-    var getCases = $scope.getCases = function(nextPage) {
+    var getCases = $scope.getCases = function() {
       setPageTitle();
-      if (nextPage !== true) {
-        pageNum = 0;
-      }
       crmThrottle(_loadCases).then(function(result) {
-        var newCases = _.each(result.cases.values, formatCase);
-        if (pageNum) {
-          $scope.cases = $scope.cases.concat(newCases);
-        } else {
-          $scope.cases = newCases;
-        }
-        var remaining = result.count - (ITEMS_PER_PAGE * (pageNum + 1));
+        $scope.cases = _.each(result.cases.values, formatCase);
         $scope.totalCount = result.count;
-        $scope.remaining = remaining > 0 ? remaining : 0;
-        if (!result.count && !pageNum) {
-          $scope.remaining = false;
-        }
         setPageTitle();
       });
     };
@@ -152,8 +134,8 @@
         options: {
           categories: {milestone: 1, task: 1, alert: 10},
           sort: $scope.sortField + ' ' + $scope.sortDir,
-          limit: ITEMS_PER_PAGE,
-          offset: ITEMS_PER_PAGE * pageNum
+          limit: $scope.pageSize,
+          offset: $scope.pageSize * ($scope.pageNum - 1)
         }
       };
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
@@ -193,6 +175,7 @@
 
     $scope.$watch('sortField', getCases);
     $scope.$watch('sortDir', getCases);
+    $scope.$watch('pageNum', getCases);
     $scope.$watchCollection('filters', function() {
       // Only live-update filter results if search is collapsed
       if (!$scope.searchIsOpen) {

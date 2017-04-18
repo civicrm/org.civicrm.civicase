@@ -120,6 +120,15 @@
         </tr>
       </tbody>
     </table>
+    <paging
+      class="center-block text-center"
+      ng-show="!caseIsFocused"
+      page="pageNum"
+      page-size="pageSize"
+      total="totalCount"
+      show-prev-next="true"
+      show-first-last="true">
+    </paging>
     <div class="civicase-table-expander" ng-if="viewingCase && !caseIsFocused" ng-click="viewCase(null, $event)"><div>&raquo;</div></div>
     <div class="civicase-table-placeholder" ng-if="caseIsFocused" ng-click="unfocusCase()"><div>&raquo;</div></div>
   </div>
