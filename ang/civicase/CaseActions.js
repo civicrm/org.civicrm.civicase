@@ -65,7 +65,11 @@
 
             changeStatus: function(cases) {
               var types = _.uniq(_.map(cases, 'case_type_id')),
-                msg = '<input name="change_case_status" placeholder="' + ts('Select New Status') + '" />',
+                msg = '<form>' +
+                  '<div><input name="change_case_status" placeholder="' + ts('Select New Status') + '" /></div>' +
+                  '<label for="change_case_status_details">' + ts('Notes') + '</label>' +
+                  '<textarea id="change_case_status_details"></textarea>' +
+                  '</form>',
                 statuses = _.map(CRM.civicase.caseStatuses, function(item) {return {id: item.name, text: item.label};});
               _.each(types, function(caseTypeId) {
                 var allowedStatuses = CRM.civicase.caseTypes[caseTypeId].definition.statuses || [];
@@ -75,26 +79,29 @@
                   });
                 }
               });
-
               CRM.confirm({
                   title: action.title,
                   message: msg,
                   open: function() {
                     $('input[name=change_case_status]', this).crmSelect2({data: statuses});
+                    CRM.wysiwyg.create('#change_case_status_details');
                   }
                 })
                 .on('crmConfirm:yes', function() {
                   var status = $('input[name=change_case_status]', this).val(),
+                    details = $('#change_case_status_details').val(),
                     calls = [];
-                  _.each(cases, function(item) {
-                    var subject = ts('Case status changed from %1 to %2', {
-                      1: item.status,
-                      2: _.result(_.find(statuses, {id: status}), 'text')
+                  if (status) {
+                    _.each(cases, function(item) {
+                      var subject = ts('Case status changed from %1 to %2', {
+                        1: item.status,
+                        2: _.result(_.find(statuses, {id: status}), 'text')
+                      });
+                      calls.push(['Case', 'create', {id: item.id, status_id: status}]);
+                      calls.push(['Activity', 'create', {case_id: item.id, status_id: 'Completed', activity_type_id: 'Change Case Status', subject: subject, details: details}]);
                     });
-                    calls.push(['Case', 'create', {id: item.id, status_id: status}]);
-                    calls.push(['Activity', 'create', {case_id: item.id, status_id: 'Completed', activity_type_id: 'Change Case Status', subject: subject}]);
-                  });
-                  crmApi(calls, true).then($scope.getCases);
+                    crmApi(calls, true).then($scope.getCases);
+                  }
                 });
             },
 

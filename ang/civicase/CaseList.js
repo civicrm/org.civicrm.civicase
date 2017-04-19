@@ -10,8 +10,13 @@
   // CaseList controller
   angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout) {
     // The ts() and hs() functions help load strings for this module.
-    var ts = $scope.ts = CRM.ts('civicase');
-    $scope.pageSize = 2;
+    var ts = $scope.ts = CRM.ts('civicase'),
+      caseTypes = CRM.civicase.caseTypes,
+      caseStatuses = CRM.civicase.caseStatuses,
+      tmpSelection = [];
+    $scope.activityTypes = CRM.civicase.activityTypes;
+    $scope.cases = [];
+    $scope.pageSize = 25;
     $scope.pageNum = 1;
     $scope.CRM = CRM;
     $scope.caseIsFocused = false;
@@ -20,15 +25,8 @@
     $scope.filters = {};
     $scope.searchIsOpen = false;
     $scope.pageTitle = '';
-
-    var caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = CRM.civicase.caseStatuses,
-      activityTypes = $scope.activityTypes = CRM.civicase.activityTypes,
-      tmpSelection = [];
-
-    $scope.cases = [];
-
     $scope.viewingCase = null;
+
     $scope.viewCase = function(id, $event) {
       if (!$event || !$($event.target).is('input, button')) {
         unfocusCase();
