@@ -25,11 +25,7 @@
                 {{ ts('Actions') }}
                 <span class="caret"></span>
               </button>
-              <ul class="dropdown-menu">
-                <li ng-class="{disabled: !(!action.number || isSelection(action.number))}" ng-repeat="action in caseActions">
-                  <a href ng-click="doAction(action)">{{ action.title }}</a>
-                </li>
-              </ul>
+              <ul class="dropdown-menu" civicase-actions></ul>
             </div>
             <div class="btn-group btn-group-sm cc-sort-btn-group" ng-class="{'pull-right': !viewingCase}">
               <button class="btn btn-default" ng-click="changeSortDir()">
