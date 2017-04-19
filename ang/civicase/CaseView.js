@@ -31,7 +31,7 @@
     function caseGetParams() {
       return {
         id: $scope.caseId,
-        return: ['subject', 'contact_id', 'case_type_id', 'case_type_id.definition', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
         // For the "related cases" section
         'api.Case.get': {
           contact_id: {IN: "$value.contact_id"},
@@ -119,6 +119,7 @@
       item.status = caseStatuses[item.status_id].label;
       item.case_type = caseTypes[item.case_type_id].title;
       item.selected = false;
+      item.definition = caseTypes[item.case_type_id].definition;
       _.each(item.contacts, function(contact) {
         if (!contact.relationship_type_id) {
           item.client.push(contact);
@@ -163,8 +164,8 @@
 
     $scope.pushCaseData = function(data) {
       var item = $scope.item = formatCase(data);
-      $scope.allowedCaseStatuses = getAllowedCaseStatuses(item['case_type_id.definition']);
-      $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item['case_type_id.definition']);
+      $scope.allowedCaseStatuses = getAllowedCaseStatuses(item.definition);
+      $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item.definition);
     };
 
     $scope.markCompleted = function(act) {

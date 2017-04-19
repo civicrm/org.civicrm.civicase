@@ -9,11 +9,10 @@
       clients = _.indexBy(item.client, 'contact_id'),
       relTypes = CRM.civicase.relationshipTypes,
       relTypesByName = _.indexBy(relTypes, 'name_b_a'),
-      definition = item['case_type_id.definition'],
       people = $scope.people = [],
       caseRoles = $scope.caseRoles = {};
 
-    _.each(_.cloneDeep(definition.caseRoles), function(role) {
+    _.each(_.cloneDeep(item.definition.caseRoles), function(role) {
       var relType = relTypesByName[role.name];
       role.role = relType.label_b_a;
       role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');

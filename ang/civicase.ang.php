@@ -32,11 +32,11 @@ foreach ($options as &$option) {
   }
 }
 $caseTypes = civicrm_api3('CaseType', 'get', array(
-  'return' => array('name', 'title', 'description'),
+  'return' => array('name', 'title', 'description', 'definition'),
   'options' => array('limit' => 0, 'sort' => 'weight'),
 ));
 foreach ($caseTypes['values'] as &$item) {
-  CRM_Utils_Array::remove($item, 'id', 'definition', 'is_forkable', 'is_forked');
+  CRM_Utils_Array::remove($item, 'id', 'is_forkable', 'is_forked');
 }
 $options['caseTypes'] = $caseTypes['values'];
 $result = civicrm_api3('RelationshipType', 'get', array(
@@ -95,6 +95,30 @@ foreach ($result['values'] as $group) {
     }
     $options['customSearchFields'][] = $group;
   }
+}
+// Bulk actions for case list - we put this here so it can be modified by other extensions
+$options['caseActions'] = array(
+  array(
+    'title' => ts('Change Case Status'),
+    'action' => 'changeStatus(cases)',
+  ),
+  array(
+    'title' => ts('Email Case Managers'),
+    'action' => 'emailManagers(cases)',
+  ),
+);
+if (CRM_Core_Permission::check('delete in CiviCase')) {
+  $options['caseActions'][] = array(
+    'title' => ts('Delete Cases'),
+    'action' => 'deleteCases(cases)',
+  );
+}
+if (CRM_Core_Permission::check('administer CiviCase')) {
+  $options['caseActions'][] = array(
+    'title' => ts('Merge 2 Cases'),
+    'number' => 2,
+    'action' => 'mergeCases(cases)',
+  );
 }
 return array(
   'js' => array(

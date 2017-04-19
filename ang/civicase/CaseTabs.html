@@ -11,7 +11,7 @@
     <div class="btn-group btn-group-sm pull-right">
       <button type="button" class="btn" data-toggle="dropdown"><i class="fa fa-plus"></i> {{ ts('Timeline') }}</button>
       <ul class="dropdown-menu" >
-        <li ng-repeat="timeline in item['case_type_id.definition'].activitySets">
+        <li ng-repeat="timeline in item['definition'].activitySets">
           <a href crm-confirm="{message: ts('Add all activities from %1 to this case?', {1: timeline.label})}" on-yes="addTimeline(timeline.name)">{{ timeline.label }}</a>
         </li>
       </ul>
