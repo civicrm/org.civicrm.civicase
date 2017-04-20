@@ -4,7 +4,7 @@
   angular.module('civicase').directive('civicaseViewFiles', function() {
     return {
       restrict: 'AE',
-      templateUrl: '~/civicase/CaseViewFiles.html',
+      templateUrl: '~/civicase/ViewFiles.html',
       scope: {
         item: '=civicaseViewFiles'
       },
