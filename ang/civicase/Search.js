@@ -131,7 +131,7 @@
   angular.module('civicase').directive('civicaseSearch', function() {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/CaseSearch.html',
+      templateUrl: '~/civicase/Search.html',
       controller: searchController,
       scope: {
         filters: '=civicaseSearch',
