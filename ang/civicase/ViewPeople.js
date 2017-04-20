@@ -68,7 +68,7 @@
   angular.module('civicase').directive('civicaseViewPeople', function() {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/CaseViewPeople.html',
+      templateUrl: '~/civicase/ViewPeople.html',
       controller: casePeopleController,
       scope: {
         item: '=civicaseViewPeople'
