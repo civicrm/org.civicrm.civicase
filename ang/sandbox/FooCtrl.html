@@ -1,0 +1,42 @@
+<div class="crm-container" id="bootstrap-theme">
+
+  <h1 crm-page-title>{{activeCid ? ts('About %1', {1: myContact.display_name}) : ts('Contacts')}}</h1>
+
+  <div class="row">
+
+    <div class="col-md-4">
+      <div crm-ui-debug="contactQuery.params"/>
+      <div civicase-api3-ctrl="contactQuery" civicase-api3="['Contact','get', contactFilters]"></div>
+      <div>
+        <input ng-model="contactFilters.display_name"/>
+      </div>
+      <ul>
+        <li ng-repeat="contact in contactQuery.result.values"><a
+          ng-click="openContact(contact.id)">{{contact.display_name}}</a>
+        </li>
+      </ul>
+    </div>
+
+    <div ng-show="activeCid" class="col-md-8">
+      <div crm-ui-debug="myContact"></div>
+      <nav class="navbar civicase-view-tab-bar navbar-inverse">
+        <div class="container-fluid">
+          <ul class="nav navbar-nav">
+            <li ng-repeat="tab in tabs" ng-class="{active: activeTab === tab.name}">
+              <a ng-click="selectTab(tab.name)">
+                {{ tab.label }}
+                <span class="sr-only" ng-if="activeTab === tab.name">{{ ts('Current') }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div ng-show="activeTab === 'summary'" ng-include="'~/sandbox/FooCtrl/summary.html'"></div>
+      <div ng-if="activeTab === 'activities'" ng-include="'~/sandbox/FooCtrl/activities.html'"></div>
+      <div ng-if="activeTab === 'people'">People!</div>
+      <div ng-if="activeTab === 'files'">Files!</div>
+    </div>
+
+  </div>
+
+</div>

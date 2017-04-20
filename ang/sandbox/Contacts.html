@@ -1,0 +1,9 @@
+<div>
+  <input ng-model="contactQuery.params.display_name"/>
+</div>
+
+<ul>
+  <li ng-repeat="contact in contactQuery.result.values"><a
+    ng-href="#/sandbox/{{contact.id}}/summary">{{contact.display_name}}</a>
+  </li>
+</ul>
