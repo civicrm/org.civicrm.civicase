@@ -83,7 +83,7 @@
   angular.module('civicase').directive('civicaseUploader', function() {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/CaseUploader.html',
+      templateUrl: '~/civicase/Uploader.html',
       controller: caseFilesController,
       scope: {
         ctx: '=civicaseUploader',
