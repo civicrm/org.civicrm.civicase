@@ -80,6 +80,15 @@
   margin: .6em 0 .6em .6em;
 }
 
+#bootstrap-theme .act-filters .act-available-filter-menu {
+  overflow-y: auto;
+  max-height: 400px;
+}
+#bootstrap-theme .act-filters .act-available-filter-menu>li>span {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 #bootstrap-theme .act-filters .dropdown-menu li:first-child input {
   font-family: FontAwesome;
   margin: 0;

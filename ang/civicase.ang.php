@@ -3,7 +3,7 @@
 // in CiviCRM. See also:
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 Civi::resources()
-  ->addPermissions(array('administer CiviCase'))
+  ->addPermissions(array('administer CiviCase', 'administer CiviCRM'))
   ->addScriptFile('org.civicrm.civicase', 'packages/paging.min.js', 140, 'html-header')
   ->addSetting(array(
     'config' => array(
@@ -65,17 +65,15 @@ foreach ($result['values'] as $group) {
       if (!empty($group['extends_entity_column_value'])) {
         $group['caseTypes'] = CRM_Utils_Array::collect('name', array_values(array_intersect_key($caseTypes['values'], array_flip($group['extends_entity_column_value']))));
       }
-      $group['fields'] = $group['api.CustomField.get']['values'];
-      unset($group['api.CustomField.get']);
-      foreach ($group['fields'] as &$field) {
-        Civi\CCase\Utils::formatCustomSearchField($field);
+      foreach ($group['api.CustomField.get']['values'] as $field) {
+        $group['fields'][] = Civi\CCase\Utils::formatCustomSearchField($field);
       }
+      unset($group['api.CustomField.get']);
       $options['customSearchFields'][] = $group;
     }
     else {
       foreach ($group['api.CustomField.get']['values'] as $field) {
-        Civi\CCase\Utils::formatCustomSearchField($field);
-        $options['customActivityFields'][] = $field + array('name' => "custom_{$field['id']}");
+        $options['customActivityFields'][] = Civi\CCase\Utils::formatCustomSearchField($field);
       }
     }
   }

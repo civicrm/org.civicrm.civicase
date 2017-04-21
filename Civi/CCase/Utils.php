@@ -51,7 +51,7 @@ class Utils {
   /**
    *
    */
-  public static function formatCustomSearchField(&$field) {
+  public static function formatCustomSearchField($field) {
     if ($field['html_type'] != 'Autocomplete-Select') {
       $opts = civicrm_api('Case', 'getoptions', array(
         'version' => 3,
@@ -88,7 +88,9 @@ class Utils {
       );
     }
     unset($field['filter'], $field['option_group_id']);
+    $field['name'] = "custom_{$field['id']}";
     $field['is_search_range'] = (bool) \CRM_Utils_Array::value('is_search_range', $field);
+    return $field;
   }
 
 }

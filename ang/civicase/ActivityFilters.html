@@ -1,13 +1,15 @@
 <form class="form-inline act-filters">
 
   <div class="btn-group btn-group-sm">
-    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">{{ ts('Filters') }} <span class="caret"></span></button>
-    <ul class="dropdown-menu" role="menu">
+    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" ng-click="openFilterMenu()">
+      {{ ts('Filters') }} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu act-available-filter-menu" role="menu">
       <li>
-        <span><input class="form-control" placeholder="&#xf002" ng-model="availableFilterSearchText" /></span>
+        <span><input class="form-control" placeholder="&#xf002" name="availableFilterSearchText" ng-model="availableFilterSearchText" /></span>
       </li>
       <li ng-repeat="field in availableFilters | filter:{label: availableFilterSearchText}">
-        <span>
+        <span ng-click="exposeFilter(field, $event)">
           <input type="checkbox" id="availableFilter_{{ field.name }}" ng-model="exposedFilters[field.name]" />
           <label for="availableFilter_{{ field.name }}">{{ field.label }}</label>
         </span>
@@ -15,7 +17,7 @@
     </ul>
   </div>
 
-  <span ng-repeat="field in availableFilters" ng-if="exposedFilters[field.name]" ng-switch="field.html_type">
+  <span ng-repeat="field in availableFilters" ng-if="exposedFilters[field.name]" data-activity-filter="{{ field.name }}" ng-switch="field.html_type">
     <span ng-switch-when="Autocomplete-Select">
       <input
         placeholder="{{ field.label }}"

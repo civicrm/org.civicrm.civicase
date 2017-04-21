@@ -123,6 +123,7 @@
       var params = {
         is_current_revision: 1,
         is_deleted: 0,
+        is_test: 0,
         case_id: caseId ? caseId : {'IS NOT NULL': 1},
         options: {}
       };
@@ -135,7 +136,7 @@
           } else if (_.isString(val)) {
             params[key] = {LIKE: '%' + val + '%'};
           } else if (_.isArray(val) && val.length) {
-            params[key] = {IN: val};
+            params[key] = val.length === 1 ? val[0] : {IN: val};
           } else if (!_.isArray(val)) {
             params[key] = val;
           }
