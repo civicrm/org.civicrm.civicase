@@ -48,4 +48,35 @@ class Utils {
     return \CRM_Utils_Array::collect('value', $statuses['values']);
   }
 
+  /**
+   *
+   */
+  public static function formatCustomSearchField(&$field) {
+    if ($field['html_type'] != 'Autocomplete-Select') {
+      $opts = civicrm_api('Case', 'getoptions', array(
+        'version' => 3,
+        'field' => "custom_{$field['id']}",
+      ));
+      if (!empty($opts['values'])) {
+        $field['options'] = array();
+        // Javascript doesn't like php's fast & loose type switching; ensure everything is a string
+        foreach ($opts['values'] as $key => $val) {
+          $field['options'][] = array(
+            'id' => (string) $key,
+            'text' => (string) $val,
+          );
+        }
+      }
+    }
+    // For contact ref fields
+    elseif (!empty($field['filter'])) {
+      parse_str($field['filter'], $field['filter']);
+      unset($field['filter']['action']);
+      if (!empty($field['filter']['group'])) {
+        $field['filter']['group'] = explode(',', $field['filter']['group']);
+      }
+    }
+    $field['is_search_range'] = (bool) \CRM_Utils_Array::value('is_search_range', $field);
+  }
+
 }

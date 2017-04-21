@@ -2,19 +2,37 @@
   <div class="btn-group btn-group-sm">
     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">{{ ts('Filters') }} <span class="caret"></span></button>
     <ul class="dropdown-menu" role="menu">
-      <li ng-repeat="(name, label) in availableFilters">
+      <li>
+        <span><input class="form-control" placeholder="&#xf002" ng-model="availableFilterSearchText" /></span></li>
+      <li ng-repeat="(name, field) in availableFilters | filter:availableFilterSearchText">
         <span>
           <input type="checkbox" id="availableFilter_{{ name }}" ng-model="exposedFilters[name]" />
-          <label for="availableFilter_{{ name }}">{{ label }}</label>
+          <label for="availableFilter_{{ name }}">{{ field.label }}</label>
         </span>
       </li>
     </ul>
   </div>
-  <input class="form-control" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.activity_type_id, data: activityTypeOptions}" ng-model="filters.activity_type_id" ng-show="exposedFilters.activity_type_id" />
-  <input class="form-control" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: availableFilters.status_id, data: activityStatusOptions}" ng-model="filters.status_id" ng-show="exposedFilters.status_id" />
-  <input type="search" class="form-control" placeholder="{{ availableFilters.text }}" ng-model="filters.text" ng-show="exposedFilters.text" />
   <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('With')}}" ng-model="filters.target_contact_id" ng-show="exposedFilters.target_contact_id" />
   <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {allowClear: true, multiple: true, placeholder: ts('Assigned to')}}" ng-model="filters.assignee_contact_id" ng-show="exposedFilters.assignee_contact_id" />
   <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {LIKE: '%civicrm_activity%'}}}, select: {allowClear: true, multiple: true, placeholder: ts('Tagged')}}" ng-model="filters.tag_id" ng-show="exposedFilters.tag_id" />
   <input class="form-control" ng-list crm-entityref="{entity: 'Campaign', select: {allowClear: true, multiple: true, placeholder: ts('Campaign')}}" ng-model="filters.campaign_id" ng-show="exposedFilters.campaign_id" />
+  
+  <span ng-repeat="(name, field) in availableFilters" ng-if="field.html_type && exposedFilters[name]" ng-switch="field.html_type">
+    <span ng-switch-when="Autocomplete-Select">
+      <input
+        placeholder="{{ field.label }}"
+        ng-list class="form-control"
+        ng-model="filters[name]"
+        crm-entityref="{entity: (field.data_type === 'ContactReference' ? 'Contact' : 'OptionValue'), select: {multiple: true}, api: {params: field.data_type === 'ContactReference' ? field.filter || {} : {option_group_id: field.option_group_id, option_sort: 'weight'}}}"
+      />
+    </span>
+    <span ng-switch-when="Select Date">
+      <span placeholder="{{ field.label }}" crm-ui-date-range="filters[name]"></span>
+    </span>
+    <span ng-switch-default>
+      <input placeholder="{{ field.label }}" type="{{ field.data_type === 'Number' || field.data_type === 'Integer' ? 'number' : 'text' }}" ng-if="!field.options && !field.is_search_range" class="form-control" id="case_search_field_custom_{{ field.id }}" ng-model="filters[name]" />
+      <span ng-if="!field.options && field.is_search_range" crm-ui-number-range="filters[name]"></span>
+      <input ng-if="field.options" class="form-control" placeholder="{{ field.label }}" crm-ui-select="{allowClear: true, multiple: true, data: field.options}" ng-model="filters[name]" />
+    </span>
+  </span>
 </form>

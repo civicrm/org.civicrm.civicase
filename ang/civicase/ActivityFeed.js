@@ -16,43 +16,13 @@
       pageNum = 0;
     $scope.CRM = CRM;
 
-    function mapSelectOptions(opt, id) {
-      return {
-        id: id,
-        text: opt.label,
-        color: opt.color,
-        icon: opt.icon
-      };
-    }
-
     // We have data available in JS. We also want to reference in HTML.
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = $scope.activityStatuses = CRM.civicase.activityStatuses;
     $scope.activityCategories = CRM.civicase.activityCategories;
-    $scope.activityTypeOptions = _.map(activityTypes, mapSelectOptions);
-    $scope.activityStatusOptions = _.map(activityStatuses, mapSelectOptions);
     $scope.activities = {};
     $scope.remaining = true;
     $scope.viewingActivity = {};
-    $scope.availableFilters = {
-      activity_type_id: ts('Activity type'),
-      status_id: ts('Status'),
-      text: ts('Contains text'),
-      target_contact_id: ts('With'),
-      assignee_contact_id: ts('Assigned to'),
-      tag_id: ts('Tagged')
-    };
-    if (_.includes(CRM.config.enableComponents, 'CiviCampaign')) {
-      $scope.availableFilters.campaign_id = ts('Campaign');
-    }
-
-    $scope.filters = {};
-
-    $scope.exposedFilters = CRM.cache.get('activityFeedFilters', {
-      activity_type_id: true,
-      status_id: true,
-      text: true
-    });
 
     var displayOptions = $scope.displayOptions = CRM.cache.get('activityFeedDisplayOptions', {
       followup_nested: true,
@@ -164,9 +134,9 @@
             params.options.or = [['subject', 'details']];
           } else if (_.isString(val)) {
             params[key] = {LIKE: '%' + val + '%'};
-          } else if (_.isArray(val)) {
+          } else if (_.isArray(val) && val.length) {
             params[key] = {IN: val};
-          } else {
+          } else if (!_.isArray(val)) {
             params[key] = val;
           }
         }
@@ -186,15 +156,6 @@
     $scope.$watchCollection('filters', getActivities);
     $scope.$watchCollection('involving', getActivities);
 
-    $scope.$watchCollection('exposedFilters', function() {
-      CRM.cache.set('activityFeedFilters', $scope.exposedFilters);
-      _.each($scope.filters, function(val, key) {
-        if (val && !$scope.exposedFilters[key]) {
-          delete $scope.filters[key];
-        }
-      });
-    });
-
     $scope.$watchCollection('displayOptions', function() {
       CRM.cache.set('activityFeedDisplayOptions', displayOptions);
       getActivities();
@@ -210,7 +171,7 @@
       restrict: 'A',
       template:
         '<div class="panel panel-default act-feed-panel">' +
-          '<div class="panel-header" ng-include="\'~/civicase/ActivityFilters.html\'"></div>' +
+          '<div class="panel-header" civicase-activity-filters></div>' +
           '<div class="panel-body clearfix" ng-include="\'~/civicase/ActivityList.html\'"></div>' +
         '</div>',
       controller: activityFeedController,

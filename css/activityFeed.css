@@ -80,6 +80,23 @@
   margin: .6em 0 .6em .6em;
 }
 
+#bootstrap-theme .act-filters .dropdown-menu li:first-child input {
+  font-family: FontAwesome;
+  margin-left: 0;
+}
+#bootstrap-theme .act-filters .dropdown-menu li input::placeholder {
+  text-align: right;
+}
+#bootstrap-theme .act-filters .dropdown-menu li input::-moz-placeholder {
+  text-align: right;
+}
+#bootstrap-theme .act-filters .dropdown-menu li input:-ms-input-placeholder {
+  text-align: right;
+}
+#bootstrap-theme .act-filters .dropdown-menu li input::-webkit-input-placeholder {
+  text-align: right;
+}
+
 #bootstrap-theme .act-feed-list-group .list-group-item {
   border: 0 none;
   padding: 0;

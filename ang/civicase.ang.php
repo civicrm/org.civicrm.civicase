@@ -47,8 +47,8 @@ $options['relationshipTypes'] = $result['values'];
 $options['fileCategories'] = CRM_Civicase_FileCategory::getCategories();
 $result = civicrm_api3('CustomGroup', 'get', array(
   'sequential' => 1,
-  'return' => array('extends_entity_column_value', 'title'),
-  'extends' => 'Case',
+  'return' => array('extends_entity_column_value', 'title', 'extends'),
+  'extends' => array('IN' => array('Case', 'Activity')),
   'is_active' => 1,
   'options' => array('sort' => 'weight'),
   'api.CustomField.get' => array(
@@ -58,42 +58,26 @@ $result = civicrm_api3('CustomGroup', 'get', array(
     'options' => array('sort' => 'weight'),
   ),
 ));
-$options['customSearchFields'] = array();
+$options['customSearchFields'] = $options['customActivityFields'] = array();
 foreach ($result['values'] as $group) {
   if (!empty($group['api.CustomField.get']['values'])) {
-    if (!empty($group['extends_entity_column_value'])) {
-      $group['caseTypes'] = CRM_Utils_Array::collect('name', array_values(array_intersect_key($caseTypes['values'], array_flip($group['extends_entity_column_value']))));
-    }
-    $group['fields'] = $group['api.CustomField.get']['values'];
-    unset($group['api.CustomField.get']);
-    foreach ($group['fields'] as &$field) {
-      if ($field['html_type'] != 'Autocomplete-Select') {
-        $opts = civicrm_api('Case', 'getoptions', array(
-          'version' => 3,
-          'field' => "custom_{$field['id']}",
-        ));
-        if (!empty($opts['values'])) {
-          $field['options'] = array();
-          // Javascript doesn't like php's fast & loose type switching; ensure everything is a string
-          foreach ($opts['values'] as $key => $val) {
-            $field['options'][] = array(
-              'key' => (string) $key,
-              'value' => (string) $val,
-            );
-          }
-        }
+    if ($group['extends'] == 'Case') {
+      if (!empty($group['extends_entity_column_value'])) {
+        $group['caseTypes'] = CRM_Utils_Array::collect('name', array_values(array_intersect_key($caseTypes['values'], array_flip($group['extends_entity_column_value']))));
       }
-      // For contact ref fields
-      elseif (!empty($field['filter'])) {
-        parse_str($field['filter'], $field['filter']);
-        unset($field['filter']['action']);
-        if (!empty($field['filter']['group'])) {
-          $field['filter']['group'] = explode(',', $field['filter']['group']);
-        }
+      $group['fields'] = $group['api.CustomField.get']['values'];
+      unset($group['api.CustomField.get']);
+      foreach ($group['fields'] as &$field) {
+        Civi\CCase\Utils::formatCustomSearchField($field);
       }
-      $field['is_search_range'] = (bool) CRM_Utils_Array::value('is_search_range', $field);
+      $options['customSearchFields'][] = $group;
     }
-    $options['customSearchFields'][] = $group;
+    else {
+      foreach ($group['api.CustomField.get']['values'] as $field) {
+        Civi\CCase\Utils::formatCustomSearchField($field);
+        $options['customActivityFields']["custom_{$field['id']}"] = $field;
+      }
+    }
   }
 }
 // Bulk actions for case list - we put this here so it can be modified by other extensions
