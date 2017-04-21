@@ -1,13 +1,11 @@
 <form class="form-inline act-filters">
 
   <div class="btn-group btn-group-sm">
-    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" ng-click="openFilterMenu()">
-      {{ ts('Filters') }} <span class="caret"></span>
+    <button type="button" class="btn btn-info dropdown-toggle act-available-filter-toggle" data-toggle="dropdown" ng-click="openFilterMenu()">
+      <span class="act-available-filter-label">{{ ts('Filters') }}<span class="caret"></span></span>
+      <input class="form-control act-available-filter-search" placeholder="&#xf002" ng-model="availableFilterSearchText" ng-click="$event.stopPropagation()" />
     </button>
     <ul class="dropdown-menu act-available-filter-menu" role="menu">
-      <li>
-        <span><input class="form-control" placeholder="&#xf002" name="availableFilterSearchText" ng-model="availableFilterSearchText" /></span>
-      </li>
       <li ng-repeat="field in (filteredFilters = (availableFilters | filter:{label: availableFilterSearchText}))">
         <span ng-class="{'act-filter-has-header': field.group && ($first || field.group !== filteredFilters[$index - 1].group)}">
           <span class="act-filter-header">

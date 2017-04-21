@@ -86,7 +86,7 @@
       $scope.openFilterMenu = function() {
         $scope.availableFilterSearchText = '';
         $timeout(function () {
-          $('[name=availableFilterSearchText]:visible', element).focus();
+          $('.act-available-filter-search:visible', element).focus();
         }, 50);
       };
 

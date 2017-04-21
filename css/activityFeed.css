@@ -85,8 +85,7 @@
   max-height: 400px;
 }
 #bootstrap-theme .act-filters .act-available-filter-menu>li>span {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-bottom: 0;
 }
 #bootstrap-theme .act-filters .act-filter-header {
   display: none;
@@ -94,25 +93,35 @@
 #bootstrap-theme .act-filters .act-filter-has-header .act-filter-header {
   display: block;
   cursor: default;
-  margin-top: -15px;
-  margin-bottom: 15px;
+  margin-top: -10px;
+  margin-bottom: 10px;
   border-bottom: 1px solid #727E8A;
 }
 
-#bootstrap-theme .act-filters .dropdown-menu li:first-child input {
+#bootstrap-theme .act-available-filter-toggle input.act-available-filter-search {
   font-family: FontAwesome;
   margin: 0;
+  display: none;
 }
-#bootstrap-theme .act-filters .dropdown-menu li input::placeholder {
+#bootstrap-theme .act-available-filter-toggle[aria-expanded=true] {
+  padding: 0;
+}
+#bootstrap-theme .act-available-filter-toggle[aria-expanded=true] input.act-available-filter-search {
+  display: inline-block;
+}
+#bootstrap-theme .act-available-filter-toggle[aria-expanded=true] .act-available-filter-label {
+  display: none;
+}
+#bootstrap-theme .act-filters input.act-available-filter-search::placeholder {
   text-align: right;
 }
-#bootstrap-theme .act-filters .dropdown-menu li input::-moz-placeholder {
+#bootstrap-theme .act-filters input.act-available-filter-search::-moz-placeholder {
   text-align: right;
 }
-#bootstrap-theme .act-filters .dropdown-menu li input:-ms-input-placeholder {
+#bootstrap-theme .act-filters input.act-available-filter-search:-ms-input-placeholder {
   text-align: right;
 }
-#bootstrap-theme .act-filters .dropdown-menu li input::-webkit-input-placeholder {
+#bootstrap-theme .act-filters input.act-available-filter-search::-webkit-input-placeholder {
   text-align: right;
 }
 
