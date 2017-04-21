@@ -88,6 +88,16 @@
   padding-top: 8px;
   padding-bottom: 8px;
 }
+#bootstrap-theme .act-filters .act-filter-header {
+  display: none;
+}
+#bootstrap-theme .act-filters .act-filter-has-header .act-filter-header {
+  display: block;
+  cursor: default;
+  margin-top: -15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #727E8A;
+}
 
 #bootstrap-theme .act-filters .dropdown-menu li:first-child input {
   font-family: FontAwesome;

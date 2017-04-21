@@ -8,10 +8,15 @@
       <li>
         <span><input class="form-control" placeholder="&#xf002" name="availableFilterSearchText" ng-model="availableFilterSearchText" /></span>
       </li>
-      <li ng-repeat="field in availableFilters | filter:{label: availableFilterSearchText}">
-        <span ng-click="exposeFilter(field, $event)">
-          <input type="checkbox" id="availableFilter_{{ field.name }}" ng-model="exposedFilters[field.name]" />
-          <label for="availableFilter_{{ field.name }}">{{ field.label }}</label>
+      <li ng-repeat="field in (filteredFilters = (availableFilters | filter:{label: availableFilterSearchText}))">
+        <span ng-class="{'act-filter-has-header': field.group && ($first || field.group !== filteredFilters[$index - 1].group)}">
+          <span class="act-filter-header">
+            {{ field.group }}
+          </span>
+          <span ng-click="exposeFilter(field, $event)">
+            <input type="checkbox" id="availableFilter_{{ field.name }}" ng-model="exposedFilters[field.name]" />
+            <label for="availableFilter_{{ field.name }}">{{ field.label }}</label>
+          </span>
         </span>
       </li>
     </ul>
