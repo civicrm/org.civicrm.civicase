@@ -75,7 +75,7 @@ foreach ($result['values'] as $group) {
     else {
       foreach ($group['api.CustomField.get']['values'] as $field) {
         Civi\CCase\Utils::formatCustomSearchField($field);
-        $options['customActivityFields']["custom_{$field['id']}"] = $field;
+        $options['customActivityFields'][] = $field + array('name' => "custom_{$field['id']}");
       }
     }
   }

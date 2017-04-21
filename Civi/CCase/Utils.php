@@ -69,13 +69,25 @@ class Utils {
       }
     }
     // For contact ref fields
-    elseif (!empty($field['filter'])) {
-      parse_str($field['filter'], $field['filter']);
-      unset($field['filter']['action']);
-      if (!empty($field['filter']['group'])) {
-        $field['filter']['group'] = explode(',', $field['filter']['group']);
+    elseif ($field['data_type'] == 'ContactReference') {
+      $field['entity'] = 'Contact';
+      $field['api_params'] = array();
+      if (!empty($field['filter'])) {
+        parse_str($field['filter'], $field['api_params']);
+        unset($field['api_params']['action']);
+        if (!empty($field['api_params']['group'])) {
+          $field['api_params']['group'] = explode(',', $field['api_params']['group']);
+        }
       }
     }
+    else {
+      $field['entity'] = 'OptionValue';
+      $field['api_params'] = array(
+        'option_group_id' => $field['option_group_id'],
+        'option_sort' => 'weight',
+      );
+    }
+    unset($field['filter'], $field['option_group_id']);
     $field['is_search_range'] = (bool) \CRM_Utils_Array::value('is_search_range', $field);
   }
 

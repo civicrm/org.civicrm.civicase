@@ -11,39 +11,53 @@
       };
     }
 
-    $scope.availableFilterSearchText = '';
-
-    $scope.availableFilters = {
-      activity_type_id: {
+    $scope.availableFilters = [
+      {
+        name: 'activity_type_id',
         label: ts('Activity type'),
         html_type: 'Select',
         options: _.map(CRM.civicase.activityTypes, mapSelectOptions)
       },
-      status_id: {
+      {
+        name: 'status_id',
         label: ts('Status'),
         html_type: 'Select',
         options: _.map(CRM.civicase.activityStatuses, mapSelectOptions)
       },
-      text: {
+      {
+        name: 'text',
         label: ts('Contains text'),
         html_type: 'Text'
       },
-      target_contact_id: {
-        label: ts('With')
+      {
+        name: 'target_contact_id',
+        label: ts('With'),
+        html_type: 'Autocomplete-Select',
+        entity: 'Contact'
       },
-      assignee_contact_id: {
-        label: ts('Assigned to')
+      {
+        name: 'assignee_contact_id',
+        label: ts('Assigned to'),
+        html_type: 'Autocomplete-Select',
+        entity: 'Contact'
       },
-      tag_id: {
-        label: ts('Tagged')
+      {
+        name: 'tag_id',
+        label: ts('Tagged'),
+        html_type: 'Autocomplete-Select',
+        entity: 'Tag',
+        api_params: {used_for: {LIKE: '%civicrm_activity%'}}
       }
-    };
+    ];
     if (_.includes(CRM.config.enableComponents, 'CiviCampaign')) {
-      $scope.availableFilters.campaign_id = {
-        label: ts('Campaign')
-      };
+      $scope.availableFilters.push({
+        name: 'campaign_id',
+        label: ts('Campaign'),
+        html_type: 'Autocomplete-Select',
+        entity: 'Campaign'
+      });
     }
-    _.extend($scope.availableFilters, CRM.civicase.customActivityFields);
+    $scope.availableFilters = $scope.availableFilters.concat(CRM.civicase.customActivityFields);
 
     $scope.filters = {};
 

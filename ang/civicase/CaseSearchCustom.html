@@ -9,7 +9,7 @@
             crm-ui-conditional ng-list class="form-control"
             id="case_search_field_custom_{{ field.id }}"
             ng-model="filters['custom_' + field.id]"
-            crm-entityref="{entity: (field.data_type === 'ContactReference' ? 'Contact' : 'OptionValue'), select: {multiple: true}, api: {params: field.data_type === 'ContactReference' ? field.filter || {} : {option_group_id: field.option_group_id, option_sort: 'weight'}}}"
+            crm-entityref="{entity: field.entity, select: {multiple: true}, api: {params: field.api_params}}"
           />
         </div>
         <div ng-switch-when="Select Date">
