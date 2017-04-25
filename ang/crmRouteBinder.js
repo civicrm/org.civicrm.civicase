@@ -1,4 +1,10 @@
-(function (angular, $, _) {
+(function(angular, $, _) {
+  angular.module('crmRouteBinder', [
+    'ngRoute'
+  ]);
+
+  // While processing a change from the $watch()'d data, we set the "internalUpdate" flag
+  // so that automated URL changes don't cause a reload.
   var internalUpdate = false, activeTimer = null, registered = false;
 
   function registerGlobalListener($injector) {
@@ -8,13 +14,12 @@
     $injector.get('$rootScope').$on('$routeUpdate', function () {
       // Only reload if someone else -- like the user or an <a href> -- changed URL.
       if (!internalUpdate) {
-        console.log('reload route');
         $injector.get('$route').reload();
       }
     });
   }
 
-  angular.module('sandbox').config(function ($provide) {
+  angular.module('crmRouteBinder').config(function ($provide) {
     $provide.decorator('$rootScope', function ($delegate, $injector) {
       Object.getPrototypeOf($delegate).$bindToRoute = function (scopeVar, queryParam, queryDefaults) {
         registerGlobalListener($injector);
@@ -25,7 +30,7 @@
         var $route = $injector.get('$route'), $timeout = $injector.get('$timeout');
 
         if ($route.current.params[queryParam]) {
-          _scope[scopeVar] = JSON.parse($route.current.params[queryParam]);
+          _scope[scopeVar] = angular.fromJson($route.current.params[queryParam]);
         }
         else {
           _scope[scopeVar] = angular.extend({}, queryDefaults);
@@ -36,7 +41,7 @@
           internalUpdate = true;
 
           var p = angular.extend({}, $route.current.params);
-          p[queryParam] = JSON.stringify(newFilters);
+          p[queryParam] = angular.toJson(newFilters);
           $route.updateParams(p);
 
           if (activeTimer) $timeout.cancel(activeTimer);
@@ -52,7 +57,9 @@
         var _scope = this;
         var $route = $injector.get('$route'), $timeout = $injector.get('$timeout');
 
-        _scope[scopeVar] = $route.current.params[queryParam] || queryDefault;
+        if (!(scopeVar in _scope)) {
+          _scope[scopeVar] = $route.current.params[queryParam] || queryDefault;
+        }
 
         // Keep the URL bar up-to-date.
         _scope.$watch(scopeVar, function (newValue) {
