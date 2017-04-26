@@ -21,52 +21,44 @@
 
   angular.module('crmRouteBinder').config(function ($provide) {
     $provide.decorator('$rootScope', function ($delegate, $injector) {
-      Object.getPrototypeOf($delegate).$bindToRoute = function (scopeVar, queryParam, queryDefaults) {
+      Object.getPrototypeOf($delegate).$bindToRoute = function (options) {
         registerGlobalListener($injector);
 
+        options.format = options.format || 'json';
         var _scope = this;
-        if (!queryDefaults) queryDefaults = {};
+        if (!options.default) {
+          options.default = (options.format === 'raw') ? '' : {};
+        }
 
         var $route = $injector.get('$route'), $timeout = $injector.get('$timeout');
 
-        if ($route.current.params[queryParam]) {
-          _scope[scopeVar] = angular.fromJson($route.current.params[queryParam]);
+        // TODO: can we combine these two branches better?
+        var initVal = null;
+        if (options.format === 'raw') {
+          initVal = (options.param in $route.current.params)
+            ? $route.current.params[options.param]
+            : options.default;
         }
-        else {
-          _scope[scopeVar] = angular.extend({}, queryDefaults);
+        else if (options.format === 'json') {
+          initVal = (options.param in $route.current.params)
+            ? angular.fromJson($route.current.params[options.param])
+            : angular.extend({}, options.default);
         }
+        // TODO: try using $parse instead of _scope[options.expr].
+        _scope[options.expr] = initVal;
 
         // Keep the URL bar up-to-date.
-        _scope.$watchCollection(scopeVar, function (newFilters) {
+        var watchFunc = (options.format === 'raw') ? '$watch' : '$watchCollection';
+        _scope[watchFunc](options.expr, function (newValue) {
+          var encValue = (options.format === 'raw' ? newValue : angular.toJson(newValue));
+          if ($route.current.params[options.param] === encValue) return;
+
           internalUpdate = true;
 
+          // TODO: Consider buffering these changes so that concurrent updates only
+          // cause one URL change.
           var p = angular.extend({}, $route.current.params);
-          p[queryParam] = angular.toJson(newFilters);
-          $route.updateParams(p);
-
-          if (activeTimer) $timeout.cancel(activeTimer);
-          activeTimer = $timeout(function () {
-            internalUpdate = false;
-            activeTimer = null;
-          }, 50);
-        });
-      };
-      Object.getPrototypeOf($delegate).$bindValueToRoute = function (scopeVar, queryParam, queryDefault) {
-        registerGlobalListener($injector);
-
-        var _scope = this;
-        var $route = $injector.get('$route'), $timeout = $injector.get('$timeout');
-
-        if (!(scopeVar in _scope)) {
-          _scope[scopeVar] = $route.current.params[queryParam] || queryDefault;
-        }
-
-        // Keep the URL bar up-to-date.
-        _scope.$watch(scopeVar, function (newValue) {
-          internalUpdate = true;
-
-          var p = angular.extend({}, $route.current.params);
-          p[queryParam] = newValue;
+          p[options.param] = encValue;
           $route.updateParams(p);
 
           if (activeTimer) $timeout.cancel(activeTimer);

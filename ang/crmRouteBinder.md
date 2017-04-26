@@ -11,7 +11,11 @@ angular.module('sandbox').config(function($routeProvider) {
     reloadOnSearch: false,
     template: '<input ng-model="filters.foo" />',
     controller: function($scope) {
-      $scope.$bindToRoute('filters', 'f', {foo: 'default-value'});
+      $scope.$bindToRoute({
+        param: 'f',
+        expr: 'filters',
+        default: {foo: 'default-value'}
+      });
     }
   });
 });
@@ -27,10 +31,14 @@ Things to try out:
 
 ## Functions
 
- * `$scope.$bindToRoute(scopeVar, queryVar, defaultValue)`
-   * Bind an object to a JSON-encoded query parameter.
- * `$scope.$bindValueToRoute(scopeVar, queryVar, defaultValue)`
-   * Bind a single value (string or number) to a query parameter.
+ * `$scope.$bindToRoute(options)`
+   * The `options` object should contain keys:
+     * `expr` (string): The name of a scoped variable to sync.
+     * `param` (string): The name of a query-parameter to sync. (If the `param` is included in the URL, it will initialize the expr.)
+     * `format` (string): The type of data to put in `param`. May be one of:
+       * `json` (default): The `param` is JSON, and the `expr` is a decoded object.
+       * `raw`: The `param` is string/int, and the `expr` is a string/int.
+     * `default` (object): The default data. (If the `param` is not included in the URL, it will initialize the expr.)
 
 ## Suggested Usage
 
@@ -65,22 +73,22 @@ angular.module('sandbox').config(function($routeProvider) {
       + '<div data-set-b="dataSetB" />'
       + '<div data-set-c="dataSetC" />',
     controller: function($scope) {
-      $scope.$bindToRoute('filterSetA', 'a', {});
+      $scope.$bindToRoute({expr:'filterSetA', param:'a', default:{}});
       $scope.$watchCollection('filterSetA', function(){
         crmApi(...).then(function(...){
           $scope.dataSetA = ...;
         });
       });
 
-      $scope.$bindToRoute('filterSetB', 'b', {});
-      $scope.$watchCollection('filterSetA', function(){
+      $scope.$bindToRoute({expr:'filterSetB', param:'b', default:{}});
+      $scope.$watchCollection('filterSetB', function(){
         crmApi(...).then(function(...){
           $scope.dataSetB = ...;
         });
       });
 
-      $scope.$bindToRoute('filterSetC', 'c', {});
-      $scope.$watchCollection('filterSetA', function(){
+      $scope.$bindToRoute({expr:'filterSetC', param:'c', default:{}});
+      $scope.$watchCollection('filterSetC', function(){
         crmApi(...).then(function(...){
           $scope.dataSetC = ...;
         });
