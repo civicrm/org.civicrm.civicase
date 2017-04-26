@@ -14,11 +14,13 @@
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/sandbox/FooCtrl'}); // See: templates/CRM/sandbox/FooCtrl.hlp
 
-    $scope.$bindToRoute('contactFilters', 'contacts', {
-      contact_type: 'Individual'
+    $scope.$bindToRoute({
+      expr: 'contactFilters',
+      param: 'contacts', 
+      default: {contact_type: 'Individual'}
     });
 
-    $scope.$bindValueToRoute('activeTab', 'tab', 'summary');
+    $scope.$bindToRoute({expr:'activeTab', param:'tab', default:'summary', format: 'raw'});
     $scope.selectTab = function(name) { $scope.activeTab = name; };
     $scope.tabs = [
       {name: 'summary', label: 'Summary'},
@@ -27,7 +29,7 @@
       {name: 'files', label: 'Files'}
     ];
 
-    $scope.$bindValueToRoute('activeCid', 'cid');
+    $scope.$bindToRoute({expr:'activeCid', param:'cid', format: 'raw'});
     $scope.$watch('activeCid', function(){
       if ($scope.activeCid) {
         crmApi('Contact', 'getsingle', {
@@ -41,7 +43,7 @@
       refreshActivities();
     });
 
-    $scope.$bindToRoute('activityFilters', 'aj', {});
+    $scope.$bindToRoute({expr:'activityFilters', param:'aj', default:{}});
     $scope.$watchCollection('activityFilters', refreshActivities);
     function refreshActivities(){
       if ($scope.activeCid) {
