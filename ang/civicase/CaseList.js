@@ -2,6 +2,7 @@
 
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/case/list', {
+      reloadOnSearch: false,
       controller: 'CivicaseCaseList',
       templateUrl: '~/civicase/CaseList.html'
     });
@@ -22,10 +23,13 @@
     $scope.caseIsFocused = false;
     $scope.sortField = 'contact_id.sort_name';
     $scope.sortDir = 'ASC';
-    $scope.filters = {};
     $scope.searchIsOpen = false;
     $scope.pageTitle = '';
     $scope.viewingCase = null;
+
+    $scope.$bindToRoute({expr:'filters', param:'cf'});
+    $scope.$bindToRoute({expr:'viewingCase', param:'caseId', format: 'raw'});
+    $scope.$bindToRoute({expr:'viewingCaseTab', param:'tab', format: 'raw', default:'summary'});
 
     $scope.viewCase = function(id, $event) {
       if (!$event || !$($event.target).is('input, button')) {
@@ -34,6 +38,7 @@
           $scope.viewingCase = null;
         } else {
           $scope.viewingCase = id;
+          $scope.viewingCaseTab = 'summary';
         }
       }
       setPageTitle();
@@ -185,19 +190,14 @@
     $scope.$watch('sortField', getCasesFromWatcher);
     $scope.$watch('sortDir', getCasesFromWatcher);
     $scope.$watch('pageNum', getCasesFromWatcher);
-    $scope.$watchCollection('filters', function(newValue, oldValue) {
-      // Only live-update filter results if search is collapsed
-      if (!$scope.searchIsOpen && !angular.equals(newValue, oldValue)) {
-        $scope.totalCount = null;
-        getCases();
-      }
-    });
+
+    $scope.applyAdvSearch = function(newFilters) {
+      $scope.filters = newFilters;
+      getCases();
+    };
 
     $timeout(function() {
-      // If there are filters the $watchCollection on it will have triggered a load. Otherwise do it now.
-      if (angular.equals($scope.filters, {})) {
-        getCases();
-      }
+      getCases();
     });
 
   });

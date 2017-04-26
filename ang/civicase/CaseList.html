@@ -1,8 +1,10 @@
 <div crm-ui-debug="cases"></div>
+<div crm-ui-debug="viewingCase"></div>
+<div crm-ui-debug="viewingCaseTab"></div>
 <h1 crm-page-title>{{ pageTitle }}</h1>
 <div id="bootstrap-theme" class="clearfix civicase-main">
 
-  <div class="panel panel-default clearfix" ng-class="{'case-is-focused': caseIsFocused}" civicase-search="filters" expanded="searchIsOpen">
+  <div class="panel panel-default clearfix" ng-class="{'case-is-focused': caseIsFocused}" civicase-search="filters" expanded="searchIsOpen" on-search="applyAdvSearch(selectedFilters)">
     <div class="civicase-filters-placeholder" ng-click="unfocusCase()">
       <i class="fa fa-angle-double-down" aria-hidden="true"></i>
       {{ ts('Filters') }}
@@ -10,7 +12,7 @@
     </div>
   </div>
 
-  <div class="civicase-view-with-search pull-right" ng-class="{'case-is-focused': caseIsFocused, 'cc-zero-w': !viewingCase}" civicase-view="viewingCase" civicase-focused="caseIsFocused"></div>
+  <div class="civicase-view-with-search pull-right" ng-class="{'case-is-focused': caseIsFocused, 'cc-zero-w': !viewingCase}" civicase-view="viewingCase" civicase-tab="viewingCaseTab" civicase-focused="caseIsFocused"></div>
   <div class="panel panel-default case-list-panel" ng-class="{'viewing-case': viewingCase, 'case-is-focused': caseIsFocused}">
 
     <table ng-show="!caseIsFocused" class="case-list-table">

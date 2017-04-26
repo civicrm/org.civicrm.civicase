@@ -181,7 +181,6 @@
       if ($scope.caseId) {
         $scope.item = null;
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
-          $scope.activeTab = 'summary';
           $scope.pushCaseData(info.values[0]);
         });
       }
@@ -199,6 +198,7 @@
       controller: caseViewController,
       scope: {
         caseId: '=civicaseView',
+        activeTab: '=civicaseTab',
         isFocused: '=civicaseFocused',
         item: '=?civicaseItem'
       }
