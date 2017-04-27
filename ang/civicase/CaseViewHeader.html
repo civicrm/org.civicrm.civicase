@@ -3,19 +3,27 @@
   <div class="case-id pull-right">
     {{ ts('Case Id: %1', {1: item.id}) }}
   </div>
-  <div class="btn-group btn-group-sm case-status-menu pull-right">
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Change case status') }}">
-      {{ item.status }}
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" >
-      <li>
-        <span class="list-group-item-info">{{ ts("Change status to:") }}</span>
-      </li>
-      <li ng-repeat="(id, status) in allowedCaseStatuses" ng-if="id != item.status_id">
-        <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" href="{{ CRM.url('civicrm/case/activity', {action: 'add', reset: 1, cid: item.client[0].contact_id, caseid: item.id, atype: getActivityType('Change Case Status'), case_status_id: id, civicase_reload: caseGetParams()}) }}">{{ status.label }}</a>
-      </li>
-    </ul>
+  <div class="case-action-menu pull-right">
+    <div class="btn-group btn-group-sm">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Change case status') }}">
+        {{ item.status }}
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" >
+        <li>
+          <span class="list-group-item-info">{{ ts("Change status to:") }}</span>
+        </li>
+        <li ng-repeat="(id, status) in allowedCaseStatuses" ng-if="id != item.status_id">
+          <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" href="{{ CRM.url('civicrm/case/activity', {action: 'add', reset: 1, cid: item.client[0].contact_id, caseid: item.id, atype: getActivityType('Change Case Status'), case_status_id: id, civicase_reload: caseGetParams()}) }}">{{ status.label }}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="btn-group btn-group-sm">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-bars"></i>
+      </button>
+      <ul class="dropdown-menu" civicase-actions="[item]" refresh-callback="refresh"></ul>
+    </div>
   </div>
   <h2>
     {{ item.client[0].display_name }}

@@ -1,17 +1,20 @@
 (function(angular, $, _) {
-  angular.module('civicase').directive('civicaseActions', function(crmApi) {
+  angular.module('civicase').directive('civicaseActions', function() {
     return {
       restrict: 'A',
       template:
-      '<li ng-class="{disabled: !isActionEnabled(action)}" ng-repeat="action in caseActions">' +
+      '<li ng-class="{disabled: !isActionEnabled(action)}" ng-if="!action.number || ((multi && action.number > 1) || (!multi && action.number === 1))" ng-repeat="action in caseActions">' +
       '  <a href ng-click="doAction(action)">{{ action.title }}</a>' +
       '</li>',
-      transclude: true,
+      scope: {
+        cases: '=civicaseActions',
+        refresh: '=refreshCallback'
+      },
       link: function($scope, element, attributes) {
-        $scope.caseActions = CRM.civicase.caseActions;
+        $scope.multi = attributes.multiple;
 
         $scope.isActionEnabled = function(action) {
-          return (!action.number || $scope.isSelection(action.number));
+          return (!action.number || $scope.cases.length == action.number);
         };
 
         // Perform bulk actions
@@ -21,7 +24,6 @@
           }
 
           $scope.$eval(action.action, {
-            cases: $scope.getSelectedCases(),
 
             deleteCases: function(cases, mode) {
               var msg, trash = 1;
@@ -45,7 +47,7 @@
                   _.each(cases, function(item) {
                     calls.push(['Case', mode, {id: item.id, move_to_trash: trash}]);
                   });
-                  crmApi(calls, true).then($scope.getCases);
+                  $scope.refresh(calls);
                 });
             },
 
@@ -59,7 +61,7 @@
               }
               CRM.confirm({title: action.title, message: msg})
                 .on('crmConfirm:yes', function() {
-                  crmApi('Case', 'merge', {case_id_1: cases[0].id, case_id_2: cases[1].id}, true).then($scope.getCases);
+                  $scope.refresh([['Case', 'merge', {case_id_1: cases[0].id, case_id_2: cases[1].id}]]);
                 });
             },
 
@@ -100,19 +102,18 @@
                       calls.push(['Case', 'create', {id: item.id, status_id: status}]);
                       calls.push(['Activity', 'create', {case_id: item.id, status_id: 'Completed', activity_type_id: 'Change Case Status', subject: subject, details: details}]);
                     });
-                    crmApi(calls, true).then($scope.getCases);
+                    $scope.refresh(calls);
                   }
                 });
             },
 
             emailManagers: function(cases) {
-              var managers = [];
+              var managers = [],
+                activityTypes = CRM.civicase.activityTypes;
               _.each(cases, function(item) {
-                _.each(item.contacts, function(contact) {
-                  if (contact.manager) {
-                    managers.push(item.manager.contact_id);
-                  }
-                });
+                if (item.manager) {
+                  managers.push(item.manager.contact_id);
+                }
               });
               var url = CRM.url('civicrm/activity/email/add', {
                 action: 'add',
@@ -125,13 +126,18 @@
           });
         };
 
-        $scope.$watchCollection('filters', function(value) {
+        $scope.$watchCollection('cases', function(cases) {
           // Special actions when viewing deleted cases
-          if (value.is_deleted) {
+          if (cases.length && cases[0].is_deleted) {
             $scope.caseActions = [
               {action: 'deleteCases(cases, "delete")', title: ts('Delete Permanently')},
               {action: 'deleteCases(cases, "restore")', title: ts('Restore from Trash')}
             ];
+          } else {
+            $scope.caseActions = _.cloneDeep(CRM.civicase.caseActions);
+            if (!$scope.multi) {
+              _.remove($scope.caseActions, {action: 'changeStatus(cases)'});
+            }
           }
         });
       }

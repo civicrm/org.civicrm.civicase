@@ -85,13 +85,13 @@ $options['caseActions'] = array(
     'action' => 'changeStatus(cases)',
   ),
   array(
-    'title' => ts('Email Case Managers'),
+    'title' => ts('Email Case Manager'),
     'action' => 'emailManagers(cases)',
   ),
 );
 if (CRM_Core_Permission::check('delete in CiviCase')) {
   $options['caseActions'][] = array(
-    'title' => ts('Delete Cases'),
+    'title' => ts('Delete Case'),
     'action' => 'deleteCases(cases)',
   );
 }

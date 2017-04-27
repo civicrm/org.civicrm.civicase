@@ -23,6 +23,7 @@
     $scope.searchIsOpen = false;
     $scope.pageTitle = '';
     $scope.viewingCase = null;
+    $scope.selectedCases = [];
 
     $scope.$bindToRoute({expr:'sortField', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
     $scope.$bindToRoute({expr:'sortDir', param:'sd', format: 'raw', default: 'ASC'});
@@ -54,16 +55,12 @@
         item.selected = checked;
       });
     };
-    
-    var getSelectedCases = $scope.getSelectedCases = function() {
-      return _.filter($scope.cases, 'selected');
-    };
 
     $scope.isSelection = function(condition) {
       if (!$scope.cases) {
         return false;
       }
-      var count = getSelectedCases().length;
+      var count = $scope.selectedCases.length;
       if (condition === 'all') {
         return count === $scope.cases.length;
       } else if (condition === 'any') {
@@ -113,6 +110,7 @@
       item.status = caseStatuses[item.status_id].label;
       item.case_type = caseTypes[item.case_type_id].title;
       item.selected = tmpSelection.indexOf(item.id) >= 0;
+      item.is_deleted = item.is_deleted === '1';
       _.each(item.contacts, function(contact) {
         if (!contact.relationship_type_id) {
           item.client.push(contact);
@@ -129,16 +127,25 @@
     var getCases = $scope.getCases = function() {
       setPageTitle();
       crmThrottle(_loadCases).then(function(result) {
-        $scope.cases = _.each(result.cases.values, formatCase);
-        $scope.totalCount = result.count;
+        $scope.cases = _.each(result[0].values, formatCase);
+        $scope.totalCount = result[1];
         setPageTitle();
       });
     };
 
-    function _loadCases() {
+    $scope.refresh = function(apiCalls) {
+      if (!apiCalls) apiCalls = [];
+      apiCalls = apiCalls.concat(_loadCaseApiParams());
+      crmApi(apiCalls, true).then(function() {
+        $scope.cases = _.each(result[apiCalls.length - 2].values, formatCase);
+        $scope.totalCount = result[apiCalls.length - 1];
+      });
+    };
+
+    function _loadCaseApiParams() {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'case_type_id', 'status_id', 'contacts', 'activity_summary', 'unread_email_count'],
+        return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'contacts', 'activity_summary', 'unread_email_count'],
         options: {
           categories: {milestone: 1, task: 1, alert: 10},
           sort: $scope.sortField + ' ' + $scope.sortDir,
@@ -175,10 +182,14 @@
       if (!params.is_deleted && !params.id) {
         params.is_deleted = 0;
       }
-      return crmApi({
-        cases: ['Case', 'getdetails', $.extend(true, returnParams, params)],
-        count: ['Case', 'getcount', params]
-      });
+      return [
+        ['Case', 'getdetails', $.extend(true, returnParams, params)],
+        ['Case', 'getcount', params]
+      ];
+    }
+
+    function _loadCases() {
+      return crmApi(_loadCaseApiParams());
     }
 
     function getCasesFromWatcher(newValue, oldValue) {
@@ -190,6 +201,9 @@
     $scope.$watch('sortField', getCasesFromWatcher);
     $scope.$watch('sortDir', getCasesFromWatcher);
     $scope.$watch('pageNum', getCasesFromWatcher);
+    $scope.$watch('cases', function(cases) {
+      $scope.selectedCases = _.filter(cases, 'selected');
+    }, true);
 
     $scope.applyAdvSearch = function(newFilters) {
       $scope.filters = newFilters;

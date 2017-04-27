@@ -17,7 +17,7 @@
     function caseGetParams() {
       return {
         id: $scope.caseId,
-        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'activity_summary', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
         // For the "related cases" section
         'api.Case.get': {
           contact_id: {IN: "$value.contact_id"},
@@ -105,6 +105,7 @@
       item.status = caseStatuses[item.status_id].label;
       item.case_type = caseTypes[item.case_type_id].title;
       item.selected = false;
+      item.is_deleted = item.is_deleted === '1';
       item.definition = caseTypes[item.case_type_id].definition;
       _.each(item.contacts, function(contact) {
         if (!contact.relationship_type_id) {
@@ -154,6 +155,14 @@
       $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item.definition);
     };
 
+    $scope.refresh = function(apiCalls) {
+      if (!apiCalls) apiCalls = [];
+      apiCalls.push(['Case', 'getdetails', caseGetParams()]);
+      crmApi(apiCalls, true).then(function(result) {
+        $scope.pushCaseData(result[apiCalls.length - 1].values[0]);
+      });
+    };
+
     $scope.markCompleted = function(act) {
       crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {});
       $scope.item.tasks.splice(_.findIndex($scope.item.tasks, {id: act.id}), 1);
@@ -164,12 +173,7 @@
     };
 
     $scope.addTimeline = function(name) {
-      crmApi([
-        ['Case', 'addtimeline', {case_id: $scope.item.id, 'timeline': name}],
-        ['Case', 'getdetails', caseGetParams()]
-      ], true).then(function(result) {
-        $scope.pushCaseData(result[1].values[0]);
-      });
+      $scope.refresh([['Case', 'addtimeline', {case_id: $scope.item.id, 'timeline': name}]]);
     };
 
     // Copied from ActivityList.js - used by the Recent Communication panel
