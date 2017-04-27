@@ -20,13 +20,13 @@
     $scope.pageSize = 25;
     $scope.pageNum = 1;
     $scope.CRM = CRM;
-    $scope.caseIsFocused = false;
     $scope.searchIsOpen = false;
     $scope.pageTitle = '';
     $scope.viewingCase = null;
 
     $scope.$bindToRoute({expr:'sortField', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
     $scope.$bindToRoute({expr:'sortDir', param:'sd', format: 'raw', default: 'ASC'});
+    $scope.$bindToRoute({expr:'caseIsFocused', param:'focus', format: 'json', default: false});
     $scope.$bindToRoute({expr:'filters', param:'cf'});
     $scope.$bindToRoute({expr:'viewingCase', param:'caseId', format: 'raw'});
     $scope.$bindToRoute({expr:'viewingCaseTab', param:'tab', format: 'raw', default:'summary'});
