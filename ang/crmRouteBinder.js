@@ -3,9 +3,9 @@
     'ngRoute'
   ]);
 
-  // While processing a change from the $watch()'d data, we set the "internalUpdate" flag
+  // While processing a change from the $watch()'d data, we set the "pendingUpdates" flag
   // so that automated URL changes don't cause a reload.
-  var internalUpdate = false, activeTimer = null, registered = false;
+  var pendingUpdates = null, activeTimer = null, registered = false;
 
   function registerGlobalListener($injector) {
     if (registered) return;
@@ -13,7 +13,7 @@
 
     $injector.get('$rootScope').$on('$routeUpdate', function () {
       // Only reload if someone else -- like the user or an <a href> -- changed URL.
-      if (!internalUpdate) {
+      if (null === pendingUpdates) {
         $injector.get('$route').reload();
       }
     });
@@ -53,17 +53,14 @@
           var encValue = (options.format === 'raw' ? newValue : angular.toJson(newValue));
           if ($route.current.params[options.param] === encValue) return;
 
-          internalUpdate = true;
-
-          // TODO: Consider buffering these changes so that concurrent updates only
-          // cause one URL change.
-          var p = angular.extend({}, $route.current.params);
-          p[options.param] = encValue;
+          pendingUpdates = pendingUpdates || [];
+          pendingUpdates[options.param] = encValue;
+          var p = angular.extend({}, $route.current.params, pendingUpdates);
           $route.updateParams(p);
 
           if (activeTimer) $timeout.cancel(activeTimer);
           activeTimer = $timeout(function () {
-            internalUpdate = false;
+            pendingUpdates = null;
             activeTimer = null;
           }, 50);
         });
