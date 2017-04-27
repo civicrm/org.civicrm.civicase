@@ -1,8 +1,0 @@
-    Activities!
-    <select ng-model="activityFilters.activity_type_id">
-      <option value="">Any</option>
-      <option ng-repeat="at in CRM.civicase.activityTypes" value="{{at.name}}">{{at.label}}</option>
-    </select>
-    <ul>
-      <li ng-repeat="activity in activities.values">#{{activity.id}}: {{activity.activity_date_time}} ({{activity.activity_type_id}}) "{{activity.subject}}"</li>
-    </ul>
