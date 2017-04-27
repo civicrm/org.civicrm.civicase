@@ -38,6 +38,7 @@ Things to try out:
      * `format` (string): The type of data to put in `param`. May be one of:
        * `json` (default): The `param` is JSON, and the `expr` is a decoded object.
        * `raw`: The `param` is string/int, and the `expr` is a string/int.
+       * `bool`: The `param` is '0'/'1', and the `expr` is false/true.
      * `default` (object): The default data. (If the `param` is not included in the URL, it will initialize the expr.)
 
 ## Suggested Usage

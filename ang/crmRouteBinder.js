@@ -19,41 +19,59 @@
     });
   }
 
+  var formats = {
+    json: {
+      watcher: '$watchCollection',
+      init: function($route, options) {
+        return (options.param in $route.current.params) ? angular.fromJson($route.current.params[options.param]) : angular.extend({}, options.default);
+      },
+      encode: angular.toJson,
+      default: {}
+    },
+    raw: {
+      watcher: '$watch',
+      init: function($route, options) {
+        return (options.param in $route.current.params) ? $route.current.params[options.param] : options.default;
+      },
+      encode: function(v) { return v; },
+      default: ''
+    },
+    bool: {
+      watcher: '$watch',
+      init: function($route, options) {
+        if (options.param in $route.current.params) {
+          return $route.current.params[options.param] === '1';
+        }
+        return options.default;
+      },
+      encode: function(v) { return v ? '1' : '0'; },
+      default: false
+    }
+  };
+
   angular.module('crmRouteBinder').config(function ($provide) {
     $provide.decorator('$rootScope', function ($delegate, $injector) {
       Object.getPrototypeOf($delegate).$bindToRoute = function (options) {
         registerGlobalListener($injector);
 
         options.format = options.format || 'json';
-        var _scope = this;
-        if (!options.default) {
-          options.default = (options.format === 'raw') ? '' : {};
+        var fmt = formats[options.format];
+        if (options.default === undefined) {
+          options.default = fmt.default;
         }
+        var _scope = this;
 
         var $route = $injector.get('$route'), $timeout = $injector.get('$timeout');
 
-        // TODO: can we combine these two branches better?
-        var initVal = null;
-        if (options.format === 'raw') {
-          initVal = (options.param in $route.current.params)
-            ? $route.current.params[options.param]
-            : options.default;
-        }
-        else if (options.format === 'json') {
-          initVal = (options.param in $route.current.params)
-            ? angular.fromJson($route.current.params[options.param])
-            : angular.extend({}, options.default);
-        }
-        // TODO: try using $parse instead of _scope[options.expr].
-        _scope[options.expr] = initVal;
+        // TODO: try using $parse...assign() instead of _scope[options.expr].
+        _scope[options.expr] = fmt.init($route, options);
 
         // Keep the URL bar up-to-date.
-        var watchFunc = (options.format === 'raw') ? '$watch' : '$watchCollection';
-        _scope[watchFunc](options.expr, function (newValue) {
-          var encValue = (options.format === 'raw' ? newValue : angular.toJson(newValue));
+        _scope[fmt.watcher](options.expr, function (newValue) {
+          var encValue = fmt.encode(newValue);
           if ($route.current.params[options.param] === encValue) return;
 
-          pendingUpdates = pendingUpdates || [];
+          pendingUpdates = pendingUpdates || {};
           pendingUpdates[options.param] = encValue;
           var p = angular.extend({}, $route.current.params, pendingUpdates);
           $route.updateParams(p);
