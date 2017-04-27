@@ -23,6 +23,13 @@
     $scope._ = _;
     $scope.checkPerm = CRM.checkPerm;
 
+    $scope.filters = angular.extend({}, $scope.defaults);
+    $scope.$watchCollection('filters', function(){
+      if (!$scope.expanded) {
+        $scope.doSearch();
+      }
+    });
+
     $scope.showMore = function() {
       $scope.expanded = true;
     };
@@ -35,24 +42,27 @@
       return $scope.filters.case_manager && $scope.filters.case_manager.length === 1 && $scope.filters.case_manager[0] === CRM.config.user_contact_id;
     };
 
-    $scope.doSearch = function() {
+    function formatSearchFilters(inp) {
       var search = {};
-      _.each($scope.filters, function(val, key) {
+      _.each(inp, function(val, key) {
         if (!_.isEmpty(val) || (typeof val === 'number' && val) || typeof val === 'boolean' && val) {
           search[key] = val;
         }
       });
-      window.location.hash = 'case/list?search=' + encodeURIComponent(JSON.stringify(search));
+      return search;
+    }
+    $scope.doSearch = function() {
+      $scope.filterDescription = buildDescription();
+      $scope.expanded = false;
+      $scope.$parent.$eval($scope.onSearch, {
+        selectedFilters: formatSearchFilters($scope.filters)
+      });
     };
 
     $scope.clearSearch = function() {
-      window.location.hash = 'case/list';
+      $scope.filters = {};
+      $scope.doSearch();
     };
-
-    var args = $location.search();
-    if (args && args.search) {
-      $scope.filters = JSON.parse(args.search);
-    }
 
     // Describe selected filters when collapsed
     var allSearchFields = {
@@ -81,40 +91,44 @@
         allSearchFields['custom_' + field.id] = field;
       });
     });
-    var des = $scope.filterDescription = [];
-    _.each($scope.filters, function(val, key) {
-      var field = allSearchFields[key];
-      if (field) {
-        var d = {label: field.label};
-        if (field.options) {
-          var text = [];
-          _.each(val, function(o) {
-            text.push(_.findWhere(field.options, {key: o}).value);
-          });
-          d.text = text.join(', ');
-        } else if (key === 'case_manager' && $scope.caseManagerIsMe()) {
-          d.text = ts('Me');
-        } else if ($.isArray(val)) {
-          d.text = ts('%1 selected', {'1': val.length});
-        } else if ($.isPlainObject(val)) {
-          if (val.BETWEEN) {
-            d.text = val.BETWEEN[0] + ' - ' + val.BETWEEN[1];
-          } else if (val['<=']) {
-            d.text = '≤ ' + val['<='];
-          } else if (val['>=']) {
-            d.text = '≥ ' + val['>='];
+    function buildDescription() {
+      var des = [];
+      _.each($scope.filters, function(val, key) {
+        var field = allSearchFields[key];
+        if (field) {
+          var d = {label: field.label};
+          if (field.options) {
+            var text = [];
+            _.each(val, function(o) {
+              text.push(_.findWhere(field.options, {key: o}).value);
+            });
+            d.text = text.join(', ');
+          } else if (key === 'case_manager' && $scope.caseManagerIsMe()) {
+            d.text = ts('Me');
+          } else if ($.isArray(val)) {
+            d.text = ts('%1 selected', {'1': val.length});
+          } else if ($.isPlainObject(val)) {
+            if (val.BETWEEN) {
+              d.text = val.BETWEEN[0] + ' - ' + val.BETWEEN[1];
+            } else if (val['<=']) {
+              d.text = '≤ ' + val['<='];
+            } else if (val['>=']) {
+              d.text = '≥ ' + val['>='];
+            } else {
+              var k = _.findKey(val, function() {return true;});
+              d.text = k + ' ' + val[k];
+            }
+          } else if (typeof val === 'boolean') {
+            d.text = val ? ts('Yes') : ts('No');
           } else {
-            var k = _.findKey(val, function() {return true;});
-            d.text = k + ' ' + val[k];
+            d.text = val;
           }
-        } else if (typeof val === 'boolean') {
-          d.text = val ? ts('Yes') : ts('No');
-        } else {
-          d.text = val;
+          des.push(d);
         }
-        des.push(d);
-      }
-    });
+      });
+      return des;
+    }
+    $scope.filterDescription = buildDescription();
   }
 
   angular.module('civicase').directive('civicaseSearch', function() {
@@ -123,7 +137,8 @@
       templateUrl: '~/civicase/Search.html',
       controller: searchController,
       scope: {
-        filters: '=civicaseSearch',
+        defaults: '=civicaseSearch',
+        onSearch: '@',
         expanded: '='
       }
     };
