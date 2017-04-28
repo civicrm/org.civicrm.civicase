@@ -8,7 +8,8 @@
       '</li>',
       scope: {
         cases: '=civicaseActions',
-        refresh: '=refreshCallback'
+        refresh: '=refreshCallback',
+        popupParams: '='
       },
       link: function($scope, element, attributes) {
         $scope.multi = attributes.multiple;
@@ -23,7 +24,7 @@
             return;
           }
 
-          $scope.$eval(action.action, {
+          var result = $scope.$eval(action.action, {
 
             deleteCases: function(cases, mode) {
               var msg, trash = 1;
@@ -115,15 +116,42 @@
                   managers.push(item.manager.contact_id);
                 }
               });
-              var url = CRM.url('civicrm/activity/email/add', {
-                action: 'add',
-                reset: 1,
-                atype: _.findKey(activityTypes, {name: 'Email'}),
-                cid: _.uniq(managers).join(',')
-              });
-              CRM.loadForm(url);
+              var popupPath = {
+                path: 'civicrm/activity/email/add',
+                query: {
+                  action: 'add',
+                  reset: 1,
+                  atype: _.findKey(activityTypes, {name: 'Email'}),
+                  cid: _.uniq(managers).join(',')
+                }
+              };
+              if (cases.length === 1) {
+                popupPath.query.caseid = cases[0].id;
+              }
+              return popupPath;
             }
           });
+
+          // Open popup if callback returns a path & query
+          if (result) {
+            // Add refresh data
+            if ($scope.popupParams) {
+              result.query.civicase_reload = $scope.popupParams();
+            }
+            // Mimic the behavior of CRM.popup()
+            var formData = false,
+              dialog = CRM.loadForm(CRM.url(result.path, result.query))
+              // Listen for success events and buffer them so we only trigger once
+              .on('crmFormSuccess crmPopupFormSuccess', function(e, data) {
+                formData = data;
+              })
+              .on('dialogclose.crmPopup', function(e, data) {
+                if (formData) {
+                  element.trigger('crmPopupFormSuccess', [dialog, formData]);
+                }
+                element.trigger('crmPopupClose', [dialog, data]);
+              });
+          }
         };
 
         $scope.$watchCollection('cases', function(cases) {
