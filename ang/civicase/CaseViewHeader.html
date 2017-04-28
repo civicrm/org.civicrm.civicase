@@ -26,6 +26,7 @@
     </div>
   </div>
   <h2>
+    <i ng-if="item.is_deleted" class="crm-i fa-trash" title="{{ ts('Case is in Trash') }}"></i>
     {{ item.client[0].display_name }}
     <span ng-if="item.client.length === 2"> &amp; {{ item.client[1].display_name }}</span>
     <div class="btn-group btn-group-sm" ng-if="item.client.length > 2">
