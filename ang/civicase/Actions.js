@@ -149,6 +149,18 @@
                 link.query.link_to_case_id = case2.id;
               }
               return link;
+            },
+
+            print: function(selectedCase) {
+              var url = CRM.url('civicrm/case/report/print', {
+                all: 1,
+                redact: 0,
+                cid: selectedCase.client[0].contact_id,
+                asn: 'standard_timeline',
+                caseID: selectedCase.id
+              });
+              var win = window.open(url, '_blank');
+              win.focus();
             }
           });
 

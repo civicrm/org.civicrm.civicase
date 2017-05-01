@@ -85,6 +85,11 @@ $options['caseActions'] = array(
     'action' => 'changeStatus(cases)',
   ),
   array(
+    'title' => ts('Print Case'),
+    'action' => 'print(cases[0])',
+    'number' => 1,
+  ),
+  array(
     'title' => ts('Email Case Manager'),
     'action' => 'emailManagers(cases)',
   ),
