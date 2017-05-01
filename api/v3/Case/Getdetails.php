@@ -34,7 +34,7 @@ function civicrm_api3_case_getdetails($params) {
   }
   $toReturn = $params['return'];
   $options = CRM_Utils_Array::value('options', $params, array());
-  $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count', 'unread_email_count');
+  $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count', 'unread_email_count', 'related_case_ids');
   $params['return'] = array_diff($params['return'], $extraReturnProperties);
 
   // Support additional sort params
@@ -94,15 +94,19 @@ function civicrm_api3_case_getdetails($params) {
         ),
       ));
       foreach ($activities['values'] as $act) {
-        $case =& $result['values'][$act['case_id']];
-        unset($act['case_id']);
-        foreach ($categories as $category => $grouping) {
-          if (in_array($act['activity_type_id'], $grouping) && (!$catetoryLimits[$category] || count($case['activity_summary'][$category]) < $catetoryLimits[$category])) {
-            $case['activity_summary'][$category][] = $act;
+        foreach ((array) $act['case_id'] as $actCaseId) {
+          if (isset($result['values'][$actCaseId])) {
+            $case =& $result['values'][$actCaseId];
+            unset($act['case_id']);
+            foreach ($categories as $category => $grouping) {
+              if (in_array($act['activity_type_id'], $grouping) && (!$catetoryLimits[$category] || count($case['activity_summary'][$category]) < $catetoryLimits[$category])) {
+                $case['activity_summary'][$category][] = $act;
+              }
+            }
+            if (strtotime($act['activity_date_time']) < time()) {
+              $case['activity_summary']['overdue'][] = $act;
+            }
           }
-        }
-        if (strtotime($act['activity_date_time']) < time()) {
-          $case['activity_summary']['overdue'][] = $act;
         }
       }
     }
@@ -131,6 +135,12 @@ function civicrm_api3_case_getdetails($params) {
       $dao = CRM_Core_DAO::executeQuery($query);
       while ($dao->fetch()) {
         $result['values'][$dao->case_id]['unread_email_count'] = (int) $dao->count;
+      }
+    }
+    // Get related_case_ids
+    if (in_array('related_case_ids', $toReturn)) {
+      foreach ($result['values'] as &$case) {
+        $case['related_case_ids'] = CRM_Case_BAO_Case::getRelatedCaseIds($case['id']);
       }
     }
     // Get last update

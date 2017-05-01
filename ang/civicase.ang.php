@@ -88,18 +88,28 @@ $options['caseActions'] = array(
     'title' => ts('Email Case Manager'),
     'action' => 'emailManagers(cases)',
   ),
+  array(
+    'title' => ts('Link Cases'),
+    'action' => 'linkCases(cases[0])',
+    'number' => 1,
+  ),
+  array(
+    'title' => ts('Link 2 Cases'),
+    'action' => 'linkCases(cases[0], cases[1])',
+    'number' => 2,
+  ),
 );
-if (CRM_Core_Permission::check('delete in CiviCase')) {
-  $options['caseActions'][] = array(
-    'title' => ts('Delete Case'),
-    'action' => 'deleteCases(cases)',
-  );
-}
 if (CRM_Core_Permission::check('administer CiviCase')) {
   $options['caseActions'][] = array(
     'title' => ts('Merge 2 Cases'),
     'number' => 2,
     'action' => 'mergeCases(cases)',
+  );
+}
+if (CRM_Core_Permission::check('delete in CiviCase')) {
+  $options['caseActions'][] = array(
+    'title' => ts('Delete Case'),
+    'action' => 'deleteCases(cases)',
   );
 }
 return array(

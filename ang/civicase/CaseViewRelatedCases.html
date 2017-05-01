@@ -3,19 +3,30 @@
     <h3>{{ ts('Other Cases') }}</h3>
   </div>
   <div class="panel-body">
-    <a ng-repeat="relCase in item.relatedCases" href="#case/{{ relCase.id }}">
-      {{ relCase.commonClients.slice(0, 2).join(', ') }}
-      <span ng-if="relCase.contact_id.length > relCase.commonClients.slice(0, 2).length">(+{{ relCase.contact_id.length - relCase.commonClients.slice(0, 2).length }})</span>
-      - {{ relCase.case_type }}
-      <span>{{ CRM.utils.formatDate(relCase.start_date) }}</span> -
-      <span ng-if="relCase.end_date">{{ CRM.utils.formatDate(relCase.end_date) }}</span>
-      <span ng-if="!relCase.end_date">{{ ts('Ongoing') }}</span>
+    <a ng-repeat="relCase in item.relatedCases" href ng-click="gotoCase(relCase.id, $event)">
+      <i ng-if="relCase.is_linked" class="crm-i fa-link" title="{{ ts('Case is linked') }}"></i>
+      <i ng-if="!relCase.is_linked" class="crm-i fa-user" title="{{ ts('Case is for the same client(s)') }}"></i>
+      {{ relCase.client[0].display_name }}
+      <div class="btn-group btn-group-xs" ng-if="relCase.client.length > 1">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Additional clients') }}">
+          {{ ts('+%1', {1: relCase.client.length - 1}) }}
+        </button>
+        <ul class="dropdown-menu" >
+          <li ng-repeat="(index, client) in relCase.client" ng-if="index">
+            <span>{{ client.display_name }}</span>
+          </li>
+        </ul>
+      </div>
+      &nbsp;&nbsp;&nbsp;
+      <span>{{ CRM.utils.formatDate(relCase.start_date) }}</span>
+      <span ng-if="relCase.end_date">- {{ CRM.utils.formatDate(relCase.end_date) }}</span>
       - {{ relCase.status }}
+      ({{ ts('Manager: %1', {1: relCase.manager.display_name}) }})
       <i class="pull-right fa fa-arrow-circle-o-right"></i>
     </a>
     <div class="civicase-panel-empty" ng-if="!item.relatedCases.length">
-      <span ng-if="item.client.length === 1">{{ ts('No other cases for %1.', {1: item.client[0].display_name}) }}</span>
-      <span ng-if="item.client.length > 1">{{ ts('No other cases for these clients.') }}</span>
+      <span ng-if="item.client.length === 1">{{ ts('No linked cases or other cases for %1.', {1: item.client[0].display_name}) }}</span>
+      <span ng-if="item.client.length > 1">{{ ts('No linked cases or other cases for these clients.') }}</span>
     </div>
   </div>
 </div>

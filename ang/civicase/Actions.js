@@ -68,12 +68,14 @@
 
             changeStatus: function(cases) {
               var types = _.uniq(_.map(cases, 'case_type_id')),
+                currentStatuses = _.uniq(_.collect(cases, 'status_id')),
+                currentStatus = currentStatuses.length === 1 ? currentStatuses[0] : null,
                 msg = '<form>' +
                   '<div><input name="change_case_status" placeholder="' + ts('Select New Status') + '" /></div>' +
                   '<label for="change_case_status_details">' + ts('Notes') + '</label>' +
                   '<textarea id="change_case_status_details"></textarea>' +
                   '</form>',
-                statuses = _.map(CRM.civicase.caseStatuses, function(item) {return {id: item.name, text: item.label};});
+                statuses = _.map(CRM.civicase.caseStatuses, function(item, status_id) {return {id: item.name, text: item.label, disabled: status_id === currentStatus};});
               _.each(types, function(caseTypeId) {
                 var allowedStatuses = CRM.civicase.caseTypes[caseTypeId].definition.statuses || [];
                 if (allowedStatuses.length) {
@@ -129,6 +131,24 @@
                 popupPath.query.caseid = cases[0].id;
               }
               return popupPath;
+            },
+
+            linkCases: function(case1, case2) {
+              var activityTypes = CRM.civicase.activityTypes,
+                link = {
+                  path: 'civicrm/case/activity',
+                  query: {
+                    action: 'add',
+                    reset: 1,
+                    cid: case1.client[0].contact_id,
+                    atype: _.findKey(activityTypes, {name: 'Link Cases'}),
+                    caseid: case1.id
+                  }
+                };
+              if (case2) {
+                link.query.link_to_case_id = case2.id;
+              }
+              return link;
             }
           });
 

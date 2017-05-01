@@ -136,7 +136,7 @@
     $scope.refresh = function(apiCalls) {
       if (!apiCalls) apiCalls = [];
       apiCalls = apiCalls.concat(_loadCaseApiParams());
-      crmApi(apiCalls, true).then(function() {
+      crmApi(apiCalls, true).then(function(result) {
         $scope.cases = _.each(result[apiCalls.length - 2].values, formatCase);
         $scope.totalCount = result[apiCalls.length - 1];
       });

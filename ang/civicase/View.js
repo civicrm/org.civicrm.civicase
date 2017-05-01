@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   // CaseList directive controller
-  function caseViewController($scope, crmApi, isActivityOverdue, formatActivity) {
+  function caseViewController($scope, crmApi, isActivityOverdue, formatActivity, $route) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -17,13 +17,19 @@
     function caseGetParams() {
       return {
         id: $scope.caseId,
-        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
-        // For the "related cases" section
-        'api.Case.get': {
+        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'related_case_ids'],
+        // Related cases by contact
+        'api.Case.get.1': {
           contact_id: {IN: "$value.contact_id"},
           id: {"!=": "$value.id"},
           is_deleted: 0,
-          return: ['case_type_id', 'start_date', 'end_date', 'contact_id', 'status_id']
+          return: ['case_type_id', 'start_date', 'end_date', 'status_id', 'contacts']
+        },
+        // Linked cases
+        'api.Case.get.2': {
+          id: {IN: "$value.related_case_ids"},
+          is_deleted: 0,
+          return: ['case_type_id', 'start_date', 'end_date', 'status_id', 'contacts']
         },
         // For the "recent communication" panel
         'api.Activity.get.1': {
@@ -104,9 +110,6 @@
       item.client = [];
       item.status = caseStatuses[item.status_id].label;
       item.case_type = caseTypes[item.case_type_id].title;
-      item.selected = false;
-      item.is_deleted = item.is_deleted === '1';
-      item.definition = caseTypes[item.case_type_id].definition;
       _.each(item.contacts, function(contact) {
         if (!contact.relationship_type_id) {
           item.client.push(contact);
@@ -118,21 +121,27 @@
           item.manager = contact;
         }
       });
-      // Format related cases
-      item.relatedCases = _.cloneDeep(item['api.Case.get'].values);
-      delete(item['api.Case.get']);
-      _.each(item.relatedCases, function(relCase) {
-        relCase.contact_id = _.toArray(relCase.contact_id);
-        delete(relCase.client_id);
-        relCase.case_type = caseTypes[relCase.case_type_id].title;
-        relCase.status = caseStatuses[relCase.status_id].label;
-        relCase.commonClients = [];
-        _.each(item.client, function(client) {
-          if (relCase.contact_id.indexOf(client.contact_id) >= 0) {
-            relCase.commonClients.push(client.display_name);
-          }
-        });
+      return item;
+    }
+
+    function formatCaseDetails(item) {
+      formatCase(item);
+      item.selected = false;
+      item.is_deleted = item.is_deleted === '1';
+      item.definition = caseTypes[item.case_type_id].definition;
+      item.relatedCases = _.each(_.cloneDeep(item['api.Case.get.1'].values), formatCase);
+      // Add linked cases
+      _.each(_.cloneDeep(item['api.Case.get.2'].values), function(linkedCase) {
+        var existing = _.find(item.relatedCases, {id: linkedCase.id});
+        if (existing) {
+          existing.is_linked = true;
+        } else {
+          linkedCase.is_linked = true;
+          item.relatedCases.push(formatCase(linkedCase));
+        }
       });
+      delete(item['api.Case.get.1']);
+      delete(item['api.Case.get.2']);
       // Format activities
       _.each(item.activity_summary, function(acts) {
         _.each(acts, formatActivity);
@@ -149,8 +158,16 @@
       return item;
     }
 
+    $scope.gotoCase = function(id, $event) {
+      if ($event && $($event.target).is('.btn-group *')) {
+        return;
+      }
+      var p = angular.extend({}, $route.current.params, {caseId: id});
+      $route.updateParams(p);
+    };
+
     $scope.pushCaseData = function(data) {
-      var item = $scope.item = formatCase(data);
+      var item = $scope.item = formatCaseDetails(data);
       $scope.allowedCaseStatuses = getAllowedCaseStatuses(item.definition);
       $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item.definition);
     };

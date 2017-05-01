@@ -94,4 +94,8 @@
 }
 #bootstrap-theme .civicase-view-related-cases .panel-body > a > i.fa-arrow-circle-o-right {
   font-size: 18px;
+  color: rgba(0, 0, 0, 0.2);
+}
+#bootstrap-theme .civicase-view-related-cases .panel-body > a:hover > i.fa-arrow-circle-o-right {
+  color: inherit;
 }
