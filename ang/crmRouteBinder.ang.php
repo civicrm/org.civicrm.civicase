@@ -16,4 +16,5 @@ return array(
     0 => 'ang/crmRouteBinder',
   ),
   'settings' => array(),
+  'requires' => array('ngRoute'),
 );

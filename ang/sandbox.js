@@ -1,6 +1,3 @@
 (function(angular, $, _) {
-  // Declare a list of dependencies.
-  angular.module('sandbox', [
-    'crmRouteBinder', 'crmUi', 'crmUtil', 'ngRoute'
-  ]);
+   angular.crmDepends('sandbox');
 })(angular, CRM.$, CRM._);
