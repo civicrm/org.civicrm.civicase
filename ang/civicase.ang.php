@@ -134,5 +134,5 @@ return array(
     'ang/civicase',
   ),
   'settings' => $options,
-  'requires' => array('crmUi', 'crmUtil', 'ngRoute', 'angularFileUpload', 'bw.paging'),
+  'requires' => array('crmUi', 'crmUtil', 'ngRoute', 'angularFileUpload', 'bw.paging', 'crmRouteBinder', 'crmResource'),
 );

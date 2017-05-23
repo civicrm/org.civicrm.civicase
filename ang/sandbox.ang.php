@@ -16,5 +16,5 @@ return array(
     0 => 'ang/sandbox',
   ),
   'settings' => array(),
-  'requires' => array('crmRouteBinder', 'crmUi', 'crmUtil', 'ngRoute'),
+  'requires' => array('crmRouteBinder', 'crmUi', 'crmUtil', 'ngRoute', 'crmResource'),
 );
