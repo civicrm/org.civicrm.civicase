@@ -23,6 +23,12 @@
     $scope.activities = {};
     $scope.remaining = true;
     $scope.viewingActivity = {};
+    $scope.$bindToRoute({
+      param: 'aid',
+      expr: 'aid',
+      format: 'raw',
+      default: 0
+    });
 
     var displayOptions = $scope.displayOptions = CRM.cache.get('activityFeedDisplayOptions', {
       followup_nested: true,
@@ -69,13 +75,15 @@
     };
 
     $scope.viewActivity = function(id, e) {
-      if ($(e.target).closest('a, button').length) {
+      if (e && $(e.target).closest('a, button').length) {
         return;
       }
-      if ($scope.viewingActivity && $scope.viewingActivity.id == id) {
+      var act = _.find($scope.activities, {id: id});
+      // If the same activity is selected twice, it's a deselection. If the activity doesn't exist, abort.
+      if (($scope.viewingActivity && $scope.viewingActivity.id == id) || !act) {
         $scope.viewingActivity = {};
-      } else {
-        var act = _.find($scope.activities, {id: id});
+        $scope.aid = 0;
+      } else {  
         // Mark email read
         if (act.status === 'Unread') {
           var statusId = _.findKey(CRM.civicase.activityStatuses, {name: 'Completed'});
@@ -85,6 +93,7 @@
           });
         }
         $scope.viewingActivity = _.cloneDeep(act);
+        $scope.aid = act.id;
       }
     };
 
@@ -107,6 +116,9 @@
           $scope.remaining = false;
         }
         $('.act-feed-panel .panel-body').unblock();
+        if ($scope.aid && $scope.aid !== $scope.viewingActivity.id) {
+          $scope.viewActivity($scope.aid);
+        }
       });
     }
 
