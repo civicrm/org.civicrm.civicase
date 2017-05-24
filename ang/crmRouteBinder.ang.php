@@ -17,4 +17,5 @@ return array(
   ),
   'settings' => array(),
   'requires' => array('ngRoute'),
+  'basePages' => array(),
 );

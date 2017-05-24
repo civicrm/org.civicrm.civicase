@@ -135,4 +135,5 @@ return array(
   ),
   'settings' => $options,
   'requires' => array('crmUi', 'crmUtil', 'ngRoute', 'angularFileUpload', 'bw.paging', 'crmRouteBinder', 'crmResource'),
+  'basePages' => array(),
 );

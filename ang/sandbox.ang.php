@@ -17,4 +17,5 @@ return array(
   ),
   'settings' => array(),
   'requires' => array('crmRouteBinder', 'crmUi', 'crmUtil', 'ngRoute', 'crmResource'),
+  'basePages' => array(),
 );
