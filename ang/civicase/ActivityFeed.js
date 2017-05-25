@@ -160,6 +160,9 @@
       if (involving.delegated && !params.assignee_contact_id) {
         params.assignee_contact_id = {'!=': 'user_contact_id'};
       }
+      if ($scope.params && $scope.params.filters) {
+        angular.extend(params, $scope.params.filters);
+      }
       return crmApi({
         acts: ['Activity', 'get', $.extend(true, returnParams, params)],
         count: ['Activity', 'getcount', params]
