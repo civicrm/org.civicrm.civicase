@@ -2,7 +2,7 @@
 
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/activity/feed', {
-      template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed></div>'
+      template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed="{filters:{case_id:{\'IS NOT NULL\': 1}}}"></div>'
     });
   });
 
@@ -136,9 +136,11 @@
         is_current_revision: 1,
         is_deleted: 0,
         is_test: 0,
-        case_id: caseId ? caseId : {'IS NOT NULL': 1},
         options: {}
       };
+      if (caseId) {
+        params.case_id = caseId;
+      }
       _.each($scope.filters, function(val, key) {
         if (val) {
           if (key === 'text') {
