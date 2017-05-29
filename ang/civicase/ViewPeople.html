@@ -1,8 +1,15 @@
 <div crm-ui-debug="caseRoles"></div>
-<div class="civicase-relationships-case">
-  <h3>{{ ts('Case Roles') }}</h3>
+<ul class="nav nav-tabs">
+  <li role="presentation" ng-class="{active: tab == 'roles'}"><a href ng-click="setTab('roles')">{{ ts('Case Roles') }}</a></li>
+  <li role="presentation" ng-class="{active: tab == 'relations'}"><a href ng-click="setTab('relations')">{{ ts('Other Relationships') }}</a></li>
+</ul>
+<div class="civicase-relationships-case" ng-show="tab == 'roles'">
+  <div class="civicase-alpha-pager">
+    <a ng-repeat="a in letters" href ng-class="{active: a === rolesAlphaFilter}" ng-click="setRolesLetterFilter(a)">{{ a }}</a>
+  </div>
   <table>
     <thead><tr>
+      <th></th>
       <th>{{ ts('Role') }}</th>
       <th>{{ ts('Name') }}</th>
       <th>{{ ts('Phone') }}</th>
@@ -11,6 +18,9 @@
     </tr></thead>
     <tbody>
       <tr ng-repeat="role in caseRoles">
+        <td>
+          <input ng-if="role.contact_id" type="checkbox" />
+        </td>
         <td>
           <div><strong>{{ role.role }}</strong></div>
           <div><em>{{ role.description }}</em></div>
@@ -25,9 +35,16 @@
       </tr>
     </tbody>
   </table>
+  <paging
+    class="center-block text-center"
+    page="rolePage"
+    page-size="25"
+    total="roleCount"
+    show-prev-next="true"
+    show-first-last="true">
+  </paging>
 </div>
-<div class="civicase-relationships-other">
-  <h3>{{ ts('Other Relationships') }}</h3>
+<div class="civicase-relationships-other" ng-show="tab == 'relations'">
   <table>
     <thead><tr>
       <th>{{ ts('Client') }}</th>
@@ -46,7 +63,4 @@
       </tr>
     </tbody>
   </table>
-</div>
-<div class="civicase-relationships-other">
-
 </div>

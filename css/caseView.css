@@ -99,3 +99,12 @@
 #bootstrap-theme .civicase-view-related-cases .panel-body > a:hover > i.fa-arrow-circle-o-right {
   color: inherit;
 }
+#bootstrap-theme .civicase-alpha-pager a {
+  margin-left: .8em;
+}
+#bootstrap-theme .civicase-alpha-pager a.active {
+  font-weight: bold;
+}
+#bootstrap-theme .case-tab-people .nav.nav-tabs > li:first-child {
+  margin-left: 1em;
+}

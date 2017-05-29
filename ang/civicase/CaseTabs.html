@@ -31,7 +31,7 @@
     </div>
   </div>
 </nav>
-<div ng-show="activeTab === 'summary'" ng-include="'~/civicase/CaseViewSummary.html'"></div>
-<div ng-if="activeTab === 'activities'" civicase-activity-feed="{case_id: item.id}"></div>
-<div ng-if="activeTab === 'people'" civicase-view-people="item"></div>
-<div ng-if="activeTab === 'files'" civicase-view-files="item"></div>
+<div class="case-tab-summary" ng-show="activeTab === 'summary'" ng-include="'~/civicase/CaseViewSummary.html'"></div>
+<div class="case-tab-activities" ng-if="activeTab === 'activities'" civicase-activity-feed="{case_id: item.id}"></div>
+<div class="case-tab-people" ng-if="activeTab === 'people'" civicase-view-people="item"></div>
+<div class="case-tab-files" ng-if="activeTab === 'files'" civicase-view-files="item"></div>

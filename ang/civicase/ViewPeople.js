@@ -9,21 +9,55 @@
       clients = _.indexBy(item.client, 'contact_id'),
       relTypes = CRM.civicase.relationshipTypes,
       relTypesByName = _.indexBy(relTypes, 'name_b_a'),
-      people = $scope.people = [],
-      caseRoles = $scope.caseRoles = {};
+      people = $scope.people = [];
+    $scope.rolePage = 1;
+    $scope.rolesAlphaFilter = '';
+    $scope.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-    _.each(_.cloneDeep(item.definition.caseRoles), function(role) {
-      var relType = relTypesByName[role.name];
-      role.role = relType.label_b_a;
-      role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');
-      caseRoles[relType.id] = role;
-    });
-
-    _.each(item.contacts, function(contact) {
-      if (contact.relationship_type_id) {
-        $.extend(caseRoles[contact.relationship_type_id], contact);
+    var getCaseRoles = $scope.getCaseRoles = function() {
+      var caseRoles = [];
+      _.each(_.cloneDeep(item.definition.caseRoles), function(role) {
+        var relType = relTypesByName[role.name];
+        role.role = relType.label_b_a;
+        role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');
+        role.relationship_type_id = relType.id;
+        caseRoles.push(role);
+      });
+      _.each(item.contacts, function (contact) {
+        if (contact.relationship_type_id) {
+          var role = _.findWhere(caseRoles, {relationship_type_id: contact.relationship_type_id});
+          // Apply alpha filters
+          if ($scope.rolesAlphaFilter && contact.display_name.toUpperCase().indexOf($scope.rolesAlphaFilter) < 0) {
+            _.pull(caseRoles, role);
+          } else {
+            $.extend(role, contact);
+          }
+        }
+      });
+      $scope.roleCount = caseRoles.length;
+      // Apply pager
+      if ($scope.roleCount <= (25 * ($scope.rolePage - 1))) {
+        // Reset if out of range
+        $scope.rolePage = 1;
       }
-    });
+      $scope.caseRoles = _.slice(caseRoles, (25 * ($scope.rolePage - 1)), 25 * $scope.rolePage);
+    };
+
+    getCaseRoles();
+
+    $scope.$bindToRoute({expr:'tab', param:'peopleTab', format: 'raw', default: 'roles'});
+    $scope.setTab = function(tab) {
+      $scope.tab = tab;
+    };
+
+    $scope.setRolesLetterFilter = function(letter) {
+      if ($scope.rolesAlphaFilter === letter) {
+        $scope.rolesAlphaFilter = '';
+      } else {
+        $scope.rolesAlphaFilter = letter;
+      }
+      getCaseRoles();
+    };
 
     function getRelations() {
       var params = {
