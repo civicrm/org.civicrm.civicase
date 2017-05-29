@@ -23,6 +23,7 @@
     $scope.searchIsOpen = false;
     $scope.pageTitle = '';
     $scope.viewingCase = null;
+    $scope.viewingCaseDetails = null;
     $scope.selectedCases = [];
 
     $scope.$bindToRoute({expr:'sortField', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
@@ -37,7 +38,9 @@
         unfocusCase();
         if ($scope.viewingCase === id) {
           $scope.viewingCase = null;
+          $scope.viewingCaseDetails = null;
         } else {
+          $scope.viewingCaseDetails = _.findWhere($scope.cases, {id: id});
           $scope.viewingCase = id;
           $scope.viewingCaseTab = 'summary';
         }
@@ -104,7 +107,7 @@
       }
     }
 
-    function formatCase(item) {
+    var formatCase = $scope.formatCase = function(item) {
       item.myRole = [];
       item.client = [];
       item.status = caseStatuses[item.status_id].label;
@@ -122,7 +125,8 @@
           item.manager = contact;
         }
       });
-    }
+      return item;
+    };
 
     var getCases = $scope.getCases = function() {
       setPageTitle();

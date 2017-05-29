@@ -17,7 +17,7 @@
     function caseGetParams() {
       return {
         id: $scope.caseId,
-        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'related_case_ids'],
+        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'unread_email_count', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'related_case_ids'],
         // Related cases by contact
         'api.Case.get.1': {
           contact_id: {IN: "$value.contact_id"},
@@ -63,7 +63,7 @@
         },
         sequential: 1,
         options: {
-          categories: {alert: 10, milestone: 1}
+          categories: {alert: 10, milestone: 1, task: 1}
         }
       };
     }
@@ -105,31 +105,10 @@
       }
     };
 
-    function formatCase(item) {
-      item.myRole = [];
-      item.client = [];
-      item.status = caseStatuses[item.status_id].label;
-      item.case_type = caseTypes[item.case_type_id].title;
-      _.each(item.contacts, function(contact) {
-        if (!contact.relationship_type_id) {
-          item.client.push(contact);
-        }
-        if (contact.contact_id == CRM.config.user_contact_id) {
-          item.myRole.push(contact.role);
-        }
-        if (contact.manager) {
-          item.manager = contact;
-        }
-      });
-      return item;
-    }
-
     function formatCaseDetails(item) {
-      formatCase(item);
-      item.selected = false;
-      item.is_deleted = item.is_deleted === '1';
+      $scope.formatCase(item);
       item.definition = caseTypes[item.case_type_id].definition;
-      item.relatedCases = _.each(_.cloneDeep(item['api.Case.get.1'].values), formatCase);
+      item.relatedCases = _.each(_.cloneDeep(item['api.Case.get.1'].values), $scope.formatCase);
       // Add linked cases
       _.each(_.cloneDeep(item['api.Case.get.2'].values), function(linkedCase) {
         var existing = _.find(item.relatedCases, {id: linkedCase.id});
@@ -137,7 +116,7 @@
           existing.is_linked = true;
         } else {
           linkedCase.is_linked = true;
-          item.relatedCases.push(formatCase(linkedCase));
+          item.relatedCases.push($scope.formatCase(linkedCase));
         }
       });
       delete(item['api.Case.get.1']);
@@ -167,7 +146,14 @@
     };
 
     $scope.pushCaseData = function(data) {
-      var item = $scope.item = formatCaseDetails(data);
+      // Instead of overwriting the object we empty it out then merge the new properties in.
+      // This way the maintain the reference to the variable in the parent scope.
+      if (!$scope.item) $scope.item = {};
+      var item = $scope.item;
+      _.each(_.keys(item), function(v, k) {
+        delete item[k];
+      });
+      _.merge(item, formatCaseDetails(data));
       $scope.allowedCaseStatuses = getAllowedCaseStatuses(item.definition);
       $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item.definition);
     };
@@ -199,8 +185,8 @@
     };
 
     $scope.$watch('caseId', function() {
-      if ($scope.caseId) {
-        $scope.item = null;
+      // Fetch extra info about the case
+      if ($scope.caseId && (!$scope.item || !$scope.item.definition)) {
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
         });
@@ -221,7 +207,8 @@
         caseId: '=civicaseView',
         activeTab: '=civicaseTab',
         isFocused: '=civicaseFocused',
-        item: '=?civicaseItem'
+        item: '=civicaseItem',
+        formatCase: '=civicaseFormatter'
       }
     };
   });

@@ -41,7 +41,7 @@
     </div>
   </h2>
   <div class="civicase-dates">
-    <span class="case-start-date">{{ CRM.utils.formatDate(item.start_date) }}</span> -
+    <span class="case-start-date">{{ CRM.utils.formatDate(item.start_date) || '. . .' }}</span> -
     <span class="case-end-date" ng-if="item.end_date">{{ CRM.utils.formatDate(item.end_date) }}</span>
     <span class="case-end-date" ng-if="!item.end_date">{{ ts('Ongoing') }}</span>
   </div>
