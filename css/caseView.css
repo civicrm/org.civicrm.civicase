@@ -105,6 +105,19 @@
 #bootstrap-theme .civicase-alpha-pager a.active {
   font-weight: bold;
 }
+#bootstrap-theme .case-action-dropdown {
+  width: 20em;
+}
+#bootstrap-theme .case-people-subtab {
+  margin: 1em 1em 0;
+}
+#bootstrap-theme .case-people-subtab td,
+#bootstrap-theme .case-people-subtab th {
+  padding: .5em;
+}
+#bootstrap-theme .case-people-subtab td:last-child {
+  text-align: right;
+}
 #bootstrap-theme .case-tab-people .nav.nav-tabs > li:first-child {
   margin-left: 1em;
 }

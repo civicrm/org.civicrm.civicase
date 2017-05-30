@@ -146,14 +146,10 @@
     };
 
     $scope.pushCaseData = function(data) {
-      // Instead of overwriting the object we empty it out then merge the new properties in.
-      // This way the maintain the reference to the variable in the parent scope.
       if (!$scope.item) $scope.item = {};
       var item = $scope.item;
-      _.each(_.keys(item), function(v, k) {
-        delete item[k];
-      });
-      _.merge(item, formatCaseDetails(data));
+      // This way the maintain the reference to the variable in the parent scope.
+      _.assign(item, formatCaseDetails(data));
       $scope.allowedCaseStatuses = getAllowedCaseStatuses(item.definition);
       $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item.definition);
     };

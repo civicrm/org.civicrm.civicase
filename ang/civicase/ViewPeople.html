@@ -3,7 +3,21 @@
   <li role="presentation" ng-class="{active: tab == 'roles'}"><a href ng-click="setTab('roles')">{{ ts('Case Roles') }}</a></li>
   <li role="presentation" ng-class="{active: tab == 'relations'}"><a href ng-click="setTab('relations')">{{ ts('Other Relationships') }}</a></li>
 </ul>
-<div class="civicase-relationships-case" ng-show="tab == 'roles'">
+<div class="civicase-relationships-case case-people-subtab" ng-show="tab == 'roles'">
+  <div>
+    <h3>{{ ts('%1 Contacts', {1: item.contacts.length}) }}</h3>
+    <div>
+      <strong>{{ ts('With:') }}</strong> &nbsp;
+      <input type="radio" value="all" ng-model="rolesSelectionMode" id="rolesSelectionMode-all"/>
+      <label for="rolesSelectionMode-all">{{ ts('All %1 Contacts', {1: item.contacts.length}) }}</label>
+      <input type="radio" value="checked" ng-model="rolesSelectionMode" id="rolesSelectionMode-checked"/>
+      <label for="rolesSelectionMode-checked">{{ ts('%1 Selected', {1: getSelectedRoles(true).length}) }}</label>
+      <select class="form-control case-action-dropdown" ng-model="selectedTask" ng-change="doContactTask()" >
+        <option value="">{{ ts('Actions') }}</option>
+        <option ng-repeat="(key, opt) in contactTasks" value="{{ key }}">{{ opt }}</option>
+      </select>
+    </div>
+  </div>
   <div class="civicase-alpha-pager">
     <a ng-repeat="a in letters" href ng-class="{active: a === rolesAlphaFilter}" ng-click="setRolesLetterFilter(a)">{{ a }}</a>
   </div>
@@ -14,12 +28,12 @@
       <th>{{ ts('Name') }}</th>
       <th>{{ ts('Phone') }}</th>
       <th>{{ ts('Email') }}</th>
-      <th>{{ ts('Actions') }}</th>
+      <th></th>
     </tr></thead>
     <tbody>
-      <tr ng-repeat="role in caseRoles">
+      <tr ng-repeat="role in caseRoles" ng-class="{unassigned: !role.contact_id}">
         <td>
-          <input ng-if="role.contact_id" type="checkbox" />
+          <input ng-if="role.contact_id" type="checkbox" ng-model="role.checked" ng-click="setRolesSelectionMode('checked')" />
         </td>
         <td>
           <div><strong>{{ role.role }}</strong></div>
@@ -27,11 +41,38 @@
         </td>
         <td>
           <span ng-if="role.contact_id">{{ role.display_name }}</span>
-          <span ng-if="!role.contact_id"><em>{{ ts('Unassigned')  }}</em></span>
+          <span ng-if="!role.contact_id">{{ ts('Unassigned')  }}</span>
         </td>
         <td>{{ role.phone }}</td>
         <td>{{ role.email }}</td>
-        <td></td>
+        <td>
+          <a href ng-if="!role.contact_id" ng-click="assignRole(role)">
+            <i class="fa fa-user-plus"></i>
+          </a>
+          <div ng-if="role.contact_id" class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-ellipsis-v"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <li>
+                <a href ng-click="assignRole(role, true)">{{ ts('Reassign %1', {1: role.role}) }}</a>
+              </li>
+              <li ng-if="role.relationship_type_id || allowMultipleCaseClients">
+                <a href ng-click="assignRole(role)">{{ ts('Add Another %1', {1: role.role}) }}</a>
+              </li>
+              <li ng-if="role.relationship_type_id || item.client.length > 1">
+                <a href ng-click="unassignRole(role)">{{ ts('Remove %1', {1: role.role}) }}</a>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li ng-if="role.email">
+                <a class="crm-popup" href="{{ CRM.url('civicrm/activity/email/add', {action: 'add', caseid: item.id, reset: 1, cid: role.contact_id}) }}">{{ ts('Send Email') }}</a>
+              </li>
+              <li>
+                <a class="crm-popup" href="{{ CRM.url('civicrm/activity/pdf/add', {action: 'add', caseid: item.id, reset: 1, cid: role.contact_id, context: 'standalone'}) }}">{{ ts('Print/Merge Document') }}</a>
+              </li>
+            </ul>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -44,7 +85,7 @@
     show-first-last="true">
   </paging>
 </div>
-<div class="civicase-relationships-other" ng-show="tab == 'relations'">
+<div class="civicase-relationships-other case-people-subtab" ng-show="tab == 'relations'">
   <table>
     <thead><tr>
       <th>{{ ts('Client') }}</th>

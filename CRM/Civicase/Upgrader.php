@@ -45,6 +45,15 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'component_id' => 'CiviCase',
       'icon' => 'fa-file',
     ));
+    $this->addOptionValue(array(
+      'option_group_id' => 'activity_type',
+      'label' => ts('Remove Client From Case'),
+      'name' => 'Remove Client From Case',
+      'is_reserved' => 0,
+      'description' => ts('Client removed from multi-client case'),
+      'component_id' => 'CiviCase',
+      'icon' => 'fa-user-times',
+    ));
 
     // Create activity statuses
     $this->addOptionValue(array(

@@ -117,6 +117,11 @@ if (CRM_Core_Permission::check('delete in CiviCase')) {
     'action' => 'deleteCases(cases)',
   );
 }
+// Contact tasks
+$options['contactTasks'] = CRM_Contact_Task::permissionedTaskTitles(CRM_Core_Permission::getPermission());
+// Random setting
+$xmlProcessorProcess = new CRM_Case_XMLProcessor_Process();
+$options['allowMultipleCaseClients'] = (bool) $xmlProcessorProcess->getAllowMultipleCaseClients();
 return array(
   'js' => array(
     'ang/civicase.js',
