@@ -25,6 +25,16 @@
     $scope.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     $scope.contactTasks = CRM.civicase.contactTasks;
 
+    function formatRole (role) {
+      var relType = relTypesByName[role.name];
+      role.role = relType.label_b_a;
+      role.contact_type = relType.contact_type_b;
+      role.contact_sub_type = relType.contact_sub_type_b;
+      role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');
+      role.relationship_type_id = relType.id;
+    }
+    $scope.allRoles = _.each(_.cloneDeep(item.definition.caseRoles), formatRole);
+
     var getSelectedRoles = $scope.getSelectedRoles = function(onlyChecked) {
       if (onlyChecked || $scope.rolesSelectionMode === 'checked') {
         return _.collect(_.filter($scope.caseRoles, {checked: true}), 'contact_id');
@@ -46,19 +56,9 @@
     };
 
     var getCaseRoles = $scope.getCaseRoles = function() {
-      var caseRoles = [],
-        allRoles = [],
+      var caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep($scope.allRoles),
+        allRoles = _.cloneDeep($scope.allRoles),
         selected = getSelectedRoles();
-      _.each(_.cloneDeep(item.definition.caseRoles), function(role) {
-        var relType = relTypesByName[role.name];
-        role.role = relType.label_b_a;
-        role.contact_type = relType.contact_type_b;
-        role.contact_sub_type = relType.contact_sub_type_b;
-        role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');
-        role.relationship_type_id = relType.id;
-        if (!$scope.rolesAlphaFilter) caseRoles.push(role);
-        allRoles.push(_.cloneDeep(role));
-      });
       _.each(item.contacts, function (contact) {
         var role = contact.relationship_type_id ? _.findWhere(caseRoles, {relationship_type_id: contact.relationship_type_id}) : null;
         if ((!role || role.contact_id) && contact.relationship_type_id) {
@@ -96,7 +96,7 @@
     $scope.assignRole = function(role, replace) {
       CRM.confirm({
         title: replace ? ts('Replace %1', {1: role.role}) : ts('Add %1', {1: role.role}),
-        message: '<input name="caseRoleSelector" />',
+        message: '<input name="caseRoleSelector" placeholder="' + ts('Select Contact') + '" />',
         open: function() {
           $('[name=caseRoleSelector]', this).crmEntityRef({create: true, api: {params: {contact_type: role.contact_type, contact_sub_type: role.contact_sub_type}, extra: ['display_name']}});
         }

@@ -5,6 +5,19 @@
 </ul>
 <div class="civicase-relationships-case case-people-subtab" ng-show="tab == 'roles'">
   <div>
+    <div class="btn-group btn-group-sm pull-right">
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-plus"></i> {{ ts('Case Role') }} <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right">
+        <li ng-if="allowMultipleCaseClients">
+          <a href ng-click="assignRole({role: ts('Client')})">{{ ts('Client') }}</a>
+        </li>
+        <li ng-repeat="role in allRoles">
+          <a href ng-click="assignRole(role)">{{ role.role }}</a>
+        </li>
+      </ul>
+    </div>
     <h3>{{ ts('%1 Contacts', {1: item.contacts.length}) }}</h3>
     <div>
       <strong>{{ ts('With:') }}</strong> &nbsp;
