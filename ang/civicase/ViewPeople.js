@@ -8,15 +8,20 @@
       clientIds = _.map(item.client, 'contact_id'),
       clients = _.indexBy(item.client, 'contact_id'),
       relTypes = CRM.civicase.relationshipTypes,
-      relTypesByName = _.indexBy(relTypes, 'name_b_a'),
-      people = $scope.people = [];
+      relTypesByName = _.indexBy(relTypes, 'name_b_a');
+
     $scope.CRM = CRM;
     $scope.allowMultipleCaseClients = CRM.civicase.allowMultipleCaseClients;
     $scope.caseRoles = [];
-    $scope.rolePage = 1;
+    $scope.rolesPage = 1;
     $scope.rolesAlphaFilter = '';
     $scope.rolesSelectionMode = '';
-    $scope.selectedTask = '';
+    $scope.rolesSelectedTask = '';
+    $scope.relations = [];
+    $scope.relationsPage = 1;
+    $scope.relationsAlphaFilter = '';
+    $scope.relationsSelectionMode = '';
+    $scope.relationsSelectedTask = '';
     $scope.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     $scope.contactTasks = CRM.civicase.contactTasks;
 
@@ -26,6 +31,16 @@
       }
       else if ($scope.rolesSelectionMode === 'all') {
         return _.collect($scope.caseRoles, 'contact_id');
+      }
+      return [];
+    };
+    
+    var getSelectedRelations = $scope.getSelectedRelations = function(onlyChecked) {
+      if (onlyChecked || $scope.relationsSelectionMode === 'checked') {
+        return _.collect(_.filter($scope.relations, {checked: true}), 'id');
+      }
+      else if ($scope.relationsSelectionMode === 'all') {
+        return _.collect($scope.relations, 'id');
       }
       return [];
     };
@@ -59,22 +74,22 @@
           caseRoles.push($.extend({role: ts('Client'), checked: selected.indexOf(contact.contact_id) >= 0}, contact));
         }
       });
-      $scope.roleCount = caseRoles.length;
+      $scope.rolesCount = caseRoles.length;
       // Apply pager
-      if ($scope.roleCount <= (25 * ($scope.rolePage - 1))) {
+      if ($scope.rolesCount <= (25 * ($scope.rolesPage - 1))) {
         // Reset if out of range
-        $scope.rolePage = 1;
+        $scope.rolesPage = 1;
       }
-      $scope.caseRoles = _.slice(caseRoles, (25 * ($scope.rolePage - 1)), 25 * $scope.rolePage);
+      $scope.caseRoles = _.slice(caseRoles, (25 * ($scope.rolesPage - 1)), 25 * $scope.rolesPage);
     };
 
-    $scope.setRolesSelectionMode = function(mode) {
-      $scope.rolesSelectionMode = mode;
+    $scope.setSelectionMode = function(mode, tab) {
+      $scope[tab + 'SelectionMode'] = mode;
     };
 
     $scope.doContactTask = function() {
-      var task = $scope.selectedTask;
-      $scope.selectedTask = '';
+      var task = $scope.rolesSelectedTask;
+      $scope.rolesSelectedTask = '';
       console.log(task);
     };
 
@@ -93,9 +108,22 @@
         }
         if (val) {
           var newContact = $('[name=caseRoleSelector]', this).select2('data').extra.display_name;
-          _.each(item.client, function(client) {
-            apiCalls.push(['Relationship', 'create', {relationship_type_id: role.relationship_type_id, start_date: 'now', contact_id_a: client.contact_id, contact_id_b: val, case_id: item.id}]);
-          });
+          // Add case role
+          if (role.relationship_type_id) {
+            _.each(item.client, function (client) {
+              apiCalls.push(['Relationship', 'create', {
+                relationship_type_id: role.relationship_type_id,
+                start_date: 'now',
+                contact_id_a: client.contact_id,
+                contact_id_b: val,
+                case_id: item.id
+              }]);
+            });
+          }
+          // Add case client
+          else {
+            apiCalls.push(['CaseContact', 'create', {case_id: item.id, contact_id: val}]);
+          }
           apiCalls.push(['Activity', 'create', {
             case_id: item.id,
             target_contact_id: replace ? [val, role.contact_id] : val,
@@ -153,53 +181,43 @@
       $scope.tab = tab;
     };
 
-    $scope.setRolesLetterFilter = function(letter) {
-      if ($scope.rolesAlphaFilter === letter) {
-        $scope.rolesAlphaFilter = '';
+    $scope.setLetterFilter = function(letter, tab) {
+      if ($scope[tab + 'AlphaFilter'] === letter) {
+        $scope[tab + 'AlphaFilter'] = '';
       } else {
-        $scope.rolesAlphaFilter = letter;
+        $scope[tab + 'AlphaFilter'] = letter;
       }
-      getCaseRoles();
+      if (tab === 'roles') {
+        getCaseRoles();
+      } else {
+        getRelations();
+      }
     };
 
-    function getRelations() {
+    var getRelations = $scope.getRelations = function() {
       var params = {
-        is_active: 1,
+        options: {limit: 25, offset: $scope.relationsPage - 1},
+        case_id: item.id,
         sequential: 1,
-        'relationship_type_id.is_active': 1,
-        case_id: {'IS NULL': 1},
-        options: {limit: 0},
-        return: ['relationship_type_id', 'contact_id_a', 'contact_id_b']
+        return: ['display_name', 'phone', 'email']
       };
-      // We have to call the api twice to get relationships of either direction
-      var relationshipApis = {
-        a: ['Relationship', 'get', $.extend({
-          contact_id_a: {'NOT IN': clientIds},
-          contact_id_b: {IN: clientIds},
-          "api.Contact.getsingle": {id: '$value.contact_id_a', return: ['display_name', 'email', 'phone']}
-        }, params)],
-        b: ['Relationship', 'get', $.extend({
-          contact_id_a: {IN: clientIds},
-          contact_id_b: {'NOT IN': clientIds},
-          "api.Contact.getsingle": {id: '$value.contact_id_b', return: ['display_name', 'email', 'phone']}
-        }, params)]
-      };
-      crmApi(relationshipApis).then(function (info) {
-        function formatRel(rel, dir) {
+      if ($scope.relationsAlphaFilter) {
+        params.display_name = $scope.relationsAlphaFilter;
+      }
+      crmApi('Case', 'getrelations', params).then(function (contacts) {
+        $scope.relations = _.each(contacts.values, function(rel) {
           var relType = relTypes[rel.relationship_type_id];
-          people.push({
-            relation: this.dir === 'a' ? relType.label_a_b : relType.label_b_a,
-            client: clients[rel['contact_id_'+this.dir]].display_name,
-            display_name: rel['api.Contact.getsingle'].display_name,
-            email: rel['api.Contact.getsingle'].email,
-            phone: rel['api.Contact.getsingle'].phone
-          });
-        }
-        _.each(info.a.values, formatRel, {dir: 'b'});
-        _.each(info.b.values, formatRel, {dir: 'a'});
+          rel.relation = relType['label_' + rel.relationship_direction];
+          rel.client = clients[rel.client_contact_id].display_name;
+        });
+        $scope.relationsCount = contacts.count;
       });
-    }
-    getRelations();
+    };
+    $scope.$watch('tab', function(tab) {
+      if (tab === 'relations' && !$scope.relations.length) {
+        getRelations();
+      }
+    });
   }
 
   angular.module('civicase').directive('civicaseViewPeople', function() {
