@@ -111,6 +111,10 @@
 #bootstrap-theme .case-people-subtab {
   margin: 1em 1em 0;
 }
+#bootstrap-theme .case-people-subtab tr.unassigned {
+  color: #b7b7b7;
+  font-style: italic;
+}
 #bootstrap-theme .case-people-subtab td,
 #bootstrap-theme .case-people-subtab th {
   padding: .5em;

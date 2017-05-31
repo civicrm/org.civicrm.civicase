@@ -13,6 +13,7 @@
     $scope.CRM = CRM;
     $scope.allowMultipleCaseClients = CRM.civicase.allowMultipleCaseClients;
     $scope.caseRoles = [];
+    $scope.rolesFilter = '';
     $scope.rolesPage = 1;
     $scope.rolesAlphaFilter = '';
     $scope.rolesSelectionMode = '';
@@ -59,18 +60,27 @@
       var caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep($scope.allRoles),
         allRoles = _.cloneDeep($scope.allRoles),
         selected = getSelectedRoles();
+      if ($scope.rolesFilter) {
+        caseRoles = $scope.rolesFilter === 'client' ? [] : [_.findWhere(caseRoles, {name: $scope.rolesFilter})];
+      }
+      console.log($scope.rolesFilter, caseRoles);
+      console.log('all:', allRoles);
       _.each(item.contacts, function (contact) {
         var role = contact.relationship_type_id ? _.findWhere(caseRoles, {relationship_type_id: contact.relationship_type_id}) : null;
         if ((!role || role.contact_id) && contact.relationship_type_id) {
           role = _.cloneDeep(_.findWhere(allRoles, {relationship_type_id: contact.relationship_type_id}));
-          caseRoles.push(role);
+          if (!$scope.rolesFilter || role.name === $scope.rolesFilter) {
+            caseRoles.push(role);
+          }
         }
-        // Apply alpha filters
+        // Apply filters
         if ($scope.rolesAlphaFilter && contact.display_name.toUpperCase().indexOf($scope.rolesAlphaFilter) < 0) {
           if (role) _.pull(caseRoles, role);
         } else if (role) {
-          $.extend(role, {checked: selected.indexOf(contact.contact_id) >= 0}, contact);
-        } else {
+          if (!$scope.rolesFilter || role.name === $scope.rolesFilter) {
+            $.extend(role, {checked: selected.indexOf(contact.contact_id) >= 0}, contact);
+          }
+        } else if (!$scope.rolesFilter || $scope.rolesFilter == 'client') {
           caseRoles.push($.extend({role: ts('Client'), checked: selected.indexOf(contact.contact_id) >= 0}, contact));
         }
       });
@@ -175,6 +185,7 @@
     }
 
     $scope.$watch('item', getCaseRoles, true);
+    $scope.$watch('rolesFilter', getCaseRoles);
 
     $scope.$bindToRoute({expr:'tab', param:'peopleTab', format: 'raw', default: 'roles'});
     $scope.setTab = function(tab) {

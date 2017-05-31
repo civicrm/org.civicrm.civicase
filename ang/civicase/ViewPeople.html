@@ -31,6 +31,13 @@
       </select>
     </div>
   </div>
+  <div class="pull-right">
+    <select class="form-control" ng-model="rolesFilter">
+      <option value="">{{ ts('All Roles') }}</option>
+      <option value="client">{{ ts('Client') }}</option>
+      <option ng-repeat="role in allRoles" value="{{ role.name }}">{{ role.role }}</option>
+    </select>
+  </div>
   <div class="civicase-alpha-pager">
     <a ng-repeat="a in letters" href ng-class="{active: a === rolesAlphaFilter}" ng-click="setLetterFilter(a, 'roles')">{{ a }}</a>
   </div>

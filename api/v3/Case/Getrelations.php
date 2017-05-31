@@ -65,9 +65,15 @@ function civicrm_api3_case_getrelations($params) {
   unset($params['case_id'], $params['options']);
   $contacts = civicrm_api3('Contact', 'get', array('sequential' => 0, 'id' => array('IN' => $contactIds)) + $params);
   foreach ($relations as &$relation) {
-    $relation += $contacts['values'][$relation['id']];
+    if (isset($contacts['values'][$relation['id']])) {
+      $relation += $contacts['values'][$relation['id']];
+    }
+    else {
+      $relation = NULL;
+      --$result['count'];
+    }
   }
-  $out = civicrm_api3_create_success($relations, $params, 'Case', 'getrelations');
+  $out = civicrm_api3_create_success(array_filter($relations), $params, 'Case', 'getrelations');
   $out['count'] = $result['count'];
   return $out;
 }
