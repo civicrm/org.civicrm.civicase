@@ -14,6 +14,12 @@
           <label for="act_control_overdue_first">{{ ts('Show overdue activities first') }}</label>
         </span>
       </li>
+      <li ng-show="!params.case_id">
+        <span>
+          <input type="checkbox" id="act_control_include_case" ng-model="displayOptions.include_case" />
+          <label for="act_control_include_case">{{ ts('Show case activities') }}</label>
+        </span>
+      </li>
     </ul>
   </div>
   <div class="btn-group btn-group-sm" data-toggle="buttons">

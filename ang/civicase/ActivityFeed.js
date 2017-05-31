@@ -2,7 +2,7 @@
 
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/activity/feed', {
-      template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed="{filters:{case_id:{\'IS NOT NULL\': 1}}}"></div>'
+      template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed="{}"></div>'
     });
   });
 
@@ -32,7 +32,8 @@
 
     var displayOptions = $scope.displayOptions = CRM.cache.get('activityFeedDisplayOptions', {
       followup_nested: true,
-      overdue_first: true
+      overdue_first: true,
+      include_case: true
     });
 
     var involving = $scope.involving = {
@@ -140,6 +141,11 @@
       };
       if (caseId) {
         params.case_id = caseId;
+      }
+      else {
+        if (!displayOptions.include_case) {
+          params.case_id = {'IS NULL': 1};
+        }
       }
       _.each($scope.filters, function(val, key) {
         if (val) {
