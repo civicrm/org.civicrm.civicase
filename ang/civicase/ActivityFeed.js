@@ -2,7 +2,7 @@
 
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/activity/feed', {
-      template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed></div>'
+      template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed="{}"></div>'
     });
   });
 
@@ -32,7 +32,8 @@
 
     var displayOptions = $scope.displayOptions = CRM.cache.get('activityFeedDisplayOptions', {
       followup_nested: true,
-      overdue_first: true
+      overdue_first: true,
+      include_case: true
     });
 
     var involving = $scope.involving = {
@@ -136,9 +137,16 @@
         is_current_revision: 1,
         is_deleted: 0,
         is_test: 0,
-        case_id: caseId ? caseId : {'IS NOT NULL': 1},
         options: {}
       };
+      if (caseId) {
+        params.case_id = caseId;
+      }
+      else {
+        if (!displayOptions.include_case) {
+          params.case_id = {'IS NULL': 1};
+        }
+      }
       _.each($scope.filters, function(val, key) {
         if (val) {
           if (key === 'text') {
@@ -159,6 +167,9 @@
       }
       if (involving.delegated && !params.assignee_contact_id) {
         params.assignee_contact_id = {'!=': 'user_contact_id'};
+      }
+      if ($scope.params && $scope.params.filters) {
+        angular.extend(params, $scope.params.filters);
       }
       return crmApi({
         acts: ['Activity', 'get', $.extend(true, returnParams, params)],

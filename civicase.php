@@ -3,6 +3,43 @@
 require_once 'civicase.civix.php';
 
 /**
+ * Implements hook_civicrm_tabset().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_tabset
+ */
+function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
+  $useAng = FALSE;
+
+  switch ($tabsetName) {
+    case 'civicrm/contact/view':
+      foreach ($tabs as &$tab) {
+        if ($tab['id'] === 'case') {
+          $useAng = TRUE;
+          $tab['url'] = CRM_Utils_System::url('civicrm/case/contact-case-tab', array(
+            'cid' => $context['contact_id'],
+          ));
+        }
+        if ($tab['id'] === 'activity') {
+          $useAng = TRUE;
+          $tab['url'] = CRM_Utils_System::url('civicrm/case/contact-act-tab', array(
+            'cid' => $context['contact_id'],
+          ));
+          break; // foreach
+        }
+      }
+      break;
+
+  }
+
+  if ($useAng) {
+    $loader = new \Civi\Angular\AngularLoader();
+    $loader->setPageName('civicrm/case/a');
+    $loader->setModules(array('civicase'));
+    $loader->load();
+  }
+}
+
+/**
  * Implements hook_civicrm_config().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config

@@ -3,22 +3,19 @@
 // in CiviCRM. See also:
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 
-return array (
-  'js' => 
-  array (
+return array(
+  'js' => array(
     0 => 'ang/sandbox.js',
     1 => 'ang/sandbox/*.js',
     2 => 'ang/sandbox/*/*.js',
   ),
-  'css' => 
-  array (
+  'css' => array(
     0 => 'ang/sandbox.css',
   ),
-  'partials' => 
-  array (
+  'partials' => array(
     0 => 'ang/sandbox',
   ),
-  'settings' => 
-  array (
-  ),
+  'settings' => array(),
+  'requires' => array('crmRouteBinder', 'crmUi', 'crmUtil', 'ngRoute', 'crmResource'),
+  'basePages' => array(),
 );

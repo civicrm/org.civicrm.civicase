@@ -1,6 +1,3 @@
 (function(angular, $, _) {
-  // Declare a list of dependencies.
-  angular.module('civicase', [
-    'crmUi', 'crmUtil', 'ngRoute', 'angularFileUpload', 'bw.paging'
-  ]);
+  angular.crmDepends('civicase');
 })(angular, CRM.$, CRM._);

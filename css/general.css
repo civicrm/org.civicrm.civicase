@@ -55,3 +55,11 @@
   width: 80%;
   display: inline-block;
 }
+
+/* Customize tabs on "View Contact" page */
+#civicaseContactTab h1[crm-page-title=""], #civicaseContactTab [civicase-search="filters"] {
+    display: none;
+}
+#civicaseActivitiesTab .act-list-controls {
+  display: none;
+}
