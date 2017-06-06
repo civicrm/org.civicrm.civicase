@@ -100,7 +100,7 @@
   });
 
   // Ex: <div crm-ui-date-range="model.some_field" />
-  angular.module('crmUi').directive('crmUiDateRange', function($timeout) {
+  angular.module('civicase').directive('crmUiDateRange', function($timeout) {
     var ts = CRM.ts('civicase');
     return {
       restrict: 'AE',
@@ -148,7 +148,7 @@
   });
 
   // Ex: <div crm-ui-number-range="model.some_field" />
-  angular.module('crmUi').directive('crmUiNumberRange', function($timeout) {
+  angular.module('civicase').directive('crmUiNumberRange', function($timeout) {
     var ts = CRM.ts('civicase');
     return {
       restrict: 'AE',
@@ -194,7 +194,7 @@
   });
 
   // Ensures that this value is removed from the model when the field is removed via ng-if
-  angular.module('crmUi').directive('crmUiConditional', function() {
+  angular.module('civicase').directive('crmUiConditional', function() {
     return {
       restrict: 'A',
       link: function (scope, elem, attrs) {
