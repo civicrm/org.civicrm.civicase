@@ -12,7 +12,7 @@
 
     $scope.CRM = CRM;
     $scope.allowMultipleCaseClients = CRM.civicase.allowMultipleCaseClients;
-    $scope.caseRoles = [];
+    $scope.roles = [];
     $scope.rolesFilter = '';
     $scope.rolesPage = 1;
     $scope.rolesAlphaFilter = '';
@@ -36,22 +36,13 @@
     }
     $scope.allRoles = _.each(_.cloneDeep(item.definition.caseRoles), formatRole);
 
-    var getSelectedRoles = $scope.getSelectedRoles = function(onlyChecked) {
-      if (onlyChecked || $scope.rolesSelectionMode === 'checked') {
-        return _.collect(_.filter($scope.caseRoles, {checked: true}), 'contact_id');
+    var getSelectedContacts = $scope.getSelectedContacts = function(tab, onlyChecked) {
+      var idField = (tab === 'roles' ? 'contact_id' : 'id');
+      if (onlyChecked || $scope[tab + 'SelectionMode'] === 'checked') {
+        return _.collect(_.filter($scope[tab], {checked: true}), idField);
       }
-      else if ($scope.rolesSelectionMode === 'all') {
-        return _.collect($scope.caseRoles, 'contact_id');
-      }
-      return [];
-    };
-    
-    var getSelectedRelations = $scope.getSelectedRelations = function(onlyChecked) {
-      if (onlyChecked || $scope.relationsSelectionMode === 'checked') {
-        return _.collect(_.filter($scope.relations, {checked: true}), 'id');
-      }
-      else if ($scope.relationsSelectionMode === 'all') {
-        return _.collect($scope.relations, 'id');
+      else if ($scope[tab + 'SelectionMode'] === 'all') {
+        return _.collect($scope[tab], idField);
       }
       return [];
     };
@@ -59,12 +50,10 @@
     var getCaseRoles = $scope.getCaseRoles = function() {
       var caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep($scope.allRoles),
         allRoles = _.cloneDeep($scope.allRoles),
-        selected = getSelectedRoles();
+        selected = getSelectedContacts('roles', true);
       if ($scope.rolesFilter) {
         caseRoles = $scope.rolesFilter === 'client' ? [] : [_.findWhere(caseRoles, {name: $scope.rolesFilter})];
       }
-      console.log($scope.rolesFilter, caseRoles);
-      console.log('all:', allRoles);
       _.each(item.contacts, function (contact) {
         var role = contact.relationship_type_id ? _.findWhere(caseRoles, {relationship_type_id: contact.relationship_type_id}) : null;
         if ((!role || role.contact_id) && contact.relationship_type_id) {
@@ -90,17 +79,24 @@
         // Reset if out of range
         $scope.rolesPage = 1;
       }
-      $scope.caseRoles = _.slice(caseRoles, (25 * ($scope.rolesPage - 1)), 25 * $scope.rolesPage);
+      $scope.roles = _.slice(caseRoles, (25 * ($scope.rolesPage - 1)), 25 * $scope.rolesPage);
     };
 
     $scope.setSelectionMode = function(mode, tab) {
       $scope[tab + 'SelectionMode'] = mode;
     };
 
-    $scope.doContactTask = function() {
-      var task = $scope.rolesSelectedTask;
-      $scope.rolesSelectedTask = '';
-      console.log(task);
+    $scope.doContactTask = function(tab) {
+      var task = $scope.contactTasks[$scope[tab + 'SelectedTask']];
+      $scope[tab + 'SelectedTask'] = '';
+      CRM.loadForm(CRM.url(task.url, {cids: getSelectedContacts(tab).join(',')}))
+        .on('crmFormSuccess', $scope.refresh)
+        .on('crmFormSuccess', function() {
+          $scope.refresh();
+          if (tab === 'relations') {
+            getRelations();
+          }
+        });
     };
 
     $scope.assignRole = function(role, replace) {

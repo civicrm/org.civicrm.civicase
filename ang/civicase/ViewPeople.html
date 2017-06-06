@@ -1,4 +1,4 @@
-<div crm-ui-debug="caseRoles"></div>
+<div crm-ui-debug="roles"></div>
 <ul class="nav nav-tabs">
   <li role="presentation" ng-class="{active: tab == 'roles'}"><a href ng-click="setTab('roles')">{{ ts('Case Roles') }}</a></li>
   <li role="presentation" ng-class="{active: tab == 'relations'}"><a href ng-click="setTab('relations')">{{ ts('Other Relationships') }}</a></li>
@@ -24,10 +24,10 @@
       <input type="radio" value="all" ng-model="rolesSelectionMode" id="rolesSelectionMode-all"/>
       <label for="rolesSelectionMode-all">{{ ts('All %1 Contacts', {1: item.contacts.length}) }}</label>
       <input type="radio" value="checked" ng-model="rolesSelectionMode" id="rolesSelectionMode-checked"/>
-      <label for="rolesSelectionMode-checked">{{ ts('%1 Selected', {1: getSelectedRoles(true).length}) }}</label>
-      <select class="form-control case-action-dropdown" ng-model="rolesSelectedTask" ng-change="doContactTask()" >
+      <label for="rolesSelectionMode-checked">{{ ts('%1 Selected', {1: getSelectedContacts('roles', true).length}) }}</label>
+      <select class="form-control case-action-dropdown" ng-model="rolesSelectedTask" ng-change="doContactTask('roles')" ng-disabled="!getSelectedContacts('roles').length" >
         <option value="">{{ ts('Actions') }}</option>
-        <option ng-repeat="(key, opt) in contactTasks" value="{{ key }}">{{ opt }}</option>
+        <option ng-repeat="(key, opt) in contactTasks" value="{{ key }}">{{ opt.title }}</option>
       </select>
     </div>
   </div>
@@ -51,7 +51,7 @@
       <th></th>
     </tr></thead>
     <tbody>
-      <tr ng-repeat="role in caseRoles" ng-class="{unassigned: !role.contact_id}">
+      <tr ng-repeat="role in roles" ng-class="{unassigned: !role.contact_id}">
         <td>
           <input ng-if="role.contact_id" type="checkbox" ng-model="role.checked" ng-click="setSelectionMode('checked', 'roles')" />
         </td>
@@ -128,10 +128,10 @@
       <input type="radio" value="all" ng-model="relationsSelectionMode" id="relationsSelectionMode-all"/>
       <label for="relationsSelectionMode-all">{{ ts('All %1 Contacts', {1: relations.length}) }}</label>
       <input type="radio" value="checked" ng-model="relationsSelectionMode" id="relationsSelectionMode-checked"/>
-      <label for="relationsSelectionMode-checked">{{ ts('%1 Selected', {1: getSelectedRelations(true).length}) }}</label>
-      <select class="form-control case-action-dropdown" ng-model="relationsSelectedTask" ng-change="doContactTask()" >
+      <label for="relationsSelectionMode-checked">{{ ts('%1 Selected', {1: getSelectedContacts('relations', true).length}) }}</label>
+      <select class="form-control case-action-dropdown" ng-model="relationsSelectedTask" ng-change="doContactTask('relations')" ng-disabled="!getSelectedContacts('relations').length" >
         <option value="">{{ ts('Actions') }}</option>
-        <option ng-repeat="(key, opt) in contactTasks" value="{{ key }}">{{ opt }}</option>
+        <option ng-repeat="(key, opt) in contactTasks" value="{{ key }}">{{ opt.title }}</option>
       </select>
     </div>
   </div>
@@ -176,6 +176,13 @@
           </div>
         </td>
       </tr>
+    <tr ng-if="!relations.length">
+      <td colspan="9" style="text-align: center">
+        <button class="btn btn-default" disabled>
+          {{ ts('None Found') }}
+        </button>
+      </td>
+    </tr>
     </tbody>
   </table>
   <paging

@@ -155,7 +155,7 @@
     };
 
     $scope.refresh = function(apiCalls) {
-      if (!apiCalls) apiCalls = [];
+      if (!_.isArray(apiCalls)) apiCalls = [];
       apiCalls.push(['Case', 'getdetails', caseGetParams()]);
       crmApi(apiCalls, true).then(function(result) {
         $scope.pushCaseData(result[apiCalls.length - 1].values[0]);

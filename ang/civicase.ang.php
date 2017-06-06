@@ -124,7 +124,13 @@ if (CRM_Core_Permission::check('delete in CiviCase')) {
   );
 }
 // Contact tasks
-$options['contactTasks'] = CRM_Contact_Task::permissionedTaskTitles(CRM_Core_Permission::getPermission());
+$contactTasks = CRM_Contact_Task::permissionedTaskTitles(CRM_Core_Permission::getPermission());
+$options['contactTasks'] = array();
+foreach (CRM_Contact_Task::$_tasks as $id => $value) {
+  if (isset($contactTasks[$id]) && isset($value['url'])) {
+    $options['contactTasks'][$id] = $value;
+  }
+}
 // Random setting
 $xmlProcessorProcess = new CRM_Case_XMLProcessor_Process();
 $options['allowMultipleCaseClients'] = (bool) $xmlProcessorProcess->getAllowMultipleCaseClients();
