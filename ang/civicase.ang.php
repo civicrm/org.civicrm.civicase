@@ -82,25 +82,30 @@ $options['caseActions'] = array(
   array(
     'title' => ts('Change Case Status'),
     'action' => 'changeStatus(cases)',
+    'icon' => 'fa-pencil-square-o',
   ),
   array(
     'title' => ts('Print Case'),
     'action' => 'print(cases[0])',
     'number' => 1,
+    'icon' => 'fa-print',
   ),
   array(
     'title' => ts('Email Case Manager'),
     'action' => 'emailManagers(cases)',
+    'icon' => 'fa-envelope-o',
   ),
   array(
     'title' => ts('Link Cases'),
     'action' => 'linkCases(cases[0])',
     'number' => 1,
+    'icon' => 'fa-link',
   ),
   array(
     'title' => ts('Link 2 Cases'),
     'action' => 'linkCases(cases[0], cases[1])',
     'number' => 2,
+    'icon' => 'fa-link',
   ),
 );
 if (CRM_Core_Permission::check('administer CiviCase')) {
@@ -108,12 +113,14 @@ if (CRM_Core_Permission::check('administer CiviCase')) {
     'title' => ts('Merge 2 Cases'),
     'number' => 2,
     'action' => 'mergeCases(cases)',
+    'icon' => 'fa-compress',
   );
 }
 if (CRM_Core_Permission::check('delete in CiviCase')) {
   $options['caseActions'][] = array(
     'title' => ts('Delete Case'),
     'action' => 'deleteCases(cases)',
+    'icon' => 'fa-trash',
   );
 }
 // Contact tasks
