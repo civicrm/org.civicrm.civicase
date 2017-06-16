@@ -61,6 +61,12 @@
           options: {limit: 5, sort: 'activity_date_time ASC'},
           return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'assignee_contact_name']
         },
+        // Custom data
+        'api.CustomValue.gettree': {
+          entity_id: "$value.id",
+          entity_type: 'Case',
+          return: ['custom_group.name', 'custom_group.title', 'custom_group.collapse_display', 'custom_field.name', 'custom_field.label', 'custom_value.display']
+        },
         sequential: 1,
         options: {
           categories: {alert: 10, milestone: 1, task: 1}
@@ -134,6 +140,9 @@
       // Tasks
       item.tasks = _.each(_.cloneDeep(item['api.Activity.get.3'].values), formatActivity);
       delete(item['api.Activity.get.3']);
+      // Custom fields
+      item.customData = item['api.CustomValue.gettree'].values || [];
+      delete(item['api.CustomValue.gettree']);
       return item;
     }
 
