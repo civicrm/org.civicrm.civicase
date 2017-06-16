@@ -1,27 +1,32 @@
 <div class="civicase-view-summary">
-  <div class="panel panel-default civicase-summary-top-outer">
-    <div class="civicase-summary-top clearfix panel-header">
-      <div class="civicase-case-subject">
-        <h3>{{ ts('Subject') }}</h3>
-        <p>{{ item.subject }}</p>
-      </div>
-      <div class="civicase-next-milestone" ng-class="{'milestone-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
-        <h3>
-          {{ ts('Next Milestone:') }}
-          <span ng-if="item.activity_summary.milestone.length">{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</span>
-        </h3>
-        <div ng-if="item.activity_summary.milestone.length">{{ ts("Due:") + ' ' + CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
-      </div>
+  <div class="row civicase-summary-top-outer">
+    <div class="civicase-case-subject col-md-6">
+      <h3>{{ ts('Subject') }}</h3>
+      <p>{{ item.subject }}</p>
+    </div>
+    <div class="civicase-next-milestone col-md-3" ng-class="{'milestone-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
+      <h3>
+        {{ ts('Next Milestone:') }}
+        <span ng-if="item.activity_summary.milestone.length">{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</span>
+      </h3>
+      <div ng-if="item.activity_summary.milestone.length">{{ ts("Due:") + ' ' + CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+    </div>
+    <div class="civicase-next-task col-md-3" ng-class="{'task-overdue': isActivityOverdue(item.activity_summary.task[0])}">
+      <h3>
+        {{ ts('Next task:') }}
+        <span ng-if="item.activity_summary.task.length">{{ activityTypes[item.activity_summary.task[0].activity_type_id].label }}</span>
+      </h3>
+      <div ng-if="item.activity_summary.task.length">{{ ts("Due:") + ' ' + CRM.utils.formatDate(item.activity_summary.task[0].activity_date_time) }}</div>
     </div>
   </div>
-  <div class="civicase-summary-mid clearfix">
-    <div class="civicase-left-40">
+  <div class="row" ng-if="item.customData" ng-include="'~/civicase/CaseViewCustomData.html'"></div>
+  <div class="civicase-summary-mid row">
+    <div class="col-md-6">
       <div ng-include="'~/civicase/CaseViewTasks.html'"></div>
     </div>
-    <div class="civicase-right-60">
-      <div ng-include="'~/civicase/CaseViewCommunicationNext.html'"></div>
+    <div class="col-md-6">
       <div ng-include="'~/civicase/CaseViewCommunicationRecent.html'"></div>
     </div>
   </div>
-  <div ng-include="'~/civicase/CaseViewRelatedCases.html'"></div>
+  <div class="row" ng-include="'~/civicase/CaseViewRelatedCases.html'" ng-if="item.relatedCases.length"></div>
 </div>
