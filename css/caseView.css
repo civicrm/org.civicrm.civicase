@@ -33,16 +33,9 @@
 #bootstrap-theme .civicase-summary-top {
   padding: 5px 10px 10px;
 }
-#bootstrap-theme .civicase-case-subject {
-  width: 50%;
-  float: left;
-}
-#bootstrap-theme .civicase-next-milestone {
-  width: 40%;
-  float: right;
-}
-#bootstrap-theme .milestone-overdue h4 span {
-  color: #d9534f;
+#bootstrap-theme .civicase-view-summary .row {
+  margin: 0;
+  border-bottom: 1px solid #e8eef0;
 }
 #bootstrap-theme nav.civicase-view-tab-bar {
   background-color: #31b0d5;
@@ -124,4 +117,36 @@
 }
 #bootstrap-theme .case-tab-people .nav.nav-tabs > li:first-child {
   margin-left: 1em;
+}
+#bootstrap-theme .case-tab-summary .row > div {
+  padding: 1em;
+}
+#bootstrap-theme .civicase-activity-stamp {
+  background-color: #4d5663;
+  padding: 0;
+}
+#bootstrap-theme .civicase-activity-stamp.civicase-stamp-overdue {
+  background-color: #e6807f;
+  padding: 0;
+}
+#bootstrap-theme .civicase-activity-stamp h3 {
+  padding: 16px;
+  background-color: #e8eef0;
+  margin: 0;
+}
+#bootstrap-theme .civicase-activity-stamp .act-feed-item {
+  padding: 22px 12px 10px;
+  color: #fff;
+}
+#bootstrap-theme .civicase-activity-stamp .act-feed-inner {
+  height: 100px;
+}
+#bootstrap-theme .civicase-activity-stamp .cb-dot {
+  background-color: white !important;
+  color: #4d5663 !important;
+  border-color: #4d5663;
+  top: -10px;
+}
+#bootstrap-theme .civicase-activity-stamp.civicase-stamp-overdue .cb-dot {
+  border-color: #e6807f;
 }

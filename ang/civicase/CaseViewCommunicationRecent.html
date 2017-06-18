@@ -1,8 +1,6 @@
-<div class="panel panel-default civicase-view-communication-recent">
-  <div class="panel-header">
-    <h3>{{ ts('Recent Communications') }}</h3>
-  </div>
-  <div class="panel-body activity-timeline">
+<div class="civicase-view-communication-recent">
+  <h3>{{ ts('Recent Communications') }}</h3>
+  <div class="activity-timeline">
     <ul class="list-group act-feed-list-group" ng-if="item.recentCommunication.length">
       <li class="list-group-item act-category-communication {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.recentCommunication">
         <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, item.recentCommunication[$index-1].activity_date_time)">

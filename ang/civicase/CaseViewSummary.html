@@ -3,19 +3,49 @@
     <div class="civicase-case-subject col-md-6">
       <p crm-editable="item" data-field="subject" data-type="textarea" crm-form-success="onChangeSubject($data)"></p>
     </div>
-    <div class="civicase-next-milestone col-md-3" ng-class="{'milestone-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
-      <h3>
-        {{ ts('Next Milestone:') }}
-        <span ng-if="item.activity_summary.milestone.length">{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</span>
-      </h3>
-      <div ng-if="item.activity_summary.milestone.length">{{ ts("Due:") + ' ' + CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+    <div class="col-md-3">
+      <div class="civicase-next-milestone civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
+        <h3>
+          {{ ts('Next Milestone') }}
+        </h3>
+        <div ng-if="item.activity_summary.milestone.length" class="act-feed-item">
+          <div class="act-feed-inner">
+            <div civicase-activity-dot="item.activity_summary.milestone[0]"></div>
+            <div><strong>{{ item.activity_summary.milestone[0].type }}</strong></div>
+            <div>{{ CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+          </div>
+          <div class="btn-group-sm text-center">
+            <a class="btn btn-default crm-popup"
+              href="{{ CRM.url('civicrm/case/activity', {action: 'update', reset: 1, cid: item.client[0].contact_id, caseid: item.id, id: item.activity_summary.milestone[0].id, civicase_reload: caseGetParams()}) }}"
+              crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+            >
+              <i class="fa fa-pencil"></i> {{ ts('Edit') }}
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="civicase-next-task col-md-3" ng-class="{'task-overdue': isActivityOverdue(item.activity_summary.task[0])}">
-      <h3>
-        {{ ts('Next task:') }}
-        <span ng-if="item.activity_summary.task.length">{{ activityTypes[item.activity_summary.task[0].activity_type_id].label }}</span>
-      </h3>
-      <div ng-if="item.activity_summary.task.length">{{ ts("Due:") + ' ' + CRM.utils.formatDate(item.activity_summary.task[0].activity_date_time) }}</div>
+    <div class="col-md-3">
+      <div class="civicase-next-task civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': isActivityOverdue(item.tasks[0])}">
+        <h3>
+          {{ ts('Next task') }}
+        </h3>
+        <div ng-if="item.tasks.length" class="act-feed-item">
+          <div class="act-feed-inner">
+            <div civicase-activity-dot="item.tasks[0]"></div>
+            <div><strong>{{ item.tasks[0].type }}</strong></div>
+            <div>{{ CRM.utils.formatDate(item.tasks[0].activity_date_time) }}</div>
+          </div>
+          <div class="btn-group-sm text-center">
+            <a class="btn btn-default crm-popup"
+               href="{{ CRM.url('civicrm/case/activity', {action: 'update', reset: 1, cid: item.client[0].contact_id, caseid: item.id, id: item.tasks[0].id, civicase_reload: caseGetParams()}) }}"
+               crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+            >
+              <i class="fa fa-pencil"></i> {{ ts('Edit') }}
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row" ng-if="item.customData" ng-include="'~/civicase/CaseViewCustomData.html'"></div>

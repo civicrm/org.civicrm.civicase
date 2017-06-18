@@ -1,35 +1,31 @@
-<div class="panel panel-default civicase-view-tasks">
-  <div class="panel-header">
-    <h3>{{ ts('Tasks') }}</h3>
-  </div>
-  <div class="panel-body">
-    <ul class="list-group act-feed-list-group" ng-if="item.tasks.length">
-      <li class="list-group-item act-category-task {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.tasks">
-        <div class="act-feed-item">
-          <div class="act-feed-inner">
-            <div civicase-activity-dot="activity"></div>
-            <a href class="act-task-checkbox" ng-click="markCompleted(activity)" title="{{ ts('Mark complete') }}">
-              <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
-            </a>
-            <h4>
-              <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
-              <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
-            </h4>
-            <div class="clearfix">
-              {{ CRM.utils.formatDate(activity.activity_date_time) }}
-              <div class="pull-right" ng-if="activity.assignee_contact_name">
-                <span ng-repeat="(cid, display_name) in activity.assignee_contact_name">
-                  <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
-                  {{$last ? '' : ', '}}
-                </span>
-              </div>
+<div class="civicase-view-tasks">
+  <h3>{{ ts('Tasks') }}</h3>
+  <ul class="list-group act-feed-list-group" ng-if="item.tasks.length">
+    <li class="list-group-item act-category-task {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.tasks">
+      <div class="act-feed-item">
+        <div class="act-feed-inner">
+          <div civicase-activity-dot="activity"></div>
+          <a href class="act-task-checkbox" ng-click="markCompleted(activity)" title="{{ ts('Mark complete') }}">
+            <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
+          </a>
+          <h4>
+            <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
+            <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
+          </h4>
+          <div class="clearfix">
+            {{ CRM.utils.formatDate(activity.activity_date_time) }}
+            <div class="pull-right" ng-if="activity.assignee_contact_name">
+              <span ng-repeat="(cid, display_name) in activity.assignee_contact_name">
+                <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
+                {{$last ? '' : ', '}}
+              </span>
             </div>
           </div>
         </div>
-      </li>
-    </ul>
-    <div class="civicase-panel-empty" ng-if="!item.tasks.length">
-      {{ ts('No scheduled tasks.') }}
-    </div>
+      </div>
+    </li>
+  </ul>
+  <div class="civicase-panel-empty" ng-if="!item.tasks.length">
+    {{ ts('No scheduled tasks.') }}
   </div>
 </div>
