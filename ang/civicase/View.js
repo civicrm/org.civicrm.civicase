@@ -171,6 +171,16 @@
       });
     };
 
+    // Create activity when changing case subject
+    $scope.onChangeSubject = function(newSubject) {
+      CRM.api3('Activity', 'create', {
+        case_id: $scope.caseId,
+        activity_type_id: 'Change Case Subject',
+        subject: newSubject,
+        status_id: 'Completed'
+      })
+    };
+
     $scope.markCompleted = function(act) {
       crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {});
       $scope.item.tasks.splice(_.findIndex($scope.item.tasks, {id: act.id}), 1);

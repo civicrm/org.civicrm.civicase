@@ -98,6 +98,21 @@
       }
     };
   });
+  
+  // Angular binding for civi ajax form events
+  angular.module('civicase').directive('crmFormSuccess', function(){
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        element
+          .on('crmFormSuccess', function(event, data) {
+            scope.$apply(function() {
+              scope.$eval(attrs.crmFormSuccess, {"$event": event, "$data": data});
+            });
+          });
+      }
+    };
+  });
 
   // Ex: <div crm-ui-date-range="model.some_field" />
   angular.module('civicase').directive('crmUiDateRange', function($timeout) {
@@ -204,6 +219,35 @@
           if (typeof val !== 'undefined') {
             scope.$eval(modelAttr + ' = null');
           }
+        });
+      }
+    };
+  });
+  
+  angular.module('civicase').directive('crmEditable', function($timeout) {
+    function nl2br(str) {
+      return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br />$2');
+    }
+    return {
+      restrict: 'A',
+      link: function (scope, elem, attrs) {
+        CRM.loadScript(CRM.config.resourceBase + 'js/jquery/jquery.crmEditable.js').done(function () {
+          var model = scope.$eval(attrs.crmEditable),
+            textarea = elem.data('type') === 'textarea',
+            field = elem.data('field');
+          elem
+            .html(textarea ? nl2br(model[field]) : _.escape(model[field]))
+            .on('crmFormSuccess', function(e, value) {
+              $timeout(function() {
+                scope.$apply(function() {
+                  model[field] = value;
+                  if (textarea) {
+                    elem.html(nl2br(model[field]));
+                  }
+                });
+              });
+            })
+            .crmEditable();
         });
       }
     };
