@@ -253,4 +253,29 @@
     };
   });
 
+  angular.module('civicase').directive('searchableDropdown', function($timeout) {
+    return {
+      restrict: 'C',
+      link: function(scope, elem, attrs) {
+        $('input', elem)
+          .attr('placeholder', "\uF002")
+          .click(function(e) {
+            e.stopPropagation();
+          })
+          .keyup(function(e) {
+            // Down arrow
+            if (e.which == 40) {
+              $(this).closest('.searchable-dropdown').next().find('a').first().focus();
+            }
+          });
+        elem.on('click', function() {
+          var $input = $('input', this).val('').change();
+          $timeout(function() {
+            $input.focus();
+          }, 100);
+        });
+      }
+    };
+  });
+
 })(angular, CRM.$, CRM._);

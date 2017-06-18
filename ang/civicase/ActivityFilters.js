@@ -83,13 +83,6 @@
         text: true
       });
 
-      $scope.openFilterMenu = function() {
-        $scope.availableFilterSearchText = '';
-        $timeout(function () {
-          $('.act-available-filter-search:visible', element).focus();
-        }, 50);
-      };
-
       $scope.exposeFilter = function(field, $event) {
         var shown = !$scope.exposedFilters[field.name];
         if (shown) {

@@ -1,9 +1,9 @@
 <form class="form-inline act-filters">
 
   <div class="btn-group btn-group-sm">
-    <button type="button" class="btn btn-info dropdown-toggle act-available-filter-toggle" data-toggle="dropdown" ng-click="openFilterMenu()">
-      <span class="act-available-filter-label">{{ ts('Filters') }}<span class="caret"></span></span>
-      <input class="form-control act-available-filter-search" placeholder="&#xf002" ng-model="availableFilterSearchText" ng-click="$event.stopPropagation()" />
+    <button type="button" class="btn btn-info dropdown-toggle searchable-dropdown" data-toggle="dropdown">
+      <span>{{ ts('Filters') }}<span class="caret"></span></span>
+      <input class="form-control" ng-model="availableFilterSearchText" />
     </button>
     <ul class="dropdown-menu act-available-filter-menu" role="menu">
       <li ng-repeat="field in (filteredFilters = (availableFilters | filter:{label: availableFilterSearchText}))">

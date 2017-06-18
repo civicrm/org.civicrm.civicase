@@ -53,3 +53,38 @@
 #civicaseActivitiesTab .act-list-controls {
   display: none;
 }
+
+/* Searchable dropdown widget */
+#bootstrap-theme .dropdown-toggle.searchable-dropdown > input {
+  margin: 0;
+  display: none;
+}
+#bootstrap-theme .dropdown-toggle.searchable-dropdown[aria-expanded=true] {
+  padding: 0;
+}
+#bootstrap-theme .dropdown-toggle.searchable-dropdown[aria-expanded=true] > input {
+  display: inline-block;
+}
+#bootstrap-theme .dropdown-toggle.searchable-dropdown[aria-expanded=true] > span {
+  display: none;
+}
+#bootstrap-theme .dropdown-toggle.searchable-dropdown > input::placeholder {
+  font-family: FontAwesome;
+  text-align: right;
+}
+#bootstrap-theme .dropdown-toggle.searchable-dropdown > input::-moz-placeholder {
+  font-family: FontAwesome;
+  text-align: right;
+}
+#bootstrap-theme .dropdown-toggle.searchable-dropdown > input:-ms-input-placeholder {
+  font-family: FontAwesome;
+  text-align: right;
+}
+#bootstrap-theme .dropdown-toggle.searchable-dropdown > input::-webkit-input-placeholder {
+  font-family: FontAwesome;
+  text-align: right;
+}
+#bootstrap-theme .dropdown-toggle.searchable-dropdown + ul.dropdown-menu {
+  overflow-y: auto;
+  max-height: 400px;
+}

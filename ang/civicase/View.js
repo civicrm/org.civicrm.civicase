@@ -144,7 +144,7 @@
     $scope.pushCaseData = function(data) {
       if (!$scope.item) $scope.item = {};
       var item = $scope.item;
-      // This way the maintain the reference to the variable in the parent scope.
+      // Maintain the reference to the variable in the parent scope.
       _.assign(item, formatCaseDetails(data));
       $scope.allowedCaseStatuses = getAllowedCaseStatuses(item.definition);
       $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item.definition);
@@ -165,7 +165,7 @@
         activity_type_id: 'Change Case Subject',
         subject: newSubject,
         status_id: 'Completed'
-      })
+      });
     };
 
     $scope.markCompleted = function(act) {
@@ -175,6 +175,29 @@
 
     $scope.getActivityType = function(name) {
       return _.findKey(activityTypes, {name: name});
+    };
+
+    $scope.newActivityUrl = function(actType) {
+      var path = 'civicrm/case/activity',
+        args = {
+          action: 'add',
+          reset: 1,
+          cid: $scope.item.client[0].contact_id,
+          caseid: $scope.item.id,
+          atype: actType.id,
+          civicase_reload: caseGetParams()
+        };
+      // CiviCRM requires nonstandard urls for a couple special activity types
+      if (actType.name === 'Email') {
+        path = 'civicrm/activity/email/add';
+        args.context = 'standalone';
+        delete args.cid;
+      }
+      if (actType.name === 'Print PDF Letter') {
+        path = 'civicrm/activity/pdf/add';
+        args.context = 'standalone';
+      }
+      return CRM.url(path, args);
     };
 
     $scope.addTimeline = function(name) {

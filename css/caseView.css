@@ -51,6 +51,9 @@
   border: 1px solid white;
   background-color: transparent;
 }
+#bootstrap-theme .navbar.civicase-view-tab-bar .open .btn {
+  border: 0 none;
+}
 #bootstrap-theme .navbar.civicase-view-tab-bar .btn-group.open .btn {
   background-color: white;
   color: #31b0d5;
