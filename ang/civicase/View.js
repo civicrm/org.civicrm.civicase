@@ -41,16 +41,6 @@
           options: {limit: 5, sort: 'activity_date_time DESC'},
           return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name']
         },
-        // For the "next communication" panel
-        'api.Activity.get.2': {
-          case_id: "$value.id",
-          is_current_revision: 1,
-          is_test: 0,
-          "activity_type_id.grouping": {LIKE: "%communication%"},
-          status_id: {'!=': 'Completed'},
-          options: {limit: 1, sort: 'activity_date_time ASC'},
-          return: ['activity_type_id', 'subject', 'details', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name']
-        },
         // For the "tasks" panel
         'api.Activity.get.3': {
           case_id: "$value.id",
@@ -134,9 +124,6 @@
       // Recent communications
       item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.1'].values), formatActivity);
       delete(item['api.Activity.get.1']);
-      // Next communications
-      item.nextCommunication = _.each(_.cloneDeep(item['api.Activity.get.2'].values), formatActivity);
-      delete(item['api.Activity.get.2']);
       // Tasks
       item.tasks = _.each(_.cloneDeep(item['api.Activity.get.3'].values), formatActivity);
       delete(item['api.Activity.get.3']);
