@@ -30,11 +30,11 @@
       default: 0
     });
 
-    var displayOptions = $scope.displayOptions = CRM.cache.get('activityFeedDisplayOptions', {
+    $scope.displayOptions = angular.extend({}, {
       followup_nested: true,
       overdue_first: true,
       include_case: true
-    });
+    }, $scope.params.displayOptions);
 
     var involving = $scope.involving = {
       myActivities: false,
@@ -143,7 +143,7 @@
         params.case_id = caseId;
       }
       else {
-        if (!displayOptions.include_case) {
+        if (!$scope.displayOptions.include_case) {
           params.case_id = {'IS NULL': 1};
         }
       }
@@ -181,7 +181,6 @@
     $scope.$watchCollection('involving', getActivities);
 
     $scope.$watchCollection('displayOptions', function() {
-      CRM.cache.set('activityFeedDisplayOptions', displayOptions);
       getActivities();
     });
 
