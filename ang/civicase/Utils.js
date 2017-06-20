@@ -223,7 +223,8 @@
       }
     };
   });
-  
+
+  // Angular binding for CiviCRM's jQuery-based crm-editable
   angular.module('civicase').directive('crmEditable', function($timeout) {
     function nl2br(str) {
       return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br />$2');
@@ -253,6 +254,16 @@
     };
   });
 
+  // Enhances searchable buttons with the class "searchable-dropdown"
+  // Button markup needs to include a label for the button and a search input.
+  // Ex:
+  // <button type="button" class="btn dropdown-toggle searchable-dropdown" data-toggle="dropdown">
+  //   <span><i class="fa fa-plus"></i> {{ ts('Add Item') }}</span>
+  //   <input class="form-control" ng-model="itemSearchText" />
+  // </button>
+  // <ul class="dropdown-menu" >
+  //   <li ng-repeat="item in listOfItems | filter:{label: itemSearchText}">...</li>
+  // </ul>
   angular.module('civicase').directive('searchableDropdown', function($timeout) {
     return {
       restrict: 'C',
