@@ -1,3 +1,3 @@
 (function(angular, $, _) {
-   angular.crmDepends('sandbox');
+   angular.module('sandbox', CRM.angRequires('sandbox'));
 })(angular, CRM.$, CRM._);

@@ -1,5 +1,5 @@
 (function(angular, $, _) {
-  angular.crmDepends('crmRouteBinder');
+  angular.module('crmRouteBinder', CRM.angRequires('crmRouteBinder'));
 
   // While processing a change from the $watch()'d data, we set the "pendingUpdates" flag
   // so that automated URL changes don't cause a reload.
