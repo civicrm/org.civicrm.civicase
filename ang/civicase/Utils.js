@@ -278,4 +278,35 @@
     };
   });
 
+  // Display the list of target/assignee contacts for an activity
+  angular.module('civicase').directive('civicaseActivityContacts', function() {
+    return {
+      restrict: 'A',
+      scope: {
+        data: '=civicaseActivityContacts'
+      },
+      link: function (scope, elem, attrs) {
+        var contacts = scope.data.activity[scope.data.type + '_contact_name'];
+        scope.url = CRM.url;
+        scope.contacts = [];
+        _.each(contacts, function(name, cid) {
+          scope.contacts.push({name: name, cid: cid});
+        });
+      },
+      template:
+        '<a ng-if="contacts.length" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].cid}) }}">{{ contacts[0].name }}</a> ' +
+        '<span ng-if="contacts.length === 2">&amp; <a href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].cid}) }}">{{ contacts[1].name }}</a></span>' +
+        '<div class="btn-group btn-group-xs" ng-if="contacts.length > 2">' +
+        '  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '    + {{ contacts.length - 1 }}' +
+        '  </button>' +
+        '  <ul class="dropdown-menu" >' +
+        '    <li ng-repeat="(index, contact) in contacts" ng-if="index">' +
+        '      <a href="{{ url(\'civicrm/contact/view\', {cid: contact.cid}) }}">{{ contact.name }}</a>' +
+        '    </li>' +
+        '  </ul>' +
+        '</div>'
+    };
+  });
+
 })(angular, CRM.$, CRM._);

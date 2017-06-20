@@ -49,7 +49,7 @@
           "activity_type_id.grouping": {LIKE: "%task%"},
           status_id: {'!=': 'Completed'},
           options: {limit: 5, sort: 'activity_date_time ASC'},
-          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'assignee_contact_name']
+          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name']
         },
         // Custom data
         'api.CustomValue.gettree': {

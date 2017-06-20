@@ -13,6 +13,7 @@
             <div civicase-activity-dot="item.activity_summary.milestone[0]"></div>
             <div><strong>{{ item.activity_summary.milestone[0].type }}</strong></div>
             <div>{{ CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+            <span civicase-activity-contacts="{activity: item.activity_summary.milestone[0], type: 'target'}"></span>
           </div>
           <div class="btn-group-sm text-center">
             <a class="btn btn-default crm-popup"
@@ -35,6 +36,7 @@
             <div civicase-activity-dot="item.tasks[0]"></div>
             <div><strong>{{ item.tasks[0].type }}</strong></div>
             <div>{{ CRM.utils.formatDate(item.tasks[0].activity_date_time) }}</div>
+            <span civicase-activity-contacts="{activity: item.tasks[0], type: 'target'}"></span>
           </div>
           <div class="btn-group-sm text-center">
             <a class="btn btn-default crm-popup"

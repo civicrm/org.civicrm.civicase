@@ -14,12 +14,14 @@
           </h4>
           <div class="clearfix">
             {{ CRM.utils.formatDate(activity.activity_date_time) }}
-            <div class="pull-right" ng-if="activity.assignee_contact_name">
-              <span ng-repeat="(cid, display_name) in activity.assignee_contact_name">
-                <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
-                {{$last ? '' : ', '}}
-              </span>
-            </div>
+          </div>
+          <div class="act-contacts-target" ng-if="activity.target_contact_name">
+            <strong>{{ ts('With') }}</strong>
+            <span civicase-activity-contacts="{activity: activity, type: 'target'}"></span>
+          </div>
+          <div class="act-contacts-assignee" ng-if="activity.assignee_contact_name">
+            <strong>{{ ts('Assigned to') }}</strong>
+            <span civicase-activity-contacts="{activity: activity, type: 'assignee'}"></span>
           </div>
         </div>
       </div>
