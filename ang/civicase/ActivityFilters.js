@@ -1,8 +1,10 @@
 (function(angular, $, _) {
 
-  angular.module('civicase').directive('civicaseActivityFilters', function($timeout) {
+  angular.module('civicase').directive('civicaseActivityFilters', function($timeout, crmUiHelp) {
 
     function activityFilters($scope, element, attrs) {
+      var ts = $scope.ts = CRM.ts('civicase');
+      var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
 
       function mapSelectOptions(opt, id) {
         return {
@@ -75,8 +77,6 @@
       }
       $scope.availableFilters = $scope.availableFilters.concat(CRM.civicase.customActivityFields);
 
-      $scope.filters = {};
-
       $scope.exposedFilters = CRM.cache.get('activityFeedFilters', {
         activity_type_id: true,
         status_id: true,
@@ -113,6 +113,9 @@
 
     return {
       restrict: 'A',
+      scope: {
+        filters: '=civicaseActivityFilters'
+      },
       templateUrl: '~/civicase/ActivityFilters.html',
       link: activityFilters,
       transclude: true

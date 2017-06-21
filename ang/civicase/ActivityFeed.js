@@ -2,6 +2,7 @@
 
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/activity/feed', {
+      reloadOnSearch: false,
       template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed="{}"></div>'
     });
   });
@@ -29,17 +30,28 @@
       format: 'raw',
       default: 0
     });
-
-    $scope.displayOptions = angular.extend({}, {
-      followup_nested: true,
-      overdue_first: true,
-      include_case: true
-    }, $scope.params.displayOptions);
-
-    var involving = $scope.involving = {
-      myActivities: false,
-      delegated: false
-    };
+    $scope.$bindToRoute({
+      expr: 'displayOptions',
+      param: 'ado',
+      default: angular.extend({}, {
+        followup_nested: true,
+        overdue_first: true,
+        include_case: true
+      }, $scope.params.displayOptions || {})
+    });
+    $scope.$bindToRoute({
+      expr: 'filters',
+      param: 'af',
+      default: {}
+    });
+    $scope.$bindToRoute({
+      'expr': 'involving',
+      'param': 'ai',
+      default: {
+        myActivities: false,
+        delegated: false
+      }
+    });
 
     $scope.star = function(act) {
       act.is_star = act.is_star === '1' ? '0' : '1';
@@ -162,10 +174,10 @@
           }
         }
       });
-      if (involving.myActivities) {
+      if ($scope.involving.myActivities) {
         params.contact_id = 'user_contact_id';
       }
-      if (involving.delegated && !params.assignee_contact_id) {
+      if ($scope.involving.delegated && !params.assignee_contact_id) {
         params.assignee_contact_id = {'!=': 'user_contact_id'};
       }
       if ($scope.params && $scope.params.filters) {
@@ -194,7 +206,7 @@
       restrict: 'A',
       template:
         '<div class="panel panel-default act-feed-panel">' +
-          '<div class="panel-header" civicase-activity-filters></div>' +
+          '<div class="panel-header" civicase-activity-filters="filters"></div>' +
           '<div class="panel-body clearfix" ng-include="\'~/civicase/ActivityList.html\'"></div>' +
         '</div>',
       controller: activityFeedController,
