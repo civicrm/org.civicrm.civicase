@@ -55,7 +55,7 @@
         'api.CustomValue.gettree': {
           entity_id: "$value.id",
           entity_type: 'Case',
-          return: ['custom_group.name', 'custom_group.title', 'custom_group.collapse_display', 'custom_field.name', 'custom_field.label', 'custom_value.display']
+          return: ['custom_group.id', 'custom_group.name', 'custom_group.title', 'custom_group.collapse_display', 'custom_field.name', 'custom_field.label', 'custom_value.display']
         },
         sequential: 1,
         options: {
@@ -129,6 +129,13 @@
       delete(item['api.Activity.get.3']);
       // Custom fields
       item.customData = item['api.CustomValue.gettree'].values || [];
+      _.each(item.customData, function(customGroup, index) {
+        customGroup.collapse_display = customGroup.collapse_display === '1';
+        // Maintain collapse state
+        if ($scope.item && $scope.item.customData) {
+          customGroup.collapse_display = $scope.item.customData[index].collapse_display;
+        }
+      });
       delete(item['api.CustomValue.gettree']);
       return item;
     }
@@ -142,12 +149,13 @@
     };
 
     $scope.pushCaseData = function(data) {
-      if (!$scope.item) $scope.item = {};
-      var item = $scope.item;
+      if (!$scope.item) {
+        $scope.item = {};
+      }
       // Maintain the reference to the variable in the parent scope.
-      _.assign(item, formatCaseDetails(data));
-      $scope.allowedCaseStatuses = getAllowedCaseStatuses(item.definition);
-      $scope.availableActivityTypes = getAvailableActivityTypes(item.activity_count, item.definition);
+      _.assign($scope.item, formatCaseDetails(data));
+      $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
+      $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
     };
 
     $scope.refresh = function(apiCalls) {
