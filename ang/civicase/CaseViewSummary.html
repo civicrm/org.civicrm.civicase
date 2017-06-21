@@ -2,6 +2,7 @@
   <div class="row civicase-summary-top-outer">
     <div class="civicase-case-subject col-md-6">
       <p crm-editable="item" data-field="subject" data-type="textarea" crm-form-success="onChangeSubject($data)"></p>
+      <div class="case-custom-data-first" data-onload="customGroup = item.customData[0]" ng-if="item.customData.length" ng-include="'~/civicase/CaseViewCustomData.html'"></div>
     </div>
     <div class="col-md-3">
       <div class="civicase-next-milestone civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
@@ -64,7 +65,9 @@
       </div>
     </div>
   </div>
-  <div class="row" ng-if="item.customData" ng-include="'~/civicase/CaseViewCustomData.html'"></div>
+  <div class="row" ng-if="item.customData.length > 1">
+    <div class="col-md-6 case-custom-data-below" ng-repeat="(index, customGroup) in item.customData" ng-if="index" ng-include="'~/civicase/CaseViewCustomData.html'"></div>
+  </div>
   <div class="civicase-summary-mid row">
     <div class="col-md-6">
       <div ng-include="'~/civicase/CaseViewTasks.html'"></div>

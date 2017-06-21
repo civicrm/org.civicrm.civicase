@@ -1,7 +1,9 @@
-<div class="col-md-6" ng-repeat="customGroup in item.customData">
-  <h3>{{ customGroup.title }}</h3>
-  <div ng-repeat="field in customGroup.fields">
-    <strong>{{ field.label }}:</strong>
-    {{ field.value.display }}
+<div class="crm-collapsible" ng-class="::{ collapsed: customGroup.collapse_display === '1' }">
+  <h3 class="collapsible-title">{{ ::customGroup.title }}</h3>
+  <div>
+    <div ng-repeat="field in customGroup.fields">
+      <strong>{{ field.label }}:</strong>
+      {{ field.value.display }}
+    </div>
   </div>
 </div>
