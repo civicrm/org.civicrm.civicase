@@ -64,7 +64,7 @@ function civicrm_api3_case_getdetails($params) {
       $catetoryLimits = CRM_Utils_Array::value('categories', $options, array_fill_keys(array('alert', 'milestone', 'task', 'communication'), 0));
       $categories = array_fill_keys(array_keys($catetoryLimits), array());
       foreach ($result['values'] as &$case) {
-        $case['activity_summary'] = $categories + array('overdue' => array());
+        $case['activity_summary'] = $categories;
       }
       $allTypes = array();
       foreach (array_keys($categories) as $grouping) {
@@ -102,9 +102,6 @@ function civicrm_api3_case_getdetails($params) {
               if (in_array($act['activity_type_id'], $grouping) && (!$catetoryLimits[$category] || count($case['activity_summary'][$category]) < $catetoryLimits[$category])) {
                 $case['activity_summary'][$category][] = $act;
               }
-            }
-            if (strtotime($act['activity_date_time']) < time()) {
-              $case['activity_summary']['overdue'][] = $act;
             }
           }
         }
