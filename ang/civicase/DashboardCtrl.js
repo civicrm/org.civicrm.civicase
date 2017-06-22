@@ -14,15 +14,15 @@
     $scope.$bindToRoute({
       param: 'dtab',
       expr: 'activeTab',
-      format: 'json',
+      format: 'int',
       default: 0
     });
 
     $scope.$bindToRoute({
       param: 'dme',
       expr: 'myCasesOnly',
-      format: 'json',
-      default: 0
+      format: 'bool',
+      default: false
     });
   });
 
