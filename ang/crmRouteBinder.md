@@ -37,7 +37,8 @@ Things to try out:
      * `param` (string): The name of a query-parameter to sync. (If the `param` is included in the URL, it will initialize the expr.)
      * `format` (string): The type of data to put in `param`. May be one of:
        * `json` (default): The `param` is JSON, and the `expr` is a decoded object.
-       * `raw`: The `param` is string/int, and the `expr` is a string/int.
+       * `raw`: The `param` is string, and the `expr` is a string.
+       * `int`: the `param` is an integer-like string, and the expr is an integer.
        * `bool`: The `param` is '0'/'1', and the `expr` is false/true.
      * `default` (object): The default data. (If the `param` is not included in the URL, it will initialize the expr.)
 
