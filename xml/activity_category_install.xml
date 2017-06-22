@@ -18,6 +18,7 @@
       <is_default>0</is_default>
       <weight>1</weight>
       <is_active>1</is_active>
+      <icon>fa-inbox</icon>
       <option_group_name>activity_category</option_group_name>
     </OptionValue>
     <OptionValue>
@@ -27,6 +28,7 @@
       <is_default>0</is_default>
       <weight>2</weight>
       <is_active>1</is_active>
+      <icon>fa-file-o</icon>
       <option_group_name>activity_category</option_group_name>
     </OptionValue>
     <OptionValue>
@@ -36,6 +38,7 @@
       <is_default>0</is_default>
       <weight>3</weight>
       <is_active>1</is_active>
+      <icon>fa-comment-o</icon>
       <option_group_name>activity_category</option_group_name>
     </OptionValue>
     <OptionValue>
@@ -45,6 +48,7 @@
       <is_default>0</is_default>
       <weight>4</weight>
       <is_active>1</is_active>
+      <icon>fa-flag-o</icon>
       <option_group_name>activity_category</option_group_name>
     </OptionValue>
     <OptionValue>
@@ -54,6 +58,7 @@
       <is_default>0</is_default>
       <weight>5</weight>
       <is_active>1</is_active>
+      <icon>fa-exclamation-triangle</icon>
       <option_group_name>activity_category</option_group_name>
     </OptionValue>
   </OptionValues>
