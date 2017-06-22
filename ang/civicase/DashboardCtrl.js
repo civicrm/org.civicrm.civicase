@@ -17,6 +17,13 @@
       format: 'json',
       default: 0
     });
+
+    $scope.$bindToRoute({
+      param: 'dme',
+      expr: 'myCasesOnly',
+      format: 'json',
+      default: 0
+    });
   });
 
 })(angular, CRM.$, CRM._);
