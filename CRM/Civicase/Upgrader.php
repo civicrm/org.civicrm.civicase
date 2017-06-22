@@ -60,7 +60,6 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'option_group_id' => 'activity_status',
       'label' => ts('Unread'),
       'name' => 'Unread',
-      'grouping' => 'communication',
       'is_reserved' => 0,
       'color' => '#d9534f',
     ));
@@ -68,7 +67,6 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'option_group_id' => 'activity_status',
       'label' => ts('Draft'),
       'name' => 'Draft',
-      'grouping' => 'communication',
       'is_reserved' => 0,
       'color' => '#c2cfd8',
     ));
