@@ -39,13 +39,16 @@ class Utils {
    *   [int]
    */
   public static function getCompletedActivityStatuses() {
-    $statuses = civicrm_api3('OptionValue', 'get', array(
-      'option_group_id' => "activity_status",
-      'name' => array('IN' => array('Completed', 'Canceled')),
-      'return' => array('value'),
-      'sequential' => 1,
-    ));
-    return \CRM_Utils_Array::collect('value', $statuses['values']);
+    if (!isset(\Civi::$statics[__CLASS__ . __FUNCTION__])) {
+      $statuses = civicrm_api3('OptionValue', 'get', array(
+        'option_group_id' => "activity_status",
+        'name' => array('IN' => array('Completed', 'Canceled')),
+        'return' => array('value'),
+        'sequential' => 1,
+      ));
+      \Civi::$statics[__CLASS__ . __FUNCTION__] = \CRM_Utils_Array::collect('value', $statuses['values']);
+    }
+    return \Civi::$statics[__CLASS__ . __FUNCTION__];
   }
 
   /**
