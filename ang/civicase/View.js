@@ -174,8 +174,7 @@
     };
 
     $scope.markCompleted = function(act) {
-      crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {});
-      $scope.item.tasks.splice(_.findIndex($scope.item.tasks, {id: act.id}), 1);
+      $scope.refresh([['Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}]]);
     };
 
     $scope.getActivityType = function(name) {
