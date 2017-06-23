@@ -34,9 +34,11 @@
   </div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group btn-group-sm">
-      <select class="form-control" ng-model="filters['activity_type_id.grouping']">
+      <select class="form-control" ng-model="filters['activity_type_id.grouping']" crm-ui-select>
         <option value="">{{ ts('Category: All') }}</option>
-        <option ng-repeat="(value, item) in activityCategories" value="{{ value }}">{{ item.label }}</option>
+        <option ng-repeat="(value, item) in ::activityCategories" value="{{ value }}" data-icon="{{ item.icon }}">
+          {{ item.label }}
+        </option>
       </select>
     </div>
     <div class="btn-group btn-group-sm">
