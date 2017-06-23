@@ -12,13 +12,14 @@
   });
 
   // CaseList controller
-  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, defaultFilters) {
+  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, defaultFilters, isActivityOverdue) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase'),
       caseTypes = CRM.civicase.caseTypes,
       caseStatuses = CRM.civicase.caseStatuses,
       tmpSelection = [];
     $scope.activityTypes = CRM.civicase.activityTypes;
+    $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.cases = [];
     $scope.pageSize = 25;
     $scope.pageNum = 1;
@@ -28,6 +29,7 @@
     $scope.viewingCase = null;
     $scope.viewingCaseDetails = null;
     $scope.selectedCases = [];
+    $scope.isActivityOverdue = isActivityOverdue;
 
     $scope.$bindToRoute({expr:'sortField', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
     $scope.$bindToRoute({expr:'sortDir', param:'sd', format: 'raw', default: 'ASC'});
@@ -152,9 +154,8 @@
     function _loadCaseApiParams() {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'contacts', 'activity_summary'],
+        return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'contacts', 'activity_summary', 'category_count'],
         options: {
-          categories: {milestone: 1, task: 1, alert: 10},
           sort: $scope.sortField + ' ' + $scope.sortDir,
           limit: $scope.pageSize,
           offset: $scope.pageSize * ($scope.pageNum - 1)

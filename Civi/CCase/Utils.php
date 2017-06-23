@@ -33,10 +33,10 @@ class Utils {
   }
 
   /**
-   * Gets a list of manager roles for each case type.
+   * Gets status ids for completed activities.
    *
    * @return array
-   *   [caseTypeId => relationshipTypeId]
+   *   [int]
    */
   public static function getCompletedActivityStatuses() {
     $statuses = civicrm_api3('OptionValue', 'get', array(

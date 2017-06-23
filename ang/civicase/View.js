@@ -17,7 +17,7 @@
     function caseGetParams() {
       return {
         id: $scope.caseId,
-        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'related_case_ids'],
+        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'related_case_ids'],
         // Related cases by contact
         'api.Case.get.1': {
           contact_id: {IN: "$value.contact_id"},
@@ -57,10 +57,7 @@
           entity_type: 'Case',
           return: ['custom_group.id', 'custom_group.name', 'custom_group.title', 'custom_group.collapse_display', 'custom_field.name', 'custom_field.label', 'custom_value.display']
         },
-        sequential: 1,
-        options: {
-          categories: {alert: 10, milestone: 1, task: 1}
-        }
+        sequential: 1
       };
     }
 

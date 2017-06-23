@@ -34,7 +34,7 @@ function civicrm_api3_case_getdetails($params) {
   }
   $toReturn = $params['return'];
   $options = CRM_Utils_Array::value('options', $params, array());
-  $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count', 'unread_email_count', 'related_case_ids');
+  $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count', 'category_count', 'unread_email_count', 'related_case_ids');
   $params['return'] = array_diff($params['return'], $extraReturnProperties);
 
   // Support additional sort params
@@ -59,9 +59,15 @@ function civicrm_api3_case_getdetails($params) {
       unset($case['client_id']);
     }
 
+    $activityCategories = civicrm_api3('OptionValue', 'get', array(
+      'return' => array('name'),
+      'option_group_id' => "activity_category",
+    ));
+    $activityCategories = CRM_Utils_Array::collect('name', $activityCategories['values']);
+
     // Get activity summary
     if (in_array('activity_summary', $toReturn)) {
-      $catetoryLimits = CRM_Utils_Array::value('categories', $options, array_fill_keys(array('alert', 'milestone', 'task', 'communication'), 0));
+      $catetoryLimits = CRM_Utils_Array::value('categories', $options, array_fill_keys($activityCategories, 1));
       $categories = array_fill_keys(array_keys($catetoryLimits), array());
       foreach ($result['values'] as &$case) {
         $case['activity_summary'] = $categories;
@@ -118,6 +124,22 @@ function civicrm_api3_case_getdetails($params) {
         $dao = CRM_Core_DAO::executeQuery($query);
         while ($dao->fetch()) {
           $case['activity_count'][$dao->activity_type_id] = $dao->count;
+        }
+      }
+    }
+    // Get count of incomplete activities by category
+    if (in_array('category_count', $toReturn)) {
+      $completed = implode(',', \Civi\CCase\Utils::getCompletedActivityStatuses());
+      foreach ($activityCategories as $category) {
+        $query = "SELECT COUNT(a.id) as count, ca.case_id
+          FROM civicrm_activity a, civicrm_case_activity ca
+          WHERE ca.activity_id = a.id AND a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id IN (" . implode(',', $ids) . ")
+          AND a.activity_type_id IN (SELECT value FROM civicrm_option_value WHERE grouping LIKE '%$category%' AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
+          AND a.status_id NOT IN ($completed)
+          GROUP BY ca.case_id";
+        $dao = CRM_Core_DAO::executeQuery($query);
+        while ($dao->fetch()) {
+          $result['values'][$dao->case_id]['category_count'][$category] = (int) $dao->count;
         }
       }
     }

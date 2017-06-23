@@ -64,13 +64,11 @@
 #bootstrap-theme .case-list-checkbox + div {
   margin-left: 30px;
 }
-#bootstrap-theme .case-list-table .badge.unread-emails {
-  background-color: #d9534f;
-  float: right;
-  margin-top: 5px;
+#bootstrap-theme .case-activity-summary-icons .badge {
+  margin-right: 10px;
 }
-#bootstrap-theme .case-list-table .case-alerts {
-  color: #d9534f;
+#bootstrap-theme .case-activity-summary-icons .badge.item-overdue {
+  background-color: #d9534f;
 }
 #bootstrap-theme .civicase-table-expander {
   position: absolute;
