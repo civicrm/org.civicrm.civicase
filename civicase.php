@@ -46,6 +46,11 @@ function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
  */
 function civicase_civicrm_config(&$config) {
   _civicase_civix_civicrm_config($config);
+
+  if (isset(Civi::$statics[__FUNCTION__])) { return; }
+  Civi::$statics[__FUNCTION__] = 1;
+
+  Civi::dispatcher()->addListener('civi.api.prepare', array('CRM_Civicase_ActivityFilter', 'onPrepare'), 10);
 }
 
 /**
