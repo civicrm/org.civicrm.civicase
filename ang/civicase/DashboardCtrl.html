@@ -25,7 +25,8 @@
     </uib-tab>
     <uib-tab index="1" heading="{{ts('Activities')}}">
       <div ng-if="myCasesOnly">FIXME: how to filter on case-manager=='user_contact_id'?</div>
-      <div civicase-activity-feed="{filters: {case_id: {'IS NOT NULL': 1}}}"></div>
+      <!-- Micro-optimization: Only load data when tab is active -->
+      <div ng-if="activeTab == 1" civicase-activity-feed="{filters: activityFilters}"></div>
     </uib-tab>
     <!--<uib-tab index="2" heading="{{ts('Calendar')}}">-->
       <!--{{ts('TODO: Calendar')}}-->
