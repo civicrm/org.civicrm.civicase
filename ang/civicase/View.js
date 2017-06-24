@@ -197,7 +197,7 @@
           cid: $scope.item.client[0].contact_id,
           caseid: $scope.item.id,
           atype: actType.id,
-          civicase_reload: caseGetParams()
+          civicase_reload: $scope.caseGetParams()
         };
       // CiviCRM requires nonstandard urls for a couple special activity types
       if (actType.name === 'Email') {
