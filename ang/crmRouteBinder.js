@@ -34,6 +34,17 @@
       encode: function(v) { return v; },
       default: ''
     },
+    int: {
+      watcher: '$watch',
+      init: function($route, options) {
+        if (options.param in $route.current.params) {
+          return parseInt($route.current.params[options.param]);
+        }
+        return options.default;
+      },
+      encode: function(v) { return v; },
+      default: 0
+    },
     bool: {
       watcher: '$watch',
       init: function($route, options) {

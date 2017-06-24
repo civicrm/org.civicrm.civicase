@@ -1,0 +1,35 @@
+<div id="bootstrap-theme" class="civicase-main">
+
+  <h1 crm-page-title>{{ ts('CiviCase Dashboard') }}</h1>
+
+  <span class="hideous-fixme" style="background: hotpink; text-align: center;">
+    <label for="dashboard-myCasesOnly">
+      <input type="checkbox" id="dashboard-myCasesOnly" ng-model="myCasesOnly">
+      {{ts('My cases only')}}
+    </label>
+  </span>
+
+  <uib-tabset active="activeTab" justified="true" type="pills" uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary">
+    <uib-tab index="0" heading="{{ts('Dasboard')}}">
+      <!--{{ts('TODO: Dashboard')}}-->
+
+      <div class="panel panel-default">
+        <div class="panel-header">Foo</div>
+        <div class="panel-body">One two three</div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-header">Bar</div>
+        <div class="panel-body">Four five six</div>
+      </div>
+
+    </uib-tab>
+    <uib-tab index="1" heading="{{ts('Activities')}}">
+      <div ng-if="myCasesOnly">FIXME: how to filter on case-manager=='user_contact_id'?</div>
+      <div civicase-activity-feed="{filters: {case_id: {'IS NOT NULL': 1}}}"></div>
+    </uib-tab>
+    <!--<uib-tab index="2" heading="{{ts('Calendar')}}">-->
+      <!--{{ts('TODO: Calendar')}}-->
+    <!--</uib-tab>-->
+  </uib-tabset>
+
+</div>
