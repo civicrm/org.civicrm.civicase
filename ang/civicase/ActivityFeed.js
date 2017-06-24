@@ -17,7 +17,6 @@
       pageNum = 0;
     $scope.CRM = CRM;
 
-    // We have data available in JS. We also want to reference in HTML.
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = $scope.activityStatuses = CRM.civicase.activityStatuses;
     $scope.activityCategories = CRM.civicase.activityCategories;
@@ -53,6 +52,12 @@
       }
     });
 
+    $scope.refreshCase = $scope.refreshCase || _.noop;
+    $scope.refreshAll = function() {
+      getActivities();
+      $scope.refreshCase();
+    };
+
     $scope.star = function(act) {
       act.is_star = act.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues
@@ -61,7 +66,7 @@
 
     $scope.markCompleted = function(act) {
       $('.act-feed-panel .panel-body').block();
-      crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {}).then(getActivities);
+      crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {}).then($scope.refreshAll);
     };
 
     $scope.isSameDate = function(d1, d2) {
@@ -197,9 +202,6 @@
       getActivities();
     });
 
-    // Respond to activities edited in popups.
-    $('#crm-container').on('crmPopupFormSuccess', '.act-feed-panel', getActivities);
-
   }
 
   angular.module('civicase').directive('civicaseActivityFeed', function() {
@@ -212,7 +214,8 @@
         '</div>',
       controller: activityFeedController,
       scope: {
-        params: '=civicaseActivityFeed'
+        params: '=civicaseActivityFeed',
+        refreshCase: '=?refreshCallback'
       }
     };
   });

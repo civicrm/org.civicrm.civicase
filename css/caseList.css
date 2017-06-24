@@ -67,7 +67,7 @@
 #bootstrap-theme .case-activity-summary-icons .badge {
   margin-right: 10px;
 }
-#bootstrap-theme .case-activity-summary-icons .badge.item-overdue {
+#bootstrap-theme a.badge.item-overdue {
   background-color: #d9534f;
 }
 #bootstrap-theme .civicase-table-expander {

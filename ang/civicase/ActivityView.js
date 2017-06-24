@@ -10,6 +10,8 @@
       delete(scope.activity.id);
     };
     scope.$watch('activity.id', loadActivity);
+
+    element.on('crmFormSuccess', scope.refresh);
   }
 
   angular.module('civicase').directive('civicaseActivityView', function() {
@@ -18,7 +20,8 @@
       templateUrl: '~/civicase/ActivityView.html',
       link: activityView,
       scope: {
-        activity: '=civicaseActivityView'
+        activity: '=civicaseActivityView',
+        refresh: '=refreshCallback'
       }
     };
   });

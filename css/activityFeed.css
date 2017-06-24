@@ -57,6 +57,11 @@
   border-left: 1px solid #e7e7e7;
 }
 
+/* File on case button */
+#bootstrap-theme .act-feed-view-activity a.cancel.button {
+  display: none;
+}
+
 #bootstrap-theme div.act-actions-menu {
   position: absolute;
   right: -.5em;
