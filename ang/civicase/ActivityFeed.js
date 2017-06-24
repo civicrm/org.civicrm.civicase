@@ -190,6 +190,7 @@
     }
 
     $scope.$watchCollection('filters', getActivities);
+    $scope.$watchCollection('params.filters', getActivities);
     $scope.$watchCollection('involving', getActivities);
 
     $scope.$watchCollection('displayOptions', function() {
