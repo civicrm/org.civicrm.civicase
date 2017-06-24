@@ -54,8 +54,7 @@
 
     $scope.refreshCase = $scope.refreshCase || _.noop;
     $scope.refreshAll = function() {
-      getActivities();
-      $scope.refreshCase();
+      getActivities(false, $scope.refreshCase);
     };
 
     $scope.star = function(act) {
@@ -115,12 +114,15 @@
       }
     };
 
-    function getActivities(nextPage) {
+    function getActivities(nextPage, callback) {
       $('.act-feed-panel .panel-body').block();
       if (nextPage !== true) {
         pageNum = 0;
       }
       crmThrottle(_loadActivities).then(function(result) {
+        if (_.isFunction(callback)) {
+          callback();
+        }
         var newActivities = _.each(result.acts.values, formatActivity);
         if (pageNum) {
           $scope.activities = $scope.activities.concat(newActivities);
