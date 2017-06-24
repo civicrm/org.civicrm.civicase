@@ -1,5 +1,14 @@
 <div class="civicase-view-communication-recent">
-  <h3>{{ ts('Recent Communications') }}</h3>
+  <h3>
+    {{ ts('Recent Communications') }}
+    <a class="badge"
+       ng-href="#{{ activityFeedUrl(item.id, 'communication', 'completed') }}"
+       ng-if="item['api.Activity.getcount']"
+       title="{{ ts('View All') }}"
+    >
+      {{ item['api.Activity.getcount'] }}
+    </a>
+  </h3>
   <div class="activity-timeline">
     <ul class="list-group act-feed-list-group" ng-if="item.recentCommunication.length">
       <li class="list-group-item act-category-communication {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.recentCommunication">

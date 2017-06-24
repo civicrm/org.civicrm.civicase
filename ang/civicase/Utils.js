@@ -37,17 +37,17 @@
     };
   });
 
-  angular.module('civicase').factory('isActivityOverdue', function(crmLegacy) {
+  angular.module('civicase').factory('isActivityOverdue', function() {
     return function(act) {
-      var statuses = crmLegacy.civicase.activityStatuses,
+      var statuses = CRM.civicase.activityStatuses,
         now = new Date();
       return !!act &&
         (['Completed', 'Canceled'].indexOf(statuses[act.status_id].name) < 0) &&
-        (crmLegacy.utils.makeDate(act.activity_date_time) < now);
+        (CRM.utils.makeDate(act.activity_date_time) < now);
     };
   });
 
-  angular.module('civicase').factory('formatActivity', function(crmLegacy) {
+  angular.module('civicase').factory('formatActivity', function() {
     var activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = CRM.civicase.activityStatuses;
     return function (act) {
@@ -60,6 +60,32 @@
       if (act.category.indexOf('alert') > -1) {
         act.color = ''; // controlled by css
       }
+    };
+  });
+
+  angular.module('civicase').factory('getActivityFeedUrl', function($route, $location) {
+
+    function getCompletedActivityStatuses() {
+      return CRM.civicase.completedActivityStatuses;
+    }
+
+    function getIncompleteActivityStatuses() {
+      return _.difference(_.keys(CRM.civicase.activityStatuses), getCompletedActivityStatuses());
+    }
+
+    return function(caseId, category, status) {
+      var p = angular.extend({}, $route.current.params, {
+        caseId: caseId,
+        tab: 'activities',
+        aid: 0,
+        focus: 1,
+        ai: '{"myActivities":false,"delegated":false}',
+        af: JSON.stringify({
+          "activity_type_id.grouping": category,
+          status_id: status === 'completed' ? getCompletedActivityStatuses() : getIncompleteActivityStatuses()
+        })
+      });
+      return $location.path() + '?' + $.param(p);
     };
   });
 

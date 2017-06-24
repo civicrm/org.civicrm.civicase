@@ -1,5 +1,15 @@
 <div class="civicase-view-tasks">
-  <h3>{{ ts('Tasks') }}</h3>
+  <h3>
+    {{ ts('Tasks') }}
+    <a ng-href="#{{ activityFeedUrl(item.id, 'task', 'incomplete') }}"
+       class="badge"
+       ng-class="{'item-overdue': isActivityOverdue(item.activity_summary.task[0])}"
+       ng-if="item.category_count.task"
+       title="{{ ts('View All') }}"
+    >
+      {{ item.category_count.task }}
+    </a>
+  </h3>
   <ul class="list-group act-feed-list-group" ng-if="item.tasks.length">
     <li class="list-group-item act-category-task {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.tasks">
       <div class="act-feed-item">

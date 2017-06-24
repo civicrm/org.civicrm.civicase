@@ -44,6 +44,7 @@ $result = civicrm_api3('RelationshipType', 'get', array(
 ));
 $options['relationshipTypes'] = $result['values'];
 $options['fileCategories'] = CRM_Civicase_FileCategory::getCategories();
+$options['completedActivityStatuses'] = \Civi\CCase\Utils::getCompletedActivityStatuses();
 $result = civicrm_api3('CustomGroup', 'get', array(
   'sequential' => 1,
   'return' => array('extends_entity_column_value', 'title', 'extends'),

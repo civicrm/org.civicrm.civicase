@@ -12,7 +12,7 @@
   });
 
   // CaseList controller
-  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, defaultFilters, isActivityOverdue) {
+  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, defaultFilters, isActivityOverdue, getActivityFeedUrl) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase'),
       caseTypes = CRM.civicase.caseTypes,
@@ -30,6 +30,7 @@
     $scope.viewingCaseDetails = null;
     $scope.selectedCases = [];
     $scope.isActivityOverdue = isActivityOverdue;
+    $scope.activityFeedUrl = getActivityFeedUrl;
 
     $scope.$bindToRoute({expr:'sortField', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
     $scope.$bindToRoute({expr:'sortDir', param:'sd', format: 'raw', default: 'ASC'});
@@ -39,7 +40,7 @@
     $scope.$bindToRoute({expr:'viewingCaseTab', param:'tab', format: 'raw', default:'summary'});
 
     $scope.viewCase = function(id, $event) {
-      if (!$event || !$($event.target).is('input, button')) {
+      if (!$event || !$($event.target).is('a', 'a *', 'input, button')) {
         unfocusCase();
         if ($scope.viewingCase === id) {
           $scope.viewingCase = null;

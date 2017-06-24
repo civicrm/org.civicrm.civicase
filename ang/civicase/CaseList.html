@@ -98,15 +98,16 @@
                 {{ item.id }}
               </div>
               <div class="case-activity-summary-icons">
-                <span class="badge"
-                      ng-repeat="category in activityCategories"
-                      ng-class="{'item-overdue': isActivityOverdue(item.activity_summary[category.name][0])}"
-                      ng-if="item.category_count[category.name]"
-                      title="{{ ts('%1 upcoming %2', {1: item.category_count[category.name], 2: category.label}) }}"
+                <a class="badge"
+                   ng-repeat="category in activityCategories"
+                   ng-href="#{{ activityFeedUrl(item.id, category.name, 'incomplete') }}"
+                   ng-class="{'item-overdue': isActivityOverdue(item.activity_summary[category.name][0])}"
+                   ng-if="item.category_count[category.name]"
+                   title="{{ ts('%1 upcoming %2', {1: item.category_count[category.name], 2: category.label}) }}"
                 >
                   <i class="fa {{ category.icon }}"></i>
                   {{ item.category_count[category.name] }}
-                </span>
+                </a>
               </div>
             </div>
           </td>

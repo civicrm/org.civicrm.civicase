@@ -77,10 +77,15 @@
       }
       $scope.availableFilters = $scope.availableFilters.concat(CRM.civicase.customActivityFields);
 
-      $scope.exposedFilters = CRM.cache.get('activityFeedFilters', {
+      // Default exposed filters
+      $scope.exposedFilters = {
         activity_type_id: true,
         status_id: true,
         text: true
+      };
+      // Ensure set filters are also exposed
+      _.each($scope.filters, function(filter, key) {
+        $scope.exposedFilters[key] = true;
       });
 
       $scope.exposeFilter = function(field, $event) {
@@ -98,17 +103,10 @@
         } else {
           // Keep menu open when deselecting
           $event.stopPropagation();
+          delete $scope.filters[field.name];
         }
       };
 
-      $scope.$watchCollection('exposedFilters', function() {
-        CRM.cache.set('activityFeedFilters', $scope.exposedFilters);
-        _.each($scope.filters, function(val, key) {
-          if (val && !$scope.exposedFilters[key]) {
-            delete $scope.filters[key];
-          }
-        });
-      });
     }
 
     return {

@@ -42,7 +42,7 @@ class Utils {
     if (!isset(\Civi::$statics[__CLASS__ . __FUNCTION__])) {
       $statuses = civicrm_api3('OptionValue', 'get', array(
         'option_group_id' => "activity_status",
-        'name' => array('IN' => array('Completed', 'Canceled')),
+        'name' => array('IN' => array('Completed', 'Cancelled')),
         'return' => array('value'),
         'sequential' => 1,
       ));
