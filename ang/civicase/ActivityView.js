@@ -11,7 +11,23 @@
     };
     scope.$watch('activity.id', loadActivity);
 
-    element.on('crmFormSuccess', scope.refresh);
+    element
+      .on('crmFormSuccess', scope.refresh)
+      .on('crmLoad', function() {
+        $('a.delete.button', this).click(function(e) {
+          CRM.confirm({
+              title: ts('Delete Activity'),
+              message: ts('Permanently delete this %1 activity?', {1: scope.activity.type})
+            })
+            .on('crmConfirm:yes', function() {
+              $(element).children('div.act-view-container').block();
+              CRM.api3('Activity', 'delete', {id: scope.activity.id})
+                .done(scope.close)
+                .done(scope.refresh);
+            });
+          return false;
+        });
+      });
   }
 
   angular.module('civicase').directive('civicaseActivityView', function() {
