@@ -1,4 +1,12 @@
-(function(angular, $, _) {
+(function(angular, $, _, CRM) {
+
+  function getCompletedActivityStatuses() {
+    return CRM.civicase.completedActivityStatuses;
+  }
+
+  function getIncompleteActivityStatuses() {
+    return _.difference(_.keys(CRM.civicase.activityStatuses), getCompletedActivityStatuses());
+  }
 
   angular.module('civicase').directive('civicaseSortheader', function() {
     return {
@@ -39,10 +47,9 @@
 
   angular.module('civicase').factory('isActivityOverdue', function() {
     return function(act) {
-      var statuses = CRM.civicase.activityStatuses,
-        now = new Date();
+      var now = new Date();
       return !!act &&
-        (['Completed', 'Canceled'].indexOf(statuses[act.status_id].name) < 0) &&
+        (getCompletedActivityStatuses().indexOf(act.status_id) < 0) &&
         (CRM.utils.makeDate(act.activity_date_time) < now);
     };
   });
@@ -64,15 +71,6 @@
   });
 
   angular.module('civicase').factory('getActivityFeedUrl', function($route, $location) {
-
-    function getCompletedActivityStatuses() {
-      return CRM.civicase.completedActivityStatuses;
-    }
-
-    function getIncompleteActivityStatuses() {
-      return _.difference(_.keys(CRM.civicase.activityStatuses), getCompletedActivityStatuses());
-    }
-
     return function(caseId, category, status) {
       var p = angular.extend({}, $route.current.params, {
         caseId: caseId,
@@ -390,4 +388,4 @@
     };
   });
 
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$, CRM._, CRM);

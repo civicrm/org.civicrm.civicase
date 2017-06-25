@@ -212,6 +212,24 @@
       return CRM.url(path, args);
     };
 
+    $scope.editActivityUrl = function(id) {
+      return CRM.url('civicrm/case/activity', {
+        action: 'update',
+        reset: 1,
+        cid: $scope.item.client[0].contact_id,
+        caseid: $scope.item.id,
+        id: id,
+        civicase_reload: $scope.caseGetParams()
+      });
+    };
+
+    $scope.editActivityPopup = function(e) {
+      console.log(e.target);
+      if (!$(e.target).is('a, a *, input, button') && $(e.currentTarget).attr('href')) {
+        CRM.popup.call(e.currentTarget, e);
+      }
+    };
+
     $scope.addTimeline = function(name) {
       $scope.refresh([['Case', 'addtimeline', {case_id: $scope.item.id, 'timeline': name}]]);
     };

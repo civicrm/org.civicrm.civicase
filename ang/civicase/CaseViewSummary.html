@@ -25,7 +25,7 @@
           </div>
           <div class="btn-group-sm text-center">
             <a class="btn btn-default crm-popup"
-              href="{{ CRM.url('civicrm/case/activity', {action: 'update', reset: 1, cid: item.client[0].contact_id, caseid: item.id, id: item.activity_summary.milestone[0].id, civicase_reload: caseGetParams()}) }}"
+              ng-href="{{ editActivityUrl(item.activity_summary.milestone[0].id) }}"
               crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
             >
               <i class="fa fa-pencil"></i> {{ ts('Edit') }}
@@ -55,7 +55,7 @@
           </div>
           <div class="btn-group-sm text-center">
             <a class="btn btn-default crm-popup"
-               href="{{ CRM.url('civicrm/case/activity', {action: 'update', reset: 1, cid: item.client[0].contact_id, caseid: item.id, id: item.tasks[0].id, civicase_reload: caseGetParams()}) }}"
+               ng-href="{{ editActivityUrl(item.tasks[0].id) }}"
                crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
             >
               <i class="fa fa-pencil"></i> {{ ts('Edit') }}

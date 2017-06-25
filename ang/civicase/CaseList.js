@@ -40,7 +40,7 @@
     $scope.$bindToRoute({expr:'viewingCaseTab', param:'tab', format: 'raw', default:'summary'});
 
     $scope.viewCase = function(id, $event) {
-      if (!$event || !$($event.target).is('a', 'a *', 'input, button')) {
+      if (!$event || !$($event.target).is('a, a *, input, button')) {
         unfocusCase();
         if ($scope.viewingCase === id) {
           $scope.viewingCase = null;

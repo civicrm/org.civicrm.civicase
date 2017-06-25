@@ -11,7 +11,13 @@
   </h3>
   <div class="activity-timeline">
     <ul class="list-group act-feed-list-group" ng-if="item.recentCommunication.length">
-      <li class="list-group-item act-category-communication {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in item.recentCommunication">
+      <li
+        class="list-group-item act-category-communication"
+        ng-repeat="activity in item.recentCommunication"
+        href="{{ editActivityUrl(activity.id) }}"
+        ng-click="editActivityPopup($event)"
+        crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+      >
         <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, item.recentCommunication[$index-1].activity_date_time)">
           {{ CRM.utils.formatDate(activity.activity_date_time) }}
         </h4>
