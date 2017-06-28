@@ -241,6 +241,24 @@ function civicase_civicrm_alterAPIPermissions($entity, $action, &$params, &$perm
 }
 
 /**
+ * Implements hook_civicrm_pageRun().
+ */
+function civicase_civicrm_pageRun(&$page) {
+  if ($page instanceof CRM_Case_Page_Tab) {
+    // OLD: http://localhost/civicrm/contact/view/case?reset=1&action=view&cid=129&id=51
+    // NEW: http://localhost/civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=51&tab=summary&sx=0
+
+    $caseId = CRM_Utils_Request::retrieve('id', 'Positive');
+    if ($caseId) {
+      $url = CRM_Utils_System::url('civicrm/case/a/', NULL, TRUE,
+        "/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId={$caseId}&tab=summary&sx=0",
+        FALSE);
+      CRM_Utils_System::redirect($url);
+    }
+  }
+}
+
+/**
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
