@@ -97,6 +97,22 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
         ));
       }
     }
+
+    $this->upgrade_0001();
+  }
+
+  public function upgrade_0001() {
+    $this->addNav(array(
+      'label' => ts('Manage Cases', array('domain' => 'org.civicrm.civicase')),
+      'name' => 'manage_cases',
+      'url' => 'civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=&tab=summary&sx=0',
+      'permission' => 'access my cases and activities,access all cases and activities',
+      'operator' => 'OR',
+      'separator' => 0,
+      'parent_name' => 'Cases',
+    ));
+    CRM_Core_BAO_Navigation::resetNavigation();
+    return TRUE;
   }
 
   /**
@@ -160,6 +176,8 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       }
       catch (Exception $e) {}
     }
+
+    $this->removeNav('manage_cases');
   }
 
   /**
@@ -189,6 +207,28 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       $params['weight'] = CRM_Core_DAO::singleValueQuery($sql);
     }
     civicrm_api3('OptionValue', 'create', $params);
+  }
+
+  /**
+   * @param array $menuItem
+   */
+  public function addNav($menuItem) {
+    $this->removeNav($menuItem['name']);
+
+    $menuItem['is_active'] = 1;
+    $menuItem['parent_id'] = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', $menuItem['parent_name'], 'id', 'name');
+    unset($menuItem['parent_name']);
+    CRM_Core_BAO_Navigation::add($menuItem);
+  }
+
+  /**
+   * @param string $name
+   *   The name of the item in `civicrm_navigation`.
+   */
+  protected function removeNav($name) {
+    CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('%s')", array(
+      1 => array($name, 'String'),
+    ));
   }
 
   /**
