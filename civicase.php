@@ -256,7 +256,7 @@ function civicase_civicrm_navigationMenu(&$menu) {
     // in the browser history, and it will be hard to press "Back" through
     // the dummy entry.
     'civicrm/case?reset=1' => 'civicrm/case/a/#/case?dtab=0&dme=0',
-    'civicrm/case/search?reset=1' => 'civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=&tab=summary',
+    'civicrm/case/search?reset=1' => 'civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=&tab=summary&sx=1',
   );
 
   _civicase_menu_walk($menu, function(&$item) use ($rewriteMap) {
@@ -264,6 +264,16 @@ function civicase_civicrm_navigationMenu(&$menu) {
       $item['url'] = $rewriteMap[$item['url']];
     }
   });
+
+  _civicase_civix_insert_navigation_menu($menu, 'Cases', array(
+    'label' => ts('Manage Cases', array('domain' => 'org.civicrm.civicase')),
+    'name' => 'manage_cases',
+    'url' => 'civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=&tab=summary&sx=0',
+    'permission' => 'access my cases and activities,access all cases and activities',
+    'operator' => 'OR',
+    'separator' => 0,
+  ));
+  _civicase_civix_navigationMenu($menu);
 }
 
 /**
