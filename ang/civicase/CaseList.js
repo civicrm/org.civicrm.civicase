@@ -24,7 +24,6 @@
     $scope.pageSize = 25;
     $scope.pageNum = 1;
     $scope.CRM = CRM;
-    $scope.searchIsOpen = false;
     $scope.pageTitle = '';
     $scope.viewingCase = null;
     $scope.viewingCaseDetails = null;
@@ -32,6 +31,7 @@
     $scope.isActivityOverdue = isActivityOverdue;
     $scope.activityFeedUrl = getActivityFeedUrl;
 
+    $scope.$bindToRoute({expr:'searchIsOpen', param: 'sx', format: 'bool', default: false});
     $scope.$bindToRoute({expr:'sortField', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
     $scope.$bindToRoute({expr:'sortDir', param:'sd', format: 'raw', default: 'ASC'});
     $scope.$bindToRoute({expr:'caseIsFocused', param:'focus', format: 'bool', default: false});
