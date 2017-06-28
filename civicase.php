@@ -244,15 +244,44 @@ function civicase_civicrm_alterAPIPermissions($entity, $action, &$params, &$perm
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
+ */
 function civicase_civicrm_navigationMenu(&$menu) {
-  _civicase_civix_insert_navigation_menu($menu, NULL, array(
-    'label' => ts('The Page', array('domain' => 'org.civicrm.civicase')),
-    'name' => 'the_page',
-    'url' => 'civicrm/the-page',
-    'permission' => 'access CiviReport,access CiviContribute',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _civicase_civix_navigationMenu($menu);
-} // */
+  /**
+   * @var array
+   *   Array(string $oldUrl => string $newUrl).
+   */
+  $rewriteMap = array(
+    // Including the default filters isn't strictly necessary. However, if
+    // if you omit, then visiting the link will create a dummy entry
+    // in the browser history, and it will be hard to press "Back" through
+    // the dummy entry.
+    'civicrm/case?reset=1' => 'civicrm/case/a/#/case?dtab=0&dme=0',
+    'civicrm/case/search?reset=1' => 'civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=&tab=summary',
+  );
+
+  _civicase_menu_walk($menu, function(&$item) use ($rewriteMap) {
+    if (isset($item['url']) && isset($rewriteMap[$item['url']])) {
+      $item['url'] = $rewriteMap[$item['url']];
+    }
+  });
+}
+
+/**
+ * Visit every link in the navigation menu, and alter it using $callback.
+ *
+ * @param array $menu
+ *   Tree of menu items, per hook_civicrm_navigationMenu.
+ * @param callable $callback
+ *   Function(&$item).
+ */
+function _civicase_menu_walk(&$menu, $callback) {
+  foreach (array_keys($menu) as $key) {
+    if (isset($menu[$key]['attributes'])) {
+      $callback($menu[$key]['attributes']);
+    }
+
+    if (isset($menu[$key]['child'])) {
+      _civicase_menu_walk($menu[$key]['child'], $callback);
+    }
+  }
+}
