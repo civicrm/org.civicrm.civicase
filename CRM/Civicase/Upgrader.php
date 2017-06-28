@@ -73,17 +73,29 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
 
     // Set status colors
     $colors = array(
-      'Scheduled' => '#42afcb',
-      'Completed' => '#8ec68a',
-      'Left Message' => '#eca67f',
-      'Available' => '#5bc0de',
+      'activity_status' => array(
+        'Scheduled' => '#42afcb',
+        'Completed' => '#8ec68a',
+        'Left Message' => '#eca67f',
+        'Available' => '#5bc0de',
+      ),
+      'case_status' => array(
+        'Open' => '#42afcb',
+        'Closed' => '#4d5663',
+        'Urgent' => '#e6807f',
+      ),
     );
-    foreach ($colors as $name => $color) {
-      civicrm_api3('OptionValue', 'get', array(
-        'option_group_id' => 'activity_status',
-        'name' => $name,
-        'api.OptionValue.setvalue' => array('field' => 'color', 'value' => $color),
-      ));
+    foreach ($colors as $optionGroup => $statuses) {
+      foreach ($statuses as $status => $color) {
+        civicrm_api3('OptionValue', 'get', array(
+          'option_group_id' => $optionGroup,
+          'name' => $status,
+          'api.OptionValue.setvalue' => array(
+            'field' => 'color',
+            'value' => $color,
+          ),
+        ));
+      }
     }
   }
 
