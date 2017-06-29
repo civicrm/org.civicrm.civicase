@@ -107,6 +107,19 @@
         }
       };
 
+      $scope.hasFilters = function hasFilters() {
+        var result = false;
+        _.each($scope.filters, function(value){
+          if (!_.isEmpty(value)) result = true;
+        });
+        return result;
+      };
+
+      $scope.clearFilters = function clearFilters() {
+        _.each(_.keys($scope.filters), function(key){
+          delete $scope.filters[key];
+        });
+      };
     }
 
     return {
