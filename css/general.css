@@ -1,3 +1,6 @@
+#bootstrap-theme .text-dark {
+  color: #4D5663;
+}
 #bootstrap-theme.civicase-main {
   max-width: 1200px;
   margin: 0 auto;

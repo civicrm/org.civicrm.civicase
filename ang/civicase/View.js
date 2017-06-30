@@ -18,7 +18,7 @@
     function caseGetParams() {
       return {
         id: $scope.item.id,
-        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'related_case_ids'],
+        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'tag_id.parent_id', 'related_case_ids'],
         // Related cases by contact
         'api.Case.get.1': {
           contact_id: {IN: "$value.contact_id"},
@@ -155,6 +155,7 @@
 
     $scope.pushCaseData = function(data) {
       // Maintain the reference to the variable in the parent scope.
+      delete($scope.item.tag_id);
       _.assign($scope.item, formatCaseDetails(data));
       $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
       $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
@@ -221,7 +222,6 @@
     };
 
     $scope.editActivityPopup = function(e) {
-      console.log(e.target);
       if (!$(e.target).is('a, a *, input, button') && $(e.currentTarget).attr('href')) {
         CRM.popup.call(e.currentTarget, e);
       }

@@ -78,12 +78,26 @@ foreach ($result['values'] as $group) {
     }
   }
 }
+// Case tags
+$options['tags'] = CRM_Core_BAO_Tag::getColorTags('civicrm_case');
+$options['tagsets'] = CRM_Utils_Array::value('values', civicrm_api3('Tag', 'get', array(
+  'sequential' => 1,
+  'return' => array("id", "name"),
+  'used_for' => array('IN' => array("Cases")),
+  'is_tagset' => 1,
+)));
 // Bulk actions for case list - we put this here so it can be modified by other extensions
 $options['caseActions'] = array(
   array(
     'title' => ts('Change Case Status'),
     'action' => 'changeStatus(cases)',
     'icon' => 'fa-pencil-square-o',
+  ),
+  array(
+    'title' => ts('Edit Tags'),
+    'action' => 'editTags(cases[0])',
+    'icon' => 'fa-tags',
+    'number' => 1,
   ),
   array(
     'title' => ts('Print Case'),
@@ -148,6 +162,6 @@ return array(
     'ang/civicase',
   ),
   'settings' => $options,
-  'requires' => array('crmUi', 'crmUtil', 'ngRoute', 'angularFileUpload', 'bw.paging', 'crmRouteBinder', 'crmResource', 'ui.bootstrap', 'uibTabsetClass'),
+  'requires' => array('crmUi', 'crmUtil', 'ngRoute', 'angularFileUpload', 'bw.paging', 'crmRouteBinder', 'crmResource', 'ui.bootstrap', 'uibTabsetClass', 'dialogService'),
   'basePages' => array(),
 );
