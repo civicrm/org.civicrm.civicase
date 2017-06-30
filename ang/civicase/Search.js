@@ -84,6 +84,9 @@
       },
       is_deleted: {
         label: ts('Deleted Cases')
+      },
+      tag_id: {
+        label: ts('Tags')
       }
     };
     _.each(CRM.civicase.customSearchFields, function(group) {
