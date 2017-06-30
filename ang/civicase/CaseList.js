@@ -25,7 +25,6 @@
     $scope.pageNum = 1;
     $scope.CRM = CRM;
     $scope.pageTitle = '';
-    $scope.viewingCase = null;
     $scope.viewingCaseDetails = null;
     $scope.selectedCases = [];
     $scope.isActivityOverdue = isActivityOverdue;
@@ -137,7 +136,19 @@
     var getCases = $scope.getCases = function() {
       setPageTitle();
       crmThrottle(_loadCases).then(function(result) {
-        $scope.cases = _.each(result[0].values, formatCase);
+        var viewingCaseDetails;
+        var cases = _.each(result[0].values, formatCase);
+        if ($scope.viewingCase) {
+          if ($scope.viewingCaseDetails) {
+            var currentCase = _.findWhere(cases, {id: $scope.viewingCase});
+            if (currentCase) {
+              _.assign(currentCase, $scope.viewingCaseDetails);
+            }
+          } else {
+            $scope.viewingCaseDetails = _.findWhere(cases, {id: $scope.viewingCase});
+          }
+        }
+        $scope.cases = cases;
         $scope.totalCount = result[1];
         setPageTitle();
       });

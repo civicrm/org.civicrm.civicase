@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   // CaseList directive controller
-  function caseViewController($scope, crmApi, isActivityOverdue, formatActivity, getActivityFeedUrl, $route) {
+  function caseViewController($scope, crmApi, isActivityOverdue, formatActivity, getActivityFeedUrl, $route, $q) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -17,7 +17,7 @@
 
     function caseGetParams() {
       return {
-        id: $scope.caseId,
+        id: $scope.item.id,
         return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'related_case_ids'],
         // Related cases by contact
         'api.Case.get.1': {
@@ -154,9 +154,6 @@
     };
 
     $scope.pushCaseData = function(data) {
-      if (!$scope.item) {
-        $scope.item = {};
-      }
       // Maintain the reference to the variable in the parent scope.
       _.assign($scope.item, formatCaseDetails(data));
       $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
@@ -174,7 +171,7 @@
     // Create activity when changing case subject
     $scope.onChangeSubject = function(newSubject) {
       CRM.api3('Activity', 'create', {
-        case_id: $scope.caseId,
+        case_id: $scope.item.id,
         activity_type_id: 'Change Case Subject',
         subject: newSubject,
         status_id: 'Completed'
@@ -239,9 +236,9 @@
       return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
     };
 
-    $scope.$watch('caseId', function() {
+    $scope.$watch('item', function() {
       // Fetch extra info about the case
-      if ($scope.caseId && (!$scope.item || !$scope.item.definition)) {
+      if ($scope.item && $scope.item.id && !$scope.item.definition) {
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
         });
@@ -259,10 +256,9 @@
         '</div>',
       controller: caseViewController,
       scope: {
-        caseId: '=civicaseView',
         activeTab: '=civicaseTab',
         isFocused: '=civicaseFocused',
-        item: '=civicaseItem',
+        item: '=civicaseView',
         formatCase: '=civicaseFormatter'
       }
     };
