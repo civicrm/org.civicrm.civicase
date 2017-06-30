@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   // CaseList directive controller
-  function caseViewController($scope, crmApi, isActivityOverdue, formatActivity, getActivityFeedUrl, $route, $q) {
+  function caseViewController($scope, crmApi, isActivityOverdue, formatActivity, getActivityFeedUrl, $route) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -221,10 +221,30 @@
       });
     };
 
-    $scope.editActivityPopup = function(e) {
-      if (!$(e.target).is('a, a *, input, button') && $(e.currentTarget).attr('href')) {
-        CRM.popup.call(e.currentTarget, e);
-      }
+    $scope.viewActivityUrl = function(id) {
+      return CRM.url('civicrm/case/activity', {
+        action: 'update',
+        reset: 1,
+        cid: $scope.item.client[0].contact_id,
+        caseid: $scope.item.id,
+        id: id,
+        civicase_reload: $scope.caseGetParams()
+      });
+    };
+
+    $scope.deleteActivity = function(activity) {
+      CRM.confirm({
+          title: ts('Delete Activity'),
+          message: ts('Permanently delete this %1 activity?', {1: activity.type})
+        })
+        .on('crmConfirm:yes', function() {
+          $scope.refresh([['Activity', 'delete', {id: activity.id}]]);
+        });
+    };
+
+    $scope.isActivityEditable = function(activity) {
+      var type = activityTypes[activity.activity_type_id].name;
+      return (type !== 'Email' && type !== 'Print PDF Letter');
     };
 
     $scope.addTimeline = function(name) {

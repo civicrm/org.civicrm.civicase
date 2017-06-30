@@ -156,6 +156,9 @@
 #bootstrap-theme .civicase-view-tasks .act-feed-item {
   border-left: 5px solid;
 }
+#bootstrap-theme .civicase-view-summary .act-feed-list-group .act-feed-item {
+  cursor: default;
+}
 #bootstrap-theme .civicase-view-tasks .act-feed-item.activity-overdue {
   border-left-color: #e6807f !important;
 }

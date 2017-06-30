@@ -14,15 +14,13 @@
       <li
         class="list-group-item act-category-communication"
         ng-repeat="activity in item.recentCommunication"
-        href="{{ editActivityUrl(activity.id) }}"
-        ng-click="editActivityPopup($event)"
-        crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
       >
         <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, item.recentCommunication[$index-1].activity_date_time)">
           {{ CRM.utils.formatDate(activity.activity_date_time) }}
         </h4>
         <div class="act-feed-item">
           <div class="act-feed-inner">
+            <div class="pull-right" ng-include="'~/civicase/ActivityItemMenu.html'"></div>
             <div civicase-activity-dot="activity"></div>
             <h4>
               <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>

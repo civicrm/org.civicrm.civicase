@@ -71,17 +71,22 @@
   });
 
   angular.module('civicase').factory('getActivityFeedUrl', function($route, $location) {
-    return function(caseId, category, status) {
+    return function(caseId, category, status, id) {
+      var af = {};
+      if (category) {
+        af["activity_type_id.grouping"] = category;
+      }
+      if (status) {
+        af.status_id = status;
+      }
       var p = angular.extend({}, $route.current.params, {
         caseId: caseId,
         tab: 'activities',
-        aid: 0,
+        aid: id || 0,
         focus: 1,
+        sx: 0,
         ai: '{"myActivities":false,"delegated":false}',
-        af: JSON.stringify({
-          "activity_type_id.grouping": category,
-          status_id: status === 'completed' ? getCompletedActivityStatuses() : getIncompleteActivityStatuses()
-        })
+        af: JSON.stringify(af)
       });
       return $location.path() + '?' + $.param(p);
     };

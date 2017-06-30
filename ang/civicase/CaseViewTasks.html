@@ -13,12 +13,10 @@
   <ul class="list-group act-feed-list-group" ng-if="item.tasks.length">
     <li class="list-group-item act-category-task is-incomplete"
         ng-repeat="activity in item.tasks"
-        href="{{ editActivityUrl(activity.id) }}"
-        ng-click="editActivityPopup($event)"
-        crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
     >
       <div class="act-feed-item" style="border-left-color: {{ activity.color }};" ng-class="{'activity-overdue': isActivityOverdue(activity)}">
         <div class="act-feed-inner">
+          <div class="pull-right" ng-include="'~/civicase/ActivityItemMenu.html'"></div>
           <div civicase-activity-dot="activity"></div>
           <a href class="act-task-checkbox" ng-click="markCompleted(activity)" title="{{ ts('Mark complete') }}">
             <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
