@@ -29,6 +29,9 @@
               if (_.isEmpty(params.assignee_contact_id)) {
                 params.assignee_contact_id = {'!=': 'user_contact_id'};
               }
+              if (_.isEmpty(params.source_contact_id)) {
+                params.source_contact_id = 'user_contact_id';
+              }
               break;
 
             default:
