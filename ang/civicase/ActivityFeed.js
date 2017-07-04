@@ -8,7 +8,7 @@
   });
 
   // ActivityFeed directive controller
-  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity) {
+  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
@@ -42,14 +42,6 @@
       expr: 'filters',
       param: 'af',
       default: {}
-    });
-    $scope.$bindToRoute({
-      'expr': 'involving',
-      'param': 'ai',
-      default: {
-        myActivities: false,
-        delegated: false
-      }
     });
 
     $scope.refreshCase = $scope.refreshCase || _.noop;
@@ -167,6 +159,7 @@
         }
       }
       _.each($scope.filters, function(val, key) {
+        if (key[0] === '@') return; // Virtual params.
         if (val) {
           if (key === 'text') {
             params.subject = {LIKE: '%' + val + '%'};
@@ -181,12 +174,7 @@
           }
         }
       });
-      if ($scope.involving.myActivities) {
-        params.contact_id = 'user_contact_id';
-      }
-      if ($scope.involving.delegated && !params.assignee_contact_id) {
-        params.assignee_contact_id = {'!=': 'user_contact_id'};
-      }
+      $rootScope.$broadcast('civicaseActivityFeed.query', $scope.filters, params);
       if ($scope.params && $scope.params.filters) {
         angular.extend(params, $scope.params.filters);
       }
@@ -198,7 +186,6 @@
 
     $scope.$watchCollection('filters', getActivities);
     $scope.$watchCollection('params.filters', getActivities);
-    $scope.$watchCollection('involving', getActivities);
 
     $scope.$watchCollection('displayOptions', function() {
       getActivities();

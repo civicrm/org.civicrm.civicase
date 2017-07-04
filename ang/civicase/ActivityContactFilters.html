@@ -1,0 +1,16 @@
+<div class="btn-group btn-group-sm">
+  <label
+      class="btn btn-primary"
+      ng-model="filters['@involvingContact']"
+      uib-btn-radio="'myActivities'"
+      uib-uncheckable="true"
+      title="{{ ts('Show only activities created by, involving or assigned to me') }}"
+  >{{ts('My Activities')}}</label>
+  <label
+      class="btn btn-primary"
+      ng-model="filters['@involvingContact']"
+      uib-btn-radio="'delegated'"
+      uib-uncheckable="true"
+      title="{{ ts('Show only activities assigned to someone other than me') }}"
+  >{{ts('Delegated')}}</label>
+</div>

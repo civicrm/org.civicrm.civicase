@@ -22,16 +22,7 @@
       </li>
     </ul>
   </div>
-  <div class="btn-group btn-group-sm" data-toggle="buttons">
-    <label class="btn btn-{{involving.myActivities ? 'primary' : 'default'}}" title="{{ ts('Show only activities created by, involving or assigned to me') }}" ng-click="involving.myActivities = !involving.myActivities">
-      <input type="checkbox" autocomplete="off" />
-      {{ ts('My Activities') }}
-    </label>
-    <label class="btn btn-{{involving.delegated ? 'primary' : 'default'}}" title="{{ ts('Show only activities assigned to someone other than me') }}" ng-click="involving.delegated = !involving.delegated">
-      <input type="checkbox" autocomplete="off" />
-      {{ ts('Delegated') }}
-    </label>
-  </div>
+  <div civicase-activity-contact-filters="filters"></div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group btn-group-sm">
       <select class="form-control" ng-model="filters['activity_type_id.grouping']" crm-ui-select>
