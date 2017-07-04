@@ -98,6 +98,10 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       }
     }
 
+    if (Civi::settings()->get('civicaseAllowMultipleCaseClients') === 'auto') {
+      Civi::settings()->set('civicaseAllowMultipleCaseClients', '1');
+    }
+
     $this->upgrade_0001();
   }
 
