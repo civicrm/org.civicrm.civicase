@@ -12,6 +12,13 @@
       link: function($scope, $el, $attr) {
         var ts = $scope.ts = CRM.ts('civicase');
 
+        $scope.$watch('filters', function(){
+          // Ensure "All" checkbox renders.
+          if ($scope.filters['@involvingContact'] === undefined) {
+            $scope.filters['@involvingContact'] = '';
+          }
+        });
+
         $scope.$on('civicaseActivityFeed.query', function(event, filters, params) {
           switch (filters['@involvingContact']) {
             case 'myActivities':
