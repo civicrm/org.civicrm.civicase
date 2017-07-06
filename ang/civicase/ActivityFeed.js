@@ -8,7 +8,7 @@
   });
 
   // ActivityFeed directive controller
-  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope) {
+  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, isActivityOverdue, $rootScope) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
@@ -104,6 +104,34 @@
         $scope.viewingActivity = _.cloneDeep(act);
         $scope.aid = act.id;
       }
+    };
+
+    $scope.activityGroups = function() {
+      var groups = [], group, subgroup,
+        date = new Date(),
+        now = CRM.utils.formatDate(date, 'yy-mm-dd') + ' ' + date.toTimeString().slice(0, 8),
+        overdue, upcoming, past;
+      if ($scope.displayOptions.overdue_first) {
+        groups.push(overdue = {key: 'overdue', title: ts('Overdue Activities'), activities: []});
+      }
+      groups.push(upcoming = {key: 'upcoming', title: ts('Upcoming Activities'), activities: []});
+      groups.push(past = {key: 'past', title: ts('Past Activities'), activities: []});
+      _.each($scope.activities, function(act) {
+        var activityDate = act.activity_date_time.slice(0, 10);
+        if (act.activity_date_time > now) {
+          group = upcoming;
+        } else if (overdue && isActivityOverdue(act)) {
+          group = overdue;
+        } else {
+          group = past;
+        }
+        subgroup = _.findWhere(group.activities, {date: activityDate});
+        if (!subgroup) {
+          group.activities.push(subgroup = {date: activityDate, activities: []});
+        }
+        subgroup.activities.push(act);
+      });
+      return groups;
     };
 
     function getActivities(nextPage, callback) {
