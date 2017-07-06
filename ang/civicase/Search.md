@@ -8,7 +8,7 @@ Note: This form includes an explicit search button.
 
 ```html
   <div
-    civicase-search="defaultFiltersExpr"
+    civicase-search="filtersExpr"
     expanded="boolExpr"
     on-search="actionExpr">
   </div>

@@ -4,7 +4,7 @@
     $routeProvider.when('/case/list', {
       reloadOnSearch: false,
       resolve: {
-        defaultFilters: function() {}
+        hiddenFilters: function() {}
       },
       controller: 'CivicaseCaseList',
       templateUrl: '~/civicase/CaseList.html'
@@ -12,7 +12,7 @@
   });
 
   // CaseList controller
-  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, defaultFilters, isActivityOverdue, getActivityFeedUrl) {
+  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, isActivityOverdue, getActivityFeedUrl) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase'),
       caseTypes = CRM.civicase.caseTypes,
@@ -34,7 +34,7 @@
     $scope.$bindToRoute({expr:'sortField', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
     $scope.$bindToRoute({expr:'sortDir', param:'sd', format: 'raw', default: 'ASC'});
     $scope.$bindToRoute({expr:'caseIsFocused', param:'focus', format: 'bool', default: false});
-    $scope.$bindToRoute({expr:'filters', param:'cf', default: defaultFilters});
+    $scope.$bindToRoute({expr:'filters', param:'cf', default: {}});
     $scope.$bindToRoute({expr:'viewingCase', param:'caseId', format: 'raw'});
     $scope.$bindToRoute({expr:'viewingCaseTab', param:'tab', format: 'raw', default:'summary'});
 
@@ -181,7 +181,8 @@
         returnParams.options.sort += ', id';
       }
       var params = {};
-      _.each($scope.filters, function(val, filter) {
+      var filters = angular.extend({}, $scope.filters, hiddenFilters);
+      _.each(filters, function(val, filter) {
         if (val || typeof val === 'boolean') {
           if (typeof val === 'number' || typeof val === 'boolean') {
             params[filter] = val;

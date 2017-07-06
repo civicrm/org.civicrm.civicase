@@ -9,9 +9,9 @@
         $routeProvider.when('/', {
           reloadOnSearch: false,
           resolve: {
-            defaultFilters: function() {
+            hiddenFilters: function() {
               return {
-                "contact_id": {/literal}{$cid|json}{literal}
+                "contact_id": [{/literal}{$cid|json}{literal}]
               };
             }
           },
