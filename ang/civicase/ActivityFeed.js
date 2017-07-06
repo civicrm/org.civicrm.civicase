@@ -21,6 +21,7 @@
     var activityStatuses = $scope.activityStatuses = CRM.civicase.activityStatuses;
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activities = {};
+    $scope.activityGroups = [];
     $scope.remaining = true;
     $scope.viewingActivity = {};
     $scope.$bindToRoute({
@@ -106,7 +107,7 @@
       }
     };
 
-    $scope.activityGroups = function() {
+    function groupActivities(activities) {
       var groups = [], group, subgroup,
         date = new Date(),
         now = CRM.utils.formatDate(date, 'yy-mm-dd') + ' ' + date.toTimeString().slice(0, 8),
@@ -116,7 +117,7 @@
       }
       groups.push(upcoming = {key: 'upcoming', title: ts('Upcoming Activities'), activities: []});
       groups.push(past = {key: 'past', title: ts('Past Activities'), activities: []});
-      _.each($scope.activities, function(act) {
+      _.each(activities, function(act) {
         var activityDate = act.activity_date_time.slice(0, 10);
         if (act.activity_date_time > now) {
           group = upcoming;
@@ -132,7 +133,7 @@
         subgroup.activities.push(act);
       });
       return groups;
-    };
+    }
 
     function getActivities(nextPage, callback) {
       $('.act-feed-panel .panel-body').block();
@@ -149,6 +150,7 @@
         } else {
           $scope.activities = newActivities;
         }
+        $scope.activityGroups = groupActivities($scope.activities);
         var remaining = result.count - (ITEMS_PER_PAGE * (pageNum + 1));
         $scope.totalCount = result.count;
         $scope.remaining = remaining > 0 ? remaining : 0;
