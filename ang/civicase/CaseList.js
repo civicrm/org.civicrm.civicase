@@ -29,6 +29,7 @@
     $scope.selectedCases = [];
     $scope.isActivityOverdue = isActivityOverdue;
     $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.hiddenFilters = hiddenFilters;
 
     $scope.$bindToRoute({expr:'searchIsOpen', param: 'sx', format: 'bool', default: false});
     $scope.$bindToRoute({expr:'sortField', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
@@ -181,7 +182,7 @@
         returnParams.options.sort += ', id';
       }
       var params = {};
-      var filters = angular.extend({}, $scope.filters, hiddenFilters);
+      var filters = angular.extend({}, $scope.filters, $scope.hiddenFilters);
       _.each(filters, function(val, filter) {
         if (val || typeof val === 'boolean') {
           if (typeof val === 'number' || typeof val === 'boolean') {

@@ -4,7 +4,7 @@
 <h1 crm-page-title>{{ pageTitle }}</h1>
 <div id="bootstrap-theme" class="clearfix civicase-main">
 
-  <div class="panel panel-default clearfix" ng-class="{'case-is-focused': caseIsFocused}" civicase-search="filters" expanded="searchIsOpen" on-search="applyAdvSearch(selectedFilters)">
+  <div class="panel panel-default clearfix" ng-class="{'case-is-focused': caseIsFocused}" civicase-search="filters" hidden-filters="hiddenFilters" expanded="searchIsOpen" on-search="applyAdvSearch(selectedFilters)">
     <div class="civicase-filters-placeholder" ng-click="unfocusCase()">
       <i class="fa fa-angle-double-down" aria-hidden="true"></i>
       {{ ts('Filters') }}

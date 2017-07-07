@@ -34,6 +34,10 @@
       $scope.expanded = true;
     };
 
+    $scope.isEnabled = function(field) {
+      return !$scope.hiddenFilters || !$scope.hiddenFilters[field];
+    };
+
     $scope.setCaseManager = function() {
       $scope.filters.case_manager = $scope.caseManagerIsMe() ? null : [CRM.config.user_contact_id];
     };
@@ -141,6 +145,7 @@
       controller: searchController,
       scope: {
         defaults: '=civicaseSearch',
+        hiddenFilters: '=',
         onSearch: '@',
         expanded: '='
       }
