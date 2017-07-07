@@ -12,7 +12,7 @@
   });
 
   // CaseList controller
-  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, isActivityOverdue, getActivityFeedUrl) {
+  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase'),
       caseTypes = CRM.civicase.caseTypes,
@@ -25,7 +25,6 @@
     $scope.pageTitle = '';
     $scope.viewingCaseDetails = null;
     $scope.selectedCases = [];
-    $scope.isActivityOverdue = isActivityOverdue;
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.hiddenFilters = hiddenFilters;
 

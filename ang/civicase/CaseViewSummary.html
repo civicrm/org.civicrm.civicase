@@ -5,7 +5,7 @@
       <div class="case-custom-data-first" ng-repeat="(index, customGroup) in item.customData" ng-if="!index" ng-include="'~/civicase/CaseViewCustomData.html'"></div>
     </div>
     <div class="col-md-3">
-      <div class="civicase-next-milestone civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': isActivityOverdue(item.activity_summary.milestone[0])}">
+      <div class="civicase-next-milestone civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': item.activity_summary.milestone[0].is_overdue}">
         <h3>
           {{ ts('Next Milestone') }}
         </h3>
@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="civicase-next-task civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': isActivityOverdue(item.tasks[0])}">
+      <div class="civicase-next-task civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': item.tasks[0].is_overdue}">
         <h3>
           {{ ts('Next task') }}
         </h3>

@@ -1,13 +1,12 @@
 (function(angular, $, _) {
 
   // CaseList directive controller
-  function caseViewController($scope, crmApi, isActivityOverdue, formatActivity, getActivityFeedUrl, $route) {
+  function caseViewController($scope, crmApi, formatActivity, getActivityFeedUrl, $route) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
-    $scope.isActivityOverdue = isActivityOverdue;
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.CRM = CRM;
     $scope.item = null;
@@ -40,7 +39,7 @@
           "activity_type_id.grouping": {LIKE: "%communication%"},
           status_id: 'Completed',
           options: {limit: 5, sort: 'activity_date_time DESC'},
-          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name']
+          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue']
         },
         'api.Activity.getcount': {
           case_id: "$value.id",
@@ -57,7 +56,7 @@
           "activity_type_id.grouping": {LIKE: "%task%"},
           status_id: {'!=': 'Completed'},
           options: {limit: 5, sort: 'activity_date_time ASC'},
-          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name']
+          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue']
         },
         // Custom data
         'api.CustomValue.gettree': {

@@ -33,25 +33,6 @@ class Utils {
   }
 
   /**
-   * Gets status ids for completed activities.
-   *
-   * @return array
-   *   [int]
-   */
-  public static function getCompletedActivityStatuses() {
-    if (!isset(\Civi::$statics[__CLASS__ . __FUNCTION__])) {
-      $statuses = civicrm_api3('OptionValue', 'get', array(
-        'option_group_id' => "activity_status",
-        'name' => array('IN' => array('Completed', 'Cancelled')),
-        'return' => array('value'),
-        'sequential' => 1,
-      ));
-      \Civi::$statics[__CLASS__ . __FUNCTION__] = \CRM_Utils_Array::collect('value', $statuses['values']);
-    }
-    return \Civi::$statics[__CLASS__ . __FUNCTION__];
-  }
-
-  /**
    *
    */
   public static function formatCustomSearchField($field) {

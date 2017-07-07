@@ -85,12 +85,12 @@ function civicrm_api3_case_getdetails($params) {
         }
       }
       $activities = civicrm_api3('Activity', 'get', array(
-        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id', 'target_contact_name', 'assignee_contact_name'),
+        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue'),
         'check_permissions' => !empty($params['check_permissions']),
         'case_id' => array('IN' => $ids),
         'is_current_revision' => 1,
         'is_test' => 0,
-        'status_id' => array('NOT IN' => \Civi\CCase\Utils::getCompletedActivityStatuses()),
+        'status_id' => array('NOT IN' => \CRM_Activity_BAO_Activity::getCompletedStatuses()),
         'activity_type_id' => array('IN' => array_unique($allTypes)),
         'activity_date_time' => array('<' => 'now'),
         'options' => array(
@@ -129,7 +129,7 @@ function civicrm_api3_case_getdetails($params) {
     }
     // Get count of incomplete activities by category
     if (in_array('category_count', $toReturn)) {
-      $completed = implode(',', \Civi\CCase\Utils::getCompletedActivityStatuses());
+      $completed = implode(',', \CRM_Activity_BAO_Activity::getCompletedStatuses());
       foreach ($activityCategories as $category) {
         $query = "SELECT COUNT(a.id) as count, ca.case_id
           FROM civicrm_activity a, civicrm_case_activity ca
@@ -226,7 +226,7 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
           'grouping' => array('LIKE' => "%$category%"),
         ));
         $actTypes = implode(',', CRM_Utils_Array::collect('value', $actTypes['values']));
-        $statuses = implode(',', \Civi\CCase\Utils::getCompletedActivityStatuses());
+        $statuses = implode(',', \CRM_Activity_BAO_Activity::getCompletedStatuses());
         if (!$actTypes || !$statuses) {
           continue;
         }

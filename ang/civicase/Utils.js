@@ -45,15 +45,6 @@
     };
   });
 
-  angular.module('civicase').factory('isActivityOverdue', function() {
-    return function(act) {
-      var now = new Date();
-      return !!act &&
-        (getCompletedActivityStatuses().indexOf(act.status_id) < 0) &&
-        (CRM.utils.makeDate(act.activity_date_time) < now);
-    };
-  });
-
   angular.module('civicase').factory('formatActivity', function() {
     var activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = CRM.civicase.activityStatuses;
@@ -62,7 +53,8 @@
       act.icon = activityTypes[act.activity_type_id].icon;
       act.type = activityTypes[act.activity_type_id].label;
       act.status = activityStatuses[act.status_id].label;
-      act.is_completed = activityStatuses[act.status_id].name === 'Completed';
+      act.is_completed = getCompletedActivityStatuses().indexOf(act.status_id) >= 0;
+      act.is_overdue = act.is_overdue === '1';
       act.color = activityStatuses[act.status_id].color || '#42afcb';
       if (act.category.indexOf('alert') > -1) {
         act.color = ''; // controlled by css
