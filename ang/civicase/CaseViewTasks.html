@@ -11,10 +11,10 @@
     </a>
   </h3>
   <ul class="list-group act-feed-list-group" ng-if="item.tasks.length">
-    <li class="list-group-item act-category-task is-incomplete"
+    <li class="list-group-item act-category-task"
         ng-repeat="activity in item.tasks"
     >
-      <div class="act-feed-item" style="border-left-color: {{ activity.color }};" ng-class="{'activity-overdue': activity.is_overdue}">
+      <div class="act-feed-item status-type-{{ activity.status_type }}" style="border-left-color: {{ activity.color }};" ng-class="{'activity-overdue': activity.is_overdue}">
         <div class="act-feed-inner">
           <div class="pull-right" ng-include="'~/civicase/ActivityItemMenu.html'"></div>
           <div civicase-activity-dot="activity"></div>

@@ -171,11 +171,11 @@
   padding-left: 5em;
 }
 
-#bootstrap-theme .act-feed-list-group .act-category-alert.is-incomplete .act-subject {
+#bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .act-subject {
   font-weight: bold;
 }
 
-#bootstrap-theme .act-feed-list-group .act-category-alert.is-incomplete .cb-dot {
+#bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .cb-dot {
   background-color: #e6807f;
 }
 
