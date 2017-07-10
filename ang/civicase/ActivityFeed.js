@@ -169,7 +169,7 @@
         sequential: 1,
         return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id', 'is_overdue'],
         options: {
-          sort: 'activity_date_time DESC',
+          sort: ($scope.displayOptions.overdue_first ? 'is_overdue DESC, ' : '') + 'activity_date_time DESC',
           limit: ITEMS_PER_PAGE,
           offset: ITEMS_PER_PAGE * pageNum
         }
