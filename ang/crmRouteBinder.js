@@ -59,7 +59,7 @@
   };
 
   angular.module('crmRouteBinder').config(function ($provide) {
-    $provide.decorator('$rootScope', function ($delegate, $injector) {
+    $provide.decorator('$rootScope', function ($delegate, $injector, $parse) {
       Object.getPrototypeOf($delegate).$bindToRoute = function (options) {
         registerGlobalListener($injector);
 
@@ -72,8 +72,8 @@
 
         var $route = $injector.get('$route'), $timeout = $injector.get('$timeout');
 
-        // TODO: try using $parse...assign() instead of _scope[options.expr].
-        _scope[options.expr] = fmt.init($route, options);
+        var value = fmt.init($route, options);
+        $parse(options.expr).assign(_scope, value);
 
         // Keep the URL bar up-to-date.
         _scope[fmt.watcher](options.expr, function (newValue) {
