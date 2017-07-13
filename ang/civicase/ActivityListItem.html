@@ -1,6 +1,5 @@
 <div
      style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};"
-     ng-click="viewActivity(activity.id, $event)"
      class="act-feed-item act-category-{{ activity.category.join(' act-category-') || 'none' }}"
      ng-class="{'is-viewing': activity.id === viewingActivity.id, 'is-completed': activity.is_completed,  'is-incomplete': !activity.is_completed, 'is-overdue': activity.is_overdue}">
   <div class="act-feed-inner">

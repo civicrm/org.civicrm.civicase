@@ -13,6 +13,7 @@
           <li
             ng-repeat="activity in dateGroup.activities"
             ng-include="'~/civicase/ActivityListItem.html'"
+            ng-click="viewActivity(activity.id, $event)"
             class="list-group-item"
           >
           </li>
