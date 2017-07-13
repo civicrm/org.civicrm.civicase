@@ -251,7 +251,7 @@ function civicase_civicrm_pageRun(&$page) {
     $caseId = CRM_Utils_Request::retrieve('id', 'Positive');
     if ($caseId) {
       $url = CRM_Utils_System::url('civicrm/case/a/', NULL, TRUE,
-        "/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId={$caseId}&tab=summary&sx=0&cpn=1&cps=25",
+        "/case/list?sf=id&sd=DESC&focus=0&cf=%7B%7D&caseId={$caseId}&tab=summary&sx=0&cpn=1&cps=25",
         FALSE);
       CRM_Utils_System::redirect($url);
     }
