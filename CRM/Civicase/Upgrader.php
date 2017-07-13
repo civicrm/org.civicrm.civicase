@@ -102,6 +102,10 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       Civi::settings()->set('civicaseAllowMultipleClients', '1');
     }
 
+    if (!Civi::settings()->hasExplict('recordGeneratedLetters')) {
+      Civi::settings()->set('recordGeneratedLetters', 'combined-attached');
+    }
+
     $this->upgrade_0001();
   }
 
