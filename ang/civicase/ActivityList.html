@@ -13,7 +13,7 @@
           <li
             ng-repeat="activity in dateGroup.activities"
             ng-include="'~/civicase/ActivityListItem.html'"
-            class="list-group-item act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}"
+            class="list-group-item"
           >
           </li>
         </ul>

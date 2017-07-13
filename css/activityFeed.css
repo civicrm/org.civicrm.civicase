@@ -115,7 +115,7 @@
   border-bottom: 1px solid #ddd;
 }
 
-#bootstrap-theme .act-feed-list-group .act-category-milestone .act-feed-item {
+#bootstrap-theme .act-feed-list-group .act-category-milestone.act-feed-item {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   border-left: 5px solid;
@@ -131,12 +131,12 @@
   cursor: inherit;
 }
 
-#bootstrap-theme .act-feed-list-group .act-feed-item.act-is-viewing {
+#bootstrap-theme .act-feed-list-group .act-feed-item.is-viewing {
   color: #555;
   background-color: #F3F6F7;
 }
 
-#bootstrap-theme .act-feed-list-group .act-feed-item.act-is-viewing .cb-dot {
+#bootstrap-theme .act-feed-list-group .act-feed-item.is-viewing .cb-dot {
   border-color: #F3F6F7;
 }
 

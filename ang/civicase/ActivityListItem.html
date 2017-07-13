@@ -1,4 +1,8 @@
-<div class="act-feed-item" style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};" ng-click="viewActivity(activity.id, $event)" ng-class="{'act-is-viewing': activity.id === viewingActivity.id}">
+<div
+     style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};"
+     ng-click="viewActivity(activity.id, $event)"
+     class="act-feed-item act-category-{{ activity.category.join(' act-category-') || 'none' }}"
+     ng-class="{'is-viewing': activity.id === viewingActivity.id, 'is-completed': activity.is_completed,  'is-incomplete': !activity.is_completed, 'is-overdue': activity.is_overdue}">
   <div class="act-feed-inner">
     <div civicase-activity-dot="activity"></div>
     <a href class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
