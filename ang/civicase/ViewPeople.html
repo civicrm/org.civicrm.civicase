@@ -25,19 +25,27 @@
       <label for="rolesSelectionMode-all">{{ ts('All %1 Contacts', {1: item.contacts.length}) }}</label>
       <input type="radio" value="checked" ng-model="rolesSelectionMode" id="rolesSelectionMode-checked"/>
       <label for="rolesSelectionMode-checked">{{ ts('%1 Selected', {1: getSelectedContacts('roles', true).length}) }}</label>
-      <select class="form-control case-action-dropdown" ng-model="rolesSelectedTask" ng-change="doContactTask('roles')" ng-disabled="!getSelectedContacts('roles').length" >
+      <select class="form-control case-action-dropdown" crm-ui-select ng-model="rolesSelectedTask" ng-change="doContactTask('roles')" ng-disabled="!getSelectedContacts('roles').length" >
         <option value="">{{ ts('Actions') }}</option>
         <option ng-repeat="(key, opt) in contactTasks" value="{{ key }}">{{ opt.title }}</option>
       </select>
     </div>
   </div>
   <div class="pull-right">
-    <select class="form-control" ng-model="rolesFilter">
+    <select class="form-control" ng-model="rolesFilter" crm-ui-select>
       <option value="">{{ ts('All Roles') }}</option>
       <option value="client">{{ ts('Client') }}</option>
       <option ng-repeat="role in allRoles" value="{{ role.name }}">{{ role.role }}</option>
     </select>
   </div>
+  <paging
+    class="center-block text-center"
+    page="rolesPage"
+    page-size="25"
+    total="rolesCount"
+    show-prev-next="true"
+    show-first-last="true">
+  </paging>
   <div class="civicase-alpha-pager">
     <a ng-repeat="a in letters" href ng-class="{active: a === rolesAlphaFilter}" ng-click="setLetterFilter(a, 'roles')">{{ a }}</a>
   </div>
@@ -53,7 +61,8 @@
     <tbody>
       <tr ng-repeat="role in roles" ng-class="{unassigned: !role.contact_id}">
         <td>
-          <input ng-if="role.contact_id" type="checkbox" ng-model="role.checked" ng-click="setSelectionMode('checked', 'roles')" />
+          <input ng-if="role.contact_id" id="select-role-{{ $index }}" type="checkbox" ng-model="role.checked" ng-click="setSelectionMode('checked', 'roles')" />
+          <label for="select-role-{{ $index }}"></label>
         </td>
         <td>
           <div><strong>{{ role.role }}</strong></div>
@@ -129,12 +138,20 @@
       <label for="relationsSelectionMode-all">{{ ts('All %1 Contacts', {1: relations.length}) }}</label>
       <input type="radio" value="checked" ng-model="relationsSelectionMode" id="relationsSelectionMode-checked"/>
       <label for="relationsSelectionMode-checked">{{ ts('%1 Selected', {1: getSelectedContacts('relations', true).length}) }}</label>
-      <select class="form-control case-action-dropdown" ng-model="relationsSelectedTask" ng-change="doContactTask('relations')" ng-disabled="!getSelectedContacts('relations').length" >
+      <select class="form-control case-action-dropdown" crm-ui-select ng-model="relationsSelectedTask" ng-change="doContactTask('relations')" ng-disabled="!getSelectedContacts('relations').length" >
         <option value="">{{ ts('Actions') }}</option>
         <option ng-repeat="(key, opt) in contactTasks" value="{{ key }}">{{ opt.title }}</option>
       </select>
     </div>
   </div>
+  <paging
+    class="center-block text-center"
+    page="relationsPage"
+    page-size="25"
+    total="relationsCount"
+    show-prev-next="true"
+    show-first-last="true">
+  </paging>
   <div class="civicase-alpha-pager">
     <a ng-repeat="a in letters" href ng-class="{active: a === relationsAlphaFilter}" ng-click="setLetterFilter(a, 'relations')">{{ a }}</a>
   </div>
@@ -150,7 +167,10 @@
     </tr></thead>
     <tbody>
       <tr ng-repeat="contact in relations">
-        <td><input type="checkbox" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" /></td>
+        <td>
+          <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
+          <label for="select-relation-{{ $index }}"></label>
+        </td>
         <td>{{ contact.display_name }}</td>
         <td>{{ contact.relation }}</td>
         <td>{{ contact.client }}</td>
