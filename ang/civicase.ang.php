@@ -166,6 +166,6 @@ return array(
     'ang/civicase',
   ),
   'settings' => $options,
-  'requires' => array('crmUi', 'crmUtil', 'ngRoute', 'angularFileUpload', 'bw.paging', 'crmRouteBinder', 'crmResource', 'ui.bootstrap', 'uibTabsetClass', 'dialogService'),
+  'requires' => array('crmAttachment', 'crmUi', 'crmUtil', 'ngRoute', 'angularFileUpload', 'bw.paging', 'crmRouteBinder', 'crmResource', 'ui.bootstrap', 'uibTabsetClass', 'dialogService'),
   'basePages' => array(),
 );
