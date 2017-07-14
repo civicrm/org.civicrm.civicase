@@ -25,7 +25,7 @@
     <table ng-show="!caseIsFocused" class="case-list-table">
       <thead>
         <tr>
-          <th>
+          <th class="fixed-col">
             <div class="case-list-checkbox" ng-if="!viewingCase">
               <input type="checkbox" ng-click="selectAll($event)" ng-checked="isSelection('all')" />
             </div>
@@ -67,7 +67,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="item in cases">
-          <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}">
+          <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="fixed-col">
             <div class="case-list-checkbox" ng-if="!viewingCase">
               <input type="checkbox" ng-model="item.selected" />
             </div>
