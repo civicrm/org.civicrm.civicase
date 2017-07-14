@@ -72,7 +72,7 @@
         af["activity_type_id.grouping"] = category;
       }
       if (status) {
-        af.status_id = status;
+        af.status_id = CRM.civicase.activityStatusTypes[status];
       }
       var p = angular.extend({}, $route.current.params, {
         caseId: caseId,
