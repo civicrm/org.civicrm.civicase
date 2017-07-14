@@ -8,14 +8,14 @@
 
 <div civicase-util="caseutil"></div>
 <ul class="list-group act-feed-list-group act-feed-list-group-file" ng-show="apiCtrl.result.count > 0">
-  <li class="list-group-item {{ activity.is_completed ? 'is-completed' : 'is-incomplete' }}" ng-repeat="activity in activities">
+  <li class="list-group-item" ng-repeat="activity in activities">
     <!--<h4>({{$index}})({{activity.activity_date_time}})({{activities[$index-1].activity_date_time}})</h4>-->
 
     <h4 class="act-date" ng-if="!caseutil.isSameDate(activity.activity_date_time, activities[$index-1].activity_date_time)">
       {{ CRM.utils.formatDate(activity.activity_date_time) }}<br/>
     </h4>
 
-    <div class="act-feed-item">
+    <div class="act-feed-item status-type-{{ activity.status_type }}">
       <div class="act-feed-inner">
 
         <div civicase-activity-dot="activity"></div>

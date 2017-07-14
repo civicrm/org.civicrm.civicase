@@ -8,7 +8,7 @@
   });
 
   // ActivityFeed directive controller
-  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, isActivityOverdue, $rootScope) {
+  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
@@ -121,7 +121,7 @@
         var activityDate = act.activity_date_time.slice(0, 10);
         if (act.activity_date_time > now) {
           group = upcoming;
-        } else if (overdue && isActivityOverdue(act)) {
+        } else if (overdue && act.is_overdue) {
           group = overdue;
         } else {
           group = past;
@@ -167,9 +167,9 @@
     function _loadActivities() {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id'],
+        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id', 'is_overdue'],
         options: {
-          sort: 'activity_date_time DESC',
+          sort: ($scope.displayOptions.overdue_first ? 'is_overdue DESC, ' : '') + 'activity_date_time DESC',
           limit: ITEMS_PER_PAGE,
           offset: ITEMS_PER_PAGE * pageNum
         }

@@ -101,7 +101,7 @@
                 <a class="badge"
                    ng-repeat="category in activityCategories"
                    ng-href="#{{ activityFeedUrl(item.id, category.name, 'incomplete') }}"
-                   ng-class="{'item-overdue': isActivityOverdue(item.activity_summary[category.name][0])}"
+                   ng-class="{'item-overdue': item.activity_summary[category.name][0].is_overdue}"
                    ng-if="item.category_count[category.name]"
                    title="{{ ts('%1 upcoming %2', {1: item.category_count[category.name], 2: category.label}) }}"
                 >

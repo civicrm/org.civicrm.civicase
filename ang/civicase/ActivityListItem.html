@@ -1,6 +1,6 @@
 <div
      style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};"
-     class="act-feed-item act-category-{{ activity.category.join(' act-category-') || 'none' }}"
+     class="act-feed-item act-category-{{ activity.category.join(' act-category-') || 'none' }} status-type-{{ activity.status_type }}"
      ng-class="{'is-viewing': activity.id === viewingActivity.id, 'is-completed': activity.is_completed,  'is-incomplete': !activity.is_completed, 'is-overdue': activity.is_overdue}">
   <div class="act-feed-inner">
     <div civicase-activity-dot="activity"></div>

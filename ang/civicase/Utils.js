@@ -1,11 +1,13 @@
 (function(angular, $, _, CRM) {
 
-  function getCompletedActivityStatuses() {
-    return CRM.civicase.completedActivityStatuses;
-  }
-
-  function getIncompleteActivityStatuses() {
-    return _.difference(_.keys(CRM.civicase.activityStatuses), getCompletedActivityStatuses());
+  function getStatusType(status_id) {
+    var statusType;
+    _.each(CRM.civicase.activityStatusTypes, function(statuses, type) {
+      if (statuses.indexOf(parseInt(status_id)) >= 0) {
+        statusType = type;
+      }
+    });
+    return statusType;
   }
 
   angular.module('civicase').directive('civicaseSortheader', function() {
@@ -45,15 +47,6 @@
     };
   });
 
-  angular.module('civicase').factory('isActivityOverdue', function() {
-    return function(act) {
-      var now = new Date();
-      return !!act &&
-        (getCompletedActivityStatuses().indexOf(act.status_id) < 0) &&
-        (CRM.utils.makeDate(act.activity_date_time) < now);
-    };
-  });
-
   angular.module('civicase').factory('formatActivity', function() {
     var activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = CRM.civicase.activityStatuses;
@@ -62,7 +55,9 @@
       act.icon = activityTypes[act.activity_type_id].icon;
       act.type = activityTypes[act.activity_type_id].label;
       act.status = activityStatuses[act.status_id].label;
-      act.is_completed = activityStatuses[act.status_id].name === 'Completed';
+      act.status_type = getStatusType(act.status_id);
+      act.is_completed = act.status_type !== 'incomplete'; // FIXME doesn't distinguish cancelled from completed
+      act.is_overdue = act.is_overdue === '1';
       act.color = activityStatuses[act.status_id].color || '#42afcb';
       if (act.category.indexOf('alert') > -1) {
         act.color = ''; // controlled by css

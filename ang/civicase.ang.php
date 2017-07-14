@@ -44,7 +44,11 @@ $result = civicrm_api3('RelationshipType', 'get', array(
 ));
 $options['relationshipTypes'] = $result['values'];
 $options['fileCategories'] = CRM_Civicase_FileCategory::getCategories();
-$options['completedActivityStatuses'] = \Civi\CCase\Utils::getCompletedActivityStatuses();
+$options['activityStatusTypes'] = array(
+  'incomplete' => array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(CRM_Activity_BAO_Activity::INCOMPLETE)),
+  'completed' => array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(CRM_Activity_BAO_Activity::COMPLETED)),
+  'cancelled' => array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(CRM_Activity_BAO_Activity::CANCELLED)),
+);
 $result = civicrm_api3('CustomGroup', 'get', array(
   'sequential' => 1,
   'return' => array('extends_entity_column_value', 'title', 'extends'),

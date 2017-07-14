@@ -85,12 +85,12 @@ function civicrm_api3_case_getdetails($params) {
         }
       }
       $activities = civicrm_api3('Activity', 'get', array(
-        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id', 'target_contact_name', 'assignee_contact_name'),
+        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue'),
         'check_permissions' => !empty($params['check_permissions']),
         'case_id' => array('IN' => $ids),
         'is_current_revision' => 1,
         'is_test' => 0,
-        'status_id' => array('NOT IN' => \Civi\CCase\Utils::getCompletedActivityStatuses()),
+        'status_id.filter' => CRM_Activity_BAO_Activity::INCOMPLETE,
         'activity_type_id' => array('IN' => array_unique($allTypes)),
         'activity_date_time' => array('<' => 'now'),
         'options' => array(
@@ -129,13 +129,13 @@ function civicrm_api3_case_getdetails($params) {
     }
     // Get count of incomplete activities by category
     if (in_array('category_count', $toReturn)) {
-      $completed = implode(',', \Civi\CCase\Utils::getCompletedActivityStatuses());
+      $incomplete = implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE)));
       foreach ($activityCategories as $category) {
         $query = "SELECT COUNT(a.id) as count, ca.case_id
           FROM civicrm_activity a, civicrm_case_activity ca
           WHERE ca.activity_id = a.id AND a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id IN (" . implode(',', $ids) . ")
           AND a.activity_type_id IN (SELECT value FROM civicrm_option_value WHERE grouping LIKE '%$category%' AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
-          AND a.status_id NOT IN ($completed)
+          AND a.status_id IN ($incomplete)
           GROUP BY ca.case_id";
         $dao = CRM_Core_DAO::executeQuery($query);
         while ($dao->fetch()) {
@@ -226,14 +226,14 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
           'grouping' => array('LIKE' => "%$category%"),
         ));
         $actTypes = implode(',', CRM_Utils_Array::collect('value', $actTypes['values']));
-        $statuses = implode(',', \Civi\CCase\Utils::getCompletedActivityStatuses());
-        if (!$actTypes || !$statuses) {
+        $incomplete = implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE)));
+        if (!$actTypes || !$incomplete) {
           continue;
         }
         $sql->join($sortJoin, "LEFT JOIN (
             SELECT MIN(activity_date_time) as activity_date_time, case_id
             FROM civicrm_activity, civicrm_case_activity
-            WHERE civicrm_activity.id = civicrm_case_activity.activity_id AND activity_type_id IN ($actTypes) AND status_id NOT IN ($statuses) AND is_current_revision = 1 AND is_test <> 1
+            WHERE civicrm_activity.id = civicrm_case_activity.activity_id AND activity_type_id IN ($actTypes) AND status_id IN ($incomplete) AND is_current_revision = 1 AND is_test <> 1
             GROUP BY case_id
           ) AS $sortJoin ON $sortJoin.case_id = a.id");
         $sql->orderBy("$sortJoin.activity_date_time $dir", NULL, $index);

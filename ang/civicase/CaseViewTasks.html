@@ -3,7 +3,7 @@
     {{ ts('Tasks') }}
     <a ng-href="#{{ activityFeedUrl(item.id, 'task', 'incomplete') }}"
        class="badge"
-       ng-class="{'item-overdue': isActivityOverdue(item.activity_summary.task[0])}"
+       ng-class="{'item-overdue': item.activity_summary.task[0].is_overdue}"
        ng-if="item.category_count.task"
        title="{{ ts('View All') }}"
     >
@@ -11,10 +11,10 @@
     </a>
   </h3>
   <ul class="list-group act-feed-list-group" ng-if="item.tasks.length">
-    <li class="list-group-item act-category-task is-incomplete"
+    <li class="list-group-item act-category-task"
         ng-repeat="activity in item.tasks"
     >
-      <div class="act-feed-item" style="border-left-color: {{ activity.color }};" ng-class="{'activity-overdue': isActivityOverdue(activity)}">
+      <div class="act-feed-item status-type-{{ activity.status_type }}" style="border-left-color: {{ activity.color }};" ng-class="{'activity-overdue': activity.is_overdue}">
         <div class="act-feed-inner">
           <div class="pull-right" ng-include="'~/civicase/ActivityItemMenu.html'"></div>
           <div civicase-activity-dot="activity"></div>

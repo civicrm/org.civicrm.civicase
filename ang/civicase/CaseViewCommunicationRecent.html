@@ -18,7 +18,7 @@
         <h4 class="act-date" ng-if="!isSameDate(activity.activity_date_time, item.recentCommunication[$index-1].activity_date_time)">
           {{ CRM.utils.formatDate(activity.activity_date_time) }}
         </h4>
-        <div class="act-feed-item">
+        <div class="act-feed-item status-type-{{ activity.status_type }}">
           <div class="act-feed-inner">
             <div class="pull-right" ng-include="'~/civicase/ActivityItemMenu.html'"></div>
             <div civicase-activity-dot="activity"></div>
