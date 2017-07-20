@@ -147,6 +147,15 @@ function civicase_civicrm_angularModules(&$angularModules) {
 }
 
 /**
+ * Implements hook_civicrm_alterMenu().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_alterMenu
+ */
+function civicase_civicrm_alterMenu(&$items) {
+  $items['civicrm/case/activity']['ids_arguments']['json'][] = 'civicase_reload';
+}
+
+/**
  * Implements hook_civicrm_alterSettingsFolders().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_alterSettingsFolders
