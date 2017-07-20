@@ -12,7 +12,7 @@
   </form>
 </div>
 <form class="panel-body" ng-show="expanded">
-  <div class="row">
+  <div class="row crm-section">
     <div class="col-lg-12">
       <div class="row">
         <label ng-if="isEnabled('id')" class="col-lg-2">{{ ts('Case ID') }}</label>
@@ -22,7 +22,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row crm-section">
     <div class="col-lg-12">
       <div class="row">
         <label ng-if="isEnabled('contact_id')" class="col-lg-2">{{ ts('Client Name or Email') }}</label>
@@ -38,7 +38,7 @@
       </div>
     </div>
   </div>
-  <div class="row" ng-if="isEnabled('case_manager')">
+  <div class="row crm-section" ng-if="isEnabled('case_manager')">
     <div class="col-lg-12">
       <div class="row">
         <label for="case_search_field_case_manager" class="col-lg-2">{{ ts('Case Manager') }}</label>
@@ -52,7 +52,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row crm-section">
     <div class="col-lg-12">
       <div class="row">
         <label ng-if="isEnabled('start_date')" class="col-lg-2">{{ ts('Case Start Date') }}</label>
@@ -62,7 +62,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row crm-section">
     <div class="col-lg-12">
       <div class="row">
         <label ng-if="isEnabled('end_date')" class="col-lg-2">{{ ts('Case End Date') }}</label>
@@ -72,7 +72,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row crm-section">
     <div class="col-lg-12">
       <div class="row">
         <label class="col-lg-2">{{ ts('Tagged') }}</label>
