@@ -11,33 +11,14 @@
     </a>
   </h3>
   <ul class="list-group act-feed-list-group" ng-if="item.tasks.length">
-    <li class="list-group-item act-category-task"
-        ng-repeat="activity in item.tasks"
-    >
-      <div class="act-feed-item status-type-{{ activity.status_type }}" style="border-left-color: {{ activity.color }};" ng-class="{'activity-overdue': activity.is_overdue}">
-        <div class="act-feed-inner">
-          <div class="pull-right" ng-include="'~/civicase/ActivityItemMenu.html'"></div>
-          <div civicase-activity-dot="activity"></div>
-          <a href class="act-task-checkbox" ng-click="markCompleted(activity)" title="{{ ts('Mark complete') }}">
-            <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
-          </a>
-          <h4>
-            <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
-            <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
-          </h4>
-          <div class="clearfix">
-            {{ CRM.utils.formatDate(activity.activity_date_time) }}
-          </div>
-          <div class="act-contacts-target" ng-if="activity.target_contact_name">
-            <strong>{{ ts('With') }}</strong>
-            <span civicase-activity-contacts="{activity: activity, type: 'target'}"></span>
-          </div>
-          <div class="act-contacts-assignee" ng-if="activity.assignee_contact_name">
-            <strong>{{ ts('Assigned to') }}</strong>
-            <span civicase-activity-contacts="{activity: activity, type: 'assignee'}"></span>
-          </div>
-        </div>
-      </div>
+    <li class="list-group-item" ng-repeat="activity in item.tasks">
+      <div
+        case-activity-card="activity"
+        refresh-callback="refresh"
+        case-item="item"
+        crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+        edit-activity-url="editActivityUrl"
+      ></div>
     </li>
   </ul>
   <div class="civicase-panel-empty" ng-if="!item.tasks.length">

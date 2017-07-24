@@ -12,7 +12,7 @@
   });
 
   // CaseList controller
-  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl) {
+  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatActivity) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase'),
       caseTypes = CRM.civicase.caseTypes,
@@ -119,6 +119,9 @@
       item.case_type = caseTypes[item.case_type_id].title;
       item.selected = tmpSelection.indexOf(item.id) >= 0;
       item.is_deleted = item.is_deleted === '1';
+      _.each(item.activity_summary, function(activities) {
+        _.each(activities, formatActivity);
+      });
       _.each(item.contacts, function(contact) {
         if (!contact.relationship_type_id) {
           item.client.push(contact);

@@ -117,15 +117,21 @@
           <td ng-show="!viewingCase">{{ item.manager.display_name }}</td>
           <td ng-show="!viewingCase">{{ item.myRole.join(', ') }}</td>
           <td ng-show="!viewingCase">
-            <div ng-if="item.activity_summary.milestone.length">
-              <div>{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</div>
-              <div>{{ CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+            <div
+              ng-if="item.activity_summary.milestone.length"
+              case-activity-card="item.activity_summary.milestone[0]"
+              refresh-callback="refresh"
+              case-item="item"
+            >
             </div>
           </td>
           <td ng-show="!viewingCase">
-            <div ng-if="item.activity_summary.task.length">
-              <div>{{ activityTypes[item.activity_summary.task[0].activity_type_id].label }}</div>
-              <div>{{ CRM.utils.formatDate(item.activity_summary.task[0].activity_date_time) }}</div>
+            <div
+              ng-if="item.activity_summary.task.length"
+              case-activity-card="item.activity_summary.task[0]"
+              refresh-callback="refresh"
+              case-item="item"
+            >
             </div>
           </td>
         </tr>

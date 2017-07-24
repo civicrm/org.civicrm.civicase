@@ -231,21 +231,6 @@
       });
     };
 
-    $scope.deleteActivity = function(activity) {
-      CRM.confirm({
-          title: ts('Delete Activity'),
-          message: ts('Permanently delete this %1 activity?', {1: activity.type})
-        })
-        .on('crmConfirm:yes', function() {
-          $scope.refresh([['Activity', 'delete', {id: activity.id}]]);
-        });
-    };
-
-    $scope.isActivityEditable = function(activity) {
-      var type = activityTypes[activity.activity_type_id].name;
-      return (type !== 'Email' && type !== 'Print PDF Letter');
-    };
-
     $scope.addTimeline = function(name) {
       $scope.refresh([['Case', 'addtimeline', {case_id: $scope.item.id, 'timeline': name}]]);
     };
