@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
-  function activityCard($scope, getActivityFeedUrl) {
-    $scope.ts = CRM.ts('civicase');
+  function activityCard($scope, getActivityFeedUrl, dialogService) {
+    var ts = $scope.ts = CRM.ts('civicase');
     $scope.CRM = CRM;
     $scope.activityFeedUrl = getActivityFeedUrl;
 
@@ -22,6 +22,32 @@
         .on('crmConfirm:yes', function() {
           $scope.refresh([['Activity', 'delete', {id: activity.id}]]);
         });
+    };
+
+    $scope.moveCopyActivity = function(act, op) {
+      var model = {
+        ts: ts,
+        activity: _.cloneDeep(act)
+      };
+      dialogService.open('MoveCopyActCard', '~/civicase/ActivityMoveCopy.html', model, {
+        autoOpen: false,
+        height: 'auto',
+        width: '40%',
+        title: op === 'move' ? ts('Move %1 Activity', {1: act.type}) : ts('Copy %1 Activity', {1: act.type}),
+        buttons: [{
+          text: ts('Save'),
+          icons: {primary: 'fa-check'},
+          click: function() {
+            if (op === 'copy') {
+              delete model.activity.id;
+            }
+            if (model.activity.case_id && model.activity.case_id != $scope.item.id) {
+              $scope.refresh([['Activity', 'create', model.activity]]);
+            }
+            $(this).dialog('close');
+          }
+        }]
+      });
     };
   }
 

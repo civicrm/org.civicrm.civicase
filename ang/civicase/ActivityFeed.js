@@ -8,7 +8,7 @@
   });
 
   // ActivityFeed directive controller
-  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope) {
+  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
@@ -82,6 +82,46 @@
           $scope.$digest();
         });
       }
+    };
+
+    $scope.deleteActivity = function(activity) {
+      CRM.confirm({
+          title: ts('Delete Activity'),
+          message: ts('Permanently delete this %1 activity?', {1: activity.type})
+        })
+        .on('crmConfirm:yes', function() {
+          if ($scope.viewingActivity && $scope.viewingActivity.id == activity.id) {
+            $scope.viewingActivity = {};
+            $scope.aid = 0;
+          }
+          crmApi('Activity', 'delete', {id: activity.id}).then($scope.refreshAll);
+        });
+    };
+
+    $scope.moveCopyActivity = function(act, op) {
+      var model = {
+        ts: ts,
+        activity: _.cloneDeep(act)
+      };
+      dialogService.open('MoveCopyActFeed', '~/civicase/ActivityMoveCopy.html', model, {
+        autoOpen: false,
+        height: 'auto',
+        width: '40%',
+        title: op === 'move' ? ts('Move %1 Activity', {1: act.type}) : ts('Copy %1 Activity', {1: act.type}),
+        buttons: [{
+          text: ts('Save'),
+          icons: {primary: 'fa-check'},
+          click: function() {
+            if (op === 'copy') {
+              delete model.activity.id;
+            }
+            if (model.activity.case_id && model.activity.case_id != $scope.item.id) {
+              crmApi('Activity', 'create', model.activity).then($scope.refreshAll);
+            }
+            $(this).dialog('close');
+          }
+        }]
+      });
     };
 
     $scope.viewActivity = function(id, e) {
@@ -167,7 +207,7 @@
     function _loadActivities() {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id', 'is_overdue'],
+        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id', 'is_overdue', 'case_id'],
         options: {
           sort: ($scope.displayOptions.overdue_first ? 'is_overdue DESC, ' : '') + 'activity_date_time DESC',
           limit: ITEMS_PER_PAGE,

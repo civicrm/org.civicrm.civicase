@@ -50,7 +50,7 @@
   angular.module('civicase').factory('formatActivity', function() {
     var activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = CRM.civicase.activityStatuses;
-    return function (act) {
+    return function (act, caseId) {
       act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
       act.icon = activityTypes[act.activity_type_id].icon;
       act.type = activityTypes[act.activity_type_id].label;
@@ -61,6 +61,11 @@
       act.color = activityStatuses[act.status_id].color || '#42afcb';
       if (act.category.indexOf('alert') > -1) {
         act.color = ''; // controlled by css
+      }
+      if (caseId) {
+        act.case_id = caseId;
+      } else {
+        act.case_id = act.case_id[0];
       }
     };
   });

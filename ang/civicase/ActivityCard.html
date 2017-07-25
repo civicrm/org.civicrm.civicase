@@ -3,7 +3,7 @@
   ng-class="{'is-completed': activity.is_completed, 'is-incomplete': !activity.is_completed, 'activity-overdue': activity.is_overdue}"
 >
   <div class="act-feed-inner">
-    <div class="pull-right" ng-include="'~/civicase/ActivityItemMenu.html'"></div>
+    <div class="pull-right" ng-include="'~/civicase/ActivityCardMenu.html'"></div>
     <div civicase-activity-dot="activity"></div>
     <h4>
       <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>

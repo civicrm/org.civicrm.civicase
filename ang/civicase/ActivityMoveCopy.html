@@ -1,0 +1,10 @@
+<form>
+  <div>
+    <label>{{ model.ts('Select Case') }}</label>
+    <input class="form-control" crm-entityref="{entity: 'Case'}" ng-model="model.activity.case_id" />
+  </div>
+  <div>
+    <label>{{ tagset.ts('Activity Subject') }}</label>
+    <input class="form-control" ng-model="model.activity.subject" />
+  </div>
+</form>

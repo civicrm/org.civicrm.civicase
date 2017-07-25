@@ -105,6 +105,10 @@
       }
     };
 
+    function formatAct(act) {
+      return formatActivity(act, $scope.item.id);
+    }
+
     function formatCaseDetails(item) {
       $scope.formatCase(item);
       item.definition = caseTypes[item.case_type_id].definition;
@@ -123,13 +127,13 @@
       delete(item['api.Case.get.2']);
       // Format activities
       _.each(item.activity_summary, function(acts) {
-        _.each(acts, formatActivity);
+        _.each(acts, formatAct);
       });
       // Recent communications
-      item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.1'].values), formatActivity);
+      item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.1'].values), formatAct);
       delete(item['api.Activity.get.1']);
       // Tasks
-      item.tasks = _.each(_.cloneDeep(item['api.Activity.get.3'].values), formatActivity);
+      item.tasks = _.each(_.cloneDeep(item['api.Activity.get.3'].values), formatAct);
       delete(item['api.Activity.get.3']);
       // Custom fields
       item.customData = item['api.CustomValue.gettree'].values || [];

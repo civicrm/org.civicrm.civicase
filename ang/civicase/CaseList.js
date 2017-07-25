@@ -120,7 +120,9 @@
       item.selected = tmpSelection.indexOf(item.id) >= 0;
       item.is_deleted = item.is_deleted === '1';
       _.each(item.activity_summary, function(activities) {
-        _.each(activities, formatActivity);
+        _.each(activities, function(act) {
+          formatActivity(act, item.id);
+        });
       });
       _.each(item.contacts, function(contact) {
         if (!contact.relationship_type_id) {
