@@ -35,7 +35,7 @@
     $scope.$bindToRoute({expr:'filters', param:'cf', default: {}});
     $scope.$bindToRoute({expr:'viewingCase', param:'caseId', format: 'raw'});
     $scope.$bindToRoute({expr:'viewingCaseTab', param:'tab', format: 'raw', default:'summary'});
-    $scope.$bindToRoute({expr:'pageSize', param:'cps', format: 'int', default: 25});
+    $scope.$bindToRoute({expr:'pageSize', param:'cps', format: 'int', default: 15});
     $scope.$bindToRoute({expr:'pageNum', param:'cpn', format: 'int', default: 1});
 
     $scope.viewCase = function(id, $event) {
