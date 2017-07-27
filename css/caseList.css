@@ -14,7 +14,10 @@
   width: 25%;
 }
 #bootstrap-theme .case-list-panel.case-is-focused {
-  width: 15px;
+  background: #fff;
+  height: calc(100% - 31px);
+  position: absolute;
+  width: 30px;
 }
 #bootstrap-theme .case-list-table {
   table-layout: fixed;
@@ -98,21 +101,23 @@
   background-color: #23527c;
 }
 #bootstrap-theme .civicase-table-placeholder {
-  width: 15px;
-  height: 600px;
   cursor: pointer;
+  height: 100%;
   position: relative;
+  width: 30px;
 }
 #bootstrap-theme .civicase-table-placeholder:hover,
 #bootstrap-theme .civicase-filters-placeholder:hover {
   background-color: #f3f6f7;
 }
 #bootstrap-theme .civicase-table-placeholder div {
-  position: absolute;
-  top: 50%;
   font-size: 18px;
-  left: 3px;
+  left: 0;
   margin-top: -13px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  width: 100%;
 }
 #bootstrap-theme th.civicase-sortable {
   cursor: pointer;
@@ -133,4 +138,61 @@
 }
 #bootstrap-theme .cc-sort-btn-group button {
   border-right: 2px solid #f4f7f8;
+}
+#bootstrap-theme input[type=checkbox] + label[for],
+#bootstrap-theme input[type=radio] + label[for] {
+  color: #727E8A;
+  font-weight: normal;
+  position: relative;
+  vertical-align: middle;
+}
+#bootstrap-theme input[type=radio] + label[for] {
+  line-height: 21px;
+}
+#bootstrap-theme input[type=radio] + label[for]:before {
+  background-color: #ffffff;
+  border: solid 1px #C2CFD8;
+  border-radius: 50%;
+  box-shadow: inset 0 0 3px 0 rgba(0, 0, 0, 0.2);  
+  content: '';
+  display: inline-block;
+  height: 16px;
+  min-width: 16px;
+  width: 16px;
+}
+#bootstrap-theme input[type=radio]:checked + label[for]:after {
+  background-color: #727E8A;
+  border-radius: 50%;
+  content: '';
+  display: inline-block;
+  left: 4px;
+  height: 8px;
+  min-width: 8px;
+  position: absolute;
+  top: 8px;
+  width: 8px;
+}
+#bootstrap-theme input[type=checkbox] + label[for]:before {
+  background-color: #ffffff;
+  border: solid 1px #C2CFD8;
+  border-radius: 2px;
+  box-shadow: inset 0 0 3px 0 rgba(0, 0, 0, 0.2);
+  content: '';
+  display: inline-block;
+  height: 16px;
+  min-width: 16px;
+  width: 16px;
+}
+#bootstrap-theme input[type=checkbox]:checked + label[for]:after {
+  color: #4D5663;
+  content: "\f00c";
+  display: inline-block;
+  font-family: 'FontAwesome';
+  font-size: 15px;
+  font-style: normal;
+  left: 2px;
+  margin-top: -6px;
+  position: absolute;
+  text-rendering: auto;
+  top: 6px;
 }
