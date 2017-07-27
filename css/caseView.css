@@ -1,7 +1,4 @@
 /* CSS rules for Angular civicase view */
-#branding h1.page-title {
-  margin: 0 0 20px !important;
-}
 #bootstrap-theme .civicase-view-with-search {
   width: 75%;
   padding-left: 10px;
