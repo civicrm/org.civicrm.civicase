@@ -12,28 +12,35 @@
           <input type="text" class="form-control" id="uploadSubject" placeholder="" ng-model="activity.subject">
         </div>
 
-        <div>
-          <div class="civicase-file-name">{{ts('Name')}}</div>
-          <div class="civicase-file-size">{{ts('Size')}}</div>
-          <div class="civicase-file-action"></div>
-        </div>
 
-        <div ng-repeat="item in uploader.queue">
-          <div>
-            <!--<a class="pull-right" ng-click="item.remove()">Remove</a>-->
-            <h4 class="civicase-file-name" ng-bind="item.file.name"></h4>
-            <div class="civicase-file-size" civicase-filesize="item.file.size"></div>
-            <div class="civicase-file-action">
-              <button class="btn btn-sm btn-danger-outline" ng-click="item.remove()">Remove</button>
-            </div>
-          </div>
-          <div class="progress progress-striped">
-            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{width: item.progress + '%'}">{{item.progress}}</div>
-          </div>
-          <div class="form-group">
-            <textarea type="textarea" class="form-control" placeholder="{{ts('Add file description')}}" rows="3" ng-model="item.crmData.description"></textarea>
-          </div>
-        </div>
+        <table class="cc-uploader-files">
+          <thead>
+          <tr>
+            <th>{{ts('Name')}}</th>
+            <th>{{ts('Size')}}</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat-start="item in uploader.queue">
+            <td ng-bind="item.file.name"></td>
+            <td civicase-filesize="item.file.size"></td>
+            <td><button class="btn btn-sm btn-danger-outline" ng-click="item.remove()">Remove</button></td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <div class="progress progress-striped">
+                <div class="progress-bar text-center" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{width: item.progress + '%'}">{{item.progress > 0 ? item.progress + '%' : ''}}</div>
+              </div>
+            </td>
+          </tr>
+          <tr ng-repeat-end="">
+            <td colspan="3" class="form-group">
+              <textarea type="textarea" class="form-control" placeholder="{{ts('Add file description')}}" rows="3" ng-model="item.crmData.description"></textarea>
+            </td>
+          </tr>
+          </tbody>
+        </table>
 
         <div class="clearfix">
           <div class="pull-right">
