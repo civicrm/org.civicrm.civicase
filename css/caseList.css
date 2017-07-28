@@ -180,6 +180,7 @@
   content: '';
   display: inline-block;
   height: 16px;
+  margin-right: 10px;
   min-width: 16px;
   width: 16px;
 }

@@ -39,13 +39,20 @@
 }
 
 #bootstrap-theme .act-feed-list-group {
-  width: 100%;
+  margin: 0 auto;
+  width: 80%;
 }
 
 #bootstrap-theme div.act-feed-panel .panel-body {
   padding: 0;
 }
-
+#bootstrap-theme div.act-feed-panel .input-group {
+  width: 100%;
+}
+#bootstrap-theme div.act-feed-panel .input-group .input-group-addon:last-child {
+  color: #727E8A;
+  width: 18px;
+}
 #bootstrap-theme .act-feed-list-group.viewing-activity {
   width: 60%;
   float: left;
@@ -129,6 +136,7 @@
 
 #bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item {
   cursor: inherit;
+  margin: 15px 0;
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-item.is-viewing {
@@ -179,35 +187,95 @@
   background-color: #e6807f;
 }
 
-#bootstrap-theme .act-feed-list-group .act-date {
-  font-weight: bold;
-  padding-left: 1em;
+#bootstrap-theme .act-feed-list-group .list-group-item:first-child .act-date {
+  border-top: 0;
+  padding-top: 10px;
 }
 
-#bootstrap-theme .act-feed-list-group .act-task-checkbox {
-  position: absolute;
+#bootstrap-theme .act-feed-list-group .act-date {
+  border-top: 1px solid #E8EEF0;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding-left: 1em;
+  padding-top: 20px;
+}
+
+#bootstrap-theme .act-feed-list-group .act-task-checkbox { 
   color: #586277;
-  left: 34px;
-  top: -6px;
-  font-size: 1.5em;
   cursor: pointer;
+  font-size: 1.5em;
+  left: 34px;  
+  position: absolute;
+  top: -6px;
 }
 
 #bootstrap-theme .act-feed-list-group .act-task-checkbox:hover i {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
 
+#bootstrap-theme .act-feed-list-group .act-feed-item h4 {
+  margin: 0;
+}
+
 #bootstrap-theme .act-feed-list-group .act-subject {
-  white-space: nowrap;
+  color: #727E8A;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  margin-right: 1em;
+  max-width: 70%;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 70%;
-  margin-right: 1em;
-  display: inline-block;
+  white-space: nowrap;
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-milestone .act-subject {
   font-weight: bold;
+}
+
+#bootstrap-theme .act-feed-item .act-files a {
+  color: #4D5663;
+}
+
+#bootstrap-theme .act-feed-item .act-files a .fa {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+#bootstrap-theme .act-feed-item .act-files a span {
+  color: #4D5663;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#bootstrap-theme .act-feed-item .act-files .btn-group .btn{
+  padding: 0 5px;
+}
+
+#bootstrap-theme .act-feed-item .act-files .btn-group .btn i {
+  color: #4D5663;
+}
+
+#bootstrap-theme .act-feed-item .act-files .btn-group .btn:hover,
+#bootstrap-theme .act-feed-item .act-files .btn-group .btn:focus,
+#bootstrap-theme .act-feed-item .act-files .btn-group.open .btn.dropdown-toggle {
+  background: transparent;
+  box-shadow: none;
+}
+
+#bootstrap-theme .act-feed-item .act-files .btn-group .btn:hover i,
+#bootstrap-theme .act-feed-item .act-files .btn-group .btn:focus i,
+#bootstrap-theme .act-feed-item .act-files .btn-group.open .btn.dropdown-toggle i {
+  color: #42AFCB;
+}
+
+#bootstrap-theme .act-feed-item .act-files p {
+  color: #525966;
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 10px;
+  margin-top: 5px;
 }
 
 #bootstrap-theme .act-feed-list-group .act-star {
