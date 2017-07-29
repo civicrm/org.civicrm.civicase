@@ -60,6 +60,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'option_group_id' => 'activity_status',
       'label' => ts('Unread'),
       'name' => 'Unread',
+      'grouping' => 'communication',
       'is_reserved' => 0,
       'color' => '#d9534f',
     ));
@@ -67,9 +68,32 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'option_group_id' => 'activity_status',
       'label' => ts('Draft'),
       'name' => 'Draft',
+      'grouping' => 'communication',
       'is_reserved' => 0,
       'color' => '#c2cfd8',
     ));
+
+    // Set grouping for existing statuses
+    $allowedStatuses = array(
+      'Scheduled' => 'none,task,document,communication,milestone',
+      'Completed' => 'none,task,document,communication,milestone,alert',
+      'Cancelled' => 'none,communication,milestone,alert',
+      'Left Message' => 'none,communication,milestone',
+      'Unreachable' => 'none,communication,milestone',
+      'Not Required' => 'none,task,milestone',
+      'Available' => 'none,milestone',
+      'No_show' => 'none,milestone',
+    );
+    foreach ($allowedStatuses as $status => $grouping) {
+      civicrm_api3('OptionValue', 'get', array(
+        'option_group_id' => 'activity_status',
+        'name' => $status,
+        'api.OptionValue.setvalue' => array(
+          'field' => 'grouping',
+          'value' => $grouping,
+        ),
+      ));
+    }
 
     // Set status colors
     $colors = array(
