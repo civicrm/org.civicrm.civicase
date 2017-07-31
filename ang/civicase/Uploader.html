@@ -8,18 +8,27 @@
       <div class="cc-uploader-detail pull-right" ng-class="{'cc-zero-w': !isUploadActive(), 'cc-zero-h': !isUploadActive()}">
 
         <div class="form-group">
-          <label for="uploadSubject">{{ts('Subject')}}</label>
+          <label for="uploadSubject">{{ts('Activity Subject')}}</label>
           <input type="text" class="form-control" id="uploadSubject" placeholder="" ng-model="activity.subject">
         </div>
 
+        <div class="row">
+          <div class="civicase-file-name col-sm-6 col-md-8"><label>{{ts('Name')}}</label></div>
+          <div class="civicase-file-size col-sm-3 col-md-2"><label>{{ts('Size')}}</label></div>
+          <div class="civicase-file-action col-sm-3 col-md-2"></div>
+        </div>
+
         <div ng-repeat="item in uploader.queue">
-          <div class="clearfix">
+          <div class="row">
             <!--<a class="pull-right" ng-click="item.remove()">Remove</a>-->
-            <button class="btn btn-sm btn-danger-outline pull-right" ng-click="item.remove()">Remove</button>
-            <h4 ng-bind="item.file.name"></h4>
+            <h4 class="civicase-file-name col-sm-6 col-md-8" ng-bind="item.file.name"></h4>
+            <div class="civicase-file-size col-sm-3 col-md-2" civicase-filesize="item.file.size"></div>
+            <div class="civicase-file-action col-sm-3 col-md-2">
+              <button class="btn btn-sm btn-danger-outline civicase-file-remove" ng-click="item.remove()">Remove</button>
+            </div>
           </div>
           <div class="progress progress-striped">
-            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{width: item.progress + '%'}">{{item.progress}}</div>
+            <div class="progress-bar" ng-class="{fullwidth: item.progress == '100'}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{width: item.progress + '%'}">{{item.progress}}</div>
           </div>
           <div class="form-group">
             <textarea type="textarea" class="form-control" placeholder="{{ts('Add file description')}}" rows="3" ng-model="item.crmData.description"></textarea>
@@ -28,8 +37,8 @@
 
         <div class="clearfix">
           <div class="pull-right">
-            <button type="button" class="btn btn-danger-outline" ng-click="deleteActivity()" >
-              <span class="btn-icon"><i class="fa fa-times"></i></span> {{ts('Cancel')}}</button>
+            <button type="button" class="btn btn-default cancel" ng-click="deleteActivity()" >
+              <span class="btn-icon"></span> {{ts('Cancel')}}</button>
             <button type="button" class="btn btn-primary" ng-click="saveActivity()" >
               <span class="btn-icon"><i class="fa fa-upload"></i></span> {{ts('Upload')}}</button>
           </div>
@@ -43,7 +52,7 @@
              <label for="cc-uploader-button">
                <i class="fa fa-cloud-upload"></i><br/>
                {{ts('Drop file here')}}<br/>
-               {{ts('or click here to browse')}}<br/>
+               <span>{{ts('or click here to browse')}}</span><br/>
              </label>
         </div>
 

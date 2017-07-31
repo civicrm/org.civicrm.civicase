@@ -2,7 +2,7 @@
 
 <div crm-ui-debug="filesByAct"></div>
 
-<div ng-hide="apiCtrl.result.count">
+<div ng-hide="apiCtrl.result.count" class="no-files">
   {{ts('No files found')}}
 </div>
 
@@ -29,7 +29,9 @@
 
         <div class="act-files">
           <div ng-repeat="file in filesByAct[activity.id]" class="clearfix">
-            <div class="btn-group btn-group-sm pull-right">
+            <a ng-href="{{file.url}}" title="Uploaded {{file.upload_date}}"><i class="fa {{file.icon}}"></i><span>{{file.name}}</span></a>
+
+            <div class="btn-group btn-group-sm">
               <button
                 type="button"
                 class="btn btn-default-outline btn-xs dropdown-toggle"
@@ -38,15 +40,13 @@
               ><i class="crm-i fa-ellipsis-v"></i></button>
               <ul class="dropdown-menu" role="menu">
                 <li>
-                  <a title="{{ ts('Download') }}" href="{{ file.url }}"><i class="crm-i fa-download"></i> &nbsp;{{ts('Download')}}</a>
+                  <a title="{{ ts('Download') }}" href="{{ file.url }}">{{ts('Download')}}</a>
                 </li>
                 <li>
-                  <a title="{{ ts('Delete') }}" ng-click="delete(activity, file)"><i class="crm-i fa-trash"></i> &nbsp;{{ts('Delete')}}</a>
+                  <a title="{{ ts('Delete') }}" ng-click="delete(activity, file)">{{ts('Delete')}}</a>
                 </li>
               </ul>
             </div>
-
-            <a ng-href="{{file.url}}" title="Uploaded {{file.upload_date}}"><i class="fa {{file.icon}}"></i><code>{{file.name}}</code></a>
 
             <p>{{file.description}}</p>
 
