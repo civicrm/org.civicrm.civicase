@@ -10,7 +10,7 @@
 #bootstrap-theme .civicase-view-with-search.case-is-focused > .panel > .panel-header {
   border-radius: 2px 2px 0 0;
 }
-#bootstrap-theme .btn.btn-primary {
+#bootstrap-theme .btn {
   font-weight: 600;
 }
 #bootstrap-theme .fa.fa-plus {
@@ -181,6 +181,7 @@
 #bootstrap-theme .select2-container .select2-choice .select2-chosen {
   color: #727E8A;
   font-size: 13px;
+  font-weight: normal;
 }
 #bootstrap-theme .form-control .select2-choice .select2-arrow {
   top: 0;
@@ -293,7 +294,6 @@
   padding: 10px 30px;
 }
 #bootstrap-theme .case-tab-files .act-feed-panel .panel-body {
-  min-height: 100px;
   padding: 20px;
 }
 #bootstrap-theme .case-tab-files .act-feed-panel .no-files {

@@ -10,6 +10,9 @@
 #bootstrap-theme .case-list-panel.viewing-case td:first-child {
   width: 100%;
 }
+#bootstrap-theme .civicase-search-panel {
+  border-radius: 3px;
+}
 #bootstrap-theme .case-list-panel.viewing-case {
   width: 25%;
 }
@@ -20,20 +23,93 @@
   width: 30px;
 }
 #bootstrap-theme .case-list-table {
+  border-radius: 3px 3px 0 0;
   table-layout: fixed;
   word-wrap: break-word;
 }
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table {
+  table-layout: inherit;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr th:first-child,
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td:first-child {
+  left: 0;
+  position: absolute;  
+  width: 310px;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr th:first-child {
+  background: #F3F6F7;
+  height: 60px;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td:first-child {
+  background: #fff;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td:first-child:hover {
+  background: #d9edf7;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td {
+  border-bottom: 1px solid #e8eef0;
+  height: 150px;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr:last-child td {
+  border-bottom: none;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .outer {
+  background: #fff;
+  position: relative;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .inner {  
+  margin-left: 310px;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table th,
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table td {
+  min-width: 142px;
+  padding: 10px 15px;
+}
 #bootstrap-theme .case-list-table thead tr {
-  height: 61px;
+  background: #F3F6F7;
+  border-radius: 3px 3px 0 0;
+  border-top: none;
+  height: 60px;
   overflow: hidden;
 }
+#bootstrap-theme .case-list-table thead tr th {
+  background: transparent;
+  border-bottom: 1px solid #D3DEE2;
+  color: #525966;
+  font-size: 13px;
+  position: relative;
+  vertical-align: middle;
+}
+#bootstrap-theme .case-list-table thead tr th:first-child {
+  border-top-left-radius: 3px;
+}
+#bootstrap-theme .case-list-table thead tr th:last-child {
+  border-top-right-radius: 3px;
+}
+#bootstrap-theme .case-list-table thead tr th .btn-group > .btn:first-child {
+  background: #FFF;
+  color: #727e8a;
+  font-weight: normal;
+  text-transform: none;
+}
+#bootstrap-theme .case-list-table thead tr th .btn:hover {
+  border-color: #C2CFD8;
+}
 #bootstrap-theme .case-list-table thead select.btn {
-  width: 120px;
+  height: 30px;
+  padding: 5px;
+  text-transform: none;
+  width: 115px;
+}
+#bootstrap-theme .case-list-table thead .select2-container.btn {
+  padding: 0;
+  text-transform: none;
 }
 #bootstrap-theme .case-list-table th,
 #bootstrap-theme .case-list-table td {
   padding: 10px;
-  position: relative;
 }
 #bootstrap-theme .case-list-table td:first-child {
   cursor: pointer;
@@ -49,26 +125,75 @@
 #bootstrap-theme .viewing-case .case-list-table td.case-selected-for-view {
   background-color: #d9edf7;
 }
-
 #bootstrap-theme .case-list-table td:first-child h4 {
-  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  margin-bottom: 5px;
+  margin-top: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#bootstrap-theme .case-list-table td:first-child h4 .btn-info {
+  background: none;
+  border: none;
+  color: #42AFCB;
+  font-size: 16px;
+  padding: 2px;
+}
+#bootstrap-theme .case-list-table td:first-child strong {
+  color: #4D5663;
+}
+#bootstrap-theme .case-list-table td:first-child .case-list-info div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 #bootstrap-theme .case-list-table tr {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #E8EEF0;
 }
 #bootstrap-theme .case-list-checkbox {
+  left: 15px;
   position: absolute;
   top: 18px;
-  left: 15px;
+  width: 17px;
 }
-#bootstrap-theme .case-list-checkbox input {
+#bootstrap-theme .case-list-checkbox input[type="checkbox"] {
+  display: block;
+  margin-left: 0;
+  position: absolute;
+  opacity: 0;
   transform: scale(1.2);
+  z-index: 1;
 }
 #bootstrap-theme .case-list-checkbox + div {
   margin-left: 30px;
+  margin-top: 5px;
 }
-#bootstrap-theme .case-activity-summary-icons .badge {
+#bootstrap-theme .case-list-table th.fixed-col .btn-group {
+  margin-top: 5px;
+}
+#bootstrap-theme .case-activity-summary-icons {
+  margin-top: 5px;
+}
+#bootstrap-theme .case-activity-summary-icons a {
+  color: #AABAC3;
+  font-size: 18px;
   margin-right: 10px;
+}
+#bootstrap-theme .case-activity-summary-icons a:hover {
+  color: #727E8A;
+  text-decoration: none;
+}
+#bootstrap-theme .case-activity-summary-icons a i {
+  vertical-align: middle;
+}
+#bootstrap-theme .scrolling + .center-block {
+  background: #FAFAFB;
+  border-radius: 0 0 3px 3px;
+  border-top: 1px solid #E8EEF0;
+  padding: 15px;
 }
 #bootstrap-theme a.badge.item-overdue {
   background-color: #d9534f;
@@ -189,11 +314,48 @@
   content: "\f00c";
   display: inline-block;
   font-family: 'FontAwesome';
-  font-size: 15px;
+  font-size: 13px;
   font-style: normal;
+  height: 13px;
+  line-height: 13px;
   left: 2px;
-  margin-top: -6px;
   position: absolute;
   text-rendering: auto;
-  top: 6px;
+  top: 5px;
+}
+#bootstrap-theme .noti-badge {
+  background: #42AFCB;
+  border-radius: 50%;
+  color: #FFF;
+  display: inline-block;
+  font-size: 10px;
+  height: 16px;
+  line-height: 14px;
+  margin: -8px 0 0 -8px;
+  min-width: 16px;
+  padding: 1px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 16px;
+}
+
+#bootstrap-theme .noti-badge-active {
+  background: #FFF;
+  color: #42AFCB;
+}
+
+#bootstrap-theme .noti-badge-success {
+  background: #8EC68A;
+  color: #FFF;
+}
+
+#bootstrap-theme .noti-badge-warning {
+  background: #ECA67F;
+  color: #FFF;
+}
+
+#bootstrap-theme .noti-badge-danger {
+  background: #E6807F;
+  color: #FFF;
 }
