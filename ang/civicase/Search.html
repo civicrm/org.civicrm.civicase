@@ -11,75 +11,51 @@
     </button>
   </form>
 </div>
-<form class="panel-body" ng-show="expanded">
-  <div class="row crm-section">
-    <div class="col-lg-12">
-      <div class="row">
-        <label ng-if="isEnabled('id')" class="col-lg-2">{{ ts('Case ID') }}</label>
-        <div class="col-lg-4">
-          <input ng-if="isEnabled('id')" class="form-control" type="number" ng-model="filters.id" />
-        </div>
+<form class="panel-body form-horizontal" ng-show="expanded">
+  <div class="form-group">
+    <label ng-if="isEnabled('id')" class="control-label col-lg-2">{{ ts('Case ID') }}</label>
+    <div class="col-lg-4">
+      <input ng-if="isEnabled('id')" class="form-control" type="number" ng-model="filters.id" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label ng-if="isEnabled('contact_id')" class="control-label col-lg-2">{{ ts('Client Name or Email') }}</label>
+    <div class="col-lg-4">
+      <input ng-if="isEnabled('contact_id')" class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.contact_id" />
+    </div>
+    <div class="col-lg-6">
+      <div ng-if="checkPerm('administer CiviCase') && isEnabled('is_deleted')">
+        <input type="checkbox" ng-model="filters.is_deleted" id="case_search_field_is_deleted" />
+        <label for="case_search_field_is_deleted" class="control-label">{{ ts('Deleted Cases') }}</label>
       </div>
     </div>
   </div>
-  <div class="row crm-section">
-    <div class="col-lg-12">
-      <div class="row">
-        <label ng-if="isEnabled('contact_id')" class="col-lg-2">{{ ts('Client Name or Email') }}</label>
-        <div class="col-lg-4">
-          <input ng-if="isEnabled('contact_id')" class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.contact_id" />
-        </div>
-        <div class="col-lg-6">
-          <div ng-if="checkPerm('administer CiviCase') && isEnabled('is_deleted')">
-            <input type="checkbox" ng-model="filters.is_deleted" id="case_search_field_is_deleted" />
-            <label for="case_search_field_is_deleted">{{ ts('Deleted Cases') }}</label>
-          </div>
-        </div>
-      </div>
+  <div class="form-group" ng-if="isEnabled('case_manager')">
+    <label for="case_search_field_case_manager" class="control-label col-lg-2">{{ ts('Case Manager') }}</label>
+    <div class="col-lg-4">
+      <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.case_manager" id="case_search_field_case_manager" />
+    </div>
+    <div class="col-lg-6">
+      <input type="checkbox" ng-click="setCaseManager()" ng-checked="caseManagerIsMe()" id="case_search_field_case_manager_me" />
+      <label for="case_search_field_case_manager_me" class="control-label">{{ ts('Only my cases') }}</label>
     </div>
   </div>
-  <div class="row crm-section" ng-if="isEnabled('case_manager')">
-    <div class="col-lg-12">
-      <div class="row">
-        <label for="case_search_field_case_manager" class="col-lg-2">{{ ts('Case Manager') }}</label>
-        <div class="col-lg-4">
-          <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.case_manager" id="case_search_field_case_manager" />
-        </div>
-        <div class="col-lg-6">
-          <input type="checkbox" ng-click="setCaseManager()" ng-checked="caseManagerIsMe()" id="case_search_field_case_manager_me" />
-          <label for="case_search_field_case_manager_me">{{ ts('Only my cases') }}</label>
-        </div>
-      </div>
+  <div class="form-group">
+    <label ng-if="isEnabled('start_date')" class="control-label col-lg-2">{{ ts('Case Start Date') }}</label>
+    <div class="col-lg-4">
+      <div ng-if="isEnabled('start_date')" crm-ui-date-range="filters.start_date"></div>
     </div>
   </div>
-  <div class="row crm-section">
-    <div class="col-lg-12">
-      <div class="row">
-        <label ng-if="isEnabled('start_date')" class="col-lg-2">{{ ts('Case Start Date') }}</label>
-        <div class="col-lg-5">
-          <div ng-if="isEnabled('start_date')" crm-ui-date-range="filters.start_date"></div>
-        </div>
-      </div>
+  <div class="form-group">
+    <label ng-if="isEnabled('end_date')" class="control-label col-lg-2">{{ ts('Case End Date') }}</label>
+    <div class="col-lg-4">
+      <div ng-if="isEnabled('end_date')" crm-ui-date-range="filters.end_date"></div>
     </div>
   </div>
-  <div class="row crm-section">
-    <div class="col-lg-12">
-      <div class="row">
-        <label ng-if="isEnabled('end_date')" class="col-lg-2">{{ ts('Case End Date') }}</label>
-        <div class="col-lg-5">
-          <div ng-if="isEnabled('end_date')" crm-ui-date-range="filters.end_date"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row crm-section">
-    <div class="col-lg-12">
-      <div class="row">
-        <label class="col-lg-2">{{ ts('Tagged') }}</label>
-        <div class="col-lg-4">
-          <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'IN':['Cases']}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
-        </div>
-      </div>
+  <div class="form-group">
+    <label class="control-label col-lg-2">{{ ts('Tagged') }}</label>
+    <div class="col-lg-4">
+      <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'IN':['Cases']}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
     </div>
   </div>
   
