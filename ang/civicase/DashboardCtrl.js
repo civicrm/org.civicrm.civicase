@@ -9,7 +9,7 @@
     }
   );
 
-  angular.module('civicase').controller('CivicaseDashboardCtrl', function($scope, crmApi, crmStatus) {
+  angular.module('civicase').controller('CivicaseDashboardCtrl', function($scope, crmApi, formatActivity) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.$bindToRoute({
       param: 'dtab',
@@ -25,6 +25,38 @@
       default: false
     });
 
+    $scope.dashboardActivities = {
+      recentCommunication: [],
+      nextMilestones: []
+    };
+
+    $scope.refresh = function(apiCalls) {
+      apiCalls = apiCalls || [];
+      var params = _.extend({
+        sequential: 1,
+        is_current_revision: 1,
+        is_test: 0,
+        options: {limit: 10, sort: 'activity_date_time DESC'},
+        return: ['case_id', 'activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue']
+      }, $scope.activityFilters);
+      // recent communication
+      apiCalls.push(['Activity', 'get', _.extend({
+        "activity_type_id.grouping": {LIKE: "%communication%"},
+        'status_id.filter': 1,
+        options: {limit: 10, sort: 'activity_date_time DESC'}
+      }, params)]);
+      // next milestones
+      apiCalls.push(['Activity', 'get', _.extend({
+        "activity_type_id.grouping": {LIKE: "%milestone%"},
+        'status_id.filter': 0,
+        options: {limit: 10, sort: 'activity_date_time ASC'}
+      }, params)]);
+      crmApi(apiCalls).then(function(data) {
+        $scope.dashboardActivities.recentCommunication = _.each(data[apiCalls.length - 2].values, formatActivity);
+        $scope.dashboardActivities.nextMilestones = _.each(data[apiCalls.length - 1].values, formatActivity);
+      });
+    };
+
     // Translate between the dashboard's global filter-options and
     // the narrower, per-section filter-options.
     $scope.$watch('myCasesOnly', function (myCasesOnly) {
@@ -36,6 +68,7 @@
       else {
         $scope.activityFilters = {case_id: {'IS NOT NULL': 1}};
       }
+      $scope.refresh();
     });
   });
 

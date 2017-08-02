@@ -74,14 +74,16 @@
 
   angular.module('civicase').factory('getActivityFeedUrl', function($route, $location) {
     return function(caseId, category, status, id) {
-      var af = {};
+      caseId = parseInt(caseId, 10);
+      var af = {},
+        currentPath = $location.path();
       if (category) {
         af["activity_type_id.grouping"] = category;
       }
       if (status) {
         af.status_id = CRM.civicase.activityStatusTypes[status];
       }
-      var p = angular.extend({}, $route.current.params, {
+      var p = {
         caseId: caseId,
         tab: 'activities',
         aid: id || 0,
@@ -89,8 +91,14 @@
         sx: 0,
         ai: '{"myActivities":false,"delegated":false}',
         af: JSON.stringify(af)
-      });
-      return $location.path() + '?' + $.param(p);
+      };
+      // If we're not already viewing a case, force the id filter
+      if (currentPath !== '/case/list') {
+        p.cf = JSON.stringify({id: caseId});
+      } else {
+        _.extend(p, $route.current.params);
+      }
+      return '/case/list?' + $.param(p);
     };
   });
 
