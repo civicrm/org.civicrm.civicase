@@ -64,8 +64,10 @@
       }
       if (caseId) {
         act.case_id = caseId;
-      } else {
+      } else if (act.case_id) {
         act.case_id = act.case_id[0];
+      } else {
+        act.case_id = null;
       }
     };
   });
