@@ -62,7 +62,7 @@
       if (act.category.indexOf('alert') > -1) {
         act.color = ''; // controlled by css
       }
-      if (caseId) {
+      if (caseId && (!act.case_id || _.contains(act.case_id, caseId))) {
         act.case_id = caseId;
       } else if (act.case_id) {
         act.case_id = act.case_id[0];

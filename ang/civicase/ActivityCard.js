@@ -41,7 +41,7 @@
             if (op === 'copy') {
               delete model.activity.id;
             }
-            if (model.activity.case_id && model.activity.case_id != $scope.item.id) {
+            if (model.activity.case_id && model.activity.case_id != act.case_id) {
               $scope.refresh([['Activity', 'create', model.activity]]);
             }
             $(this).dialog('close');
@@ -59,7 +59,6 @@
       scope: {
         activity: '=caseActivityCard',
         refresh: '=refreshCallback',
-        item: '=caseItem',
         editActivityUrl: '=?editActivityUrl'
       }
     };

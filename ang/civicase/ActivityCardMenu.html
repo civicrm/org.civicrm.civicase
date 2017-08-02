@@ -4,7 +4,7 @@
   </button>
   <ul class="dropdown-menu dropdown-menu-right">
     <li>
-      <a ng-href="#{{ activityFeedUrl(item.id, null, null, activity.id) }}">
+      <a ng-href="#{{ activityFeedUrl(activity.case_id, null, null, activity.id) }}">
         <i class="fa fa-external-link-square"></i> {{ ts('View') }}
       </a>
       <a ng-href="{{ editActivityUrl(activity.id) }}" class="crm-popup" ng-if="isActivityEditable(activity)">
