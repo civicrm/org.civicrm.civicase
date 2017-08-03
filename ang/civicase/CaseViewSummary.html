@@ -35,27 +35,27 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="civicase-next-task civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': item.tasks[0].is_overdue}">
+      <div class="civicase-next-communication civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': item.activity_summary.communication[0].is_overdue}">
         <h3>
-          {{ ts('Next task') }}
+          {{ ts('Next Communication') }}
         </h3>
-        <div ng-if="item.tasks.length" class="act-feed-item">
+        <div ng-if="item.activity_summary.communication.length" class="act-feed-item">
           <div class="act-feed-inner">
-            <div civicase-activity-dot="item.tasks[0]"></div>
-            <div><strong>{{ item.tasks[0].type }}</strong></div>
-            <div>{{ CRM.utils.formatDate(item.tasks[0].activity_date_time) }}</div>
-            <div class="act-contacts-target" ng-if="item.tasks[0].target_contact_name">
+            <div civicase-activity-dot="item.activity_summary.communication[0]"></div>
+            <div><strong>{{ item.activity_summary.communication[0].type }}</strong></div>
+            <div>{{ CRM.utils.formatDate(item.activity_summary.communication[0].activity_date_time) }}</div>
+            <div class="act-contacts-target" ng-if="item.activity_summary.communication[0].target_contact_name">
               <strong>{{ ts('With') }}</strong>
-              <span civicase-activity-contacts="{activity: item.tasks[0], type: 'target'}"></span>
+              <span civicase-activity-contacts="{activity: item.activity_summary.communication[0], type: 'target'}"></span>
             </div>
-            <div class="act-contacts-assignee" ng-if="item.tasks[0].assignee_contact_name">
+            <div class="act-contacts-assignee" ng-if="item.activity_summary.communication[0].assignee_contact_name">
               <strong>{{ ts('Assigned to') }}</strong>
-              <span civicase-activity-contacts="{activity: item.tasks[0], type: 'assignee'}"></span>
+              <span civicase-activity-contacts="{activity: item.activity_summary.communication[0], type: 'assignee'}"></span>
             </div>
           </div>
           <div class="btn-group-sm text-center">
             <a class="btn btn-default crm-popup"
-               ng-href="{{ editActivityUrl(item.tasks[0].id) }}"
+               ng-href="{{ editActivityUrl(item.activity_summary.communication[0].id) }}"
                crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
             >
               <i class="fa fa-pencil"></i> {{ ts('Edit') }}
