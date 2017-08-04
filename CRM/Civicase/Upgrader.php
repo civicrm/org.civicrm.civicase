@@ -75,8 +75,8 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
 
     // Set grouping for existing statuses
     $allowedStatuses = array(
-      'Scheduled' => 'none,task,document,communication,milestone',
-      'Completed' => 'none,task,document,communication,milestone,alert',
+      'Scheduled' => 'none,task,file,communication,milestone',
+      'Completed' => 'none,task,file,communication,milestone,alert',
       'Cancelled' => 'none,communication,milestone,alert',
       'Left Message' => 'none,communication,milestone',
       'Unreachable' => 'none,communication,milestone',

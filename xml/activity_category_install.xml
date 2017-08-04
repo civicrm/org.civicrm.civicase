@@ -22,13 +22,13 @@
       <option_group_name>activity_category</option_group_name>
     </OptionValue>
     <OptionValue>
-      <label>Document</label>
-      <value>document</value>
-      <name>document</name>
+      <label>File</label>
+      <value>file</value>
+      <name>file</name>
       <is_default>0</is_default>
       <weight>2</weight>
       <is_active>1</is_active>
-      <icon>fa-file-text</icon>
+      <icon>fa-file</icon>
       <option_group_name>activity_category</option_group_name>
     </OptionValue>
     <OptionValue>
