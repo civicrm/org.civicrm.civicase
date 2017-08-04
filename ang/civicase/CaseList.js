@@ -230,6 +230,10 @@
     $scope.$watch('cases', function(cases) {
       $scope.selectedCases = _.filter(cases, 'selected');
     }, true);
+    // Hide page title when case is selected
+    $scope.$watch('viewingCase', function(caseId) {
+      $('h1.crm-page-title').toggle(!caseId);
+    });
 
     $scope.applyAdvSearch = function(newFilters) {
       $scope.filters = newFilters;
