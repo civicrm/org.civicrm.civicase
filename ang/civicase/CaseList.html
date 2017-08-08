@@ -72,7 +72,7 @@
           <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="fixed-col">
             <div class="case-list-checkbox" ng-if="!viewingCase">
               <input type="checkbox" ng-model="item.selected" />
-              <label for="{{ }}"></label>
+              <label></label>
             </div>
             <div class="case-list-info">
               <h4>
@@ -104,11 +104,12 @@
                 <a class=""
                    ng-repeat="category in activityCategories"
                    ng-href="#{{ activityFeedUrl(item.id, category.name, 'incomplete') }}"
+                   ng-class="{'item-overdue': item.activity_summary[category.name][0].is_overdue}"
                    ng-if="item.category_count[category.name]"
                    title="{{ ts('%1 upcoming %2', {1: item.category_count[category.name], 2: category.label}) }}"
                 >
                   <i class="fa {{ category.icon }}"></i>
-                  <span class="badge noti-badge" ng-class="{'noti-badge-danger': category.icon == 'fa-check-circle', 'noti-badge-warning': category.icon == 'fa-flag'}">{{ item.category_count[category.name] }}</span>
+                  <span class="badge noti-badge">{{ item.category_count[category.name] }}</span>
                 </a>
               </div>
             </div>
@@ -119,15 +120,19 @@
           <td ng-show="!viewingCase">{{ item.manager.display_name }}</td>
           <td ng-show="!viewingCase">{{ item.myRole.join(', ') }}</td>
           <td ng-show="!viewingCase">
-            <div ng-if="item.activity_summary.milestone.length">
-              <div>{{ activityTypes[item.activity_summary.milestone[0].activity_type_id].label }}</div>
-              <div>{{ CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
+            <div
+              ng-if="item.activity_summary.milestone.length"
+              case-activity-card="item.activity_summary.milestone[0]"
+              refresh-callback="refresh"
+            >
             </div>
           </td>
           <td ng-show="!viewingCase">
-            <div ng-if="item.activity_summary.task.length">
-              <div>{{ activityTypes[item.activity_summary.task[0].activity_type_id].label }}</div>
-              <div>{{ CRM.utils.formatDate(item.activity_summary.task[0].activity_date_time) }}</div>
+            <div
+              ng-if="item.activity_summary.task.length"
+              case-activity-card="item.activity_summary.task[0]"
+              refresh-callback="refresh"
+            >
             </div>
           </td>
         </tr>

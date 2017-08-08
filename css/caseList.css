@@ -340,21 +340,6 @@
   width: 16px;
 }
 
-#bootstrap-theme .noti-badge-active {
-  background: #FFF;
-  color: #42AFCB;
-}
-
-#bootstrap-theme .noti-badge-success {
-  background: #8EC68A;
-  color: #FFF;
-}
-
-#bootstrap-theme .noti-badge-warning {
-  background: #ECA67F;
-  color: #FFF;
-}
-
 #bootstrap-theme .noti-badge-danger {
   background: #E6807F;
   color: #FFF;
