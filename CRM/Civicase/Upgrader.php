@@ -18,7 +18,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     $communicationTypes = civicrm_api3('OptionValue', 'get', array(
       'return' => array('id'),
       'option_group_id' => 'activity_type',
-      'name' => array('IN' => array("Meeting", "Phone Call", "Email", "SMS", "Inbound Email", "Follow up")),
+      'name' => array('IN' => array('Meeting', 'Phone Call', 'Email', 'SMS', 'Inbound Email', 'Follow up', 'Print PDF Letter')),
     ));
     foreach ($communicationTypes['values'] as $type) {
       civicrm_api3('OptionValue', 'setvalue', array('id' => $type['id'], 'field' => 'grouping', 'value' => 'communication'));
