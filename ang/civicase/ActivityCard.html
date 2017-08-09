@@ -8,6 +8,7 @@
     <h4>
       <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
       <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
+      <span class="act-subject-draft" ng-if="activity.status_name === 'Draft'">{{ ts('Draft') }}</span>
     </h4>
     <div class="clearfix">
       {{ CRM.utils.formatDate(activity.activity_date_time) }}
