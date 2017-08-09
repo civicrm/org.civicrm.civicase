@@ -8,6 +8,10 @@
     <a href class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
       <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
     </a>
+    <h4 class="act-contacts-target" ng-if="activity.target_contact_name && activity.category.indexOf('communication') >= 0">
+      <strong>{{ ts('To') }}</strong>
+      <span civicase-activity-contacts="{activity: activity, type: 'target'}"></span>
+    </h4>
     <h4>
       <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
       <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
@@ -47,7 +51,7 @@
     </div>
     <div class="act-details" ng-bind-html="activity.details"></div>
     <div class="act-contacts clearfix">
-      <div class="act-contacts-target" ng-if="activity.target_contact_name">
+      <div class="act-contacts-target" ng-if="activity.target_contact_name && activity.category.indexOf('communication') < 0">
         <strong>{{ ts('With:') }}</strong>
         <span ng-repeat="(cid, display_name) in activity.target_contact_name">
           <a href="{{ CRM.url('civicrm/contact/view', {cid:cid}) }}">{{ display_name }}</a>
