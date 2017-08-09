@@ -52,19 +52,19 @@
                 <option value="end_date">{{ ts('End Date') }}</option>
                 <option value="case_manager.sort_name">{{ ts('Case Manager') }}</option>
                 <option value="my_role.label_b_a">{{ ts('My Role') }}</option>
+                <option value="next_activity">{{ ts('Next Activity') }}</option>
                 <option value="next_activity_category_milestone">{{ ts('Next Milestone') }}</option>
                 <option value="next_activity_category_task">{{ ts('Next Task') }}</option>
                 <option value="next_activity_category_communication">{{ ts('Next Communication') }}</option>
               </select>
             </div>
           </th>
+          <th ng-show="!viewingCase" civicase-sortheader="next_activity">{{ ts('Next Activity') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="subject">{{ ts('Subject') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="status_id.label">{{ ts('Status') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="case_type_id.title">{{ ts('Type') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="case_manager.sort_name">{{ ts('Case Manager') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="my_role.label_b_a">{{ ts('My Role') }}</th>
-          <th ng-show="!viewingCase" civicase-sortheader="next_activity_category_milestone">{{ ts('Next Milestone') }}</th>
-          <th ng-show="!viewingCase" civicase-sortheader="next_activity_category_task">{{ ts('Next Task') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -114,27 +114,19 @@
               </div>
             </div>
           </td>
+          <td ng-show="!viewingCase">
+            <div
+              ng-if="item.activity_summary.upcoming.length"
+              case-activity-card="item.activity_summary.upcoming[0]"
+              refresh-callback="refresh"
+            >
+            </div>
+          </td>
           <td ng-show="!viewingCase">{{ item.subject }}</td>
           <td ng-show="!viewingCase"><span class="badge">{{ item.status }}</span></td>
           <td ng-show="!viewingCase">{{ item.case_type }}</td>
           <td ng-show="!viewingCase">{{ item.manager.display_name }}</td>
           <td ng-show="!viewingCase">{{ item.myRole.join(', ') }}</td>
-          <td ng-show="!viewingCase">
-            <div
-              ng-if="item.activity_summary.milestone.length"
-              case-activity-card="item.activity_summary.milestone[0]"
-              refresh-callback="refresh"
-            >
-            </div>
-          </td>
-          <td ng-show="!viewingCase">
-            <div
-              ng-if="item.activity_summary.task.length"
-              case-activity-card="item.activity_summary.task[0]"
-              refresh-callback="refresh"
-            >
-            </div>
-          </td>
         </tr>
       </tbody>
     </table>

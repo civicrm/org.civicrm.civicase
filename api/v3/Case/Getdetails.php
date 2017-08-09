@@ -69,6 +69,7 @@ function civicrm_api3_case_getdetails($params) {
     if (in_array('activity_summary', $toReturn)) {
       $catetoryLimits = CRM_Utils_Array::value('categories', $options, array_fill_keys($activityCategories, 1));
       $categories = array_fill_keys(array_keys($catetoryLimits), array());
+      $catetoryLimits += array('upcoming' => 10);
       foreach ($result['values'] as &$case) {
         $case['activity_summary'] = $categories;
       }
@@ -91,20 +92,20 @@ function civicrm_api3_case_getdetails($params) {
         'is_current_revision' => 1,
         'is_test' => 0,
         'status_id.filter' => CRM_Activity_BAO_Activity::INCOMPLETE,
-        'activity_type_id' => array('IN' => array_unique($allTypes)),
-        'activity_date_time' => array('<' => 'now'),
         'options' => array(
           'limit' => 0,
           'sort' => 'activity_date_time',
-          'or' => array(array('activity_date_time', 'activity_type_id')),
         ),
       ));
       foreach ($activities['values'] as $act) {
         foreach ((array) $act['case_id'] as $actCaseId) {
           if (isset($result['values'][$actCaseId])) {
             $case =& $result['values'][$actCaseId];
+            if (empty($catetoryLimits['upcoming']) || count($case['activity_summary']['upcoming']) < $catetoryLimits['upcoming']) {
+              $case['activity_summary']['upcoming'][] = $act;
+            }
             foreach ($categories as $category => $grouping) {
-              if (in_array($act['activity_type_id'], $grouping) && (!$catetoryLimits[$category] || count($case['activity_summary'][$category]) < $catetoryLimits[$category])) {
+              if (in_array($act['activity_type_id'], $grouping) && (empty($catetoryLimits[$category]) || count($case['activity_summary'][$category]) < $catetoryLimits[$category])) {
                 $case['activity_summary'][$category][] = $act;
               }
             }
@@ -215,24 +216,29 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
         $sortString = '(1)';
       }
       // Sort by upcoming activities
-      elseif (strpos($sortString, 'next_activity_category_') === 0) {
+      elseif (strpos($sortString, 'next_activity') === 0) {
         $sortString = '(1)';
         $category = str_replace('next_activity_category_', '', $sortJoin);
-        $actTypes = civicrm_api3('OptionValue', 'get', array(
-          'sequential' => 1,
-          'option_group_id' => "activity_type",
-          'options' => array('limit' => 0),
-          'grouping' => array('LIKE' => "%$category%"),
-        ));
-        $actTypes = implode(',', CRM_Utils_Array::collect('value', $actTypes['values']));
-        $incomplete = implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE)));
-        if (!$actTypes || !$incomplete) {
-          continue;
+        $actClause = '';
+        // If we're limiting to a particiular category
+        if ($category != 'next_activity') {
+          $actTypes = civicrm_api3('OptionValue', 'get', array(
+            'sequential' => 1,
+            'option_group_id' => "activity_type",
+            'options' => array('limit' => 0),
+            'grouping' => array('LIKE' => "%$category%"),
+          ));
+          $actTypes = implode(',', CRM_Utils_Array::collect('value', $actTypes['values']));
+          if (!$actTypes) {
+            continue;
+          }
+          $actClause = "AND activity_type_id IN ($actTypes)";
         }
+        $incomplete = implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE)));
         $sql->join($sortJoin, "LEFT JOIN (
             SELECT MIN(activity_date_time) as activity_date_time, case_id
             FROM civicrm_activity, civicrm_case_activity
-            WHERE civicrm_activity.id = civicrm_case_activity.activity_id AND activity_type_id IN ($actTypes) AND status_id IN ($incomplete) AND is_current_revision = 1 AND is_test <> 1
+            WHERE civicrm_activity.id = civicrm_case_activity.activity_id $actClause AND status_id IN ($incomplete) AND is_current_revision = 1 AND is_test <> 1
             GROUP BY case_id
           ) AS $sortJoin ON $sortJoin.case_id = a.id");
         $sql->orderBy("$sortJoin.activity_date_time $dir", NULL, $index);
