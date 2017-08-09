@@ -245,34 +245,15 @@
 #bootstrap-theme .case-tab-summary .row > div {
   padding: 1em;
 }
-#bootstrap-theme .civicase-activity-stamp {
-  background-color: #4d5663;
-  padding: 0;
+#bootstrap-theme .civicase-view-next-activities-inner {
+  overflow-x: auto;
 }
-#bootstrap-theme .civicase-activity-stamp.civicase-stamp-overdue {
-  background-color: #e6807f;
-  padding: 0;
+#bootstrap-theme .civicase-view-next-activities-inner > ul {
+  width: 3000px; /* FIXME */
 }
-#bootstrap-theme .civicase-activity-stamp h3 {
-  padding: 16px;
-  background-color: #e8eef0;
-  margin: 0;
-}
-#bootstrap-theme .civicase-activity-stamp .act-feed-item {
-  padding: 22px 12px 10px;
-  color: #fff;
-}
-#bootstrap-theme .civicase-activity-stamp .act-feed-inner {
-  height: 150px;
-}
-#bootstrap-theme .civicase-activity-stamp .cb-dot {
-  background-color: white !important;
-  color: #4d5663 !important;
-  border-color: #4d5663;
-  top: -10px;
-}
-#bootstrap-theme .civicase-activity-stamp.civicase-stamp-overdue .cb-dot {
-  border-color: #e6807f;
+#bootstrap-theme .civicase-view-next-activities-inner .list-group-item {
+  display: inline-block;
+  margin-right: 20px;
 }
 #bootstrap-theme .civicase-view-tasks .act-feed-item {
   border-left: 5px solid;

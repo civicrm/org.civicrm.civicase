@@ -4,65 +4,23 @@
       <p crm-editable="item" data-field="subject" data-type="textarea" crm-form-success="onChangeSubject($data)"></p>
       <div class="case-custom-data-first" ng-repeat="(index, customGroup) in item.customData" ng-if="!index" ng-include="'~/civicase/CaseViewCustomData.html'"></div>
     </div>
-    <div class="col-md-3">
-      <div class="civicase-next-milestone civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': item.activity_summary.milestone[0].is_overdue}">
-        <h3>
-          {{ ts('Next Milestone') }}
-        </h3>
-        <div ng-if="item.activity_summary.milestone.length" class="act-feed-item">
-          <div class="act-feed-inner">
-            <div civicase-activity-dot="item.activity_summary.milestone[0]"></div>
-            <div><strong>{{ item.activity_summary.milestone[0].type }}</strong></div>
-            <div>{{ CRM.utils.formatDate(item.activity_summary.milestone[0].activity_date_time) }}</div>
-            <div class="act-contacts-target" ng-if="item.activity_summary.milestone[0].target_contact_name">
-              <strong>{{ ts('With') }}</strong>
-              <span civicase-activity-contacts="{activity: item.activity_summary.milestone[0], type: 'target'}"></span>
-            </div>
-            <div class="act-contacts-assignee" ng-if="item.activity_summary.milestone[0].assignee_contact_name">
-              <strong>{{ ts('Assigned to') }}</strong>
-              <span civicase-activity-contacts="{activity: item.activity_summary.milestone[0], type: 'assignee'}"></span>
-            </div>
-          </div>
-          <div class="btn-group-sm text-center">
-            <a class="btn btn-default crm-popup"
-              ng-href="{{ editActivityUrl(item.activity_summary.milestone[0].id) }}"
-              crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
-            >
-              <i class="fa fa-pencil"></i> {{ ts('Edit') }}
-            </a>
+    <div class="civicase-view-next-activities col-md-6">
+      <h3>{{ ts('Up Next') }}</h3>
+        <div class="civicase-view-next-activities-inner activity-timeline">
+          <ul class="list-group act-feed-list-group" ng-if="item.activity_summary.upcoming.length">
+            <li class="list-group-item" ng-repeat="activity in item.activity_summary.upcoming">
+              <div
+                case-activity-card="activity"
+                refresh-callback="refresh"
+                crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+                edit-activity-url="editActivityUrl"
+              ></div>
+            </li>
+          </ul>
+          <div class="civicase-panel-empty" ng-if="!item.activity_summary.upcoming.length">
+            {{ ts('No upcoming activities.') }}
           </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="civicase-next-communication civicase-activity-stamp" ng-class="{'civicase-stamp-overdue': item.activity_summary.communication[0].is_overdue}">
-        <h3>
-          {{ ts('Next Communication') }}
-        </h3>
-        <div ng-if="item.activity_summary.communication.length" class="act-feed-item">
-          <div class="act-feed-inner">
-            <div civicase-activity-dot="item.activity_summary.communication[0]"></div>
-            <div><strong>{{ item.activity_summary.communication[0].type }}</strong></div>
-            <div>{{ CRM.utils.formatDate(item.activity_summary.communication[0].activity_date_time) }}</div>
-            <div class="act-contacts-target" ng-if="item.activity_summary.communication[0].target_contact_name">
-              <strong>{{ ts('With') }}</strong>
-              <span civicase-activity-contacts="{activity: item.activity_summary.communication[0], type: 'target'}"></span>
-            </div>
-            <div class="act-contacts-assignee" ng-if="item.activity_summary.communication[0].assignee_contact_name">
-              <strong>{{ ts('Assigned to') }}</strong>
-              <span civicase-activity-contacts="{activity: item.activity_summary.communication[0], type: 'assignee'}"></span>
-            </div>
-          </div>
-          <div class="btn-group-sm text-center">
-            <a class="btn btn-default crm-popup"
-               ng-href="{{ editActivityUrl(item.activity_summary.communication[0].id) }}"
-               crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
-            >
-              <i class="fa fa-pencil"></i> {{ ts('Edit') }}
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
   <div class="row" ng-if="item.customData.length > 1">
