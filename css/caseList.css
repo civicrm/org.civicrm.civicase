@@ -340,7 +340,7 @@
   width: 16px;
 }
 
-#bootstrap-theme .noti-badge-danger {
+#bootstrap-theme .item-overdue .noti-badge {
   background: #E6807F;
   color: #FFF;
 }
