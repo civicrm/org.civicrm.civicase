@@ -21,13 +21,15 @@
     civicase-formatter="formatCase">
   </div>
   <div class="panel panel-default case-list-panel" ng-class="{'viewing-case': viewingCase, 'case-is-focused': caseIsFocused}">
-
+  <div class="scrolling outer">
+    <div class="inner">    
     <table ng-show="!caseIsFocused" class="case-list-table">
       <thead>
         <tr>
           <th class="fixed-col">
             <div class="case-list-checkbox" ng-if="!viewingCase">
-              <input type="checkbox" ng-click="selectAll($event)" ng-checked="isSelection('all')" />
+              <input type="checkbox" ng-click="selectAll($event)" id="select-role-{{ $index }}" ng-checked="isSelection('all')" />
+              <label for="select-role-{{ $index }}"></label>
             </div>
             <div class="btn-group btn-group-sm" ng-if="!viewingCase">
               <button type="button" class="btn btn-default dropdown-toggle" ng-class="{disabled: !selectedCases.length}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -40,7 +42,7 @@
               <button class="btn btn-default" ng-click="changeSortDir()">
                 <i class="fa" ng-class="{'fa-arrow-circle-up': sortDir === 'ASC', 'fa-arrow-circle-down': sortDir === 'DESC'}"></i>
               </button>
-              <select class="btn btn-default" ng-model="sortField">
+              <select class="form-control btn btn-default" ng-model="sortField" crm-ui-select>
                 <option value="id">{{ ts('Case ID') }}</option>
                 <option value="contact_id.sort_name">{{ ts('Case Client') }}</option>
                 <option value="subject">{{ ts('Subject') }}</option>
@@ -70,8 +72,9 @@
           <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="fixed-col">
             <div class="case-list-checkbox" ng-if="!viewingCase">
               <input type="checkbox" ng-model="item.selected" />
+              <label></label>
             </div>
-            <div>
+            <div class="case-list-info">
               <h4>
                 {{ item.client[0].display_name }}
                 <div class="btn-group btn-group-sm" ng-if="item.client.length > 1">
@@ -98,7 +101,7 @@
                 {{ item.id }}
               </div>
               <div class="case-activity-summary-icons">
-                <a class="badge"
+                <a class=""
                    ng-repeat="category in activityCategories"
                    ng-href="#{{ activityFeedUrl(item.id, category.name, 'incomplete') }}"
                    ng-class="{'item-overdue': item.activity_summary[category.name][0].is_overdue}"
@@ -106,13 +109,13 @@
                    title="{{ ts('%1 upcoming %2', {1: item.category_count[category.name], 2: category.label}) }}"
                 >
                   <i class="fa {{ category.icon }}"></i>
-                  {{ item.category_count[category.name] }}
+                  <span class="badge noti-badge">{{ item.category_count[category.name] }}</span>
                 </a>
               </div>
             </div>
           </td>
           <td ng-show="!viewingCase">{{ item.subject }}</td>
-          <td ng-show="!viewingCase">{{ item.status }}</td>
+          <td ng-show="!viewingCase"><span class="badge">{{ item.status }}</span></td>
           <td ng-show="!viewingCase">{{ item.case_type }}</td>
           <td ng-show="!viewingCase">{{ item.manager.display_name }}</td>
           <td ng-show="!viewingCase">{{ item.myRole.join(', ') }}</td>
@@ -135,6 +138,8 @@
         </tr>
       </tbody>
     </table>
+    </div>
+  </div>
     <paging
       class="center-block text-center"
       ng-show="!caseIsFocused"
