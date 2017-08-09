@@ -1,5 +1,5 @@
 <div
-  class="act-feed-item activity-card act-category-{{ activity.category.join(' act-category-') || 'none' }} status-type-{{ activity.status_type }}"
+  class="act-feed-item activity-card act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.status_css }}"
   ng-class="{'is-completed': activity.is_completed, 'is-incomplete': !activity.is_completed, 'activity-overdue': activity.is_overdue}"
 >
   <div class="act-feed-inner">
