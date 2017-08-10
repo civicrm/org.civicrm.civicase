@@ -14,6 +14,8 @@ and interactions.
 
  * Latest CiviCRM v4.7.x, preferrably the latest `master`
  * [Shoreditch](https://github.com/civicrm/org.civicrm.shoreditch) 
+ * (*Recommended*) Migrate from embedded activity revisions to full system logging
+   ([CRM-21051](https://issues.civicrm.org/jira/browse/CRM-21051))
 
 ## Installation (git/cli)
 
