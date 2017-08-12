@@ -3,15 +3,16 @@
   function FileFilterCtrl($scope) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.fileCategoriesIT = CRM.civicase.fileCategories;
+    $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.customFilters = {
-      showLetters: false
+      grouping: ''
     };
     $scope.$watchCollection('customFilters', function() {
-      if ($scope.customFilters.showLetters) {
-        $scope.apiCtrl.params.activity_type_id = 'Print PDF Letter';
+      if (!_.isEmpty($scope.customFilters.grouping)) {
+        $scope.apiCtrl.params['activity_type_id.grouping'] = {'LIKE': '%' + $scope.customFilters.grouping + '%'};
       }
       else {
-        delete $scope.apiCtrl.params.activity_type_id;
+        delete $scope.apiCtrl.params['activity_type_id.grouping'];
       }
     });
   }
