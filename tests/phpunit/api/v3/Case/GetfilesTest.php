@@ -49,7 +49,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
     //   4 => expectMatch,
     // );
 
-    $cases[] = array(
+    $cases[0] = array(
       // Match any file if there's no filter.
       0 => 'Give bread a chance',
       1 => 'With a little butter and jam',
@@ -57,7 +57,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array(),
       4 => TRUE,
     );
-    $cases[] = array(
+    $cases[1] = array(
       // Match any file if the text filter is blank.
       0 => 'Give bread a chance',
       1 => 'With a little butter and jam',
@@ -65,7 +65,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('text' => ''),
       4 => TRUE,
     );
-    $cases[] = array(
+    $cases[2] = array(
       // This doesn't match "cheese" to anything.
       0 => 'Give bread a chance',
       1 => 'With a little butter and jam',
@@ -73,7 +73,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('text' => 'cheese'),
       4 => FALSE,
     );
-    $cases[] = array(
+    $cases[3] = array(
       // Match on subject.
       0 => 'Give cheese a chance',
       1 => '',
@@ -81,7 +81,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('text' => 'cheese'),
       4 => TRUE,
     );
-    $cases[] = array(
+    $cases[4] = array(
       // Match on details.
       0 => 'Give bread a chance',
       1 => 'But make it with cheesey goodness',
@@ -89,7 +89,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('text' => 'cheese'),
       4 => TRUE,
     );
-    $cases[] = array(
+    $cases[5] = array(
       // Match on file name.
       0 => 'Give bread a chance',
       1 => '',
@@ -97,7 +97,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('text' => 'cheese'),
       4 => TRUE,
     );
-    $cases[] = array(
+    $cases[6] = array(
       // Match on file type (miss).
       0 => 'Give bread a chance',
       1 => '',
@@ -105,7 +105,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('mime_type' => 'text/html'),
       4 => FALSE,
     );
-    $cases[] = array(
+    $cases[7] = array(
       // Match on file type.
       0 => 'Give bread a chance',
       1 => '',
@@ -113,7 +113,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('mime_type' => 'text/plain'),
       4 => TRUE,
     );
-    $cases[] = array(
+    $cases[8] = array(
       // Match on file category.
       0 => 'Give bread a chance',
       1 => '',
@@ -121,7 +121,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('mime_type_cat' => 'doc'),
       4 => TRUE,
     );
-    $cases[] = array(
+    $cases[9] = array(
       // Match on file category (miss).
       0 => 'Give bread a chance',
       1 => '',
@@ -129,7 +129,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('mime_type_cat' => 'sheet'),
       4 => FALSE,
     );
-    $cases[] = array(
+    $cases[10] = array(
       // Match on activity type (existing record).
       0 => 'Give bread a chance',
       1 => '',
@@ -137,7 +137,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('activity_type_id' => 'Medical evaluation'),
       4 => TRUE,
     );
-    $cases[] = array(
+    $cases[11] = array(
       // Match on multiple activity types (existing record).
       0 => 'Give bread a chance',
       1 => '',
@@ -150,7 +150,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       ),
       4 => TRUE,
     );
-    $cases[] = array(
+    $cases[12] = array(
       // Match on activity type (existent but unused type name).
       0 => 'Give bread a chance',
       1 => '',
@@ -158,7 +158,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       3 => array('activity_type_id' => 'Incoming Email'),
       4 => FALSE,
     );
-    $cases[] = array(
+    $cases[13] = array(
       // Match on activity type (non-existent type name).
       0 => 'Give bread a chance',
       1 => '',
