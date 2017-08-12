@@ -163,7 +163,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       0 => 'Give bread a chance',
       1 => '',
       2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
-      3 => array('activity_type_id' => 'Federatd republic of blergistan'),
+      3 => array('activity_type_id' => 'Federated republic of blergistan'),
       4 => FALSE,
     );
 
