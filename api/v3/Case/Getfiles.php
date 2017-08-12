@@ -182,6 +182,26 @@ function _civicrm_api3_case_getfiles_select($params) {
     }
   }
 
+  if (isset($params['activity_type_id.grouping'])) {
+    $groupingFilter = is_array($params['activity_type_id.grouping'])
+      ? $params['activity_type_id.grouping']
+      : array('=', $params['activity_type_id.grouping']);
+    $selectActTypes = CRM_Utils_SQL_Select::from('civicrm_option_value cov')
+      ->join('cog', 'INNER JOIN civicrm_option_group cog ON cog.id = cov.option_group_id')
+      ->where('cog.name = "activity_type"')
+      ->where(CRM_Core_DAO::createSqlFilter('cov.grouping', $groupingFilter, 'String'))
+      ->select('cov.value, cov.name');
+    $actTypes = $selectActTypes->execute()->fetchMap('value', 'name');
+    if ($actTypes) {
+      $select->where('act.activity_type_id IN (#type)', array(
+        '#type' => array_keys($actTypes),
+      ));
+    }
+    else {
+      $select->where('0 = 1');
+    }
+  }
+
   if (isset($params['activity_type_id'])) {
     if (is_array($params['activity_type_id'])) {
       $select->where(CRM_Core_DAO::createSqlFilter('act.activity_type_id', $params['activity_type_id'], 'String'));

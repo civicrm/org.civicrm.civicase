@@ -30,6 +30,7 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
 
   public function setUp() {
     parent::setUp();
+    CRM_Core_DAO::executeQuery('UPDATE civicrm_option_value SET grouping = "milestone" WHERE option_group_id = 2 AND name = "Medical evaluation"');
     $this->cleanupFiles();
   }
 
@@ -164,6 +165,23 @@ class api_v3_Case_GetfilesTest extends api_v3_Case_BaseTestCase implements Headl
       1 => '',
       2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
       3 => array('activity_type_id' => 'Federated republic of blergistan'),
+      4 => FALSE,
+    );
+
+    $cases[14] = array(
+      // Match on activity type grouping (existing record)
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array('activity_type_id.grouping' => array('LIKE' => '%milestone%')),
+      4 => TRUE,
+    );
+    $cases[15] = array(
+      // Match on activity type grouping (no match)
+      0 => 'Give bread a chance',
+      1 => '',
+      2 => self::getFilePrefix() . 'theCheeseIsGoodForYou.txt',
+      3 => array('activity_type_id.grouping' => array('LIKE' => '%document%')),
       4 => FALSE,
     );
 
