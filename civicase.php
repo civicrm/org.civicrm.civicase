@@ -177,6 +177,9 @@ function civicase_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 
 /**
  * Implements hook_civicrm_buildForm().
+ *
+ * @param string $formName
+ * @param CRM_Core_Form $form
  */
 function civicase_civicrm_buildForm($formName, &$form) {
   // Display category option for activity types and activity statuses
@@ -235,10 +238,84 @@ function civicase_civicrm_buildForm($formName, &$form) {
   if (!empty($_REQUEST['civicase_reload'])) {
     $form->civicase_reload = json_decode($_REQUEST['civicase_reload'], TRUE);
   }
+  // Add save draft button to Communication activities
+  $specialForms = array('CRM_Contact_Form_Task_PDF', 'CRM_Contact_Form_Task_Email');
+  if (is_a($form, 'CRM_Activity_Form_Activity') || in_array($formName, $specialForms)) {
+    $activityType = $form->getVar('_activityTypeId');
+    $id = $form->getVar('_activityId');
+    $status = NULL;
+    if ($id) {
+      $status = civicrm_api3('Activity', 'getsingle', array('id' => $id, 'return' => 'status_id.name'));
+      $status = $status['status_id.name'];
+    }
+    $checkParams = array('option_group_id' => 'activity_type', 'grouping' => array('LIKE' => '%communication%'), 'value' => $activityType);
+    if (!$activityType || civicrm_api3('OptionValue', 'getcount', $checkParams)) {
+      if ($form->_action & (CRM_Core_Action::ADD + CRM_Core_Action::UPDATE)) {
+        $buttonGroup = $form->getElement('buttons');
+        $buttons = $buttonGroup->getElements();
+        $buttons[] = $form->createElement('submit', $form->getButtonName('refresh'), ts('Save Draft'), array(
+          'crm-icon' => 'fa-pencil-square-o',
+          'class' => 'crm-form-submit'
+        ));
+        $buttonGroup->setElements($buttons);
+        $form->addGroup($buttons, 'buttons');
+      }
+      if ($status == 'Draft' && ($form->_action & CRM_Core_Action::VIEW)) {
+        $form->assign('activityTypeDescription', '<i class="crm-i fa-pencil-square-o"></i> &nbsp;' . ts('Saved as a Draft'));
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_civicrm_validateForm().
+ *
+ * @param string $formName
+ * @param array $fields
+ * @param array $files
+ * @param CRM_Core_Form $form
+ * @param array $errors
+ */
+function civicase_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
+  $specialForms = array('CRM_Contact_Form_Task_PDF', 'CRM_Contact_Form_Task_Email');
+  if (is_a($form, 'CRM_Activity_Form_Activity') || in_array($formName, $specialForms)) {
+    if (array_key_exists($form->getButtonName('refresh'), $fields['buttons'])) {
+      $activityType = $form->getVar('_activityTypeId');
+      $caseId = $form->getVar('_caseId');
+      if (!$activityType) {
+        $activityType = $formName == 'CRM_Contact_Form_Task_PDF' ? 'Print PDF Letter' : 'Email';
+      }
+      $params = array(
+        'activity_type_id' => $activityType,
+        'status_id' => 'Draft',
+        'case_id' => $caseId,
+        'id' => $form->getVar('_activityId'),
+      );
+      $newActivity = civicrm_api3('Activity', 'create', $params + $fields);
+      $url = CRM_Utils_System::url('civicrm/contact/view/case',
+        "reset=1&action=view&cid={$form->_currentlyViewedContactId}&id={$caseId}&show=1"
+      );
+      $session = CRM_Core_Session::singleton();
+      $session->pushUserContext($url);
+      CRM_Core_Session::setStatus('Activity saved as a draft', ts('Saved'), 'success');
+      if (CRM_Utils_Array::value('snippet', $_GET) === 'json') {
+        $response = array();
+        if (!empty($form->civicase_reload)) {
+          $api = civicrm_api3('Case', 'getdetails', array('check_permissions' => 1) + $form->civicase_reload);
+          $response['civicase_reload'] = $api['values'];
+        }
+        CRM_Core_Page_AJAX::returnJsonResponse($response);
+      }
+      CRM_Utils_System::redirect($url);
+    }
+  }
 }
 
 /**
  * Implements hook_civicrm_postProcess().
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ * @throws \CiviCRM_API3_Exception
  */
 function civicase_civicrm_postProcess($formName, &$form) {
   if (!empty($form->civicase_reload)) {
