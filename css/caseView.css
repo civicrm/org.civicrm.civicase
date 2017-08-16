@@ -17,22 +17,33 @@
   padding-right: 5px;
 }
 #bootstrap-theme .civicase-view-header {
-  padding: 10px 20px;
+  background-color: #F3F6F7; 
 }
 #bootstrap-theme .civicase-view-header h2 {
-  color: #42AFCB;
+  color: #525966;
   font-size: 24px;
-  margin-bottom: 5px;
-  margin-top: 10px;
+  margin: 19px 19px 0;
+
 }
+
+#bootstrap-theme .civicase-view-header h2 .btn-group {
+  line-height: 24px;
+  margin-top: -10px;
+}
+
 #bootstrap-theme .civicase-view-header h2 .btn-info {
+
   background: transparent;
   border: none;
   border-radius: 0;
-  color: #4D5663;
+  color: #42AFCB;
+  float: none;
   font-size: 24px;
   font-weight: 600;
-  padding: 0 5px;
+  line-height: 24px;
+  margin: 0;
+  padding: 0;
+  text-transform: lowercase;
 }
 #bootstrap-theme .label {
   border-radius: 10px;
@@ -40,17 +51,23 @@
 #bootstrap-theme .btn-group .btn.btn-primary {
   border: none;
 }
-#bootstrap-theme .civicase-view-header .case-id {  
-  float: left;
-  margin-right: 15px;
-}
-#bootstrap-theme .civicase-view-header .case-id strong {
+#bootstrap-theme .civicase-view-header .case-id{
   color: #4D5663;
+  font-weight: normal;
+  font-size: 13px;
 }
 #bootstrap-theme .civicase-view-header .civicase-dates,
 #bootstrap-theme .civicase-view-header .civicase-tags {
   display: inline-block;
   margin-right: 15px;
+}
+#bootstrap-theme .civicase-view-header .civicase-dates {
+  color: #525966;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  margin-left: 19px;
+  margin-top: 16px;
 }
 #bootstrap-theme .civicase-tags .label {
   margin-right: 1em;
@@ -58,11 +75,24 @@
 }
 #bootstrap-theme .case-action-menu {
   clear: both;
-  margin-top: 10px;
+  margin-right: 19px;
 }
 #bootstrap-theme .civicase-type-and-manager {
-  border-top: 1px solid #c2cfd8;
-  margin-top: 5px;
+  border-top: 1px solid #E8EEF0;
+  margin-bottom: 18px;
+  margin-top: 15px;
+  padding: 0px 19px;
+}
+#bootstrap-theme .civicase-type-and-manager .civicase-type {
+  padding-top: 13px;
+  display: block;
+}
+#bootstrap-theme .civicase-type-and-manager .civicase-manager {
+  color: #42AFCB;
+  padding-top: 13px;
+}
+#bootstrap-theme .civicase-type-and-manager .civicase-manager strong{
+  color: #727E8A;
 }
 #bootstrap-theme .civicase-view-panel .panel-body {
   border-radius: 0 0 2px 2px;
