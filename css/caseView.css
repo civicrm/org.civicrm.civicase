@@ -286,3 +286,46 @@
 #bootstrap-theme .case-tab-files .act-feed-panel .panel-header .select2-container {
   margin-left: 15px;
 }
+#bootstrap-theme .civicase-view-other-cases-panel.panel-primary{
+  box-shadow: 0 3px 18px 0 rgba(48,40,40,0.25);
+}
+#bootstrap-theme .civicase-view-other-cases-panel.panel-primary .panel-heading {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0;
+}
+#bootstrap-theme .civicase-view-other-cases-panel .panel-body {
+  padding: 0;
+}
+#bootstrap-theme .civicase-view-other-cases .civicase-view-other-case {
+  padding: 20px;
+}
+#bootstrap-theme .civicase-view-other-cases .civicase-view-other-case:hover {
+  background-color: #D9EFF5;
+}
+#bootstrap-theme .civicase-view-other-cases .civicase-view-other-case h4 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  margin: 0 0 10px 0;
+}
+#bootstrap-theme .civicase-view-other-cases .civicase-view-other-case .text-muted {
+  color: #727E8A;
+  font-size: 13px;
+  line-height: 13px;
+  opacity: 0.65;
+  padding-top: 8px;
+}
+#bootstrap-theme .civicase-view-other-cases .civicase-view-other-case .crm-is-linked {
+  color: #42AFCB;
+  font-size: 16px;
+  padding-top: 3px;
+  margin-left: 15px;
+
+}
+#bootstrap-theme .civicase-view-other-cases .civicase-view-other-case .other-case-subject {
+  color: #727E8A;
+  opacity: 0.6;
+  line-height: 18px;
+  margin-top: 6px;
+}
