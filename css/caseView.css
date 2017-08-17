@@ -185,18 +185,24 @@
   width: 20em;
 }
 #bootstrap-theme .case-people-subtab {
-  margin: 2em 0 0;
+  margin: 20px 0px 0;
 }
 #bootstrap-theme .case-people-subtab .case-people-status {
   border-bottom: 1px solid #e8eef0;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   padding: 0 20px 20px 25px;
+}
+#bootstrap-theme .case-people-subtab .case-people-status h3 {
+  margin-bottom: 20px;
 }
 #bootstrap-theme .case-people-subtab .case-people-status strong {
   color: #4D5663;
 }
 #bootstrap-theme .case-people-subtab label + .select2-container {
-  margin-top: 5px;
+  margin-top: 10px;
+}
+#bootstrap-theme .case-people-subtab .people-selection-radio {
+  margin-left: 10px;
 }
 #bootstrap-theme .case-people-status .select2-container:not(.select2-container-disabled) .select2-choice .select2-chosen {
   color: #42AFCB;
@@ -228,6 +234,13 @@
 }
 #bootstrap-theme .case-tab-people .pagination {
   padding-left: 20px;
+  color: #4D5663;
+}
+#bootstrap-theme .case-tab-people .pagination li.disabled {
+  display: none;
+}
+#bootstrap-theme .case-tab-people .pagination li:nth-child(-n+2), #bootstrap-theme .case-tab-people .pagination li:nth-last-child(-n+2) {
+  font-weight: 600;
 }
 #bootstrap-theme .case-tab-people table + paging {
   border-top: 1px solid #E8EEF0;
