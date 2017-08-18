@@ -257,24 +257,35 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    * @param string $name
    *   The name of the item in `civicrm_navigation`.
    */
+  protected function toggleNav($name, $isActive) {
+    CRM_Core_DAO::executeQuery("UPDATE `civicrm_navigation` SET is_active = %2 WHERE name IN (%1)", array(
+      1 => array($name, 'String'),
+      2 => array($isActive ? 1 : 0, 'Int'),
+    ));
+  }
+
+  /**
+   * @param string $name
+   *   The name of the item in `civicrm_navigation`.
+   */
   protected function removeNav($name) {
-    CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('%s')", array(
+    CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN (%1)", array(
       1 => array($name, 'String'),
     ));
   }
 
   /**
-   * Example: Run a simple query when a module is enabled.
-   *
+   * Re-enable the extension's parts.
+   */
   public function enable() {
-    CRM_Core_DAO::executeQuery('UPDATE foo SET is_active = 1 WHERE bar = "whiz"');
+    $this->toggleNav('manage_cases', TRUE);
   }
 
   /**
-   * Example: Run a simple query when a module is disabled.
-   *
+   * Disnable the extension's parts without removing them.
+   */
   public function disable() {
-    CRM_Core_DAO::executeQuery('UPDATE foo SET is_active = 0 WHERE bar = "whiz"');
+    $this->toggleNav('manage_cases', FALSE);
   }
 
   /**
