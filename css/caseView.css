@@ -329,3 +329,38 @@
   line-height: 18px;
   margin-top: 6px;
 }
+#bootstrap-theme .civicase-view-summary .civicase-case-subject p.crm-editable-enabled:not(.crm-editable-editing):hover {
+  border: 1px solid #C2CFD8;
+  border-radius: 2px;
+  display: block;
+  padding: 1px 30px 1px 3px;
+  position: relative;
+}
+#bootstrap-theme .civicase-view-summary .civicase-case-subject p.crm-editable-enabled:not(.crm-editable-editing):hover:before {
+  background-color: #E8EEF0;
+  border-left: 1px solid #C2CFD8;
+  border-radius: 0 2px 2px 0;
+  bottom: 0;
+  content: "";
+  height: 100%;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  vertical-align: middle;
+  top: 0;
+  width: 30px;
+}
+
+#bootstrap-theme .civicase-view-summary .civicase-case-subject p.crm-editable-enabled:not(.crm-editable-editing):hover:after {
+  content: "\f040";
+  font-family: "FontAwesome";
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: calc(50% - 7px);
+  width: 30px;
+}
+#bootstrap-theme .civicase-view-summary .civicase-case-subject-label {
+  float: left;
+  margin: 2px 5px 0px;
+}
