@@ -15,13 +15,41 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     CRM_Core_BAO_ConfigSetting::enableComponent('CiviCase');
 
     // Set activity categories
-    $communicationTypes = civicrm_api3('OptionValue', 'get', array(
-      'return' => array('id'),
-      'option_group_id' => 'activity_type',
-      'name' => array('IN' => array('Meeting', 'Phone Call', 'Email', 'SMS', 'Inbound Email', 'Follow up', 'Print PDF Letter')),
-    ));
-    foreach ($communicationTypes['values'] as $type) {
-      civicrm_api3('OptionValue', 'setvalue', array('id' => $type['id'], 'field' => 'grouping', 'value' => 'communication'));
+    $categories = array(
+      'communication' => array(
+        'Meeting',
+        'Phone Call',
+        'Email',
+        'SMS',
+        'Inbound Email',
+        'Follow up',
+        'Print PDF Letter',
+      ),
+      'system' => array(
+        'Change Case Type',
+        'Change Case Status',
+        'Change Case Subject',
+        'Change Custom Data',
+        'Change Case Start Date',
+        'Assign Case Role',
+        'Remove Case Role',
+        'Merge Case',
+        'Reassigned Case',
+        'Link Cases',
+        'Change Case Tags',
+        'Add Client To Case',
+      ),
+    );
+    foreach ($categories as $grouping => $activityTypes) {
+      civicrm_api3('OptionValue', 'get', array(
+        'return' => 'id',
+        'option_group_id' => 'activity_type',
+        'name' => array('IN' => $activityTypes),
+        'api.OptionValue.setvalue' => array(
+          'field' => 'grouping',
+          'value' => $grouping,
+        ),
+      ));
     }
 
     // Create activity types
@@ -49,6 +77,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'option_group_id' => 'activity_type',
       'label' => ts('Remove Client From Case'),
       'name' => 'Remove Client From Case',
+      'grouping' => 'system',
       'is_reserved' => 0,
       'description' => ts('Client removed from multi-client case'),
       'component_id' => 'CiviCase',
@@ -88,6 +117,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       civicrm_api3('OptionValue', 'get', array(
         'option_group_id' => 'activity_status',
         'name' => $status,
+        'return' => 'id',
         'api.OptionValue.setvalue' => array(
           'field' => 'grouping',
           'value' => $grouping,
