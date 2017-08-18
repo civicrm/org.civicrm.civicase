@@ -34,7 +34,7 @@
       role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');
       role.relationship_type_id = relType.id;
     }
-    $scope.allRoles = _.each(_.cloneDeep(item.definition.caseRoles), formatRole);
+    $scope.allRoles = [];
 
     var getSelectedContacts = $scope.getSelectedContacts = function(tab, onlyChecked) {
       var idField = (tab === 'roles' ? 'contact_id' : 'id');
@@ -48,6 +48,9 @@
     };
 
     var getCaseRoles = $scope.getCaseRoles = function() {
+      if ($scope.item && $scope.item.definition && $scope.item.definition.caseRoles) {
+        $scope.allRoles = _.each(_.cloneDeep($scope.item.definition.caseRoles), formatRole);
+      }
       var caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep($scope.allRoles),
         allRoles = _.cloneDeep($scope.allRoles),
         selected = getSelectedContacts('roles', true);
