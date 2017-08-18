@@ -73,6 +73,16 @@ function civicase_civicrm_install() {
   _civicase_civix_civicrm_install();
 }
 
+
+/**
+ * Implements hook_civicrm_postInstall().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_postInstall
+ */
+function civicase_civicrm_postInstall() {
+  _civicase_civix_civicrm_postInstall();
+}
+
 /**
  * Implements hook_civicrm_uninstall().
  *
