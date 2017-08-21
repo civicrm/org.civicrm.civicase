@@ -331,3 +331,13 @@ function _civicase_menu_walk(&$menu, $callback) {
     }
   }
 }
+
+/**
+ * Implements hook_civicrm_coreResourceList().
+ */
+function civicase_civicrm_coreResourceList(&$items, $region) {
+  if ($region == 'html-header') {
+    
+    CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.shoreditch', 'base/js/affix.js', 1000, 'html-header');
+  }
+}
