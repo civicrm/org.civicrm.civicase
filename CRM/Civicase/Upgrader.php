@@ -16,6 +16,9 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
 
     // Set activity categories
     $categories = array(
+      'milestone' => array(
+        'Open Case',
+      ),
       'communication' => array(
         'Meeting',
         'Phone Call',
