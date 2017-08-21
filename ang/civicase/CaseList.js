@@ -53,6 +53,26 @@
       setPageTitle();
     };
 
+    $scope.$watch('caseIsFocused', function() {
+      if(window.cj('.act-feed-panel .panel-header').hasClass('affix')) {
+        setTimeout(function() {
+          window.cj('.act-feed-panel .panel-header').css('width',window.cj('.act-feed-panel').css('width'));
+        }, 1500);
+      }
+      else {
+        window.cj('.act-feed-panel .panel-header').css('width', 'auto');
+      }
+
+      if(window.cj('.act-feed-panel .act-list-controls').hasClass('affix')) {
+        setTimeout(function() {
+          window.cj('.act-feed-panel .act-list-controls').css('width',window.cj('.act-feed-panel .panel-header').css('width'));
+        }, 1500);
+      }
+      else {
+        window.cj('.act-feed-panel .act-list-controls').css('width', 'auto');
+      }
+    });
+
     var unfocusCase = $scope.unfocusCase = function() {
       $scope.caseIsFocused = false;
     };

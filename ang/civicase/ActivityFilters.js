@@ -15,6 +15,41 @@
         };
       }
 
+      window.cj('.act-feed-panel .panel-header').affix({offset: {top: window.cj('.civicase-view-header').offset().top} });
+
+      window.cj('.act-feed-panel .panel-header').css('top', window.cj('#toolbar').height());
+      window.cj('.act-feed-panel .panel-header').on('affixed.bs.affix', function() {
+        window.cj('.act-feed-panel .panel-header').css('width',window.cj('.act-feed-panel').css('width'));
+        window.cj('.act-feed-panel .panel-header').css('top', window.cj('#toolbar').height());
+      });
+
+      window.cj('.act-feed-panel .panel-header').on('affixed-top.bs.affix', function() {
+        window.cj('.act-feed-panel .panel-header').css('width','auto');
+      });
+
+      window.cj('.toggle.toolbar-toggle-processed').on('click',function() {
+        window.cj('.act-feed-panel .panel-header').css('top', window.cj('#toolbar').height());
+        window.cj('.act-feed-panel .act-list-controls').css('top',window.cj('#toolbar').height() + window.cj('.act-feed-panel .panel-header').height());
+      });
+
+      setTimeout(function() {
+        window.cj('.act-feed-panel .act-list-controls').affix({offset: {top: window.cj('.civicase-view-header').offset().top + window.cj('.act-feed-panel .panel-header').height()} });
+        
+        window.cj('.act-feed-panel .act-list-controls').on('affixed.bs.affix', function() {
+          window.cj('.act-feed-panel .act-list-controls').css('width',window.cj('.act-feed-panel .panel-header').css('width'));
+          window.cj('.act-feed-panel .act-list-controls').css('top',window.cj('#toolbar').height() + window.cj('.act-feed-panel .panel-header').height());
+        });
+
+        window.cj('.act-feed-panel .act-list-controls').on('affixed-top.bs.affix', function() {
+          window.cj('.act-feed-panel .act-list-controls').css('width','auto');
+          window.cj('.act-feed-panel .act-list-controls').css('top', 'auto');
+        });
+
+      }, 1000);
+
+
+
+
       $scope.availableFilters = [
         {
           name: 'activity_type_id',
