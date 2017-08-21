@@ -317,11 +317,10 @@
   font-size: 13px;
   font-style: normal;
   height: 13px;
-  line-height: 13px;
   left: 2px;
   position: absolute;
   text-rendering: auto;
-  top: 5px;
+  top: 8px;
 }
 #bootstrap-theme .noti-badge {
   background: #42AFCB;
