@@ -24,6 +24,15 @@
         });
     };
 
+    $scope.viewInPopup = function($event, activity) {
+      if (!$event || !$($event.target).is('a, a *, input, button')) {
+        CRM.loadForm(CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1}))
+          .on('crmFormSuccess', function() {
+            $scope.refresh();
+          });
+      }
+    };
+
     $scope.moveCopyActivity = function(act, op) {
       var model = {
         ts: ts,
