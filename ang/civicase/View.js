@@ -13,6 +13,10 @@
     $scope.caseGetParams = function() {
       return JSON.stringify(caseGetParams());
     };
+    // Categories to show in the summary block
+    $scope.upNextCategories = _.cloneDeep(CRM.civicase.activityCategories);
+    delete $scope.upNextCategories.alert;
+    delete $scope.upNextCategories.system;
 
     function caseGetParams() {
       return {
