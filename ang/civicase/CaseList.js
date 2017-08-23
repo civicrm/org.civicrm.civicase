@@ -55,7 +55,7 @@
 
     $scope.$watch('caseIsFocused', function() {
       if($('.act-feed-panel .panel-header').hasClass('affix')) {
-        setTimeout(function() {
+        $timeout(function() {
           $('.act-feed-panel .panel-header').css('width',$('.act-feed-panel').css('width'));
         }, 1500);
       }
@@ -64,7 +64,7 @@
       }
 
       if($('.act-feed-panel .act-list-controls').hasClass('affix')) {
-        setTimeout(function() {
+        $timeout(function() {
           $('.act-feed-panel .act-list-controls').css('width',$('.act-feed-panel .panel-header').css('width'));
         }, 1500);
       }
