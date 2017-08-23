@@ -4,6 +4,7 @@
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 Civi::resources()
   ->addPermissions(array('administer CiviCase', 'administer CiviCRM'))
+  ->addScriptFile('org.civicrm.shoreditch', 'base/js/affix.js', 1000, 'html-header')
   ->addSetting(array(
     'config' => array(
       'enableComponents' => CRM_Core_Config::singleton()->enableComponents,
