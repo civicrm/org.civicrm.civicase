@@ -32,7 +32,7 @@
         $('.act-feed-panel .act-list-controls').css('top',$('#toolbar').height() + $('.act-feed-panel .panel-header').height());
       });
 
-      setTimeout(function() {
+      $timeout(function() {
         $('.act-feed-panel .act-list-controls').affix({offset: {top: $('.civicase-view-header').offset().top + $('.act-feed-panel .panel-header').height()} });
         
         $('.act-feed-panel .act-list-controls').on('affixed.bs.affix', function() {
