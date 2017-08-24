@@ -151,8 +151,7 @@ foreach (CRM_Contact_Task::$_tasks as $id => $value) {
   }
 }
 // Random setting
-$xmlProcessorProcess = new CRM_Case_XMLProcessor_Process();
-$options['allowMultipleCaseClients'] = (bool) $xmlProcessorProcess->getAllowMultipleCaseClients();
+$options['allowMultipleCaseClients'] = (bool) Civi::settings()->get('civicaseAllowMultipleClients');
 return array(
   'js' => array(
     'ang/civicase.js',
