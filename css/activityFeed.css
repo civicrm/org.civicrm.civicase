@@ -369,11 +369,11 @@
   position: relative;
 }
 #bootstrap-theme div.act-feed-panel > .panel-header.affix {
-  z-index: 3;
+  z-index: 600;
   width: inherit;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix {
-  z-index: 3;
+  z-index: 600;
   width: inherit; 
   margin: 0px;
   padding: 0.2em 0.5em;
