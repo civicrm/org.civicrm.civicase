@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   // CaseList directive controller
-  function caseViewController($scope, crmApi, formatActivity, getActivityFeedUrl, $route) {
+  function caseViewController($scope, crmApi, formatActivity, getActivityFeedUrl, $route, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -108,6 +108,28 @@
         $scope.isFocused = true;
       }
     };
+
+    $scope.$watch('isFocused', function() {
+      $timeout(function() {
+        var $actHeader = $('.act-feed-panel .panel-header'),
+        $actControls = $('.act-feed-panel .act-list-controls');
+
+        if($actHeader.hasClass('affix')) {
+            $actHeader.css('width',$('.act-feed-panel').css('width'));
+        }
+        else {
+          $actHeader.css('width', 'auto');
+        }
+
+        if($actControls.hasClass('affix')) {
+            $actControls.css('width',$actHeader.css('width'));
+        }
+        else {
+          $actControls.css('width', 'auto');
+        }
+      },1500);
+      
+    });
 
     function formatAct(act) {
       return formatActivity(act, $scope.item.id);

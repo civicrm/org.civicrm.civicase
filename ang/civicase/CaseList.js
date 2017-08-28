@@ -53,6 +53,28 @@
       setPageTitle();
     };
 
+    
+    $scope.$watch('caseIsFocused', function() {
+      $timeout(function() {
+        var $actHeader = $('.act-feed-panel .panel-header'),
+        $actControls = $('.act-feed-panel .act-list-controls');
+
+        if($actHeader.hasClass('affix')) {
+            $actHeader.css('width',$('.act-feed-panel').css('width'));
+        }
+        else {
+          $actHeader.css('width', 'auto');
+        }
+
+        if($actControls.hasClass('affix')) {
+            $actControls.css('width',$actHeader.css('width'));
+        }
+        else {
+          $actControls.css('width', 'auto');
+        }
+      },1500);
+    });
+
     var unfocusCase = $scope.unfocusCase = function() {
       $scope.caseIsFocused = false;
     };
