@@ -53,24 +53,26 @@
       setPageTitle();
     };
 
+    
     $scope.$watch('caseIsFocused', function() {
-      if($('.act-feed-panel .panel-header').hasClass('affix')) {
-        $timeout(function() {
-          $('.act-feed-panel .panel-header').css('width',$('.act-feed-panel').css('width'));
-        }, 1500);
-      }
-      else {
-        $('.act-feed-panel .panel-header').css('width', 'auto');
-      }
+      $timeout(function() {
+        var $actHeader = $('.act-feed-panel .panel-header'),
+        $actControls = $('.act-feed-panel .act-list-controls');
 
-      if($('.act-feed-panel .act-list-controls').hasClass('affix')) {
-        $timeout(function() {
-          $('.act-feed-panel .act-list-controls').css('width',$('.act-feed-panel .panel-header').css('width'));
-        }, 1500);
-      }
-      else {
-        $('.act-feed-panel .act-list-controls').css('width', 'auto');
-      }
+        if($actHeader.hasClass('affix')) {
+            $actHeader.css('width',$('.act-feed-panel').css('width'));
+        }
+        else {
+          $actHeader.css('width', 'auto');
+        }
+
+        if($actControls.hasClass('affix')) {
+            $actControls.css('width',$actHeader.css('width'));
+        }
+        else {
+          $actControls.css('width', 'auto');
+        }
+      },1500);
     });
 
     var unfocusCase = $scope.unfocusCase = function() {

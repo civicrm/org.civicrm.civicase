@@ -15,40 +15,32 @@
         };
       }
 
-      $('.act-feed-panel .panel-header').affix({offset: {top: $('.civicase-view-header').offset().top} });
-
-      $('.act-feed-panel .panel-header').css('top', $('#toolbar').height());
-      $('.act-feed-panel .panel-header').on('affixed.bs.affix', function() {
-        $('.act-feed-panel .panel-header').css('width',$('.act-feed-panel').css('width'));
-        $('.act-feed-panel .panel-header').css('top', $('#toolbar').height());
-      });
-
-      $('.act-feed-panel .panel-header').on('affixed-top.bs.affix', function() {
-        $('.act-feed-panel .panel-header').css('width','auto');
-      });
-
-      $('.toggle.toolbar-toggle-processed').on('click',function() {
-        $('.act-feed-panel .panel-header').css('top', $('#toolbar').height());
-        $('.act-feed-panel .act-list-controls').css('top',$('#toolbar').height() + $('.act-feed-panel .panel-header').height());
-      });
-
       $timeout(function() {
-        $('.act-feed-panel .act-list-controls').affix({offset: {top: $('.civicase-view-header').offset().top + $('.act-feed-panel .panel-header').height()} });
+        var $actHeader = $('.act-feed-panel .panel-header'),
+        $actControls = $('.act-feed-panel .act-list-controls'),
+        $civicrmMenu = $('#civicrm-menu');
         
-        $('.act-feed-panel .act-list-controls').on('affixed.bs.affix', function() {
-          $('.act-feed-panel .act-list-controls').css('width',$('.act-feed-panel .panel-header').css('width'));
-          $('.act-feed-panel .act-list-controls').css('top',$('#toolbar').height() + $('.act-feed-panel .panel-header').height());
+        $actHeader.affix({offset: {top: $('.civicase-view-header').offset().top} })
+        .css('top', $civicrmMenu.height())
+        .on('affixed.bs.affix', function() {
+          $actHeader.css('width',$('.act-feed-panel').css('width'));
+          $actHeader.css('top', $civicrmMenu.height());
+          console.log($actHeader.css('top') + ' ' + $civicrmMenu.height());
+        })
+        .on('affixed-top.bs.affix', function() {
+          $actHeader.css('width','auto');
         });
-
-        $('.act-feed-panel .act-list-controls').on('affixed-top.bs.affix', function() {
-          $('.act-feed-panel .act-list-controls').css('width','auto');
-          $('.act-feed-panel .act-list-controls').css('top', 'auto');
+        
+        $actControls.affix({offset: {top: $('.civicase-view-header').offset().top + $actHeader.height()} })
+        .on('affixed.bs.affix', function() {
+          $actControls.css('width',$actHeader.css('width'));
+          $actControls.css('top',$civicrmMenu.height() + $actHeader.height());
+        })
+        .on('affixed-top.bs.affix', function() {
+          $actControls.css('width','auto');
+          $actControls.css('top', 'auto');
         });
-
-      }, 1000);
-
-
-
+      });
 
       $scope.availableFilters = [
         {
