@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   // CaseList directive controller
-  function caseViewController($scope, crmApi, formatActivity, getActivityFeedUrl, $route) {
+  function caseViewController($scope, crmApi, formatActivity, getActivityFeedUrl, $route, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
