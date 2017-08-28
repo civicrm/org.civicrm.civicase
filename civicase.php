@@ -278,6 +278,15 @@ function civicase_civicrm_pageRun(&$page) {
 }
 
 /**
+ * Implements hook_civicrm_check().
+ */
+function civicase_civicrm_check(&$messages) {
+  $check = new CRM_Civicase_Check();
+  $newMessages = $check->checkAll();
+  $messages = array_merge($messages, $newMessages);
+}
+
+/**
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu

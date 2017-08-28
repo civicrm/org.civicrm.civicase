@@ -98,7 +98,7 @@
       if (currentPath !== '/case/list') {
         p.cf = JSON.stringify({id: caseId});
       } else {
-        _.extend(p, $route.current.params);
+        p = _.extend($route.current.params, p);
       }
       return '/case/list?' + $.param(p);
     };
