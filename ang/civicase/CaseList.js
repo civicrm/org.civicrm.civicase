@@ -29,7 +29,7 @@
     $scope.hiddenFilters = hiddenFilters;
     $scope.pages = 0;
 
-      $scope.$bindToRoute({expr:'searchIsOpen', param: 'sx', format: 'bool', default: false});
+    $scope.$bindToRoute({expr:'searchIsOpen', param: 'sx', format: 'bool', default: false});
     $scope.$bindToRoute({expr:'sortField', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
     $scope.$bindToRoute({expr:'sortDir', param:'sd', format: 'raw', default: 'ASC'});
     $scope.$bindToRoute({expr:'caseIsFocused', param:'focus', format: 'bool', default: false});
