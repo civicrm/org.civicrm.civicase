@@ -25,6 +25,7 @@
     $scope.relationsSelectedTask = '';
     $scope.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     $scope.contactTasks = CRM.civicase.contactTasks;
+    $scope.ceil = Math.ceil;
 
     function formatRole (role) {
       var relType = relTypesByName[role.name];

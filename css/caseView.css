@@ -236,9 +236,6 @@
   padding-left: 20px;
   color: #4D5663;
 }
-#bootstrap-theme .case-tab-people .pagination li.disabled {
-  display: none;
-}
 #bootstrap-theme .case-tab-people .pagination li:nth-child(-n+2), #bootstrap-theme .case-tab-people .pagination li:nth-last-child(-n+2) {
   font-weight: 600;
 }
