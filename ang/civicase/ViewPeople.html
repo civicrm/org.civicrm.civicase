@@ -44,6 +44,7 @@
     page="rolesPage"
     page-size="25"
     total="rolesCount"
+    ng-show="rolesCount > 25"
     show-prev-next="true"
     show-first-last="true"
     text-first="{{ ts('<< First') }}"
@@ -111,11 +112,13 @@
       </tr>
     </tbody>
   </table>
+  <div class="pull-right pager-counter">{{ ts('Page %1 of %2', {1: rolesPage, 2: ceil(rolesCount / 25)}) }}</div>
   <paging
     class="center-block"
     page="rolesPage"
     page-size="25"
     total="rolesCount"
+    ng-show="rolesCount > 25"
     show-prev-next="true"
     show-first-last="true"
     text-first="{{ ts('<< First') }}"
@@ -159,6 +162,7 @@
     page="relationsPage"
     page-size="25"
     total="relationsCount"
+    ng-show="relationsCount > 25"
     show-prev-next="true"
     show-first-last="true"
     text-first="{{ ts('<< First') }}"
@@ -219,11 +223,13 @@
     </tr>
     </tbody>
   </table>
+  <div class="pull-right pager-counter">{{ ts('Page %1 of %2', {1: relationsPage, 2: ceil(relationsCount / 25)}) }}</div>
   <paging
     class="center-block"
     page="relationsPage"
     page-size="25"
     total="relationsCount"
+    ng-show="relationsCount > 25"
     show-prev-next="true"
     show-first-last="true"
     text-first="{{ ts('<< First') }}"
