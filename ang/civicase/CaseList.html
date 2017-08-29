@@ -132,19 +132,24 @@
     </table>
     </div>
   </div>
-    <paging
-      class="center-block text-center"
-      ng-show="!caseIsFocused"
-      page="pageNum"
-      page-size="pageSize"
-      total="totalCount"
-      show-prev-next="true"
-      show-first-last="true"
-      text-first="{{ ts('<< First') }}"
-      text-last="{{ ts('Last >>') }}"
-      text-next="{{ ts('Next >') }}"
-      text-prev="{{ ts('< Prev') }}"
-    ></paging>
+    <div class="center-block civicase-pager">
+      <div class="pull-right pager-counter" ng-show="!viewingCase">
+        {{ ts('Page %1 of %2', {1: pageNum, 2: pages}) }}
+      </div>
+      <paging
+        class="center-block text-center"
+        ng-show="!caseIsFocused && pages > 1"
+        page="pageNum"
+        page-size="pageSize"
+        total="totalCount"
+        show-prev-next="true"
+        show-first-last="true"
+        text-first="{{ ts('<< First') }}"
+        text-last="{{ ts('Last >>') }}"
+        text-next="{{ ts('Next >') }}"
+        text-prev="{{ ts('< Prev') }}"
+      ></paging>
+    </div>
     <div class="civicase-table-expander" ng-if="viewingCase && !caseIsFocused" ng-click="viewCase(null)"><div>&raquo;</div></div>
     <div class="civicase-table-placeholder" ng-if="caseIsFocused" ng-click="unfocusCase()"><div>&raquo;</div></div>
   </div>

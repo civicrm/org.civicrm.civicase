@@ -7,7 +7,7 @@
   <div class="case-people-status">
     <div class="btn-group btn-group-sm pull-right">
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-plus"></i> {{ ts('Case Role') }} <span class="caret"></span>
+        <i class="fa fa-plus"></i> {{ ts('Add Case Role') }}
       </button>
       <ul class="dropdown-menu dropdown-menu-right">
         <li ng-if="allowMultipleCaseClients">
@@ -18,13 +18,14 @@
         </li>
       </ul>
     </div>
-    <h3>{{ ts('%1 Contacts', {1: item.contacts.length}) }}</h3>
+    <h3>{{ ts('%1 Contacts', {1: roles.length}) }}</h3>
     <div>
-      <strong>{{ ts('With:') }}</strong> &nbsp;
-      <input type="radio" value="all" ng-model="rolesSelectionMode" id="rolesSelectionMode-all"/>
-      <label for="rolesSelectionMode-all">{{ ts('All %1 Contacts', {1: item.contacts.length}) }}</label>
+      {{ ts('Select Records:') }} &nbsp;
+      
+      <input type="radio" value="all" ng-model="rolesSelectionMode" id="rolesSelectionMode-all" />
+      <label for="rolesSelectionMode-all" class="people-selection-radio">{{ ts('All %1 records', {1: roles.length}) }}</label>
       <input type="radio" value="checked" ng-model="rolesSelectionMode" id="rolesSelectionMode-checked"/>
-      <label for="rolesSelectionMode-checked">{{ ts('%1 Selected', {1: getSelectedContacts('roles', true).length}) }}</label>
+      <label for="rolesSelectionMode-checked" class="people-selection-radio">Selected records only</label>
       <select class="form-control case-action-dropdown" crm-ui-select ng-model="rolesSelectedTask" ng-change="doContactTask('roles')" ng-disabled="!getSelectedContacts('roles').length" >
         <option value="">{{ ts('Actions') }}</option>
         <option ng-repeat="(key, opt) in contactTasks" value="{{ key }}">{{ opt.title }}</option>
@@ -43,13 +44,15 @@
     page="rolesPage"
     page-size="25"
     total="rolesCount"
+    ng-show="rolesCount > 25"
     show-prev-next="true"
     show-first-last="true"
     text-first="{{ ts('<< First') }}"
     text-last="{{ ts('Last >>') }}"
     text-next="{{ ts('Next >') }}"
     text-prev="{{ ts('< Prev') }}"
-  ></paging>
+    >
+  </paging>
   <div class="civicase-alpha-pager">
     <a ng-repeat="a in letters" href ng-class="{active: a === rolesAlphaFilter}" ng-click="setLetterFilter(a, 'roles')">{{ a }}</a>
   </div>
@@ -109,18 +112,20 @@
       </tr>
     </tbody>
   </table>
+  <div class="pull-right pager-counter">{{ ts('Page %1 of %2', {1: rolesPage, 2: ceil(rolesCount / 25)}) }}</div>
   <paging
     class="center-block"
     page="rolesPage"
     page-size="25"
     total="rolesCount"
+    ng-show="rolesCount > 25"
     show-prev-next="true"
     show-first-last="true"
     text-first="{{ ts('<< First') }}"
     text-last="{{ ts('Last >>') }}"
     text-next="{{ ts('Next >') }}"
     text-prev="{{ ts('< Prev') }}"
-  ></paging>
+    ></paging>
 </div>
 <div class="civicase-relationships-other case-people-subtab" ng-show="tab == 'relations'">
   <div class="case-people-status">
@@ -157,6 +162,7 @@
     page="relationsPage"
     page-size="25"
     total="relationsCount"
+    ng-show="relationsCount > 25"
     show-prev-next="true"
     show-first-last="true"
     text-first="{{ ts('<< First') }}"
@@ -217,11 +223,13 @@
     </tr>
     </tbody>
   </table>
+  <div class="pull-right pager-counter">{{ ts('Page %1 of %2', {1: relationsPage, 2: ceil(relationsCount / 25)}) }}</div>
   <paging
     class="center-block"
     page="relationsPage"
     page-size="25"
     total="relationsCount"
+    ng-show="relationsCount > 25"
     show-prev-next="true"
     show-first-last="true"
     text-first="{{ ts('<< First') }}"
