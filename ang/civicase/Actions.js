@@ -185,7 +185,6 @@
                 query: {
                   action: 'add',
                   reset: 1,
-                  atype: _.findKey(activityTypes, {name: 'Email'}),
                   cid: _.uniq(managers).join(',')
                 }
               };
