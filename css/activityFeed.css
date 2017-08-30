@@ -369,12 +369,25 @@
   position: relative;
 }
 #bootstrap-theme div.act-feed-panel > .panel-header.affix {
-  z-index: 600;
   width: inherit;
+  z-index: 600;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix {
-  z-index: 600;
-  width: inherit; 
   margin: 0px;
   padding: 0.2em 0.5em;
+  width: inherit;
+  z-index: 600;
+}
+
+#bootstrap-theme .act-feed-view-activity.affix {
+  background-color: #FFFFFF;
+  margin-right: -600px;
+  position: fixed;
+  right: 50%;
+  top: 119px;
+  width: 355px;
+  z-index: 600;
+}
+#bootstrap-theme .case-is-focused .act-feed-view-activity.affix {
+  width: 463px;
 }
