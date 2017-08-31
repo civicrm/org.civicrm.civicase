@@ -331,6 +331,8 @@ function civicase_civicrm_buildForm($formName, &$form) {
  * @param array $errors
  */
 function civicase_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
+  // Save draft feature
+  // The validate stage provides an opportunity to bypass normal form processing, save the draft & return early
   $specialForms = array('CRM_Contact_Form_Task_PDF', 'CRM_Contact_Form_Task_Email');
   if (is_a($form, 'CRM_Activity_Form_Activity') || in_array($formName, $specialForms)) {
     if (array_key_exists($form->getButtonName('refresh'), $fields['buttons'])) {
