@@ -1,6 +1,6 @@
 #bootstrap-theme .act-feed-view-activity {
   height: calc(100vh - 120px);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 #bootstrap-theme .act-feed-view-activity nav {
