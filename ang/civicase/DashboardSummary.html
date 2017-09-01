@@ -23,7 +23,7 @@
   <tbody ng-show="showBreakdown">
     <tr ng-repeat="(ctid, caseType) in caseTypes">
       <td>{{ caseType.title }}</td>
-      <td ng-repeat="(sid, status) in caseStatuses" class="text-center">
+      <td ng-repeat="(sid, status) in caseStatuses" class="text-center" ng-class="{'case-status-unavailable': (caseType.definition.statuses && (caseType.definition.statuses.indexOf(status.name) < 0))}">
         <h4 class="case-summary-count">
           <a href="#/case/list?cf=%7B%22status_id%22:%5B%22{{ status.name }}%22%5D,%22case_type_id%22:%5B%22{{ caseType.name }}%22%5D%7D">
             {{ summaryData[ctid][sid] || '0' }}
