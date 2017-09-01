@@ -1,0 +1,6 @@
+td.case-status-unavailable {
+  background-color: lightgrey;
+}
+td.case-status-unavailable * {
+  display: none;
+}
