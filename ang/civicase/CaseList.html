@@ -116,8 +116,8 @@
           </td>
           <td ng-show="!viewingCase">
             <div
-              ng-if="item.activity_summary.upcoming.length"
-              case-activity-card="item.activity_summary.upcoming[0]"
+              ng-if="item.activity_summary.next"
+              case-activity-card="item.activity_summary.next[0]"
               refresh-callback="refresh"
             >
             </div>
