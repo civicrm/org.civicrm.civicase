@@ -33,6 +33,23 @@ class Utils {
   }
 
   /**
+   * Add a case_manager join
+   *
+   * @param \CRM_Utils_SQL_Select $sql
+   */
+  public static function joinOnManager($sql) {
+    $caseTypeManagers = self::getCaseManagerRelationshipTypes();
+    $managerTypeClause = array();
+    foreach ($caseTypeManagers as $caseTypeId => $relationshipTypeId) {
+      $managerTypeClause[] = "(a.case_type_id = $caseTypeId AND manager_relationship.relationship_type_id = $relationshipTypeId)";
+    }
+    $managerTypeClause = implode(' OR ', $managerTypeClause);
+    $sql->join('ccc', 'LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id');
+    $sql->join('manager_relationship', "LEFT JOIN civicrm_relationship AS manager_relationship ON ccc.contact_id = manager_relationship.contact_id_a AND manager_relationship.is_active AND ($managerTypeClause) AND manager_relationship.case_id = a.id");
+    $sql->join('manager', 'LEFT JOIN civicrm_contact AS manager ON manager_relationship.contact_id_b = manager.id AND manager.is_deleted <> 1');
+  }
+
+  /**
    *
    */
   public static function formatCustomSearchField($field) {

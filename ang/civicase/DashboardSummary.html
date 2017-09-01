@@ -1,0 +1,27 @@
+<table class="dashboard-case-summary" ng-class="{'show-summary-breakdown': showBreakdown}">
+  <thead>
+    <tr>
+      <th>
+        <h3>{{ ts('Case Summary') }}</h3>
+        <a href ng-click="showHideBreakdown()">
+          <i class="crm-i fa-angle-right" ng-class="{'fa-rotate-90': showBreakdown}"></i>
+          {{ ts('See breakdown by type') }}
+        </a>
+      </th>
+      <th ng-repeat="(sid, status) in caseStatuses" class="text-center">
+        <h3 class="case-summary-count">{{ summaryData.all[sid] || '0' }}</h3>
+        <div class="case-summary-status">
+          <span class="badge badge-secondary" ng-style="{'background-color': status.color}">{{ status.label }}</span>
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody ng-show="showBreakdown">
+    <tr ng-repeat="(ctid, caseType) in caseTypes">
+      <td>{{ caseType.title }}</td>
+      <td ng-repeat="(sid, status) in caseStatuses" class="text-center">
+        <h4 class="case-summary-count">{{ summaryData[ctid][sid] || '0' }}</h4>
+      </td>
+    </tr>
+  </tbody>
+</table>

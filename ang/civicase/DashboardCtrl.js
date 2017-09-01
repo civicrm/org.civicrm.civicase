@@ -11,6 +11,9 @@
 
   angular.module('civicase').controller('CivicaseDashboardCtrl', function($scope, crmApi, formatActivity) {
     var ts = $scope.ts = CRM.ts('civicase');
+    $scope.caseStatuses = CRM.civicase.caseStatuses;
+    $scope.caseTypes = CRM.civicase.caseTypes;
+
     $scope.$bindToRoute({
       param: 'dtab',
       expr: 'activeTab',
@@ -25,13 +28,27 @@
       default: false
     });
 
+    $scope.$bindToRoute({
+      param: 'dbd',
+      expr: 'showBreakdown',
+      format: 'bool',
+      default: false
+    });
+
+    $scope.summaryData = [];
+
     $scope.dashboardActivities = {
       recentCommunication: [],
       nextMilestones: []
     };
 
+    $scope.showHideBreakdown = function() {
+      $scope.showBreakdown = !$scope.showBreakdown;
+    };
+
     $scope.refresh = function(apiCalls) {
       apiCalls = apiCalls || [];
+      apiCalls.push(['Case', 'getstats', {my_cases: $scope.myCasesOnly}]);
       var params = _.extend({
         sequential: 1,
         is_current_revision: 1,
@@ -52,6 +69,7 @@
         options: {limit: 10, sort: 'activity_date_time ASC'}
       }, params)]);
       crmApi(apiCalls).then(function(data) {
+        $scope.summaryData = data[apiCalls.length - 3].values;
         $scope.dashboardActivities.recentCommunication = _.each(data[apiCalls.length - 2].values, formatActivity);
         $scope.dashboardActivities.nextMilestones = _.each(data[apiCalls.length - 1].values, formatActivity);
       });

@@ -13,6 +13,8 @@
     <uib-tab index="0" heading="{{ts('Dasboard')}}">
       <div crm-ui-debug="dashboardActivities"></div>
 
+      <div class="panel panel-default" ng-include="'~/civicase/DashboardSummary.html'"></div>
+
       <div class="panel panel-default">
         <div class="panel-header">{{ ts('Next Milestones') }}</div>
         <div class="panel-body">
