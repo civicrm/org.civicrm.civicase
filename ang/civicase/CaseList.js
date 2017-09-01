@@ -16,8 +16,8 @@
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase'),
       caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = CRM.civicase.caseStatuses,
       tmpSelection = [];
+    $scope.caseStatuses = caseStatuses = CRM.civicase.caseStatuses;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.cases = [];
