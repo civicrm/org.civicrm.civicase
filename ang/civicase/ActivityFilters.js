@@ -18,12 +18,12 @@
       $timeout(function() {
 
         var $actHeader = $('.act-feed-panel .panel-header'),
-        $actControls = $('.act-feed-panel .act-list-controls'),
-        $civicrmMenu = $('#civicrm-menu'),
-        $feedActivity = $('.act-feed-view-activity');
+          $actControls = $('.act-feed-panel .act-list-controls'),
+          $civicrmMenu = $('#civicrm-menu'),
+          $feedActivity = $('.act-feed-view-activity');
 
         
-        $('.act-feed-view-activity').affix({
+        $feedActivity.affix({
           offset: {
             top: $('.civicase-view-header').offset().top,
             bottom: $(document).height() - ($('.civicase-view-panel').offset().top + $('.civicase-view-panel').height()) + 18
@@ -34,44 +34,35 @@
         })
         .on('affixed-top.bs.affix', function() {
           $feedActivity.css('top','auto');
-        });;
+        });
 
 
         $actHeader.affix({offset: {top: $('.civicase-view-header').offset().top} })
-        .css('top', $civicrmMenu.height())
-        .on('affixed.bs.affix', function() {
-          $actHeader.css('width',$('.act-feed-panel').css('width'));
-          $actHeader.css('top', $civicrmMenu.height());
-        })
-        .on('affixed-top.bs.affix', function() {
-          $actHeader.css('width','auto');
-        });
+          .css('top', $civicrmMenu.height())
+          .on('affixed.bs.affix', function() {
+            $actHeader.css('width',$('.act-feed-panel').css('width'));
+            $actHeader.css('top', $civicrmMenu.height());
+          })
+          .on('affixed-top.bs.affix', function() {
+            $actHeader.css('width','auto');
+          });
         
         $actControls.affix({offset: {top: $('.civicase-view-header').offset().top} })
-        .on('affixed.bs.affix', function() {
-          $actControls.css('width',$actHeader.css('width'));
-          $actControls.css('top',$civicrmMenu.height() + $actHeader.height());
-        })
-        .on('affixed-top.bs.affix', function() {
-          $actControls.css('width','auto');
-          $actControls.css('top', 'auto');
-        });
-
-        $scope.$watchCollection('filters', function(){
-          $timeout(function() {
+          .on('affixed.bs.affix', function() {
+            $actControls.css('width',$actHeader.css('width'));
             $actControls.css('top',$civicrmMenu.height() + $actHeader.height());
-            $feedActivity
-            .height($(window).height() - ($civicrmMenu.height() + $actHeader.height() + $actControls.height()))
-            .css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height());
+          })
+          .on('affixed-top.bs.affix', function() {
+            $actControls.css('width','auto');
+            $actControls.css('top', 'auto');
           });
-        });
 
-        $scope.$watchCollection('exposedFilters', function(){
+        $scope.$watchCollection('[filters, exposedFilters]', function(){
           $timeout(function() {
             $actControls.css('top',$civicrmMenu.height() + $actHeader.height());
-            $('#bootstrap-theme .act-feed-view-activity')
-            .height($(window).height() - ($civicrmMenu.height() + $actHeader.height() + $actControls.height()))
-            .css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height());
+            $feedActivity.not('.cc-zero-w')
+              .height($(window).height() - ($civicrmMenu.height() + $actHeader.height() + $actControls.height()))
+              .css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height());
           });
         });
       });
