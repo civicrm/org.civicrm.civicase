@@ -191,3 +191,23 @@
   top: 15%;
   width: 1px;
 }
+#bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading .badge.badge-primary {
+  background-color: #8EC68A;
+}
+#bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading .badge.badge-danger {
+  background-color: #E6807F;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-feed-item {
+  border-radius: 2px;
+  margin: 5px 0px;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-feed-item.activity-overdue {
+  border-left-color: #E6807F !important;
+  border-right-color: #E6807F !important;
+}
+#bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading a {
+  color: #42AFCB;
+  font-size: 13px;
+  font-weight: normal;
+  margin-top: 3px;
+}
