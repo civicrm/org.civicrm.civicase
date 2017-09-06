@@ -246,6 +246,22 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
   }
 
   /**
+   * Fixes original id of followup activities to point to the original activity and not a revision.
+   *
+   * TODO: This is a WIP (untested) and not yet called from anywhere.
+   * When it's ready we can change its name to upgrade_000X and call it from the installer
+   */
+  public function fixActivityRevisions() {
+    $sql = 'UPDATE civicrm_activity a, civicrm_activity b
+      SET a.parent_id = b.original_id
+      WHERE a.parent_id = b.id
+      AND b.original_id IS NOT NULL';
+    CRM_Core_DAO::executeQuery($sql);
+    // TODO: before we uncomment the below, need to migrate this history to advanced logging table
+    // CRM_Core_DAO::executeQuery('DELETE FROM civicrm_activity WHERE original_id IS NOT NULL');
+  }
+
+  /**
    * Adds an option value if it doesn't already exist.
    *
    * Weight and value are calculated as needed.
