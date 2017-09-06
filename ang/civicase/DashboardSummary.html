@@ -1,39 +1,46 @@
-<table class="dashboard-case-summary" ng-class="{'show-summary-breakdown': showBreakdown}">
-  <thead>
-    <tr>
-      <th>
-        <h3>{{ ts('Case Summary') }}</h3>
-        <a href ng-click="showHideBreakdown()">
-          <i class="crm-i fa-angle-right" ng-class="{'fa-rotate-90': showBreakdown}"></i>
-          {{ ts('See breakdown by type') }}
-        </a>
-      </th>
-      <th ng-repeat="(sid, status) in caseStatuses" class="text-center">
-        <h3 class="case-summary-count">
-          <a href="#/case/list?cf=%7B%22status_id%22:%5B%22{{ status.name }}%22%5D%7D">
-            {{ summaryData.all[sid] || '0' }}
+<div class="dashboard-case-summary-wrapper" ng-class="{'show-summary-breakdown-wrapper': showBreakdown}">
+  <table class="dashboard-case-summary" ng-class="{'show-summary-breakdown': showBreakdown}">
+    <thead>
+      <tr>
+        <th>
+          <h3>{{ ts('Case Summary') }}</h3>
+          <a href ng-click="showHideBreakdown()">
+            <i class="crm-i fa-angle-right" ng-class="{'fa-rotate-90': showBreakdown}"></i>
+            {{ ts('See breakdown by type') }}
           </a>
-        </h3>
-        <div class="case-summary-status">
-          <span class="badge badge-secondary" ng-style="{'background-color': status.color}">{{ status.label }}</span>
-        </div>
-      </th>
-    </tr>
-  </thead>
-  <tbody ng-show="showBreakdown">
-    <tr ng-repeat="(ctid, caseType) in caseTypes">
-      <td>
-        <a href="#/case/list?cf=%7B%22case_type_id%22:%5B%22{{ caseType.name }}%22%5D%7D">
-          {{ caseType.title }}
-        </a>
-      </td>
-      <td ng-repeat="(sid, status) in caseStatuses" class="text-center" ng-class="{'case-status-unavailable': (caseType.definition.statuses && (caseType.definition.statuses.indexOf(status.name) < 0))}">
-        <h4 class="case-summary-count">
-          <a href="#/case/list?cf=%7B%22status_id%22:%5B%22{{ status.name }}%22%5D,%22case_type_id%22:%5B%22{{ caseType.name }}%22%5D%7D">
-            {{ summaryData[ctid][sid] || '0' }}
+        </th>
+        <th ng-repeat="(sid, status) in caseStatuses" class="text-center">
+          <h3 class="case-summary-count">
+            <a href="#/case/list?cf=%7B%22status_id%22:%5B%22{{ status.name }}%22%5D%7D">
+              {{ summaryData.all[sid] || '0' }}
+            </a>
+          </h3>
+          <div class="case-summary-status">
+            <span class="badge badge-secondary" ng-style="{'background-color': status.color}">{{ status.label }}</span>
+          </div>
+          <span class="arrow-right"></span>
+        </th>
+      </tr>
+    </thead>
+    <tbody ng-show="showBreakdown">
+      <tr ng-repeat="(ctid, caseType) in caseTypes">
+        <td>
+          <a href="#/case/list?cf=%7B%22case_type_id%22:%5B%22{{ caseType.name }}%22%5D%7D">
+            {{ caseType.title }}
           </a>
-        </h4>
-      </td>
-    </tr>
-  </tbody>
-</table>
+          <span class="border-right"></span>
+        </td>
+        <td ng-repeat="(sid, status) in caseStatuses" class="text-center" ng-class="{'case-status-unavailable': (caseType.definition.statuses && (caseType.definition.statuses.indexOf(status.name) < 0))}">
+          <h4 class="case-summary-count">
+            <a href="#/case/list?cf=%7B%22status_id%22:%5B%22{{ status.name }}%22%5D,%22case_type_id%22:%5B%22{{ caseType.name }}%22%5D%7D">
+              {{ summaryData[ctid][sid] || '0' }}
+            </a>
+          </h4>
+          <span class="border-bottom"></span>
+          <span class="border-top"></span>
+          <span class="border-right"></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
