@@ -4,7 +4,7 @@
       <tr>
         <th>
           <h3>{{ ts('Case Summary') }}</h3>
-          <a href ng-click="showHideBreakdown()">
+          <a href ng-click="showHideBreakdown()" ng-if="caseTypesLength > 1">
             <i class="crm-i fa-angle-right" ng-class="{'fa-rotate-90': showBreakdown}"></i>
             {{ ts('See breakdown by type') }}
           </a>

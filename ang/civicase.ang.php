@@ -34,6 +34,7 @@ foreach ($options as &$option) {
 $caseTypes = civicrm_api3('CaseType', 'get', array(
   'return' => array('name', 'title', 'description', 'definition'),
   'options' => array('limit' => 0, 'sort' => 'weight'),
+  'is_active' => 1,
 ));
 foreach ($caseTypes['values'] as &$item) {
   CRM_Utils_Array::remove($item, 'id', 'is_forkable', 'is_forked');

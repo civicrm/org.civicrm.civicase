@@ -209,7 +209,7 @@
       if ($scope.sortField !== 'id') {
         returnParams.options.sort += ', id';
       }
-      var params = {};
+      var params = {"case_type_id.is_active": 1};
       var filters = angular.extend({}, $scope.filters, $scope.hiddenFilters);
       _.each(filters, function(val, filter) {
         if (val || typeof val === 'boolean') {
@@ -264,9 +264,7 @@
       getCases();
     };
 
-    $timeout(function() {
-      getCases();
-    });
+    $timeout(getCases);
 
   });
 

@@ -13,6 +13,7 @@
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.caseTypes = CRM.civicase.caseTypes;
+    $scope.caseTypesLength = _.size(CRM.civicase.caseTypes);
 
     $scope.$bindToRoute({
       param: 'dtab',
@@ -34,6 +35,11 @@
       format: 'bool',
       default: false
     });
+
+    // We hide the breakdown when there's only one case type
+    if ($scope.caseTypesLength < 2) {
+      $scope.showBreakdown = false;
+    }
 
     $scope.summaryData = [];
 
@@ -91,13 +97,11 @@
     // Translate between the dashboard's global filter-options and
     // the narrower, per-section filter-options.
     $scope.$watch('myCasesOnly', function (myCasesOnly) {
+      $scope.activityFilters = {
+        case_filter: {"case_type_id.is_active": 1}
+      };
       if (myCasesOnly) {
-        $scope.activityFilters = {
-          case_filter: {case_manager: CRM.config.user_contact_id}
-        };
-      }
-      else {
-        $scope.activityFilters = {case_id: {'IS NOT NULL': 1}};
+        $scope.activityFilters.case_filter.case_manager = CRM.config.user_contact_id;
       }
       $scope.refresh();
     });
