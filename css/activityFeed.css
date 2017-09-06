@@ -370,6 +370,13 @@
 }
 #bootstrap-theme div.act-feed-panel > .panel-header.affix {
   width: inherit;
+  z-index: 601;
+}
+#bootstrap-theme div.act-feed-panel > .panel-header .form-control {
+  vertical-align: top;
+}
+#bootstrap-theme div.act-feed-panel > .panel-header .select2-container-multi {
+  height: auto;
   z-index: 600;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix {
@@ -379,7 +386,7 @@
   z-index: 600;
 }
 
-#bootstrap-theme .act-feed-view-activity.affix {
+#bootstrap-theme .act-feed-view-activity.affix:not(.cc-zero-w) {
   background-color: #FFFFFF;
   margin-right: -600px;
   position: fixed;
@@ -388,6 +395,6 @@
   width: 355px;
   z-index: 600;
 }
-#bootstrap-theme .case-is-focused .act-feed-view-activity.affix {
+#bootstrap-theme .case-is-focused .act-feed-view-activity.affix:not(.cc-zero-w) {
   width: 463px;
 }
