@@ -21,6 +21,7 @@
         $actControls = $('.act-feed-panel .act-list-controls'),
         $civicrmMenu = $('#civicrm-menu'),
         $feedActivity = $('.act-feed-view-activity');
+
         
         $('.act-feed-view-activity').affix({
           offset: {
@@ -34,6 +35,7 @@
         .on('affixed-top.bs.affix', function() {
           $feedActivity.css('top','auto');
         });;
+
 
         $actHeader.affix({offset: {top: $('.civicase-view-header').offset().top} })
         .css('top', $civicrmMenu.height())
