@@ -21,7 +21,7 @@
             <div class="panel-heading">
               <h3 class="panel-title">{{ ts('Next Milestones') }}
                 <span class="badge badge-danger">{{dashboardActivities.nextMilestones.length}}</span>
-                <a href="#" class="pull-right">(see all)</a>
+                <a ng-href="{{ seeAllLink('milestone', 'incomplete') }}" class="pull-right">({{ ts('see all') }})</a>
               </h3>
 
             </div>
@@ -46,7 +46,7 @@
             <div class="panel-heading">
               <h3 class="panel-title">{{ ts('Recent Communications') }}
                 <span class="badge badge-primary">{{dashboardActivities.recentCommunication.length}}</span>
-                <a href="#" class="pull-right">(see all)</a>
+                <a ng-href="{{ seeAllLink('communication', 'completed') }}" class="pull-right">({{ ts('see all') }})</a>
               </h3>
             </div>
             <div class="panel-body">

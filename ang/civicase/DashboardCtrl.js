@@ -46,6 +46,19 @@
       $scope.showBreakdown = !$scope.showBreakdown;
     };
 
+    $scope.seeAllLink = function(category, statusFilter) {
+      var params = {
+        dtab: 1,
+        dme: $scope.myCasesOnly ? 1 : 0,
+        dbd: 0,
+        af: JSON.stringify({
+          'activity_type_id.grouping': category,
+          status_id: CRM.civicase.activityStatusTypes[statusFilter]
+        })
+      };
+      return '#/case?' + $.param(params);
+    };
+
     $scope.refresh = function(apiCalls) {
       apiCalls = apiCalls || [];
       apiCalls.push(['Case', 'getstats', {my_cases: $scope.myCasesOnly}]);
