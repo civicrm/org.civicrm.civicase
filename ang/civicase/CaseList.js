@@ -195,7 +195,7 @@
     function _loadCaseApiParams() {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'contacts', 'activity_summary', 'category_count'],
+        return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count'],
         options: {
           sort: $scope.sortField + ' ' + $scope.sortDir,
           limit: $scope.pageSize,

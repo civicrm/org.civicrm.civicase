@@ -50,6 +50,8 @@
                 <option value="case_type_id.title">{{ ts('Type') }}</option>
                 <option value="start_date">{{ ts('Start Date') }}</option>
                 <option value="end_date">{{ ts('End Date') }}</option>
+                <option value="created_date">{{ ts('Date Created') }}</option>
+                <option value="modified_date">{{ ts('Last Updated') }}</option>
                 <option value="case_manager.sort_name">{{ ts('Case Manager') }}</option>
                 <option value="my_role.label_b_a">{{ ts('My Role') }}</option>
                 <option value="next_activity">{{ ts('Next Activity') }}</option>
@@ -64,6 +66,8 @@
           <th ng-show="!viewingCase" civicase-sortheader="status_id.label">{{ ts('Status') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="case_type_id.title">{{ ts('Type') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="case_manager.sort_name">{{ ts('Case Manager') }}</th>
+          <th ng-show="!viewingCase" civicase-sortheader="start_date">{{ ts('Start Date') }}</th>
+          <th ng-show="!viewingCase" civicase-sortheader="modified_date">{{ ts('Last Updated') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="my_role.label_b_a">{{ ts('My Role') }}</th>
         </tr>
       </thead>
@@ -130,6 +134,8 @@
           </td>
           <td ng-show="!viewingCase">{{ item.case_type }}</td>
           <td ng-show="!viewingCase">{{ item.manager.display_name }}</td>
+          <td ng-show="!viewingCase">{{ CRM.utils.formatDate(item.start_date) }}</td>
+          <td ng-show="!viewingCase">{{ CRM.utils.formatDate(item.modified_date) }}</td>
           <td ng-show="!viewingCase">{{ item.myRole.join(', ') }}</td>
         </tr>
       </tbody>
