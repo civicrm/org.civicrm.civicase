@@ -12,12 +12,11 @@
   });
 
   // CaseList controller
-  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatActivity) {
+  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatActivity, formatCase) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase'),
       caseTypes = CRM.civicase.caseTypes,
-      tmpSelection = [];
-    $scope.caseStatuses = caseStatuses = CRM.civicase.caseStatuses;
+      caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.cases = [];
@@ -134,32 +133,6 @@
         $scope.pageTitle += ' (' + $scope.totalCount + ')';
       }
     }
-
-    var formatCase = $scope.formatCase = function(item) {
-      item.myRole = [];
-      item.client = [];
-      item.status = caseStatuses[item.status_id].label;
-      item.case_type = caseTypes[item.case_type_id].title;
-      item.selected = tmpSelection.indexOf(item.id) >= 0;
-      item.is_deleted = item.is_deleted === '1';
-      _.each(item.activity_summary, function(activities) {
-        _.each(activities, function(act) {
-          formatActivity(act, item.id);
-        });
-      });
-      _.each(item.contacts, function(contact) {
-        if (!contact.relationship_type_id) {
-          item.client.push(contact);
-        }
-        if (contact.contact_id == CRM.config.user_contact_id) {
-          item.myRole.push(contact.role);
-        }
-        if (contact.manager) {
-          item.manager = contact;
-        }
-      });
-      return item;
-    };
 
     var getCases = $scope.getCases = function() {
       setPageTitle();
@@ -292,6 +265,18 @@
       });
     });
 
+  });
+
+  function caseListTableController() {
+
+  }
+
+  angular.module('civicase').directive('caseListTable', function() {
+    return {
+      restrict: 'A',
+      controller: caseListTableController,
+      templateUrl: '~/civicase/CaseListTable.html'
+    };
   });
 
 })(angular, CRM.$, CRM._);

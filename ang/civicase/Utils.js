@@ -74,6 +74,36 @@
     };
   });
 
+  angular.module('civicase').factory('formatCase', function(formatActivity) {
+    var caseTypes = CRM.civicase.caseTypes,
+      caseStatuses = CRM.civicase.caseStatuses;
+    return function(item) {
+      item.myRole = [];
+      item.client = [];
+      item.status = caseStatuses[item.status_id].label;
+      item.case_type = caseTypes[item.case_type_id].title;
+      item.selected = false;
+      item.is_deleted = item.is_deleted === '1';
+      _.each(item.activity_summary, function(activities) {
+        _.each(activities, function(act) {
+          formatActivity(act, item.id);
+        });
+      });
+      _.each(item.contacts, function(contact) {
+        if (!contact.relationship_type_id) {
+          item.client.push(contact);
+        }
+        if (contact.contact_id == CRM.config.user_contact_id) {
+          item.myRole.push(contact.role);
+        }
+        if (contact.manager) {
+          item.manager = contact;
+        }
+      });
+      return item;
+    };
+  });
+
   angular.module('civicase').factory('getActivityFeedUrl', function($route, $location) {
     return function(caseId, category, status, id) {
       caseId = parseInt(caseId, 10);
