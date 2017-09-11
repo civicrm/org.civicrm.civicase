@@ -5,7 +5,6 @@
   transition: width .2s linear;
 }
 #bootstrap-theme .case-list-panel,
-#bootstrap-theme table.case-list-table,
 #bootstrap-theme .case-list-panel.viewing-case th:first-child,
 #bootstrap-theme .case-list-panel.viewing-case td:first-child {
   width: 100%;
@@ -38,7 +37,7 @@
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr th:first-child {
   background: #F3F6F7;
-  height: 60px;
+  height: 61px;
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td:first-child {
   background: #fff;
@@ -349,4 +348,46 @@
 #bootstrap-theme .item-overdue .noti-badge {
   background: #E6807F;
   color: #FFF;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table {
+  width: 1350px;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper {
+  border: none;
+  margin-left: 310px;
+  overflow-x: scroll;
+  overflow-y:hidden;
+  width: calc(100% - 310px);
+}
+#bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper .custom-scroll{
+  height: 1px;
+  width: 1350px;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
+  position: fixed;
+  top: 92px;
+  width: 890px;
+  z-index: 6;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table thead.affix {
+  left: 50%;
+  margin-left: -290px;
+  overflow: hidden;
+  position: fixed;
+  top: 32px;
+  width: 890px;
+  z-index: 6;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
+  left: 50%;
+  margin-left: -600px;
+  min-width: 310px;
+  position: fixed;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table .next-activity-title {
+  max-width: 330px;
+  min-width: 330px;
+}
+#bootstrap-theme .viewing-case .scrolling table.case-list-table thead.affix {
+  position: relative;
 }
