@@ -67,6 +67,13 @@
   min-width: 142px;
   padding: 10px 15px;
 }
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table td.case-activity-card-wrapper {
+  max-width: 330px;
+  min-width: 330px;
+  position: relative;
+}
+
+
 #bootstrap-theme .case-list-table thead tr {
   background: #F3F6F7;
   border-radius: 3px 3px 0 0;
