@@ -22,7 +22,11 @@
   </div>
   <div class="panel panel-default case-list-panel" ng-class="{'viewing-case': viewingCase, 'case-is-focused': caseIsFocused}">
   <div class="scrolling outer">
-    <div class="inner">    
+    <div class="custom-scroll-wrapper">
+      <div class="custom-scroll"></div>
+    </div>
+
+    <div class="inner">
     <table ng-show="!caseIsFocused" class="case-list-table">
       <thead>
         <tr>
@@ -61,7 +65,7 @@
               </select>
             </div>
           </th>
-          <th ng-show="!viewingCase" civicase-sortheader="next_activity">{{ ts('Next Activity') }}</th>
+          <th ng-show="!viewingCase" civicase-sortheader="next_activity" class="next-activity-title">{{ ts('Next Activity') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="subject">{{ ts('Subject') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="status_id.label">{{ ts('Status') }}</th>
           <th ng-show="!viewingCase" civicase-sortheader="case_type_id.title">{{ ts('Type') }}</th>

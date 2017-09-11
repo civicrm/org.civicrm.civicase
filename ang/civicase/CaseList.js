@@ -266,6 +266,32 @@
 
     $timeout(getCases);
 
+    $timeout(function() {
+
+      var $listTable = $('.case-list-panel .inner'),
+        $customScroll = $('.case-list-panel .custom-scroll-wrapper'),
+        $tableHeader = $('.case-list-panel .inner table thead');
+
+      $($listTable).scroll(function(){
+        $customScroll.scrollLeft($listTable.scrollLeft());
+        $('thead.affix').scrollLeft($customScroll.scrollLeft());
+      });
+
+      $customScroll.scroll(function(){
+        $listTable.scrollLeft($customScroll.scrollLeft());
+        $('thead.affix').scrollLeft($customScroll.scrollLeft());
+      });
+
+      $([$tableHeader, $customScroll]).affix({
+        offset: {
+           top: $('.civicase-search-panel').offset().top
+        }
+      })
+      .on('affixed.bs.affix', function() {
+        $('thead.affix').scrollLeft($customScroll.scrollLeft());
+      });
+    });
+
   });
 
 })(angular, CRM.$, CRM._);
