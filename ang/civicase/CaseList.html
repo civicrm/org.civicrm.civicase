@@ -29,13 +29,13 @@
   </div>
     <div class="center-block civicase-pager">
       <div class="pull-right pager-counter" ng-show="!viewingCase">
-        {{ ts('Page %1 of %2', {1: pageNum, 2: pages}) }}
+        {{ ts('Page %1 of %2', {1: page.num, 2: page.total}) }}
       </div>
       <paging
         class="center-block text-center"
-        ng-show="!caseIsFocused && pages > 1"
-        page="pageNum"
-        page-size="pageSize"
+        ng-show="!caseIsFocused && page.total > 1"
+        page="page.num"
+        page-size="page.size"
         total="totalCount"
         show-prev-next="true"
         show-first-last="true"

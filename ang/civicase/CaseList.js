@@ -26,8 +26,8 @@
     $scope.selectedCases = [];
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.hiddenFilters = hiddenFilters;
-    $scope.pages = 0;
     $scope.sort = {};
+    $scope.page = {total: 0};
 
     $scope.$bindToRoute({expr:'searchIsOpen', param: 'sx', format: 'bool', default: false});
     $scope.$bindToRoute({expr:'sort.field', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
@@ -36,8 +36,8 @@
     $scope.$bindToRoute({expr:'filters', param:'cf', default: {}});
     $scope.$bindToRoute({expr:'viewingCase', param:'caseId', format: 'raw'});
     $scope.$bindToRoute({expr:'viewingCaseTab', param:'tab', format: 'raw', default:'summary'});
-    $scope.$bindToRoute({expr:'pageSize', param:'cps', format: 'int', default: 15});
-    $scope.$bindToRoute({expr:'pageNum', param:'cpn', format: 'int', default: 1});
+    $scope.$bindToRoute({expr:'page.size', param:'cps', format: 'int', default: 15});
+    $scope.$bindToRoute({expr:'page.num', param:'cpn', format: 'int', default: 1});
 
     $scope.viewCase = function(id, $event) {
       if (!$event || !$($event.target).is('a, a *, input, button')) {
@@ -152,7 +152,7 @@
         }
         $scope.cases = cases;
         $scope.totalCount = result[1];
-        $scope.pages = Math.ceil(result[1] / $scope.pageSize);
+        $scope.page.total = Math.ceil(result[1] / $scope.page.size);
         setPageTitle();
       });
     };
@@ -172,8 +172,8 @@
         return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count'],
         options: {
           sort: $scope.sort.field + ' ' + $scope.sort.dir,
-          limit: $scope.pageSize,
-          offset: $scope.pageSize * ($scope.pageNum - 1)
+          limit: $scope.page.size,
+          offset: $scope.page.size * ($scope.page.num - 1)
         }
       };
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
@@ -223,7 +223,7 @@
     }
 
     $scope.$watchCollection('sort', getCasesFromWatcher);
-    $scope.$watch('pageNum', getCasesFromWatcher);
+    $scope.$watchCollection('page', getCasesFromWatcher);
     $scope.$watch('cases', function(cases) {
       $scope.selectedCases = _.filter(cases, 'selected');
     }, true);
@@ -268,7 +268,7 @@
   });
 
   function caseListTableController($scope) {
-
+    
   }
 
   angular.module('civicase').directive('caseListTable', function() {
