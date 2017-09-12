@@ -8,7 +8,7 @@ Civi::resources()
   ->addSetting(array(
     'config' => array(
       'enableComponents' => CRM_Core_Config::singleton()->enableComponents,
-      'user_contact_id' => CRM_Core_Session::getLoggedInContactID(),
+      'user_contact_id' => (int) CRM_Core_Session::getLoggedInContactID(),
     ),
   ));
 $options = array(

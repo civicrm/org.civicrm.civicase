@@ -1,7 +1,7 @@
 (function(angular, $, _) {
 
   // CaseList directive controller
-  function caseViewController($scope, crmApi, formatActivity, getActivityFeedUrl, $route, $timeout) {
+  function caseViewController($scope, crmApi, formatActivity, formatCase, getActivityFeedUrl, $route, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -136,9 +136,9 @@
     }
 
     function formatCaseDetails(item) {
-      $scope.formatCase(item);
+      formatCase(item);
       item.definition = caseTypes[item.case_type_id].definition;
-      item.relatedCases = _.each(_.cloneDeep(item['api.Case.get.1'].values), $scope.formatCase);
+      item.relatedCases = _.each(_.cloneDeep(item['api.Case.get.1'].values), formatCase);
       // Add linked cases
       _.each(_.cloneDeep(item['api.Case.get.2'].values), function(linkedCase) {
         var existing = _.find(item.relatedCases, {id: linkedCase.id});
@@ -146,7 +146,7 @@
           existing.is_linked = true;
         } else {
           linkedCase.is_linked = true;
-          item.relatedCases.push($scope.formatCase(linkedCase));
+          item.relatedCases.push(formatCase(linkedCase));
         }
       });
       delete(item['api.Case.get.1']);
@@ -293,8 +293,7 @@
       scope: {
         activeTab: '=civicaseTab',
         isFocused: '=civicaseFocused',
-        item: '=civicaseView',
-        formatCase: '=civicaseFormatter'
+        item: '=civicaseView'
       }
     };
   });

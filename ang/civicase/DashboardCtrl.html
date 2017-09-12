@@ -75,7 +75,11 @@
               </h3>
             </div>
             <div class="panel-body">
-              FIXME: Need to show Recent Cases
+              <div case-list-table
+                case-list-table-sort="{dir: 'DESC', field: 'modified_date'}"
+                case-list-table-page="{num: 1, size: 10, total: 0}"
+                case-list-table-filters="activityFilters.case_filter"
+              ></div>
             </div>
           </div>
         </div>
