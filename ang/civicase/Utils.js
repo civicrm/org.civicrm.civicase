@@ -27,20 +27,22 @@
           scope.sort.dir = (scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
         };
 
-        element
-          .addClass('civicase-sortable')
-          .on('click', function(e) {
-            scope.$apply(function() {
-              if ($(e.target).is('th, .cc-sort-icon')) {
-                if (scope.sort.field === attrs.civicaseSortheader) {
-                  scope.changeSortDir();
-                } else {
-                  scope.sort.field = attrs.civicaseSortheader;
-                  scope.sort.dir = 'ASC';
+        if (scope.sort.sortable) {
+          element
+            .addClass('civicase-sortable')
+            .on('click', function (e) {
+              scope.$apply(function () {
+                if ($(e.target).is('th, .cc-sort-icon')) {
+                  if (scope.sort.field === attrs.civicaseSortheader) {
+                    scope.changeSortDir();
+                  } else {
+                    scope.sort.field = attrs.civicaseSortheader;
+                    scope.sort.dir = 'ASC';
+                  }
                 }
-              }
+              });
             });
-          });
+        }
 
         scope.$watchCollection('sort', change);
       }
