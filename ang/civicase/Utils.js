@@ -16,33 +16,33 @@
       link: function(scope, element, attrs) {
 
         function change() {
-          element.toggleClass('sorting', attrs.civicaseSortheader === scope.sortField);
+          element.toggleClass('sorting', attrs.civicaseSortheader === scope.sort.field);
           element.find('i.cc-sort-icon').remove();
-          if (attrs.civicaseSortheader === scope.sortField) {
-            element.append('<i class="cc-sort-icon fa fa-arrow-circle-' + (scope.sortDir === 'ASC' ? 'up' : 'down') + '"></i>');
+          if (attrs.civicaseSortheader === scope.sort.field) {
+            element.append('<i class="cc-sort-icon fa fa-arrow-circle-' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + '"></i>');
           }
         }
 
         scope.changeSortDir = function() {
-          scope.sortDir = (scope.sortDir === 'ASC' ? 'DESC' : 'ASC');
+          scope.sort.dir = (scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
         };
 
         element
           .addClass('civicase-sortable')
           .on('click', function(e) {
-            if ($(e.target).is('th, .cc-sort-icon')) {
-              if (scope.sortField === attrs.civicaseSortheader) {
-                scope.changeSortDir();
-              } else {
-                scope.sortField = attrs.civicaseSortheader;
-                scope.sortDir = 'ASC';
+            scope.$apply(function() {
+              if ($(e.target).is('th, .cc-sort-icon')) {
+                if (scope.sort.field === attrs.civicaseSortheader) {
+                  scope.changeSortDir();
+                } else {
+                  scope.sort.field = attrs.civicaseSortheader;
+                  scope.sort.dir = 'ASC';
+                }
               }
-              scope.$digest();
-            }
+            });
           });
 
-        scope.$watch('sortField', change);
-        scope.$watch('sortDir', change);
+        scope.$watchCollection('sort', change);
       }
     };
   });
