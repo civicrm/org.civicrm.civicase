@@ -233,8 +233,13 @@
   color: #b8bec4;
 }
 #bootstrap-theme .case-tab-people .pagination {
-  padding-left: 20px;
   color: #4D5663;
+  margin: 20px 0;
+  padding-left: 20px;
+}
+#bootstrap-theme .case-tab-people .pager-counter {
+  margin: 20px 0;
+  padding-right: 20px;
 }
 #bootstrap-theme .case-tab-people .pagination li:nth-child(-n+2), #bootstrap-theme .case-tab-people .pagination li:nth-last-child(-n+2) {
   font-weight: 600;
