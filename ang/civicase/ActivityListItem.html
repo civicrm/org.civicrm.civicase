@@ -10,7 +10,7 @@
     </a>
     <h4 class="act-contacts-target" ng-if="activity.target_contact_name && activity.category.indexOf('communication') >= 0">
       <strong>{{ ts('To') }}</strong>
-      <span civicase-activity-contacts="{activity: activity, type: 'target'}"></span>
+      <span civicase-activity-contacts="activity.target_contact_name"></span>
     </h4>
     <h4>
       <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
