@@ -100,9 +100,14 @@
       $scope.activityFilters = {
         case_filter: {"case_type_id.is_active": 1}
       };
+      $scope.recentCaseFilter = {
+        'status_id.grouping': 'Opened'
+      };
       if (myCasesOnly) {
         $scope.activityFilters.case_filter.case_manager = CRM.config.user_contact_id;
+        $scope.recentCaseFilter.case_manager = CRM.config.user_contact_id;
       }
+      $scope.recentCaseLink = '#/case/list?sf=modified_date&sd=DESC&cf=' + JSON.stringify($scope.recentCaseFilter);
       $scope.refresh();
     });
   });
