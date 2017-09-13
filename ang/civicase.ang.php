@@ -11,6 +11,22 @@ Civi::resources()
       'user_contact_id' => (int) CRM_Core_Session::getLoggedInContactID(),
     ),
   ));
+CRM_Utils_System::resetBreadCrumb();
+$breadcrumb = array(
+  array(
+    'title' => ts('Home'),
+    'url' => CRM_Utils_System::url(),
+  ),
+  array(
+    'title' => ts('CiviCRM'),
+    'url' => CRM_Utils_System::url('civicrm', 'reset=1'),
+  ),
+  array(
+    'title' => ts('Case Dashboard'),
+    'url' => CRM_Utils_System::url('civicrm/case/a/#/case'),
+  ),
+);
+CRM_Utils_System::appendBreadCrumb($breadcrumb);
 $options = array(
   'activityTypes' => 'activity_type',
   'activityStatuses' => 'activity_status',
