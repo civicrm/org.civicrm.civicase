@@ -222,11 +222,10 @@
       };
       if (caseId) {
         params.case_id = caseId;
-      }
-      else {
-        if (!$scope.displayOptions.include_case) {
-          params.case_id = {'IS NULL': 1};
-        }
+      } else if (!$scope.displayOptions.include_case) {
+        params.case_id = {'IS NULL': 1};
+      } else {
+        returnParams.return = returnParams.return.concat(['case_id.case_type_id', 'case_id.status_id', 'case_id.contacts']);
       }
       _.each($scope.filters, function(val, key) {
         if (key[0] === '@') return; // Virtual params.

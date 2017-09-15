@@ -103,9 +103,9 @@
     </td>
     <td ng-show="!viewingCase">{{ item.subject }}</td>
     <td ng-show="!viewingCase">
-            <span class="badge" style="background-color: {{ caseStatuses[item.status_id].color }}">
-              {{ item.status }}
-            </span>
+      <span class="badge" style="background-color: {{ item.color }}">
+        {{ item.status }}
+      </span>
     </td>
     <td ng-show="!viewingCase">{{ item.case_type }}</td>
     <td ng-show="!viewingCase">{{ item.manager.display_name }}</td>

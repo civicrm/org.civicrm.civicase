@@ -10,7 +10,7 @@
     </a>
     <h4 class="act-contacts-target" ng-if="activity.target_contact_name && activity.category.indexOf('communication') >= 0">
       <strong>{{ ts('To') }}</strong>
-      <span civicase-activity-contacts="{activity: activity, type: 'target'}"></span>
+      <span civicase-activity-contacts="activity.target_contact_name"></span>
     </h4>
     <h4>
       <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
@@ -66,5 +66,12 @@
         </span>
       </div>
     </div>
+    <a class="act-case-info" ng-if="activity.case" ng-href="#/case/list?caseId={{ activity.case_id }}">
+      <span style="background-color: {{ activity.case.color }}" title="{{ activity.case.status }}">
+        {{ ts('Case: %1', {1: activity.case_id}) }}
+      </span>
+      <span>{{ activity.case.case_type }}</span>
+      <span civicase-activity-contacts="activity.case.client"></span>
+    </a>
   </div>
 </div>

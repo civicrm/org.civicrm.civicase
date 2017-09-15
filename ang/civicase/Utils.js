@@ -50,8 +50,10 @@
   });
 
   angular.module('civicase').factory('formatActivity', function() {
-    var activityTypes = CRM.civicase.activityTypes;
-    var activityStatuses = CRM.civicase.activityStatuses;
+    var activityTypes = CRM.civicase.activityTypes,
+      activityStatuses = CRM.civicase.activityStatuses,
+      caseTypes = CRM.civicase.caseTypes,
+      caseStatuses = CRM.civicase.caseStatuses;
     return function (act, caseId) {
       act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
       act.icon = activityTypes[act.activity_type_id].icon;
@@ -73,6 +75,28 @@
       } else {
         act.case_id = null;
       }
+      if (act['case_id.case_type_id']) {
+        act.case = {};
+        _.each(act, function(val, key) {
+          if (key.indexOf('case_id.') === 0) {
+            act.case[key.replace('case_id.', '')] = val;
+            delete act[key];
+          }
+        });
+        act.case.client = [];
+        act.case.status = caseStatuses[act.case.status_id].label;
+        act.case.color = caseStatuses[act.case.status_id].color;
+        act.case.case_type = caseTypes[act.case.case_type_id].title;
+        _.each(act.case.contacts, function(contact) {
+          if (!contact.relationship_type_id) {
+            act.case.client.push(contact);
+          }
+          if (contact.manager) {
+            act.case.manager = contact;
+          }
+        });
+        delete act.case.contacts;
+      }
     };
   });
 
@@ -83,6 +107,7 @@
       item.myRole = [];
       item.client = [];
       item.status = caseStatuses[item.status_id].label;
+      item.color = caseStatuses[item.status_id].color;
       item.case_type = caseTypes[item.case_type_id].title;
       item.selected = false;
       item.is_deleted = item.is_deleted === '1';
@@ -370,23 +395,26 @@
         data: '=civicaseActivityContacts'
       },
       link: function (scope, elem, attrs) {
-        var contacts = scope.data.activity[scope.data.type + '_contact_name'];
         scope.url = CRM.url;
-        scope.contacts = [];
-        _.each(contacts, function(name, cid) {
-          scope.contacts.push({name: name, cid: cid});
-        });
+        if (_.isPlainObject(scope.data)) {
+          scope.contacts = [];
+          _.each(scope.data, function (name, cid) {
+            scope.contacts.push({display_name: name, contact_id: cid});
+          });
+        } else {
+          scope.contacts = scope.data;
+        }
       },
       template:
-        '<a ng-if="contacts.length" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].cid}) }}">{{ contacts[0].name }}</a> ' +
-        '<span ng-if="contacts.length === 2">&amp; <a href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].cid}) }}">{{ contacts[1].name }}</a></span>' +
+        '<a ng-if="contacts.length" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].contact_id}) }}">{{ contacts[0].display_name }}</a> ' +
+        '<span ng-if="contacts.length === 2">&amp; <a href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].contact_id}) }}">{{ contacts[1].display_name }}</a></span>' +
         '<div class="btn-group btn-group-xs" ng-if="contacts.length > 2">' +
         '  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
         '    + {{ contacts.length - 1 }}' +
         '  </button>' +
         '  <ul class="dropdown-menu" >' +
         '    <li ng-repeat="(index, contact) in contacts" ng-if="index">' +
-        '      <a href="{{ url(\'civicrm/contact/view\', {cid: contact.cid}) }}">{{ contact.name }}</a>' +
+        '      <a href="{{ url(\'civicrm/contact/view\', {cid: contact.contact_id}) }}">{{ contact.display_name }}</a>' +
         '    </li>' +
         '  </ul>' +
         '</div>'
