@@ -28,12 +28,13 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_case_getdetails($params) {
+  $resultMetadata = array();
   $params += array('return' => array());
   if (is_string($params['return'])) {
     $params['return'] = explode(',', str_replace(' ', '', $params['return']));
   }
   $toReturn = $params['return'];
-  $options = CRM_Utils_Array::value('options', $params, array());
+  $params['options'] = CRM_Utils_Array::value('options', $params, array());
   $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count', 'category_count', 'unread_email_count', 'related_case_ids');
   $params['return'] = array_diff($params['return'], $extraReturnProperties);
 
@@ -47,6 +48,20 @@ function civicrm_api3_case_getdetails($params) {
     }
     \Civi\CCase\Utils::joinOnManager($sql);
     $sql->where(CRM_Core_DAO::createSQLFilter('manager.id', $params['case_manager']));
+  }
+
+  // Set page number dynamically based on selected record
+  if (!empty($params['options']['page_of_record'])) {
+    $prParams = array('sequential' => 1) + $params;
+    $prParams['return'] = array('id');
+    $prParams['options']['limit'] = $prParams['options']['offset'] = 0;
+    foreach (CRM_Utils_Array::value('values', civicrm_api3_case_get($prParams), array()) as $num => $case) {
+      if ($case['id'] == $params['options']['page_of_record']) {
+        $resultMetadata['page'] = floor($num / $params['options']['limit']) + 1;
+        $params['options']['offset'] = $params['options']['limit'] * ($resultMetadata['page'] - 1);
+        break;
+      }
+    }
   }
 
   // Call the case api
@@ -67,7 +82,7 @@ function civicrm_api3_case_getdetails($params) {
 
     // Get activity summary
     if (in_array('activity_summary', $toReturn)) {
-      $catetoryLimits = CRM_Utils_Array::value('categories', $options, array_fill_keys($activityCategories, 1));
+      $catetoryLimits = CRM_Utils_Array::value('categories', $params['options'], array_fill_keys($activityCategories, 1));
       $categories = array_fill_keys(array_keys($catetoryLimits), array());
       foreach ($result['values'] as &$case) {
         $case['activity_summary'] = $categories;
@@ -169,7 +184,7 @@ function civicrm_api3_case_getdetails($params) {
       $result['values'] = array_values($result['values']);
     }
   }
-  return $result;
+  return $resultMetadata + $result;
 }
 
 /**

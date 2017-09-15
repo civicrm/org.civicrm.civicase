@@ -61,6 +61,7 @@
   angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatActivity, formatCase) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase'),
+      firstLoad = true,
       caseTypes = CRM.civicase.caseTypes,
       caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.activityTypes = CRM.civicase.activityTypes;
@@ -197,9 +198,11 @@
           }
         }
         $scope.cases = cases;
+        $scope.page.num = result[0].page || $scope.page.num;
         $scope.totalCount = result[1];
         $scope.page.total = Math.ceil(result[1] / $scope.page.size);
         setPageTitle();
+        firstLoad = false;
       });
     };
 
@@ -213,7 +216,11 @@
     };
 
     function _loadCases() {
-      return crmApi(loadCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page));
+      var params = loadCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page);
+      if (firstLoad && $scope.viewingCase) {
+        params[0][2].options.page_of_record = $scope.viewingCase;
+      }
+      return crmApi(params);
     }
 
     function getCasesFromWatcher(newValue, oldValue) {

@@ -84,9 +84,8 @@
           }
         });
         act.case.client = [];
-        act.case.status = caseStatuses[act.case.status_id].label;
-        act.case.color = caseStatuses[act.case.status_id].color;
-        act.case.case_type = caseTypes[act.case.case_type_id].title;
+        act.case.status = caseStatuses[act.case.status_id];
+        act.case.type = caseTypes[act.case.case_type_id];
         _.each(act.case.contacts, function(contact) {
           if (!contact.relationship_type_id) {
             act.case.client.push(contact);

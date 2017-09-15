@@ -418,8 +418,12 @@ function civicase_civicrm_pageRun(&$page) {
 
     $caseId = CRM_Utils_Request::retrieve('id', 'Positive');
     if ($caseId) {
+      $case = civicrm_api3('Case', 'getsingle', array(
+        'id' => $caseId,
+        'return' => array('case_type_id.name', 'status_id.name'),
+      ));
       $url = CRM_Utils_System::url('civicrm/case/a/', NULL, TRUE,
-        "/case/list?sf=id&sd=DESC&focus=0&cf=%7B%7D&caseId={$caseId}&tab=summary&sx=0&cpn=1&cps=25",
+        "/case/list?caseId={$caseId}&cf=%7B%22status_id%22:%5B%22{$case['status_id.name']}%22%5D,%22case_type_id%22:%5B%22{$case['case_type_id.name']}%22%5D%7D",
         FALSE);
       CRM_Utils_System::redirect($url);
     }

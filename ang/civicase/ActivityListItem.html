@@ -66,11 +66,11 @@
         </span>
       </div>
     </div>
-    <a class="act-case-info" ng-if="activity.case" ng-href="#/case/list?caseId={{ activity.case_id }}">
-      <span style="background-color: {{ activity.case.color }}" title="{{ activity.case.status }}">
+    <a class="act-case-info" ng-if="activity.case" ng-href="#/case/list?caseId={{ activity.case_id }}&cf=%7B%22status_id%22:%5B%22{{ activity.case.status.name }}%22%5D,%22case_type_id%22:%5B%22{{ activity.case.type.name }}%22%5D%7D">
+      <span style="background-color: {{ activity.case.status.color }}" title="{{ activity.case.status.label }}">
         {{ ts('Case: %1', {1: activity.case_id}) }}
       </span>
-      <span>{{ activity.case.case_type }}</span>
+      <span>{{ activity.case.type.name }}</span>
       <span civicase-activity-contacts="activity.case.client"></span>
     </a>
   </div>
