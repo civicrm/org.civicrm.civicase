@@ -114,6 +114,7 @@
   border: 0 none;
   padding: 0;
   margin: 0;
+  border-radius: 0;
 }
 
 #bootstrap-theme .act-feed-list-group .act-list-controls {
@@ -194,7 +195,7 @@
 
 #bootstrap-theme .act-feed-list-group .act-date {
   border-top: 1px solid #E8EEF0;
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 20px;
   padding-left: 1em;
   padding-top: 20px;
@@ -249,8 +250,9 @@
   font-weight: 600;
 }
 
-#bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn{
+#bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn {
   padding: 0 5px;
+  margin-left: 10px;
 }
 
 #bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn i {

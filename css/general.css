@@ -9,6 +9,9 @@
   position: relative;
   left: 4px;
 }
+#bootstrap-theme .panel {
+  overflow: hidden;
+}
 #bootstrap-theme .panel .panel-header {
   background-color: #f3f6f7;
 }
