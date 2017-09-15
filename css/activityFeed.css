@@ -372,7 +372,7 @@
 }
 #bootstrap-theme div.act-feed-panel > .panel-header.affix {
   width: inherit;
-  z-index: 601;
+  z-index: 6;
 }
 #bootstrap-theme div.act-feed-panel > .panel-header .form-control {
   vertical-align: top;
@@ -385,7 +385,7 @@
   margin: 0px;
   padding: 0.2em 0.5em;
   width: inherit;
-  z-index: 600;
+  z-index: 5;
 }
 
 #bootstrap-theme .act-feed-view-activity.affix:not(.cc-zero-w) {
