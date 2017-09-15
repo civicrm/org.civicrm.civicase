@@ -10,7 +10,7 @@
   width: 100%;
 }
 #bootstrap-theme .civicase-search-panel {
-  border-radius: 3px;
+  border-radius: 2px;
 }
 #bootstrap-theme .case-list-panel.viewing-case {
   width: 25%;
@@ -20,6 +20,9 @@
   height: calc(100% - 31px);
   position: absolute;
   width: 30px;
+}
+#bootstrap-theme .case-list-panel.case-is-focused .civicase-pager {
+  padding: 0;
 }
 #bootstrap-theme .case-list-table {
   border-radius: 3px 3px 0 0;

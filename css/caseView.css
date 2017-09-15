@@ -77,9 +77,12 @@
   clear: both;
   margin-right: 19px;
 }
+#bootstrap-theme .case-action-menu .btn-group-md .btn {
+  padding: 9px 12px;
+}
 #bootstrap-theme .civicase-type-and-manager {
   border-top: 1px solid #E8EEF0;
-  margin-bottom: 18px;
+  margin-bottom: 15px;
   margin-top: 15px;
   padding: 0px 19px;
 }
@@ -119,7 +122,7 @@
   padding: 8px 0 0 5px;
 }
 #bootstrap-theme .navbar.civicase-view-tab-bar .btn-group {
-  margin: 12px 12px 0 0;
+  margin: 9px 0 0 9px;
 }
 #bootstrap-theme .navbar.civicase-view-tab-bar .btn {
   background-color: transparent;
@@ -220,6 +223,7 @@
   font-weight: normal;
 }
 #bootstrap-theme .form-control .select2-choice .select2-arrow {
+  padding: 0;
   top: 0;
 }
 #bootstrap-theme .select2-container.select2-dropdown-open,
