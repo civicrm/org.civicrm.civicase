@@ -450,8 +450,8 @@ function civicase_civicrm_navigationMenu(&$menu) {
     // if you omit, then visiting the link will create a dummy entry
     // in the browser history, and it will be hard to press "Back" through
     // the dummy entry.
-    'civicrm/case?reset=1' => 'civicrm/case/a/#/case?dtab=0&dme=0',
-    'civicrm/case/search?reset=1' => 'civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=&tab=summary&sx=1&cpn=1&cps=25',
+    'civicrm/case?reset=1' => 'civicrm/case/a/#/case',
+    'civicrm/case/search?reset=1' => 'civicrm/case/a/#/case/list',
   );
 
   _civicase_menu_walk($menu, function(&$item) use ($rewriteMap) {
