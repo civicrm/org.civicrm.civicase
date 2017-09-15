@@ -266,7 +266,7 @@ function civicase_civicrm_buildForm($formName, &$form) {
         $buttons = $buttonGroup->getElements();
         $buttons[] = $form->createElement('submit', $form->getButtonName('refresh'), ts('Save Draft'), array(
           'crm-icon' => 'fa-pencil-square-o',
-          'class' => 'crm-form-submit'
+          'class' => 'crm-form-submit',
         ));
         $buttonGroup->setElements($buttons);
         $form->addGroup($buttons, 'buttons');
