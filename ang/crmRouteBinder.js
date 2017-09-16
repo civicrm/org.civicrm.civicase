@@ -3,7 +3,7 @@
 
   // While processing a change from the $watch()'d data, we set the "pendingUpdates" flag
   // so that automated URL changes don't cause a reload.
-  var pendingUpdates = null, activeTimer = null, registered = false;
+  var pendingUpdates = null, activeTimer = null, registered = false, ignorable = {};
 
   function registerGlobalListener($injector) {
     if (registered) return;
@@ -64,6 +64,7 @@
         }
         else {
           value = _.isObject(options.default) ? angular.extend({}, options.default) : options.default;
+          ignorable[options.param] = fmt.encode(options.default);
         }
         $parse(options.expr).assign(_scope, value);
 
@@ -75,12 +76,14 @@
           pendingUpdates = pendingUpdates || {};
           pendingUpdates[options.param] = encValue;
           var p = angular.extend({}, $route.current.params, pendingUpdates);
+          angular.forEach(ignorable, function(v,k){ if (p[k] === v) delete p[k]; });
           $route.updateParams(p);
 
           if (activeTimer) $timeout.cancel(activeTimer);
           activeTimer = $timeout(function () {
             pendingUpdates = null;
             activeTimer = null;
+            ignorable = {};
           }, 50);
         });
       };
