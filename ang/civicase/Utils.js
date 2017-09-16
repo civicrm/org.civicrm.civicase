@@ -154,7 +154,7 @@
       if (currentPath !== '/case/list') {
         p.cf = JSON.stringify({id: caseId});
       } else {
-        p = _.extend($route.current.params, p);
+        p = angular.extend({}, $route.current.params, p);
       }
       return '/case/list?' + $.param(p);
     };
