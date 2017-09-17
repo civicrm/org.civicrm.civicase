@@ -43,7 +43,7 @@
     };
 
     $scope.caseManagerIsMe = function() {
-      return $scope.filters.case_manager && $scope.filters.case_manager.length === 1 && $scope.filters.case_manager[0] === CRM.config.user_contact_id;
+      return $scope.filters.case_manager && $scope.filters.case_manager.length === 1 && parseInt($scope.filters.case_manager[0], 10) === CRM.config.user_contact_id;
     };
 
     function formatSearchFilters(inp) {
