@@ -90,6 +90,10 @@
   padding-top: 13px;
   display: block;
 }
+#bootstrap-theme .civicase-type-and-manager .civicase-type a {
+  color: inherit;
+  text-decoration: none;
+}
 #bootstrap-theme .civicase-type-and-manager .civicase-manager {
   color: #42AFCB;
   padding-top: 13px;

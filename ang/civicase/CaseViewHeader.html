@@ -31,7 +31,7 @@
           <span class="list-group-item-info">{{ ts("Change status to:") }}</span>
         </li>
         <li ng-repeat="(id, status) in allowedCaseStatuses" ng-if="id != item.status_id">
-          <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" href="{{ CRM.url('civicrm/case/activity', {action: 'add', reset: 1, cid: item.client[0].contact_id, caseid: item.id, atype: getActivityType('Change Case Status'), case_status_id: id, civicase_reload: caseGetParams()}) }}">{{ status.label }}</a>
+          <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" ng-href="{{ CRM.url('civicrm/case/activity', {action: 'add', reset: 1, cid: item.client[0].contact_id, caseid: item.id, atype: getActivityType('Change Case Status'), case_status_id: id, civicase_reload: caseGetParams()}) }}">{{ status.label }}</a>
         </li>
       </ul>
     </div>
@@ -59,6 +59,13 @@
   </div>
   <div class="civicase-type-and-manager clearfix">
     <div class="civicase-manager pull-right"><strong>{{ ts('Case Manager:') }}</strong> {{ item.manager.display_name }}</div>
-    <strong class="civicase-type">{{ item.case_type }}</strong>
+    <strong class="civicase-type">
+      <a ng-if="caseTypesLength > 1" title="{{ ts('Change Case Type') }}" class="crm-popup crm-editable-enabled" crm-popup-form-success="pushCaseData($data.civicase_reload[0])" ng-href="{{ CRM.url('civicrm/case/activity', {action: 'add', reset: 1, cid: item.client[0].contact_id, caseid: item.id, atype: getActivityType('Change Case Type'), case_status_id: id, civicase_reload: caseGetParams()}) }}">
+        {{ item.case_type }}
+      </a>
+      <span ng-if="caseTypesLength < 2">
+        {{ item.case_type }}
+      </span>
+    </strong>
   </div>
 </div>

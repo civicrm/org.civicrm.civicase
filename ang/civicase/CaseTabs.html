@@ -13,7 +13,7 @@
         <span><i class="fa fa-plus"></i> {{ ts('Timeline') }}</span>
         <input class="form-control" ng-model="activitySetSearchText" />
       </button>
-      <ul class="dropdown-menu" >
+      <ul class="dropdown-menu">
         <li ng-repeat="timeline in item.definition.activitySets | filter:{label: activitySetSearchText}">
           <a href crm-confirm="{message: ts('Add all activities from %1 to this case?', {1: timeline.label})}" on-yes="addTimeline(timeline.name)">
             {{ timeline.label }}
@@ -26,9 +26,9 @@
         <span><i class="fa fa-plus"></i> {{ ts('Activity') }}</span>
         <input class="form-control" ng-model="activityTypeSearchText" />
       </button>
-      <ul class="dropdown-menu" >
+      <ul class="dropdown-menu">
         <li ng-repeat="actType in availableActivityTypes | filter:{label: activityTypeSearchText}">
-          <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" href="{{ newActivityUrl(actType) }}">
+          <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" ng-href="{{ newActivityUrl(actType) }}">
             <i class="fa fa-fw {{ actType.icon || 'fa-circle' }}">
               <span class="civicase-icon-placeholder" ng-if="!actType.icon">{{ actType.label[0] }}</span>
             </i>

@@ -8,6 +8,7 @@
     var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;
     $scope.item = null;
     $scope.caseGetParams = function() {
@@ -85,11 +86,14 @@
     }
 
     function getAvailableActivityTypes(activityCount, definition) {
-      var ret = [];
+      var ret = [],
+        exclude = ['Change Case Status', 'Change Case Type'];
       _.each(definition.activityTypes, function(actSpec) {
-        var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
-        if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances < activityCount[actTypeId])) {
-          ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
+        if (exclude.indexOf(actSpec.name) < 0) {
+          var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
+          if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances < activityCount[actTypeId])) {
+            ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
+          }
         }
       });
       return _.sortBy(ret, 'label');
