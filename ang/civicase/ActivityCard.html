@@ -5,38 +5,6 @@
 >
   <div class="act-feed-inner">
     <div class="pull-right" ng-include="'~/civicase/ActivityCardMenu.html'"></div>
-    <div civicase-activity-dot="activity"></div>
-    <h4 class="act-contacts-target" ng-if="activity.target_contact_name && activity.category.indexOf('communication') >= 0">
-      <strong>{{ ts('To') }}</strong>
-      <span civicase-activity-contacts="activity.target_contact_name"></span>
-    </h4>
-    <h4>
-      <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
-      <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
-      <span class="act-subject-draft" ng-if="activity.status_name === 'Draft'">{{ ts('Draft') }}</span>
-    </h4>
-    <div class="clearfix">
-      {{ CRM.utils.formatDate(activity.activity_date_time) }}
-    </div>
-    <a href class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
-      <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
-    </a>
-    <div class="act-contacts clearfix">
-      <div class="act-contacts-target" ng-if="activity.target_contact_name && activity.category.indexOf('communication') < 0">
-        <strong>{{ ts('With') }}</strong>
-        <span civicase-activity-contacts="activity.target_contact_name"></span>
-      </div>
-      <div class="act-contacts-assignee" ng-if="activity.assignee_contact_name">
-        <strong>{{ ts('Assigned to') }}</strong>
-        <span civicase-activity-contacts="activity.assignee_contact_name"></span>
-      </div>
-    </div>
-    <a class="act-case-info" ng-if="activity.case" ng-href="#/case/list?caseId={{ activity.case_id }}&cf=%7B%22status_id%22:%5B%22{{ activity.case.status.name }}%22%5D,%22case_type_id%22:%5B%22{{ activity.case.type.name }}%22%5D%7D">
-      <span style="background-color: {{ activity.case.status.color }}" title="{{ activity.case.status.label }}">
-        {{ ts('Case: %1', {1: activity.case_id}) }}
-      </span>
-      <span>{{ activity.case.type.name }}</span>
-      <span civicase-activity-contacts="activity.case.client"></span>
-    </a>
+    <div ng-include="'~/civicase/ActivityItemInner.html'"></div>
   </div>
 </div>
