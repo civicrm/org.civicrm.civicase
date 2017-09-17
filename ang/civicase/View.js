@@ -188,6 +188,7 @@
       _.assign($scope.item, formatCaseDetails(data));
       $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
       $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
+      $scope.$broadcast('updateCaseData');
     };
 
     $scope.refresh = function(apiCalls) {

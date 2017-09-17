@@ -255,11 +255,8 @@
 
     $scope.$watchCollection('filters', getActivities);
     $scope.$watchCollection('params.filters', getActivities);
-
-    $scope.$watchCollection('displayOptions', function() {
-      getActivities();
-    });
-
+    $scope.$watchCollection('displayOptions', getActivities);
+    $scope.$on('updateCaseData', getActivities);
   }
 
   angular.module('civicase').directive('civicaseActivityFeed', function() {
