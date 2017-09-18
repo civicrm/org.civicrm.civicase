@@ -73,7 +73,7 @@
         is_current_revision: 1,
         is_test: 0,
         options: {limit: 10, sort: 'activity_date_time DESC'},
-        return: ['case_id', 'activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'case_id.case_type_id', 'case_id.status_id', 'case_id.contacts']
+        return: ['case_id', 'activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id', 'case_id.case_type_id', 'case_id.status_id', 'case_id.contacts']
       }, $scope.activityFilters);
       // recent communication
       apiCalls.push(['Activity', 'get', _.extend({

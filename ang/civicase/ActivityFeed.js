@@ -53,7 +53,7 @@
     $scope.star = function(act) {
       act.is_star = act.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues
-      crmApi('Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}, {});
+      crmApi('Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}, {}).then($scope.refreshCase);
     };
 
     $scope.markCompleted = function(act) {

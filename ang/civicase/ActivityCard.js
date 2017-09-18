@@ -14,6 +14,12 @@
       $scope.refresh([['Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}]]);
     };
 
+    $scope.star = function(act) {
+      act.is_star = act.is_star === '1' ? '0' : '1';
+      // Setvalue api avoids messy revisioning issues
+      $scope.refresh([['Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}]]);
+    };
+
     $scope.deleteActivity = function(activity) {
       CRM.confirm({
           title: ts('Delete Activity'),
@@ -25,7 +31,7 @@
     };
 
     $scope.viewInPopup = function($event, activity) {
-      if (!$event || !$($event.target).is('a, a *, input, button')) {
+      if (!$event || !$($event.target).is('a, a *, input, button, button *')) {
         CRM.loadForm(CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1}))
           .on('crmFormSuccess', function() {
             $scope.refresh();
@@ -57,6 +63,20 @@
           }
         }]
       });
+    };
+
+    $scope.getAttachments = function(activity) {
+      if (!activity.attachments) {
+        activity.attachments = [];
+        CRM.api3('Attachment', 'get', {
+          entity_table: 'civicrm_activity',
+          entity_id: activity.id,
+          sequential: 1
+        }).done(function(data) {
+          activity.attachments = data.values;
+          $scope.$digest();
+        });
+      }
     };
   }
 

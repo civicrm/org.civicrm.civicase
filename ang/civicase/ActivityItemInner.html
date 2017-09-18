@@ -6,7 +6,7 @@
   <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
   <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
   <span class="act-subject-draft" ng-if="activity.status_name === 'Draft'">{{ ts('Draft') }}</span>
-  <a class="act-star crm-i" ng-click="star(activity)" href ng-if="star && activity.category.indexOf('alert') < 0">
+  <a class="act-star crm-i" ng-click="star(activity)" href ng-if="star && activity.is_star && activity.category.indexOf('alert') < 0">
     <i class="crm-i" ng-class="{'fa-star-o': activity.is_star === '0', 'fa-star': activity.is_star === '1'}" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}"></i>
   </a>
   <div ng-if="activity.file_id" class="act-attachment-menu btn-group btn-group-sm">
