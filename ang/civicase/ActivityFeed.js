@@ -8,7 +8,7 @@
   });
 
   // ActivityFeed directive controller
-  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
+  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, templateExists) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
@@ -20,6 +20,7 @@
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = $scope.activityStatuses = CRM.civicase.activityStatuses;
     $scope.activityCategories = CRM.civicase.activityCategories;
+    $scope.templateExists = templateExists;
     $scope.activities = {};
     $scope.activityGroups = [];
     $scope.remaining = true;

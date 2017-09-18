@@ -1,4 +1,3 @@
-<div civicase-activity-dot="activity"></div>
 <a href class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
   <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
 </a>
@@ -6,7 +5,7 @@
   <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
   <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
   <span class="act-subject-draft" ng-if="activity.status_name === 'Draft'">{{ ts('Draft') }}</span>
-  <a class="act-star crm-i" ng-click="star(activity)" href ng-if="star && activity.is_star && activity.category.indexOf('alert') < 0">
+  <a class="act-star crm-i" ng-click="star(activity)" href ng-if="star && activity.is_star">
     <i class="crm-i" ng-class="{'fa-star-o': activity.is_star === '0', 'fa-star': activity.is_star === '1'}" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}"></i>
   </a>
   <div ng-if="activity.file_id" class="act-attachment-menu btn-group btn-group-sm">
@@ -30,14 +29,14 @@
   </div>
 </h4>
 <div class="act-tags">
-      <span
-        class="label label-default"
-        ng-repeat="tag in activity.tag_id || []"
-        style="background-color: {{ tag['tag_id.color'] }};"
-        title="{{ tag['tag_id.description'] }}"
-      >
-        {{ tag['tag_id.name'] }}
-      </span>
+  <span
+    class="label label-default"
+    ng-repeat="tag in activity.tag_id || []"
+    style="background-color: {{ tag['tag_id.color'] }};"
+    title="{{ tag['tag_id.description'] }}"
+  >
+    {{ tag['tag_id.name'] }}
+  </span>
 </div>
 <div class="act-details" ng-bind-html="activity.details"></div>
 <div class="act-contacts clearfix">
@@ -50,10 +49,3 @@
     <span civicase-activity-contacts="activity.assignee_contact_name"></span>
   </div>
 </div>
-<a class="act-case-info" ng-if="activity.case" ng-href="#/case/list?caseId={{ activity.case_id }}&cf=%7B%22status_id%22:%5B%22{{ activity.case.status.name }}%22%5D,%22case_type_id%22:%5B%22{{ activity.case.type.name }}%22%5D%7D">
-      <span style="background-color: {{ activity.case.status.color }}" title="{{ activity.case.status.label }}">
-        {{ ts('Case: %1', {1: activity.case_id}) }}
-      </span>
-  <span>{{ activity.case.type.name }}</span>
-  <span civicase-activity-contacts="activity.case.client"></span>
-</a>

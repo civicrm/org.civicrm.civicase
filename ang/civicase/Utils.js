@@ -160,6 +160,12 @@
     };
   });
 
+  angular.module('civicase').factory('templateExists', function($templateCache) {
+    return function(templateName) {
+      return !!$templateCache.get(templateName);
+    };
+  });
+
   // Export a set of civicase-related utility functions.
   // <div civicase-util="myhelper" />
   angular.module('civicase').directive('civicaseUtil', function(){

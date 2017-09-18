@@ -1,9 +1,10 @@
 (function(angular, $, _) {
 
-  function activityCard($scope, getActivityFeedUrl, dialogService) {
+  function activityCard($scope, getActivityFeedUrl, dialogService, templateExists) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.CRM = CRM;
     $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.templateExists = templateExists;
 
     $scope.isActivityEditable = function(activity) {
       var type = CRM.civicase.activityTypes[activity.activity_type_id].name;
