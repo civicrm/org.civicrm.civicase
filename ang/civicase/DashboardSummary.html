@@ -3,18 +3,19 @@
     <thead>
       <tr>
         <th>
-          <h3>{{ ts('Case Summary') }}</h3>
-          <a href ng-click="showHideBreakdown()" ng-if="caseTypesLength > 1">
+          <h4>{{ ts('Case Summary') }}</h4>
+          <a href ng-click="showHideBreakdown()" ng-if="caseTypesLength > 1" class="show-breakdown">
             <i class="crm-i fa-angle-right" ng-class="{'fa-rotate-90': showBreakdown}"></i>
             {{ ts('See breakdown by type') }}
           </a>
+          <span class="arrow-right"></span>
         </th>
         <th ng-repeat="(sid, status) in caseStatuses" class="text-center">
-          <h3 class="case-summary-count">
+          <h4 class="case-summary-count">
             <a href="#/case/list?cf=%7B%22status_id%22:%5B%22{{ status.name }}%22%5D%7D">
               {{ summaryData.all[sid] || '0' }}
             </a>
-          </h3>
+          </h4>
           <div class="case-summary-status">
             <span class="badge badge-secondary" ng-style="{'background-color': status.color}">{{ status.label }}</span>
           </div>
