@@ -105,6 +105,7 @@
     return function(item) {
       item.myRole = [];
       item.client = [];
+      item.subject = (typeof item.subject === 'undefined') ? '' : item.subject;
       item.status = caseStatuses[item.status_id].label;
       item.color = caseStatuses[item.status_id].color;
       item.case_type = caseTypes[item.case_type_id].title;
