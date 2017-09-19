@@ -5,6 +5,6 @@
       <span style="background-color: {{ activity.case.status.color }}" title="{{ activity.case.status.label }}">
         {{ ts('Case: %1', {1: activity.case_id}) }}
       </span>
-  <span>{{ activity.case.type.name }}</span>
+  <span>{{ activity.case.type.title }}</span>
   <span civicase-activity-contacts="activity.case.client"></span>
 </a>
