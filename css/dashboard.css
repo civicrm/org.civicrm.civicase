@@ -48,7 +48,7 @@
   border-bottom:10px solid #FFFFFF;
   border-top: 10px solid #FFFFFF;
   border-color: #FFFFFF !important;
-  padding: 12px;
+  padding: 13px;
   position: relative;
   vertical-align: middle;
 }
@@ -83,6 +83,7 @@
 #bootstrap-theme .dashboard-case-summary th:first-child,
 #bootstrap-theme .dashboard-case-summary td:first-child {
   padding-left: 20px;
+  width: 190px;
 }
 
 #bootstrap-theme .dashboard-case-summary td:last-child {
@@ -141,46 +142,64 @@
 #bootstrap-theme .dashboard-case-summary th .arrow-right:after {
   border-color: rgba(255, 255, 255, 0);
   border-left-color: #F3F6F7;
-  border-width: 37px;
+  border-width: 24px;
   border-left-width: 9px;
-  margin-top: -37px;
+  margin-top: -24px;
   z-index: 2;
 }
 #bootstrap-theme .dashboard-case-summary th .arrow-right:before {
   border-color: rgba(232, 238, 240, 0);
   border-left-color: #D3DEE2;
-  border-width: 38px;
+  border-width: 25px;
   border-left-width: 10px;
-  margin-top: -38px;
+  margin-top: -25px;
   z-index: 1;
 }
+#bootstrap-theme .dashboard-case-summary th:first-child .arrow-right:after,
 #bootstrap-theme .dashboard-case-summary th:last-child .arrow-right:after {
   content: none;
 }
+#bootstrap-theme .dashboard-case-summary th:first-child .arrow-right:before,
 #bootstrap-theme .dashboard-case-summary th:last-child .arrow-right:before {
   border: none;
   content: "";
-  height: 70%;
+  height: 50px;
   position: absolute;
   background-color: #D3DEE2;
   width: 1px;
-  top: 50px;
+  top: 45px;
 }
 #bootstrap-theme .dashboard-case-summary td a {
   color: #4D5663;
   font-weight: 600;
   text-decoration: none;
 }
+#bootstrap-theme .dashboard-case-summary a:hover,
+#bootstrap-theme .dashboard-case-summary a:focus,
 #bootstrap-theme .dashboard-case-summary a:hover {
   color: #42AFCB;
+  text-decoration: none;
 }
+#bootstrap-theme .dashboard-case-summary th a.show-breakdown {
+  font-weight: normal;
+}
+#bootstrap-theme .dashboard-case-summary a .crm-i{
+  margin-right: 5px;
+}
+
 #bootstrap-theme .dashboard-case-summary th h4,
 #bootstrap-theme .dashboard-case-summary td h4 {
   font-size: 18px;
   font-weight: 600;
 }
+#bootstrap-theme .dashboard-case-summary th h4 {
+  margin-top: 18px;
+}
 #bootstrap-theme .dashboard-case-summary td h4 {
   margin: 0;
+}
+#bootstrap-theme .dashboard-case-summary td h4 a {
+  color: #727E8A;
 }
 #bootstrap-theme .dashboard-case-summary .summary-pipe {
   background-color: #D3DEE2;
