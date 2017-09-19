@@ -105,16 +105,24 @@
 #bootstrap-theme .act-feed-item {
   border-radius: 2px;
   cursor: pointer;
-  padding: 10px 15px;
+  padding: 10px 0px 18px;
 }
 #bootstrap-theme .act-feed-item.act-category-milestone {
+  background: #F3F6F7;
   border-bottom: 1px solid #ddd;
   border-left: 5px solid;
   border-right: 5px solid;
   border-top: 1px solid #ddd;
 }
+#bootstrap-theme .act-feed-item.act-category-task {
+  border: 1px solid #E8EEF0;
+  border-radius: 4px;
+}
+#bootstrap-theme .act-feed-item.act-category-task.activity-overdue {
+  border-color: #E8EEF0 !important;
+}
 #bootstrap-theme .act-feed-item .act-subject {
-  color: #727E8A;
+  color: #4D5663;
   display: inline-block;
   font-size: 13px;
   font-weight: 600;
@@ -125,12 +133,27 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+#bootstrap-theme .act-feed-item.act-category-milestone .act-subject {
+  color: #4D5663;
+}
 #bootstrap-theme .act-feed-item.activity-overdue {
   border-left-color: #E6807F !important;
   border-right-color: #E6807F !important;
 }
+#bootstrap-theme .act-feed-item.activity-overdue .act-direction-icon{
+  color: #E6807F !important;
+}
+#bootstrap-theme .act-feed-item .cb-dot {
+  top: -7px;
+}
+#bootstrap-theme .act-feed-inner {
+  padding-left: 30px;
+}
 #bootstrap-theme .act-feed-item.activity-overdue .cb-dot {
   background: #E6807F !important;
+}
+#bootstrap-theme .act-feed-item.act-category-milestone .cb-dot {
+  border-color: #F3F6F7;
 }
 #bootstrap-theme .case-activity-card-wrapper .btn {
   border: none;
@@ -150,8 +173,41 @@
   font-size: 1.5em;
   left: 34px;
   position: absolute;
-  top: -6px;
+  top: -3px;
 }
 #bootstrap-theme .act-task-checkbox:hover i {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+#bootstrap-theme .act-feed-item .communication-wrapper {
+  background-color: #F3F6F7;
+  border: 1px solid #E8EEF0;
+  border-radius: 4px;
+  margin-left: 5px;
+  padding: 5px 20px 15px;
+}
+#bootstrap-theme .act-feed-item .communication-wrapper:before {
+  background: #F3F6F7;
+  border-left: 1px solid #E8EEF0;
+  border-top: 1px solid #E8EEF0;
+  content: ' ';
+  height: 8px;
+  left: 30px;
+  top: 15px;
+  position: absolute;
+  transform: rotate(-45deg);
+  width: 8px;
+}
+#bootstrap-theme .btn-group {
+  margin-top: -24px;
+}
+#bootstrap-theme .act-category-communication {
+  padding-top: 0;
+}
+#bootstrap-theme .act-category-communication .btn-group {
+  margin-top: 10px;
+}
+#bootstrap-theme .act-subject-draft {
+  color: #525966;
+  font-size: 13px;
+  margin-right: 10px;
 }
