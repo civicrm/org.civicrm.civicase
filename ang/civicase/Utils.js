@@ -337,23 +337,25 @@
       restrict: 'A',
       link: function (scope, elem, attrs) {
         CRM.loadScript(CRM.config.resourceBase + 'js/jquery/jquery.crmEditable.js').done(function () {
-          var model = scope.$eval(attrs.crmEditable),
-            textarea = elem.data('type') === 'textarea',
+          var textarea = elem.data('type') === 'textarea',
             field = elem.data('field');
           elem
-            .html(textarea ? nl2br(model[field]) : _.escape(model[field]))
+            .html(textarea ? nl2br(scope.model[field]) : _.escape(scope.model[field]))
             .on('crmFormSuccess', function(e, value) {
               $timeout(function() {
                 scope.$apply(function() {
-                  model[field] = value;
-                  if (textarea) {
-                    elem.html(nl2br(model[field]));
-                  }
+                  scope.model[field] = value;
                 });
               });
             })
             .crmEditable();
+          scope.$watchCollection('model', function(model) {
+            elem.html(textarea ? nl2br(model[field]) : _.escape(model[field]));
+          });
         });
+      },
+      scope: {
+        model: '=crmEditable'
       }
     };
   });
