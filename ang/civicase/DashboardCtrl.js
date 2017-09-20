@@ -71,6 +71,20 @@
       return '#/case?' + $.param(params);
     };
 
+    $scope.caseListLink = function(type, status) {
+      var cf = {};
+      if (type) {
+        cf.case_type_id = [type];
+      }
+      if (status) {
+        cf.status_id = [status];
+      }
+      if ($scope.myCasesOnly) {
+        cf.case_manager = [CRM.config.user_contact_id];
+      }
+      return '#/case/list?' + $.param({cf: JSON.stringify(cf)});
+    };
+
     $scope.refresh = function(apiCalls) {
       $scope.$broadcast('caseRefresh');
       apiCalls = apiCalls || [];
@@ -112,7 +126,7 @@
       };
       if (myCasesOnly) {
         $scope.activityFilters.case_filter.case_manager = CRM.config.user_contact_id;
-        $scope.recentCaseFilter.case_manager = CRM.config.user_contact_id;
+        $scope.recentCaseFilter.case_manager = [CRM.config.user_contact_id];
       }
       $scope.recentCaseLink = '#/case/list?sf=modified_date&sd=DESC&cf=' + JSON.stringify($scope.recentCaseFilter);
       $scope.refresh();

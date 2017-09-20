@@ -12,7 +12,7 @@
         </th>
         <th ng-repeat="(sid, status) in caseStatuses" class="text-center">
           <h4 class="case-summary-count">
-            <a href="#/case/list?cf=%7B%22status_id%22:%5B%22{{ status.name }}%22%5D%7D">
+            <a ng-href="{{ caseListLink(null, status.name) }}">
               {{ summaryData.all[sid] || '0' }}
             </a>
           </h4>
@@ -26,14 +26,14 @@
     <tbody ng-show="showBreakdown">
       <tr ng-repeat="(ctid, caseType) in caseTypes">
         <td>
-          <a href="#/case/list?cf=%7B%22case_type_id%22:%5B%22{{ caseType.name }}%22%5D%7D">
+          <a ng-href="{{ caseListLink(caseType.name) }}">
             {{ caseType.title }}
           </a>
           <span class="border-right"></span>
         </td>
         <td ng-repeat="(sid, status) in caseStatuses" class="text-center" ng-class="{'case-status-unavailable': (caseType.definition.statuses && (caseType.definition.statuses.indexOf(status.name) < 0))}">
           <h4 class="case-summary-count">
-            <a href="#/case/list?cf=%7B%22status_id%22:%5B%22{{ status.name }}%22%5D,%22case_type_id%22:%5B%22{{ caseType.name }}%22%5D%7D">
+            <a ng-href="{{ caseListLink(caseType.name, status.name) }}">
               {{ summaryData[ctid][sid] || '0' }}
             </a>
           </h4>
