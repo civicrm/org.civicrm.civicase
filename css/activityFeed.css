@@ -372,14 +372,14 @@
 }
 #bootstrap-theme div.act-feed-panel > .panel-header.affix {
   width: inherit;
-  z-index: 6;
+  z-index: 600;
 }
 #bootstrap-theme div.act-feed-panel > .panel-header .form-control {
   vertical-align: top;
 }
 #bootstrap-theme div.act-feed-panel > .panel-header .select2-container-multi {
   height: auto;
-  z-index: 600;
+  z-index: 6;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix {
   margin: 0px;
