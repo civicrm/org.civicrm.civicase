@@ -14,6 +14,8 @@
     $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.caseTypes = CRM.civicase.caseTypes;
     $scope.caseTypesLength = _.size(CRM.civicase.caseTypes);
+    $scope.checkPerm = CRM.checkPerm;
+    $scope.url = CRM.url;
 
     $scope.$bindToRoute({
       param: 'dtab',
@@ -22,12 +24,16 @@
       default: 0
     });
 
-    $scope.$bindToRoute({
-      param: 'dme',
-      expr: 'myCasesOnly',
-      format: 'bool',
-      default: false
-    });
+    if (CRM.checkPerm('access all cases and activities')) {
+      $scope.$bindToRoute({
+        param: 'dme',
+        expr: 'myCasesOnly',
+        format: 'bool',
+        default: false
+      });
+    } else {
+      $scope.myCasesOnly = true;
+    }
 
     $scope.$bindToRoute({
       param: 'dbd',
@@ -66,6 +72,7 @@
     };
 
     $scope.refresh = function(apiCalls) {
+      $scope.$broadcast('caseRefresh');
       apiCalls = apiCalls || [];
       apiCalls.push(['Case', 'getstats', {my_cases: $scope.myCasesOnly}]);
       var params = _.extend({

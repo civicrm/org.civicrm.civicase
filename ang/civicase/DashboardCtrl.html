@@ -2,12 +2,21 @@
 
   <h1 crm-page-title>{{ ts('CiviCase Dashboard') }}</h1>
 
-  <span class="hideous-fixme" style="background: hotpink; text-align: center;">
-    <label for="dashboard-myCasesOnly">
-      <input type="checkbox" id="dashboard-myCasesOnly" ng-model="myCasesOnly">
-      {{ts('My cases only')}}
-    </label>
-  </span>
+  <nav class="navbar navbar-default">
+    <div class="navbar-form navbar-right">
+      <label for="dashboard-myCasesOnly" ng-show="checkPerm('access all cases and activities')">
+        <input type="checkbox" id="dashboard-myCasesOnly" ng-model="myCasesOnly">
+        {{ts('My cases only')}}
+      </label>
+      <a ng-if="checkPerm('add cases')"
+        ng-href="{{ url('civicrm/case/add', {reset: 1, action: 'add', context: 'standalone'}) }}"
+        class="btn btn-default crm-popup"
+        crm-popup-form-success="refresh()">
+        <i class="crm-i fa-plus-circle"></i>
+        {{ ts('Add Case') }}
+      </a>
+    </div>
+  </nav>
 
   <uib-tabset active="activeTab" justified="true" type="pills" uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary">
     <uib-tab index="0" heading="{{ ts('Dashboard') }}">

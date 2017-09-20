@@ -308,6 +308,7 @@
     $scope.$watchCollection('sort', getCases);
     $scope.$watchCollection('page', getCases);
     $scope.$watchCollection('filters', getCases);
+    $scope.$on('caseRefresh', getCases);
   }
 
   angular.module('civicase').directive('caseListTable', function() {
