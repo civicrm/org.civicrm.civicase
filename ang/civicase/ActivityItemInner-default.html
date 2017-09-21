@@ -4,7 +4,6 @@
 <h4>
   <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
   <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
-  <span class="act-subject-draft" ng-if="activity.status_name === 'Draft'">{{ ts('Draft') }}</span>
   <a class="act-star crm-i" ng-click="star(activity)" href ng-if="star && activity.is_star">
     <i class="crm-i" ng-class="{'fa-star-o': activity.is_star === '0', 'fa-star': activity.is_star === '1'}" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}"></i>
   </a>
@@ -27,6 +26,7 @@
       </li>
     </ul>
   </div>
+  <span class="act-subject-draft" ng-if="activity.status_name === 'Draft'">{{ ts('(Draft)') }}</span>
 </h4>
 <div class="act-tags">
   <span

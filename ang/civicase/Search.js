@@ -30,6 +30,15 @@
       }
     });
 
+    var $customScroll = $('.case-list-panel .custom-scroll-wrapper'),
+      $tableHeader = $('.case-list-panel .inner table thead');
+
+    $scope.$watch('expanded',function(){
+      $timeout(function(){
+        $($customScroll,$tableHeader).data('bs.affix').options.offset.top =  $('.case-list-panel').offset().top - 50;
+      });
+    });
+
     $scope.showMore = function() {
       $scope.expanded = true;
     };

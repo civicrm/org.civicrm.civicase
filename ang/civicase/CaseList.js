@@ -264,7 +264,7 @@
 
       $([$tableHeader, $customScroll]).affix({
         offset: {
-           top: $('.civicase-search-panel').offset().top
+           top: $('.case-list-panel').offset().top - 50
         }
       })
       .on('affixed.bs.affix', function() {
