@@ -178,14 +178,14 @@
 #bootstrap-theme .act-task-checkbox:hover i {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
-#bootstrap-theme .act-feed-item .communication-wrapper {
+#bootstrap-theme .act-category-communication .act-feed-item-content {
   background-color: #F3F6F7;
   border: 1px solid #E8EEF0;
   border-radius: 4px;
   margin-left: 5px;
   padding: 5px 20px 15px;
 }
-#bootstrap-theme .act-feed-item .communication-wrapper:before {
+#bootstrap-theme .act-category-communication .act-feed-item-content:before {
   background: #F3F6F7;
   border-left: 1px solid #E8EEF0;
   border-top: 1px solid #E8EEF0;
