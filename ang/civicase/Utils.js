@@ -68,7 +68,7 @@
       if (act.category.indexOf('alert') > -1) {
         act.color = ''; // controlled by css
       }
-      if (caseId && (!act.case_id || _.contains(act.case_id, caseId))) {
+      if (caseId && (!act.case_id || act.case_id === caseId || _.contains(act.case_id, caseId))) {
         act.case_id = caseId;
       } else if (act.case_id) {
         act.case_id = act.case_id[0];
@@ -404,14 +404,17 @@
       },
       link: function (scope, elem, attrs) {
         scope.url = CRM.url;
-        if (_.isPlainObject(scope.data)) {
-          scope.contacts = [];
-          _.each(scope.data, function (name, cid) {
-            scope.contacts.push({display_name: name, contact_id: cid});
-          });
-        } else {
-          scope.contacts = scope.data;
+        function refresh() {
+          if (_.isPlainObject(scope.data)) {
+            scope.contacts = [];
+            _.each(scope.data, function (name, cid) {
+              scope.contacts.push({display_name: name, contact_id: cid});
+            });
+          } else {
+            scope.contacts = _.cloneDeep(scope.data);
+          }
         }
+        scope.$watch('data', refresh);
       },
       template:
         '<a ng-if="contacts.length" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].contact_id}) }}">{{ contacts[0].display_name }}</a> ' +
