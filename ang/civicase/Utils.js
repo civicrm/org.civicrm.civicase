@@ -49,6 +49,45 @@
     };
   });
 
+  /** doNutty converts a dc.pieChart() to a stylized donut chart. */
+  angular.module('civicase').factory('doNutty', function() {
+    return function doNutty(chart, totalWidth, subLabel, mainStat) {
+      var legendWidth = Math.floor(totalWidth / 2), radius = Math.floor(totalWidth / 4);
+      var padding = 10, thickness = 0.3;
+
+      chart
+          .width(legendWidth + (radius * 2))
+          .height(radius * 2)
+          .innerRadius(Math.floor(radius * (1-thickness)))
+          .cx(radius)
+          .legend(CRM.visual.dc.legend().x(padding+(radius * 2)).y(0).gap(padding));
+
+      if (subLabel && mainStat) {
+        var g;
+        chart
+            .on('postRender', function(){
+              g = chart.svg()
+                  .append("g")
+                  .classed('dc-donutty-label', 'true')
+                  .attr("transform", "translate(" + radius + "," + radius + ")");
+              g.append("text")
+                  .attr("dy", "0em")
+                  .attr("text-anchor", "middle")
+                  .classed("dc-donutty-label-main", "true")
+                  .text(mainStat);
+              g.append("text")
+                  .attr("dy", "1em")
+                  .attr("text-anchor", "middle")
+                  .classed("dc-donutty-label-sub", "true")
+                  .text(subLabel);
+            })
+            .on('postRedraw', function(){
+              g.selectAll('.dc-donutty-label-main').text(mainStat);
+            });
+      }
+    };
+  });
+
   angular.module('civicase').factory('formatActivity', function() {
     var activityTypes = CRM.civicase.activityTypes,
       activityStatuses = CRM.civicase.activityStatuses,
