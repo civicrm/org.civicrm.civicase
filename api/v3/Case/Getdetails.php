@@ -115,10 +115,10 @@ function civicrm_api3_case_getdetails($params) {
         foreach ((array) $act['case_id'] as $actCaseId) {
           if (isset($result['values'][$actCaseId])) {
             $case =& $result['values'][$actCaseId];
+            if (!isset($case['activity_summary']['next'])) {
+              $case['activity_summary']['next'][] = $act;
+            }
             foreach ($categories as $category => $grouping) {
-              if (!isset($case['activity_summary']['next'])) {
-                $case['activity_summary']['next'][] = $act;
-              }
               if (in_array($act['activity_type_id'], $grouping) && (empty($catetoryLimits[$category]) || count($case['activity_summary'][$category]) < $catetoryLimits[$category])) {
                 $case['activity_summary'][$category][] = $act;
               }
