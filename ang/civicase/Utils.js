@@ -55,36 +55,46 @@
       var legendWidth = Math.floor(totalWidth / 2), radius = Math.floor(totalWidth / 4);
       var padding = 10, thickness = 0.3;
 
+      var legend = CRM.visual.dc.legend().x(padding+(radius * 2)).gap(padding);
+
       chart
           .width(legendWidth + (radius * 2))
           .height(radius * 2)
           .innerRadius(Math.floor(radius * (1-thickness)))
           .cx(radius)
-          .legend(CRM.visual.dc.legend().x(padding+(radius * 2)).y(0).gap(padding));
+          .legend(legend);
 
-      if (subLabel && mainStat) {
-        var g;
-        chart
-            .on('postRender', function(){
-              g = chart.svg()
-                  .append("g")
-                  .classed('dc-donutty-label', 'true')
-                  .attr("transform", "translate(" + radius + "," + radius + ")");
-              g.append("text")
-                  .attr("dy", "0em")
-                  .attr("text-anchor", "middle")
-                  .classed("dc-donutty-label-main", "true")
-                  .text(mainStat);
-              g.append("text")
-                  .attr("dy", "1em")
-                  .attr("text-anchor", "middle")
-                  .classed("dc-donutty-label-sub", "true")
-                  .text(subLabel);
-            })
-            .on('postRedraw', function(){
-              g.selectAll('.dc-donutty-label-main').text(mainStat);
-            });
+      function moveLegend() {
+        var size  = chart.group().size();
+        var legendHeight = (size * legend.itemHeight()) + ((size-1) * legend.gap());
+        legend.y((chart.height() - legendHeight)/2);
+        legend.render();
       }
+
+      var g;
+      chart
+        .on('postRender', function(){
+          moveLegend();
+          g = chart.svg()
+              .append("g")
+              .classed('dc-donutty-label', 'true')
+              .attr("transform", "translate(" + radius + "," + radius + ")");
+          g.append("text")
+              .attr("dy", "0em")
+              .attr("text-anchor", "middle")
+              .classed("dc-donutty-label-main", "true")
+              .text(mainStat);
+          g.append("text")
+              .attr("dy", "1em")
+              .attr("text-anchor", "middle")
+              .classed("dc-donutty-label-sub", "true")
+              .text(subLabel);
+        })
+        .on('postRedraw', function(){
+          moveLegend();
+          g.selectAll('.dc-donutty-label-main').text(mainStat);
+        });
+
     };
   });
 
