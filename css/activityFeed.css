@@ -31,7 +31,6 @@
   color: #727E8A;
   white-space: nowrap;
 }
-
 #bootstrap-theme .act-feed-list-group,
 #bootstrap-theme .act-feed-view-activity {
   position: relative;
@@ -77,6 +76,7 @@
 
 #bootstrap-theme div.act-attachment-menu {
   display: inline-block;
+  margin-top: 0;
 }
 
 #bootstrap-theme .act-feed-list-group div.btn-group-sm>button.btn {
@@ -98,6 +98,9 @@
 
 #bootstrap-theme .act-filters .act-available-filter-menu>li>span {
   padding-bottom: 0;
+}
+#bootstrap-theme .act-filters .act-available-filter-menu>li:last-child>span {
+  padding-bottom: 10px;
 }
 #bootstrap-theme .act-filters .act-filter-header {
   display: none;
@@ -128,10 +131,12 @@
   border-bottom: 1px solid #ddd;
   border-left: 5px solid;
   border-right: 5px solid;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-item {
-  padding: 10px 15px;
+  padding: 10px 20px;
   cursor: pointer;
 }
 
@@ -149,17 +154,8 @@
   border-color: #F3F6F7;
 }
 
-#bootstrap-theme .act-feed-list-group .act-feed-item:hover {
-  color: #555;
-  background-color: #F3F6F7;
-}
-
 #bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item:hover {
   background: inherit;
-}
-
-#bootstrap-theme .act-feed-list-group .act-feed-item:hover .cb-dot {
-  border-color: #F3F6F7;
 }
 
 #bootstrap-theme .act-feed-inner {
@@ -170,10 +166,6 @@
 
 #bootstrap-theme .activity-timeline .act-feed-inner {
   border-left: 1px solid #ddd;
-}
-
-#bootstrap-theme .act-feed-list-group .act-category-milestone .act-feed-inner {
-  border-left: 0 none;
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-task .act-feed-inner {
@@ -188,17 +180,15 @@
   background-color: #e6807f;
 }
 
-#bootstrap-theme .case-tab-files .act-feed-list-group .list-group-item:first-child .act-date {
-  border-top: 0;
-  padding-top: 10px;
-}
 
 #bootstrap-theme .act-feed-list-group .act-date {
-  border-top: 1px solid #E8EEF0;
+  color: #525966;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 20px;
-  padding-left: 1em;
-  padding-top: 20px;
+  line-height: 22px;
+  padding: 20px;
+  margin: 0;
+
 }
 
 #bootstrap-theme .act-feed-list-group .act-task-checkbox { 
@@ -303,7 +293,10 @@
 #bootstrap-theme .act-feed-list-group .act-contacts {
   padding: 1em 0;
 }
-
+#bootstrap-theme .act-feed-list-group .act-feed-inner .btn {
+  border: none;
+  padding: 0;
+}
 #bootstrap-theme .act-feed-list-group .act-contacts div {
   min-width: 40%;
   max-width: 100%;
@@ -387,7 +380,9 @@
   width: inherit;
   z-index: 5;
 }
-
+#bootstrap-theme .act-feed-list-group .act-list-controls.affix-top {
+  top: 0 !important;
+}
 #bootstrap-theme .act-feed-view-activity.affix:not(.cc-zero-w) {
   background-color: #FFFFFF;
   margin-right: -600px;
@@ -430,4 +425,51 @@
   position: absolute;
   right: 0;
   top: 0;
+}
+#bootstrap-theme .case-tab-activities .act-feed-item {
+  margin: 0px 22px;
+}
+#bootstrap-theme .case-tab-activities .act-feed-item.act-category-task {
+  border: none;
+  border-radius: 0;
+}
+#bootstrap-theme .case-tab-activities .act-feed-item.act-category-task {
+  border:none !important;
+}
+#bootstrap-theme .case-tab-activities .pager-show-more {
+  margin-bottom: 20px;
+}
+#bootstrap-theme .case-tab-activities .pager-no-more {
+  margin-bottom: 20px;
+}
+#bootstrap-theme .case-tab-activities .act-feed-list-group h3 {
+  background-color: #F3F6F7;
+  border-top: 1px solid #D3DEE2;
+  border-bottom: 1px solid #D3DEE2;
+  color: #4D5663;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 5px 0px;
+  padding: 13px 20px;
+}
+#bootstrap-theme .case-tab-activities .activity-item-menu.btn-group {
+  margin-top: -10px;
+}
+#bootstrap-theme .case-tab-activities .act-category-communication .activity-item-menu.btn-group {
+  margin-top: 20px;
+  margin-right: 20px;
+}
+#bootstrap-theme .case-tab-activities .act-star {
+  margin-top: -5px;
+}
+#bootstrap-theme .case-tab-activities .act-attachment-menu {
+  margin-top: -8px;
+}
+#bootstrap-theme .case-tab-activities .act-filters input::placeholder {
+  color: #727E8A;
+  opacity: 0.6;
+}
+#bootstrap-theme .case-tab-activities .act-filters .select2-default::placeholder {
+  color: #727E8A;
+  opacity: 0.6;
 }

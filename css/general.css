@@ -115,7 +115,7 @@
   border-top: 1px solid #ddd;
 }
 #bootstrap-theme .act-feed-item.act-category-task {
-  border: 1px solid #E8EEF0;
+  border: 1px solid #E8EEF0 !important;
   border-radius: 4px;
 }
 #bootstrap-theme .act-feed-item.act-category-task.activity-overdue {
@@ -164,9 +164,6 @@
 #bootstrap-theme .case-activity-card-wrapper .act-feed-inner {
   border-left: 1px solid #ddd;
 }
-#bootstrap-theme .act-category-milestone .act-feed-inner {
-  border-left: none;
-}
 #bootstrap-theme .act-task-checkbox {
   color: #586277;
   cursor: pointer;
@@ -197,13 +194,11 @@
   transform: rotate(-45deg);
   width: 8px;
 }
-#bootstrap-theme .btn-group {
-  margin-top: -24px;
-}
 #bootstrap-theme .act-category-communication {
   padding-top: 0;
+  padding-right: 0 !important;
 }
-#bootstrap-theme .act-category-communication .btn-group {
+#bootstrap-theme .act-category-communication .activity-card-menu.btn-group {
   margin-top: 10px;
 }
 #bootstrap-theme .act-subject-draft {
