@@ -22,7 +22,7 @@
     function caseGetParams() {
       return {
         id: $scope.item.id,
-        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'tag_id.parent_id', 'related_case_ids'],
+        return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_count', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'tag_id.parent_id', 'related_case_ids'],
         // Related cases by contact
         'api.Case.get.1': {
           contact_id: {IN: "$value.contact_id"},
@@ -155,10 +155,6 @@
       });
       delete(item['api.Case.get.1']);
       delete(item['api.Case.get.2']);
-      // Format activities
-      _.each(item.activity_summary, function(acts) {
-        _.each(acts, formatAct);
-      });
       // Recent communications
       item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.1'].values), formatAct);
       delete(item['api.Activity.get.1']);
@@ -187,12 +183,15 @@
     };
 
     $scope.pushCaseData = function(data) {
-      // Maintain the reference to the variable in the parent scope.
-      delete($scope.item.tag_id);
-      _.assign($scope.item, formatCaseDetails(data));
-      $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
-      $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
-      $scope.$broadcast('updateCaseData');
+      // If the user has already clicked through to another case by the time we get this data back, stop.
+      if ($scope.item && data.id === $scope.item.id) {
+        // Maintain the reference to the variable in the parent scope.
+        delete($scope.item.tag_id);
+        _.assign($scope.item, formatCaseDetails(data));
+        $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
+        $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
+        $scope.$broadcast('updateCaseData');
+      }
     };
 
     $scope.refresh = function(apiCalls) {

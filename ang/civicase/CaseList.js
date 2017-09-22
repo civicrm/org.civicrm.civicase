@@ -292,7 +292,7 @@
     }
 
     $scope.viewCase = function(id, $event) {
-      if (!$event || !$($event.target).is('a, a *, input, button')) {
+      if (!$event || !$($event.target).is('a, a *, input, button, button *')) {
         var p = {
           caseId: id,
           focus: 1,
