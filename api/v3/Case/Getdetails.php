@@ -141,19 +141,27 @@ function civicrm_api3_case_getdetails($params) {
         }
       }
     }
-    // Get count of incomplete activities by category
+    // Get count of activities by category
     if (in_array('category_count', $toReturn)) {
-      $incomplete = implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE)));
-      foreach ($activityCategories as $category) {
-        $query = "SELECT COUNT(a.id) as count, ca.case_id
+      $statusTypes = array(
+        'incomplete' => implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE))),
+        'completed' => implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::COMPLETED))),
+      );
+      foreach ($result['values'] as &$case) {
+        $case['category_count'] = array_fill_keys(array_keys($statusTypes), array());
+      }
+      foreach ($statusTypes as $statusType => $statusTypeIds) {
+        foreach ($activityCategories as $category) {
+          $query = "SELECT COUNT(a.id) as count, ca.case_id
           FROM civicrm_activity a, civicrm_case_activity ca
           WHERE ca.activity_id = a.id AND a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id IN (" . implode(',', $ids) . ")
           AND a.activity_type_id IN (SELECT value FROM civicrm_option_value WHERE grouping LIKE '%$category%' AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
-          AND a.status_id IN ($incomplete)
+          AND a.status_id IN ($statusTypeIds)
           GROUP BY ca.case_id";
-        $dao = CRM_Core_DAO::executeQuery($query);
-        while ($dao->fetch()) {
-          $result['values'][$dao->case_id]['category_count'][$category] = (int) $dao->count;
+          $dao = CRM_Core_DAO::executeQuery($query);
+          while ($dao->fetch()) {
+            $result['values'][$dao->case_id]['category_count'][$statusType][$category] = (int) $dao->count;
+          }
         }
       }
     }

@@ -7,6 +7,7 @@
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
+    var panelLimit = 5;
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;
@@ -43,15 +44,8 @@
           is_test: 0,
           "activity_type_id.grouping": {LIKE: "%communication%"},
           'status_id.filter': 1,
-          options: {limit: 5, sort: 'activity_date_time DESC'},
+          options: {limit: panelLimit, sort: 'activity_date_time DESC'},
           return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id']
-        },
-        'api.Activity.getcount': {
-          case_id: "$value.id",
-          is_current_revision: 1,
-          is_test: 0,
-          "activity_type_id.grouping": {LIKE: "%communication%"},
-          'status_id.filter': 1
         },
         // For the "tasks" panel
         'api.Activity.get.3': {
@@ -60,7 +54,7 @@
           is_test: 0,
           "activity_type_id.grouping": {LIKE: "%task%"},
           'status_id.filter': 0,
-          options: {limit: 5, sort: 'activity_date_time ASC'},
+          options: {limit: panelLimit, sort: 'activity_date_time ASC'},
           return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id']
         },
         // Custom data
@@ -272,6 +266,10 @@
     // Copied from ActivityList.js - used by the Recent Communication panel
     $scope.isSameDate = function(d1, d2) {
       return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
+    };
+
+    $scope.panelPlaceholders = function(num) {
+      return _.range(num > panelLimit ? panelLimit : num);
     };
 
     $scope.$watch('item', function() {

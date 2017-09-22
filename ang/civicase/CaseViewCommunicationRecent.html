@@ -3,10 +3,10 @@
     {{ ts('Recent Communications') }}
     <a class="badge"
        ng-href="#{{ activityFeedUrl(item.id, 'communication', 'completed') }}"
-       ng-if="item['api.Activity.getcount']"
+       ng-if="item.category_count.completed.communication"
        title="{{ ts('View All') }}"
     >
-      {{ item['api.Activity.getcount'] }}
+      {{ item.category_count.completed.communication }}
     </a>
   </h3>
   <div class="activity-timeline">
@@ -20,7 +20,12 @@
         ></div>
       </li>
     </ul>
-    <div class="civicase-panel-empty" ng-if="!item.recentCommunication.length">
+    <ul class="list-group act-feed-list-group" ng-if="!item.recentCommunication.length && item.category_count.completed.communication">
+      <li class="list-group-item" ng-repeat="placeholder in panelPlaceholders(item.category_count.completed.communication)">
+        <div class="activity-card-loading-placeholder"><div></div></div>
+      </li>
+    </ul>
+    <div class="civicase-panel-empty" ng-if="!item.category_count.completed.communication">
       {{ ts('No completed communications.') }}
     </div>
   </div>

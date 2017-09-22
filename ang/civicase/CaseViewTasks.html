@@ -4,10 +4,10 @@
     <a ng-href="#{{ activityFeedUrl(item.id, 'task', 'incomplete') }}"
        class="badge"
        ng-class="{'item-overdue': item.activity_summary.task[0].is_overdue}"
-       ng-if="item.category_count.task"
+       ng-if="item.category_count.incomplete.task"
        title="{{ ts('View All') }}"
     >
-      {{ item.category_count.task }}
+      {{ item.category_count.incomplete.task }}
     </a>
   </h3>
   <ul class="list-group act-feed-list-group" ng-if="item.tasks.length">
@@ -20,7 +20,12 @@
       ></div>
     </li>
   </ul>
-  <div class="civicase-panel-empty" ng-if="!item.tasks.length">
+  <ul class="list-group act-feed-list-group" ng-if="!item.tasks.length && item.category_count.incomplete.task">
+    <li class="list-group-item" ng-repeat="placeholder in panelPlaceholders(item.category_count.incomplete.task)">
+      <div class="activity-card-loading-placeholder"><div></div></div>
+    </li>
+  </ul>
+  <div class="civicase-panel-empty" ng-if="!item.category_count.incomplete.task">
     {{ ts('No scheduled tasks.') }}
   </div>
 </div>

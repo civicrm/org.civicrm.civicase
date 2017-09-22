@@ -206,3 +206,43 @@
   font-size: 13px;
   margin-right: 10px;
 }
+#bootstrap-theme .activity-card-loading-placeholder {
+  border: 1px solid #E8EEF0;
+  border-radius: 4px;
+  height: 90px;
+}
+#bootstrap-theme .activity-card-loading-placeholder:before {
+  content: ' ';
+  position: absolute;
+  left: 1em;
+  top: 0.4em;
+  width: 2.7em;
+  height: 2.7em;
+  background-color: #EDF3F5;
+  border-radius: 1.5em;
+  font-size: 1.5em;
+  text-align: center;
+  padding-top: .2em;
+  border: .4em solid white;
+}
+#bootstrap-theme .activity-card-loading-placeholder:after {
+  content: ' ';
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  height: 30px;
+  width: 12px;
+  background-color: #EDF3F5;
+}
+#bootstrap-theme .activity-card-loading-placeholder div {
+  margin-left: 90px;
+  margin-right: 90px;
+}
+#bootstrap-theme .activity-card-loading-placeholder div:before,
+#bootstrap-theme .activity-card-loading-placeholder div:after {
+  content: ' ';
+  display: block;
+  height: 10px;
+  background-color: #EDF3F5;
+  margin-top: 23px;
+}

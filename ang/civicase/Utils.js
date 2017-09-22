@@ -62,7 +62,7 @@
       act.status_name = activityStatuses[act.status_id].name;
       act.status_type = getStatusType(act.status_id);
       act.is_completed = act.status_type !== 'incomplete'; // FIXME doesn't distinguish cancelled from completed
-      act.is_overdue = act.is_overdue === '1';
+      act.is_overdue = (typeof act.is_overdue === 'string') ? (act.is_overdue === '1') : act.is_overdue;
       act.color = activityStatuses[act.status_id].color || '#42afcb';
       act.status_css = 'status-type-' + act.status_type + ' activity-status-' + act.status_name.toLowerCase().replace(' ', '-');
       if (act.category.indexOf('alert') > -1) {
