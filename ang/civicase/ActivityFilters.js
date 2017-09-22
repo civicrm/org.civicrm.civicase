@@ -81,11 +81,6 @@
           options: _.map(CRM.civicase.activityStatuses, mapSelectOptions)
         },
         {
-          name: 'text',
-          label: ts('Contains text'),
-          html_type: 'Text'
-        },
-        {
           name: 'target_contact_id',
           label: ts('With'),
           html_type: 'Autocomplete-Select',
@@ -103,6 +98,11 @@
           html_type: 'Autocomplete-Select',
           entity: 'Tag',
           api_params: {used_for: {LIKE: '%civicrm_activity%'}}
+        },
+        {
+          name: 'text',
+          label: ts('Contains text'),
+          html_type: 'Text'
         }
       ];
       if (_.includes(CRM.config.enableComponents, 'CiviCampaign')) {
@@ -133,6 +133,8 @@
       $scope.exposedFilters = {
         activity_type_id: true,
         status_id: true,
+        assignee_contact_id: true,
+        tag_id: true,
         text: true
       };
       // Ensure set filters are also exposed
