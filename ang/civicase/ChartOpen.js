@@ -4,7 +4,7 @@
   angular.module('civicase').directive('civicaseChartOpen', function(doNutty) {
     return {
       restrict: 'AE',
-      template: '<div></div>',
+      // template: '<div></div>',
       scope: {
         civicaseChartOpen: '='
       },
@@ -15,8 +15,12 @@
         //   $scope.myOptions = newValue;
         // });
 
-        var csvData ="Type,Count\nHousing Support,64000\nAdult Day Care,3721\nAdult Day Care,7\nSpeaking Engagement,1522";
-        var experiments = d3.csv.parse(csvData);
+        var experiments = [
+          {Type: 'Housing Support', Count: '64000'},
+          {Type: 'Adult Day Care', Count: '3721'},
+          {Type: 'Adult Day Care', Count: '7'},
+          {Type: 'Speaking', Count: '1522'}
+        ];
         experiments.forEach(function(x) {
           x.Count = +x.Count;
         });
