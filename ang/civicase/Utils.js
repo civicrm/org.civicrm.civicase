@@ -58,7 +58,7 @@
 
   /** doNutty converts a dc.pieChart() to a stylized donut chart. */
   angular.module('civicase').factory('doNutty', function() {
-    return function doNutty(chart, totalWidth, subLabel, mainStat) {
+    return function doNutty(chart, totalWidth, statCallback) {
       var legendWidth = Math.floor(totalWidth / 2), radius = Math.floor(totalWidth / 4);
       var padding = 10, thickness = 0.3;
       var legend;
@@ -85,6 +85,7 @@
           legend = CRM.visual.dc.legend();
           chart.legend(legend);
           moveLegend();
+          var stat = statCallback();
           g = chart.svg()
               .append("g")
               .classed('dc-donutty-label', 'true')
@@ -93,16 +94,20 @@
               .attr("dy", "0em")
               .attr("text-anchor", "middle")
               .classed("dc-donutty-label-main", "true")
-              .text(mainStat);
+              .text(stat.number);
           g.append("text")
               .attr("dy", "1em")
               .attr("text-anchor", "middle")
               .classed("dc-donutty-label-sub", "true")
-              .text(subLabel);
+              .text(stat.text);
         })
         .on('postRedraw', function(){
           moveLegend();
-          if (g) g.selectAll('.dc-donutty-label-main').text(mainStat);
+          if (g) {
+            var stat = statCallback();
+            g.selectAll('.dc-donutty-label-main').text(stat.number);
+            g.selectAll('.dc-donutty-label-sub').text(stat.text);
+          }
         });
 
     };

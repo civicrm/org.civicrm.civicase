@@ -26,8 +26,12 @@
               .group(caseTypeCountGroup)
               .label(function(d) {return "";});
 
-          doNutty(chart, 250, "total", function(){
-            return civicaseNumber(caseTypeSum.value());
+          doNutty(chart, 250, function(){
+            var v = caseTypeSum.value();
+            return {
+              number: civicaseNumber(v),
+              text: (v === 1) ? ts('case') : ts('cases')
+            };
           });
 
           chart.render();
