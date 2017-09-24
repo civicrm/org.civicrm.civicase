@@ -54,26 +54,29 @@
     return function doNutty(chart, totalWidth, subLabel, mainStat) {
       var legendWidth = Math.floor(totalWidth / 2), radius = Math.floor(totalWidth / 4);
       var padding = 10, thickness = 0.3;
-
-      var legend = CRM.visual.dc.legend().x(padding+(radius * 2)).gap(padding);
+      var legend;
 
       chart
           .width(legendWidth + (radius * 2))
           .height(radius * 2)
           .innerRadius(Math.floor(radius * (1-thickness)))
-          .cx(radius)
-          .legend(legend);
+          .cx(radius);
 
       function moveLegend() {
         var size  = chart.group().size();
+        legend.gap(padding);
         var legendHeight = (size * legend.itemHeight()) + ((size-1) * legend.gap());
-        legend.y((chart.height() - legendHeight)/2);
+        legend
+            .x(padding+(radius * 2))
+            .y((chart.height() - legendHeight)/2);
         legend.render();
       }
 
       var g;
       chart
         .on('postRender', function(){
+          legend = CRM.visual.dc.legend();
+          chart.legend(legend);
           moveLegend();
           g = chart.svg()
               .append("g")
@@ -92,7 +95,7 @@
         })
         .on('postRedraw', function(){
           moveLegend();
-          g.selectAll('.dc-donutty-label-main').text(mainStat);
+          if (g) g.selectAll('.dc-donutty-label-main').text(mainStat);
         });
 
     };
