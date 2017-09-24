@@ -49,6 +49,13 @@
     };
   });
 
+  angular.module('civicase').factory('civicaseNumber', function() {
+    var myFormat = CRM.visual.d3.format(".3s");
+    return function(v) {
+      return (v > -1000 & v < 1000) ? Math.round(v) : myFormat(v);
+    };
+  });
+
   /** doNutty converts a dc.pieChart() to a stylized donut chart. */
   angular.module('civicase').factory('doNutty', function() {
     return function doNutty(chart, totalWidth, subLabel, mainStat) {
