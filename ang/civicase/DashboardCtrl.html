@@ -31,13 +31,13 @@
             <div class="panel-heading">
               {{ts('Open Cases')}}
             </div>
-            <div class="panel-body"><div civicase-chart-open="{my_cases: myCasesOnly}"></div></div>
+            <div class="panel-body"><div civicase-type-donut-chart="{my_cases: myCasesOnly, 'status_id.grouping': 'Opened'}"></div></div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="panel panel-default">
             <div class="panel-heading">{{ts('Cases Closed')}}</div>
-            <div class="panel-body"><div civicase-chart-open="{my_cases: myCasesOnly}"></div></div>
+            <div class="panel-body"><div civicase-type-donut-chart="{my_cases: myCasesOnly, 'status_id.grouping': 'Closed'}"></div></div>
           </div>
         </div>
         <div class="col-md-4">
