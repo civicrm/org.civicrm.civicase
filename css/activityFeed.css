@@ -53,14 +53,19 @@
   width: 18px;
 }
 #bootstrap-theme .act-feed-list-group.viewing-activity {
-  width: 60%;
+  width: calc(100% - 355px);
   float: left;
 }
+#bootstrap-theme .case-is-focused .act-feed-list-group.viewing-activity {
+  width: calc(100% - 463px);
+}
+
 
 #bootstrap-theme .act-feed-view-activity {
-  width: 40%;
+  background-color: #F3F6F7;
+  border-left: 1px solid #E7E7E7;
   float: right;
-  border-left: 1px solid #e7e7e7;
+  width: 463px;
 }
 
 /* File on case button */
@@ -144,14 +149,13 @@
   cursor: inherit;
   margin: 15px 0;
 }
-
-#bootstrap-theme .act-feed-list-group .act-feed-item.is-viewing {
-  color: #555;
-  background-color: #F3F6F7;
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover,
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing {
+  background-color: #D9EFF5;
 }
-
-#bootstrap-theme .act-feed-list-group .act-feed-item.is-viewing .cb-dot {
-  border-color: #F3F6F7;
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover .cb-dot,
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing .cb-dot {
+  border-color: #D9EFF5;
 }
 
 #bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item:hover {
@@ -383,6 +387,9 @@
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix-top {
   top: 0 !important;
 }
+#bootstrap-theme .act-feed-view-activity:not(.cc-zero-w) {
+  width: 355px;
+}
 #bootstrap-theme .act-feed-view-activity.affix:not(.cc-zero-w) {
   background-color: #FFFFFF;
   margin-right: -600px;
@@ -392,9 +399,13 @@
   width: 355px;
   z-index: 600;
 }
-#bootstrap-theme .case-is-focused .act-feed-view-activity.affix:not(.cc-zero-w) {
+#bootstrap-theme .case-is-focused .act-feed-view-activity:not(.cc-zero-w) {
   width: 463px;
 }
+#bootstrap-theme .act-feed-view-activity.affix-top {
+  top: 0 !important;
+}
+
 #bootstrap-theme .act-feed-item a.act-case-info {
   background-color: #fff;
   border-radius: 4px;
@@ -472,4 +483,27 @@
 #bootstrap-theme .case-tab-activities .act-filters .select2-default::placeholder {
   color: #727E8A;
   opacity: 0.6;
+}
+#bootstrap-theme .crm-activity-view-block .crm-info-panel {
+  box-shadow: none;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons {
+  height: auto;
+  margin: 20px;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a {
+  color: #FFF;
+  background-color: #42AFCB;
+  float: none;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a.delete {
+  background-color: #E6807F;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a:hover {
+  color: #FFF;
+  opacity: 0.8 !important;
+  text-decoration: none;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a:hover i {
+  color: #FFF;
 }
