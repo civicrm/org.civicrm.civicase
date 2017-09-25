@@ -20,7 +20,9 @@
               function onRemove(p,v) { p.count -= v.count; p.total -= (v.count * v.average_duration); return p; },
               function onInit() {return {count: 0, total: 0}; }
             );
-          function avg(p) { return (p.count) ? Math.round(p.total / p.count) : 0; }
+
+          var format = d3.format('.2f');
+          function avg(p) { return (p.count) ? format(p.total / p.count) : 0; }
 
           chart
             .width(300)
@@ -40,21 +42,13 @@
         }
 
         $scope.$watchCollection('civicaseTypeDurationChart', function(params){
-          // crmApi('Case', 'gettypestats', params).then(function(response){
-          //   var data = response.values;
-          var data = [
-            {'case_type_id.title': 'Fixme', 'count': 5, average_duration: 32.7},
-            {'case_type_id.title': 'Fixme', 'count': 7, average_duration: '12.25'},
-            {'case_type_id.title': 'Todo', 'count': 19, average_duration: '15.4'},
-            {'case_type_id.title': 'Blank', 'count': 30, average_duration: 13.2},
-            {'case_type_id.title': 'Placeholder', 'count': 11, average_duration: '19.7'}
-          ];
-            data.forEach(function(x) {
+          crmApi('Case', 'gettypestats', params).then(function(response){
+            response.values.forEach(function(x) {
               x.count = +x.count;
               x.average_duration = +x.average_duration;
             });
-            fullDraw(data);
-          // });
+            fullDraw(response.values);
+          });
         });
       }
     };
