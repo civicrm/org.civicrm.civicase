@@ -1,7 +1,7 @@
 (function(angular, $, _) {
   // "civicaseTypeDonutChart" displays a donut chart about case-types.
   // Example usage: <div civicase-type-donut-chart="{...params for Case.gettypestats...}"></div>
-  angular.module('civicase').directive('civicaseTypeDonutChart', function(doNutty, crmApi, civicaseNumber) {
+  angular.module('civicase').directive('civicaseTypeDonutChart', function(doNutty, crmApi, civicaseInteger) {
     return {
       restrict: 'AE',
       scope: {
@@ -24,12 +24,13 @@
               .slicesCap(5)
               .dimension(caseTypeDimension)
               .group(caseTypeCountGroup)
+              .colors(d3.scale.category20())
               .label(function(d) {return "";});
 
           doNutty(chart, 250, function(){
             var v = caseTypeSum.value();
             return {
-              number: civicaseNumber(v),
+              number: civicaseInteger(v),
               text: (v === 1) ? ts('case') : ts('cases')
             };
           });

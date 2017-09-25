@@ -49,7 +49,7 @@
     };
   });
 
-  angular.module('civicase').factory('civicaseNumber', function() {
+  angular.module('civicase').factory('civicaseInteger', function() {
     var myFormat = CRM.visual.d3.format(".3s");
     return function(v) {
       return (v > -1000 & v < 1000) ? Math.round(v) : myFormat(v);
