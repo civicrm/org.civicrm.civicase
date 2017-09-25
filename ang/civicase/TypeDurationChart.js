@@ -36,6 +36,7 @@
             .render();
 
           chart.onClick = function(){};
+          chart.svg().classed('civicase-type-duration-chart', true);
 
           // CSS would be more maintainable, but that only works in Chrome.
           chart.svg().selectAll('rect').attr('rx', 5).attr('ry', 5);

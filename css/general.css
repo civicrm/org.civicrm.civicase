@@ -181,6 +181,10 @@ text.dc-donutty-label-main {
 text.dc-donutty-label-sub {
   font-size: 0.8em;
 }
+.dc-chart .civicase-type-duration-chart g.row text {
+  fill: black;
+}
+
 #bootstrap-theme .act-category-communication .act-feed-item-content {
   background-color: #F3F6F7;
   border: 1px solid #E8EEF0;
