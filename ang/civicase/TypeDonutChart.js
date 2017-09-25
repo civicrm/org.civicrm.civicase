@@ -1,6 +1,4 @@
 (function(angular, $, _) {
-  // "civicaseTypeDonutChart" displays a donut chart about case-types.
-  // Example usage: <div civicase-type-donut-chart="{...params for Case.gettypestats...}"></div>
   angular.module('civicase').directive('civicaseTypeDonutChart', function(doNutty, crmApi, civicaseInteger) {
     return {
       restrict: 'AE',
