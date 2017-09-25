@@ -34,6 +34,7 @@
           });
 
           chart.render();
+          chart.svg().classed('civicase-type-donut-chart', true);
         }
 
         $scope.$watchCollection('civicaseTypeDonutChart', function(params){

@@ -175,10 +175,10 @@
 #bootstrap-theme .act-task-checkbox:hover i {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
-text.dc-donutty-label-main {
+.civicase-type-donut-chart text.dc-donutty-label-main {
   font-size: 1.5em;
 }
-text.dc-donutty-label-sub {
+.civicase-type-donut-chart text.dc-donutty-label-sub {
   font-size: 0.8em;
 }
 .dc-chart .civicase-type-duration-chart g.row text {
