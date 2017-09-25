@@ -22,7 +22,7 @@
 #bootstrap-theme .civicase-view-header h2 {
   color: #525966;
   font-size: 24px;
-  margin: 19px 19px 0;
+  margin: 19px 19px 0 25px;
 
 }
 
@@ -66,7 +66,7 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 22px;
-  margin-left: 19px;
+  margin-left: 25px;
   margin-top: 16px;
 }
 #bootstrap-theme .civicase-tags .label {
@@ -78,20 +78,20 @@
   margin-right: 19px;
 }
 #bootstrap-theme .case-action-menu .btn-group-md .btn {
-  padding: 9px 12px;
+  padding: 7px 12px;
 }
 #bootstrap-theme .civicase-type-and-manager {
   border-top: 1px solid #E8EEF0;
   margin-bottom: 15px;
   margin-top: 15px;
-  padding: 0px 19px;
+  padding: 0 19px 0 25px;
 }
 #bootstrap-theme .civicase-type-and-manager .civicase-type {
   padding-top: 13px;
   display: block;
 }
 #bootstrap-theme .civicase-type-and-manager .civicase-type a {
-  color: inherit;
+  color: #4D5663;
   text-decoration: none;
 }
 #bootstrap-theme .civicase-type-and-manager .civicase-manager {
@@ -99,7 +99,7 @@
   padding-top: 13px;
 }
 #bootstrap-theme .civicase-type-and-manager .civicase-manager strong{
-  color: #727E8A;
+  color: #4D5663;
 }
 #bootstrap-theme .civicase-view-panel .panel-body {
   border-radius: 0 0 2px 2px;
