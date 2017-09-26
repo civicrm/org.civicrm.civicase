@@ -168,11 +168,15 @@
       return item;
     }
 
-    $scope.gotoCase = function(id, $event) {
-      if ($event && $($event.target).is('.btn-group *')) {
+    $scope.gotoCase = function(item, $event) {
+      if ($event && $($event.target).is('a, a *, input, button, button *')) {
         return;
       }
-      var p = angular.extend({}, $route.current.params, {caseId: id});
+      var cf = {
+        case_type_id: [caseTypes[item.case_type_id].name],
+        status_id: [caseStatuses[item.status_id].name]
+      };
+      var p = angular.extend({}, $route.current.params, {caseId: item.id, cf: JSON.stringify(cf)});
       $route.updateParams(p);
     };
 

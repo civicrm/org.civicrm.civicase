@@ -8,7 +8,7 @@
 <div id="collapse-other-cases" class="panel-collapse collapse in">
   <div class="panel-body">
     <div class="civicase-view-other-cases">
-      <div ng-repeat="relCase in item.relatedCases" class="civicase-view-other-case" ng-click="gotoCase(relCase.id, $event)">
+      <div ng-repeat="relCase in item.relatedCases" class="civicase-view-other-case" ng-click="gotoCase(relCase, $event)">
         <i ng-if="relCase.is_linked" class="pull-right crm-i fa-link crm-is-linked" title="{{ ts('Case is linked') }}"></i>
         <i ng-if="!relCase.is_linked" class="pull-right crm-i fa-user crm-is-linked" title="{{ ts('Case is for the same client(s)') }}"></i>
         <div class="pull-right text-muted">
