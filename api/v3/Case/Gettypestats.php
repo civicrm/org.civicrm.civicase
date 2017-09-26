@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Case.getstats API specification
+ * Case.gettypestats API specification
  *
  * @param array $spec description of fields supported by this API call
  * @return void
@@ -14,13 +14,13 @@ function _civicrm_api3_case_gettypestats_spec(&$spec) {
   );
   $spec['status_id.grouping'] = array(
     'title' => '',
-    'description' => 'Limit stats based on the ',
+    'description' => 'Limit stats based on the case status class',
     'type' => CRM_Utils_Type::T_STRING,
   );
 }
 
 /**
- * Case.getstats API
+ * Case.gettypestats API
  *
  * This is provided by the CiviCase extension. It gives statistics for the case dashboard.
  *
@@ -75,5 +75,5 @@ function civicrm_api3_case_gettypestats($params) {
     );
   }
 
-  return civicrm_api3_create_success($results, $params, 'Case', 'getstats');
+  return civicrm_api3_create_success($results, $params, 'Case', 'gettypestats');
 }
