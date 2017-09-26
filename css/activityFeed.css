@@ -491,6 +491,7 @@
   height: auto;
   margin: 20px;
 }
+#bootstrap-theme .crm-activity-view-block .help a.button,
 #bootstrap-theme .crm-activity-view-block .crm-submit-buttons a {
   color: #FFF;
   background-color: #42AFCB;
@@ -499,6 +500,7 @@
 #bootstrap-theme .crm-activity-view-block .crm-submit-buttons a.delete {
   background-color: #E6807F;
 }
+#bootstrap-theme .crm-activity-view-block .help a.button:hover,
 #bootstrap-theme .crm-activity-view-block .crm-submit-buttons a:hover {
   color: #FFF;
   opacity: 0.8 !important;
