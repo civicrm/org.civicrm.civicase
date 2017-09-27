@@ -11,7 +11,7 @@
 
   angular.module('civicase').controller('CivicaseDashboardCtrl', function($scope, crmApi, formatActivity) {
     var ts = $scope.ts = CRM.ts('civicase'),
-      activitiesToShow = 4;
+      activitiesToShow = 10;
     $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.caseTypes = CRM.civicase.caseTypes;
     $scope.caseTypesLength = _.size(CRM.civicase.caseTypes);
