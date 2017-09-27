@@ -153,11 +153,14 @@
 #bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing {
   background-color: #D9EFF5;
 }
-#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover .cb-dot,
-#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing .cb-dot {
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover .act-feed-item:not(.act-category-milestone) .cb-dot,
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing .act-feed-item:not(.act-category-milestone) .cb-dot {
   border-color: #D9EFF5;
 }
-
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
 #bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item:hover {
   background: inherit;
 }
