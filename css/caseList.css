@@ -387,11 +387,21 @@
   width: 890px;
   z-index: 600;
 }
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix {
+  margin-left: 122px;
+  width: 458px;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
+  width: 458px;
+}
 #bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
   left: 50%;
   margin-left: -600px;
   min-width: 310px;
   position: fixed;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
+  margin-left: -188px;
 }
 #bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table .next-activity-title {
   max-width: 370px;

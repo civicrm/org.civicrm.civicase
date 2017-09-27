@@ -271,10 +271,9 @@
         $('thead.affix').scrollLeft($customScroll.scrollLeft());
       });
     });
-
   });
 
-  function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle) {
+  function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.cases = [];
     $scope.CRM = CRM;
@@ -288,6 +287,32 @@
         .then(function(result) {
           $scope.cases = _.each(result[0].values, formatCase);
           $scope.totalCount = result[1];
+
+          $timeout(function() {
+
+            var $listTable = $('.case-list-panel .inner'),
+              $customScroll = $('.case-list-panel .custom-scroll-wrapper'),
+              $tableHeader = $('.case-list-panel .inner table thead');
+
+            $($listTable).scroll(function(){
+              $customScroll.scrollLeft($listTable.scrollLeft());
+              $('thead.affix').scrollLeft($customScroll.scrollLeft());
+            });
+
+            $customScroll.scroll(function(){
+              $listTable.scrollLeft($customScroll.scrollLeft());
+              $('thead.affix').scrollLeft($customScroll.scrollLeft());
+            });
+
+            $([$tableHeader, $customScroll]).affix({
+              offset: {
+                 top: $('.case-list-panel').offset().top - 50
+              }
+            })
+            .on('affixed.bs.affix', function() {
+              $('thead.affix').scrollLeft($customScroll.scrollLeft());
+            });
+          });
         });
     }
 
