@@ -8,7 +8,10 @@
       <div class="civicase-view-next-activities-inner">
         <ul class="list-group act-feed-list-group">
           <li class="list-group-item" ng-repeat="category in upNextCategories" ng-if="item.activity_summary[category.name].length">
-            <h3>{{ ts('Next %1', {1: category.label}) }}</h3>
+            <h3>
+              {{ ts('Next %1', {1: category.label}) }}
+              <span class="badge badge-danger" ng-if="item.activity_summary[category.name][0].is_overdue">{{ ts('Overdue') }}</span>
+            </h3>
             <div
               case-activity-card="item.activity_summary[category.name][0]"
               refresh-callback="refresh"
