@@ -404,6 +404,7 @@
       },
       link: function (scope, elem, attrs) {
         scope.url = CRM.url;
+        scope.ts = CRM.ts('civicase');
         function refresh() {
           if (_.isPlainObject(scope.data)) {
             scope.contacts = [];
@@ -417,15 +418,15 @@
         scope.$watch('data', refresh);
       },
       template:
-        '<a ng-if="contacts.length" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].contact_id}) }}">{{ contacts[0].display_name }}</a> ' +
-        '<span ng-if="contacts.length === 2">&amp; <a href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].contact_id}) }}">{{ contacts[1].display_name }}</a></span>' +
+        '<a ng-if="contacts.length" title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].contact_id}) }}">{{ contacts[0].display_name }}</a> ' +
+        '<span ng-if="contacts.length === 2">&amp; <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].contact_id}) }}">{{ contacts[1].display_name }}</a></span>' +
         '<div class="btn-group btn-group-xs" ng-if="contacts.length > 2">' +
         '  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
         '    + {{ contacts.length - 1 }}' +
         '  </button>' +
         '  <ul class="dropdown-menu" >' +
         '    <li ng-repeat="(index, contact) in contacts" ng-if="index">' +
-        '      <a href="{{ url(\'civicrm/contact/view\', {cid: contact.contact_id}) }}">{{ contact.display_name }}</a>' +
+        '      <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contact.contact_id}) }}">{{ contact.display_name }}</a>' +
         '    </li>' +
         '  </ul>' +
         '</div>'
