@@ -10,12 +10,14 @@
   );
 
   angular.module('civicase').controller('CivicaseDashboardCtrl', function($scope, crmApi, formatActivity) {
-    var ts = $scope.ts = CRM.ts('civicase');
+    var ts = $scope.ts = CRM.ts('civicase'),
+      activitiesToShow = 4;
     $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.caseTypes = CRM.civicase.caseTypes;
     $scope.caseTypesLength = _.size(CRM.civicase.caseTypes);
     $scope.checkPerm = CRM.checkPerm;
     $scope.url = CRM.url;
+    $scope.activityPlaceholders = _.range(activitiesToShow);
 
     $scope.$bindToRoute({
       param: 'dtab',
@@ -49,10 +51,7 @@
 
     $scope.summaryData = [];
 
-    $scope.dashboardActivities = {
-      recentCommunication: [],
-      nextMilestones: []
-    };
+    $scope.dashboardActivities = {};
 
     $scope.showHideBreakdown = function() {
       $scope.showBreakdown = !$scope.showBreakdown;
@@ -93,25 +92,38 @@
         sequential: 1,
         is_current_revision: 1,
         is_test: 0,
-        options: {limit: 10, sort: 'activity_date_time DESC'},
         return: ['case_id', 'activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id', 'case_id.case_type_id', 'case_id.status_id', 'case_id.contacts']
       }, $scope.activityFilters);
       // recent communication
       apiCalls.push(['Activity', 'get', _.extend({
         "activity_type_id.grouping": {LIKE: "%communication%"},
         'status_id.filter': 1,
-        options: {limit: 10, sort: 'activity_date_time DESC'}
+        options: {limit: activitiesToShow, sort: 'activity_date_time DESC'}
       }, params)]);
+      apiCalls.push(['Activity', 'getcount', {
+        "activity_type_id.grouping": {LIKE: "%communication%"},
+        'status_id.filter': 1,
+        is_current_revision: 1,
+        is_test: 0
+      }]);
       // next milestones
       apiCalls.push(['Activity', 'get', _.extend({
         "activity_type_id.grouping": {LIKE: "%milestone%"},
         'status_id.filter': 0,
-        options: {limit: 10, sort: 'activity_date_time ASC'}
+        options: {limit: activitiesToShow, sort: 'activity_date_time ASC'}
       }, params)]);
+      apiCalls.push(['Activity', 'getcount', {
+        "activity_type_id.grouping": {LIKE: "%milestone%"},
+        'status_id.filter': 0,
+        is_current_revision: 1,
+        is_test: 0
+      }]);
       crmApi(apiCalls).then(function(data) {
-        $scope.summaryData = data[apiCalls.length - 3].values;
-        $scope.dashboardActivities.recentCommunication = _.each(data[apiCalls.length - 2].values, formatActivity);
-        $scope.dashboardActivities.nextMilestones = _.each(data[apiCalls.length - 1].values, formatActivity);
+        $scope.summaryData = data[apiCalls.length - 5].values;
+        $scope.dashboardActivities.recentCommunication = _.each(data[apiCalls.length - 4].values, formatActivity);
+        $scope.dashboardActivities.recentCommunicationCount = data[apiCalls.length - 3];
+        $scope.dashboardActivities.nextMilestones = _.each(data[apiCalls.length - 2].values, formatActivity);
+        $scope.dashboardActivities.nextMilestonesCount = data[apiCalls.length - 1];
       });
     };
 

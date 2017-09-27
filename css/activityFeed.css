@@ -417,10 +417,14 @@
   color: inherit;
   cursor: pointer;
 }
+#bootstrap-theme .act-feed-item a.act-case-info:hover {
+  border: 1px solid #666;
+}
 #bootstrap-theme .act-feed-item a.act-case-info span {
   display: inline-block;
   padding: 4px 6px;
   height: 28px;
+  border-radius: 4px 0 0 0;
 }
 #bootstrap-theme .act-feed-item a.act-case-info span:first-child {
   color: #fff;
