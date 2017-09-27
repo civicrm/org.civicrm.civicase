@@ -213,6 +213,9 @@
 #bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading .badge.badge-primary {
   background-color: #8EC68A;
 }
+#bootstrap-theme .dashboard-case-wrapper .case-list-panel {
+  padding: 0;
+}
 #bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading .badge.badge-danger {
   background-color: #E6807F;
 }
