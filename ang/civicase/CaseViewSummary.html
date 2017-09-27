@@ -5,7 +5,7 @@
       <div class="case-custom-data-first" ng-repeat="(index, customGroup) in item.customData" ng-if="!index" ng-include="'~/civicase/CaseViewCustomData.html'"></div>
     </div>
     <div class="civicase-view-next-activities col-md-6">
-      <div class="civicase-view-next-activities-inner activity-timeline">
+      <div class="civicase-view-next-activities-inner">
         <ul class="list-group act-feed-list-group">
           <li class="list-group-item" ng-repeat="category in upNextCategories" ng-if="item.activity_summary[category.name].length">
             <h3>{{ ts('Next %1', {1: category.label}) }}</h3>

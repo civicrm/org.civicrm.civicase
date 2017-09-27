@@ -166,9 +166,6 @@
   margin-left: 2em;
   padding-left: 3em;
   position: relative;
-}
-
-#bootstrap-theme .activity-timeline .act-feed-inner {
   border-left: 1px solid #ddd;
 }
 
@@ -184,15 +181,17 @@
   background-color: #e6807f;
 }
 
-
-#bootstrap-theme .act-feed-list-group .act-date {
+#bootstrap-theme .activity-timeline .act-date {
   color: #525966;
   font-size: 16px;
   font-weight: 600;
   line-height: 22px;
   padding: 20px;
   margin: 0;
+}
 
+#bootstrap-theme .activity-timeline .act-feed-item-content .act-date {
+  display: none; /* In the timeline, dates are shown above the activity card */
 }
 
 #bootstrap-theme .act-feed-list-group .act-task-checkbox { 
