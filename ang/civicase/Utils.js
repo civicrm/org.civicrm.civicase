@@ -464,6 +464,10 @@
               form = $('<div></div>').html(elem.hide().html());
               form.insertAfter(elem)
                 .on('click', '.cancel', close)
+                .on('crmLoad', function() {
+                  // Workaround bug where href="#" changes the angular route
+                  $('a.crm-clear-link', form).removeAttr('href');
+                })
                 .on('crmFormSuccess', function(e, data) {
                   scope.$apply(function() {
                     scope.pushCaseData(data.civicase_reload[0]);
