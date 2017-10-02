@@ -230,6 +230,37 @@
   padding: 0;
   top: 0;
 }
+#bootstrap-theme .crm-case-custom-form-block .crm-accordion-body {
+  padding: 5px;
+}
+#bootstrap-theme .crm-case-custom-form-block td.label {
+  display: table-cell;
+  padding-top: 7.5px;
+  text-align: left;
+  vertical-align: top;
+}
+#bootstrap-theme .crm-case-custom-form-block .select2-choice .select2-arrow {
+  background: none;
+  padding: 0;
+  width: 26px;
+}
+#bootstrap-theme .crm-case-custom-form-block .select2-container .select2-choices {
+  margin-bottom: 0;
+}
+#bootstrap-theme .crm-case-custom-form-block input.crm-form-date {
+  display: inline-block;
+}
+#bootstrap-theme .crm-case-custom-form-block .crm-form-text {
+  max-width: 230px;
+}
+#bootstrap-theme .crm-case-custom-form-block .crm-form-textarea {
+  height: 80px;
+  max-width: 230px;
+}
+#bootstrap-theme .crm-case-custom-form-block .crm-button-type-cancel input:hover {
+  color: #FFF !important;
+}
+
 #bootstrap-theme .select2-container.select2-dropdown-open,
 #bootstrap-theme .select2-container.select2-container-active .select2-choice, 
 #bootstrap-theme .select2-container.select2-container-active .select2-choices {
@@ -379,4 +410,7 @@
   opacity: 0.6;
   line-height: 18px;
   margin-top: 6px;
+}
+#bootstrap-theme .collapsible-title {
+  padding: 5px 15px;
 }
