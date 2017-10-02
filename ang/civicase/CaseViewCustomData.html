@@ -1,9 +1,6 @@
 <div class="crm-collapsible" ng-class="::{ collapsed: customGroup.collapse_display }">
   <h3 class="collapsible-title" ng-click="customGroup.collapse_display = !customGroup.collapse_display">{{ ::customGroup.title }}</h3>
-  <!-- FIXME: This needs to have proper logic on form open/close in ng-style -->
-  <div 
-  ng-style="{ display: customGroup.collapse_display ? 'none' : 'block' }"
-  civicase-edit-custom-data>
+  <div civicase-edit-custom-data>
     <div ng-repeat="field in customGroup.fields">
       <strong>{{ field.label }}:</strong>
       {{ field.value.display }}
