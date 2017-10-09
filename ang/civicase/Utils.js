@@ -49,6 +49,70 @@
     };
   });
 
+  angular.module('civicase').factory('civicaseInteger', function() {
+    var myFormat = CRM.visual.d3.format(".3s");
+    return function(v) {
+      return (v > -1000 & v < 1000) ? Math.round(v) : myFormat(v);
+    };
+  });
+
+  /** doNutty converts a dc.pieChart() to a stylized donut chart. */
+  angular.module('civicase').factory('doNutty', function() {
+    return function doNutty(chart, totalWidth, statCallback) {
+      var legendWidth = Math.floor(totalWidth / 2), radius = Math.floor(totalWidth / 4);
+      var padding = 10, thickness = 0.3;
+      var legend;
+
+      chart
+          .width(legendWidth + (radius * 2))
+          .height(radius * 2)
+          .innerRadius(Math.floor(radius * (1-thickness)))
+          .cx(radius);
+
+      function moveLegend() {
+        var size  = chart.group().size();
+        legend.gap(padding);
+        var legendHeight = (size * legend.itemHeight()) + ((size-1) * legend.gap());
+        legend
+            .x(padding+(radius * 2))
+            .y((chart.height() - legendHeight)/2);
+        legend.render();
+      }
+
+      var g;
+      chart
+        .on('postRender', function(){
+          legend = CRM.visual.dc.legend();
+          chart.legend(legend);
+          moveLegend();
+          var stat = statCallback();
+          g = chart.svg()
+              .append("g")
+              .classed('dc-donutty-label', 'true')
+              .attr("transform", "translate(" + radius + "," + radius + ")");
+          g.append("text")
+              .attr("dy", "0em")
+              .attr("text-anchor", "middle")
+              .classed("dc-donutty-label-main", "true")
+              .text(stat.number);
+          g.append("text")
+              .attr("dy", "1em")
+              .attr("text-anchor", "middle")
+              .classed("dc-donutty-label-sub", "true")
+              .text(stat.text);
+        })
+        .on('postRedraw', function(){
+          moveLegend();
+          if (g) {
+            var stat = statCallback();
+            g.selectAll('.dc-donutty-label-main').text(stat.number);
+            g.selectAll('.dc-donutty-label-sub').text(stat.text);
+          }
+        });
+
+    };
+  });
+
   angular.module('civicase').factory('formatActivity', function() {
     var activityTypes = CRM.civicase.activityTypes,
       activityStatuses = CRM.civicase.activityStatuses,

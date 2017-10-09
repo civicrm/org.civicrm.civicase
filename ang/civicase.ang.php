@@ -172,10 +172,12 @@ foreach (CRM_Contact_Task::$_tasks as $id => $value) {
 $options['allowMultipleCaseClients'] = (bool) Civi::settings()->get('civicaseAllowMultipleClients');
 return array(
   'js' => array(
+    'assetBuilder://visual-bundle.js', // at the moment, it's safe to include this multiple times -- deduped by resource manager
     'ang/civicase.js',
     'ang/civicase/*.js',
   ),
   'css' => array(
+    'assetBuilder://visual-bundle.css', // at the moment, it's safe to include this multiple times -- deduped by resource manager
     'css/*.css',
     'ang/civicase/*.css',
   ),
