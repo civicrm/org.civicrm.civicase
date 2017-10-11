@@ -54,7 +54,8 @@ class CRM_Civicase_ActivityFilter {
 
     // Revise the Activity.get call
     unset($apiRequest['params']['case_filter']);
-    $apiRequest['params']['case_id'] = array('IN' => array_keys($caseResult['values']));
+    // Add case ids to the query or else a bogus value to ensure no results
+    $apiRequest['params']['case_id'] = empty($caseResult['values']) ? -1 : array('IN' => array_keys($caseResult['values']));
     $e->setApiRequest($apiRequest);
   }
 
