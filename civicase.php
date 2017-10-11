@@ -163,6 +163,7 @@ function civicase_civicrm_angularModules(&$angularModules) {
  */
 function civicase_civicrm_alterMenu(&$items) {
   $items['civicrm/case/activity']['ids_arguments']['json'][] = 'civicase_reload';
+  $items['civicrm/case/cd/edit']['ids_arguments']['json'][] = 'civicase_reload';
 }
 
 /**
