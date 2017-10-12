@@ -188,7 +188,7 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .act-subject {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .cb-dot {
@@ -239,7 +239,7 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-milestone .act-subject {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 #bootstrap-theme .case-tab-files .act-feed-item .act-files a {
@@ -442,7 +442,7 @@
 }
 #bootstrap-theme .act-feed-item a.act-case-info span:first-child {
   color: #fff;
-  font-weight: bold;
+  font-weight: 600;
   padding-right: 12px;
   position: relative;
 }
