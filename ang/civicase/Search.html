@@ -55,7 +55,7 @@
   <div class="form-group">
     <label class="control-label col-lg-2">{{ ts('Tagged') }}</label>
     <div class="col-lg-4">
-      <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'IN':['Cases']}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
+      <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'LIKE':'%civicrm_case%'}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
     </div>
   </div>
   
