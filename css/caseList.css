@@ -9,9 +9,6 @@
 #bootstrap-theme .case-list-panel.viewing-case td:first-child {
   width: 100%;
 }
-#bootstrap-theme .civicase-search-panel {
-  border-radius: 2px;
-}
 #bootstrap-theme .case-list-panel.viewing-case {
   width: 25%;
 }
