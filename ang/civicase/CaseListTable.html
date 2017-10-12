@@ -77,7 +77,16 @@
         </div>
         <div>
           <strong>{{ ts('Case ID:') }}</strong>
-          {{ item.id }}
+          {{ item.id }} &nbsp;
+          <span class="civicase-tags">
+            <span
+              class="label label-default"
+              title="{{ tag['tag_id.description'] }}"
+              ng-repeat="tag in item.tag_id || []"
+              ng-class="{'text-dark': CRM.utils.colorContrast(tag['tag_id.color']) === 'black'}"
+              style="background-color: {{ tag['tag_id.color'] }};"
+            >{{ tag['tag_id.name'] }}</span>
+          </span>
         </div>
         <div class="case-activity-summary-icons">
           <a class=""

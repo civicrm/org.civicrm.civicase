@@ -15,7 +15,7 @@
   function loadCaseApiParams(filters, sort, page) {
     var returnParams = {
       sequential: 1,
-      return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count'],
+      return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
       options: {
         sort: sort.field + ' ' + sort.dir,
         limit: page.size,
@@ -273,10 +273,12 @@
     });
   });
 
-  function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout) {
+  function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.cases = [];
     $scope.CRM = CRM;
+    $scope.activityCategories = CRM.civicase.activityCategories;
+    $scope.activityFeedUrl = getActivityFeedUrl;
 
     function _loadCases() {
       return crmApi(loadCaseApiParams($scope.filters, $scope.sort, $scope.page));

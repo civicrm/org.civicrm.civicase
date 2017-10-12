@@ -11,6 +11,10 @@ Civi::resources()
       'user_contact_id' => (int) CRM_Core_Session::getLoggedInContactID(),
     ),
   ));
+// Add shoreditch custom css if not already present
+if (!civicrm_api3('Setting', 'getvalue', array('name' => "customCSSURL"))) {
+  Civi::resources()->addStyleFile('org.civicrm.shoreditch', 'css/custom-civicrm.css', 99, 'html-header');
+}
 CRM_Utils_System::resetBreadCrumb();
 $breadcrumb = array(
   array(
@@ -105,7 +109,7 @@ $options['tags'] = CRM_Core_BAO_Tag::getColorTags('civicrm_case');
 $options['tagsets'] = CRM_Utils_Array::value('values', civicrm_api3('Tag', 'get', array(
   'sequential' => 1,
   'return' => array("id", "name"),
-  'used_for' => array('IN' => array("Cases")),
+  'used_for' => array('LIKE' => "%civicrm_case%"),
   'is_tagset' => 1,
 )));
 // Bulk actions for case list - we put this here so it can be modified by other extensions

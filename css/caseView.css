@@ -405,7 +405,6 @@
   font-size: 16px;
   padding-top: 3px;
   margin-left: 15px;
-
 }
 #bootstrap-theme .civicase-view-other-cases .civicase-view-other-case .other-case-subject {
   color: #727E8A;
@@ -418,4 +417,7 @@
 }
 #bootstrap-theme .civicase-view-tasks li.list-group-item{
   margin-bottom: 17px;
+}
+#bootstrap-theme .crm-collapsible.collapsed .collapsible-title + * {
+  display: none;
 }
