@@ -273,10 +273,12 @@
     });
   });
 
-  function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout) {
+  function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.cases = [];
     $scope.CRM = CRM;
+    $scope.activityCategories = CRM.civicase.activityCategories;
+    $scope.activityFeedUrl = getActivityFeedUrl;
 
     function _loadCases() {
       return crmApi(loadCaseApiParams($scope.filters, $scope.sort, $scope.page));
