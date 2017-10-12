@@ -141,7 +141,7 @@
         recentCaseFilter.case_manager = [CRM.config.user_contact_id];
       }
       $scope.recentCaseFilter = recentCaseFilter;
-      $scope.recentCaseLink = '#/case/list?sf=modified_date&sd=DESC&cf=' + JSON.stringify(recentCaseFilter);
+      $scope.recentCaseLink = '#/case/list?sf=modified_date&sd=DESC' + (myCasesOnly ? ('&cf=' + JSON.stringify({case_manager: [CRM.config.user_contact_id]})) : '');
       $scope.refresh();
     });
   });
