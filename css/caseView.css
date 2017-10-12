@@ -335,7 +335,7 @@
   overflow-x: auto;
 }
 #bootstrap-theme .civicase-view-next-activities-inner > ul {
-  width: 3000px; /* FIXME */
+  white-space: nowrap;
 }
 #bootstrap-theme .civicase-view-next-activities-inner .list-group-item {
   display: inline-block;
@@ -414,6 +414,9 @@
 }
 #bootstrap-theme .collapsible-title {
   padding: 5px 15px;
+}
+#bootstrap-theme .civicase-view-tasks li.list-group-item{
+  margin-bottom: 17px;
 }
 #bootstrap-theme .crm-collapsible.collapsed .collapsible-title + * {
   display: none;
