@@ -149,6 +149,15 @@
   cursor: inherit;
   margin: 15px 0;
 }
+#bootstrap-theme .act-feed-list-group:not(.viewing-activity) .list-group:not(.list-group-inner) {
+  margin: 0 auto;
+  width: 675px;
+}
+
+#bootstrap-theme .act-feed-list-group .list-group {
+  margin-bottom: 0;
+}
+
 #bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover,
 #bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing {
   background-color: #D9EFF5;
@@ -158,8 +167,10 @@
   border-color: #D9EFF5;
 }
 #bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item {
-  padding-bottom: 10px;
-  padding-top: 10px;
+  margin-bottom: 17px;
+}
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:last-child {
+  margin-bottom: 10px;
 }
 #bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item:hover {
   background: inherit;
@@ -189,7 +200,7 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 22px;
-  padding: 20px;
+  padding: 0px 20px 10px;
   margin: 0;
 }
 
@@ -297,7 +308,10 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-contacts {
-  padding: 1em 0;
+  padding: 0 0 1em;
+}
+#bootstrap-theme .act-feed-list-group .act-tags {
+  margin-bottom: 1em;
 }
 #bootstrap-theme .act-feed-list-group .act-feed-inner .btn {
   border: none;
@@ -466,7 +480,7 @@
   color: #4D5663;
   font-size: 18px;
   font-weight: 600;
-  margin: 5px 0px;
+  margin: 5px 0px 15px;
   padding: 13px 20px;
 }
 #bootstrap-theme .case-tab-activities .activity-item-menu.btn-group {
