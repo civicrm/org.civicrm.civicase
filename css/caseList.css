@@ -29,6 +29,9 @@
   table-layout: fixed;
   word-wrap: break-word;
 }
+#bootstrap-theme .case-list-table .fixed-col .label {
+  font-size: .8em;
+}
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table {
   table-layout: inherit;
 }
