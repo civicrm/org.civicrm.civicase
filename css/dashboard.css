@@ -37,7 +37,7 @@
   border-bottom: 1px solid #D3DEE2;
   box-shadow: none;
   content: "";
-  height: 90px;
+  height: calc(100% + 1px);
   left: auto;
   position: absolute;
   right: -20px;
