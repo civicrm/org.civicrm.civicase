@@ -1,5 +1,5 @@
 #bootstrap-theme .text-dark {
-  color: #4D5663;
+  color: #383f4b;
 }
 #bootstrap-theme.civicase-main {
   max-width: 1200px;
@@ -10,7 +10,7 @@
   left: 4px;
 }
 #bootstrap-theme .panel {
-  overflow: hidden;
+  border-radius: 2px;
 }
 #bootstrap-theme .panel .panel-header {
   background-color: #f3f6f7;
@@ -164,6 +164,12 @@
 #bootstrap-theme .case-activity-card-wrapper .act-feed-inner {
   border-left: 1px solid #ddd;
 }
+#bootstrap-theme td.case-activity-card-wrapper .activity-card-menu {
+  margin-top: -5px;
+}
+#bootstrap-theme td.case-activity-card-wrapper a.act-star {
+  margin-top: -7px;
+}
 #bootstrap-theme .act-task-checkbox {
   color: #586277;
   cursor: pointer;
@@ -175,12 +181,22 @@
 #bootstrap-theme .act-task-checkbox:hover i {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
+.civicase-type-donut-chart text.dc-donutty-label-main {
+  font-size: 1.5em;
+}
+.civicase-type-donut-chart text.dc-donutty-label-sub {
+  font-size: 0.8em;
+}
+.dc-chart .civicase-type-duration-chart g.row text {
+  fill: black;
+}
+
 #bootstrap-theme .act-category-communication .act-feed-item-content {
   background-color: #F3F6F7;
   border: 1px solid #E8EEF0;
   border-radius: 4px;
   margin-left: 5px;
-  padding: 5px 20px 15px;
+  padding: 5px 20px 10px;
 }
 #bootstrap-theme .act-category-communication .act-feed-item-content:before {
   background: #F3F6F7;
@@ -200,6 +216,7 @@
 }
 #bootstrap-theme .act-category-communication .activity-card-menu.btn-group {
   margin-top: 10px;
+  margin-right: 10px;
 }
 #bootstrap-theme .act-subject-draft {
   color: #525966;

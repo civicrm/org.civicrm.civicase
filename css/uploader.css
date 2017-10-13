@@ -49,6 +49,7 @@ input[type="file"]#cc-uploader-button {
 #bootstrap-theme .cc-uploader-detail .btn.civicase-file-remove {
   border: none;
   font-size: 13px;
+  font-weight: normal;
   margin-top: -4px;
   padding: 0 5px 2px;
   text-transform: none;

@@ -18,6 +18,7 @@
 }
 #bootstrap-theme .civicase-view-header {
   background-color: #F3F6F7; 
+  border-radius: 2px 2px 0 0;
 }
 #bootstrap-theme .civicase-view-header h2 {
   color: #525966;
@@ -51,11 +52,15 @@
 #bootstrap-theme .btn-group .btn.btn-primary {
   border: none;
 }
-#bootstrap-theme .civicase-view-header .case-id{
-  color: #4D5663;
+#bootstrap-theme .civicase-view-header .case-id {
+  color: #727E8A;
   font-weight: normal;
   font-size: 13px;
 }
+#bootstrap-theme .civicase-view-header .case-id strong {
+  color: #4D5663;
+}
+
 #bootstrap-theme .civicase-view-header .civicase-dates,
 #bootstrap-theme .civicase-view-header .civicase-tags {
   display: inline-block;
