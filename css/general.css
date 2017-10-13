@@ -161,6 +161,12 @@
 #bootstrap-theme .case-activity-card-wrapper .act-feed-inner {
   border-left: 1px solid #ddd;
 }
+#bootstrap-theme td.case-activity-card-wrapper .activity-card-menu {
+  margin-top: -5px;
+}
+#bootstrap-theme td.case-activity-card-wrapper a.act-star {
+  margin-top: -7px;
+}
 #bootstrap-theme .act-task-checkbox {
   color: #586277;
   cursor: pointer;
