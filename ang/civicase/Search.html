@@ -1,4 +1,4 @@
-<div class="panel-header civicase-search-panel">
+<div class="panel-header">
   <div crm-ui-debug="filters"></div>
   <form class="form-inline civicase-filters">
     <input class="form-control" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Case Type: Any'), data: caseTypeOptions}" ng-model="filters.case_type_id" />
@@ -55,7 +55,7 @@
   <div class="form-group">
     <label class="control-label col-lg-2">{{ ts('Tagged') }}</label>
     <div class="col-lg-4">
-      <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'IN':['Cases']}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
+      <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'LIKE':'%civicrm_case%'}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
     </div>
   </div>
   

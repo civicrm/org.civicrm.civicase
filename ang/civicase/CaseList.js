@@ -15,7 +15,7 @@
   function loadCaseApiParams(filters, sort, page) {
     var returnParams = {
       sequential: 1,
-      return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count'],
+      return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
       options: {
         sort: sort.field + ' ' + sort.dir,
         limit: page.size,
@@ -271,13 +271,14 @@
         $('thead.affix').scrollLeft($customScroll.scrollLeft());
       });
     });
-
   });
 
-  function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle) {
+  function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.cases = [];
     $scope.CRM = CRM;
+    $scope.activityCategories = CRM.civicase.activityCategories;
+    $scope.activityFeedUrl = getActivityFeedUrl;
 
     function _loadCases() {
       return crmApi(loadCaseApiParams($scope.filters, $scope.sort, $scope.page));
@@ -288,6 +289,32 @@
         .then(function(result) {
           $scope.cases = _.each(result[0].values, formatCase);
           $scope.totalCount = result[1];
+
+          $timeout(function() {
+
+            var $listTable = $('.case-list-panel .inner'),
+              $customScroll = $('.case-list-panel .custom-scroll-wrapper'),
+              $tableHeader = $('.case-list-panel .inner table thead');
+
+            $($listTable).scroll(function(){
+              $customScroll.scrollLeft($listTable.scrollLeft());
+              $('thead.affix').scrollLeft($customScroll.scrollLeft());
+            });
+
+            $customScroll.scroll(function(){
+              $listTable.scrollLeft($customScroll.scrollLeft());
+              $('thead.affix').scrollLeft($customScroll.scrollLeft());
+            });
+
+            $([$tableHeader, $customScroll]).affix({
+              offset: {
+                 top: $('.case-list-panel').offset().top - 50
+              }
+            })
+            .on('affixed.bs.affix', function() {
+              $('thead.affix').scrollLeft($customScroll.scrollLeft());
+            });
+          });
         });
     }
 
@@ -305,10 +332,8 @@
       }
     };
 
-    $scope.$watchCollection('sort', getCases);
-    $scope.$watchCollection('page', getCases);
-    $scope.$watchCollection('filters', getCases);
-    $scope.$on('caseRefresh', getCases);
+    // Currently we only watch filters. If we wanted to add more watchers we'd also need to debounce to avoid duplicate refreshes.
+    $scope.$watch('filters', getCases);
   }
 
   angular.module('civicase').directive('caseListTable', function() {

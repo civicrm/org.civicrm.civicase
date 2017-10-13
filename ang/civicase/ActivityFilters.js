@@ -22,22 +22,20 @@
           $civicrmMenu = $('#civicrm-menu'),
           $feedActivity = $('.act-feed-view-activity');
 
-        
         $feedActivity.affix({
           offset: {
-            top: $('.civicase-view-header').offset().top,
+            top: $('.civicase-view-panel > .panel-body').offset().top,
             bottom: $(document).height() - ($('.civicase-view-panel').offset().top + $('.civicase-view-panel').height()) + 18
           }
         })
         .on('affixed.bs.affix', function() {
-          $feedActivity.css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height());
+          $feedActivity.css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height() + 6);
         })
         .on('affixed-top.bs.affix', function() {
           $feedActivity.css('top','auto');
         });
 
-
-        $actHeader.affix({offset: {top: $('.civicase-view-header').offset().top} })
+        $actHeader.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top} })
           .css('top', $civicrmMenu.height())
           .on('affixed.bs.affix', function() {
             $actHeader.css('width',$('.act-feed-panel').css('width'));
@@ -47,7 +45,7 @@
             $actHeader.css('width','auto');
           });
         
-        $actControls.affix({offset: {top: $('.civicase-view-header').offset().top} })
+        $actControls.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top} })
           .on('affixed.bs.affix', function() {
             $actControls.css('width',$actHeader.css('width'));
             $actControls.css('top',$civicrmMenu.height() + $actHeader.height());

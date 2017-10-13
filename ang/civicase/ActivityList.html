@@ -1,7 +1,7 @@
 <div crm-ui-debug="activities"></div>
 <div class="act-feed-view-activity" civicase-activity-view="viewingActivity" refresh-callback="refreshAll" ng-class="{'cc-zero-w': !viewingActivity.id, 'cc-zero-h': !viewingActivity.id}"></div>
 <ul class="list-group act-feed-list-group activity-timeline" ng-class="{'viewing-activity': viewingActivity.id, 'followup-nested': displayOptions.followup_nested}">
-  <li class="list-group-item act-list-controls" ng-include="'~/civicase/ActivityControls.html'"></li>
+  <li class="list-group-item act-list-controls clearfix" ng-include="'~/civicase/ActivityControls.html'"></li>
   <li class="list-group-item activity-group-{{ activityGroup.key }}" ng-if="activityGroup.activities.length" ng-repeat="activityGroup in activityGroups">
     <h3>{{ activityGroup.title }}</h3>
     <ul class="list-group">
@@ -9,12 +9,13 @@
         <h4 class="act-date">
           {{ CRM.utils.formatDate(dateGroup.date) }}
         </h4>
-        <ul class="list-group">
+        <ul class="list-group list-group-inner">
           <li
             ng-repeat="activity in dateGroup.activities"
             ng-include="'~/civicase/ActivityListItem.html'"
             ng-click="viewActivity(activity.id, $event)"
             class="list-group-item"
+            ng-class="{'is-viewing': activity.id === viewingActivity.id}"
           >
           </li>
         </ul>

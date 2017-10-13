@@ -33,10 +33,9 @@
     ng-repeat="tag in activity.tag_id || []"
     style="background-color: {{ tag['tag_id.color'] }};"
     title="{{ tag['tag_id.description'] }}"
-  >
-    {{ tag['tag_id.name'] }}
-  </span>
+  >{{ tag['tag_id.name'] }}</span>
 </div>
+<div class="act-date">{{ CRM.utils.formatDate(activity.activity_date_time) }}</div>
 <div class="act-details" ng-bind-html="activity.details"></div>
 <div class="act-contacts clearfix">
   <div class="act-contacts-target" ng-if="activity.target_contact_name">

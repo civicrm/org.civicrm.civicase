@@ -51,11 +51,11 @@
   <div class="civicase-tags">
     <span
       class="label label-default"
+      title="{{ tag['tag_id.description'] }}"
       ng-repeat="tag in item.tag_id || []"
+      ng-class="{'text-dark': CRM.utils.colorContrast(tag['tag_id.color'] || '#cccccc') === 'black'}"
       style="background-color: {{ tag['tag_id.color'] }};"
-    >
-      {{ tag['tag_id.name'] }}
-    </span>
+    >{{ tag['tag_id.name'] }}</span>
   </div>
   <div class="civicase-type-and-manager clearfix">
     <div class="civicase-manager pull-right"><strong>{{ ts('Case Manager:') }}</strong> {{ item.manager.display_name }}</div>

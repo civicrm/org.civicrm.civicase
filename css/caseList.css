@@ -9,9 +9,6 @@
 #bootstrap-theme .case-list-panel.viewing-case td:first-child {
   width: 100%;
 }
-#bootstrap-theme .civicase-search-panel {
-  border-radius: 2px;
-}
 #bootstrap-theme .case-list-panel.viewing-case {
   width: 25%;
 }
@@ -28,6 +25,9 @@
   border-radius: 3px 3px 0 0;
   table-layout: fixed;
   word-wrap: break-word;
+}
+#bootstrap-theme .case-list-table .fixed-col .label {
+  font-size: .8em;
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table {
   table-layout: inherit;
@@ -224,6 +224,9 @@
   overflow: hidden;
   opacity: .8;
 }
+#bootstrap-theme .panel.viewing-case .civicase-table-expander{
+  display: none;
+}
 #bootstrap-theme .civicase-table-expander div {
   position: relative;
   left: -15px;
@@ -387,11 +390,21 @@
   width: 890px;
   z-index: 600;
 }
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix {
+  margin-left: 122px;
+  width: 458px;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
+  width: 458px;
+}
 #bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
   left: 50%;
   margin-left: -600px;
   min-width: 310px;
   position: fixed;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
+  margin-left: -188px;
 }
 #bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table .next-activity-title {
   max-width: 370px;

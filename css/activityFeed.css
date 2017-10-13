@@ -53,14 +53,19 @@
   width: 18px;
 }
 #bootstrap-theme .act-feed-list-group.viewing-activity {
-  width: 60%;
+  width: calc(100% - 355px);
   float: left;
 }
+#bootstrap-theme .case-is-focused .act-feed-list-group.viewing-activity {
+  width: calc(100% - 463px);
+}
+
 
 #bootstrap-theme .act-feed-view-activity {
-  width: 40%;
+  background-color: #F3F6F7;
+  border-left: 1px solid #E7E7E7;
   float: right;
-  border-left: 1px solid #e7e7e7;
+  width: 463px;
 }
 
 /* File on case button */
@@ -144,16 +149,29 @@
   cursor: inherit;
   margin: 15px 0;
 }
-
-#bootstrap-theme .act-feed-list-group .act-feed-item.is-viewing {
-  color: #555;
-  background-color: #F3F6F7;
+#bootstrap-theme .act-feed-list-group:not(.viewing-activity) .list-group:not(.list-group-inner) {
+  margin: 0 auto;
+  width: 675px;
 }
 
-#bootstrap-theme .act-feed-list-group .act-feed-item.is-viewing .cb-dot {
-  border-color: #F3F6F7;
+#bootstrap-theme .act-feed-list-group .list-group {
+  margin-bottom: 0;
 }
 
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover,
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing {
+  background-color: #D9EFF5;
+}
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover .act-feed-item:not(.act-category-milestone) .cb-dot,
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing .act-feed-item:not(.act-category-milestone) .cb-dot {
+  border-color: #D9EFF5;
+}
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item {
+  margin-bottom: 17px;
+}
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:last-child {
+  margin-bottom: 10px;
+}
 #bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item:hover {
   background: inherit;
 }
@@ -174,22 +192,24 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .act-subject {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .cb-dot {
   background-color: #e6807f;
 }
 
-
-#bootstrap-theme .act-feed-list-group .act-date {
+#bootstrap-theme .activity-timeline .act-date {
   color: #525966;
   font-size: 16px;
   font-weight: 600;
   line-height: 22px;
-  padding: 20px;
+  padding: 0px 20px 10px;
   margin: 0;
+}
 
+#bootstrap-theme .activity-timeline .act-feed-item-content .act-date {
+  display: none; /* In the timeline, dates are shown above the activity card */
 }
 
 #bootstrap-theme .act-feed-list-group .act-task-checkbox { 
@@ -223,7 +243,7 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-milestone .act-subject {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 #bootstrap-theme .case-tab-files .act-feed-item .act-files a {
@@ -294,7 +314,10 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-contacts {
-  padding: 1em 0;
+  padding: 0 0 1em;
+}
+#bootstrap-theme .act-feed-list-group .act-tags {
+  margin-bottom: 1em;
 }
 #bootstrap-theme .act-feed-list-group .act-feed-inner .btn {
   border: none;
@@ -386,6 +409,9 @@
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix-top {
   top: 0 !important;
 }
+#bootstrap-theme .act-feed-view-activity:not(.cc-zero-w) {
+  width: 355px;
+}
 #bootstrap-theme .act-feed-view-activity.affix:not(.cc-zero-w) {
   background-color: #FFFFFF;
   margin-right: -600px;
@@ -395,9 +421,13 @@
   width: 355px;
   z-index: 600;
 }
-#bootstrap-theme .case-is-focused .act-feed-view-activity.affix:not(.cc-zero-w) {
+#bootstrap-theme .case-is-focused .act-feed-view-activity:not(.cc-zero-w) {
   width: 463px;
 }
+#bootstrap-theme .act-feed-view-activity.affix-top {
+  top: 0 !important;
+}
+
 #bootstrap-theme .act-feed-item a.act-case-info {
   background-color: #fff;
   border-radius: 4px;
@@ -407,14 +437,18 @@
   color: inherit;
   cursor: pointer;
 }
+#bootstrap-theme .act-feed-item a.act-case-info:hover {
+  border: 1px solid #666;
+}
 #bootstrap-theme .act-feed-item a.act-case-info span {
   display: inline-block;
   padding: 4px 6px;
   height: 28px;
+  border-radius: 4px 0 0 0;
 }
 #bootstrap-theme .act-feed-item a.act-case-info span:first-child {
   color: #fff;
-  font-weight: bold;
+  font-weight: 600;
   padding-right: 12px;
   position: relative;
 }
@@ -452,7 +486,7 @@
   color: #4D5663;
   font-size: 18px;
   font-weight: 600;
-  margin: 5px 0px;
+  margin: 5px 0px 15px;
   padding: 13px 20px;
 }
 #bootstrap-theme .case-tab-activities .activity-item-menu.btn-group {
@@ -475,4 +509,30 @@
 #bootstrap-theme .case-tab-activities .act-filters .select2-default::placeholder {
   color: #727E8A;
   opacity: 0.6;
+}
+#bootstrap-theme .crm-activity-view-block .crm-info-panel {
+  border-bottom: 1px solid #E8EEF0;
+  box-shadow: none;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons {
+  height: auto;
+  margin: 20px;
+}
+#bootstrap-theme .crm-activity-view-block .help a.button,
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a {
+  color: #FFF;
+  background-color: #42AFCB;
+  float: none;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a.delete {
+  background-color: #E6807F;
+}
+#bootstrap-theme .crm-activity-view-block .help a.button:hover,
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a:hover {
+  color: #FFF;
+  opacity: 0.8 !important;
+  text-decoration: none;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a:hover i {
+  color: #FFF;
 }

@@ -7,7 +7,7 @@
   width: 40% !important;
   margin-right: 15px;
 }
-#bootstrap-theme .case-is-focused .civicase-filters,
+#bootstrap-theme .civicase-search-panel.case-is-focused,
 #bootstrap-theme .civicase-filters-placeholder {
   display: none;
 }
