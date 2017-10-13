@@ -9,6 +9,9 @@
   position: relative;
   left: 4px;
 }
+#bootstrap-theme .panel {
+  border-radius: 2px;
+}
 #bootstrap-theme .panel .panel-header {
   background-color: #f3f6f7;
 }
@@ -160,6 +163,12 @@
 }
 #bootstrap-theme .case-activity-card-wrapper .act-feed-inner {
   border-left: 1px solid #ddd;
+}
+#bootstrap-theme td.case-activity-card-wrapper .activity-card-menu {
+  margin-top: -5px;
+}
+#bootstrap-theme td.case-activity-card-wrapper a.act-star {
+  margin-top: -7px;
 }
 #bootstrap-theme .act-task-checkbox {
   color: #586277;

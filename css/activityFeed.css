@@ -180,6 +180,10 @@
   margin-left: 2em;
   padding-left: 3em;
   position: relative;
+}
+
+#bootstrap-theme .activity-timeline .act-feed-inner,
+#bootstrap-theme .case-tab-files .act-feed-inner {
   border-left: 1px solid #ddd;
 }
 
@@ -278,9 +282,11 @@
 #bootstrap-theme .case-tab-files  .act-feed-item .act-files .btn-group.open .btn.dropdown-toggle i {
   color: #42AFCB;
 }
-
+#bootstrap-theme .case-tab-files  .act-feed-item .act-subject {
+  color: #727E8A;
+}
 #bootstrap-theme .case-tab-files  .act-feed-item .act-files p {
-  color: #525966;
+  color: #727E8A;
   font-size: 13px;
   line-height: 18px;
   margin-bottom: 10px;
