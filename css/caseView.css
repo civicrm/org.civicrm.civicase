@@ -188,7 +188,7 @@
   margin-left: .8em;
 }
 #bootstrap-theme .civicase-alpha-pager a.active {
-  font-weight: bold;
+  font-weight: 600;
 }
 #bootstrap-theme .case-action-dropdown {
   width: 20em;
@@ -275,15 +275,33 @@
 }
 #bootstrap-theme .case-tab-people .pagination {
   color: #4D5663;
-  margin: 20px 0;
+  margin: 16px 0;
   padding-left: 20px;
 }
+#bootstrap-theme .case-tab-people .pagination li.active a {
+  font-weight: 600;
+}
+#bootstrap-theme .case-tab-people .paging-top {
+  display: inline-block;
+}
+#bootstrap-theme .case-tab-people .paging-top .pagination {
+  margin-bottom: 0;
+  margin-top: 0;
+}
 #bootstrap-theme .case-tab-people .pager-counter {
-  margin: 20px 0;
+  margin: 16px 0;
   padding-right: 20px;
 }
-#bootstrap-theme .case-tab-people .pagination li:nth-child(-n+2), #bootstrap-theme .case-tab-people .pagination li:nth-last-child(-n+2) {
+#bootstrap-theme .case-tab-people .pagination li.disabled {
+  display: none;
+}
+#bootstrap-theme .case-tab-people .pagination li:nth-child(-n+2),
+#bootstrap-theme .case-tab-people .pagination li:nth-last-child(-n+2) {
   font-weight: 600;
+}
+#bootstrap-theme .case-tab-people .pagination li:nth-child(-n+2) a,
+#bootstrap-theme .case-tab-people .pagination li:nth-last-child(-n+2) a{
+  color: #4D5663;
 }
 #bootstrap-theme .case-tab-people table + paging {
   border-top: 1px solid #E8EEF0;
@@ -292,12 +310,32 @@
 #bootstrap-theme .client-role {
   margin-right: 20px;
 }
+#bootstrap-theme  .case-people-subtab .table {
+  border-bottom: 1px solid #E8EEF0;
+}
 #bootstrap-theme  .case-people-subtab .table > thead tr {
   border-top: 1px solid #E8EEF0;
 }
-#bootstrap-theme .table > thead > tr > th,
-#bootstrap-theme .table > thead > tr > td {
-  padding: 15px 20px;
+#bootstrap-theme .case-people-subtab .table > thead > tr > th,
+#bootstrap-theme .case-people-subtab .table > tbody > tr > td {
+  padding: 15px 10px;
+}
+
+#bootstrap-theme .case-people-subtab .table > thead > tr > th:first-child,
+#bootstrap-theme .case-people-subtab .table > tbody > tr > td:first-child {
+  padding-left: 20px;
+  width: 10px;
+}
+
+#bootstrap-theme .case-people-subtab .table > thead > tr > th:last-child,
+#bootstrap-theme .case-people-subtab .table > tbody > tr > td:last-child {
+  padding-right: 20px;
+}
+#bootstrap-theme .case-people-subtab .table input[type=checkbox]+label[for] {
+  margin: 0;
+}
+#bootstrap-theme .case-people-subtab .table input[type=checkbox] + label[for]:before {
+  margin-right: 0;
 }
 #bootstrap-theme .case-people-subtab tr.unassigned {
   color: #b7b7b7;
