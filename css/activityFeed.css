@@ -505,6 +505,7 @@
   opacity: 0.6;
 }
 #bootstrap-theme .crm-activity-view-block .crm-info-panel {
+  border-bottom: 1px solid #E8EEF0;
   box-shadow: none;
 }
 #bootstrap-theme .crm-activity-view-block .crm-submit-buttons {
