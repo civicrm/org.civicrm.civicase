@@ -5,7 +5,7 @@
 </ul>
 <div class="civicase-relationships-case case-people-subtab" ng-show="tab == 'roles'">
   <div class="case-people-status">
-    <div class="btn-group btn-group-sm pull-right">
+    <div class="btn-group btn-group-md pull-right">
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-plus"></i> {{ ts('Add Case Role') }}
       </button>
@@ -32,15 +32,9 @@
       </select>
     </div>
   </div>
-  <div class="pull-right client-role">
-    <select class="form-control" ng-model="rolesFilter" crm-ui-select>
-      <option value="">{{ ts('All Roles') }}</option>
-      <option value="client">{{ ts('Client') }}</option>
-      <option ng-repeat="role in allRoles" value="{{ role.name }}">{{ role.role }}</option>
-    </select>
-  </div>
-  <paging
-    class="center-block"
+  <div>
+    <paging
+    class="center-block paging-top"
     page="rolesPage"
     page-size="25"
     total="rolesCount"
@@ -52,7 +46,16 @@
     text-next="{{ ts('Next >') }}"
     text-prev="{{ ts('< Prev') }}"
     >
-  </paging>
+    </paging>
+    <div class="pull-right client-role">
+      <select class="form-control" ng-model="rolesFilter" crm-ui-select>
+        <option value="">{{ ts('All Roles') }}</option>
+        <option value="client">{{ ts('Client') }}</option>
+        <option ng-repeat="role in allRoles" value="{{ role.name }}">{{ role.role }}</option>
+      </select>
+    </div>
+  </div>
+
   <div class="civicase-alpha-pager">
     <a ng-repeat="a in letters" href ng-class="{active: a === rolesAlphaFilter}" ng-click="setLetterFilter(a, 'roles')">{{ a }}</a>
   </div>
@@ -129,7 +132,7 @@
 </div>
 <div class="civicase-relationships-other case-people-subtab" ng-show="tab == 'relations'">
   <div class="case-people-status">
-    <div class="btn-group btn-group-sm pull-right">
+    <div class="btn-group btn-group-md pull-right">
       <a ng-if="item.client.length === 1" class="btn btn-primary crm-popup" crm-popup-form-success="getRelations()" href="{{ CRM.url('civicrm/contact/view/rel', {action: 'add', reset: 1, cid: item.client[0].contact_id}) }}">
         <i class="fa fa-plus"></i> {{ ts('Relationship') }}
       </a>
@@ -158,7 +161,7 @@
     </div>
   </div>
   <paging
-    class="center-block"
+    class="center-block paging-top"
     page="relationsPage"
     page-size="25"
     total="relationsCount"

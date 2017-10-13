@@ -224,6 +224,9 @@
   overflow: hidden;
   opacity: .8;
 }
+#bootstrap-theme .panel.viewing-case .civicase-table-expander{
+  display: none;
+}
 #bootstrap-theme .civicase-table-expander div {
   position: relative;
   left: -15px;
