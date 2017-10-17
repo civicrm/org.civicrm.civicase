@@ -231,6 +231,10 @@
   border-left-color: #E6807F !important;
   border-right-color: #E6807F !important;
 }
+#bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading {
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
 #bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading a {
   color: #42AFCB;
   font-size: 13px;
