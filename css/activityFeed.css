@@ -125,6 +125,10 @@
   border-radius: 0;
 }
 
+#bootstrap-theme .act-feed-list-group .list-group-item .act-date {
+  font-size: 13px;
+}
+
 #bootstrap-theme .act-feed-list-group .act-list-controls {
   padding: .7em 0;
   margin: 0 .5em;
