@@ -60,17 +60,11 @@
   width: calc(100% - 463px);
 }
 
-
 #bootstrap-theme .act-feed-view-activity {
   background-color: #F3F6F7;
   border-left: 1px solid #E7E7E7;
   float: right;
   width: 463px;
-}
-
-/* File on case button */
-#bootstrap-theme .act-feed-view-activity a.cancel.button {
-  display: none;
 }
 
 #bootstrap-theme div.act-actions-menu {
