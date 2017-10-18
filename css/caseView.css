@@ -455,6 +455,10 @@
   line-height: 18px;
   margin-top: 6px;
 }
+#bootstrap-theme .civicase-view-summary .civicase-case-subject-label {
+  float: left;
+  margin: 2px 5px 0px;
+}
 #bootstrap-theme .collapsible-title {
   padding: 5px 15px;
 }
