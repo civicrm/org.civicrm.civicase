@@ -390,6 +390,16 @@
   width: 890px;
   z-index: 600;
 }
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table th {
+  background: #FFFFFF;
+  font-weight: bold;
+}
+#bootstrap-theme .dashboard-case-wrapper div.case-list-panel:not(.viewing-case) .scrolling table tr th:first-child {
+  background: #FFFFFF;
+}
+#bootstrap-theme .dashboard-case-wrapper div.case-list-panel:not(.viewing-case) .scrolling table td {
+  padding-left: 20px;
+}
 #bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix {
   margin-left: 122px;
   width: 458px;

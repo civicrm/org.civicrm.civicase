@@ -231,9 +231,57 @@
   border-left-color: #E6807F !important;
   border-right-color: #E6807F !important;
 }
+#bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading {
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
 #bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading a {
   color: #42AFCB;
   font-size: 13px;
   font-weight: normal;
   margin-top: 3px;
+}
+#bootstrap-theme .dashboard-case-wrapper .panel-title .badge {
+  margin-left: 5px;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-category-milestone.act-feed-item .act-feed-inner {
+  margin-left: 0;
+  padding-left: 0;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-category-milestone .act-feed-item-content > div.ng-scope {
+  margin-left: 3em;
+  padding-left: 2em;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-category-milestone.act-feed-item .act-feed-item-content h4 {
+  margin-bottom: 0;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-category-milestone.act-feed-item .act-tags {
+  margin-bottom: 0;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-category-milestone.act-feed-item .cb-dot {
+  left: 0;
+}
+#bootstrap-theme .dashboard-case-wrapper .panel-body {
+  padding-top: 12px
+}
+#bootstrap-theme .dashboard-case-wrapper .act-feed-item.act-category-milestone .act-subject {
+  font-size: 16px
+}
+#bootstrap-theme .dashboard-case-wrapper .act-feed-list-group .act-category-milestone.act-feed-item {
+  border-left-color: #E8EEF0;
+  border-right-color: #E8EEF0;
+  margin: 0 0 10px;
+  padding-bottom: 15px;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-feed-item.act-category-milestone .activity-card-menu,
+#bootstrap-theme .dashboard-case-wrapper .act-feed-item.act-category-communication .activity-card-menu {
+  display: none;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-category-communication {
+  margin: 0;
+  padding: 0 0 10px 10px;
+}
+#bootstrap-theme .dashboard-case-wrapper .act-feed-list-group .act-category-communication h4,
+#bootstrap-theme .dashboard-case-wrapper .act-feed-list-group .act-category-communication .act-tags {
+  margin-bottom: 0;
 }

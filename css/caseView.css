@@ -464,3 +464,6 @@
 #bootstrap-theme .crm-collapsible.collapsed .collapsible-title + * {
   display: none;
 }
+#bootstrap-theme .civicase-view-other-cases .civicase-view-other-case .other-case-type-manager a {
+   margin-left: 15px;
+}
