@@ -16,40 +16,108 @@
       link: function(scope, element, attrs) {
 
         function change() {
-          element.toggleClass('sorting', attrs.civicaseSortheader === scope.sortField);
+          element.toggleClass('sorting', attrs.civicaseSortheader === scope.sort.field);
           element.find('i.cc-sort-icon').remove();
-          if (attrs.civicaseSortheader === scope.sortField) {
-            element.append('<i class="cc-sort-icon fa fa-arrow-circle-' + (scope.sortDir === 'ASC' ? 'up' : 'down') + '"></i>');
+          if (attrs.civicaseSortheader === scope.sort.field) {
+            element.append('<i class="cc-sort-icon fa fa-arrow-circle-' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + '"></i>');
           }
         }
 
         scope.changeSortDir = function() {
-          scope.sortDir = (scope.sortDir === 'ASC' ? 'DESC' : 'ASC');
+          scope.sort.dir = (scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
         };
 
-        element
-          .addClass('civicase-sortable')
-          .on('click', function(e) {
-            if ($(e.target).is('th, .cc-sort-icon')) {
-              if (scope.sortField === attrs.civicaseSortheader) {
-                scope.changeSortDir();
-              } else {
-                scope.sortField = attrs.civicaseSortheader;
-                scope.sortDir = 'ASC';
-              }
-              scope.$digest();
-            }
-          });
+        if (scope.sort.sortable) {
+          element
+            .addClass('civicase-sortable')
+            .on('click', function (e) {
+              scope.$apply(function () {
+                if ($(e.target).is('th, .cc-sort-icon')) {
+                  if (scope.sort.field === attrs.civicaseSortheader) {
+                    scope.changeSortDir();
+                  } else {
+                    scope.sort.field = attrs.civicaseSortheader;
+                    scope.sort.dir = 'ASC';
+                  }
+                }
+              });
+            });
+        }
 
-        scope.$watch('sortField', change);
-        scope.$watch('sortDir', change);
+        scope.$watchCollection('sort', change);
       }
     };
   });
 
+  angular.module('civicase').factory('civicaseInteger', function() {
+    var myFormat = CRM.visual.d3.format(".3s");
+    return function(v) {
+      return (v > -1000 & v < 1000) ? Math.round(v) : myFormat(v);
+    };
+  });
+
+  /** doNutty converts a dc.pieChart() to a stylized donut chart. */
+  angular.module('civicase').factory('doNutty', function() {
+    return function doNutty(chart, totalWidth, statCallback) {
+      var legendWidth = Math.floor(totalWidth / 2), radius = Math.floor(totalWidth / 4);
+      var padding = 10, thickness = 0.3;
+      var legend;
+
+      chart
+          .width(legendWidth + (radius * 2))
+          .height(radius * 2)
+          .innerRadius(Math.floor(radius * (1-thickness)))
+          .cx(radius);
+
+      function moveLegend() {
+        var size  = chart.group().size();
+        legend.gap(padding);
+        var legendHeight = (size * legend.itemHeight()) + ((size-1) * legend.gap());
+        legend
+            .x(padding+(radius * 2))
+            .y((chart.height() - legendHeight)/2);
+        legend.render();
+      }
+
+      var g;
+      chart
+        .on('postRender', function(){
+          legend = CRM.visual.dc.legend();
+          chart.legend(legend);
+          moveLegend();
+          var stat = statCallback();
+          g = chart.svg()
+              .append("g")
+              .classed('dc-donutty-label', 'true')
+              .attr("transform", "translate(" + radius + "," + radius + ")");
+          g.append("text")
+              .attr("dy", "0em")
+              .attr("text-anchor", "middle")
+              .classed("dc-donutty-label-main", "true")
+              .text(stat.number);
+          g.append("text")
+              .attr("dy", "1em")
+              .attr("text-anchor", "middle")
+              .classed("dc-donutty-label-sub", "true")
+              .text(stat.text);
+        })
+        .on('postRedraw', function(){
+          moveLegend();
+          if (g) {
+            var stat = statCallback();
+            g.selectAll('.dc-donutty-label-main').text(stat.number);
+            g.selectAll('.dc-donutty-label-sub').text(stat.text);
+          }
+        });
+
+    };
+  });
+
   angular.module('civicase').factory('formatActivity', function() {
-    var activityTypes = CRM.civicase.activityTypes;
-    var activityStatuses = CRM.civicase.activityStatuses;
+    var activityTypes = CRM.civicase.activityTypes,
+      activityStatuses = CRM.civicase.activityStatuses,
+      caseTypes = CRM.civicase.caseTypes,
+      caseStatuses = CRM.civicase.caseStatuses;
     return function (act, caseId) {
       act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
       act.icon = activityTypes[act.activity_type_id].icon;
@@ -58,19 +126,72 @@
       act.status_name = activityStatuses[act.status_id].name;
       act.status_type = getStatusType(act.status_id);
       act.is_completed = act.status_type !== 'incomplete'; // FIXME doesn't distinguish cancelled from completed
-      act.is_overdue = act.is_overdue === '1';
+      act.is_overdue = (typeof act.is_overdue === 'string') ? (act.is_overdue === '1') : act.is_overdue;
       act.color = activityStatuses[act.status_id].color || '#42afcb';
       act.status_css = 'status-type-' + act.status_type + ' activity-status-' + act.status_name.toLowerCase().replace(' ', '-');
       if (act.category.indexOf('alert') > -1) {
         act.color = ''; // controlled by css
       }
-      if (caseId && (!act.case_id || _.contains(act.case_id, caseId))) {
+      if (caseId && (!act.case_id || act.case_id === caseId || _.contains(act.case_id, caseId))) {
         act.case_id = caseId;
       } else if (act.case_id) {
         act.case_id = act.case_id[0];
       } else {
         act.case_id = null;
       }
+      if (act['case_id.case_type_id']) {
+        act.case = {};
+        _.each(act, function(val, key) {
+          if (key.indexOf('case_id.') === 0) {
+            act.case[key.replace('case_id.', '')] = val;
+            delete act[key];
+          }
+        });
+        act.case.client = [];
+        act.case.status = caseStatuses[act.case.status_id];
+        act.case.type = caseTypes[act.case.case_type_id];
+        _.each(act.case.contacts, function(contact) {
+          if (!contact.relationship_type_id) {
+            act.case.client.push(contact);
+          }
+          if (contact.manager) {
+            act.case.manager = contact;
+          }
+        });
+        delete act.case.contacts;
+      }
+    };
+  });
+
+  angular.module('civicase').factory('formatCase', function(formatActivity) {
+    var caseTypes = CRM.civicase.caseTypes,
+      caseStatuses = CRM.civicase.caseStatuses;
+    return function(item) {
+      item.myRole = [];
+      item.client = [];
+      item.subject = (typeof item.subject === 'undefined') ? '' : item.subject;
+      item.status = caseStatuses[item.status_id].label;
+      item.color = caseStatuses[item.status_id].color;
+      item.case_type = caseTypes[item.case_type_id].title;
+      item.selected = false;
+      item.is_deleted = item.is_deleted === '1';
+      _.each(item.activity_summary, function(activities) {
+        _.each(activities, function(act) {
+          formatActivity(act, item.id);
+        });
+      });
+      _.each(item.contacts, function(contact) {
+        if (!contact.relationship_type_id) {
+          item.client.push(contact);
+        }
+        if (contact.contact_id == CRM.config.user_contact_id) {
+          item.myRole.push(contact.role);
+        }
+        if (contact.manager) {
+          item.manager = contact;
+        }
+      });
+      return item;
     };
   });
 
@@ -98,9 +219,15 @@
       if (currentPath !== '/case/list') {
         p.cf = JSON.stringify({id: caseId});
       } else {
-        _.extend(p, $route.current.params);
+        p = angular.extend({}, $route.current.params, p);
       }
       return '/case/list?' + $.param(p);
+    };
+  });
+
+  angular.module('civicase').factory('templateExists', function($templateCache) {
+    return function(templateName) {
+      return !!$templateCache.get(templateName);
     };
   });
 
@@ -274,23 +401,25 @@
       restrict: 'A',
       link: function (scope, elem, attrs) {
         CRM.loadScript(CRM.config.resourceBase + 'js/jquery/jquery.crmEditable.js').done(function () {
-          var model = scope.$eval(attrs.crmEditable),
-            textarea = elem.data('type') === 'textarea',
+          var textarea = elem.data('type') === 'textarea',
             field = elem.data('field');
           elem
-            .html(textarea ? nl2br(model[field]) : _.escape(model[field]))
+            .html(textarea ? nl2br(scope.model[field]) : _.escape(scope.model[field]))
             .on('crmFormSuccess', function(e, value) {
               $timeout(function() {
                 scope.$apply(function() {
-                  model[field] = value;
-                  if (textarea) {
-                    elem.html(nl2br(model[field]));
-                  }
+                  scope.model[field] = value;
                 });
               });
             })
             .crmEditable();
+          scope.$watchCollection('model', function(model) {
+            elem.html(textarea ? nl2br(model[field]) : _.escape(model[field]));
+          });
         });
+      },
+      scope: {
+        model: '=crmEditable'
       }
     };
   });
@@ -338,23 +467,30 @@
         data: '=civicaseActivityContacts'
       },
       link: function (scope, elem, attrs) {
-        var contacts = scope.data.activity[scope.data.type + '_contact_name'];
         scope.url = CRM.url;
-        scope.contacts = [];
-        _.each(contacts, function(name, cid) {
-          scope.contacts.push({name: name, cid: cid});
-        });
+        scope.ts = CRM.ts('civicase');
+        function refresh() {
+          if (_.isPlainObject(scope.data)) {
+            scope.contacts = [];
+            _.each(scope.data, function (name, cid) {
+              scope.contacts.push({display_name: name, contact_id: cid});
+            });
+          } else {
+            scope.contacts = _.cloneDeep(scope.data);
+          }
+        }
+        scope.$watch('data', refresh);
       },
       template:
-        '<a ng-if="contacts.length" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].cid}) }}">{{ contacts[0].name }}</a> ' +
-        '<span ng-if="contacts.length === 2">&amp; <a href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].cid}) }}">{{ contacts[1].name }}</a></span>' +
+        '<a ng-if="contacts.length" title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].contact_id}) }}">{{ contacts[0].display_name }}</a> ' +
+        '<span ng-if="contacts.length === 2">&amp; <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].contact_id}) }}">{{ contacts[1].display_name }}</a></span>' +
         '<div class="btn-group btn-group-xs" ng-if="contacts.length > 2">' +
         '  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
         '    + {{ contacts.length - 1 }}' +
         '  </button>' +
         '  <ul class="dropdown-menu" >' +
         '    <li ng-repeat="(index, contact) in contacts" ng-if="index">' +
-        '      <a href="{{ url(\'civicrm/contact/view\', {cid: contact.cid}) }}">{{ contact.name }}</a>' +
+        '      <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contact.contact_id}) }}">{{ contact.display_name }}</a>' +
         '    </li>' +
         '  </ul>' +
         '</div>'
@@ -392,6 +528,10 @@
               form = $('<div></div>').html(elem.hide().html());
               form.insertAfter(elem)
                 .on('click', '.cancel', close)
+                .on('crmLoad', function() {
+                  // Workaround bug where href="#" changes the angular route
+                  $('a.crm-clear-link', form).removeAttr('href');
+                })
                 .on('crmFormSuccess', function(e, data) {
                   scope.$apply(function() {
                     scope.pushCaseData(data.civicase_reload[0]);

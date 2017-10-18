@@ -5,13 +5,9 @@
   transition: width .2s linear;
 }
 #bootstrap-theme .case-list-panel,
-#bootstrap-theme table.case-list-table,
 #bootstrap-theme .case-list-panel.viewing-case th:first-child,
 #bootstrap-theme .case-list-panel.viewing-case td:first-child {
   width: 100%;
-}
-#bootstrap-theme .civicase-search-panel {
-  border-radius: 3px;
 }
 #bootstrap-theme .case-list-panel.viewing-case {
   width: 25%;
@@ -22,10 +18,16 @@
   position: absolute;
   width: 30px;
 }
+#bootstrap-theme .case-list-panel.case-is-focused .civicase-pager {
+  padding: 0;
+}
 #bootstrap-theme .case-list-table {
   border-radius: 3px 3px 0 0;
   table-layout: fixed;
   word-wrap: break-word;
+}
+#bootstrap-theme .case-list-table .fixed-col .label {
+  font-size: .8em;
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table {
   table-layout: inherit;
@@ -38,7 +40,7 @@
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr th:first-child {
   background: #F3F6F7;
-  height: 60px;
+  height: 61px;
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td:first-child {
   background: #fff;
@@ -67,6 +69,19 @@
   min-width: 142px;
   padding: 10px 15px;
 }
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table td:nth-child(2) {
+ padding: 10px 20px;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table td:not(:nth-child(2)):not(:first-child) {
+ padding: 20px;
+}
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table td.case-activity-card-wrapper {
+  max-width: 370px;
+  min-width: 370px;
+  position: relative;
+}
+
+
 #bootstrap-theme .case-list-table thead tr {
   background: #F3F6F7;
   border-radius: 3px 3px 0 0;
@@ -209,6 +224,9 @@
   overflow: hidden;
   opacity: .8;
 }
+#bootstrap-theme .panel.viewing-case .civicase-table-expander{
+  display: none;
+}
 #bootstrap-theme .civicase-table-expander div {
   position: relative;
   left: -15px;
@@ -317,11 +335,10 @@
   font-size: 13px;
   font-style: normal;
   height: 13px;
-  line-height: 13px;
   left: 2px;
   position: absolute;
   text-rendering: auto;
-  top: 5px;
+  top: 8px;
 }
 #bootstrap-theme .noti-badge {
   background: #42AFCB;
@@ -343,4 +360,56 @@
 #bootstrap-theme .item-overdue .noti-badge {
   background: #E6807F;
   color: #FFF;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table {
+  width: 1400px;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper {
+  border: none;
+  margin-left: 310px;
+  overflow-x: scroll;
+  overflow-y:hidden;
+  width: calc(100% - 310px);
+}
+#bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper .custom-scroll{
+  height: 1px;
+  width: 1400px;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
+  position: fixed;
+  top: 92px;
+  width: 890px;
+  z-index: 6;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table thead.affix {
+  left: 50%;
+  margin-left: -290px;
+  overflow: hidden;
+  position: fixed;
+  top: 32px;
+  width: 890px;
+  z-index: 600;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix {
+  margin-left: 122px;
+  width: 458px;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
+  width: 458px;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
+  left: 50%;
+  margin-left: -600px;
+  min-width: 310px;
+  position: fixed;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
+  margin-left: -188px;
+}
+#bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table .next-activity-title {
+  max-width: 370px;
+  min-width: 370px;
+}
+#bootstrap-theme .viewing-case .scrolling table.case-list-table thead.affix {
+  position: relative;
 }

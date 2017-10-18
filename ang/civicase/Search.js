@@ -30,6 +30,15 @@
       }
     });
 
+    var $customScroll = $('.case-list-panel .custom-scroll-wrapper'),
+      $tableHeader = $('.case-list-panel .inner table thead');
+
+    $scope.$watch('expanded',function(){
+      $timeout(function(){
+        $($customScroll,$tableHeader).data('bs.affix').options.offset.top =  $('.case-list-panel').offset().top - 50;
+      });
+    });
+
     $scope.showMore = function() {
       $scope.expanded = true;
     };
@@ -43,7 +52,7 @@
     };
 
     $scope.caseManagerIsMe = function() {
-      return $scope.filters.case_manager && $scope.filters.case_manager.length === 1 && $scope.filters.case_manager[0] === CRM.config.user_contact_id;
+      return $scope.filters.case_manager && $scope.filters.case_manager.length === 1 && parseInt($scope.filters.case_manager[0], 10) === CRM.config.user_contact_id;
     };
 
     function formatSearchFilters(inp) {

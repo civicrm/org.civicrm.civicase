@@ -31,7 +31,6 @@
   color: #727E8A;
   white-space: nowrap;
 }
-
 #bootstrap-theme .act-feed-list-group,
 #bootstrap-theme .act-feed-view-activity {
   position: relative;
@@ -54,14 +53,19 @@
   width: 18px;
 }
 #bootstrap-theme .act-feed-list-group.viewing-activity {
-  width: 60%;
+  width: calc(100% - 355px);
   float: left;
 }
+#bootstrap-theme .case-is-focused .act-feed-list-group.viewing-activity {
+  width: calc(100% - 463px);
+}
+
 
 #bootstrap-theme .act-feed-view-activity {
-  width: 40%;
+  background-color: #F3F6F7;
+  border-left: 1px solid #E7E7E7;
   float: right;
-  border-left: 1px solid #e7e7e7;
+  width: 463px;
 }
 
 /* File on case button */
@@ -77,6 +81,7 @@
 
 #bootstrap-theme div.act-attachment-menu {
   display: inline-block;
+  margin-top: 0;
 }
 
 #bootstrap-theme .act-feed-list-group div.btn-group-sm>button.btn {
@@ -99,6 +104,9 @@
 #bootstrap-theme .act-filters .act-available-filter-menu>li>span {
   padding-bottom: 0;
 }
+#bootstrap-theme .act-filters .act-available-filter-menu>li:last-child>span {
+  padding-bottom: 10px;
+}
 #bootstrap-theme .act-filters .act-filter-header {
   display: none;
 }
@@ -114,10 +122,11 @@
   border: 0 none;
   padding: 0;
   margin: 0;
+  border-radius: 0;
 }
 
 #bootstrap-theme .act-feed-list-group .act-list-controls {
-  padding: .2em 0;
+  padding: .7em 0;
   margin: 0 .5em;
   border-bottom: 1px solid #ddd;
 }
@@ -127,10 +136,12 @@
   border-bottom: 1px solid #ddd;
   border-left: 5px solid;
   border-right: 5px solid;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 #bootstrap-theme .act-feed-list-group .act-feed-item {
-  padding: 10px 15px;
+  padding: 10px 20px;
   cursor: pointer;
 }
 
@@ -138,27 +149,31 @@
   cursor: inherit;
   margin: 15px 0;
 }
-
-#bootstrap-theme .act-feed-list-group .act-feed-item.is-viewing {
-  color: #555;
-  background-color: #F3F6F7;
+#bootstrap-theme .act-feed-list-group:not(.viewing-activity) .list-group:not(.list-group-inner) {
+  margin: 0 auto;
+  width: 675px;
 }
 
-#bootstrap-theme .act-feed-list-group .act-feed-item.is-viewing .cb-dot {
-  border-color: #F3F6F7;
+#bootstrap-theme .act-feed-list-group .list-group {
+  margin-bottom: 0;
 }
 
-#bootstrap-theme .act-feed-list-group .act-feed-item:hover {
-  color: #555;
-  background-color: #F3F6F7;
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover,
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing {
+  background-color: #D9EFF5;
 }
-
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover .act-feed-item:not(.act-category-milestone) .cb-dot,
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing .act-feed-item:not(.act-category-milestone) .cb-dot {
+  border-color: #D9EFF5;
+}
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item {
+  margin-bottom: 17px;
+}
+#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:last-child {
+  margin-bottom: 10px;
+}
 #bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item:hover {
   background: inherit;
-}
-
-#bootstrap-theme .act-feed-list-group .act-feed-item:hover .cb-dot {
-  border-color: #F3F6F7;
 }
 
 #bootstrap-theme .act-feed-inner {
@@ -167,12 +182,9 @@
   position: relative;
 }
 
-#bootstrap-theme .activity-timeline .act-feed-inner {
+#bootstrap-theme .activity-timeline .act-feed-inner,
+#bootstrap-theme .case-tab-files .act-feed-inner {
   border-left: 1px solid #ddd;
-}
-
-#bootstrap-theme .act-feed-list-group .act-category-milestone .act-feed-inner {
-  border-left: 0 none;
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-task .act-feed-inner {
@@ -180,24 +192,24 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .act-subject {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .cb-dot {
   background-color: #e6807f;
 }
 
-#bootstrap-theme .case-tab-files .act-feed-list-group .list-group-item:first-child .act-date {
-  border-top: 0;
-  padding-top: 10px;
+#bootstrap-theme .activity-timeline .act-date {
+  color: #525966;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  padding: 0px 20px 10px;
+  margin: 0;
 }
 
-#bootstrap-theme .act-feed-list-group .act-date {
-  border-top: 1px solid #E8EEF0;
-  font-weight: bold;
-  margin-bottom: 20px;
-  padding-left: 1em;
-  padding-top: 20px;
+#bootstrap-theme .activity-timeline .act-feed-item-content .act-date {
+  display: none; /* In the timeline, dates are shown above the activity card */
 }
 
 #bootstrap-theme .act-feed-list-group .act-task-checkbox { 
@@ -231,7 +243,7 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-category-milestone .act-subject {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 #bootstrap-theme .case-tab-files .act-feed-item .act-files a {
@@ -249,8 +261,9 @@
   font-weight: 600;
 }
 
-#bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn{
+#bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn {
   padding: 0 5px;
+  margin-left: 10px;
 }
 
 #bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn i {
@@ -269,9 +282,11 @@
 #bootstrap-theme .case-tab-files  .act-feed-item .act-files .btn-group.open .btn.dropdown-toggle i {
   color: #42AFCB;
 }
-
+#bootstrap-theme .case-tab-files  .act-feed-item .act-subject {
+  color: #727E8A;
+}
 #bootstrap-theme .case-tab-files  .act-feed-item .act-files p {
-  color: #525966;
+  color: #727E8A;
   font-size: 13px;
   line-height: 18px;
   margin-bottom: 10px;
@@ -299,9 +314,15 @@
 }
 
 #bootstrap-theme .act-feed-list-group .act-contacts {
-  padding: 1em 0;
+  padding: 0 0 1em;
 }
-
+#bootstrap-theme .act-feed-list-group .act-tags {
+  margin-bottom: 1em;
+}
+#bootstrap-theme .act-feed-list-group .act-feed-inner .btn {
+  border: none;
+  padding: 0;
+}
 #bootstrap-theme .act-feed-list-group .act-contacts div {
   min-width: 40%;
   max-width: 100%;
@@ -311,13 +332,207 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 #bootstrap-theme .act-list-controls label.btn {
-  border-color: lightgrey;
+  text-transform: none;
+  font-weight: normal;
+  border: 1px solid #C2CFD8; 
 }
+#bootstrap-theme .act-list-controls label.btn:hover {
+  border-color: #bfbfbf;
+}
+#bootstrap-theme .act-list-controls label.btn.active, 
+#bootstrap-theme .act-list-controls label.btn:focus {
+  background-color: #E8EEF0;
+  box-shadow: inset 0 0 5px 0 rgba(0,0,0,0.1);
+  color: #42AFCB;
+
+}
+
 #bootstrap-theme .act-tags .label {
   margin-right: 1em;
 }
 #bootstrap-theme .pager-loading {
   height: 200px;
+}
+#bootstrap-theme .act-filters .btn-group.act-clear-filter {
+  margin-right: 10px;
+}
+#bootstrap-theme .act-filters .input-group-btn {
+  border-radius: 2px;
+}
+#bootstrap-theme .act-filters .btn-filter {
+  border-bottom-right-radius: 2px !important;
+  border-top-right-radius: 2px !important;
+  line-height: 17px;
+  margin: 0.7em 0;
+}
+#bootstrap-theme .act-filters .filter-separator {
+  background-color: #C2CFD8;
+  display: inline-block;
+  height: 30px;
+  margin-left: 10px;
+  width: 1px; 
+}
+#bootstrap-theme .act-list-controls .btn.btn-clean {
+  border: none;
+}
+#bootstrap-theme .act-list-controls .btn.btn-clean.active {
+  background: none;
+}
+#bootstrap-theme .act-list-controls .btn.btn-clean.active .fa-paperclip,
+#bootstrap-theme .act-list-controls .btn.btn-clean.active .fa-paperclip {
+  color: #42AFCB;
+}
+#bootstrap-theme .act-list-controls .select2-container {
+  margin-top: 2px;
+}
+#bootstrap-theme div.act-feed-panel {
+  position: relative;
+}
+#bootstrap-theme div.act-feed-panel > .panel-header.affix {
+  width: inherit;
+  z-index: 600;
+}
+#bootstrap-theme div.act-feed-panel > .panel-header .form-control {
+  vertical-align: top;
+}
+#bootstrap-theme div.act-feed-panel > .panel-header .select2-container-multi {
+  height: auto;
+  z-index: 6;
+}
+#bootstrap-theme .act-feed-list-group .act-list-controls.affix {
+  margin: 0px;
+  padding: 0.2em 0.5em;
+  width: inherit;
+  z-index: 5;
+}
+#bootstrap-theme .act-feed-list-group .act-list-controls.affix-top {
+  top: 0 !important;
+}
+#bootstrap-theme .act-feed-view-activity:not(.cc-zero-w) {
+  width: 355px;
+}
+#bootstrap-theme .act-feed-view-activity.affix:not(.cc-zero-w) {
+  background-color: #FFFFFF;
+  margin-right: -600px;
+  position: fixed;
+  right: 50%;
+  top: 119px;
+  width: 355px;
+  z-index: 600;
+}
+#bootstrap-theme .case-is-focused .act-feed-view-activity:not(.cc-zero-w) {
+  width: 463px;
+}
+#bootstrap-theme .act-feed-view-activity.affix-top {
+  top: 0 !important;
+}
+
+#bootstrap-theme .act-feed-item a.act-case-info {
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+#bootstrap-theme .act-feed-item a.act-case-info:hover {
+  border: 1px solid #666;
+}
+#bootstrap-theme .act-feed-item a.act-case-info span {
+  display: inline-block;
+  padding: 4px 6px;
+  height: 28px;
+  border-radius: 4px 0 0 0;
+}
+#bootstrap-theme .act-feed-item a.act-case-info span:first-child {
+  color: #fff;
+  font-weight: 600;
+  padding-right: 12px;
+  position: relative;
+}
+#bootstrap-theme .act-feed-item a.act-case-info span:first-child:after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 14px 0 14px 10px;
+  border-color: white transparent white transparent;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+#bootstrap-theme .case-tab-activities .act-feed-item {
+  margin: 0px 22px;
+}
+#bootstrap-theme .case-tab-activities .act-feed-item.act-category-task {
+  border: none;
+  border-radius: 0;
+}
+#bootstrap-theme .case-tab-activities .act-feed-item.act-category-task {
+  border:none !important;
+}
+#bootstrap-theme .case-tab-activities .pager-show-more {
+  margin-bottom: 20px;
+}
+#bootstrap-theme .case-tab-activities .pager-no-more {
+  margin-bottom: 20px;
+}
+#bootstrap-theme .case-tab-activities .act-feed-list-group h3 {
+  background-color: #F3F6F7;
+  border-top: 1px solid #D3DEE2;
+  border-bottom: 1px solid #D3DEE2;
+  color: #4D5663;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 5px 0px 15px;
+  padding: 13px 20px;
+}
+#bootstrap-theme .case-tab-activities .activity-item-menu.btn-group {
+  margin-top: -10px;
+}
+#bootstrap-theme .case-tab-activities .act-category-communication .activity-item-menu.btn-group {
+  margin-top: 20px;
+  margin-right: 20px;
+}
+#bootstrap-theme .case-tab-activities .act-star {
+  margin-top: -5px;
+}
+#bootstrap-theme .case-tab-activities .act-attachment-menu {
+  margin-top: -8px;
+}
+#bootstrap-theme .case-tab-activities .act-filters input::placeholder {
+  color: #727E8A;
+  opacity: 0.6;
+}
+#bootstrap-theme .case-tab-activities .act-filters .select2-default::placeholder {
+  color: #727E8A;
+  opacity: 0.6;
+}
+#bootstrap-theme .crm-activity-view-block .crm-info-panel {
+  border-bottom: 1px solid #E8EEF0;
+  box-shadow: none;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons {
+  height: auto;
+  margin: 20px;
+}
+#bootstrap-theme .crm-activity-view-block .help a.button,
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a {
+  color: #FFF;
+  background-color: #42AFCB;
+  float: none;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a.delete {
+  background-color: #E6807F;
+}
+#bootstrap-theme .crm-activity-view-block .help a.button:hover,
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a:hover {
+  color: #FFF;
+  opacity: 0.8 !important;
+  text-decoration: none;
+}
+#bootstrap-theme .crm-activity-view-block .crm-submit-buttons a:hover i {
+  color: #FFF;
 }

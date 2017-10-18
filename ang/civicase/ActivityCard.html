@@ -1,34 +1,10 @@
-<div
+<div style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};" 
   class="act-feed-item activity-card act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.status_css }}"
   ng-class="{'is-completed': activity.is_completed, 'is-incomplete': !activity.is_completed, 'activity-overdue': activity.is_overdue}"
+  ng-click="viewInPopup($event, activity)"
 >
   <div class="act-feed-inner">
     <div class="pull-right" ng-include="'~/civicase/ActivityCardMenu.html'"></div>
-    <div civicase-activity-dot="activity"></div>
-    <h4 class="act-contacts-target" ng-if="activity.target_contact_name && activity.category.indexOf('communication') >= 0">
-      <strong>{{ ts('To') }}</strong>
-      <span civicase-activity-contacts="{activity: activity, type: 'target'}"></span>
-    </h4>
-    <h4>
-      <span class="act-subject" ng-if="activity.subject">{{ activity.subject }}</span>
-      <span class="act-subject" ng-if="!activity.subject">{{ activity.type }}</span>
-      <span class="act-subject-draft" ng-if="activity.status_name === 'Draft'">{{ ts('Draft') }}</span>
-    </h4>
-    <div class="clearfix">
-      {{ CRM.utils.formatDate(activity.activity_date_time) }}
-    </div>
-    <a href class="act-task-checkbox" ng-if="activity.category.indexOf('task') > -1" ng-click="markCompleted(activity)" title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}">
-      <i class="fa" ng-class="{'fa-square-o': !activity.is_completed, 'fa-check-square-o': activity.is_completed}"></i>
-    </a>
-    <div class="act-contacts clearfix">
-      <div class="act-contacts-target" ng-if="activity.target_contact_name && activity.category.indexOf('communication') < 0">
-        <strong>{{ ts('With') }}</strong>
-        <span civicase-activity-contacts="{activity: activity, type: 'target'}"></span>
-      </div>
-      <div class="act-contacts-assignee" ng-if="activity.assignee_contact_name">
-        <strong>{{ ts('Assigned to') }}</strong>
-        <span civicase-activity-contacts="{activity: activity, type: 'assignee'}"></span>
-      </div>
-    </div>
+    <div ng-include="'~/civicase/ActivityItemInnerWrapper.html'"></div>
   </div>
 </div>

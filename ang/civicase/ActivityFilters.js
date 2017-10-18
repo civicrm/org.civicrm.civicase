@@ -15,6 +15,56 @@
         };
       }
 
+      $timeout(function() {
+
+        var $actHeader = $('.act-feed-panel .panel-header'),
+          $actControls = $('.act-feed-panel .act-list-controls'),
+          $civicrmMenu = $('#civicrm-menu'),
+          $feedActivity = $('.act-feed-view-activity');
+
+        $feedActivity.affix({
+          offset: {
+            top: $('.civicase-view-panel > .panel-body').offset().top,
+            bottom: $(document).height() - ($('.civicase-view-panel').offset().top + $('.civicase-view-panel').height()) + 18
+          }
+        })
+        .on('affixed.bs.affix', function() {
+          $feedActivity.css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height() + 6);
+        })
+        .on('affixed-top.bs.affix', function() {
+          $feedActivity.css('top','auto');
+        });
+
+        $actHeader.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top} })
+          .css('top', $civicrmMenu.height())
+          .on('affixed.bs.affix', function() {
+            $actHeader.css('width',$('.act-feed-panel').css('width'));
+            $actHeader.css('top', $civicrmMenu.height());
+          })
+          .on('affixed-top.bs.affix', function() {
+            $actHeader.css('width','auto');
+          });
+        
+        $actControls.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top} })
+          .on('affixed.bs.affix', function() {
+            $actControls.css('width',$actHeader.css('width'));
+            $actControls.css('top',$civicrmMenu.height() + $actHeader.height());
+          })
+          .on('affixed-top.bs.affix', function() {
+            $actControls.css('width','auto');
+            $actControls.css('top', 'auto');
+          });
+
+        $scope.$watchCollection('[filters, exposedFilters]', function(){
+          $timeout(function() {
+            $actControls.css('top',$civicrmMenu.height() + $actHeader.height());
+            $feedActivity.not('.cc-zero-w')
+              .height($(window).height() - ($civicrmMenu.height() + $actHeader.height() + $actControls.height()))
+              .css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height());
+          });
+        });
+      });
+
       $scope.availableFilters = [
         {
           name: 'activity_type_id',
@@ -27,11 +77,6 @@
           label: ts('Status'),
           html_type: 'Select',
           options: _.map(CRM.civicase.activityStatuses, mapSelectOptions)
-        },
-        {
-          name: 'text',
-          label: ts('Contains text'),
-          html_type: 'Text'
         },
         {
           name: 'target_contact_id',
@@ -51,6 +96,11 @@
           html_type: 'Autocomplete-Select',
           entity: 'Tag',
           api_params: {used_for: {LIKE: '%civicrm_activity%'}}
+        },
+        {
+          name: 'text',
+          label: ts('Contains text'),
+          html_type: 'Text'
         }
       ];
       if (_.includes(CRM.config.enableComponents, 'CiviCampaign')) {
@@ -81,6 +131,8 @@
       $scope.exposedFilters = {
         activity_type_id: true,
         status_id: true,
+        assignee_contact_id: true,
+        tag_id: true,
         text: true
       };
       // Ensure set filters are also exposed

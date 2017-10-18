@@ -8,7 +8,7 @@
   });
 
   // ActivityFeed directive controller
-  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
+  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, templateExists) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
@@ -20,6 +20,7 @@
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = $scope.activityStatuses = CRM.civicase.activityStatuses;
     $scope.activityCategories = CRM.civicase.activityCategories;
+    $scope.templateExists = templateExists;
     $scope.activities = {};
     $scope.activityGroups = [];
     $scope.remaining = true;
@@ -53,7 +54,7 @@
     $scope.star = function(act) {
       act.is_star = act.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues
-      crmApi('Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}, {});
+      crmApi('Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}, {}).then($scope.refreshCase);
     };
 
     $scope.markCompleted = function(act) {
@@ -222,11 +223,10 @@
       };
       if (caseId) {
         params.case_id = caseId;
-      }
-      else {
-        if (!$scope.displayOptions.include_case) {
-          params.case_id = {'IS NULL': 1};
-        }
+      } else if (!$scope.displayOptions.include_case) {
+        params.case_id = {'IS NULL': 1};
+      } else {
+        returnParams.return = returnParams.return.concat(['case_id.case_type_id', 'case_id.status_id', 'case_id.contacts']);
       }
       _.each($scope.filters, function(val, key) {
         if (key[0] === '@') return; // Virtual params.
@@ -256,11 +256,8 @@
 
     $scope.$watchCollection('filters', getActivities);
     $scope.$watchCollection('params.filters', getActivities);
-
-    $scope.$watchCollection('displayOptions', function() {
-      getActivities();
-    });
-
+    $scope.$watchCollection('displayOptions', getActivities);
+    $scope.$on('updateCaseData', getActivities);
   }
 
   angular.module('civicase').directive('civicaseActivityFeed', function() {

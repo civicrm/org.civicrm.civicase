@@ -3,7 +3,7 @@
 
   // While processing a change from the $watch()'d data, we set the "pendingUpdates" flag
   // so that automated URL changes don't cause a reload.
-  var pendingUpdates = null, activeTimer = null, registered = false;
+  var pendingUpdates = null, activeTimer = null, registered = false, ignorable = {};
 
   function registerGlobalListener($injector) {
     if (registered) return;
@@ -20,39 +20,25 @@
   var formats = {
     json: {
       watcher: '$watchCollection',
-      init: function($route, options) {
-        return (options.param in $route.current.params) ? angular.fromJson($route.current.params[options.param]) : angular.extend({}, options.default);
-      },
+      decode: angular.fromJson,
       encode: angular.toJson,
       default: {}
     },
     raw: {
       watcher: '$watch',
-      init: function($route, options) {
-        return (options.param in $route.current.params) ? $route.current.params[options.param] : options.default;
-      },
+      decode: function(v) { return v; },
       encode: function(v) { return v; },
       default: ''
     },
     int: {
       watcher: '$watch',
-      init: function($route, options) {
-        if (options.param in $route.current.params) {
-          return parseInt($route.current.params[options.param]);
-        }
-        return options.default;
-      },
+      decode: function(v) { return parseInt(v); },
       encode: function(v) { return v; },
       default: 0
     },
     bool: {
       watcher: '$watch',
-      init: function($route, options) {
-        if (options.param in $route.current.params) {
-          return $route.current.params[options.param] === '1';
-        }
-        return options.default;
-      },
+      decode: function(v) { return v === '1'; },
       encode: function(v) { return v ? '1' : '0'; },
       default: false
     }
@@ -72,7 +58,14 @@
 
         var $route = $injector.get('$route'), $timeout = $injector.get('$timeout');
 
-        var value = fmt.init($route, options);
+        var value;
+        if (options.param in $route.current.params) {
+          value = fmt.decode($route.current.params[options.param]);
+        }
+        else {
+          value = _.isObject(options.default) ? angular.extend({}, options.default) : options.default;
+          ignorable[options.param] = fmt.encode(options.default);
+        }
         $parse(options.expr).assign(_scope, value);
 
         // Keep the URL bar up-to-date.
@@ -83,12 +76,14 @@
           pendingUpdates = pendingUpdates || {};
           pendingUpdates[options.param] = encValue;
           var p = angular.extend({}, $route.current.params, pendingUpdates);
+          angular.forEach(ignorable, function(v,k){ if (p[k] === v) delete p[k]; });
           $route.updateParams(p);
 
           if (activeTimer) $timeout.cancel(activeTimer);
           activeTimer = $timeout(function () {
             pendingUpdates = null;
             activeTimer = null;
+            ignorable = {};
           }, 50);
         });
       };

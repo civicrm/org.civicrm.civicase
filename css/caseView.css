@@ -17,22 +17,34 @@
   padding-right: 5px;
 }
 #bootstrap-theme .civicase-view-header {
-  padding: 10px 20px;
+  background-color: #F3F6F7; 
+  border-radius: 2px 2px 0 0;
 }
 #bootstrap-theme .civicase-view-header h2 {
-  color: #42AFCB;
+  color: #525966;
   font-size: 24px;
-  margin-bottom: 5px;
-  margin-top: 10px;
+  margin: 19px 19px 0 25px;
+
 }
+
+#bootstrap-theme .civicase-view-header h2 .btn-group {
+  line-height: 24px;
+  margin-top: -10px;
+}
+
 #bootstrap-theme .civicase-view-header h2 .btn-info {
+
   background: transparent;
   border: none;
   border-radius: 0;
-  color: #4D5663;
+  color: #42AFCB;
+  float: none;
   font-size: 24px;
   font-weight: 600;
-  padding: 0 5px;
+  line-height: 24px;
+  margin: 0;
+  padding: 0;
+  text-transform: lowercase;
 }
 #bootstrap-theme .label {
   border-radius: 10px;
@@ -40,29 +52,60 @@
 #bootstrap-theme .btn-group .btn.btn-primary {
   border: none;
 }
-#bootstrap-theme .civicase-view-header .case-id {  
-  float: left;
-  margin-right: 15px;
+#bootstrap-theme .civicase-view-header .case-id {
+  color: #727E8A;
+  font-weight: normal;
+  font-size: 13px;
 }
 #bootstrap-theme .civicase-view-header .case-id strong {
   color: #4D5663;
 }
+
 #bootstrap-theme .civicase-view-header .civicase-dates,
 #bootstrap-theme .civicase-view-header .civicase-tags {
   display: inline-block;
   margin-right: 15px;
 }
+#bootstrap-theme .civicase-view-header .civicase-dates {
+  color: #525966;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  margin-left: 25px;
+  margin-top: 16px;
+}
 #bootstrap-theme .civicase-tags .label {
   margin-right: 1em;
-  padding: 0.1em 0.6em 0.2em;
+  padding: 0.1em 0.8em 0.2em;
 }
 #bootstrap-theme .case-action-menu {
   clear: both;
-  margin-top: 10px;
+  margin-right: 19px;
+}
+#bootstrap-theme .case-action-menu .btn-group-md .btn {
+  padding: 7px 12px;
 }
 #bootstrap-theme .civicase-type-and-manager {
-  border-top: 1px solid #c2cfd8;
-  margin-top: 5px;
+  border-top: 1px solid #E8EEF0;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  padding: 0 19px 0 25px;
+}
+#bootstrap-theme .civicase-type-and-manager .civicase-type {
+  padding-top: 13px;
+  display: block;
+  width: 200px;
+}
+#bootstrap-theme .civicase-type-and-manager .civicase-type a {
+  color: #4D5663;
+  text-decoration: none;
+}
+#bootstrap-theme .civicase-type-and-manager .civicase-manager {
+  color: #42AFCB;
+  padding-top: 13px;
+}
+#bootstrap-theme .civicase-type-and-manager .civicase-manager strong{
+  color: #4D5663;
 }
 #bootstrap-theme .civicase-view-panel .panel-body {
   border-radius: 0 0 2px 2px;
@@ -84,12 +127,13 @@
   border-radius: 0;
   box-shadow: 0 5px 20px rgba(0,0,0,.2);
   margin-bottom: 0;
+  z-index: 1;
 }
 #bootstrap-theme .panel-default .nav-tabs:not(.nav-tabs-stacked) {
   padding: 8px 0 0 5px;
 }
 #bootstrap-theme .navbar.civicase-view-tab-bar .btn-group {
-  margin: 12px 12px 0 0;
+  margin: 9px 0 0 9px;
 }
 #bootstrap-theme .navbar.civicase-view-tab-bar .btn {
   background-color: transparent;
@@ -149,24 +193,30 @@
   margin-left: .8em;
 }
 #bootstrap-theme .civicase-alpha-pager a.active {
-  font-weight: bold;
+  font-weight: 600;
 }
 #bootstrap-theme .case-action-dropdown {
   width: 20em;
 }
 #bootstrap-theme .case-people-subtab {
-  margin: 2em 0 0;
+  margin: 20px 0px 0;
 }
 #bootstrap-theme .case-people-subtab .case-people-status {
   border-bottom: 1px solid #e8eef0;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   padding: 0 20px 20px 25px;
+}
+#bootstrap-theme .case-people-subtab .case-people-status h3 {
+  margin-bottom: 20px;
 }
 #bootstrap-theme .case-people-subtab .case-people-status strong {
   color: #4D5663;
 }
 #bootstrap-theme .case-people-subtab label + .select2-container {
-  margin-top: 5px;
+  margin-top: 10px;
+}
+#bootstrap-theme .case-people-subtab .people-selection-radio {
+  margin-left: 10px;
 }
 #bootstrap-theme .case-people-status .select2-container:not(.select2-container-disabled) .select2-choice .select2-chosen {
   color: #42AFCB;
@@ -184,8 +234,40 @@
   font-weight: normal;
 }
 #bootstrap-theme .form-control .select2-choice .select2-arrow {
+  padding: 0;
   top: 0;
 }
+#bootstrap-theme .crm-case-custom-form-block .crm-accordion-body {
+  padding: 5px;
+}
+#bootstrap-theme .crm-case-custom-form-block td.label {
+  display: table-cell;
+  padding-top: 7.5px;
+  text-align: left;
+  vertical-align: top;
+}
+#bootstrap-theme .crm-case-custom-form-block .select2-choice .select2-arrow {
+  background: none;
+  padding: 0;
+  width: 26px;
+}
+#bootstrap-theme .crm-case-custom-form-block .select2-container .select2-choices {
+  margin-bottom: 0;
+}
+#bootstrap-theme .crm-case-custom-form-block input.crm-form-date {
+  display: inline-block;
+}
+#bootstrap-theme .crm-case-custom-form-block .crm-form-text {
+  max-width: 230px;
+}
+#bootstrap-theme .crm-case-custom-form-block .crm-form-textarea {
+  height: 80px;
+  max-width: 230px;
+}
+#bootstrap-theme .crm-case-custom-form-block .crm-button-type-cancel input:hover {
+  color: #FFF !important;
+}
+
 #bootstrap-theme .select2-container.select2-dropdown-open,
 #bootstrap-theme .select2-container.select2-container-active .select2-choice, 
 #bootstrap-theme .select2-container.select2-container-active .select2-choices {
@@ -197,7 +279,34 @@
   color: #b8bec4;
 }
 #bootstrap-theme .case-tab-people .pagination {
+  color: #4D5663;
+  margin: 16px 0;
   padding-left: 20px;
+}
+#bootstrap-theme .case-tab-people .pagination li.active a {
+  font-weight: 600;
+}
+#bootstrap-theme .case-tab-people .paging-top {
+  display: inline-block;
+}
+#bootstrap-theme .case-tab-people .paging-top .pagination {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+#bootstrap-theme .case-tab-people .pager-counter {
+  margin: 16px 0;
+  padding-right: 20px;
+}
+#bootstrap-theme .case-tab-people .pagination li.disabled {
+  display: none;
+}
+#bootstrap-theme .case-tab-people .pagination li:nth-child(-n+2),
+#bootstrap-theme .case-tab-people .pagination li:nth-last-child(-n+2) {
+  font-weight: 600;
+}
+#bootstrap-theme .case-tab-people .pagination li:nth-child(-n+2) a,
+#bootstrap-theme .case-tab-people .pagination li:nth-last-child(-n+2) a{
+  color: #4D5663;
 }
 #bootstrap-theme .case-tab-people table + paging {
   border-top: 1px solid #E8EEF0;
@@ -206,12 +315,32 @@
 #bootstrap-theme .client-role {
   margin-right: 20px;
 }
+#bootstrap-theme  .case-people-subtab .table {
+  border-bottom: 1px solid #E8EEF0;
+}
 #bootstrap-theme  .case-people-subtab .table > thead tr {
   border-top: 1px solid #E8EEF0;
 }
-#bootstrap-theme .table > thead > tr > th,
-#bootstrap-theme .table > thead > tr > td {
-  padding: 15px 20px;
+#bootstrap-theme .case-people-subtab .table > thead > tr > th,
+#bootstrap-theme .case-people-subtab .table > tbody > tr > td {
+  padding: 15px 10px;
+}
+
+#bootstrap-theme .case-people-subtab .table > thead > tr > th:first-child,
+#bootstrap-theme .case-people-subtab .table > tbody > tr > td:first-child {
+  padding-left: 20px;
+  width: 10px;
+}
+
+#bootstrap-theme .case-people-subtab .table > thead > tr > th:last-child,
+#bootstrap-theme .case-people-subtab .table > tbody > tr > td:last-child {
+  padding-right: 20px;
+}
+#bootstrap-theme .case-people-subtab .table input[type=checkbox]+label[for] {
+  margin: 0;
+}
+#bootstrap-theme .case-people-subtab .table input[type=checkbox] + label[for]:before {
+  margin-right: 0;
 }
 #bootstrap-theme .case-people-subtab tr.unassigned {
   color: #b7b7b7;
@@ -249,7 +378,7 @@
   overflow-x: auto;
 }
 #bootstrap-theme .civicase-view-next-activities-inner > ul {
-  width: 3000px; /* FIXME */
+  white-space: nowrap;
 }
 #bootstrap-theme .civicase-view-next-activities-inner .list-group-item {
   display: inline-block;
@@ -257,9 +386,6 @@
 }
 #bootstrap-theme .civicase-view-tasks .act-feed-item {
   border-left: 5px solid;
-}
-#bootstrap-theme .civicase-view-summary .act-feed-list-group .act-feed-item {
-  cursor: default;
 }
 #bootstrap-theme .civicase-view-tasks .act-feed-item.activity-overdue {
   border-left-color: #e6807f !important;
@@ -299,6 +425,7 @@
 }
 #bootstrap-theme .civicase-view-other-cases .civicase-view-other-case {
   padding: 20px;
+  cursor: pointer;
 }
 #bootstrap-theme .civicase-view-other-cases .civicase-view-other-case:hover {
   background-color: #D9EFF5;
@@ -321,7 +448,6 @@
   font-size: 16px;
   padding-top: 3px;
   margin-left: 15px;
-
 }
 #bootstrap-theme .civicase-view-other-cases .civicase-view-other-case .other-case-subject {
   color: #727E8A;
@@ -332,4 +458,13 @@
 #bootstrap-theme .civicase-view-summary .civicase-case-subject-label {
   float: left;
   margin: 2px 5px 0px;
+}
+#bootstrap-theme .collapsible-title {
+  padding: 5px 15px;
+}
+#bootstrap-theme .civicase-view-tasks li.list-group-item{
+  margin-bottom: 17px;
+}
+#bootstrap-theme .crm-collapsible.collapsed .collapsible-title + * {
+  display: none;
 }

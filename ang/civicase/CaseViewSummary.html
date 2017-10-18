@@ -6,22 +6,22 @@
       <div class="case-custom-data-first" ng-repeat="(index, customGroup) in item.customData" ng-if="!index" ng-include="'~/civicase/CaseViewCustomData.html'"></div>
     </div>
     <div class="civicase-view-next-activities col-md-6">
-      <h3>{{ ts('Up Next') }}</h3>
-        <div class="civicase-view-next-activities-inner activity-timeline">
-          <ul class="list-group act-feed-list-group" ng-if="item.activity_summary.upcoming.length">
-            <li class="list-group-item" ng-repeat="activity in item.activity_summary.upcoming">
-              <div
-                case-activity-card="activity"
-                refresh-callback="refresh"
-                crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
-                edit-activity-url="editActivityUrl"
-              ></div>
-            </li>
-          </ul>
-          <div class="civicase-panel-empty" ng-if="!item.activity_summary.upcoming.length">
-            {{ ts('No upcoming activities.') }}
-          </div>
-        </div>
+      <div class="civicase-view-next-activities-inner">
+        <ul class="list-group act-feed-list-group">
+          <li class="list-group-item" ng-repeat="category in upNextCategories" ng-if="item.activity_summary[category.name].length">
+            <h3>
+              {{ ts('Next %1', {1: category.label}) }}
+              <span class="badge badge-danger" ng-if="item.activity_summary[category.name][0].is_overdue">{{ ts('Overdue') }}</span>
+            </h3>
+            <div
+              case-activity-card="item.activity_summary[category.name][0]"
+              refresh-callback="refresh"
+              crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+              edit-activity-url="editActivityUrl"
+            ></div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
   <div class="row" ng-if="item.customData.length > 1">
@@ -29,10 +29,10 @@
   </div>
   <div class="civicase-summary-mid row">
     <div class="col-md-6">
-      <div ng-include="'~/civicase/CaseViewTasks.html'"></div>
+      <div ng-include="'~/civicase/CaseViewCommunicationRecent.html'"></div>
     </div>
     <div class="col-md-6">
-      <div ng-include="'~/civicase/CaseViewCommunicationRecent.html'"></div>
+      <div ng-include="'~/civicase/CaseViewTasks.html'"></div>
     </div>
   </div>
   

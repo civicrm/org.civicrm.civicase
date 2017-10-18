@@ -15,13 +15,44 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     CRM_Core_BAO_ConfigSetting::enableComponent('CiviCase');
 
     // Set activity categories
-    $communicationTypes = civicrm_api3('OptionValue', 'get', array(
-      'return' => array('id'),
-      'option_group_id' => 'activity_type',
-      'name' => array('IN' => array('Meeting', 'Phone Call', 'Email', 'SMS', 'Inbound Email', 'Follow up', 'Print PDF Letter')),
-    ));
-    foreach ($communicationTypes['values'] as $type) {
-      civicrm_api3('OptionValue', 'setvalue', array('id' => $type['id'], 'field' => 'grouping', 'value' => 'communication'));
+    $categories = array(
+      'milestone' => array(
+        'Open Case',
+      ),
+      'communication' => array(
+        'Meeting',
+        'Phone Call',
+        'Email',
+        'SMS',
+        'Inbound Email',
+        'Follow up',
+        'Print PDF Letter',
+      ),
+      'system' => array(
+        'Change Case Type',
+        'Change Case Status',
+        'Change Case Subject',
+        'Change Custom Data',
+        'Change Case Start Date',
+        'Assign Case Role',
+        'Remove Case Role',
+        'Merge Case',
+        'Reassigned Case',
+        'Link Cases',
+        'Change Case Tags',
+        'Add Client To Case',
+      ),
+    );
+    foreach ($categories as $grouping => $activityTypes) {
+      civicrm_api3('OptionValue', 'get', array(
+        'return' => 'id',
+        'option_group_id' => 'activity_type',
+        'name' => array('IN' => $activityTypes),
+        'api.OptionValue.setvalue' => array(
+          'field' => 'grouping',
+          'value' => $grouping,
+        ),
+      ));
     }
 
     // Create activity types
@@ -49,6 +80,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'option_group_id' => 'activity_type',
       'label' => ts('Remove Client From Case'),
       'name' => 'Remove Client From Case',
+      'grouping' => 'system',
       'is_reserved' => 0,
       'description' => ts('Client removed from multi-client case'),
       'component_id' => 'CiviCase',
@@ -75,8 +107,8 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
 
     // Set grouping for existing statuses
     $allowedStatuses = array(
-      'Scheduled' => 'none,task,file,communication,milestone',
-      'Completed' => 'none,task,file,communication,milestone,alert',
+      'Scheduled' => 'none,task,file,communication,milestone,system',
+      'Completed' => 'none,task,file,communication,milestone,alert,system',
       'Cancelled' => 'none,communication,milestone,alert',
       'Left Message' => 'none,communication,milestone',
       'Unreachable' => 'none,communication,milestone',
@@ -88,6 +120,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       civicrm_api3('OptionValue', 'get', array(
         'option_group_id' => 'activity_status',
         'name' => $status,
+        'return' => 'id',
         'api.OptionValue.setvalue' => array(
           'field' => 'grouping',
           'value' => $grouping,
@@ -137,7 +170,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     $this->addNav(array(
       'label' => ts('Manage Cases', array('domain' => 'org.civicrm.civicase')),
       'name' => 'manage_cases',
-      'url' => 'civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=&tab=summary&sx=0&cpn=1&cps=25',
+      'url' => 'civicrm/case/a/#/case/list',
       'permission' => 'access my cases and activities,access all cases and activities',
       'operator' => 'OR',
       'separator' => 0,
@@ -213,6 +246,22 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
   }
 
   /**
+   * Fixes original id of followup activities to point to the original activity and not a revision.
+   *
+   * TODO: This is a WIP (untested) and not yet called from anywhere.
+   * When it's ready we can change its name to upgrade_000X and call it from the installer
+   */
+  public function fixActivityRevisions() {
+    $sql = 'UPDATE civicrm_activity a, civicrm_activity b
+      SET a.parent_id = b.original_id
+      WHERE a.parent_id = b.id
+      AND b.original_id IS NOT NULL';
+    CRM_Core_DAO::executeQuery($sql);
+    // TODO: before we uncomment the below, need to migrate this history to advanced logging table
+    // CRM_Core_DAO::executeQuery('DELETE FROM civicrm_activity WHERE original_id IS NOT NULL');
+  }
+
+  /**
    * Adds an option value if it doesn't already exist.
    *
    * Weight and value are calculated as needed.
@@ -257,24 +306,35 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    * @param string $name
    *   The name of the item in `civicrm_navigation`.
    */
+  protected function toggleNav($name, $isActive) {
+    CRM_Core_DAO::executeQuery("UPDATE `civicrm_navigation` SET is_active = %2 WHERE name IN (%1)", array(
+      1 => array($name, 'String'),
+      2 => array($isActive ? 1 : 0, 'Int'),
+    ));
+  }
+
+  /**
+   * @param string $name
+   *   The name of the item in `civicrm_navigation`.
+   */
   protected function removeNav($name) {
-    CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('%s')", array(
+    CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN (%1)", array(
       1 => array($name, 'String'),
     ));
   }
 
   /**
-   * Example: Run a simple query when a module is enabled.
-   *
+   * Re-enable the extension's parts.
+   */
   public function enable() {
-    CRM_Core_DAO::executeQuery('UPDATE foo SET is_active = 1 WHERE bar = "whiz"');
+    $this->toggleNav('manage_cases', TRUE);
   }
 
   /**
-   * Example: Run a simple query when a module is disabled.
-   *
+   * Disnable the extension's parts without removing them.
+   */
   public function disable() {
-    CRM_Core_DAO::executeQuery('UPDATE foo SET is_active = 0 WHERE bar = "whiz"');
+    $this->toggleNav('manage_cases', FALSE);
   }
 
   /**

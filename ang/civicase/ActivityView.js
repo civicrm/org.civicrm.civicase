@@ -14,6 +14,8 @@
     element
       .on('crmFormSuccess', scope.refresh)
       .on('crmLoad', function() {
+        // Workaround bug where href="#" changes the angular route
+        $('a.crm-clear-link', this).removeAttr('href');
         $('a.delete.button', this).click(function(e) {
           CRM.confirm({
               title: ts('Delete Activity'),

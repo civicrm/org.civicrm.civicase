@@ -28,12 +28,13 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_case_getdetails($params) {
+  $resultMetadata = array();
   $params += array('return' => array());
   if (is_string($params['return'])) {
     $params['return'] = explode(',', str_replace(' ', '', $params['return']));
   }
   $toReturn = $params['return'];
-  $options = CRM_Utils_Array::value('options', $params, array());
+  $params['options'] = CRM_Utils_Array::value('options', $params, array());
   $extraReturnProperties = array('activity_summary', 'last_update', 'activity_count', 'category_count', 'unread_email_count', 'related_case_ids');
   $params['return'] = array_diff($params['return'], $extraReturnProperties);
 
@@ -45,8 +46,22 @@ function civicrm_api3_case_getdetails($params) {
     if (!is_array($params['case_manager'])) {
       $params['case_manager'] = array('=' => $params['case_manager']);
     }
-    _civicrm_api3_case_getdetails_join_on_manager($sql);
+    \Civi\CCase\Utils::joinOnManager($sql);
     $sql->where(CRM_Core_DAO::createSQLFilter('manager.id', $params['case_manager']));
+  }
+
+  // Set page number dynamically based on selected record
+  if (!empty($params['options']['page_of_record'])) {
+    $prParams = array('sequential' => 1) + $params;
+    $prParams['return'] = array('id');
+    $prParams['options']['limit'] = $prParams['options']['offset'] = 0;
+    foreach (CRM_Utils_Array::value('values', civicrm_api3_case_get($prParams), array()) as $num => $case) {
+      if ($case['id'] == $params['options']['page_of_record']) {
+        $resultMetadata['page'] = floor($num / $params['options']['limit']) + 1;
+        $params['options']['offset'] = $params['options']['limit'] * ($resultMetadata['page'] - 1);
+        break;
+      }
+    }
   }
 
   // Call the case api
@@ -67,9 +82,8 @@ function civicrm_api3_case_getdetails($params) {
 
     // Get activity summary
     if (in_array('activity_summary', $toReturn)) {
-      $catetoryLimits = CRM_Utils_Array::value('categories', $options, array_fill_keys($activityCategories, 1));
+      $catetoryLimits = CRM_Utils_Array::value('categories', $params['options'], array_fill_keys($activityCategories, 1));
       $categories = array_fill_keys(array_keys($catetoryLimits), array());
-      $catetoryLimits += array('upcoming' => 10);
       foreach ($result['values'] as &$case) {
         $case['activity_summary'] = $categories;
       }
@@ -86,7 +100,7 @@ function civicrm_api3_case_getdetails($params) {
         }
       }
       $activities = civicrm_api3('Activity', 'get', array(
-        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue'),
+        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id'),
         'check_permissions' => !empty($params['check_permissions']),
         'case_id' => array('IN' => $ids),
         'is_current_revision' => 1,
@@ -101,8 +115,8 @@ function civicrm_api3_case_getdetails($params) {
         foreach ((array) $act['case_id'] as $actCaseId) {
           if (isset($result['values'][$actCaseId])) {
             $case =& $result['values'][$actCaseId];
-            if (empty($catetoryLimits['upcoming']) || count($case['activity_summary']['upcoming']) < $catetoryLimits['upcoming']) {
-              $case['activity_summary']['upcoming'][] = $act;
+            if (!isset($case['activity_summary']['next'])) {
+              $case['activity_summary']['next'][] = $act;
             }
             foreach ($categories as $category => $grouping) {
               if (in_array($act['activity_type_id'], $grouping) && (empty($catetoryLimits[$category]) || count($case['activity_summary'][$category]) < $catetoryLimits[$category])) {
@@ -127,19 +141,27 @@ function civicrm_api3_case_getdetails($params) {
         }
       }
     }
-    // Get count of incomplete activities by category
+    // Get count of activities by category
     if (in_array('category_count', $toReturn)) {
-      $incomplete = implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE)));
-      foreach ($activityCategories as $category) {
-        $query = "SELECT COUNT(a.id) as count, ca.case_id
+      $statusTypes = array(
+        'incomplete' => implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE))),
+        'completed' => implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::COMPLETED))),
+      );
+      foreach ($result['values'] as &$case) {
+        $case['category_count'] = array_fill_keys(array_keys($statusTypes), array());
+      }
+      foreach ($statusTypes as $statusType => $statusTypeIds) {
+        foreach ($activityCategories as $category) {
+          $query = "SELECT COUNT(a.id) as count, ca.case_id
           FROM civicrm_activity a, civicrm_case_activity ca
           WHERE ca.activity_id = a.id AND a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id IN (" . implode(',', $ids) . ")
           AND a.activity_type_id IN (SELECT value FROM civicrm_option_value WHERE grouping LIKE '%$category%' AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
-          AND a.status_id IN ($incomplete)
+          AND a.status_id IN ($statusTypeIds)
           GROUP BY ca.case_id";
-        $dao = CRM_Core_DAO::executeQuery($query);
-        while ($dao->fetch()) {
-          $result['values'][$dao->case_id]['category_count'][$category] = (int) $dao->count;
+          $dao = CRM_Core_DAO::executeQuery($query);
+          while ($dao->fetch()) {
+            $result['values'][$dao->case_id]['category_count'][$statusType][$category] = (int) $dao->count;
+          }
         }
       }
     }
@@ -170,7 +192,7 @@ function civicrm_api3_case_getdetails($params) {
       $result['values'] = array_values($result['values']);
     }
   }
-  return $result;
+  return $resultMetadata + $result;
 }
 
 /**
@@ -198,7 +220,7 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
         if (!array_key_exists($sortField, CRM_Contact_DAO_Contact::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
           throw new API_Exception("Unknown field specified for sort. Cannot order by '$sortString'");
         }
-        _civicrm_api3_case_getdetails_join_on_manager($sql);
+        \Civi\CCase\Utils::joinOnManager($sql);
         $sql->orderBy("manager.$sortField $dir", NULL, $index);
         $sortString = '(1)';
       }
@@ -250,21 +272,4 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
   }
 
   return $sql;
-}
-
-/**
- * Add a case_manager join
- *
- * @param $sql
- */
-function _civicrm_api3_case_getdetails_join_on_manager($sql) {
-  $caseTypeManagers = \Civi\CCase\Utils::getCaseManagerRelationshipTypes();
-  $managerTypeClause = array();
-  foreach ($caseTypeManagers as $caseTypeId => $relationshipTypeId) {
-    $managerTypeClause[] = "(a.case_type_id = $caseTypeId AND manager_relationship.relationship_type_id = $relationshipTypeId)";
-  }
-  $managerTypeClause = implode(' OR ', $managerTypeClause);
-  $sql->join('ccc', 'LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id');
-  $sql->join('manager_relationship', "LEFT JOIN civicrm_relationship AS manager_relationship ON ccc.contact_id = manager_relationship.contact_id_a AND manager_relationship.is_active AND ($managerTypeClause) AND manager_relationship.case_id = a.id");
-  $sql->join('manager', 'LEFT JOIN civicrm_contact AS manager ON manager_relationship.contact_id_b = manager.id AND manager.is_deleted <> 1');
 }

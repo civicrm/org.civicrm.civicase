@@ -1,13 +1,13 @@
 <form class="form-inline">
   <div class="btn-group btn-group-sm">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-gear"></i> <span class="caret"></span></button>
+    <button type="button" class="btn btn-default btn-clean dropdown-toggle " data-toggle="dropdown"><i class="fa fa-gear"></i> <span class="caret"></span></button>
     <ul class="dropdown-menu" role="menu">
-      <li>
+      <!--li>
         <span>
           <input type="checkbox" id="act_control_followup_nested" ng-model="displayOptions.followup_nested" />
           <label for="act_control_followup_nested">{{ ts('Nested followup activities') }}</label>
         </span>
-      </li>
+      </li-->
       <li>
         <span>
           <input type="checkbox" id="act_control_overdue_first" ng-model="displayOptions.overdue_first" />
@@ -24,21 +24,21 @@
   </div>
   <div civicase-activity-contact-filters="filters"></div>
   <div class="btn-toolbar pull-right">
-    <div class="btn-group btn-group-sm">
+    <div class="btn-group btn-group-xs">
       <select class="form-control" ng-model="filters['activity_type_id.grouping']" crm-ui-select>
-        <option value="">{{ ts('Category: All') }}</option>
+        <option value="">{{ ts('All Activity Categories') }}</option>
         <option ng-repeat="(value, item) in ::activityCategories" value="{{ value }}" data-icon="{{ item.icon }}">
           {{ item.label }}
         </option>
       </select>
     </div>
     <div class="btn-group btn-group-sm">
-      <button class="btn btn-{{filters.file_id ? 'primary active' : 'default'}}" ng-click="filters.file_id = filters.file_id ? null : {'IS NOT NULL': 1}" title="{{ ts('Show only activities with attachments') }}">
+      <button class="btn btn-{{filters.file_id ? 'primary active' : 'default'}} btn-clean" ng-click="filters.file_id = filters.file_id ? null : {'IS NOT NULL': 1}" title="{{ ts('Show only activities with attachments') }}">
         <i class="fa fa-paperclip"></i>
       </button>
     </div>
     <div class="btn-group btn-group-sm">
-      <button class="btn btn-{{filters.is_star ? 'primary active' : 'default'}}" ng-click="filters.is_star = filters.is_star ? null : '1'" title="{{ ts('Show only starred items') }}">
+      <button class="btn btn-{{filters.is_star ? 'primary active' : 'default'}} btn-clean" ng-click="filters.is_star = filters.is_star ? null : '1'" title="{{ ts('Show only starred items') }}">
         <i class="fa fa-star{{ filters.is_star ? '' : '-o' }}"></i>
       </button>
     </div>

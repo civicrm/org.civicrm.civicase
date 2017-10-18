@@ -1,18 +1,24 @@
 (function(angular, $, _) {
 
   // CaseList directive controller
-  function caseViewController($scope, crmApi, formatActivity, getActivityFeedUrl, $route) {
+  function caseViewController($scope, crmApi, formatActivity, formatCase, getActivityFeedUrl, $route, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
+    var panelLimit = 5;
     $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;
     $scope.item = null;
     $scope.caseGetParams = function() {
       return JSON.stringify(caseGetParams());
     };
+    // Categories to show in the summary block
+    $scope.upNextCategories = _.cloneDeep(CRM.civicase.activityCategories);
+    delete $scope.upNextCategories.alert;
+    delete $scope.upNextCategories.system;
 
     function caseGetParams() {
       return {
@@ -38,15 +44,8 @@
           is_test: 0,
           "activity_type_id.grouping": {LIKE: "%communication%"},
           'status_id.filter': 1,
-          options: {limit: 5, sort: 'activity_date_time DESC'},
-          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue']
-        },
-        'api.Activity.getcount': {
-          case_id: "$value.id",
-          is_current_revision: 1,
-          is_test: 0,
-          "activity_type_id.grouping": {LIKE: "%communication%"},
-          'status_id.filter': 1
+          options: {limit: panelLimit, sort: 'activity_date_time DESC'},
+          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id']
         },
         // For the "tasks" panel
         'api.Activity.get.3': {
@@ -55,8 +54,8 @@
           is_test: 0,
           "activity_type_id.grouping": {LIKE: "%task%"},
           'status_id.filter': 0,
-          options: {limit: 5, sort: 'activity_date_time ASC'},
-          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue']
+          options: {limit: panelLimit, sort: 'activity_date_time ASC'},
+          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id']
         },
         // Custom data
         'api.CustomValue.gettree': {
@@ -81,11 +80,14 @@
     }
 
     function getAvailableActivityTypes(activityCount, definition) {
-      var ret = [];
+      var ret = [],
+        exclude = ['Change Case Status', 'Change Case Type'];
       _.each(definition.activityTypes, function(actSpec) {
-        var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
-        if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances < activityCount[actTypeId])) {
-          ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
+        if (exclude.indexOf(actSpec.name) < 0) {
+          var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
+          if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances < activityCount[actTypeId])) {
+            ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
+          }
         }
       });
       return _.sortBy(ret, 'label');
@@ -105,14 +107,36 @@
       }
     };
 
+    $scope.$watch('isFocused', function() {
+      $timeout(function() {
+        var $actHeader = $('.act-feed-panel .panel-header'),
+        $actControls = $('.act-feed-panel .act-list-controls');
+
+        if($actHeader.hasClass('affix')) {
+            $actHeader.css('width',$('.act-feed-panel').css('width'));
+        }
+        else {
+          $actHeader.css('width', 'auto');
+        }
+
+        if($actControls.hasClass('affix')) {
+            $actControls.css('width',$actHeader.css('width'));
+        }
+        else {
+          $actControls.css('width', 'auto');
+        }
+      },1500);
+      
+    });
+
     function formatAct(act) {
       return formatActivity(act, $scope.item.id);
     }
 
     function formatCaseDetails(item) {
-      $scope.formatCase(item);
+      formatCase(item);
       item.definition = caseTypes[item.case_type_id].definition;
-      item.relatedCases = _.each(_.cloneDeep(item['api.Case.get.1'].values), $scope.formatCase);
+      item.relatedCases = _.each(_.cloneDeep(item['api.Case.get.1'].values), formatCase);
       // Add linked cases
       _.each(_.cloneDeep(item['api.Case.get.2'].values), function(linkedCase) {
         var existing = _.find(item.relatedCases, {id: linkedCase.id});
@@ -120,15 +144,11 @@
           existing.is_linked = true;
         } else {
           linkedCase.is_linked = true;
-          item.relatedCases.push($scope.formatCase(linkedCase));
+          item.relatedCases.push(formatCase(linkedCase));
         }
       });
       delete(item['api.Case.get.1']);
       delete(item['api.Case.get.2']);
-      // Format activities
-      _.each(item.activity_summary, function(acts) {
-        _.each(acts, formatAct);
-      });
       // Recent communications
       item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.1'].values), formatAct);
       delete(item['api.Activity.get.1']);
@@ -148,20 +168,28 @@
       return item;
     }
 
-    $scope.gotoCase = function(id, $event) {
-      if ($event && $($event.target).is('.btn-group *')) {
+    $scope.gotoCase = function(item, $event) {
+      if ($event && $($event.target).is('a, a *, input, button, button *')) {
         return;
       }
-      var p = angular.extend({}, $route.current.params, {caseId: id});
+      var cf = {
+        case_type_id: [caseTypes[item.case_type_id].name],
+        status_id: [caseStatuses[item.status_id].name]
+      };
+      var p = angular.extend({}, $route.current.params, {caseId: item.id, cf: JSON.stringify(cf)});
       $route.updateParams(p);
     };
 
     $scope.pushCaseData = function(data) {
-      // Maintain the reference to the variable in the parent scope.
-      delete($scope.item.tag_id);
-      _.assign($scope.item, formatCaseDetails(data));
-      $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
-      $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
+      // If the user has already clicked through to another case by the time we get this data back, stop.
+      if ($scope.item && data.id === $scope.item.id) {
+        // Maintain the reference to the variable in the parent scope.
+        delete($scope.item.tag_id);
+        _.assign($scope.item, formatCaseDetails(data));
+        $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
+        $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
+        $scope.$broadcast('updateCaseData');
+      }
     };
 
     $scope.refresh = function(apiCalls) {
@@ -244,6 +272,10 @@
       return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
     };
 
+    $scope.panelPlaceholders = function(num) {
+      return _.range(num > panelLimit ? panelLimit : num);
+    };
+
     $scope.$watch('item', function() {
       // Fetch extra info about the case
       if ($scope.item && $scope.item.id && !$scope.item.definition) {
@@ -267,8 +299,7 @@
       scope: {
         activeTab: '=civicaseTab',
         isFocused: '=civicaseFocused',
-        item: '=civicaseView',
-        formatCase: '=civicaseFormatter'
+        item: '=civicaseView'
       }
     };
   });
