@@ -54,6 +54,10 @@ input[type="file"]#cc-uploader-button {
   padding: 0 5px 2px;
   text-transform: none;
 }
+#bootstrap-theme .cc-uploader-detail .btn.civicase-file-remove:hover {
+  background: none;
+  color: #E6807F;
+}
 #bootstrap-theme .cc-uploader-detail .btn-default.cancel {
   border: 1px solid #727E8A;
   margin-right: 10px;
