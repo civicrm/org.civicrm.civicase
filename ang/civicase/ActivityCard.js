@@ -33,7 +33,8 @@
 
     $scope.viewInPopup = function($event, activity) {
       if (!$event || !$($event.target).is('a, a *, input, button, button *')) {
-        CRM.loadForm(CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1}))
+        var context = activity.case_id ? 'case' : 'activity';
+        CRM.loadForm(CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1, context: context}))
           .on('crmFormSuccess', function() {
             $scope.refresh();
           });
