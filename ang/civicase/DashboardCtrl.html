@@ -2,23 +2,7 @@
 
   <h1 crm-page-title>{{ myCasesOnly ? ts('CiviCase Dashboard - My Cases') : ts('CiviCase Dashboard - All Cases') }}</h1>
 
-  <nav class="navbar navbar-default">
-    <div class="navbar-form navbar-right">
-      <label for="dashboard-myCasesOnly" ng-show="checkPerm('access all cases and activities')">
-        <input type="checkbox" id="dashboard-myCasesOnly" ng-model="myCasesOnly">
-        {{ts('My cases only')}}
-      </label>
-      <a ng-if="checkPerm('add cases')"
-        ng-href="{{ url('civicrm/case/add', {reset: 1, action: 'add', context: 'standalone'}) }}"
-        class="btn btn-default crm-popup"
-        crm-popup-form-success="refresh()">
-        <i class="crm-i fa-plus-circle"></i>
-        {{ ts('Add Case') }}
-      </a>
-    </div>
-  </nav>
-
-  <uib-tabset active="activeTab" justified="true" type="pills" uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary">
+  <uib-tabset active="activeTab" type="pills" uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary">
     <uib-tab index="0" heading="{{ ts('Dashboard') }}">
 
       <div class="panel panel-default" ng-include="'~/civicase/DashboardSummary.html'"></div>
@@ -141,6 +125,17 @@
     <!--<uib-tab index="2" heading="{{ts('Calendar')}}">-->
       <!--{{ts('TODO: Calendar')}}-->
     <!--</uib-tab>-->
+    <div class="btn-group btn-group-md pull-right dashboard-nav">
+      <input type="checkbox" id="dashboard-myCasesOnly" ng-model="myCasesOnly" ng-show="checkPerm('access all cases and activities')">
+      <label for="dashboard-myCasesOnly" ng-show="checkPerm('access all cases and activities')">{{ts('My cases only')}}</label>
+      <a ng-if="checkPerm('add cases')"
+        ng-href="{{ url('civicrm/case/add', {reset: 1, action: 'add', context: 'standalone'}) }}"
+        class="btn btn-default crm-popup"
+        crm-popup-form-success="refresh()">
+        <i class="crm-i fa-plus"></i>
+        {{ ts('Add Case') }}
+      </a>
+    </div>
   </uib-tabset>
 
 </div>
