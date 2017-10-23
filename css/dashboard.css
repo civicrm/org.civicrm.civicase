@@ -286,3 +286,26 @@
 #bootstrap-theme .dashboard-case-wrapper .act-feed-list-group .act-category-communication .act-tags {
   margin-bottom: 0;
 }
+#bootstrap-theme .dashboard-nav {
+  margin: 6px 6px 0 0;
+}
+#bootstrap-theme .dashboard-nav input[type=checkbox] + label[for] {
+  color: #FFFFFF;
+  margin-top: 5px;
+}
+#bootstrap-theme .dashboard-nav input[type=checkbox] + label[for]:before {
+  margin-top: -2px;
+}
+#bootstrap-theme .dashboard-nav input[type=checkbox] + label[for]:after {
+  margin-top: -6px;
+}
+#bootstrap-theme .dashboard-nav .btn-default,
+#bootstrap-theme .dashboard-nav .btn-default:active,
+#bootstrap-theme .dashboard-nav .btn-default:focus {
+  background-color: transparent;
+  border: 1px solid #FFFFFF;
+  border-radius: 2px;
+  color: #FFFFFF;
+  float: none;
+  outline: none;
+}

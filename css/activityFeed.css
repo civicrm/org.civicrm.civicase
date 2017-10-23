@@ -411,8 +411,10 @@
   z-index: 5;
 }
 #bootstrap-theme .act-feed-list-group {
-  padding-top: 54px;
   position: relative;
+}
+#bootstrap-theme .case-tab-activities .act-feed-list-group {
+  padding-top: 54px;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix-top {
   position: absolute;
