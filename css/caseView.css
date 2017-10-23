@@ -374,6 +374,9 @@
 #bootstrap-theme .case-tab-summary .row > div {
   padding: 1em;
 }
+#bootstrap-theme .case-tab-summary .civicase-summary-mid .col-md-6 {
+  min-height: 420px;
+}
 #bootstrap-theme .civicase-view-next-activities-inner {
   overflow-x: auto;
   position: relative;

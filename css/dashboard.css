@@ -218,7 +218,8 @@
 }
 #bootstrap-theme .dashboard-case-wrapper .col-md-4 .panel-body {
   overflow-y: auto;
-  height: 720px;
+  max-height: 720px;
+  min-height: 350px;
 }
 #bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading .badge.badge-danger {
   background-color: #E6807F;

@@ -73,7 +73,8 @@
                   </li>
                 </ul>
                 <div class="civicase-panel-empty" ng-if="dashboardActivities.nextMilestones && !dashboardActivities.nextMilestones.length">
-                  {{ ts('No upcoming milestones.') }}
+                  <i class="fa fa-flag fa-big"></i>
+                  <div class="empty-label">{{ ts('There are currently no milestones') }}</div>
                 </div>
               </div>
             </div>
@@ -100,7 +101,8 @@
                   </li>
                 </ul>
                 <div class="civicase-panel-empty" ng-if="dashboardActivities.recentCommunication && !dashboardActivities.recentCommunication.length">
-                  {{ ts('No completed communications.') }}
+                  <i class="fa fa-comment fa-big"></i>
+                  <div class="empty-label">{{ ts('There are no past communications') }}</div>
                 </div>
               </div>
             </div>
