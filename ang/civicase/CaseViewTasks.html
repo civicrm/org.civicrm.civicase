@@ -26,6 +26,7 @@
     </li>
   </ul>
   <div class="civicase-panel-empty" ng-if="!item.category_count.incomplete.task">
-    {{ ts('No scheduled tasks.') }}
+    <i class="fa fa-inbox fa-big"></i>
+    <div class="empty-label">{{ ts('This case has no new tasks') }}</div>
   </div>
 </div>
