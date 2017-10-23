@@ -379,6 +379,25 @@
 }
 #bootstrap-theme .civicase-view-next-activities-inner {
   overflow-x: auto;
+  position: relative;
+}
+#bootstrap-theme .civicase-view-next-activities:before,
+#bootstrap-theme .civicase-view-next-activities:after {
+  content: "";
+  height: calc(100% - 26px);
+  margin: 13px;
+  position: absolute;
+  top: 0;
+  width: 18px;
+  z-index: 1;
+}
+#bootstrap-theme .civicase-view-next-activities:before {
+  box-shadow: inset 36px 0 18px -36px rgba(49,40,40,0.25);
+  left: 0;
+}
+#bootstrap-theme .civicase-view-next-activities:after {
+  box-shadow: inset -36px 0 18px -36px rgba(49,40,40,0.25);
+  right: 0;
 }
 #bootstrap-theme .civicase-view-next-activities-inner > ul {
   white-space: nowrap;
@@ -430,6 +449,9 @@
   padding: 20px;
   cursor: pointer;
 }
+#bootstrap-theme .civicase-view-other-cases .civicase-view-other-case:not(:last-of-type) {
+  border-bottom: 1px solid #E8EEF0;
+}
 #bootstrap-theme .civicase-view-other-cases .civicase-view-other-case:hover {
   background-color: #D9EFF5;
 }
@@ -463,7 +485,29 @@
   margin: 2px 5px 0px;
 }
 #bootstrap-theme .collapsible-title {
-  padding: 5px 15px;
+  background: none;
+  color: #727E8A;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  margin-top: 0;
+  padding: 10px 15px;
+  position: relative;
+  text-transform: uppercase;
+}
+#bootstrap-theme .crm-collapsible .collapsible-title::before {
+  color: #727E8A;
+  content: "\f107";
+  display: inline-block;
+  font-family: 'FontAwesome';
+  font-size: 13px;
+  font-style: normal;
+  height: 13px;
+  left: 2px;
+  position: absolute;
+}
+#bootstrap-theme .crm-collapsible.collapsed .collapsible-title::before {
+  content: "\f105";
 }
 #bootstrap-theme .civicase-view-tasks li.list-group-item{
   margin-bottom: 17px;
