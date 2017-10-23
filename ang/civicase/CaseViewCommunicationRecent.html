@@ -26,7 +26,8 @@
       </li>
     </ul>
     <div class="civicase-panel-empty" ng-if="!item.category_count.completed.communication">
-      {{ ts('No completed communications.') }}
+      <i class="fa fa-comment fa-big"></i>
+      <div class="empty-label">{{ ts('This case has no past communications') }}</div>
     </div>
   </div>
 </div>
