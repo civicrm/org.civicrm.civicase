@@ -403,7 +403,6 @@
 }
 #bootstrap-theme div.act-feed-panel > .panel-header .select2-container-multi {
   height: auto;
-  z-index: 6;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix {
   margin: 0px;
