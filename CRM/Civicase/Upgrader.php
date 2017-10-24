@@ -164,6 +164,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     }
 
     $this->upgrade_0001();
+    $this->upgrade_0002();
   }
 
   public function upgrade_0001() {
@@ -178,6 +179,60 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     ));
     CRM_Core_BAO_Navigation::resetNavigation();
     return TRUE;
+  }
+
+  /**
+   * Renames 'manage_cases' to 'Manage Cases' menu item.
+   *
+   * @return boolean
+   */
+  public function upgrade_0002() {
+    $manageCasesItem = $this->getCaseMenuItem('manage_cases');
+
+    if (!empty($manageCasesItem)) {
+      civicrm_api3('Navigation', 'create', array(
+        'id' => $manageCasesItem['id'],
+        'name' => 'Manage Cases',
+      ));
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Swaps 'Manage Cases' with 'Find Cases' menu weight.
+   * This upgrade should be executed only once so it's not added to install
+   * method.
+   *
+   * @return boolean
+   */
+  public function upgrade_0003() {
+    $this->swapCaseMenuItems();
+
+    return TRUE;
+  }
+
+  /**
+   * Returns an array containing Case menu item for specified name.
+   * Returns NULL if menu item is not found.
+   *
+   * @param string $name
+   *
+   * @return array|NULL
+   */
+  private function getCaseMenuItem($name) {
+    $result = civicrm_api3('Navigation', 'get', array(
+      'sequential' => 1,
+      'parent_id' => 'Cases',
+      'name' => $name,
+      'options' => array('limit' => 1),
+    ));
+
+    if (empty($result['id'])) {
+      return NULL;
+    }
+
+    return $result['values'][0];
   }
 
   /**
@@ -242,7 +297,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       catch (Exception $e) {}
     }
 
-    $this->removeNav('manage_cases');
+    $this->removeNav('Manage Cases');
   }
 
   /**
@@ -327,14 +382,47 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    * Re-enable the extension's parts.
    */
   public function enable() {
-    $this->toggleNav('manage_cases', TRUE);
+    $this->swapCaseMenuItems();
+
+    $this->toggleNav('Manage Cases', TRUE);
   }
 
   /**
-   * Disnable the extension's parts without removing them.
+   * Disable the extension's parts without removing them.
    */
   public function disable() {
-    $this->toggleNav('manage_cases', FALSE);
+    $this->swapCaseMenuItems();
+
+    $this->toggleNav('Manage Cases', FALSE);
+  }
+
+  /**
+   * Swaps weight and has_separator values between 'Find Cases'
+   * and 'Manage Cases' menu items.
+   */
+  private function swapCaseMenuItems() {
+    $findCasesItem = $this->getCaseMenuItem('Find Cases');
+    $manageCasesItem = $this->getCaseMenuItem('Manage Cases');
+
+    if (!$findCasesItem || !$manageCasesItem) {
+      return TRUE;
+    }
+
+    // Updating 'Find Cases' menu item.
+    civicrm_api3('Navigation', 'create', array(
+      'id' => $findCasesItem['id'],
+      'weight' => !empty($manageCasesItem['weight']) ? $manageCasesItem['weight'] : NULL,
+      'has_separator' => $manageCasesItem['has_separator'],
+    ));
+
+    // Updating 'Manage Cases' menu item.
+    civicrm_api3('Navigation', 'create', array(
+      'id' => $manageCasesItem['id'],
+      'weight' => !empty($findCasesItem['weight']) ? $findCasesItem['weight'] : NULL,
+      'has_separator' => $findCasesItem['has_separator'],
+    ));
+
+    CRM_Core_BAO_Navigation::resetNavigation();
   }
 
   /**
