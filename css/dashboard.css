@@ -262,7 +262,7 @@
 #bootstrap-theme .dashboard-case-wrapper .act-category-milestone.act-feed-item .cb-dot {
   left: 0;
 }
-#bootstrap-theme .dashboard-case-wrapper .panel-body {
+#bootstrap-theme .dashboard-case-wrapper .panel-body:not(.case-list-panel) {
   padding-top: 12px
 }
 #bootstrap-theme .dashboard-case-wrapper .act-feed-item.act-category-milestone .act-subject {
