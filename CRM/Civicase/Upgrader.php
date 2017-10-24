@@ -163,21 +163,26 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       Civi::settings()->set('recordGeneratedLetters', 'combined-attached');
     }
 
-    $this->upgrade_0001();
+    $this->createManageCasesMenuItem();
     $this->upgrade_0002();
   }
 
-  public function upgrade_0001() {
+  /**
+   * Creates 'Manage Cases' menu item for Cases navigation.
+   */
+  private function createManageCasesMenuItem() {
     $this->addNav(array(
       'label' => ts('Manage Cases', array('domain' => 'org.civicrm.civicase')),
-      'name' => 'manage_cases',
+      'name' => 'Manage Cases',
       'url' => 'civicrm/case/a/#/case/list',
       'permission' => 'access my cases and activities,access all cases and activities',
       'operator' => 'OR',
       'separator' => 0,
       'parent_name' => 'Cases',
     ));
+
     CRM_Core_BAO_Navigation::resetNavigation();
+
     return TRUE;
   }
 
