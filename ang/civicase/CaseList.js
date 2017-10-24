@@ -332,8 +332,8 @@
       }
     };
 
-    // Currently we only watch filters. If we wanted to add more watchers we'd also need to debounce to avoid duplicate refreshes.
-    $scope.$watch('filters', getCases);
+    $scope.$on('caseRefresh', getCases);
+    getCases();
   }
 
   angular.module('civicase').directive('caseListTable', function() {
@@ -344,7 +344,8 @@
       scope: {
         sort: '=caseListTableSort',
         page: '=caseListTablePage',
-        filters: '=caseListTableFilters'
+        filters: '=caseListTableFilters',
+        refresh: '=refreshCallback'
       }
     };
   });

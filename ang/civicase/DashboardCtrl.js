@@ -118,7 +118,7 @@
         is_test: 0
       }, $scope.activityFilters)]);
       crmApi(apiCalls).then(function(data) {
-        //$scope.$broadcast('caseRefresh');
+        $scope.$broadcast('caseRefresh');
         $scope.summaryData = data[apiCalls.length - 5].values;
         $scope.dashboardActivities.recentCommunication = _.each(data[apiCalls.length - 4].values, formatActivity);
         $scope.dashboardActivities.recentCommunicationCount = data[apiCalls.length - 3];
