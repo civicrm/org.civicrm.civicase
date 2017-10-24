@@ -374,25 +374,25 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    * and 'Manage Cases' menu items.
    */
   private function swapCaseMenuItems() {
-    $findCasesItem = $this->getCaseMenuItem('Find Cases');
-    $manageCasesItem = $this->getCaseMenuItem('Manage Cases');
+    $findCasesMenuItem = $this->getCaseMenuItem('Find Cases');
+    $manageCasesMenuItem = $this->getCaseMenuItem('Manage Cases');
 
-    if (!$findCasesItem || !$manageCasesItem) {
+    if (!$findCasesMenuItem || !$manageCasesMenuItem) {
       return TRUE;
     }
 
     // Updating 'Find Cases' menu item.
     civicrm_api3('Navigation', 'create', array(
-      'id' => $findCasesItem['id'],
-      'weight' => !empty($manageCasesItem['weight']) ? $manageCasesItem['weight'] : NULL,
-      'has_separator' => $manageCasesItem['has_separator'],
+      'id' => $findCasesMenuItem['id'],
+      'weight' => !empty($manageCasesMenuItem['weight']) ? $manageCasesMenuItem['weight'] : NULL,
+      'has_separator' => $manageCasesMenuItem['has_separator'],
     ));
 
     // Updating 'Manage Cases' menu item.
     civicrm_api3('Navigation', 'create', array(
-      'id' => $manageCasesItem['id'],
-      'weight' => !empty($findCasesItem['weight']) ? $findCasesItem['weight'] : NULL,
-      'has_separator' => $findCasesItem['has_separator'],
+      'id' => $manageCasesMenuItem['id'],
+      'weight' => !empty($findCasesMenuItem['weight']) ? $findCasesMenuItem['weight'] : NULL,
+      'has_separator' => $findCasesMenuItem['has_separator'],
     ));
 
     CRM_Core_BAO_Navigation::resetNavigation();
