@@ -164,7 +164,6 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     }
 
     $this->createManageCasesMenuItem();
-    $this->upgrade_0002();
   }
 
   /**
@@ -182,24 +181,6 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     ));
 
     CRM_Core_BAO_Navigation::resetNavigation();
-
-    return TRUE;
-  }
-
-  /**
-   * Renames 'manage_cases' to 'Manage Cases' menu item.
-   *
-   * @return boolean
-   */
-  public function upgrade_0002() {
-    $manageCasesItem = $this->getCaseMenuItem('manage_cases');
-
-    if (!empty($manageCasesItem)) {
-      civicrm_api3('Navigation', 'create', array(
-        'id' => $manageCasesItem['id'],
-        'name' => 'Manage Cases',
-      ));
-    }
 
     return TRUE;
   }
