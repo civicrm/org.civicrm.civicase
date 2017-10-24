@@ -186,29 +186,6 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
   }
 
   /**
-   * Returns an array containing Case menu item for specified name.
-   * Returns NULL if menu item is not found.
-   *
-   * @param string $name
-   *
-   * @return array|NULL
-   */
-  private function getCaseMenuItem($name) {
-    $result = civicrm_api3('Navigation', 'get', array(
-      'sequential' => 1,
-      'parent_id' => 'Cases',
-      'name' => $name,
-      'options' => array('limit' => 1),
-    ));
-
-    if (empty($result['id'])) {
-      return NULL;
-    }
-
-    return $result['values'][0];
-  }
-
-  /**
    * Tasks to perform after the module is installed.
    */
   public function postInstall() {
@@ -396,6 +373,29 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     ));
 
     CRM_Core_BAO_Navigation::resetNavigation();
+  }
+
+  /**
+   * Returns an array containing Case menu item for specified name.
+   * Returns NULL if menu item is not found.
+   *
+   * @param string $name
+   *
+   * @return array|NULL
+   */
+  private function getCaseMenuItem($name) {
+    $result = civicrm_api3('Navigation', 'get', array(
+      'sequential' => 1,
+      'parent_id' => 'Cases',
+      'name' => $name,
+      'options' => array('limit' => 1),
+    ));
+
+    if (empty($result['id'])) {
+      return NULL;
+    }
+
+    return $result['values'][0];
   }
 
   /**
