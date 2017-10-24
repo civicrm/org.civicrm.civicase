@@ -21,21 +21,31 @@
       $scope.refresh([['Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}]]);
     };
 
-    $scope.deleteActivity = function(activity) {
+    $scope.deleteActivity = function(activity, dialog) {
       CRM.confirm({
           title: ts('Delete Activity'),
           message: ts('Permanently delete this %1 activity?', {1: activity.type})
         })
         .on('crmConfirm:yes', function() {
           $scope.refresh([['Activity', 'delete', {id: activity.id}]]);
+          if (dialog && $(dialog).data('uiDialog')) {
+            $(dialog).dialog('close');
+          }
         });
     };
 
     $scope.viewInPopup = function($event, activity) {
       if (!$event || !$($event.target).is('a, a *, input, button, button *')) {
-        CRM.loadForm(CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1}))
+        var context = activity.case_id ? 'case' : 'activity';
+        var form = CRM.loadForm(CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1, context: context}))
           .on('crmFormSuccess', function() {
             $scope.refresh();
+          })
+          .on('crmLoad', function() {
+            $('a.delete.button').click(function() {
+              $scope.deleteActivity(activity, form);
+              return false;
+            });
           });
       }
     };

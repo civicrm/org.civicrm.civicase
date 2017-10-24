@@ -11,26 +11,30 @@ Civi::resources()
       'user_contact_id' => (int) CRM_Core_Session::getLoggedInContactID(),
     ),
   ));
-// Add shoreditch custom css if not already present
-if (!civicrm_api3('Setting', 'getvalue', array('name' => "customCSSURL"))) {
-  Civi::resources()->addStyleFile('org.civicrm.shoreditch', 'css/custom-civicrm.css', 99, 'html-header');
+// The following changes are only relevant to the full-page app
+if (CRM_Utils_System::getUrlPath() == 'civicrm/case/a') {
+  // Add shoreditch custom css if not already present
+  if (!civicrm_api3('Setting', 'getvalue', array('name' => "customCSSURL"))) {
+    Civi::resources()
+      ->addStyleFile('org.civicrm.shoreditch', 'css/custom-civicrm.css', 99, 'html-header');
+  }
+  CRM_Utils_System::resetBreadCrumb();
+  $breadcrumb = array(
+    array(
+      'title' => ts('Home'),
+      'url' => CRM_Utils_System::url(),
+    ),
+    array(
+      'title' => ts('CiviCRM'),
+      'url' => CRM_Utils_System::url('civicrm', 'reset=1'),
+    ),
+    array(
+      'title' => ts('Case Dashboard'),
+      'url' => CRM_Utils_System::url('civicrm/case/a/#/case'),
+    ),
+  );
+  CRM_Utils_System::appendBreadCrumb($breadcrumb);
 }
-CRM_Utils_System::resetBreadCrumb();
-$breadcrumb = array(
-  array(
-    'title' => ts('Home'),
-    'url' => CRM_Utils_System::url(),
-  ),
-  array(
-    'title' => ts('CiviCRM'),
-    'url' => CRM_Utils_System::url('civicrm', 'reset=1'),
-  ),
-  array(
-    'title' => ts('Case Dashboard'),
-    'url' => CRM_Utils_System::url('civicrm/case/a/#/case'),
-  ),
-);
-CRM_Utils_System::appendBreadCrumb($breadcrumb);
 $options = array(
   'activityTypes' => 'activity_type',
   'activityStatuses' => 'activity_status',

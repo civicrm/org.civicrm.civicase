@@ -60,17 +60,11 @@
   width: calc(100% - 463px);
 }
 
-
 #bootstrap-theme .act-feed-view-activity {
   background-color: #F3F6F7;
   border-left: 1px solid #E7E7E7;
   float: right;
   width: 463px;
-}
-
-/* File on case button */
-#bootstrap-theme .act-feed-view-activity a.cancel.button {
-  display: none;
 }
 
 #bootstrap-theme div.act-actions-menu {
@@ -123,6 +117,10 @@
   padding: 0;
   margin: 0;
   border-radius: 0;
+}
+
+#bootstrap-theme .act-feed-list-group .list-group-item .act-date {
+  font-size: 13px;
 }
 
 #bootstrap-theme .act-feed-list-group .act-list-controls {
@@ -387,7 +385,13 @@
   margin-top: 2px;
 }
 #bootstrap-theme div.act-feed-panel {
+  padding-top: 47px;
   position: relative;
+}
+#bootstrap-theme div.act-feed-panel > .panel-header.affix-top {
+  position: absolute;
+  top: 0 !important;
+  width: 100% !important;
 }
 #bootstrap-theme div.act-feed-panel > .panel-header.affix {
   width: inherit;
@@ -406,8 +410,16 @@
   width: inherit;
   z-index: 5;
 }
+#bootstrap-theme .act-feed-list-group {
+  position: relative;
+}
+#bootstrap-theme .case-tab-activities .act-feed-list-group {
+  padding-top: 54px;
+}
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix-top {
+  position: absolute;
   top: 0 !important;
+  width: calc(100% - 13px) !important;
 }
 #bootstrap-theme .act-feed-view-activity:not(.cc-zero-w) {
   width: 355px;

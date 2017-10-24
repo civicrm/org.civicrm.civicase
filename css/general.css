@@ -36,8 +36,22 @@
   display: inline-block;
 }
 #bootstrap-theme .panel .civicase-panel-empty {
+  margin-bottom: 110px;
+  margin-top: 110px;
   padding: 5px;
-  color: #aaa;
+  text-align: center;
+}
+#bootstrap-theme .panel .civicase-panel-empty .fa.fa-big {
+  color: #C9D6DC;
+  font-size: 64px;
+}
+#bootstrap-theme .panel .civicase-panel-empty .empty-label{
+  color: #BECDD4;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 19px;
+  padding: 18px 0;
+  text-align: center;
 }
 #bootstrap-theme .crm-ui-range > span {
   width: 50%;
@@ -204,7 +218,7 @@
   border-top: 1px solid #E8EEF0;
   content: ' ';
   height: 8px;
-  left: 30px;
+  left: 31px;
   top: 15px;
   position: absolute;
   transform: rotate(-45deg);

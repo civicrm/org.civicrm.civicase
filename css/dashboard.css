@@ -218,7 +218,8 @@
 }
 #bootstrap-theme .dashboard-case-wrapper .col-md-4 .panel-body {
   overflow-y: auto;
-  height: 720px;
+  max-height: 720px;
+  min-height: 350px;
 }
 #bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading .badge.badge-danger {
   background-color: #E6807F;
@@ -261,7 +262,7 @@
 #bootstrap-theme .dashboard-case-wrapper .act-category-milestone.act-feed-item .cb-dot {
   left: 0;
 }
-#bootstrap-theme .dashboard-case-wrapper .panel-body {
+#bootstrap-theme .dashboard-case-wrapper .panel-body:not(.case-list-panel) {
   padding-top: 12px
 }
 #bootstrap-theme .dashboard-case-wrapper .act-feed-item.act-category-milestone .act-subject {
@@ -284,4 +285,27 @@
 #bootstrap-theme .dashboard-case-wrapper .act-feed-list-group .act-category-communication h4,
 #bootstrap-theme .dashboard-case-wrapper .act-feed-list-group .act-category-communication .act-tags {
   margin-bottom: 0;
+}
+#bootstrap-theme .dashboard-nav {
+  margin: 6px 6px 0 0;
+}
+#bootstrap-theme .dashboard-nav input[type=checkbox] + label[for] {
+  color: #FFFFFF;
+  margin-top: 5px;
+}
+#bootstrap-theme .dashboard-nav input[type=checkbox] + label[for]:before {
+  margin-top: -2px;
+}
+#bootstrap-theme .dashboard-nav input[type=checkbox] + label[for]:after {
+  margin-top: -6px;
+}
+#bootstrap-theme .dashboard-nav .btn-default,
+#bootstrap-theme .dashboard-nav .btn-default:active,
+#bootstrap-theme .dashboard-nav .btn-default:focus {
+  background-color: transparent;
+  border: 1px solid #FFFFFF;
+  border-radius: 2px;
+  color: #FFFFFF;
+  float: none;
+  outline: none;
 }
