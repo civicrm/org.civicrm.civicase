@@ -186,19 +186,6 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
   }
 
   /**
-   * Swaps 'Manage Cases' with 'Find Cases' menu weight.
-   * This upgrade should be executed only once so it's not added to install
-   * method.
-   *
-   * @return boolean
-   */
-  public function upgrade_0003() {
-    $this->swapCaseMenuItems();
-
-    return TRUE;
-  }
-
-  /**
    * Returns an array containing Case menu item for specified name.
    * Returns NULL if menu item is not found.
    *
