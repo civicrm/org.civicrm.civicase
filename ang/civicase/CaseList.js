@@ -63,7 +63,8 @@
     var ts = $scope.ts = CRM.ts('civicase'),
       firstLoad = true,
       caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
+      caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses,
+      casesToShow = 25;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.cases = [];
@@ -75,6 +76,7 @@
     $scope.hiddenFilters = hiddenFilters;
     $scope.sort = {sortable: true};
     $scope.page = {total: 0};
+    $scope.casePlaceholders = _.range(casesToShow);
 
     $scope.$bindToRoute({expr:'searchIsOpen', param: 'sx', format: 'bool', default: false});
     $scope.$bindToRoute({expr:'sort.field', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
@@ -274,11 +276,13 @@
   });
 
   function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
-    var ts = $scope.ts = CRM.ts('civicase');
+    var ts = $scope.ts = CRM.ts('civicase'),
+    casesToShow = 25;
     $scope.cases = [];
     $scope.CRM = CRM;
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.casePlaceholders = _.range(casesToShow);
 
     function _loadCases() {
       return crmApi(loadCaseApiParams($scope.filters, $scope.sort, $scope.page));

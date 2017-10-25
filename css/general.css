@@ -175,9 +175,6 @@
 #bootstrap-theme .act-category-task .act-feed-inner {
   padding-left: 5em;
 }
-#bootstrap-theme .case-activity-card-wrapper .act-feed-inner {
-  border-left: 1px solid #ddd;
-}
 #bootstrap-theme td.case-activity-card-wrapper .activity-card-menu {
   margin-top: -5px;
 }
@@ -241,6 +238,8 @@
   border: 1px solid #E8EEF0;
   border-radius: 4px;
   height: 90px;
+  margin-bottom: 10px;
+  position: relative;
 }
 #bootstrap-theme .activity-card-loading-placeholder:before {
   content: ' ';
@@ -276,4 +275,24 @@
   height: 10px;
   background-color: #EDF3F5;
   margin-top: 23px;
+}
+#bootstrap-theme .oneline-loading-placeholder:before {
+  content: ' ';
+  display: block;
+  height: 10px;
+  background-color: #EDF3F5;
+}
+#bootstrap-theme .case-view-loading-placeholder {
+  padding: 0 5px;
+}
+#bootstrap-theme .case-view-loading-placeholder div:before,
+#bootstrap-theme .case-view-loading-placeholder div:after {
+  content: ' ';
+  display: block;
+  height: 10px;
+  background-color: #EDF3F5;
+  margin-top: 20px;
+}
+#bootstrap-theme .case-view-loading-placeholder div:before {
+  height: 20px;
 }
