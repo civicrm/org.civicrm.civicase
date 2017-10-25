@@ -405,6 +405,7 @@
 #bootstrap-theme .civicase-view-next-activities-inner .list-group-item {
   display: inline-block;
   margin-right: 20px;
+  margin-left: 10px;
 }
 #bootstrap-theme .civicase-view-tasks .act-feed-item {
   border-left: 5px solid;
