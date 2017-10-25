@@ -35,7 +35,7 @@
           $feedActivity.css('top','auto');
         });
 
-        $actHeader.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top} })
+        $actHeader.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top + 20} })
           .css('top', $civicrmMenu.height())
           .on('affixed.bs.affix', function() {
             $actHeader.css('width',$('.act-feed-panel').css('width'));
@@ -45,7 +45,7 @@
             $actHeader.css('width','auto');
           });
         
-        $actControls.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top} })
+        $actControls.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top + 20} })
           .on('affixed.bs.affix', function() {
             $actControls.css('width',$actHeader.css('width'));
             $actControls.css('top',$civicrmMenu.height() + $actHeader.height());

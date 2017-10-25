@@ -97,9 +97,6 @@
   position: relative;
   vertical-align: middle;
 }
-#bootstrap-theme .case-list-table thead tr th:first-child {
-  border-top-left-radius: 3px;
-}
 #bootstrap-theme .case-list-table thead tr th:last-child {
   border-top-right-radius: 3px;
 }
@@ -282,63 +279,18 @@
 #bootstrap-theme .cc-sort-btn-group button {
   border-right: 2px solid #f4f7f8;
 }
-#bootstrap-theme input[type=checkbox] + label[for],
-#bootstrap-theme input[type=radio] + label[for] {
+#bootstrap-theme .act-feed-panel input[type=checkbox] + label[for],
+#bootstrap-theme .act-feed-panel input[type=radio] + label[for] {
   color: #727E8A;
   font-weight: normal;
   position: relative;
   vertical-align: middle;
 }
-#bootstrap-theme input[type=radio] + label[for] {
-  line-height: 21px;
-}
-#bootstrap-theme input[type=radio] + label[for]:before {
-  background-color: #ffffff;
-  border: solid 1px #C2CFD8;
-  border-radius: 50%;
-  box-shadow: inset 0 0 3px 0 rgba(0, 0, 0, 0.2);  
-  content: '';
-  display: inline-block;
-  height: 16px;
-  min-width: 16px;
-  width: 16px;
-}
-#bootstrap-theme input[type=radio]:checked + label[for]:after {
-  background-color: #727E8A;
-  border-radius: 50%;
-  content: '';
-  display: inline-block;
-  left: 4px;
-  height: 8px;
-  min-width: 8px;
-  position: absolute;
-  top: 8px;
-  width: 8px;
-}
-#bootstrap-theme input[type=checkbox] + label[for]:before {
-  background-color: #ffffff;
-  border: solid 1px #C2CFD8;
-  border-radius: 2px;
-  box-shadow: inset 0 0 3px 0 rgba(0, 0, 0, 0.2);
-  content: '';
-  display: inline-block;
-  height: 16px;
-  margin-right: 10px;
-  min-width: 16px;
-  width: 16px;
-}
-#bootstrap-theme input[type=checkbox]:checked + label[for]:after {
-  color: #4D5663;
-  content: "\f00c";
-  display: inline-block;
-  font-family: 'FontAwesome';
+
+#bootstrap-theme .act-feed-panel input[type=checkbox] + label[for]:after,
+#bootstrap-theme .act-feed-panel input[type=radio] + label[for]:after,
+#bootstrap-theme .case-list-checkbox input[type=checkbox] + label[for]:after {
   font-size: 13px;
-  font-style: normal;
-  height: 13px;
-  left: 2px;
-  position: absolute;
-  text-rendering: auto;
-  top: 8px;
 }
 #bootstrap-theme .noti-badge {
   background: #42AFCB;
@@ -401,11 +353,11 @@
   padding-left: 20px;
 }
 #bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix {
-  margin-left: 122px;
-  width: 458px;
+  margin-left: 115px;
+  width: 485px;
 }
 #bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
-  width: 458px;
+  width: 485px;
 }
 #bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
   left: 50%;
@@ -414,7 +366,7 @@
   position: fixed;
 }
 #bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
-  margin-left: -188px;
+  margin-left: -195px;
 }
 #bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table .next-activity-title {
   max-width: 370px;

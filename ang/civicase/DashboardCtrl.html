@@ -1,6 +1,6 @@
-<div id="bootstrap-theme" class="civicase-main">
+<div id="bootstrap-theme" class="civicase-main civicase-dashboard">
 
-  <h1 crm-page-title>{{ myCasesOnly ? ts('CiviCase Dashboard - My Cases') : ts('CiviCase Dashboard - All Cases') }}</h1>
+  <h1 crm-page-title crm-document-title="myCasesOnly ? ts('CiviCase Dashboard - My Cases') : ts('CiviCase Dashboard - All Cases')"></h1>
 
   <uib-tabset active="activeTab" type="pills" uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary">
     <uib-tab index="0" heading="{{ ts('Dashboard') }}">
