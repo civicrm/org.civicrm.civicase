@@ -123,16 +123,10 @@
     <td ng-show="!viewingCase">{{ item.myRole.join(', ') }}</td>
   </tr>
 
-  <tr ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length">
+  <tr ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">
     <td class="fixed-col"><div class="case-view-loading-placeholder"><div></div></div></td>
-    <td><div class="activity-card-loading-placeholder"><div></div></div></td>
-    <td><div class="oneline-loading-placeholder"></div></td>
-    <td><div class="oneline-loading-placeholder"></div></td>
-    <td><div class="oneline-loading-placeholder"></div></td>
-    <td><div class="oneline-loading-placeholder"></div></td>
-    <td><div class="oneline-loading-placeholder"></div></td>
-    <td><div class="oneline-loading-placeholder"></div></td>
-    <td><div class="oneline-loading-placeholder"></div></td>
+    <td ng-show="!viewingCase"><div class="activity-card-loading-placeholder"><div></div></div></td>
+    <td ng-show="!viewingCase" ng-repeat="i in [1,2,3,4,5,6,7]"><div class="oneline-loading-placeholder"></div></td>
   </tr>
   </tbody>
 </table>

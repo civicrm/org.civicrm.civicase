@@ -63,8 +63,7 @@
     var ts = $scope.ts = CRM.ts('civicase'),
       firstLoad = true,
       caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses,
-      casesToShow = 25;
+      caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.cases = [];
@@ -76,7 +75,7 @@
     $scope.hiddenFilters = hiddenFilters;
     $scope.sort = {sortable: true};
     $scope.page = {total: 0};
-    $scope.casePlaceholders = _.range(casesToShow);
+    $scope.isLoading = true;
 
     $scope.$bindToRoute({expr:'searchIsOpen', param: 'sx', format: 'bool', default: false});
     $scope.$bindToRoute({expr:'sort.field', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
@@ -87,6 +86,7 @@
     $scope.$bindToRoute({expr:'viewingCaseTab', param:'tab', format: 'raw', default:'summary'});
     $scope.$bindToRoute({expr:'page.size', param:'cps', format: 'int', default: 15});
     $scope.$bindToRoute({expr:'page.num', param:'cpn', format: 'int', default: 1});
+    $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
 
     $scope.viewCase = function(id, $event) {
       if (!$event || !$($event.target).is('a, a *, input, button')) {
@@ -185,6 +185,7 @@
     }
 
     var getCases = $scope.getCases = function() {
+      $scope.isLoading = true;
       setPageTitle();
       crmThrottle(_loadCases).then(function(result) {
         var viewingCaseDetails;
@@ -204,16 +205,18 @@
         $scope.totalCount = result[1];
         $scope.page.total = Math.ceil(result[1] / $scope.page.size);
         setPageTitle();
-        firstLoad = false;
+        firstLoad = $scope.isLoading = false;
       });
     };
 
     $scope.refresh = function(apiCalls) {
+      $scope.isLoading = true;
       if (!apiCalls) apiCalls = [];
       apiCalls = apiCalls.concat(loadCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page));
       crmApi(apiCalls, true).then(function(result) {
         $scope.cases = _.each(result[apiCalls.length - 2].values, formatCase);
         $scope.totalCount = result[apiCalls.length - 1];
+        $scope.isLoading = false;
       });
     };
 
@@ -276,13 +279,12 @@
   });
 
   function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
-    var ts = $scope.ts = CRM.ts('civicase'),
-    casesToShow = 25;
+    var ts = $scope.ts = CRM.ts('civicase');
     $scope.cases = [];
     $scope.CRM = CRM;
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activityFeedUrl = getActivityFeedUrl;
-    $scope.casePlaceholders = _.range(casesToShow);
+    $scope.casePlaceholders = _.range($scope.page.size);
 
     function _loadCases() {
       return crmApi(loadCaseApiParams($scope.filters, $scope.sort, $scope.page));
