@@ -158,7 +158,7 @@
   margin-bottom: 0;
 }
 
-#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover,
+#bootstrap-theme .act-feed-list-group .list-group-inner:not(.activity-placeholder-list-inner) li.list-group-item:hover,
 #bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing {
   background-color: #D9EFF5;
 }
@@ -509,6 +509,9 @@
   font-weight: 600;
   margin: 5px 0px 15px;
   padding: 13px 20px;
+}
+#bootstrap-theme .activity-timeline .activity-placeholder-group h3 {
+  background-color: #fcfcfc;
 }
 #bootstrap-theme .case-tab-activities .activity-item-menu.btn-group {
   margin-top: -10px;

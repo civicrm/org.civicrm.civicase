@@ -16,6 +16,7 @@
       caseId = $scope.params ? $scope.params.case_id : null,
       pageNum = 0;
     $scope.CRM = CRM;
+    $scope.isLoading = true;
 
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = $scope.activityStatuses = CRM.civicase.activityStatuses;
@@ -48,6 +49,7 @@
 
     $scope.refreshCase = $scope.refreshCase || _.noop;
     $scope.refreshAll = function() {
+      $('.act-feed-panel .panel-body').block();
       getActivities(false, $scope.refreshCase);
     };
 
@@ -177,7 +179,6 @@
     }
 
     function getActivities(nextPage, callback) {
-      $('.act-feed-panel .panel-body').block();
       if (nextPage !== true) {
         pageNum = 0;
       }
@@ -202,6 +203,7 @@
         if ($scope.aid && $scope.aid !== $scope.viewingActivity.id) {
           $scope.viewActivity($scope.aid);
         }
+        $scope.isLoading = false;
       });
     }
 
