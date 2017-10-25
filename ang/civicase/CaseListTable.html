@@ -128,5 +128,13 @@
     <td ng-show="!viewingCase"><div class="activity-card-loading-placeholder"><div></div></div></td>
     <td ng-show="!viewingCase" ng-repeat="i in [1,2,3,4,5,6,7]"><div class="oneline-loading-placeholder"></div></td>
   </tr>
+
+  <tr ng-if="!cases.length && !isLoading" class="civicase-panel-empty">
+    <td class="fixed-col"></td>
+    <td colspan="3">
+      <i class="fa fa-folder-o fa-big"></i>
+      <div class="empty-label">{{ ts('No cases found matching the search criteria.') }}</div>
+    </td>
+  </tr>
   </tbody>
 </table>
