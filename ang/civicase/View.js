@@ -293,6 +293,7 @@
         '<div class="panel panel-default civicase-view-panel">' +
           '<div class="panel-header" ng-if="item" ng-include="\'~/civicase/CaseViewHeader.html\'"></div>' +
           '<div class="panel-body" ng-if="item" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
+          '<div ng-if="!item" class="case-view-placeholder-panel" ng-include="\'~/civicase/CaseViewPlaceholder.html\'"></div>' +
         '</div>' +
         '<div class="panel panel-primary civicase-view-other-cases-panel" ng-if="item && item.relatedCases.length && activeTab === \'summary\'" ng-include="\'~/civicase/CaseViewOtherCases.html\'"></div>',
       controller: caseViewController,
