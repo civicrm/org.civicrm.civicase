@@ -285,16 +285,19 @@
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.casePlaceholders = _.range($scope.page.size);
+    $scope.isLoading = true;
 
     function _loadCases() {
       return crmApi(loadCaseApiParams($scope.filters, $scope.sort, $scope.page));
     }
 
     function getCases() {
+      $scope.isLoading = true;
       crmThrottle(_loadCases)
         .then(function(result) {
           $scope.cases = _.each(result[0].values, formatCase);
           $scope.totalCount = result[1];
+          $scope.isLoading = false;
 
           $timeout(function() {
 
