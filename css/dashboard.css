@@ -2,6 +2,7 @@
   padding: 0 20px 0 0;
 }
 #bootstrap-theme .dashboard-case-summary-wrapper.show-summary-breakdown {
+  background: #FFFFFF;
   border-bottom: 1px solid #D3DEE2;
   box-shadow: inset 7px -13px 10px -13px rgba(48, 40, 40, 0.25);
   padding-bottom: 10px;
@@ -287,11 +288,11 @@
   margin-bottom: 0;
 }
 #bootstrap-theme .dashboard-nav {
-  margin: 6px 6px 0 0;
+  margin-top: 9px;
 }
 #bootstrap-theme .dashboard-nav input[type=checkbox] + label[for] {
   color: #FFFFFF;
-  margin-top: 5px;
+  margin-top: 2px;
 }
 #bootstrap-theme .dashboard-nav input[type=checkbox] + label[for]:before {
   margin-top: -2px;
@@ -308,4 +309,29 @@
   color: #FFFFFF;
   float: none;
   outline: none;
+  vertical-align: baseline;
+}
+#bootstrap-theme .dashboard-nav .btn-default .fa-plus {
+  line-height: 13px;
+  padding-right: 5px;
+}
+#bootstrap-theme.civicase-main .nav-pills.nav-pills-horizontal {
+  padding: 0 8px;
+}
+#bootstrap-theme.civicase-main .nav-pills > li > a {
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+#bootstrap-theme.civicase-main .nav-pills > li.active > a {
+  border-color: #FFFFFF;
+}
+#bootstrap-theme.civicase-main .nav-pills > li.active > a:after {
+  border-bottom: none;
+}
+#bootstrap-theme.civicase-dashboard .tab-pane {
+  background: #E8EEF0;
+  padding: 0;
+  margin-top: 16px;
 }

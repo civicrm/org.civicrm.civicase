@@ -228,8 +228,9 @@
 #bootstrap-theme .select2-container .select2-choice {
   background-image: none;
 }
-#bootstrap-theme .select2-container .select2-choice .select2-chosen {
-  color: #727E8A;
+#bootstrap-theme .act-feed-panel .select2-container .select2-choice .select2-chosen,
+#bootstrap-theme .act-feed-panel .select2-default {
+  color: #727E8A !important;
   font-size: 13px;
   font-weight: normal;
 }

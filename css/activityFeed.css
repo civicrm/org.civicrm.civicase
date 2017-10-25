@@ -58,6 +58,7 @@
 }
 #bootstrap-theme .case-is-focused .act-feed-list-group.viewing-activity {
   width: calc(100% - 463px);
+  min-height: calc(100vh - 120px);
 }
 
 #bootstrap-theme .act-feed-view-activity {
@@ -389,12 +390,15 @@
   padding-top: 47px;
   position: relative;
 }
+#bootstrap-theme div.act-feed-panel > .panel-header {
+  margin-top: -47px;
+}
 #bootstrap-theme div.act-feed-panel > .panel-header.affix-top {
-  position: absolute;
   top: 0 !important;
   width: 100% !important;
 }
 #bootstrap-theme div.act-feed-panel > .panel-header.affix {
+  margin-top: 0;
   width: inherit;
   z-index: 600;
 }
@@ -403,6 +407,7 @@
 }
 #bootstrap-theme div.act-feed-panel > .panel-header .select2-container-multi {
   height: auto;
+  min-width: 170px;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix {
   margin: 0px;
@@ -410,14 +415,20 @@
   width: inherit;
   z-index: 5;
 }
+#bootstrap-theme .case-tab-activities .act-feed-list-group .act-list-controls.affix {
+  margin-top: 0;
+}
+
 #bootstrap-theme .act-feed-list-group {
   position: relative;
 }
 #bootstrap-theme .case-tab-activities .act-feed-list-group {
   padding-top: 54px;
 }
+#bootstrap-theme .case-tab-activities .act-feed-list-group .act-list-controls {
+  margin-top: -54px;
+}
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix-top {
-  position: absolute;
   top: 0 !important;
   width: calc(100% - 13px) !important;
 }
@@ -485,10 +496,8 @@
 #bootstrap-theme .case-tab-activities .act-feed-item.act-category-task {
   border:none !important;
 }
-#bootstrap-theme .case-tab-activities .pager-show-more {
-  margin-bottom: 20px;
-}
-#bootstrap-theme .case-tab-activities .pager-no-more {
+#bootstrap-theme .act-feed-panel .pager-show-more,
+#bootstrap-theme .act-feed-panel .pager-no-more {
   margin-bottom: 20px;
 }
 #bootstrap-theme .case-tab-activities .act-feed-list-group h3 {
@@ -514,13 +523,11 @@
 #bootstrap-theme .case-tab-activities .act-attachment-menu {
   margin-top: -8px;
 }
-#bootstrap-theme .case-tab-activities .act-filters input::placeholder {
+#bootstrap-theme .act-filters input::placeholder {
   color: #727E8A;
-  opacity: 0.6;
 }
-#bootstrap-theme .case-tab-activities .act-filters .select2-default::placeholder {
+#bootstrap-theme .act-filters .select2-default::placeholder {
   color: #727E8A;
-  opacity: 0.6;
 }
 #bootstrap-theme .crm-activity-view-block .crm-info-panel {
   border-bottom: 1px solid #E8EEF0;
@@ -547,4 +554,7 @@
 }
 #bootstrap-theme .crm-activity-view-block .crm-submit-buttons a:hover i {
   color: #FFF;
+}
+#bootstrap-theme .act-feed-panel .form-control::placeholder {
+  color: #727E8A;
 }
