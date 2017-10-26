@@ -486,15 +486,12 @@
   right: 0;
   top: 0;
 }
-#bootstrap-theme .case-tab-activities .act-feed-item {
+#bootstrap-theme .activity-timeline .act-feed-item {
   margin: 0px 22px;
 }
-#bootstrap-theme .case-tab-activities .act-feed-item.act-category-task {
-  border: none;
+#bootstrap-theme .activity-timeline .act-feed-item.act-category-task {
+  border: !important;
   border-radius: 0;
-}
-#bootstrap-theme .case-tab-activities .act-feed-item.act-category-task {
-  border:none !important;
 }
 #bootstrap-theme .act-feed-panel .pager-show-more,
 #bootstrap-theme .act-feed-panel .pager-no-more {
@@ -513,17 +510,17 @@
 #bootstrap-theme .activity-timeline .activity-placeholder-group h3 {
   background-color: #fcfcfc;
 }
-#bootstrap-theme .case-tab-activities .activity-item-menu.btn-group {
+#bootstrap-theme .activity-timeline .activity-item-menu.btn-group {
   margin-top: -10px;
 }
-#bootstrap-theme .case-tab-activities .act-category-communication .activity-item-menu.btn-group {
+#bootstrap-theme .activity-timeline .act-category-communication .activity-item-menu.btn-group {
   margin-top: 20px;
   margin-right: 20px;
 }
-#bootstrap-theme .case-tab-activities .act-star {
+#bootstrap-theme .activity-timeline .act-star {
   margin-top: -5px;
 }
-#bootstrap-theme .case-tab-activities .act-attachment-menu {
+#bootstrap-theme .activity-timeline .act-attachment-menu {
   margin-top: -8px;
 }
 #bootstrap-theme .act-filters input::placeholder {
