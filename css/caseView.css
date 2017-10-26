@@ -444,7 +444,13 @@
   border-bottom-right-radius: 0;
   margin-bottom: 0;
 }
+#bootstrap-theme .civicase-view-other-cases-panel .panel-collapse {
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
 #bootstrap-theme .civicase-view-other-cases-panel .panel-body {
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
   padding: 0;
 }
 #bootstrap-theme .civicase-view-other-cases .civicase-view-other-case {

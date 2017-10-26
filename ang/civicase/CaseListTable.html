@@ -54,19 +54,17 @@
         <label></label>
       </div>
       <div class="case-list-info">
-        <h4>
-          {{ item.client[0].display_name }}
-          <div class="btn-group btn-group-sm" ng-if="item.client.length > 1">
-            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Additional clients') }}">
-              +{{ item.client.length - 1 }}
-            </button>
-            <ul class="dropdown-menu" >
-              <li ng-repeat="(index, client) in item.client" ng-if="index">
-                <span>{{ client.display_name }}</span>
-              </li>
-            </ul>
-          </div>
-        </h4>
+        <h4>{{ item.client[0].display_name }}</h4>
+        <div class="btn-group btn-group-sm" ng-if="item.client.length > 1">
+          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Additional clients') }}">
+            +{{ item.client.length - 1 }}
+          </button>
+          <ul class="dropdown-menu" >
+            <li ng-repeat="(index, client) in item.client" ng-if="index">
+              <span>{{ client.display_name }}</span>
+            </li>
+          </ul>
+        </div>
         <div ng-if="item.client[0].email">
           <strong>{{ ts('Email:') }}</strong>
           {{ item.client[0].email }}

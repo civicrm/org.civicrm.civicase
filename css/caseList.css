@@ -138,16 +138,19 @@
   background-color: #d9edf7;
 }
 #bootstrap-theme .case-list-table td:first-child h4 {
+  display: inline-block;
   font-size: 16px;
   font-weight: 600;
   line-height: 22px;
   margin-bottom: 5px;
   margin-top: 6px;
+  max-width: 85%;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: middle;
   white-space: nowrap;
 }
-#bootstrap-theme .case-list-table td:first-child h4 .btn-info {
+#bootstrap-theme .case-list-table td:first-child .btn-info {
   background: none;
   border: none;
   color: #42AFCB;
@@ -157,7 +160,7 @@
 #bootstrap-theme .case-list-table td:first-child strong {
   color: #4D5663;
 }
-#bootstrap-theme .case-list-table td:first-child .case-list-info div {
+#bootstrap-theme .case-list-table td:first-child .case-list-info div:not(.btn-group) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

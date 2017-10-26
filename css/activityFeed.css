@@ -293,18 +293,18 @@
   margin-top: 5px;
 }
 
-#bootstrap-theme .act-feed-list-group .act-star {
+#bootstrap-theme .act-star {
   margin-right: .5em;
   color: #c2cfd8;
 }
 
-#bootstrap-theme .act-feed-list-group .act-star .fa-star {
+#bootstrap-theme .act-star .fa-star {
   color: #ECA67F;
 }
 
-#bootstrap-theme .act-feed-list-group .act-star:hover,
-#bootstrap-theme .act-feed-list-group .act-star:focus,
-.act-list-controls .fa-star {
+#bootstrap-theme .act-star:hover,
+#bootstrap-theme .act-star:focus,
+#bootstrap-theme .fa-star {
   color: #f1965a;
 }
 
@@ -323,7 +323,7 @@
   border: none;
   padding: 0;
 }
-#bootstrap-theme .act-feed-list-group .act-contacts div {
+#bootstrap-theme .act-feed-list-group .act-contacts div:not(.act-contacts-target):not(.btn-group) {
   min-width: 40%;
   max-width: 100%;
   margin-right: 2em;
