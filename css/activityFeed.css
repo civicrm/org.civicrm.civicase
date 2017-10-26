@@ -323,7 +323,7 @@
   border: none;
   padding: 0;
 }
-#bootstrap-theme .act-feed-list-group .act-contacts div {
+#bootstrap-theme .act-feed-list-group .act-contacts div:not(.act-contacts-target):not(.btn-group) {
   min-width: 40%;
   max-width: 100%;
   margin-right: 2em;
