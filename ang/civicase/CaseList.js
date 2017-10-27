@@ -153,6 +153,8 @@
       var viewingCase = $scope.viewingCase,
         cases = $scope.cases,
         filters = $scope.filters;
+      // Hide page title when case is selected
+      $('h1.crm-page-title').toggle(!viewingCase);
       if (viewingCase) {
         var item = _.findWhere(cases, {id: viewingCase});
         if (item) {
@@ -239,10 +241,6 @@
     $scope.$watch('cases', function(cases) {
       $scope.selectedCases = _.filter(cases, 'selected');
     }, true);
-    // Hide page title when case is selected
-    $scope.$watch('viewingCase', function(caseId) {
-      $('h1.crm-page-title').toggle(!caseId);
-    });
 
     $scope.applyAdvSearch = function(newFilters) {
       $scope.filters = newFilters;
@@ -333,8 +331,7 @@
           caseId: id,
           focus: 1,
           sf: $scope.sort.field,
-          sd: $scope.sort.dir,
-          cf: JSON.stringify($scope.filters)
+          sd: $scope.sort.dir
         };
         $location.path('/case/list');
         $location.search(p);
