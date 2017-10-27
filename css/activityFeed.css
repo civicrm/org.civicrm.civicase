@@ -387,6 +387,7 @@
   margin-top: 2px;
 }
 #bootstrap-theme div.act-feed-panel {
+  margin-bottom: 0;
   padding-top: 47px;
   position: relative;
 }
@@ -408,6 +409,10 @@
 #bootstrap-theme div.act-feed-panel > .panel-header .select2-container-multi {
   height: auto;
   min-width: 170px;
+  max-width: 170px;
+}
+#bootstrap-theme div.act-feed-panel .act-list-controls .select2-container {
+  min-width: 220px;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix {
   margin: 0px;
