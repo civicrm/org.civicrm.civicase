@@ -526,3 +526,24 @@
 #bootstrap-theme .civicase-view-other-cases .civicase-view-other-case .other-case-type-manager a {
    margin-left: 15px;
 }
+#bootstrap-theme .case-view-body {
+  margin-top: 53px;
+}
+#bootstrap-theme .case-view-body .civicase-view-tab-bar {
+  margin-top: -53px;
+}
+#bootstrap-theme .case-view-body .civicase-view-tab-bar.affix-top {
+  width: auto;
+}
+#bootstrap-theme .case-view-body .civicase-view-tab-bar.affix {
+  margin-top: 0;
+  top: 32px;
+  width: inherit;
+  z-index: 600;
+}
+#bootstrap-theme .civicase-view-with-search .civicase-view-tab-bar.affix {
+  width: 890px;
+}
+#bootstrap-theme .civicase-view-with-search.case-is-focused .civicase-view-tab-bar.affix {
+  width: 1160px;
+}

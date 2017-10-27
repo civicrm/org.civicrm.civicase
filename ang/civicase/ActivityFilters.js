@@ -20,35 +20,36 @@
         var $actHeader = $('.act-feed-panel .panel-header'),
           $actControls = $('.act-feed-panel .act-list-controls'),
           $civicrmMenu = $('#civicrm-menu'),
-          $feedActivity = $('.act-feed-view-activity');
+          $feedActivity = $('.act-feed-view-activity'),
+          $casePanelBody = $('.civicase-view-panel > .panel-body');
 
         $feedActivity.affix({
           offset: {
-            top: $('.civicase-view-panel > .panel-body').offset().top,
+            top: $('.civicase-view-panel > .panel-body').offset().top - 73,
             bottom: $(document).height() - ($('.civicase-view-panel').offset().top + $('.civicase-view-panel').height()) + 18
           }
         })
         .on('affixed.bs.affix', function() {
-          $feedActivity.css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height() + 6);
+          $feedActivity.css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height() + 59);
         })
         .on('affixed-top.bs.affix', function() {
           $feedActivity.css('top','auto');
         });
 
-        $actHeader.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top + 20} })
+        $actHeader.affix({offset: {top: $casePanelBody.offset().top - 73} })
           .css('top', $civicrmMenu.height())
           .on('affixed.bs.affix', function() {
             $actHeader.css('width',$('.act-feed-panel').css('width'));
-            $actHeader.css('top', $civicrmMenu.height());
+            $actHeader.css('top', $civicrmMenu.height() + 53);
           })
           .on('affixed-top.bs.affix', function() {
             $actHeader.css('width','auto');
           });
         
-        $actControls.affix({offset: {top: $('.civicase-view-panel > .panel-body').offset().top + 20} })
+        $actControls.affix({offset: {top: $casePanelBody.offset().top - 73} })
           .on('affixed.bs.affix', function() {
             $actControls.css('width',$actHeader.css('width'));
-            $actControls.css('top',$civicrmMenu.height() + $actHeader.height());
+            $actControls.css('top',$civicrmMenu.height() + $actHeader.height() + 53);
           })
           .on('affixed-top.bs.affix', function() {
             $actControls.css('width','auto');
@@ -60,7 +61,7 @@
             $actControls.css('top',$civicrmMenu.height() + $actHeader.height());
             $feedActivity.not('.cc-zero-w')
               .height($(window).height() - ($civicrmMenu.height() + $actHeader.height() + $actControls.height()))
-              .css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height());
+              .css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height() + 53);
           });
         });
       });
