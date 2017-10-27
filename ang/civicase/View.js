@@ -292,7 +292,7 @@
       template:
         '<div class="panel panel-default civicase-view-panel">' +
           '<div class="panel-header" ng-if="item" ng-include="\'~/civicase/CaseViewHeader.html\'"></div>' +
-          '<div class="panel-body" ng-if="item" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
+          '<div class="panel-body case-view-body" ng-if="item" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
           '<div ng-if="!item" class="case-view-placeholder-panel" ng-include="\'~/civicase/CaseViewPlaceholder.html\'"></div>' +
         '</div>' +
         '<div class="panel panel-primary civicase-view-other-cases-panel" ng-if="item && item.relatedCases.length && activeTab === \'summary\'" ng-include="\'~/civicase/CaseViewOtherCases.html\'"></div>',
@@ -301,6 +301,31 @@
         activeTab: '=civicaseTab',
         isFocused: '=civicaseFocused',
         item: '=civicaseView'
+      }
+    };
+  })
+  .directive('caseTabAffix', function($timeout) {
+    return {
+      scope: {},
+      link: function(scope, $el, attrs) {
+
+        $timeout(function() {
+          $caseNavigation = $('.civicase-view-tab-bar'),
+          $civicrmMenu = $('#civicrm-menu'),
+          $casePanelBody = $('.civicase-view-panel > .panel-body');
+
+          $caseNavigation.affix({
+            offset: {
+              top: $casePanelBody.offset().top - 73
+            }
+          })
+          .on('affixed.bs.affix', function() {
+            $caseNavigation.css('top', $civicrmMenu.height());
+          })
+          .on('affixed-top.bs.affix', function() {
+            $caseNavigation.css('top','auto');
+          });
+        });
       }
     };
   });
