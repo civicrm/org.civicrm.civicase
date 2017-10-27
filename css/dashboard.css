@@ -335,3 +335,15 @@
   padding: 0;
   margin-top: 16px;
 }
+#bootstrap-theme .dashboard-tab-container {
+  margin-top: 53px;
+}
+#bootstrap-theme .dashboard-tab-container ul.nav-pills-horizontal {
+  margin-top: -53px;
+}
+#bootstrap-theme .dashboard-tab-container ul.nav-pills-horizontal.affix {
+  margin-top: 0;
+  top: 32px;
+  width: 1200px;
+  z-index: 600;
+}

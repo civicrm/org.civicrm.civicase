@@ -9,7 +9,7 @@
     }
   );
 
-  angular.module('civicase').controller('CivicaseDashboardCtrl', function($scope, crmApi, formatActivity) {
+  angular.module('civicase').controller('CivicaseDashboardCtrl', function($scope, crmApi, formatActivity, $timeout) {
     var ts = $scope.ts = CRM.ts('civicase'),
       activitiesToShow = 10;
     $scope.caseStatuses = CRM.civicase.caseStatuses;
@@ -145,5 +145,32 @@
       $scope.refresh();
     });
   });
+
+  // TODO: Move this to common crm-affix directive
+  angular.module('civicase').directive('uibTabsetAffix', function ($timeout) {
+    return {
+      link: function(scope, $el, attrs) {
+        $timeout(function() {
+
+          // $el it self is not ul.nav (consider this when creating common directive)
+          $tabNavigation = $('ul.nav'),
+          $civicrmMenu = $('#civicrm-menu'),
+          $tabContainer = $('.dashboard-tab-container');
+
+          $tabNavigation.affix({
+            offset: {
+              top: $tabContainer.offset().top - 128
+            }
+          })
+          .on('affixed.bs.affix', function() {
+            $tabNavigation.css('top', $civicrmMenu.height());
+          })
+          .on('affixed-top.bs.affix', function() {
+            $tabNavigation.css('top','auto');
+          });
+        });
+    }
+  };
+});
 
 })(angular, CRM.$, CRM._);

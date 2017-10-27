@@ -21,12 +21,19 @@
           $actControls = $('.act-feed-panel .act-list-controls'),
           $civicrmMenu = $('#civicrm-menu'),
           $feedActivity = $('.act-feed-view-activity'),
-          $casePanelBody = $('.civicase-view-panel > .panel-body');
+          $casePanelBody = $('.civicase-view-panel > .panel-body'),
+          $casePanel = $('.civicase-view-panel');
+
+
+        if($casePanel.length < 1) {
+          $casePanel = $('.dashboard-activites');
+          $casePanelBody = $('.dashboard-activites');
+        }
 
         $feedActivity.affix({
           offset: {
-            top: $('.civicase-view-panel > .panel-body').offset().top - 73,
-            bottom: $(document).height() - ($('.civicase-view-panel').offset().top + $('.civicase-view-panel').height()) + 18
+            top: $casePanelBody.offset().top - 73,
+            bottom: $(document).height() - ($casePanel.offset().top + $casePanel.height()) + 18
           }
         })
         .on('affixed.bs.affix', function() {

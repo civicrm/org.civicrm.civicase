@@ -387,6 +387,7 @@
   margin-top: 2px;
 }
 #bootstrap-theme div.act-feed-panel {
+  margin-bottom: 0;
   padding-top: 47px;
   position: relative;
 }
@@ -408,6 +409,10 @@
 #bootstrap-theme div.act-feed-panel > .panel-header .select2-container-multi {
   height: auto;
   min-width: 170px;
+  max-width: 170px;
+}
+#bootstrap-theme div.act-feed-panel .act-list-controls .select2-container {
+  min-width: 220px;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix {
   margin: 0px;
@@ -513,17 +518,17 @@
 #bootstrap-theme .activity-timeline .activity-placeholder-group h3 {
   background-color: #fcfcfc;
 }
-#bootstrap-theme .case-tab-activities .activity-item-menu.btn-group {
+#bootstrap-theme .activity-timeline .activity-item-menu.btn-group {
   margin-top: -10px;
 }
-#bootstrap-theme .case-tab-activities .act-category-communication .activity-item-menu.btn-group {
+#bootstrap-theme .activity-timeline .act-category-communication .activity-item-menu.btn-group {
   margin-top: 20px;
   margin-right: 20px;
 }
-#bootstrap-theme .case-tab-activities .act-star {
+#bootstrap-theme .activity-timeline .act-star {
   margin-top: -5px;
 }
-#bootstrap-theme .case-tab-activities .act-attachment-menu {
+#bootstrap-theme .activity-timeline .act-attachment-menu {
   margin-top: -8px;
 }
 #bootstrap-theme .act-filters input::placeholder {
