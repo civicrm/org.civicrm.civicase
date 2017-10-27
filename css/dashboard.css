@@ -305,10 +305,11 @@
 #bootstrap-theme .dashboard-nav .btn-default:focus {
   background-color: transparent;
   border: 1px solid #FFFFFF;
-  border-radius: 2px;
+  border-radius: 2px !important;
   color: #FFFFFF;
   float: none;
   outline: none;
+  padding-left: 15px;
   vertical-align: baseline;
 }
 #bootstrap-theme .dashboard-nav .btn-default .fa-plus {
