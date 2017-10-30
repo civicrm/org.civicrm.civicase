@@ -492,8 +492,9 @@
   float: left;
   margin: 2px 5px 0px;
 }
-#bootstrap-theme .collapsible-title {
+#bootstrap-theme.civicase-main .collapsible-title {
   background: none;
+  border: none;
   color: #727E8A;
   font-size: 13px;
   font-weight: normal;
@@ -503,7 +504,7 @@
   position: relative;
   text-transform: uppercase;
 }
-#bootstrap-theme .crm-collapsible .collapsible-title::before {
+#bootstrap-theme.civicase-main .crm-collapsible .collapsible-title::before {
   color: #727E8A;
   content: "\f107";
   display: inline-block;
@@ -514,13 +515,13 @@
   left: 2px;
   position: absolute;
 }
-#bootstrap-theme .crm-collapsible.collapsed .collapsible-title::before {
+#bootstrap-theme.civicase-main .crm-collapsible.collapsed .collapsible-title::before {
   content: "\f105";
 }
 #bootstrap-theme .civicase-view-tasks li.list-group-item{
   margin-bottom: 17px;
 }
-#bootstrap-theme .crm-collapsible.collapsed .collapsible-title + * {
+#bootstrap-theme.civicase-main .crm-collapsible.collapsed .collapsible-title + * {
   display: none;
 }
 #bootstrap-theme .civicase-view-other-cases .civicase-view-other-case .other-case-type-manager a {
