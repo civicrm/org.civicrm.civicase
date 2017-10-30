@@ -288,20 +288,6 @@
 #bootstrap-theme .panel-header .oneline-loading-placeholder:before {
   background-color: #d7e0e8;
 }
-#bootstrap-theme .case-view-loading-placeholder {
-  padding: 0 5px;
-}
-#bootstrap-theme .case-view-loading-placeholder div:before,
-#bootstrap-theme .case-view-loading-placeholder div:after {
-  content: ' ';
-  display: block;
-  height: 10px;
-  background-color: #EDF3F5;
-  margin-top: 20px;
-}
-#bootstrap-theme .case-view-loading-placeholder div:before {
-  height: 20px;
-}
 #bootstrap-theme .panel-default .case-view-placeholder-panel .panel-body {
   border-top: 0 none;
 }

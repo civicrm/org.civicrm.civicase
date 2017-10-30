@@ -45,7 +45,7 @@
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td:first-child {
   background: #fff;
 }
-#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td:first-child:hover {
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr:not(.case-placeholder-row) td:first-child:hover {
   background: #d9edf7;
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td {
@@ -123,7 +123,7 @@
 #bootstrap-theme .case-list-table td {
   padding: 10px;
 }
-#bootstrap-theme .case-list-table td:first-child {
+#bootstrap-theme .case-list-table tr:not(.case-placeholder-row) td:first-child {
   cursor: pointer;
 }
 #bootstrap-theme .case-list-table th:first-child,
