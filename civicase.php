@@ -454,12 +454,8 @@ function civicase_civicrm_navigationMenu(&$menu) {
    *   Array(string $oldUrl => string $newUrl).
    */
   $rewriteMap = array(
-    // Including the default filters isn't strictly necessary. However, if
-    // if you omit, then visiting the link will create a dummy entry
-    // in the browser history, and it will be hard to press "Back" through
-    // the dummy entry.
     'civicrm/case?reset=1' => 'civicrm/case/a/#/case',
-    'civicrm/case/search?reset=1' => 'civicrm/case/a/#/case/list',
+    'civicrm/case/search?reset=1' => 'civicrm/case/a/#/case/list?sx=1',
   );
 
   _civicase_menu_walk($menu, function(&$item) use ($rewriteMap) {
