@@ -56,9 +56,11 @@
   width: calc(100% - 355px);
   float: left;
 }
-#bootstrap-theme .case-is-focused .act-feed-list-group.viewing-activity {
-  width: calc(100% - 463px);
+#bootstrap-theme .activity-timeline.viewing-activity {
   min-height: calc(100vh - 120px);
+}
+#bootstrap-theme .case-is-focused .activity-timeline.viewing-activity {
+  width: calc(100% - 463px);
 }
 
 #bootstrap-theme .act-feed-view-activity {
