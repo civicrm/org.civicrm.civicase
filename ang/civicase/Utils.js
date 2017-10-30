@@ -486,10 +486,10 @@
         '<span ng-if="contacts.length === 2">&amp; <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].contact_id}) }}">{{ contacts[1].display_name }}</a></span>' +
         // preventDefault stops the browser from folling a link if this is used inside an <a> tag and the user clicks the button.
         '<div class="btn-group btn-group-xs" ng-if="contacts.length > 2" ng-click="$event.preventDefault();">' +
-        '  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts(\'Additional Contacts\') }}">' +
+        '  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts(\'Additional Contacts\') }}">' +
         '    + {{ contacts.length - 1 }}' +
         '  </button>' +
-        '  <ul class="dropdown-menu" >' +
+        '  <ul class="dropdown-menu pull-right" >' +
         '    <li ng-repeat="(index, contact) in contacts" ng-if="index">' +
         '      <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contact.contact_id}) }}">{{ contact.display_name }}</a>' +
         '    </li>' +

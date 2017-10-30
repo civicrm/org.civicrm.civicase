@@ -246,6 +246,15 @@
 #bootstrap-theme .dashboard-case-wrapper .panel-title .badge {
   margin-left: 5px;
 }
+#bootstrap-theme .dashboard-case-wrapper .next-milestone-panel .act-star {
+  margin-top: -7px;
+}
+#bootstrap-theme .dashboard-case-wrapper .next-milestone-panel .cb-dot {
+  margin-left: -13px;
+}
+#bootstrap-theme .dashboard-case-wrapper .recent-communication-panel .act-feed-item-content {
+  padding: 5px 15px 15px;
+}
 #bootstrap-theme .dashboard-case-wrapper .act-category-milestone.act-feed-item .act-feed-inner {
   margin-left: 0;
   padding-left: 0;
@@ -253,6 +262,18 @@
 #bootstrap-theme .dashboard-case-wrapper .act-category-milestone .act-feed-item-content > div.ng-scope {
   margin-left: 3em;
   padding-left: 2em;
+}
+#bootstrap-theme .dashboard-case-wrapper .next-milestone-panel .act-category-milestone .act-feed-item-content > div {
+  margin-left: 1.2em;
+}
+#bootstrap-theme .dashboard-case-wrapper .next-milestone-panel .act-contacts-target strong {
+  display: none;
+}
+#bootstrap-theme .dashboard-case-wrapper .next-milestone-panel .act-date {
+  float: left;
+}
+#bootstrap-theme .dashboard-case-wrapper .next-milestone-panel .act-contacts {
+  float: right;
 }
 #bootstrap-theme .dashboard-case-wrapper .act-category-milestone.act-feed-item .act-feed-item-content h4 {
   margin-bottom: 0;
