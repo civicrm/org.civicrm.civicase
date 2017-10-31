@@ -345,6 +345,12 @@
   width: 890px;
   z-index: 600;
 }
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
+  top: 145px;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix {
+  top: 85px;
+}
 #bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table th {
   background: #FFFFFF;
   font-weight: bold;
