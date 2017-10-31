@@ -390,11 +390,11 @@
   position: absolute;
   top: 0;
   width: 18px;
-  z-index: 1;
 }
 #bootstrap-theme .civicase-view-next-activities:before {
   box-shadow: inset 36px 0 18px -36px rgba(49,40,40,0.25);
   left: 0;
+  z-index: 1;
 }
 #bootstrap-theme .civicase-view-next-activities:after {
   box-shadow: inset -36px 0 18px -36px rgba(49,40,40,0.25);

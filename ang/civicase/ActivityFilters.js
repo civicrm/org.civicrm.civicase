@@ -44,7 +44,8 @@
         });
 
         $actHeader.affix({offset: {top: $casePanelBody.offset().top - 73} })
-          .css('top', $civicrmMenu.height())
+          .css('top', $civicrmMenu.height() + 53)
+          .css('width',$('.act-feed-panel').css('width'))
           .on('affixed.bs.affix', function() {
             $actHeader.css('width',$('.act-feed-panel').css('width'));
             $actHeader.css('top', $civicrmMenu.height() + 53);
@@ -54,6 +55,7 @@
           });
         
         $actControls.affix({offset: {top: $casePanelBody.offset().top - 73} })
+          .css('width',$actHeader.css('width'))
           .on('affixed.bs.affix', function() {
             $actControls.css('width',$actHeader.css('width'));
             $actControls.css('top',$civicrmMenu.height() + $actHeader.height() + 53);
@@ -65,7 +67,7 @@
 
         $scope.$watchCollection('[filters, exposedFilters]', function(){
           $timeout(function() {
-            $actControls.css('top',$civicrmMenu.height() + $actHeader.height());
+            $actControls.css('top',$civicrmMenu.height() + $actHeader.height() + 53);
             $feedActivity.not('.cc-zero-w')
               .height($(window).height() - ($civicrmMenu.height() + $actHeader.height() + $actControls.height()))
               .css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height() + 53);

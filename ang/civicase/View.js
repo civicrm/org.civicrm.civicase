@@ -316,7 +316,7 @@
 
           $caseNavigation.affix({
             offset: {
-              top: $casePanelBody.offset().top - 73
+              top: $casePanelBody.offset().top - 87
             }
           })
           .on('affixed.bs.affix', function() {

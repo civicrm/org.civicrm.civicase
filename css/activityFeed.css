@@ -323,7 +323,7 @@
 }
 #bootstrap-theme .act-feed-list-group .act-feed-inner .btn {
   border: none;
-  padding: 0;
+  padding: 0 5px;
 }
 #bootstrap-theme .act-feed-list-group .act-contacts div:not(.act-contacts-target):not(.btn-group) {
   min-width: 40%;
@@ -414,7 +414,7 @@
   max-width: 170px;
 }
 #bootstrap-theme div.act-feed-panel .act-list-controls .select2-container {
-  min-width: 220px;
+  min-width: 185px;
 }
 #bootstrap-theme .act-feed-list-group .act-list-controls.affix {
   margin: 0px;
@@ -518,6 +518,7 @@
   background-color: #fcfcfc;
 }
 #bootstrap-theme .activity-timeline .activity-item-menu.btn-group {
+  margin-right: -5px;
   margin-top: -10px;
 }
 #bootstrap-theme .activity-timeline .act-category-communication .activity-item-menu.btn-group {
