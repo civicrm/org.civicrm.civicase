@@ -224,9 +224,6 @@
   overflow: hidden;
   opacity: .8;
 }
-#bootstrap-theme .panel.viewing-case .civicase-table-expander{
-  display: none;
-}
 #bootstrap-theme .civicase-table-expander div {
   position: relative;
   left: -15px;
@@ -239,6 +236,7 @@
   font-size: 18px;
   text-indent: 12px;
   text-shadow: 1px 1px #303030;
+  z-index: 1;
 }
 #bootstrap-theme .civicase-table-expander:hover div {
   background-color: #23527c;
