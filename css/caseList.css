@@ -224,9 +224,6 @@
   overflow: hidden;
   opacity: .8;
 }
-#bootstrap-theme .panel.viewing-case .civicase-table-expander{
-  display: none;
-}
 #bootstrap-theme .civicase-table-expander div {
   position: relative;
   left: -15px;
@@ -239,6 +236,7 @@
   font-size: 18px;
   text-indent: 12px;
   text-shadow: 1px 1px #303030;
+  z-index: 1;
 }
 #bootstrap-theme .civicase-table-expander:hover div {
   background-color: #23527c;
@@ -344,6 +342,12 @@
   top: 32px;
   width: 890px;
   z-index: 600;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
+  top: 145px;
+}
+#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix {
+  top: 85px;
 }
 #bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table th {
   background: #FFFFFF;
