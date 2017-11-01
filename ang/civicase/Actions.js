@@ -3,7 +3,7 @@
     return {
       restrict: 'A',
       template:
-      '<li ng-class="{disabled: !isActionEnabled(action)}" ng-if="!action.number || ((multi && action.number > 1) || (!multi && action.number === 1))" ng-repeat="action in caseActions">' +
+      '<li ng-class="{disabled: !isActionEnabled(action)}" ng-if="isActionAllowed(action)" ng-repeat="action in caseActions">' +
       '  <a href ng-click="doAction(action)"><i class="fa {{action.icon}}"></i> {{ action.title }}</a>' +
       '</li>',
       scope: {
@@ -13,10 +13,14 @@
       },
       link: function($scope, element, attributes) {
         var ts = CRM.ts('civicase');
-        $scope.multi = attributes.multiple;
+        var multi = $scope.multi = attributes.multiple;
 
         $scope.isActionEnabled = function(action) {
           return (!action.number || $scope.cases.length == action.number);
+        };
+
+        $scope.isActionAllowed = function(action) {
+          return (!action.number || ((multi && action.number > 1) || (!multi && action.number === 1)));
         };
 
         // Perform bulk actions
@@ -191,6 +195,26 @@
               if (cases.length === 1) {
                 popupPath.query.caseid = cases[0].id;
               }
+              return popupPath;
+            },
+
+            printMerge: function(cases) {
+              var contactIds = [],
+                caseIds = [];
+              _.each(cases, function(item) {
+                caseIds.push(item.id);
+                contactIds.push(item.client[0].contact_id);
+              });
+              var popupPath = {
+                path: 'civicrm/activity/pdf/add',
+                query: {
+                  action: 'add',
+                  reset: 1,
+                  context: 'standalone',
+                  cid: contactIds.join(),
+                  caseid: caseIds.join()
+                }
+              };
               return popupPath;
             },
 
