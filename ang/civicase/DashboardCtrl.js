@@ -131,7 +131,7 @@
     // the narrower, per-section filter-options.
     $scope.$watch('myCasesOnly', function (myCasesOnly) {
       $scope.activityFilters = {
-        case_filter: {"case_type_id.is_active": 1}
+        case_filter: {"case_type_id.is_active": 1, contact_is_deleted: 0}
       };
       var recentCaseFilter = {
         'status_id.grouping': 'Opened'

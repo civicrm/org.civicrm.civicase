@@ -60,6 +60,8 @@ function civicrm_api3_case_gettypestats($params) {
     $permClauses = array_filter(CRM_Case_BAO_Case::getSelectWhereClause('a'));
     $query->where($permClauses);
   }
+  // Filter out deleted contacts
+  $query->where("a.id IN (SELECT case_id FROM civicrm_case_contact ccc, civicrm_contact cc WHERE ccc.contact_id = cc.id AND cc.is_deleted = 0)");
 
   // Denormalize the stats data.
   $results = array();

@@ -33,6 +33,7 @@ function civicrm_api3_case_getrelations($params) {
   $params += array('options' => array());
   $caseContacts = civicrm_api3('CaseContact', 'get', array(
     'case_id' => $params['case_id'],
+    'contact_id.is_deleted' => 0,
     'return' => 'contact_id',
     'options' => array('limit' => 0),
   ));

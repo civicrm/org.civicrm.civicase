@@ -16,6 +16,12 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
     'description' => 'Contact id of the case manager',
     'type' => CRM_Utils_Type::T_INT,
   );
+
+  $spec['contact_is_deleted'] = array(
+    'title' => 'Contact Is Deleted',
+    'description' => 'Set FALSE to filter out cases for deleted contacts, TRUE to return only cases of deleted contacts',
+    'type' => CRM_Utils_Type::T_BOOLEAN,
+  );
 }
 
 /**
@@ -48,6 +54,12 @@ function civicrm_api3_case_getdetails($params) {
     }
     \Civi\CCase\Utils::joinOnManager($sql);
     $sql->where(CRM_Core_DAO::createSQLFilter('manager.id', $params['case_manager']));
+  }
+
+  // Filter deleted contacts from results
+  if (isset($params['contact_is_deleted'])) {
+    $isDeleted = (int) $params['contact_is_deleted'];
+    $sql->where("a.id IN (SELECT case_id FROM civicrm_case_contact ccc, civicrm_contact cc WHERE ccc.contact_id = cc.id AND cc.is_deleted = $isDeleted)");
   }
 
   // Set page number dynamically based on selected record

@@ -43,6 +43,10 @@
         }
       }
     });
+    // Filter out deleted contacts
+    if (!params.contact_id) {
+      params.contact_is_deleted = 0;
+    }
     // If no status specified, default to all open cases
     if (!params.status_id && !params.id) {
       params['status_id.grouping'] = 'Opened';
