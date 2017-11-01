@@ -42,6 +42,9 @@ input[type="file"]#cc-uploader-button {
   color: #42AFCB;
   font-size: 13px;
   margin: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 #bootstrap-theme .cc-uploader-detail .civicase-file-action {
   text-align: right;
