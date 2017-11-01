@@ -153,7 +153,7 @@
         $timeout(function() {
 
           // $el it self is not ul.nav (consider this when creating common directive)
-          $tabNavigation = $('ul.nav'),
+          var $tabNavigation = $('ul.nav'),
           $civicrmMenu = $('#civicrm-menu'),
           $tabContainer = $('.dashboard-tab-container');
 
