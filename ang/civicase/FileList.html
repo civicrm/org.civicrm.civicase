@@ -2,12 +2,21 @@
 
 <div crm-ui-debug="filesByAct"></div>
 
-<div ng-hide="apiCtrl.result.count" class="no-files">
-  {{ts('No files found')}}
+<div ng-hide="apiCtrl.loading || apiCtrl.result.count" class="civicase-panel-empty">
+  <i class="fa fa-file-o fa-big"></i>
+  <div class="empty-label">{{ ts('No files found') }}</div>
 </div>
 
 <div civicase-util="caseutil"></div>
-<ul class="list-group act-feed-list-group act-feed-list-group-file" ng-show="apiCtrl.result.count > 0">
+
+
+<ul class="list-group act-feed-list-group activity-placeholder-list-inner" ng-if="apiCtrl.loading && !apiCtrl.result.count">
+  <li class="list-group-item" ng-repeat="i in [0,1,2]">
+    <div class="activity-card-loading-placeholder"><div></div></div>
+  </li>
+</ul>
+
+<ul class="list-group act-feed-list-group act-feed-list-group-file" ng-show="apiCtrl.result.count">
   <li class="list-group-item" ng-repeat="activity in activities">
     <!--<h4>({{$index}})({{activity.activity_date_time}})({{activities[$index-1].activity_date_time}})</h4>-->
 

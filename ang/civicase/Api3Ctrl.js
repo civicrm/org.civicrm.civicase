@@ -19,12 +19,15 @@
         ctrl.action = parts[1];
         ctrl.params = parts[2];
         ctrl.result = {};
+        ctrl.loading = ctrl.firstLoad = true;
 
         ctrl.refresh = function refresh() {
+          ctrl.loading = true;
           crmThrottle(function () {
             return crmApi(ctrl.entity, ctrl.action, ctrl.params)
               .then(function (response) {
                 ctrl.result = response;
+                ctrl.loading = ctrl.firstLoad = false;
                 if ($scope.onRefresh) {
                   $scope.$parent.$eval($scope.onRefresh, ctrl);
                 }
