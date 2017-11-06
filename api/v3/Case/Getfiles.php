@@ -237,6 +237,7 @@ function _civicrm_api3_case_getfiles_assert_access($params) {
   // Delegate to Case.get to determine if the ID is accessible.
   civicrm_api3('Case', 'getsingle', array(
     'id' => $params['case_id'],
+    'check_permissions' => $params['check_permissions'],
     'return' => 'id',
   ));
 }
