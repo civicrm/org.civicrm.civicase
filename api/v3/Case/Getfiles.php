@@ -154,8 +154,11 @@ function _civicrm_api3_case_getfiles_select($params) {
 
   $select->join('act', 'INNER JOIN civicrm_activity act ON ((caseact.activity_id = act.id OR caseact.activity_id = act.original_id) AND act.is_current_revision=1)');
   if (isset($params['text'])) {
-    $select->where('act.subject LIKE @q OR act.details LIKE @q OR f.description LIKE @q OR f.uri LIKE @q',
-      array('q' => '%' . $params['text'] . '%'));
+    // The end of the uri contains a hash which we want to ignore. So we match from the start of the file uri as a cheap fix. CRM-20096.
+    $select->where('act.subject LIKE @q OR act.details LIKE @q OR f.description LIKE @q OR f.uri LIKE @s', array(
+      'q' => '%' . $params['text'] . '%',
+      's' => $params['text'] . '%',
+    ));
   }
 
   if (isset($params['mime_type_cat'])) {
