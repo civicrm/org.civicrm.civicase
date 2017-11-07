@@ -427,7 +427,7 @@ function civicase_civicrm_pageRun(&$page) {
         'return' => array('case_type_id.name', 'status_id.name'),
       ));
       $url = CRM_Utils_System::url('civicrm/case/a/', NULL, TRUE,
-        "/case/list?caseId={$caseId}&cf=%7B%22status_id%22:%5B%22{$case['status_id.name']}%22%5D,%22case_type_id%22:%5B%22{$case['case_type_id.name']}%22%5D%7D",
+        "/case/list?sf=id&sd=DESC&caseId={$caseId}&cf=%7B%22status_id%22:%5B%22{$case['status_id.name']}%22%5D,%22case_type_id%22:%5B%22{$case['case_type_id.name']}%22%5D%7D",
         FALSE);
       CRM_Utils_System::redirect($url);
     }
