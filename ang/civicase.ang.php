@@ -146,6 +146,11 @@ $options['caseActions'] = array(
     'icon' => 'fa-file-pdf-o',
   ),
   array(
+    'title' => ts('Export Cases'),
+    'action' => 'exportCases(cases)',
+    'icon' => 'fa-file-excel-o',
+  ),
+  array(
     'title' => ts('Link Cases'),
     'action' => 'linkCases(cases[0])',
     'number' => 1,

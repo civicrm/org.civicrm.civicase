@@ -218,6 +218,19 @@
               return popupPath;
             },
 
+            exportCases: function(cases) {
+              var caseIds = _.collect(cases, 'id');
+              var popupPath = {
+                path: 'civicrm/export/standalone',
+                query: {
+                  reset: 1,
+                  entity: 'Case',
+                  id: caseIds.join()
+                }
+              };
+              return popupPath;
+            },
+
             linkCases: function(case1, case2) {
               var activityTypes = CRM.civicase.activityTypes,
                 link = {
