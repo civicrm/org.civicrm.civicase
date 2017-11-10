@@ -79,7 +79,7 @@
           <div><em>{{ role.description }}</em></div>
         </td>
         <td>
-          <span ng-if="role.contact_id">{{ role.display_name }}</span>
+          <a ng-if="role.contact_id" ng-href="{{ CRM.url('civicrm/contact/view', {cid: role.contact_id}) }}">{{ role.display_name }}</a>
           <span ng-if="!role.contact_id">{{ ts('Unassigned')  }}</span>
         </td>
         <td>{{ role.phone }}</td>
@@ -192,7 +192,7 @@
           <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
           <label for="select-relation-{{ $index }}"></label>
         </td>
-        <td>{{ contact.display_name }}</td>
+        <td><a ng-href="{{ CRM.url('civicrm/contact/view', {cid: contact.contact_id}) }}">{{ contact.display_name }}</a></td>
         <td>{{ contact.relation }}</td>
         <td>{{ contact.client }}</td>
         <td>{{ contact.phone }}</td>

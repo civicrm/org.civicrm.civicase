@@ -352,9 +352,6 @@
   padding: .5em;
   vertical-align: middle !important;
 }
-#bootstrap-theme .case-people-subtab td:nth-child(3) {
-  color: #42AFCB;
-}
 #bootstrap-theme .case-people-subtab td:last-child {
   text-align: right;
 }
