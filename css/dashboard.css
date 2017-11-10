@@ -4,7 +4,6 @@
 #bootstrap-theme .dashboard-case-summary-wrapper.show-summary-breakdown {
   background: #FFFFFF;
   border-bottom: 1px solid #D3DEE2;
-  box-shadow: inset 7px -13px 10px -13px rgba(48, 40, 40, 0.25);
   padding-bottom: 10px;
 }
 #bootstrap-theme .dashboard-case-summary {
@@ -21,7 +20,6 @@
 #bootstrap-theme .show-summary-breakdown .dashboard-case-summary th:after {
   background: none;
   border: none;
-  box-shadow: inset 2px 8px 11px -8px rgba(48, 40, 40, 0.25);
   bottom: -10px;
   content: "";
   height: 9px;
@@ -142,7 +140,7 @@
 }
 #bootstrap-theme .dashboard-case-summary th .arrow-right:after {
   border-color: rgba(255, 255, 255, 0);
-  border-left-color: #F3F6F7;
+  border-left-color: #F5F8F9;
   border-width: 24px;
   border-left-width: 9px;
   margin-top: -24px;
@@ -233,6 +231,7 @@
   border-left-color: #E6807F !important;
   border-right-color: #E6807F !important;
 }
+#bootstrap-theme .case-stats-wrapper .panel-default>.panel-heading,
 #bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading {
   padding-bottom: 20px;
   padding-top: 20px;
