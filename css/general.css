@@ -299,3 +299,14 @@
   padding: 5px 19px 5px 25px;
   margin-top: 12px;
 }
+#bootstrap-theme .activity-card.act-category-none {
+  border: 1px solid #E8EEF0;
+}
+#bootstrap-theme .activity-card.act-category-none.activity-overdue {
+  border-color: #E8EEF0 !important;
+}
+#bootstrap-theme .open>.dropdown-menu {
+  position: fixed;
+  width: fit-content;
+  z-index: 2;
+}
