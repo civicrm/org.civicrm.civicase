@@ -37,6 +37,9 @@
   left: 0;
   position: absolute;  
   width: 310px;
+  transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr th:first-child {
   background: #F3F6F7;
