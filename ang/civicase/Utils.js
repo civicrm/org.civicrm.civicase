@@ -546,4 +546,32 @@
     };
   });
 
+  angular.module('civicase').directive('dropdownToggle', function($timeout) {
+    return {
+      restrict: 'C',
+      link: function(scope, $el, attrs) {
+        function dropDownFixPosition(button,dropdown){
+          var dropDownTop = - $(window).scrollTop() + button.offset().top + button.outerHeight();
+          dropdown.css('top', dropDownTop + "px");
+          if(dropdown.hasClass('dropdown-menu-right')) {
+            dropdown.css('left', button.offset().left - dropdown.outerWidth() + button.outerWidth() + "px");
+          }
+          else {
+            dropdown.css('left', button.offset().left + "px");
+          }
+        }
+
+        $timeout(function() {
+          $($el).click(function(){
+            dropDownFixPosition($(this),$(this).next('.dropdown-menu'));
+          });
+
+          document.addEventListener('scroll', function(e){
+            dropDownFixPosition($($el),$($el).next('.dropdown-menu'));
+          }, true);
+        });
+      }
+    };
+  });
+
 })(angular, CRM.$, CRM._, CRM);

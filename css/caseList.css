@@ -52,9 +52,6 @@
   border-bottom: 1px solid #e8eef0;
   height: 150px;
 }
-#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr:last-child td {
-  border-bottom: none;
-}
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .outer {
   background: #fff;
   position: relative;
