@@ -4,7 +4,6 @@
 
     function activityFilters($scope, element, attrs) {
       var ts = $scope.ts = CRM.ts('civicase');
-      var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
 
       function mapSelectOptions(opt, id) {
         return {

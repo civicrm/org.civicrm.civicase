@@ -11,7 +11,6 @@
   function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, templateExists) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
-    var hs = $scope.hs = crmUiHelp({file: 'CRM/civicase/ActivityFeed'});
     var ITEMS_PER_PAGE = 25,
       caseId = $scope.params ? $scope.params.case_id : null,
       pageNum = 0;
