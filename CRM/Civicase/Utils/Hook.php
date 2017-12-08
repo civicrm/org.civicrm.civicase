@@ -5,7 +5,7 @@
  *
  * Implements hook to alter the content of case tables.
  */
-class CRM_CiviCase_Utils_Hook {
+class CRM_Civicase_Utils_Hook {
 
   /**
    * Allows to alter case dashboard tables by adding or removing columns to the

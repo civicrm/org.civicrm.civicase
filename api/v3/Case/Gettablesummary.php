@@ -37,7 +37,7 @@ function civicrm_api3_case_gettablesummary($params) {
   $resultDetails = _civicrm_api3_case_gettablesummary_get_cases($params);
   $cases = $resultDetails['values'];
 
-  CRM_CiviCase_Utils_Hook::alterCaseTable($headers, $cases);
+  CRM_Civicase_Utils_Hook::alterCaseTable($headers, $cases);
 
   $resultDetails['values'] = array(
     'headers' => $headers,
