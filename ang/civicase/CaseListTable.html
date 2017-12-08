@@ -36,14 +36,7 @@
         </select>
       </div>
     </th>
-    <th ng-show="!viewingCase" civicase-sortheader="next_activity" class="next-activity-title">{{ ts('Next Activity') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="subject">{{ ts('Subject') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="status_id.label">{{ ts('Status') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="case_type_id.title">{{ ts('Type') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="case_manager.sort_name">{{ ts('Case Manager') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="start_date">{{ ts('Start Date') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="modified_date">{{ ts('Last Updated') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="my_role.label_b_a">{{ ts('My Role') }}</th>
+    <th ng-repeat="header in headers">{{ header.label }}</th>
   </tr>
   </thead>
   <tbody>
@@ -100,25 +93,29 @@
         </div>
       </div>
     </td>
-    <td ng-show="!viewingCase" class="case-activity-card-wrapper">
-      <div
-        ng-if="item.activity_summary.next"
-        case-activity-card="item.activity_summary.next[0]"
-        refresh-callback="refresh"
-      >
-      </div>
-    </td>
-    <td ng-show="!viewingCase">{{ item.subject }}</td>
-    <td ng-show="!viewingCase">
-      <span class="badge" style="background-color: {{ item.color }}">
-        {{ item.status }}
+    <td
+      ng-show="!viewingCase"
+      ng-repeat="header in headers"
+      ng-class="{'case-activity-card-wrapper': header.name == 'next_activity'}">
+
+      <span ng-switch on="header.name">
+        <span ng-switch-when="next_activity">
+          <div
+            ng-if="item.activity_summary.next"
+            case-activity-card="item.activity_summary.next[0]"
+            refresh-callback="refresh"
+          >
+          </div>
+        </span>
+        <span ng-switch-when="status" class="badge" style="background-color: {{ item.color }}">
+          {{ item.status }}
+        </span>
+        <span ng-switch-when="manager">{{ item.manager.display_name }}</span>
+        <span ng-switch-when="start_date|modified_date">{{ CRM.utils.formatDate(item[header.name]) }}</span>
+        <span ng-switch-when="myRole">{{ item.myRole.join(', ') }}</span>
+        <span ng-switch-default>{{ item[header.name] }}</span>
       </span>
     </td>
-    <td ng-show="!viewingCase">{{ item.case_type }}</td>
-    <td ng-show="!viewingCase">{{ item.manager.display_name }}</td>
-    <td ng-show="!viewingCase">{{ CRM.utils.formatDate(item.start_date) }}</td>
-    <td ng-show="!viewingCase">{{ CRM.utils.formatDate(item.modified_date) }}</td>
-    <td ng-show="!viewingCase">{{ item.myRole.join(', ') }}</td>
   </tr>
 
   <tr class="case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">

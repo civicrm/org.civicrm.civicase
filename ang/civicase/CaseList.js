@@ -56,7 +56,7 @@
       params.is_deleted = 0;
     }
     return [
-      ['Case', 'getdetails', $.extend(true, returnParams, params)],
+      ['Case', 'gettablesummary', $.extend(true, returnParams, params)],
       ['Case', 'getcount', params]
     ];
   }
@@ -195,7 +195,7 @@
       setPageTitle();
       crmThrottle(_loadCases).then(function(result) {
         var viewingCaseDetails;
-        var cases = _.each(result[0].values, formatCase);
+        var cases = _.each(result[0].values.cases, formatCase);
         if ($scope.viewingCase) {
           if ($scope.viewingCaseDetails) {
             var currentCase = _.findWhere(cases, {id: $scope.viewingCase});
@@ -207,6 +207,7 @@
           }
         }
         $scope.cases = cases;
+        $scope.headers = result[0].values.headers;
         $scope.page.num = result[0].page || $scope.page.num;
         $scope.totalCount = result[1];
         $scope.page.total = Math.ceil(result[1] / $scope.page.size);
@@ -220,7 +221,8 @@
       if (!apiCalls) apiCalls = [];
       apiCalls = apiCalls.concat(loadCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page));
       crmApi(apiCalls, true).then(function(result) {
-        $scope.cases = _.each(result[apiCalls.length - 2].values, formatCase);
+        $scope.cases = _.each(result[apiCalls.length - 2].values.cases, formatCase);
+        $scope.headers = result[apiCalls.length - 2].values.headers;
         $scope.totalCount = result[apiCalls.length - 1];
         $scope.isLoading = false;
       });
@@ -297,7 +299,8 @@
       $scope.isLoading = true;
       crmThrottle(_loadCases)
         .then(function(result) {
-          $scope.cases = _.each(result[0].values, formatCase);
+          $scope.cases = _.each(result[0].values.cases, formatCase);
+          $scope.headers = result[0].values.headers;
           $scope.totalCount = result[1];
           $scope.isLoading = false;
 
