@@ -246,6 +246,7 @@
     $scope.$watchCollection('page', getCasesFromWatcher);
     $scope.$watch('cases', function(cases) {
       $scope.selectedCases = _.filter(cases, 'selected');
+      $('.custom-scroll').css('width', $('.case-list-table thead.affix-top').css('width'));
     }, true);
 
     $scope.applyAdvSearch = function(newFilters) {
