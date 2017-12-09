@@ -246,8 +246,16 @@
     $scope.$watchCollection('page', getCasesFromWatcher);
     $scope.$watch('cases', function(cases) {
       $scope.selectedCases = _.filter(cases, 'selected');
-      $('.custom-scroll').css('width', $('.case-list-table thead.affix-top').css('width'));
     }, true);
+
+    $scope.$watch(
+      function () {
+        return $('.case-list-table thead.affix-top').css('width');
+      },
+      function(width) {
+        $('.custom-scroll').css('width', width);
+      }
+    );
 
     $scope.applyAdvSearch = function(newFilters) {
       $scope.filters = newFilters;
@@ -291,6 +299,15 @@
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.casePlaceholders = _.range($scope.page.size);
     $scope.isLoading = true;
+
+    $scope.$watch(
+      function () {
+        return $('.case-list-table thead.affix-top').css('width');
+      },
+      function(width) {
+        $('.custom-scroll').css('width', width);
+      }
+    );
 
     function _loadCases() {
       return crmApi(loadCaseApiParams($scope.filters, $scope.sort, $scope.page));
