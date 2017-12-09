@@ -94,34 +94,42 @@ function _civicrm_api3_case_gettablesummary_get_headers() {
     array(
       'name' => 'next_activity',
       'label' => ts('Next Activity'),
+      'sort' => 'next_activity',
     ),
     array(
       'name' => 'subject',
       'label' => ts('Subject'),
+      'sort' => 'subject',
     ),
     array(
       'name' => 'status',
       'label' => ts('Status'),
+      'sort' => 'status_id.label',
     ),
     array(
       'name' => 'case_type',
       'label' => ts('Type'),
+      'sort' => 'case_type_id.title',
     ),
     array(
       'name' => 'manager',
       'label' => ts('Case Manager'),
+      'sort' => 'case_manager.sort_name',
     ),
     array(
       'name' => 'start_date',
       'label' => ts('Start Date'),
+      'sort' => 'start_date',
     ),
     array(
       'name' => 'modified_date',
       'label' => ts('Last Updated'),
+      'sort' => 'modified_date',
     ),
     array(
       'name' => 'myRole',
       'label' => ts('My Role'),
+      'sort' => 'my_role.label_b_a',
     ),
   );
 
