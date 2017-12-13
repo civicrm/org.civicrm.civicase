@@ -401,6 +401,37 @@ function civicase_civicrm_postProcess($formName, &$form) {
 }
 
 /**
+ * Implements hook_civicrm_permission()
+ *
+ * @param array $permissions
+ *   Array of permissions defined on extensions
+ */
+function civicase_civicrm_permission(&$permissions) {
+  $permissions['basic case information'] = array(
+    'Civicase: basic case information',
+    ts('Allows a user to view only basic information of cases.')
+  );
+}
+
+/**
+ * Implements hook_civicrm_alterCaseTable()
+ *
+ * @param array $headers
+ *   List of columns in the table, of the form ['column_name' => 'Column Label']
+ * @param $cases
+ *   List of cases to be shown
+ */
+function civicase_civicrm_alterCaseTable(&$headers, &$cases) {
+  if (CRM_Core_Permission::check('basic case information')) {
+    foreach ($headers as $key => $header) {
+      if ($header['name'] === 'next_activity') {
+        unset($headers[$key]);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_civicrm_alterAPIPermissions().
  *
  * @link https://docs.civicrm.org/dev/en/master/hooks/hook_civicrm_alterAPIPermissions/
