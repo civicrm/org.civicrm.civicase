@@ -165,6 +165,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+#bootstrap-theme .case-list-table td:first-child .case-list-info .open > .dropdown-menu {
+  left: auto !important;
+  position: absolute;
+  right: 0;
+  top: 28px !important;
+}
 #bootstrap-theme .case-list-table tr {
   border-top: 1px solid #E8EEF0;
 }
@@ -339,7 +345,7 @@
   margin-left: -290px;
   overflow: hidden;
   position: fixed;
-  top: 32px;
+  top: 60px;
   width: 890px;
   z-index: 600;
 }
@@ -347,7 +353,7 @@
   top: 145px;
 }
 #bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix {
-  top: 85px;
+  top: 113px;
 }
 #bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table th {
   background: #FFFFFF;
