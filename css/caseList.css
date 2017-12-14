@@ -131,6 +131,9 @@
   border-right: 1px solid #ddd;
   width: 25%;
 }
+#bootstrap-theme .case-list-table td:first-child {
+  z-index: 1;
+}
 #bootstrap-theme .case-list-table td:first-child:hover {
   background-color: #f2f9fc;
 }
@@ -168,7 +171,6 @@
 #bootstrap-theme .case-list-table td:first-child .case-list-info .open > .dropdown-menu {
   left: auto !important;
   position: absolute;
-  right: 0;
   top: 28px !important;
 }
 #bootstrap-theme .case-list-table tr {
