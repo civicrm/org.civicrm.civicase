@@ -1,7 +1,6 @@
 <?php
 function _civicrm_api3_case_getcaselist_spec(&$spec) {
-  $result = civicrm_api3('Case', 'getfields', array('api_action' => 'get'));
-  $spec = $result['values'];
+  $spec = civicrm_api3('Case', 'getfields', array('api_action' => 'get'))['values'];
 
   $spec['case_manager'] = array(
     'title' => 'Case Manager',
