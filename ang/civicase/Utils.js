@@ -574,4 +574,20 @@
     };
   });
 
+  angular.module('civicase').directive('calculateScrollWidth', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, $el, attrs) {
+        scope.$watch(
+          function () {
+            return $('.case-list-table thead.affix-top').css('width');
+          },
+          function(width) {
+            $('.custom-scroll').css('width', width);
+          }
+        );
+      }
+    };
+  });
+
 })(angular, CRM.$, CRM._, CRM);
