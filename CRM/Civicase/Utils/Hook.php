@@ -18,16 +18,38 @@ class CRM_Civicase_Utils_Hook {
    *
    * @return mixed
    */
-  public static function alterCaseTable(&$headers, &$cases) {
+  public static function alterCaseListContent(&$cases) {
     return CRM_Utils_Hook::singleton()->invoke(
-      array('headers', 'cases'),
-      $headers,
+      array('cases'),
       $cases,
       CRM_Utils_Hook::$_nullObject,
       CRM_Utils_Hook::$_nullObject,
       CRM_Utils_Hook::$_nullObject,
       CRM_Utils_Hook::$_nullObject,
-      'civicrm_alterCaseTable'
+      CRM_Utils_Hook::$_nullObject,
+      'civicrm_alterCaseListContent'
+    );
+  }
+
+  /**
+   * Allows to alter case dashboard tables by adding or removing headers to the
+   * table.
+   *
+   * @param array $headers
+   *   List of columns in the table, of the form ['column_name' => 'Column Label']
+   *
+   * @return mixed
+   */
+  public static function alterCaseListHeaders(&$headers) {
+    return CRM_Utils_Hook::singleton()->invoke(
+      array('headers'),
+      $headers,
+      CRM_Utils_Hook::$_nullObject,
+      CRM_Utils_Hook::$_nullObject,
+      CRM_Utils_Hook::$_nullObject,
+      CRM_Utils_Hook::$_nullObject,
+      CRM_Utils_Hook::$_nullObject,
+      'civicrm_alterCaseListHeaders'
     );
   }
 

@@ -56,7 +56,7 @@
       params.is_deleted = 0;
     }
     return [
-      ['Case', 'gettablesummary', $.extend(true, returnParams, params)],
+      ['Case', 'getcaselist', $.extend(true, returnParams, params)],
       ['Case', 'getcount', params]
     ];
   }
@@ -195,7 +195,7 @@
       setPageTitle();
       crmThrottle(_loadCases).then(function(result) {
         var viewingCaseDetails;
-        var cases = _.each(result[0].values.cases, formatCase);
+        var cases = _.each(result[0].values, formatCase);
         if ($scope.viewingCase) {
           if ($scope.viewingCaseDetails) {
             var currentCase = _.findWhere(cases, {id: $scope.viewingCase});
@@ -206,8 +206,12 @@
             $scope.viewingCaseDetails = _.findWhere(cases, {id: $scope.viewingCase});
           }
         }
+
+        if (typeof result[2] !== 'undefined') {
+          $scope.headers = result[2].values;
+        }
+
         $scope.cases = cases;
-        $scope.headers = result[0].values.headers;
         $scope.page.num = result[0].page || $scope.page.num;
         $scope.totalCount = result[1];
         $scope.page.total = Math.ceil(result[1] / $scope.page.size);
@@ -221,8 +225,7 @@
       if (!apiCalls) apiCalls = [];
       apiCalls = apiCalls.concat(loadCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page));
       crmApi(apiCalls, true).then(function(result) {
-        $scope.cases = _.each(result[apiCalls.length - 2].values.cases, formatCase);
-        $scope.headers = result[apiCalls.length - 2].values.headers;
+        $scope.cases = _.each(result[apiCalls.length - 2].values, formatCase);
         $scope.totalCount = result[apiCalls.length - 1];
         $scope.isLoading = false;
       });
@@ -230,9 +233,13 @@
 
     function _loadCases() {
       var params = loadCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page);
+
       if (firstLoad && $scope.viewingCase) {
         params[0][2].options.page_of_record = $scope.viewingCase;
+      } else if (firstLoad) {
+        params.push(['Case', 'getcaselistheaders']);
       }
+
       return crmApi(params);
     }
 
@@ -247,15 +254,6 @@
     $scope.$watch('cases', function(cases) {
       $scope.selectedCases = _.filter(cases, 'selected');
     }, true);
-
-    $scope.$watch(
-      function () {
-        return $('.case-list-table thead.affix-top').css('width');
-      },
-      function(width) {
-        $('.custom-scroll').css('width', width);
-      }
-    );
 
     $scope.applyAdvSearch = function(newFilters) {
       $scope.filters = newFilters;
@@ -293,6 +291,8 @@
 
   function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
     var ts = $scope.ts = CRM.ts('civicase');
+    var firstLoad = true;
+
     $scope.cases = [];
     $scope.CRM = CRM;
     $scope.activityCategories = CRM.civicase.activityCategories;
@@ -300,25 +300,27 @@
     $scope.casePlaceholders = _.range($scope.page.size);
     $scope.isLoading = true;
 
-    $scope.$watch(
-      function () {
-        return $('.case-list-table thead.affix-top').css('width');
-      },
-      function(width) {
-        $('.custom-scroll').css('width', width);
-      }
-    );
-
     function _loadCases() {
-      return crmApi(loadCaseApiParams($scope.filters, $scope.sort, $scope.page));
+      var params = loadCaseApiParams($scope.filters, $scope.sort, $scope.page);
+
+      if (firstLoad) {
+        params.push(['Case', 'getcaselistheaders']);
+      }
+
+      return crmApi(params);
     }
 
     function getCases() {
       $scope.isLoading = true;
       crmThrottle(_loadCases)
         .then(function(result) {
-          $scope.cases = _.each(result[0].values.cases, formatCase);
-          $scope.headers = result[0].values.headers;
+          $scope.cases = _.each(result[0].values, formatCase);
+
+          if (firstLoad) {
+            $scope.headers = result[2].values;
+            firstLoad = false;
+          }
+
           $scope.totalCount = result[1];
           $scope.isLoading = false;
 
