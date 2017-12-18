@@ -61,8 +61,6 @@ class CRM_Civicase_Utils_Caselist {
       );
     }
 
-    CRM_Civicase_Utils_Hook::alterCaseListHeaders(self::$defaultHeaders);
-
     return array(
       'values' => self::$defaultHeaders
     );
@@ -90,8 +88,6 @@ class CRM_Civicase_Utils_Caselist {
         }
       }
     }
-
-    CRM_Civicase_Utils_Hook::alterCaseListContent($cases['values']);
 
     return $cases;
   }
