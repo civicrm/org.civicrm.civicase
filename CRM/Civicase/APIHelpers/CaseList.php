@@ -4,23 +4,16 @@
  * Implements helper methods to obtain list of cases and columns allowed to be
  * viewed on case lists for dashboard, searches and contacts.
  */
-class CRM_Civicase_Utils_Caselist {
-
-  /**
-   * List of default headers allowed to be seen on case list table.
-   *
-   * @var array
-   */
-  private static $defaultHeaders = array();
+class CRM_Civicase_APIHelpers_CaseList {
 
   /**
    * Returns list of allowed headers that can be shown on case lists.
    *
    * @return array
    */
-  public static function getAllowedHeaders() {
-    if (empty(self::$defaultHeaders)) {
-      self::$defaultHeaders = array(
+  public function getAllowedHeaders() {
+    return array(
+      'values' => array(
         array(
           'name' => 'next_activity',
           'label' => ts('Next Activity'),
@@ -61,16 +54,12 @@ class CRM_Civicase_Utils_Caselist {
           'label' => ts('My Role'),
           'sort' => 'my_role.label_b_a',
         ),
-      );
-    }
-
-    return array(
-      'values' => self::$defaultHeaders
+      )
     );
   }
 
   /**
-   * Returns paginated list of cases to be shown on case lists.
+   * Returns list of cases to be shown on case lists.
    *
    * @param array $params
    *   Parameters array for the API call

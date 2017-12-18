@@ -10,5 +10,6 @@
  *   List of headers.
  */
 function civicrm_api3_case_getcaselistheaders($params) {
-  return CRM_Civicase_Utils_Caselist::getAllowedHeaders();
+  $caseList = new CRM_Civicase_APIHelpers_CaseList();
+  return $caseList->getAllowedHeaders();
 }

@@ -31,5 +31,6 @@ function _civicrm_api3_case_getcaselist_spec(&$spec) {
  *   API result with the list of cases
  */
 function civicrm_api3_case_getcaselist($params) {
-  return CRM_Civicase_Utils_Caselist::getCaseList($params);
+  $caseList = new CRM_Civicase_APIHelpers_CaseList();
+  return $caseList->getCaseList($params);
 }
