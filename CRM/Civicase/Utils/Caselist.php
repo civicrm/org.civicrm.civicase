@@ -15,6 +15,11 @@ class CRM_Civicase_Utils_Caselist {
    */
   private static $defaultHeaders = array();
 
+  /**
+   * Returns list of allowed headers that can be shown on case lists.
+   *
+   * @return array
+   */
   public static function getAllowedHeaders() {
     if (empty(self::$defaultHeaders)) {
       self::$defaultHeaders = array(
@@ -66,6 +71,15 @@ class CRM_Civicase_Utils_Caselist {
     );
   }
 
+  /**
+   * Returns paginated list of cases to be shown on case lists.
+   *
+   * @param array $params
+   *   Parameters array for the API call
+   *
+   * @return array
+   *   Result with the list of cases to be shown
+   */
   public function getCaseList($params) {
     $loggedContactID = CRM_Core_Session::singleton()->getLoggedInContactID();
 

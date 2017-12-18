@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * Specification of the API action.
+ *
+ * @param array $spec
+ */
 function _civicrm_api3_case_getcaselist_spec(&$spec) {
   $spec = civicrm_api3('Case', 'getfields', array('api_action' => 'get'))['values'];
 
@@ -15,6 +21,15 @@ function _civicrm_api3_case_getcaselist_spec(&$spec) {
   );
 }
 
+/**
+ * Returns list of cases according to given parameters.
+ *
+ * @param array $params
+ *   Prameters to be passed to API call to obtain case list
+ *
+ * @return array
+ *   API result with the list of cases
+ */
 function civicrm_api3_case_getcaselist($params) {
   return CRM_Civicase_Utils_Caselist::getCaseList($params);
 }
