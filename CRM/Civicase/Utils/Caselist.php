@@ -1,10 +1,8 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: Usuario
- * Date: 15/12/2017
- * Time: 12:18 PM
+ * Implements helper methods to obtain list of cases and columns allowed to be
+ * viewed on case lists for dashboard, searches and contacts.
  */
 class CRM_Civicase_Utils_Caselist {
 
