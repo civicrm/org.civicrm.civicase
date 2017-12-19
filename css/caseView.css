@@ -532,7 +532,7 @@
 }
 #bootstrap-theme .case-view-body .civicase-view-tab-bar.affix {
   margin-top: 0;
-  top: 32px;
+  top: 60px;
   width: inherit;
   z-index: 600;
 }

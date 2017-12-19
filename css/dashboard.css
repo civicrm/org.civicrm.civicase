@@ -343,7 +343,7 @@
 }
 #bootstrap-theme .dashboard-tab-container ul.nav-pills-horizontal.affix {
   margin-top: 0;
-  top: 32px;
+  top: 60px;
   width: 1200px;
   z-index: 600;
 }
