@@ -180,6 +180,13 @@
           formatActivity(act, item.id);
         });
       });
+
+      _.each(item, function(field) {
+        if (typeof field.activity_date_time != 'undefined') {
+          formatActivity(field, item.id);
+        }
+      });
+
       _.each(item.contacts, function(contact) {
         if (!contact.relationship_type_id) {
           item.client.push(contact);

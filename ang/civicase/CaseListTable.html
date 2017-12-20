@@ -99,13 +99,13 @@
     <td
       ng-show="!viewingCase"
       ng-repeat="header in headers"
-      ng-class="{'case-activity-card-wrapper': header.name == 'next_activity'}">
+      ng-class="{'case-activity-card-wrapper': header.display_type == 'activity_card'}">
 
       <span ng-switch on="header.display_type">
         <span ng-switch-when="activity_card">
           <div
-            ng-if="item.activity_summary.next"
-            case-activity-card="item.activity_summary.next[0]"
+            ng-if="item[header.name]"
+            case-activity-card="item[header.name]"
             refresh-callback="refresh"
           >
           </div>

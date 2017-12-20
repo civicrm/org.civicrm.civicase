@@ -96,6 +96,8 @@ class CRM_Civicase_APIHelpers_CaseList {
           $case['myRole'][] = $contact['role'];
         }
       }
+
+      $case['next_activity'] = CRM_Utils_Array::value(0, $case['activity_summary']['next']);
     }
 
     return $cases;
