@@ -39,12 +39,7 @@
     <th
       ng-show="!viewingCase"
       ng-repeat="header in headers"
-      ng-if="header.sort"
       civicase-sortheader="{{ header.sort }}">{{ header.label }}</th>
-    <th
-      ng-show="!viewingCase"
-      ng-repeat="header in headers"
-      ng-if="!header.sort">{{ header.label }}</th>
   </tr>
   </thead>
   <tbody>

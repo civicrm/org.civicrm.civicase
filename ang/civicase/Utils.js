@@ -27,7 +27,7 @@
           scope.sort.dir = (scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
         };
 
-        if (scope.sort.sortable) {
+        if (scope.sort.sortable && attrs.civicaseSortheader != '') {
           element
             .addClass('civicase-sortable')
             .on('click', function (e) {
