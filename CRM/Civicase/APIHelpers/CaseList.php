@@ -18,41 +18,49 @@ class CRM_Civicase_APIHelpers_CaseList {
           'name' => 'next_activity',
           'label' => ts('Next Activity'),
           'sort' => 'next_activity',
+          'display_type' => 'activity_card',
         ),
         array(
           'name' => 'subject',
           'label' => ts('Subject'),
           'sort' => 'subject',
+          'display_type' => 'default',
         ),
         array(
           'name' => 'status',
           'label' => ts('Status'),
           'sort' => 'status_id.label',
+          'display_type' => 'status_badge',
         ),
         array(
           'name' => 'case_type',
           'label' => ts('Type'),
           'sort' => 'case_type_id.title',
+          'display_type' => 'default',
         ),
         array(
           'name' => 'manager',
           'label' => ts('Case Manager'),
           'sort' => 'case_manager.sort_name',
+          'display_type' => 'contact_reference',
         ),
         array(
           'name' => 'start_date',
           'label' => ts('Start Date'),
           'sort' => 'start_date',
+          'display_type' => 'date',
         ),
         array(
           'name' => 'modified_date',
           'label' => ts('Last Updated'),
           'sort' => 'modified_date',
+          'display_type' => 'date',
         ),
         array(
           'name' => 'myRole',
           'label' => ts('My Role'),
           'sort' => 'my_role.label_b_a',
+          'display_type' => 'multiple_values',
         ),
       )
     );
