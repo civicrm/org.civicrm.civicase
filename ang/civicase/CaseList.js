@@ -81,6 +81,14 @@
     $scope.page = {total: 0};
     $scope.isLoading = true;
 
+    if (CRM.checkPerm('basic case information') &&
+      !CRM.checkPerm('administer CiviCase')
+    ) {
+      $scope.bulkAllowed = false;
+    } else {
+      $scope.bulkAllowed = true;
+    }
+
     $scope.$bindToRoute({expr:'searchIsOpen', param: 'sx', format: 'bool', default: false});
     $scope.$bindToRoute({expr:'sort.field', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
     $scope.$bindToRoute({expr:'sort.dir', param:'sd', format: 'raw', default: 'ASC'});
@@ -93,6 +101,10 @@
     $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
 
     $scope.viewCase = function(id, $event) {
+      if (!$scope.bulkAllowed) {
+        return;
+      }
+
       if (!$event || !$($event.target).is('a, a *, input, button')) {
         unfocusCase();
         if ($scope.viewingCase === id) {
@@ -353,6 +365,10 @@
     }
 
     $scope.viewCase = function(id, $event) {
+      if (!$scope.bulkAllowed) {
+        return;
+      }
+
       if (!$event || !$($event.target).is('a, a *, input, button, button *')) {
         var p = {
           caseId: id,

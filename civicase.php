@@ -414,20 +414,11 @@ function civicase_civicrm_permission(&$permissions) {
 }
 
 /**
- * Implements hook_civicrm_alterCaseTable()
- *
- * @param array $headers
- *   List of columns in the table, of the form ['column_name' => 'Column Label']
- * @param $cases
- *   List of cases to be shown
+ * Implements hook_civicrm_apiWrappers
  */
-function civicase_civicrm_alterCaseTable(&$headers, &$cases) {
-  if (CRM_Core_Permission::check('basic case information')) {
-    foreach ($headers as $key => $header) {
-      if ($header['name'] === 'next_activity') {
-        unset($headers[$key]);
-      }
-    }
+function civicase_civicrm_apiWrappers(&$wrappers, $apiRequest) {
+  if ($apiRequest['entity'] == 'Case') {
+    $wrappers[] = new CRM_Civicase_APIHelpers_CaseList();
   }
 }
 

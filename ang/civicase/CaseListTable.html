@@ -2,11 +2,11 @@
   <thead calculate-scroll-width>
   <tr>
     <th class="fixed-col">
-      <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases">
+      <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases && bulkAllowed">
         <input type="checkbox" ng-click="selectAll($event)" id="select-role-{{ $index }}" ng-checked="isSelection('all')" />
         <label for="select-role-{{ $index }}"></label>
       </div>
-      <div class="btn-group btn-group-sm" ng-if="!viewingCase && selectedCases">
+      <div class="btn-group btn-group-sm" ng-if="!viewingCase && selectedCases && bulkAllowed">
         <button type="button" class="btn btn-default dropdown-toggle" ng-class="{disabled: !selectedCases.length}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{ ts('Actions') }}
           <span class="caret"></span>
@@ -45,7 +45,7 @@
   <tbody>
   <tr ng-repeat="item in cases">
     <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="fixed-col">
-      <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases">
+      <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases && bulkAllowed">
         <input type="checkbox" ng-model="item.selected" />
         <label></label>
       </div>
