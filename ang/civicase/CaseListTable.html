@@ -1,5 +1,5 @@
 <table ng-show="!caseIsFocused" class="case-list-table">
-  <thead>
+  <thead calculate-scroll-width>
   <tr>
     <th class="fixed-col">
       <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases">
@@ -36,14 +36,10 @@
         </select>
       </div>
     </th>
-    <th ng-show="!viewingCase" civicase-sortheader="next_activity" class="next-activity-title">{{ ts('Next Activity') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="subject">{{ ts('Subject') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="status_id.label">{{ ts('Status') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="case_type_id.title">{{ ts('Type') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="case_manager.sort_name">{{ ts('Case Manager') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="start_date">{{ ts('Start Date') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="modified_date">{{ ts('Last Updated') }}</th>
-    <th ng-show="!viewingCase" civicase-sortheader="my_role.label_b_a">{{ ts('My Role') }}</th>
+    <th
+      ng-show="!viewingCase"
+      ng-repeat="header in headers"
+      civicase-sortheader="{{ header.sort }}">{{ header.label }}</th>
   </tr>
   </thead>
   <tbody>
@@ -100,25 +96,29 @@
         </div>
       </div>
     </td>
-    <td ng-show="!viewingCase" class="case-activity-card-wrapper">
-      <div
-        ng-if="item.activity_summary.next"
-        case-activity-card="item.activity_summary.next[0]"
-        refresh-callback="refresh"
-      >
-      </div>
-    </td>
-    <td ng-show="!viewingCase">{{ item.subject }}</td>
-    <td ng-show="!viewingCase">
-      <span class="badge" style="background-color: {{ item.color }}">
-        {{ item.status }}
+    <td
+      ng-show="!viewingCase"
+      ng-repeat="header in headers"
+      ng-class="{'case-activity-card-wrapper': header.display_type == 'activity_card'}">
+
+      <span ng-switch on="header.display_type">
+        <span ng-switch-when="activity_card">
+          <div
+            ng-if="item[header.name]"
+            case-activity-card="item[header.name]"
+            refresh-callback="refresh"
+          >
+          </div>
+        </span>
+        <span ng-switch-when="status_badge" class="badge" style="background-color: {{ item.color }}">
+          {{ item.status }}
+        </span>
+        <span ng-switch-when="contact_reference">{{ item[header.name].display_name }}</span>
+        <span ng-switch-when="date">{{ CRM.utils.formatDate(item[header.name]) }}</span>
+        <span ng-switch-when="multiple_values">{{ item[header.name].join(', ') }}</span>
+        <span ng-switch-default>{{ item[header.name] }}</span>
       </span>
     </td>
-    <td ng-show="!viewingCase">{{ item.case_type }}</td>
-    <td ng-show="!viewingCase">{{ item.manager.display_name }}</td>
-    <td ng-show="!viewingCase">{{ CRM.utils.formatDate(item.start_date) }}</td>
-    <td ng-show="!viewingCase">{{ CRM.utils.formatDate(item.modified_date) }}</td>
-    <td ng-show="!viewingCase">{{ item.myRole.join(', ') }}</td>
   </tr>
 
   <tr class="case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">

@@ -27,7 +27,7 @@
           scope.sort.dir = (scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
         };
 
-        if (scope.sort.sortable) {
+        if (scope.sort.sortable && attrs.civicaseSortheader != '') {
           element
             .addClass('civicase-sortable')
             .on('click', function (e) {
@@ -180,6 +180,13 @@
           formatActivity(act, item.id);
         });
       });
+
+      _.each(item, function(field) {
+        if (typeof field.activity_date_time != 'undefined') {
+          formatActivity(field, item.id);
+        }
+      });
+
       _.each(item.contacts, function(contact) {
         if (!contact.relationship_type_id) {
           item.client.push(contact);
@@ -570,6 +577,22 @@
             dropDownFixPosition($($el),$($el).next('.dropdown-menu'));
           }, true);
         });
+      }
+    };
+  });
+
+  angular.module('civicase').directive('calculateScrollWidth', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, $el, attrs) {
+        scope.$watch(
+          function () {
+            return $('.case-list-table thead.affix-top').css('width');
+          },
+          function(width) {
+            $('.custom-scroll').css('width', width);
+          }
+        );
       }
     };
   });

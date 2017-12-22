@@ -56,7 +56,7 @@
       params.is_deleted = 0;
     }
     return [
-      ['Case', 'getdetails', $.extend(true, returnParams, params)],
+      ['Case', 'getcaselist', $.extend(true, returnParams, params)],
       ['Case', 'getcount', params]
     ];
   }
@@ -206,6 +206,11 @@
             $scope.viewingCaseDetails = _.findWhere(cases, {id: $scope.viewingCase});
           }
         }
+
+        if (typeof result[2] !== 'undefined') {
+          $scope.headers = result[2].values;
+        }
+
         $scope.cases = cases;
         $scope.page.num = result[0].page || $scope.page.num;
         $scope.totalCount = result[1];
@@ -228,9 +233,13 @@
 
     function _loadCases() {
       var params = loadCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page);
+
       if (firstLoad && $scope.viewingCase) {
         params[0][2].options.page_of_record = $scope.viewingCase;
+      } else if (firstLoad) {
+        params.push(['Case', 'getcaselistheaders']);
       }
+
       return crmApi(params);
     }
 
@@ -282,6 +291,8 @@
 
   function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
     var ts = $scope.ts = CRM.ts('civicase');
+    var firstLoad = true;
+
     $scope.cases = [];
     $scope.CRM = CRM;
     $scope.activityCategories = CRM.civicase.activityCategories;
@@ -290,7 +301,13 @@
     $scope.isLoading = true;
 
     function _loadCases() {
-      return crmApi(loadCaseApiParams($scope.filters, $scope.sort, $scope.page));
+      var params = loadCaseApiParams($scope.filters, $scope.sort, $scope.page);
+
+      if (firstLoad) {
+        params.push(['Case', 'getcaselistheaders']);
+      }
+
+      return crmApi(params);
     }
 
     function getCases() {
@@ -298,6 +315,12 @@
       crmThrottle(_loadCases)
         .then(function(result) {
           $scope.cases = _.each(result[0].values, formatCase);
+
+          if (firstLoad) {
+            $scope.headers = result[2].values;
+            firstLoad = false;
+          }
+
           $scope.totalCount = result[1];
           $scope.isLoading = false;
 

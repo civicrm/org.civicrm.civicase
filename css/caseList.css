@@ -323,7 +323,7 @@
   color: #FFF;
 }
 #bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table {
-  width: 1400px;
+  width: 100%;
 }
 #bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper {
   border: none;
@@ -334,7 +334,7 @@
 }
 #bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper .custom-scroll{
   height: 1px;
-  width: 1400px;
+  width: 100%;
 }
 #bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
   position: fixed;
