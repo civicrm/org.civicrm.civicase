@@ -3,7 +3,8 @@
 // in CiviCRM. See also:
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 Civi::resources()
-  ->addPermissions(array('administer CiviCase', 'administer CiviCRM', 'access all cases and activities', 'add cases'))
+  ->addPermissions(array('administer CiviCase', 'administer CiviCRM',
+    'access all cases and activities', 'add cases', 'basic case information'))
   ->addScriptFile('org.civicrm.shoreditch', 'base/js/affix.js', 1000, 'html-header')
   ->addSetting(array(
     'config' => array(
