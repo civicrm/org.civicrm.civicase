@@ -312,6 +312,14 @@
     $scope.casePlaceholders = _.range($scope.page.size);
     $scope.isLoading = true;
 
+    if (CRM.checkPerm('basic case information') &&
+      !CRM.checkPerm('administer CiviCase')
+    ) {
+      $scope.bulkAllowed = false;
+    } else {
+      $scope.bulkAllowed = true;
+    }
+
     function _loadCases() {
       var params = loadCaseApiParams($scope.filters, $scope.sort, $scope.page);
 
