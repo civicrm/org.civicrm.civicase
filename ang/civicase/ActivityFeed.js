@@ -47,6 +47,14 @@
       default: {}
     });
 
+    if (CRM.checkPerm('basic case information') &&
+      !CRM.checkPerm('administer CiviCase')
+    ) {
+      $scope.bulkAllowed = false;
+    } else {
+      $scope.bulkAllowed = true;
+    }
+
     $scope.refreshCase = $scope.refreshCase || _.noop;
     $scope.refreshAll = function() {
       $('.act-feed-panel .panel-body').block();

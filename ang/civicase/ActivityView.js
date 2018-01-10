@@ -30,6 +30,12 @@
             });
           return false;
         });
+
+        if (CRM.checkPerm('basic case information') &&
+          !CRM.checkPerm('administer CiviCase')
+        ) {
+          $('div.crm-submit-buttons').remove();
+        }
       });
   }
 
