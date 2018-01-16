@@ -12,8 +12,11 @@ function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
 
   switch ($tabsetName) {
     case 'civicrm/contact/view':
+      $caseTabPresent = FALSE;
+
       foreach ($tabs as &$tab) {
         if ($tab['id'] === 'case') {
+          $caseTabPresent = TRUE;
           $useAng = TRUE;
           $tab['url'] = CRM_Utils_System::url('civicrm/case/contact-case-tab', array(
             'cid' => $context['contact_id'],
@@ -24,9 +27,23 @@ function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
           $tab['url'] = CRM_Utils_System::url('civicrm/case/contact-act-tab', array(
             'cid' => $context['contact_id'],
           ));
-          break; // foreach
         }
       }
+
+      if (!$caseTabPresent && CRM_Core_Permission::check('basic case information')) {
+        $useAng = TRUE;
+        $tabs[] = array(
+          'id' => 'case',
+          'url' => CRM_Utils_System::url('civicrm/case/contact-case-tab', array(
+            'cid' => $context['contact_id'],
+          )),
+          'title' => ts('Cases'),
+          'weight' => 20,
+          'count' => CRM_Contact_BAO_Contact::getCountComponent('case', $context['contact_id']),
+          'class' => 'livePage',
+        );
+      }
+
       break;
 
   }
@@ -413,6 +430,16 @@ function civicase_civicrm_permission(&$permissions) {
   );
 }
 
+function civicase_civicrm_permission_check($permission, &$granted) {
+  /*
+  if ($permission === 'access my cases and activities' && !$granted) {
+    if (CRM_Core_Permission::check('basic case information')) {
+      $granted = true;
+    }
+  }
+  */
+}
+
 /**
  * Implements hook_civicrm_apiWrappers
  */
@@ -428,10 +455,35 @@ function civicase_civicrm_apiWrappers(&$wrappers, $apiRequest) {
  * @link https://docs.civicrm.org/dev/en/master/hooks/hook_civicrm_alterAPIPermissions/
  */
 function civicase_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
-  $permissions['case']['get']['getfiles'] = array(
+  $permissions['case']['getfiles'] = array(
     array('access my cases and activities', 'access all cases and activities'),
     'access uploaded files',
   );
+
+  $permissions['case']['get'] = array(
+    array(
+      'access my cases and activities',
+      'access all cases and activities',
+      'basic case information',
+    )
+  );
+
+  $permissions['case']['getcount'] = array(
+    array(
+      'access my cases and activities',
+      'access all cases and activities',
+      'basic case information',
+    )
+  );
+
+  $permissions['case_type']['get'] = $permissions['casetype']['getcount'] = array(
+    array(
+      'access my cases and activities',
+      'access all cases and activities',
+      'basic case information',
+    )
+  );
+  //$permissions['case']['getcount'] = array();
 }
 
 /**
@@ -505,4 +557,14 @@ function _civicase_menu_walk(&$menu, $callback) {
       _civicase_menu_walk($menu[$key]['child'], $callback);
     }
   }
+}
+
+function civicase_civicrm_selectWhereClause($entity, &$clauses) {
+  if ($entity === 'Case' && CRM_Core_Permission::check('basic case information')) {
+    unset($clauses['id']);
+  }
+}
+
+function civicase_civicrm_queryObjects(&$queryObjects, $type) {
+  //var_dump($queryObjects, $type);
 }
