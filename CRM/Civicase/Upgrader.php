@@ -399,6 +399,151 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
   }
 
   /**
+   * Creates custom group for case stats and custom field to hold case duration.
+   *
+   * @return bool
+   */
+  public function upgrade_1001() {
+    $customGroup = $this->createStatsCustomGroup();
+    $durationField = $this->createDurationCustomField($customGroup);
+    $this->createCaseDurationLogTable();
+    $this->buildDurationLog();
+    $this->calculateCasesDuration($customGroup, $durationField);
+
+    return false;
+  }
+
+  /**
+   * Calculates duration for all cases and stores it in the corresponding field.
+   *
+   * @param $statsGroup
+   * @param $durationField
+   */
+  private function calculateCasesDuration($statsGroup, $durationField) {
+    CRM_Core_DAO::executeQuery('TRUNCATE TABLE ' . $statsGroup['table_name']);
+    CRM_Core_DAO::executeQuery("
+      INSERT INTO {$statsGroup['table_name']} (entity_id, {$durationField['column_name']})
+        SELECT case_id, SUM(CASE WHEN duration IS NULL THEN datediff(CURDATE(), start_date) ELSE duration END) AS duration 
+        FROM civicrm_case_duration_log 
+        GROUP BY case_id
+    ");
+  }
+
+  /**
+   * Inserts records into case duration log table by processing all cases'
+   * history.
+   */
+  private function buildDurationLog() {
+    CRM_Core_DAO::executeQuery('TRUNCATE TABLE civicrm_case_duration_log');
+
+    $query = "
+      SELECT civicrm_case_activity.case_id, civicrm_activity.*
+      FROM civicrm_case, civicrm_case_activity, civicrm_activity, 
+        civicrm_option_group og_activity_type, 
+        civicrm_option_value ov_activity_type 
+      WHERE civicrm_case.id = civicrm_case_activity.case_id
+      AND civicrm_case_activity.activity_id = civicrm_activity.id
+      AND og_activity_type.name = 'activity_type'
+      AND og_activity_type.id = ov_activity_type.option_group_id
+      AND ov_activity_type.value = civicrm_activity.activity_type_id
+      AND ov_activity_type.name IN ('Open Case', 'Change Case Status')
+      ORDER BY civicrm_case.id ASC, civicrm_activity.activity_date_time
+    ";
+    $caseActivitiesResult = CRM_Core_DAO::executeQuery($query);
+
+    $logger = new CRM_Civicase_CaseDurationLog();
+    while ($caseActivitiesResult->fetch()) {
+      $logger->processOldCaseActivity($caseActivitiesResult);
+    }
+  }
+
+  /**
+   * Creates case duration log table.
+   */
+  private function createCaseDurationLogTable() {
+    CRM_Core_DAO::executeQuery("
+      CREATE TABLE IF NOT EXISTS `civicrm_case_duration_log` (
+        `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Primary key.',
+        `case_id` int(10) UNSIGNED NOT NULL COMMENT 'Case ID for which the record is set.',
+        `start_task` int(10) UNSIGNED NOT NULL COMMENT 'Task that signaled the case''s start.',
+        `start_date` date NOT NULL COMMENT 'Date on which the case started.',
+        `end_task` int(10) UNSIGNED DEFAULT NULL COMMENT 'Task on which the case ended.',
+        `end_date` date DEFAULT NULL COMMENT 'Date on which the case ended.',
+        `duration` int(11) DEFAULT NULL COMMENT 'Case''s duration, in days.',
+        
+        PRIMARY KEY (`id`),
+        KEY `case_id` (`case_id`),
+        KEY `fk_start_task` (`start_task`),
+        KEY `fk_end_task` (`end_task`),
+        
+        CONSTRAINT `fk_end_task` FOREIGN KEY (`end_task`) REFERENCES `civicrm_activity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT `fk_case` FOREIGN KEY (`case_id`) REFERENCES `civicrm_case` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT `fk_start_task` FOREIGN KEY (`start_task`) REFERENCES `civicrm_activity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE    
+      ) ENGINE=InnoDB;
+    ");
+  }
+
+  /**
+   * Creates a custom group for cases to put case stats.
+   *
+   * @return array
+   *   Data for the created/obtained custom group.
+   */
+  private function createStatsCustomGroup() {
+    $customGroupResult = civicrm_api3('CustomGroup', 'get', array(
+      'sequential' => 1,
+      'name' => 'Case_Stats'
+    ));
+
+    if ($customGroupResult['count'] < 1) {
+      $customGroupResult = civicrm_api3('CustomGroup', 'create', array(
+        'sequential' => 1,
+        'title' => 'Case Stats',
+        'name' => 'Case_Stats',
+        'extends' => 'Case',
+        'weight' => 10,
+        'collapse_display' => 0,
+        'style' => 'Inline',
+        'is_active' => 1
+      ));
+    }
+
+    return array_shift($customGroupResult['values']);
+  }
+
+  /**
+   * Create duration custom field on given custom group.
+   *
+   * @param array $customGroup
+   *   Data of the custom group where the field should be created
+   */
+  private function createDurationCustomField($customGroup) {
+    $fieldResult = civicrm_api3('CustomField', 'get', array(
+      'sequential' => 1,
+      'custom_group_id' => $customGroup['id'],
+      'name' => 'duration',
+    ));
+
+    if ($fieldResult['count'] < 1) {
+      $fieldResult = civicrm_api3('CustomField', 'create', array(
+        'custom_group_id' => $customGroup['id'],
+        'name' => 'duration',
+        'label' => 'Duration (days)',
+        'html_type' => 'Text',
+        'data_type' => 'Int',
+        'weight' => 1,
+        'is_required' => 0,
+        'is_searchable' => 1,
+        'is_active' => 1,
+        'is_view' => 1,
+        'is_search_range' => 1,
+      ));
+    }
+
+    return array_shift($fieldResult['values']);
+  }
+
+  /**
    * Example: Run a couple simple queries.
    *
    * @return TRUE on success

@@ -484,3 +484,20 @@ function _civicase_menu_walk(&$menu, $callback) {
     }
   }
 }
+
+function civicase_civicrm_pre($op, $objectName, $id, &$params) {
+  if ($objectName === 'Activity' && $op == 'create') {
+    $logger = CRM_Civicase_CaseDurationLog::singleton();
+    $logger->preProcessCaseActivity($params);
+  }
+}
+
+/**
+ * Implements hook_civicrm_post()
+ */
+function civicase_civicrm_post($op, $objectName, $objectId, &$objectRef) {
+  if ($objectName === 'Activity' && $op === 'create' && !empty($objectRef->case_id)) {
+    $logger = CRM_Civicase_CaseDurationLog::singleton();
+    $logger->postProcessCaseActivity($objectRef);
+  }
+}
