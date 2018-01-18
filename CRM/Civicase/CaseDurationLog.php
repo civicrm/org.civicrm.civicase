@@ -46,7 +46,7 @@ class CRM_Civicase_CaseDurationLog {
     ));
 
     foreach ($statuses['values'] as $status) {
-      $this->statuses[] = $status;
+      $this->statuses[$status['value']] = $status;
       $this->statusGroupingsPerLabel[$status['label']] = $status['grouping'];
     }
 
@@ -89,7 +89,7 @@ class CRM_Civicase_CaseDurationLog {
       !empty($params['case_status_id']) &&
       !empty($params['case_id'])
     ) {
-      $this->pendingCases['case_id'] = $params;
+      $this->pendingCases[$params['case_id']] = $params;
     }
   }
 
@@ -106,6 +106,8 @@ class CRM_Civicase_CaseDurationLog {
     } elseif($this->isCaseClosing($activityDAO)) {
       $this->endLog($activityDAO->id, $activityDAO->activity_date_time, $activityDAO->case_id);
     }
+
+    $this->calculateCaseDuration($activityDAO->case_id);
   }
 
   /**
