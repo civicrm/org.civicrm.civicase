@@ -409,8 +409,32 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     $this->createCaseDurationLogTable();
     $this->buildDurationLog();
     $this->calculateCasesDuration($customGroup, $durationField);
+    $this->createCaseDurationScheduledJob();
 
     return false;
+  }
+
+  /**
+   * Creates scheduled job that maintains cases' durations updated.
+   */
+  private function createCaseDurationScheduledJob() {
+    $dao = new CRM_Core_DAO_Job();
+    $dao->api_entity = 'case';
+    $dao->api_action = 'calculatealldurations';
+    $dao->find(TRUE);
+
+    if (!$dao->id) {
+      $dao = new CRM_Core_DAO_Job();
+      $dao->domain_id = CRM_Core_Config::domainID();
+      $dao->run_frequency = 'Daily';
+      $dao->parameters = null;
+      $dao->name = 'Case Duration Calculation';
+      $dao->description = 'Job to update the duration of cases.';
+      $dao->api_entity = 'case';
+      $dao->api_action = 'calculatealldurations';
+      $dao->is_active = 1;
+      $dao->save();
+    }
   }
 
   /**
