@@ -430,16 +430,6 @@ function civicase_civicrm_permission(&$permissions) {
   );
 }
 
-function civicase_civicrm_permission_check($permission, &$granted) {
-  /*
-  if ($permission === 'access my cases and activities' && !$granted) {
-    if (CRM_Core_Permission::check('basic case information')) {
-      $granted = true;
-    }
-  }
-  */
-}
-
 /**
  * Implements hook_civicrm_apiWrappers
  */
@@ -483,7 +473,6 @@ function civicase_civicrm_alterAPIPermissions($entity, $action, &$params, &$perm
       'basic case information',
     )
   );
-  //$permissions['case']['getcount'] = array();
 }
 
 /**
@@ -559,12 +548,11 @@ function _civicase_menu_walk(&$menu, $callback) {
   }
 }
 
+/**
+ * Implements hook_civicrm_selectWhereClause
+ */
 function civicase_civicrm_selectWhereClause($entity, &$clauses) {
   if ($entity === 'Case' && CRM_Core_Permission::check('basic case information')) {
     unset($clauses['id']);
   }
-}
-
-function civicase_civicrm_queryObjects(&$queryObjects, $type) {
-  //var_dump($queryObjects, $type);
 }

@@ -117,7 +117,9 @@ class CRM_Civicase_APIHelpers_CaseList implements API_Wrapper {
     if ($apiRequest['action'] === 'getcaselistheaders') {
       if (
         CRM_Core_Permission::check('basic case information') &&
-        !CRM_Core_Permission::check('administer CiviCase')
+        !CRM_Core_Permission::check('administer CiviCase') &&
+        !CRM_Core_Permission::check('access my cases and activities') &&
+        !CRM_Core_Permission::check('access all cases and activities')
       ) {
         foreach ($result['values'] as $key => $header) {
           if ($header['name'] === 'next_activity') {
