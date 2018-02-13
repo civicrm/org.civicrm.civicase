@@ -85,7 +85,7 @@
             >{{ tag['tag_id.name'] }}</span>
           </span>
         </div>
-        <div class="case-activity-summary-icons">
+        <div class="case-activity-summary-icons" ng-if="bulkAllowed">
           <a class=""
              ng-repeat="category in activityCategories"
              ng-href="#{{ activityFeedUrl(item.id, category.name, 'incomplete') }}"
