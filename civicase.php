@@ -12,8 +12,11 @@ function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
 
   switch ($tabsetName) {
     case 'civicrm/contact/view':
+      $caseTabPresent = FALSE;
+
       foreach ($tabs as &$tab) {
         if ($tab['id'] === 'case') {
+          $caseTabPresent = TRUE;
           $useAng = TRUE;
           $tab['url'] = CRM_Utils_System::url('civicrm/case/contact-case-tab', array(
             'cid' => $context['contact_id'],
@@ -24,9 +27,23 @@ function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
           $tab['url'] = CRM_Utils_System::url('civicrm/case/contact-act-tab', array(
             'cid' => $context['contact_id'],
           ));
-          break; // foreach
         }
       }
+
+      if (!$caseTabPresent && CRM_Core_Permission::check('basic case information')) {
+        $useAng = TRUE;
+        $tabs[] = array(
+          'id' => 'case',
+          'url' => CRM_Utils_System::url('civicrm/case/contact-case-tab', array(
+            'cid' => $context['contact_id'],
+          )),
+          'title' => ts('Cases'),
+          'weight' => 20,
+          'count' => CRM_Contact_BAO_Contact::getCountComponent('case', $context['contact_id']),
+          'class' => 'livePage',
+        );
+      }
+
       break;
 
   }
@@ -401,14 +418,60 @@ function civicase_civicrm_postProcess($formName, &$form) {
 }
 
 /**
+ * Implements hook_civicrm_permission()
+ *
+ * @param array $permissions
+ *   Array of permissions defined on extensions
+ */
+function civicase_civicrm_permission(&$permissions) {
+  $permissions['basic case information'] = array(
+    'Civicase: basic case information',
+    ts('Allows a user to view only basic information of cases.')
+  );
+}
+
+/**
+ * Implements hook_civicrm_apiWrappers
+ */
+function civicase_civicrm_apiWrappers(&$wrappers, $apiRequest) {
+  if ($apiRequest['entity'] == 'Case') {
+    $wrappers[] = new CRM_Civicase_APIHelpers_CaseList();
+  }
+}
+
+/**
  * Implements hook_civicrm_alterAPIPermissions().
  *
  * @link https://docs.civicrm.org/dev/en/master/hooks/hook_civicrm_alterAPIPermissions/
  */
 function civicase_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
-  $permissions['case']['get']['getfiles'] = array(
+  $permissions['case']['getfiles'] = array(
     array('access my cases and activities', 'access all cases and activities'),
     'access uploaded files',
+  );
+
+  $permissions['case']['get'] = array(
+    array(
+      'access my cases and activities',
+      'access all cases and activities',
+      'basic case information',
+    )
+  );
+
+  $permissions['case']['getcount'] = array(
+    array(
+      'access my cases and activities',
+      'access all cases and activities',
+      'basic case information',
+    )
+  );
+
+  $permissions['case_type']['get'] = $permissions['casetype']['getcount'] = array(
+    array(
+      'access my cases and activities',
+      'access all cases and activities',
+      'basic case information',
+    )
   );
 }
 
@@ -482,5 +545,14 @@ function _civicase_menu_walk(&$menu, $callback) {
     if (isset($menu[$key]['child'])) {
       _civicase_menu_walk($menu[$key]['child'], $callback);
     }
+  }
+}
+
+/**
+ * Implements hook_civicrm_selectWhereClause
+ */
+function civicase_civicrm_selectWhereClause($entity, &$clauses) {
+  if ($entity === 'Case' && CRM_Core_Permission::check('basic case information')) {
+    unset($clauses['id']);
   }
 }

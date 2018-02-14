@@ -182,7 +182,7 @@
       });
 
       _.each(item, function(field) {
-        if (typeof field.activity_date_time != 'undefined') {
+        if (field && typeof field.activity_date_time != 'undefined') {
           formatActivity(field, item.id);
         }
       });

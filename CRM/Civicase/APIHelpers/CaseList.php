@@ -4,7 +4,7 @@
  * Implements helper methods to obtain list of cases and columns allowed to be
  * viewed on case lists for dashboard, searches and contacts.
  */
-class CRM_Civicase_APIHelpers_CaseList {
+class CRM_Civicase_APIHelpers_CaseList implements API_Wrapper {
 
   /**
    * Returns list of allowed headers that can be shown on case lists.
@@ -101,6 +101,35 @@ class CRM_Civicase_APIHelpers_CaseList {
     }
 
     return $cases;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function fromApiInput($apiRequest) {
+    return $apiRequest;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function toApiOutput($apiRequest, $result) {
+    if ($apiRequest['action'] === 'getcaselistheaders') {
+      if (
+        CRM_Core_Permission::check('basic case information') &&
+        !CRM_Core_Permission::check('administer CiviCase') &&
+        !CRM_Core_Permission::check('access my cases and activities') &&
+        !CRM_Core_Permission::check('access all cases and activities')
+      ) {
+        foreach ($result['values'] as $key => $header) {
+          if ($header['name'] === 'next_activity') {
+            unset($result['values'][$key]);
+          }
+        }
+      }
+    }
+
+    return $result;
   }
 
 }
