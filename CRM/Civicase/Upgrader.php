@@ -399,6 +399,15 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
   }
 
   /**
+   * Adds case lock table to existing installations.
+   */
+  public function upgrade_0001() {
+    $this->executeSqlFile('sql/auto_install.sql');
+
+    return TRUE;
+  }
+
+  /**
    * Example: Run a couple simple queries.
    *
    * @return TRUE on success

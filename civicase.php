@@ -549,10 +549,21 @@ function _civicase_menu_walk(&$menu, $callback) {
 }
 
 /**
- * Implements hook_civicrm_selectWhereClause
+ * Implements hook_civicrm_selectWhereClause().
  */
 function civicase_civicrm_selectWhereClause($entity, &$clauses) {
   if ($entity === 'Case' && CRM_Core_Permission::check('basic case information')) {
     unset($clauses['id']);
   }
+}
+
+/**
+ * Implements hook_civicrm_entityTypes().
+ */
+function civicase_civicrm_entityTypes(&$entityTypes) {
+  $entityTypes[] = array(
+    'name'  => 'CivicaseContactLock',
+    'class' => 'CRM_Civicase_DAO_CivicaseContactLock',
+    'table' => 'civicase_contactlock',
+  );
 }
