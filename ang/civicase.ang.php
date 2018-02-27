@@ -163,6 +163,12 @@ $options['caseActions'] = array(
     'number' => 2,
     'icon' => 'fa-link',
   ),
+  array(
+    'title' => ts('Lock Case'),
+    'action' => 'lockCases(cases[0])',
+    'number' => 1,
+    'icon' => 'fa-lock',
+  ),
 );
 if (CRM_Core_Permission::check('administer CiviCase')) {
   $options['caseActions'][] = array(
