@@ -45,10 +45,10 @@
   <tbody>
   <tr ng-repeat="item in cases">
     <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="fixed-col">
-      <div ng-if="!bulkAllowed" class="lockDiv">
+      <div ng-if="!bulkAllowed || item.lock" class="lockDiv">
         <div class="fa fa-lock"></div>
       </div>
-      <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases && bulkAllowed">
+      <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases && (bulkAllowed && !item.lock)">
         <input type="checkbox" ng-model="item.selected" />
         <label></label>
       </div>
@@ -85,7 +85,7 @@
             >{{ tag['tag_id.name'] }}</span>
           </span>
         </div>
-        <div class="case-activity-summary-icons" ng-if="bulkAllowed">
+        <div class="case-activity-summary-icons" ng-if="bulkAllowed && !item.lock">
           <a class=""
              ng-repeat="category in activityCategories"
              ng-href="#{{ activityFeedUrl(item.id, category.name, 'incomplete') }}"

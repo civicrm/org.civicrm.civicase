@@ -87,6 +87,19 @@ class CRM_Civicase_APIHelpers_CaseList implements API_Wrapper {
     $cases = civicrm_api3('Case', 'getdetails', $params);
 
     foreach ($cases['values'] as &$case) {
+      $caseLockedContacts = civicrm_api3('CivicaseContactLock', 'get', array(
+        'sequential' => 1,
+        'case_id' => $case['id'],
+        'contact_id' => $loggedContactID,
+      ));
+
+      if ($caseLockedContacts['count'] > 0) {
+        $case['lock'] = 1;
+        $case['activity_summary'] = array();
+      } else {
+        $case['lock'] = 0;
+      }
+
       foreach ($case['contacts'] as $contact) {
         if ($contact['manager'] == 1) {
           $case['manager'] = $contact;

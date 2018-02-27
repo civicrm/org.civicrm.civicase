@@ -103,7 +103,9 @@
     $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
 
     $scope.viewCase = function(id, $event) {
-      if (!$scope.bulkAllowed) {
+      var currentCase = _.findWhere($scope.cases, {id: id});
+
+      if (!$scope.bulkAllowed || currentCase.lock) {
         return;
       }
 
