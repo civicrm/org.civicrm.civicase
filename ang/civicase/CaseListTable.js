@@ -86,7 +86,10 @@
       var checked = e.target.checked;
 
       _.each($scope.cases, function (item) {
-        item.selected = checked;
+        // Case is marked as selected only if it's not locked for the current user.
+        if (!item.lock) {
+          item.selected = checked;
+        }
       });
     };
 
@@ -95,7 +98,9 @@
     };
 
     $scope.viewCase = function (id, $event) {
-      if (!$scope.bulkAllowed) {
+      var currentCase = _.findWhere($scope.cases, {id: id});
+
+      if (!$scope.bulkAllowed || currentCase.lock) {
         return;
       }
 

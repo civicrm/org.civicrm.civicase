@@ -7,11 +7,11 @@
         <thead class="civicase__case-list-table__header">
         <tr>
           <th class="civicase__case-list-column--fixed civicase__case-list-column--first">
-            <span class="case-list-checkbox" ng-if="!viewingCase && selectedCases && bulkAllowed">
+            <span class="case-list-checkbox" ng-if="!viewingCase && selectedCases && bulkAllowed && !item.lock">
               <input type="checkbox" ng-click="selectAll($event)" id="select-role-{{ $index }}" ng-checked="isSelection('all')" />
               <label for="select-role-{{ $index }}"></label>
             </span>
-            <span class="btn-group btn-group-sm" ng-if="!viewingCase && selectedCases && bulkAllowed">
+            <span class="btn-group btn-group-sm" ng-if="!viewingCase && selectedCases && bulkAllowed && !item.lock">
               <button type="button" class="btn btn-default dropdown-toggle" ng-class="{disabled: !selectedCases.length}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ ts('Actions') }}
                 <span class="caret"></span>
