@@ -46,3 +46,47 @@ function civicrm_api3_civicase_contact_lock_delete($params) {
 function civicrm_api3_civicase_contact_lock_get($params) {
   return _civicrm_api3_basic_get(_civicrm_api3_get_BAO(__FUNCTION__), $params);
 }
+
+/**
+ * CivicaseContactLock.lockcases API specification (optional)
+ *
+ * @param $spec
+ */
+function _civicrm_api3_civicase_contact_lock_lockcases_spec(&$spec) {
+  $spec = civicrm_api3('CivicaseContactLock', 'getfields', array('api_action' => 'get'))['values'];
+
+  $spec['case_id']['title'] = 'Case IDs';
+  $spec['case_id']['description'] = 'Array of cases for which the locks need to be set.';
+  $spec['case_id']['api.required'] = 1;
+
+  $spec['contact_id']['title'] = 'Contact IDs';
+  $spec['contact_id']['description'] = 'Array of contacts that need to be locked out of given cases.';
+  $spec['contact_id']['api.required'] = 1;
+
+  unset($spec['id']);
+}
+
+/**
+ * @param $params
+ *
+ * @return array API result descriptor
+ */
+function civicrm_api3_civicase_contact_lock_lockcases($params) {
+  $cases = CRM_Utils_Array::value('case_id', $params, array());
+  if (!is_array($cases) && is_numeric($cases)) {
+    $cases = array($cases);
+  }
+
+  $contacts = CRM_Utils_Array::value('contact_id', $params, array());
+  if (!is_array($contacts) && is_numeric($contacts)) {
+    $contacts = array($contacts);
+  }
+
+  try {
+    $result = CRM_Civicase_BAO_CivicaseContactLock::createLocks($cases, $contacts);
+  } catch (Exception $exception) {
+    return civicrm_api3_create_error($exception->getMessage(), $params);
+  }
+
+  return civicrm_api3_create_success($result, $params, 'CivicaseContactLock', 'lockcases');
+}
