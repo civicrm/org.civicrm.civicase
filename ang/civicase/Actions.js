@@ -259,6 +259,18 @@
               });
               var win = window.open(url, '_blank');
               win.focus();
+            },
+
+            lockCases: function (currentCase) {
+              var popupPath = {
+                path: 'civicrm/case/locked-contacts',
+                query: {
+                  reset: 1,
+                  case_id: currentCase.id
+                }
+              };
+
+              return popupPath;
             }
           });
 

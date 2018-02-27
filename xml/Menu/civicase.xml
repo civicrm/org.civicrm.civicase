@@ -17,4 +17,10 @@
     <title>ContactActivityTab</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/case/locked-contacts</path>
+    <page_callback>CRM_Civicase_Form_LockedContacts</page_callback>
+    <title>Locked Contacts</title>
+    <access_arguments>access all cases and activities;access my cases and activities</access_arguments>
+  </item>
 </menu>
