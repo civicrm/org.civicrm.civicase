@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Form to add locked contaacts to a case.
+ * Form to add locked contacts to a case.
  */
 class CRM_Civicase_Form_LockedContacts extends CRM_Core_Form {
 
@@ -24,7 +24,7 @@ class CRM_Civicase_Form_LockedContacts extends CRM_Core_Form {
    */
   public function preProcess() {
     $this->caseID = CRM_Utils_Request::retrieve('case_id', 'Int');
-    $contactLocks = civicrm_api3('CivicaseContactLock', 'get', array(
+    $contactLocks = civicrm_api3('CaseContactLock', 'get', array(
       'sequential' => 1,
       'case_id' => $this->caseID,
     ));
@@ -42,7 +42,7 @@ class CRM_Civicase_Form_LockedContacts extends CRM_Core_Form {
       'multiple' => TRUE,
     ), TRUE);
 
-    if (sizeof($this->contacts) > 0) {
+    if (count($this->contacts) > 0) {
       $this->setDefaults(array(
         'contacts' => implode(',', $this->contacts)
       ));
@@ -57,7 +57,7 @@ class CRM_Civicase_Form_LockedContacts extends CRM_Core_Form {
   public function postProcess() {
     $values = $this->controller->exportValues();
 
-    civicrm_api3('CivicaseContactLock', 'lockcases', array(
+    civicrm_api3('CaseContactLock', 'lockcases', array(
       'case_id' => $this->caseID,
       'contact_id' => explode(',', $values['contacts']),
     ));

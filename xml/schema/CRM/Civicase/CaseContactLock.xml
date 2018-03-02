@@ -2,7 +2,7 @@
 
 <table>
   <base>CRM/Civicase</base>
-  <class>CivicaseContactLock</class>
+  <class>CaseContactLock</class>
   <name>civicase_contactlock</name>
   <comment>This table implements a list of contacts that have been locked out of specific cases, to which they will only have basic view access.</comment>
   <add>4.7</add>
@@ -12,7 +12,7 @@
     <name>id</name>
     <type>int unsigned</type>
     <required>true</required>
-    <comment>Unique CivicaseContactLock ID</comment>
+    <comment>Unique CaseContactLock ID</comment>
     <add>4.4</add>
   </field>
   <primaryKey>

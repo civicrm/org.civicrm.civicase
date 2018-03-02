@@ -4,8 +4,8 @@
 return array (
   0 => 
   array (
-    'name' => 'CivicaseContactLock',
-    'class' => 'CRM_Civicase_DAO_CivicaseContactLock',
-    'table' => 'civicrm_civicasecontactlock',
+    'name' => 'CaseContactLock',
+    'class' => 'CRM_Civicase_DAO_CaseContactLock',
+    'table' => 'civicase_contactlock',
   ),
 );
