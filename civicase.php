@@ -562,8 +562,8 @@ function civicase_civicrm_selectWhereClause($entity, &$clauses) {
  */
 function civicase_civicrm_entityTypes(&$entityTypes) {
   $entityTypes[] = array(
-    'name'  => 'CivicaseContactLock',
-    'class' => 'CRM_Civicase_DAO_CivicaseContactLock',
+    'name'  => 'CaseContactLock',
+    'class' => 'CRM_Civicase_DAO_CaseContactLock',
     'table' => 'civicase_contactlock',
   );
 }

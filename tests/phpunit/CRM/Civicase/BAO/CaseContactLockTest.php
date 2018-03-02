@@ -6,11 +6,11 @@ use CRM_Civicase_Test_Fabricator_CaseType as CaseTypeFabricator;
 use CRM_Civicase_Test_Fabricator_Contact as ContactFabricator;
 
 /**
- * Runs tests on CivicaseContactLock BAO.
+ * Runs tests on CaseContactLock BAO.
  *
  * @group headless
  */
-class CRM_Civicase_BAO_CivicaseContactLockTest extends PHPUnit_Framework_TestCase
+class CRM_Civicase_BAO_CaseContactLockTest extends PHPUnit_Framework_TestCase
   implements HeadlessInterface, TransactionalInterface {
 
   /**
@@ -38,14 +38,14 @@ class CRM_Civicase_BAO_CivicaseContactLockTest extends PHPUnit_Framework_TestCas
       $contacts[] = $contact['id'];
     }
 
-    CRM_Civicase_BAO_CivicaseContactLock::createLocks($cases, $contacts);
+    CRM_Civicase_BAO_CaseContactLock::createLocks($cases, $contacts);
 
     foreach ($cases as $currentCase) {
-      $result = civicrm_api3('CivicaseContactLock', 'get', array(
+      $result = civicrm_api3('CaseContactLock', 'get', array(
         'sequential' => 1,
         'case_id' => $currentCase,
       ));
-      $this->assertEquals($result['count'], sizeof($contacts));
+      $this->assertEquals($result['count'], count($contacts));
 
       foreach ($result['values'] as $currentLock) {
         $this->assertEquals($currentLock['case_id'], $currentCase);
@@ -61,7 +61,7 @@ class CRM_Civicase_BAO_CivicaseContactLockTest extends PHPUnit_Framework_TestCas
    * @expectedException API_Exception
    */
   public function testExceptionThrownOnNonInputParametersToCreateLocks() {
-    CRM_Civicase_BAO_CivicaseContactLock::createLocks(1, 2);
+    CRM_Civicase_BAO_CaseContactLock::createLocks(1, 2);
   }
 
 }

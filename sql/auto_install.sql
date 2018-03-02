@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS `civicase_contactlock`;
 -- *
 -- *******************************************************/
 CREATE TABLE `civicase_contactlock` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Unique CivicaseContactLock ID',
+  `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Unique CaseContactLock ID',
   `case_id` int unsigned    COMMENT 'Case ID that is locked.',
   `contact_id` int unsigned    COMMENT 'Contact for which the case is locked.' ,
   PRIMARY KEY (`id`),
