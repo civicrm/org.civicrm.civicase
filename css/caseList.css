@@ -387,6 +387,9 @@
   max-width: 370px;
   min-width: 370px;
 }
+#bootstrap-theme .viewing-case .scrolling table.case-list-table thead.affix {
+  position: relative;
+}
 #bootstrap-theme .viewing-case .scrolling table.case-list-table td.fixed-col {
   position: relative;
 }
