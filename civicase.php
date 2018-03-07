@@ -572,3 +572,12 @@ function civicase_civicrm_entityTypes(&$entityTypes) {
     'table' => 'civicase_contactlock',
   );
 }
+
+/**
+ * Implements hook_civicrm_queryObjects().
+ */
+function civicase_civicrm_queryObjects(&$queryObjects, $type) {
+  if ($type == 'Contact') {
+    $queryObjects[] = new CRM_Civicase_BAO_Query();
+  }
+}
