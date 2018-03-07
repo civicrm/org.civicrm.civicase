@@ -152,7 +152,11 @@
     $scope.selectAll = function(e) {
       var checked = e.target.checked;
       _.each($scope.cases, function(item) {
-        item.selected = checked;
+
+        // Case is marked as selected only if it's not locked for the current user.
+        if (!item.lock) {
+          item.selected = checked;
+        }
       });
     };
 
