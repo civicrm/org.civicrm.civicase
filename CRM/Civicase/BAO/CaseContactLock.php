@@ -47,6 +47,10 @@ class CRM_Civicase_BAO_CaseContactLock extends CRM_Civicase_DAO_CaseContactLock 
     }
 
     foreach ($cases as $caseID) {
+      $locksBAO = new CRM_Civicase_BAO_CaseContactLock();
+      $locksBAO->whereAdd("case_id = $caseID");
+      $locksBAO->delete(TRUE);
+
       foreach ($contacts as $contactID) {
         $lockDAO = self::create(array(
           'case_id' => $caseID,
