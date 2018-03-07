@@ -40,7 +40,7 @@ class CRM_Civicase_Form_LockedContacts extends CRM_Core_Form {
   public function buildQuickForm() {
     $this->addEntityRef('contacts', ts('Locked Contacts'), array(
       'multiple' => TRUE,
-    ), TRUE);
+    ), FALSE);
 
     if (count($this->contacts) > 0) {
       $this->setDefaults(array(
@@ -48,7 +48,18 @@ class CRM_Civicase_Form_LockedContacts extends CRM_Core_Form {
       ));
     }
 
-    $this->addDefaultButtons(ts('Save'), 'next', 'cancel');
+    $buttons = array(
+      array(
+        'type' => 'cancel',
+        'name' => ts('Cancel'),
+      ),
+      array(
+        'type' => 'next',
+        'name' => 'Save',
+        'isDefault' => TRUE,
+      ),
+    );
+    $this->addButtons($buttons);
   }
 
   /**
