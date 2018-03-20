@@ -1,13 +1,23 @@
 <?php
 
-
+/**
+ * Alters query used to search for activities to filter out from locked users.
+ */
 class CRM_Civicase_BAO_Query extends CRM_Contact_BAO_Query_Interface {
+
+  /**
+   * Implements getFields method, required by CRM_Contact_BAO_Query_Interface
+   * class.
+   */
   public function &getFields() {
     $fields = array();
 
     return $fields;
   }
 
+  /**
+   * Alters from statement to include case locks.
+   */
   public function from($fieldName, $mode, $side) {
     if ($fieldName == 'civicase_contactlock') {
       $loggedContactID = CRM_Core_Session::singleton()->getLoggedInContactID();
@@ -25,6 +35,9 @@ class CRM_Civicase_BAO_Query extends CRM_Contact_BAO_Query_Interface {
     return '';
   }
 
+  /**
+   * Alters where statement to include case locks.
+   */
   public function where(&$query) {
     if ($query->_mode == CRM_Contact_BAO_QUERY::MODE_ACTIVITY) {
 
@@ -33,7 +46,13 @@ class CRM_Civicase_BAO_Query extends CRM_Contact_BAO_Query_Interface {
     }
   }
 
+  /**
+   * Implements getPanesMapper, required by getPanesMapper hook.
+   *
+   * @param $panes
+   */
   public function getPanesMapper(&$panes) {
 
   }
+
 }
