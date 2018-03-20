@@ -576,3 +576,11 @@ function civicase_civicrm_queryObjects(&$queryObjects, $type) {
     $queryObjects[] = new CRM_Civicase_BAO_Query();
   }
 }
+
+/**
+ * Implements hook_civicrm_permission_check().
+ */
+function civicase_civicrm_permission_check($permission, &$granted) {
+  $permissionsChecker = new CRM_Civicase_Hook_Permissions_Check();
+  $granted = $permissionsChecker->validatePermission($permission, $granted);
+}
