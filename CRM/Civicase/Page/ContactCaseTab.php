@@ -11,9 +11,12 @@ class CRM_Civicase_Page_ContactCaseTab extends CRM_Core_Page {
     $cid = CRM_Utils_Request::retrieve('cid', 'Positive', CRM_Core_DAO::$_nullObject, TRUE);
     $this->assign('cid', $cid);
     // For Related cases tab (optional)
-    $related_cids = CRM_Utils_Request::retrieve('related_cids', 'String');
-    if($related_cids)
+    $relatedCases = CRM_Utils_Request::retrieve('relatedCases', 'Boolean');
+    if($relatedCases) {
+      $rcases = new CRM_Civicase_RelatedCases();
+      $related_cids = implode(',', $rcases->getOrganizationRelatedCaseContactIds($cid));
       $this->assign('related_cids', $related_cids);
+    }
     parent::run();
   }
 

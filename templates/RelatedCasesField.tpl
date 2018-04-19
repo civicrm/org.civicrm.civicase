@@ -9,3 +9,4 @@
 <script type="text/javascript">
     cj('form.CRM_Admin_Form_Setting_Case table.form-layout tbody').append(cj('#civicaseRelatedCasesTab'));
 </script>
+
