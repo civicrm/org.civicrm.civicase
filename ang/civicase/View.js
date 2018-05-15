@@ -63,6 +63,12 @@
           entity_type: 'Case',
           return: ['custom_group.id', 'custom_group.name', 'custom_group.title', 'custom_group.collapse_display', 'custom_field.name', 'custom_field.label', 'custom_value.display']
         },
+        // Relationship description field
+        'api.Relationship.get': {
+          case_id:  "$value.id",
+          is_active: 1,
+          return: ['id', 'relationship_type_id', 'contact_id_a', 'contact_id_b', 'description'],
+        },
         sequential: 1
       };
     }

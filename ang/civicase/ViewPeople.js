@@ -58,6 +58,13 @@
       if ($scope.rolesFilter) {
         caseRoles = $scope.rolesFilter === 'client' ? [] : [_.findWhere(caseRoles, {name: $scope.rolesFilter})];
       }
+      var relDesc = [];
+      // get relationship descriptions
+      if(item["api.Relationship.get"]) {
+        _.each(item["api.Relationship.get"].values, function (relationship) {
+          relDesc[relationship.contact_id_b + '_' + relationship.relationship_type_id] = relationship['description'] ? relationship['description'] : '';
+        });
+      }
       _.each(item.contacts, function (contact) {
         var role = contact.relationship_type_id ? _.findWhere(caseRoles, {relationship_type_id: contact.relationship_type_id}) : null;
         if ((!role || role.contact_id) && contact.relationship_type_id) {
@@ -75,6 +82,11 @@
           }
         } else if (!$scope.rolesFilter || $scope.rolesFilter == 'client') {
           caseRoles.push($.extend({role: ts('Client'), checked: selected.indexOf(contact.contact_id) >= 0}, contact));
+        }
+      });
+      _.each(caseRoles, function (role, index) {
+        if(role && role.role != 'Client' && (role.contact_id + '_' + role.relationship_type_id in relDesc)) {
+          caseRoles[index]['desc'] = relDesc[role.contact_id + '_' + role.relationship_type_id];
         }
       });
       $scope.rolesCount = caseRoles.length;
@@ -104,15 +116,20 @@
     };
 
     $scope.assignRole = function(role, replace) {
+      var message = '<input name="caseRoleSelector" placeholder="' + ts('Select Coantact') + '" />';
+      if(role.role != 'Client') {
+        message = message + '<br/><textarea rows="3" cols="35" name="description" class="crm-form-textarea" style="margin-top: 10px;padding-left: 10px;border-color: #C2CFDE;color: #9494A4;" placeholder="Description"></textarea>';
+      }
       CRM.confirm({
         title: replace ? ts('Replace %1', {1: role.role}) : ts('Add %1', {1: role.role}),
-        message: '<input name="caseRoleSelector" placeholder="' + ts('Select Contact') + '" />',
+        message: message,
         open: function() {
           $('[name=caseRoleSelector]', this).crmEntityRef({create: true, api: {params: {contact_type: role.contact_type, contact_sub_type: role.contact_sub_type}, extra: ['display_name']}});
         }
       }).on('crmConfirm:yes', function() {
         var apiCalls = [],
-          val = $('[name=caseRoleSelector]', this).val();
+          val = $('[name=caseRoleSelector]', this).val(),
+          desc = $('[name=description]', this).val();
         if (replace) {
           apiCalls.push(unassignRoleCall(role));
         }
@@ -120,14 +137,16 @@
           var newContact = $('[name=caseRoleSelector]', this).select2('data').extra.display_name;
           // Add case role
           if (role.relationship_type_id) {
+            params = {
+              relationship_type_id: role.relationship_type_id,
+              start_date: 'now',
+              contact_id_b: val,
+              case_id: item.id,
+              description: desc
+            };
             _.each(item.client, function (client) {
-              apiCalls.push(['Relationship', 'create', {
-                relationship_type_id: role.relationship_type_id,
-                start_date: 'now',
-                contact_id_a: client.contact_id,
-                contact_id_b: val,
-                case_id: item.id
-              }]);
+              params['contact_id_a'] = client.contact_id;
+              apiCalls.push(['Relationship', 'create', params]);
             });
           }
           // Add case client
