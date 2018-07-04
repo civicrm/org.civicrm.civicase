@@ -21,7 +21,7 @@
     delete $scope.upNextCategories.system;
 
     function caseGetParams() {
-      return {
+      var caseGetParams = {
         id: $scope.item.id,
         return: ['subject', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'tag_id.parent_id', 'related_case_ids'],
         // Related cases by contact
@@ -57,12 +57,6 @@
           options: {limit: panelLimit, sort: 'activity_date_time ASC'},
           return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id']
         },
-        // Custom data
-        'api.CustomValue.gettree': {
-          entity_id: "$value.id",
-          entity_type: 'Case',
-          return: ['custom_group.id', 'custom_group.name', 'custom_group.title', 'custom_group.collapse_display', 'custom_field.name', 'custom_field.label', 'custom_value.display']
-        },
         // Relationship description field
         'api.Relationship.get': {
           case_id:  "$value.id",
@@ -71,6 +65,15 @@
         },
         sequential: 1
       };
+      if (CRM.checkPerm('administer CiviCRM')) {
+        // Custom data
+        caseGetParams['api.CustomValue.gettree'] = {
+          entity_id: "$value.id",
+          entity_type: 'Case',
+          return: ['custom_group.id', 'custom_group.name', 'custom_group.title', 'custom_group.collapse_display', 'custom_field.name', 'custom_field.label', 'custom_value.display']
+        };
+      }
+      return caseGetParams;
     }
 
     function getAllowedCaseStatuses(definition) {
@@ -132,7 +135,7 @@
           $actControls.css('width', 'auto');
         }
       },1500);
-      
+
     });
 
     function formatAct(act) {
@@ -162,7 +165,10 @@
       item.tasks = _.each(_.cloneDeep(item['api.Activity.get.3'].values), formatAct);
       delete(item['api.Activity.get.3']);
       // Custom fields
-      item.customData = item['api.CustomValue.gettree'].values || [];
+      item.customData = [];
+      if (item['api.CustomValue.gettree']) {
+        item.customData = item['api.CustomValue.gettree'].value;
+      }
       _.each(item.customData, function(customGroup, index) {
         customGroup.collapse_display = customGroup.collapse_display === '1';
         // Maintain collapse state
