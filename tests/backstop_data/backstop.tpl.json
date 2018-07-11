@@ -14,7 +14,81 @@
     "html_report": "html_report",
     "ci_report": "ci_report"
   },
-  "scenarios": [],
+  "scenarios": [
+    {
+      "label": "Civicase - Dashboard",
+      "url": "{url}/civicrm/case?reset=1",
+      "onReadyScript": "civicase/dashboard.js"
+    },
+    {
+      "label": "Civicase - Find Cases - Search",
+      "url": "{url}/civicrm/case/search?reset=1"
+    },
+    {
+      "label": "Civicase - Find My Cases",
+      "url": "{url}/civicrm/case?reset=1",
+      "onReadyScript": "civicase/find.js"
+    },
+    {
+      "label": "Civicase - Add Case",
+      "url": "{url}/civicrm/case/add?action=add&context=standalone&reset=1",
+      "onReadyScript": "common/wait-for-wysiwyg.js"
+    },
+    {
+      "label": "Civicase - Manage Case",
+      "url": "{url}/civicrm/case?reset=1",
+      "onReadyScript": "civicase/manage.js"
+    },
+    {
+      "label": "Civicase - Delete Case",
+      "url": "{url}/civicrm/case?reset=1",
+      "selectors": [".ui-dialog"],
+      "onReadyScript": "civicase/delete.js"
+    },
+    {
+      "label": "Civicase - Assign to others case",
+      "url": "{url}/civicrm/case?reset=1",
+      "selectors": [".ui-dialog"],
+      "onReadyScript": "civicase/assign-to-others.js"
+    },
+    {
+      "label": "Civicase - View case activity",
+      "url": "{url}/civicrm/case?reset=1",
+      "onReadyScript": "civicase/case-activity.js"
+    },
+    {
+      "label": "Civicase - Case Report",
+      "url": "{url}/civicrm/report/list?compid=7&reset=1"
+    },
+    {
+      "label": "Civicase - New Case Report",
+      "url": "{url}/civicrm/report/template/list?reset=1&compid=7"
+    },
+    {
+      "label": "Civicase - Case Summary Report - Columns",
+      "url": "{url}/civicrm/report/case/summary"
+    },
+    {
+      "label": "Civicase - Case Summary Report - Sorting",
+      "url": "{url}/civicrm/report/case/summary",
+      "onReadyScript": "civicase/summary-report-sorting.js"
+    },
+    {
+      "label": "Civicase - Case Summary Report - Filters",
+      "url": "{url}/civicrm/report/case/summary",
+      "onReadyScript": "civicase/summary-report-filters.js"
+    },
+    {
+      "label": "Civicase - Case Time Spent Report - Grouping",
+      "url": "{url}/civicrm/report/case/timespent",
+      "onReadyScript": "civicase/timespent-report-grouping.js"
+    },
+    {
+      "label": "Civicase - Case Detail Report - Display Options",
+      "url": "{url}/civicrm/report/case/detail",
+      "onReadyScript": "civicase/detail-report-display-options.js"
+    }
+  ],
   "report": ["CLI", "browser"],
   "engine": "puppeteer",
   "engineOptions": {
