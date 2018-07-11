@@ -1,4 +1,3 @@
-
 const gulp = require('gulp');
 const _ = require('lodash');
 const argv = require('yargs').argv;
