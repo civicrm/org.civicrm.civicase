@@ -32,7 +32,7 @@
     {
       "label": "Civicase - Add Case",
       "url": "{url}/civicrm/case/add?action=add&context=standalone&reset=1",
-      "onReadyScript": "common/wait-for-wysiwyg.js"
+      "onReadyScript": "civicase/add.js"
     },
     {
       "label": "Civicase - Manage Case",
