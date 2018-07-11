@@ -1,11 +1,7 @@
 {
   "name": "org.civicrm.civicase",
   "version": "1.0.0",
-  "description": "BackstopJS configuration for CiviCRM - Civicase",
   "main": "index.js",
-  "scripts": {
-    "test": "node test-runner.js"
-  },
   "devDependencies": {
     "ansi-colors": "^2.0.2",
     "backstopjs": "^3.3.1",
