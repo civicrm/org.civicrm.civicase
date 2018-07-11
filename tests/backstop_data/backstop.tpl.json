@@ -14,10 +14,7 @@
     "html_report": "html_report",
     "ci_report": "ci_report"
   },
-  "scenarios": [{
-    "label": "Dashboard",
-    "url": "{url}/civicrm"
-  }],
+  "scenarios": [],
   "report": ["CLI", "browser"],
   "engine": "puppeteer",
   "engineOptions": {
