@@ -45,3 +45,7 @@ civibuild create dcase --url http://dcase.localhost --admin-pass s3cr3t
 ## Create a build with WordPress, CiviCRM 4.7, and CiviCase 5
 civibuild create wpcase --url http://wpcase.localhost --admin-pass s3cr3t
 ```
+
+## Post Development
+
+Once you are done making your changes, please use BackstopJS (see [TESTING.MD](TESTING.md#backstopjs-visual-regression-tesing) to check for any possible visual regression issues.
