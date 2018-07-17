@@ -15,4 +15,5 @@ module.exports = async (engine, scenario, vp) => {
 
     return tables.length > 0 && Array.from(tables).every(table => table.style.display === 'none');
   });
+  await engine.waitForSelector('.fa-calendar');
 };
