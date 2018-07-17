@@ -1,13 +1,11 @@
 'use strict';
 
+const Utility = require('../../utility.js');
+
 module.exports = async (engine, scenario, viewport) => {
+  const utility = new Utility(engine, scenario, viewport);
+  
   await require('./main')(engine, scenario, viewport);
-
   await engine.click('a[href="#acttab-actType"]');
-  // wait for fadein animation to complete.
-  await engine.waitFor(() => {
-    const uiBlock = document.querySelector('#acttab-actType');
-
-    return uiBlock.style.display === 'block';
-  });
+  await utility.waitForVisibility('#acttab-actType');  
 };
