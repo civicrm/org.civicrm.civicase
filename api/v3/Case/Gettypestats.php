@@ -62,7 +62,7 @@ function civicrm_api3_case_gettypestats($params) {
   }
   // Filter out deleted contacts
   $query->where("a.id IN (SELECT case_id FROM civicrm_case_contact ccc, civicrm_contact cc WHERE ccc.contact_id = cc.id AND cc.is_deleted = 0)");
-  $isDeleted = CRM_Utils_Array::value('is_deleted', $params, 0);
+  $isDeleted = (int) CRM_Utils_Array::value('is_deleted', $params, 0);
   $query->where('a.is_deleted = ' . $isDeleted);
 
   // Denormalize the stats data.
