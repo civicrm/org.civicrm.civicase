@@ -1,7 +1,7 @@
 {
   "name": "uk.co.compucorp.civicase",
-  "version": "2.0.0",
-  "description": "Civicase Extension based on Shoreditch theme",
+  "version": "5.0.0",
+  "description": "The CiviCase extension is an overhaul of the CiviCase UI. It provides a richer experience with more thoughtful layouts and interactions.",
   "main": "index.js",
   "directories": {
     "doc": "docs",
@@ -15,18 +15,14 @@
     "*.js": [
       "semistandard --fix",
       "git add"
-    ],
-    "*.scss": [
-      "stylelint --fix",
-      "git add"
     ]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/compucorp/uk.co.compucorp.civicase.git"
   },
-  "author": "compucorp.co.uk",
-  "license": "ISC",
+  "author": "Compucorp <info@compucorp.co.uk>",
+  "license": "GNU Affero Public License 3.0",
   "bugs": {
     "url": "https://github.com/compucorp/uk.co.compucorp.civicase/issues"
   },
