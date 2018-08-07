@@ -1,6 +1,6 @@
 # CiviCase v5
 
-The CiviCase v5 extension (`org.civicrm.civicase`) is an overhaul of the
+The CiviCase v5 extension (`uk.co.compucorp.civicase`) is an overhaul of the
 CiviCase UI.  It provides a richer experience with more thoughtful layouts
 and interactions.
 
@@ -25,7 +25,7 @@ To install the extension on an existing CiviCRM site:
 mkdir sites/all/modules/civicrm/ext
 cd sites/all/modules/civicrm/ext
 git clone https://github.com/civicrm/org.civicrm.shoreditch shoreditch
-git clone https://github.com/civicrm/org.civicrm.civicase civicase
+git clone https://github.com/civicrm/uk.co.compucorp.civicase civicase
 cv en shoreditch civicase
 cv api setting.create customCSSURL=$(cv url -x shoreditch/css/custom-civicrm.css --out=list)
 ```

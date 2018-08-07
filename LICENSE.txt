@@ -1,5 +1,5 @@
-Package: org.civicrm.civicase
-Copyright (C) 2016, Coleman Watts <info@civicrm.org>
+Package: uk.co.compucorp.civicase
+Copyright (C) 2018, Compucorp
 Licensed under the GNU Affero Public License 3.0 (below).
 
 -------------------------------------------------------------------------------

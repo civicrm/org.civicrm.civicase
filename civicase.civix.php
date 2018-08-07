@@ -8,7 +8,7 @@
  */
 class CRM_Civicase_ExtensionUtil {
   const SHORT_NAME = "civicase";
-  const LONG_NAME = "org.civicrm.civicase";
+  const LONG_NAME = "uk.co.compucorp.civicase";
   const CLASS_PREFIX = "CRM_Civicase";
 
   /**

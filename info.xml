@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<extension key="org.civicrm.civicase" type="module">
+<extension key="uk.co.compucorp.civicase" type="module">
   <file>civicase</file>
   <name>CiviCase</name>
   <description>Manage cases, clients, activities, etc.</description>
   <license>AGPL-3.0</license>
   <maintainer>
-    <author>Coleman Watts</author>
-    <email>info@civicrm.org</email>
+    <author>Compucorp</author>
+    <email>info@compucorp.co.uk</email>
   </maintainer>
   <urls>
     <url desc="Main Extension Page">http://FIXME</url>

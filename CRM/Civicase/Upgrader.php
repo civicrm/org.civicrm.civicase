@@ -171,7 +171,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    */
   private function createManageCasesMenuItem() {
     $this->addNav(array(
-      'label' => ts('Manage Cases', array('domain' => 'org.civicrm.civicase')),
+      'label' => ts('Manage Cases', array('domain' => 'uk.co.compucorp.civicase')),
       'name' => 'Manage Cases',
       'url' => 'civicrm/case/a/#/case/list',
       'permission' => 'access my cases and activities,access all cases and activities',
