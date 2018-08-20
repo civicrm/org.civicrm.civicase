@@ -1,0 +1,16 @@
+/**
+  * @file
+  * The file contains all the scss imports required for the civicase extensions
+  * All basic components like variables, mixins, typographys are defined first
+  * followed by components and pages
+  * 
+  * *NOTE*
+  * To import scss partials from other extension (e.g. shoreditch etc), import partials like this
+  * @import 'SCSSROOT/org.civicrm.shoreditch/scss/path/to/the/partial';
+  */
+
+@import 'base/variables/**';
+@import 'base/mixins/**';
+@import 'base/typography/**';
+@import 'components/**';
+@import 'pages/**';
