@@ -1,9 +1,9 @@
 /**
-  * @file
-  * The file contains all the scss imports required for the civicase extensions
-  * All basic components like variables, mixins, typographys are defined first
-  * followed by components and pages.
-  */
+ * @file
+ * The file contains all the scss imports required for the civicase extension
+ * Base partials like variables, mixins, typographys are imported first
+ * followed by components and pages.
+ */
 
 @import 'base/variables/**';
 @import 'base/mixins/**';

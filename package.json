@@ -24,7 +24,6 @@
   "semistandard": {
     "globals": [
       "CRM",
-      "jQuery",
       "angular"
     ]
   },

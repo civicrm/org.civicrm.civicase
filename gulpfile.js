@@ -1,17 +1,15 @@
 'use strict';
 
 /**
-  * @file
-  * This file contains gulp configurations for setting up SASS with feature of
-  * importing Shoreditch Partials and minifying the css file to .min.css
-  * Tasks
-  * default : Runs SASS task
-  * sass:sync : Runs sass sync task for civicrmScssRoot
-  * sass: Compiles civicase.scss under scss folder to CSS counterpart
-  * watch: Watches for scss file changes and run sass task
-  */
-
-// Gulp related variables
+ * @file
+ * This file contains gulp configurations for setting up SASS with feature of
+ * importing Shoreditch Partials and minifying the css file to .min.css
+ *
+ * Tasks
+ * default : Runs SASS task
+ * sass: Compiles civicase.scss under scss folder to CSS counterpart
+ * watch: Watches for scss file changes and run sass task
+ */
 const gulp = require('gulp');
 const bulk = require('gulp-sass-bulk-import');
 const sass = require('gulp-sass');
@@ -24,15 +22,14 @@ const cssmin = require('gulp-cssmin');
 const rename = require('gulp-rename');
 const sourcemaps = require('gulp-sourcemaps');
 
-// Local variables
 const bootstrapNamespace = '#bootstrap-theme';
 const outsideNamespaceRegExp = /^\.___outside-namespace/;
 
 /**
-  * The gulp task compiles civicase.scss file to civicase.min.css (minified file).
-  * Also prefix the output css selector with `#bootstrap-theme` selector except the output.
-  * selector starts from either `body`, `page-civicrm-case` or `.___outside-namespace` classes.
-  */
+ * The gulp task compiles and minifies scss/civicase.scss file into css/civicase.min.css.
+ * Also prefix the output css selector with `#bootstrap-theme` selector except the output.
+ * selector starts from either `body`, `page-civicrm-case` or `.___outside-namespace` classes.
+ */
 gulp.task('sass', () => {
   return gulp.src('scss/civicase.scss')
     .pipe(bulk())
@@ -54,25 +51,25 @@ gulp.task('sass', () => {
 });
 
 /**
-  * Watch task for watching scss files and compile them if
-  * file changes.
-  */
+ * Watch task for watching scss files and compile them if
+ * file changes.
+ */
 gulp.task('watch', () => {
   gulp.watch('scss/**/*.scss', ['sass']);
 });
 
 /**
-  * Default task calls sass task
-  */
+ * Default task calls sass task
+ */
 gulp.task('default', ['sass']);
 
 /**
-  * Deletes the special class that was used as marker for styles that should
-  * not be nested inside the bootstrap namespace from the given selector
-  *
-  * @param  {String} selector
-  * @return {String}
-  */
+ * Deletes the special class that was used as marker for styles that should
+ * not be nested inside the bootstrap namespace from the given selector
+ *
+ * @param  {String} selector
+ * @return {String}
+ */
 function removeOutsideNamespaceMarker (selector) {
   return selector.replace(outsideNamespaceRegExp, '');
 }

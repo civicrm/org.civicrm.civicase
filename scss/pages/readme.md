@@ -1,2 +1,2 @@
 ### Folder details
-This folder contains partials for page related sass
+This folder contains partials for pages of the application.
