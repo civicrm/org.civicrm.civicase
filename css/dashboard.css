@@ -316,19 +316,19 @@
   line-height: 13px;
   padding-right: 5px;
 }
-#bootstrap-theme.civicase-main .nav-pills.nav-pills-horizontal {
+#bootstrap-theme.civicase__container .nav-pills.nav-pills-horizontal {
   padding: 0 8px;
 }
-#bootstrap-theme.civicase-main .nav-pills > li > a {
+#bootstrap-theme.civicase__container .nav-pills > li > a {
   border-bottom: 3px solid transparent;
   border-radius: 0;
   font-size: 14px;
   line-height: 20px;
 }
-#bootstrap-theme.civicase-main .nav-pills > li.active > a {
+#bootstrap-theme.civicase__container .nav-pills > li.active > a {
   border-color: #FFFFFF;
 }
-#bootstrap-theme.civicase-main .nav-pills > li.active > a:after {
+#bootstrap-theme.civicase__container .nav-pills > li.active > a:after {
   border-bottom: none;
 }
 #bootstrap-theme.civicase-dashboard .tab-pane {
