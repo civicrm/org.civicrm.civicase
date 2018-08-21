@@ -25,7 +25,7 @@ To install the extension on an existing CiviCRM site:
 mkdir sites/all/modules/civicrm/ext
 cd sites/all/modules/civicrm/ext
 git clone https://github.com/civicrm/org.civicrm.shoreditch shoreditch
-git clone https://github.com/civicrm/uk.co.compucorp.civicase civicase
+git clone https://github.com/compucorp/uk.co.compucorp.civicase civicase
 cv en shoreditch civicase
 cv api setting.create customCSSURL=$(cv url -x shoreditch/css/custom-civicrm.css --out=list)
 ```
