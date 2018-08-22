@@ -21,6 +21,8 @@ var transformSelectors = require('gulp-transform-selectors');
 var cssmin = require('gulp-cssmin');
 var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
+var karma = require('karma');
+var path = require('path');
 
 var bootstrapNamespace = '#bootstrap-theme';
 var outsideNamespaceRegExp = /^\.___outside-namespace/;
@@ -73,3 +75,13 @@ gulp.task('default', ['sass']);
 function removeOutsideNamespaceMarker (selector) {
   return selector.replace(outsideNamespaceRegExp, '');
 }
+
+/**
+ * Runs the unit tests
+ */
+gulp.task('test', function (done) {
+  new karma.Server({
+    configFile: path.resolve(__dirname, 'ang/test/karma.conf.js'),
+    singleRun: true
+  }, done).start();
+});
