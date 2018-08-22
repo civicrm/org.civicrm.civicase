@@ -1,14 +1,13 @@
-(function(angular, $, _) {
-
-  angular.module('civicase').config(function($routeProvider) {
+(function (angular, $, _) {
+  angular.module('civicase').config(function ($routeProvider) {
     $routeProvider.when('/activity/feed', {
       reloadOnSearch: false,
-      template: '<div id="bootstrap-theme" class="civicase-main" civicase-activity-feed="{}"></div>'
+      template: '<div id="bootstrap-theme" class="civicase__container" civicase-activity-feed="{}"></div>'
     });
   });
 
   // ActivityFeed directive controller
-  function activityFeedController($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, templateExists) {
+  function activityFeedController ($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, templateExists) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25,
@@ -57,51 +56,51 @@
     }
 
     $scope.refreshCase = $scope.refreshCase || _.noop;
-    $scope.refreshAll = function() {
+    $scope.refreshAll = function () {
       $('.act-feed-panel .panel-body').block();
       getActivities(false, $scope.refreshCase);
     };
 
-    $scope.star = function(act) {
+    $scope.star = function (act) {
       act.is_star = act.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues
       crmApi('Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}, {}).then($scope.refreshCase);
     };
 
-    $scope.markCompleted = function(act) {
+    $scope.markCompleted = function (act) {
       $('.act-feed-panel .panel-body').block();
       crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {}).then($scope.refreshAll);
     };
 
-    $scope.isSameDate = function(d1, d2) {
+    $scope.isSameDate = function (d1, d2) {
       return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
     };
 
-    $scope.nextPage = function() {
+    $scope.nextPage = function () {
       ++pageNum;
       getActivities(true);
     };
 
-    $scope.getAttachments = function(activity) {
+    $scope.getAttachments = function (activity) {
       if (!activity.attachments) {
         activity.attachments = [];
         CRM.api3('Attachment', 'get', {
           entity_table: 'civicrm_activity',
           entity_id: activity.id,
           sequential: 1
-        }).done(function(data) {
+        }).done(function (data) {
           activity.attachments = data.values;
           $scope.$digest();
         });
       }
     };
 
-    $scope.deleteActivity = function(activity) {
+    $scope.deleteActivity = function (activity) {
       CRM.confirm({
-          title: ts('Delete Activity'),
-          message: ts('Permanently delete this %1 activity?', {1: activity.type})
-        })
-        .on('crmConfirm:yes', function() {
+        title: ts('Delete Activity'),
+        message: ts('Permanently delete this %1 activity?', {1: activity.type})
+      })
+        .on('crmConfirm:yes', function () {
           if ($scope.viewingActivity && $scope.viewingActivity.id == activity.id) {
             $scope.viewingActivity = {};
             $scope.aid = 0;
@@ -110,7 +109,7 @@
         });
     };
 
-    $scope.moveCopyActivity = function(act, op) {
+    $scope.moveCopyActivity = function (act, op) {
       var model = {
         ts: ts,
         activity: _.cloneDeep(act)
@@ -123,7 +122,7 @@
         buttons: [{
           text: ts('Save'),
           icons: {primary: 'fa-check'},
-          click: function() {
+          click: function () {
             if (op === 'copy') {
               delete model.activity.id;
             }
@@ -136,7 +135,7 @@
       });
     };
 
-    $scope.viewActivity = function(id, e) {
+    $scope.viewActivity = function (id, e) {
       if (e && $(e.target).closest('a, button').length) {
         return;
       }
@@ -145,11 +144,11 @@
       if (($scope.viewingActivity && $scope.viewingActivity.id == id) || !act) {
         $scope.viewingActivity = {};
         $scope.aid = 0;
-      } else {  
+      } else {
         // Mark email read
         if (act.status === 'Unread') {
           var statusId = _.findKey(CRM.civicase.activityStatuses, {name: 'Completed'});
-          crmApi('Activity', 'setvalue', {id: act.id, field: 'status_id', value: statusId}).then(function() {
+          crmApi('Activity', 'setvalue', {id: act.id, field: 'status_id', value: statusId}).then(function () {
             act.status_id = statusId;
             formatActivity(act);
           });
@@ -159,7 +158,7 @@
       }
     };
 
-    function groupActivities(activities) {
+    function groupActivities (activities) {
       var groups = [], group, subgroup,
         date = new Date(),
         now = CRM.utils.formatDate(date, 'yy-mm-dd') + ' ' + date.toTimeString().slice(0, 8),
@@ -169,7 +168,7 @@
       }
       groups.push(upcoming = {key: 'upcoming', title: ts('Upcoming Activities'), activities: []});
       groups.push(past = {key: 'past', title: ts('Past Activities'), activities: []});
-      _.each(activities, function(act) {
+      _.each(activities, function (act) {
         var activityDate = act.activity_date_time.slice(0, 10);
         if (act.activity_date_time > now) {
           group = upcoming;
@@ -187,11 +186,11 @@
       return groups;
     }
 
-    function getActivities(nextPage, callback) {
+    function getActivities (nextPage, callback) {
       if (nextPage !== true) {
         pageNum = 0;
       }
-      crmThrottle(_loadActivities).then(function(result) {
+      crmThrottle(_loadActivities).then(function (result) {
         if (_.isFunction(callback)) {
           callback();
         }
@@ -216,7 +215,7 @@
       });
     }
 
-    function _loadActivities() {
+    function _loadActivities () {
       var returnParams = {
         sequential: 1,
         return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id', 'is_overdue', 'case_id'],
@@ -239,7 +238,7 @@
       } else {
         returnParams.return = returnParams.return.concat(['case_id.case_type_id', 'case_id.status_id', 'case_id.contacts']);
       }
-      _.each($scope.filters, function(val, key) {
+      _.each($scope.filters, function (val, key) {
         if (key[0] === '@') return; // Virtual params.
         if (val) {
           if (key === 'text') {
@@ -271,7 +270,7 @@
     $scope.$on('updateCaseData', getActivities);
   }
 
-  angular.module('civicase').directive('civicaseActivityFeed', function() {
+  angular.module('civicase').directive('civicaseActivityFeed', function () {
     return {
       restrict: 'A',
       template:
@@ -286,5 +285,4 @@
       }
     };
   });
-
 })(angular, CRM.$, CRM._);

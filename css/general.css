@@ -1,10 +1,6 @@
 #bootstrap-theme .text-dark {
   color: #383f4b;
 }
-#bootstrap-theme.civicase-main {
-  max-width: 1200px;
-  margin: 0 auto;
-}
 #bootstrap-theme .btn .caret {
   position: relative;
   left: 4px;
