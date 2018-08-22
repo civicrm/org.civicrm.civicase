@@ -68,5 +68,8 @@
     "semistandard": "^12.0.1",
     "stylelint": "^9.5.0",
     "stylelint-config-sass-guidelines": "^5.0.0"
+  },
+  "dependencies": {
+    "material-design-icons": "^3.0.1"
   }
 }

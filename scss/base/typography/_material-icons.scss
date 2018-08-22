@@ -1,0 +1,14 @@
+/**
+ * @file
+ * Contains font-face declerations for material-icons
+ */
+  
+@font-face {
+  font-family: $materialFont-name;
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(#{$materialFont-url}MaterialIcons-Regular.woff2) format('woff2'),
+    url(#{$materialFont-url}MaterialIcons-Regular.woff) format('woff');
+}
