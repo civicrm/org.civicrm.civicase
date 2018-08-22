@@ -4,13 +4,13 @@
  */
   
 @font-face {
-  font-family: $material-font-name;
+  font-family: $material-icon-font-name;
   font-style: normal;
   font-weight: 400;
   src: local('Material Icons'),
     local('MaterialIcons-Regular'),
-    url(#{$material-font-url}MaterialIcons-Regular.woff2) format('woff2'),
-    url(#{$material-font-url}MaterialIcons-Regular.woff) format('woff');
+    url(#{$material-icon-font-url}MaterialIcons-Regular.woff2) format('woff2'),
+    url(#{$material-icon-font-url}MaterialIcons-Regular.woff) format('woff');
 }
 
 /**
