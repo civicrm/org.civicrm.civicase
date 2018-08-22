@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @file
  * This file contains gulp configurations for setting up SASS with feature of
@@ -10,27 +8,29 @@
  * sass: Compiles civicase.scss under scss folder to CSS counterpart
  * watch: Watches for scss file changes and run sass task
  */
-const gulp = require('gulp');
-const bulk = require('gulp-sass-bulk-import');
-const sass = require('gulp-sass');
-const postcss = require('gulp-postcss');
-const postcssPrefix = require('postcss-prefix-selector');
-const postcssDiscardDuplicates = require('postcss-discard-duplicates');
-const stripCssComments = require('gulp-strip-css-comments');
-const transformSelectors = require('gulp-transform-selectors');
-const cssmin = require('gulp-cssmin');
-const rename = require('gulp-rename');
-const sourcemaps = require('gulp-sourcemaps');
+'use strict';
 
-const bootstrapNamespace = '#bootstrap-theme';
-const outsideNamespaceRegExp = /^\.___outside-namespace/;
+var gulp = require('gulp');
+var bulk = require('gulp-sass-bulk-import');
+var sass = require('gulp-sass');
+var postcss = require('gulp-postcss');
+var postcssPrefix = require('postcss-prefix-selector');
+var postcssDiscardDuplicates = require('postcss-discard-duplicates');
+var stripCssComments = require('gulp-strip-css-comments');
+var transformSelectors = require('gulp-transform-selectors');
+var cssmin = require('gulp-cssmin');
+var rename = require('gulp-rename');
+var sourcemaps = require('gulp-sourcemaps');
+
+var bootstrapNamespace = '#bootstrap-theme';
+var outsideNamespaceRegExp = /^\.___outside-namespace/;
 
 /**
  * The gulp task compiles and minifies scss/civicase.scss file into css/civicase.min.css.
  * Also prefix the output css selector with `#bootstrap-theme` selector except the output.
  * selector starts from either `body`, `page-civicrm-case` or `.___outside-namespace` classes.
  */
-gulp.task('sass', () => {
+gulp.task('sass', function () {
   return gulp.src('scss/civicase.scss')
     .pipe(bulk())
     .pipe(sourcemaps.init())
@@ -54,7 +54,7 @@ gulp.task('sass', () => {
  * Watch task for watching scss files and compile them if
  * file changes.
  */
-gulp.task('watch', () => {
+gulp.task('watch', function () {
   gulp.watch('scss/**/*.scss', ['sass']);
 });
 
