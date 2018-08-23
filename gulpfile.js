@@ -21,6 +21,8 @@ var transformSelectors = require('gulp-transform-selectors');
 var cssmin = require('gulp-cssmin');
 var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
+var karma = require('karma');
+var path = require('path');
 
 var bootstrapNamespace = '#bootstrap-theme';
 var outsideNamespaceRegExp = /^\.___outside-namespace/;
@@ -51,17 +53,17 @@ gulp.task('sass', function () {
 });
 
 /**
- * Watch task for watching scss files and compile them if
- * file changes.
+ * Watch task
  */
 gulp.task('watch', function () {
   gulp.watch('scss/**/*.scss', ['sass']);
+  gulp.watch(['ang/**/*.js', '!ang/test/karma.conf.js'], ['test']);
 });
 
 /**
- * Default task calls sass task
+ * Default task
  */
-gulp.task('default', ['sass']);
+gulp.task('default', ['sass', 'test']);
 
 /**
  * Deletes the special class that was used as marker for styles that should
@@ -73,3 +75,13 @@ gulp.task('default', ['sass']);
 function removeOutsideNamespaceMarker (selector) {
   return selector.replace(outsideNamespaceRegExp, '');
 }
+
+/**
+ * Runs the unit tests
+ */
+gulp.task('test', function (done) {
+  new karma.Server({
+    configFile: path.resolve(__dirname, 'ang/test/karma.conf.js'),
+    singleRun: true
+  }, done).start();
+});
