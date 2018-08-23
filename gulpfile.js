@@ -53,17 +53,17 @@ gulp.task('sass', function () {
 });
 
 /**
- * Watch task for watching scss files and compile them if
- * file changes.
+ * Watch task
  */
 gulp.task('watch', function () {
   gulp.watch('scss/**/*.scss', ['sass']);
+  gulp.watch(['ang/**/*.js', '!ang/test/karma.conf.js'], ['test']);
 });
 
 /**
- * Default task calls sass task
+ * Default task
  */
-gulp.task('default', ['sass']);
+gulp.task('default', ['sass', 'test']);
 
 /**
  * Deletes the special class that was used as marker for styles that should
