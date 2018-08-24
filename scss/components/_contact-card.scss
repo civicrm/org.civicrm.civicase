@@ -13,3 +13,56 @@
   font-size: 18px;
   margin-top: 2px;
 }
+
+.civicase__contact-additional__container {
+  margin-left: 5px;
+
+  a {
+    display: flex !important;
+  }
+
+  .dropdown-menu {
+    height: 200px;
+    margin-left: -77px;
+    overflow: auto;
+    top: 29px;
+  }
+
+  &:hover {
+    .dropdown-menu,
+    .civicase__contact-additional__arrow {
+      display: block;
+    }
+  }
+
+  .civicase__contact-icon {
+    font-size: 18px;
+  }
+
+  .civicase__contact-name {
+    color: $brand-primary;
+  }
+}
+
+.civicase__contact-additional__arrow {
+  display: none;
+  position: relative;
+  top: 5px;
+
+  &::after {
+    border: 7px solid #000;
+    border-color: transparent transparent #fff #fff;
+    bottom: -2em;
+    box-shadow: -2px 2px 3px 0 rgba(48, 40, 40, 0.1);
+    box-sizing: border-box;
+    content: '';
+    height: 0;
+    left: 50%;
+    margin-left: -77px;
+    position: absolute;
+    transform: rotate(-225deg);
+    transform-origin: 46px 13px;
+    width: 0;
+    z-index: 1000000;
+  }
+}
