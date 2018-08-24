@@ -1,4 +1,4 @@
-.table--caselist {
+.civicase__table--caselist {
   .fixed-col {
     .label {
       font-size: 0.8em;
@@ -65,7 +65,7 @@
     z-index: 6;
   }  
 
-  .table--caselist__header.affix {
+  .civicase__table--caselist__header.affix {
     th:nth-child(1) {
       left: 0;
       position: fixed;
@@ -73,7 +73,7 @@
     }
   }
 
-  .table--caselist {
+  .civicase__table--caselist {
     table-layout: inherit;
 
     th {
