@@ -1,0 +1,42 @@
+.civicase__activity-card {
+  .panel-body > div {
+    display: flex;
+    vertical-align: middle;
+  }
+
+  .civicase__contact-avatar {
+    margin-left: 5px;
+    margin-top: -10px;
+  }
+}
+
+.civicase__activity-icon {
+  font-size: 18px;
+}
+
+.civicase__activity-icon--muted {
+  color: $crm-grayblue-darker;
+}
+
+.civicase__activity-date {
+  color: $crm-gray-matte;
+  margin-left: 5px;
+}
+
+.civicase__activity__right-container {
+  margin-left: auto;
+}
+
+.civicase__activity-subject {
+  color: $gray-darker;
+  font-weight: 600;
+}
+
+.civicase__activity-second-row,
+.civicase__activity-third-row {
+  line-height: 1.8em;
+}
+
+.civicase__activity-with {
+  color: $crm-gray-matte;
+}

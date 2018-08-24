@@ -1,4 +1,4 @@
-<div style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};" 
+<!-- <div style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};"
   class="act-feed-item activity-card act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.status_css }}"
   ng-class="{'is-completed': activity.is_completed, 'is-incomplete': !activity.is_completed, 'activity-overdue': activity.is_overdue}"
   ng-click="viewInPopup($event, activity)"
@@ -6,5 +6,32 @@
   <div class="act-feed-inner">
     <div class="pull-right" ng-include="'~/civicase/ActivityCardMenu.html'"></div>
     <div ng-include="'~/civicase/ActivityItemInnerWrapper.html'"></div>
+  </div>
+</div> -->
+
+<div class="civicase__activity-card">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="civicase__activity-first-row">
+        <i class="civicase__activity-icon text-primary material-icons">card_travel</i>
+        <span class="civicase__activity-date">10 Feb 2018</span>
+        <span class="civicase__activity__right-container">
+          <i class="civicase__activity-icon civicase__activity-icon--muted material-icons">attach_file</i>
+          <i class="civicase__activity-icon civicase__activity-icon--muted material-icons">star_border</i>
+          <span class="civicase__contact-avatar crm_notification-badge">DB</span>
+        </span>
+      </div>
+      <div class="civicase__activity-second-row">
+        <span class="civicase__activity-subject">Secure temporary housing</span>
+      </div>
+      <div class="civicase__activity-third-row">
+        <span class="civicase__activity-with">With:&nbsp;</span>
+        <div class="civicase__contact-card">
+          <i class="civicase__contact-icon civicase__activity-icon--muted material-icons">person</i>
+          <span class="civicase__contact-name">John Caseman</span>
+          <span class="civicase__contact-additional">+2</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
