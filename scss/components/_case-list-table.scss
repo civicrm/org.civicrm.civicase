@@ -1,0 +1,134 @@
+.table--caselist {
+  .fixed-col {
+    .label {
+      font-size: 0.8em;
+    }
+  }
+
+  &__header {
+    &.affix {
+      display: block;
+      left: 0;
+      margin-left: 310px;
+      overflow-x: hidden;
+      overflow-y: visible;
+      right: 0;
+      top: 60px;
+      z-index: 9999;
+
+      tr {
+        display: table;
+        width: 100%;    
+      }
+
+      th {
+        display: table-cell;
+      }      
+    }
+  }
+}
+
+.case-list-panel:not(.viewing-case) {
+  .outer {
+    background: #fff;
+    position: relative;
+  }
+
+  .inner {
+    margin-left: 310px;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
+  .custom-scroll-wrapper {
+    border: 0;
+    margin-left: 310px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: calc(100% - 310px);
+
+    .custom-scroll {
+      height: 1px;
+      width: 100%;
+    }
+  }
+
+  .custom-scroll-wrapper.affix {
+    position: fixed;
+    top: 120px;
+    width: 890px;
+    z-index: 6;
+  }  
+
+  .table--caselist__header.affix {
+    th:nth-child(1) {
+      left: 0;
+      position: fixed;
+      top: 60px;
+    }
+  }
+
+  .table--caselist {
+    table-layout: inherit;
+
+    th {
+      min-width: 142px;
+      padding: 10px 15px;
+    }
+
+    th:first-child {
+      background: #f3f6f7;
+      height: 61px;
+      left: 0;
+      position: absolute;
+      -moz-transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      width: 310px;
+    }
+
+    th:nth-child(2) {
+      max-width: 370px;
+      min-width: 370px;
+      position: relative;
+    }
+
+    td {
+      border-bottom: 1px solid #e8eef0;
+      height: 150px;
+      min-width: 142px;
+      padding: 10px 15px;
+      padding-left: 20px;
+
+      &:first-child {
+        background: #fff;
+        left: 0;
+        position: absolute;
+        -moz-transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        width: 310px;
+      }
+
+      &:nth-child(2) {
+        padding: 10px 20px;
+      }
+
+      &:not(:nth-child(2)):not(:first-child) {
+        padding: 20px;
+      } 
+    }
+
+    &:not(.case-placeholder-row) {
+      td:first-child:hover {
+        background: #d9edf7;
+      }
+    }
+
+    .case-activity-card-wrapper {
+      max-width: 370px;
+      min-width: 370px;
+      position: relative;
+    }
+  }  
+}
