@@ -25,7 +25,7 @@
     <div class="custom-scroll-wrapper">
       <div class="custom-scroll"></div>
     </div>
-    <div class="inner" ng-include="'~/civicase/CaseListTable.html'"></div>
+    <div class="inner" id="caselist-table" ng-include="'~/civicase/CaseListTable.html'"></div>
   </div>
     <div class="center-block civicase__pager" sticky-footer-pager>
       <div class="pager-counter" ng-show="!viewingCase && page.total" ng-class=" !viewingCase && page.total > 1 ? 'pull-right' : 'text-right' " >
