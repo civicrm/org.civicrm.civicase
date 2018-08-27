@@ -1,5 +1,7 @@
 .civicase__activity-card {
   box-shadow: $box-shadow-card;
+  position: relative;
+  width: 280px;
 
   .panel {
     box-shadow: none;
@@ -44,6 +46,25 @@
   font-size: 18px;
 }
 
+.civicase__activity-icon--flag {
+  color: $crm-white;
+  font-size: 22px;
+  margin-top: -5px;
+  z-index: 1;
+}
+
+.civicase__activity-icon-ribbon {
+  border-bottom: 6px solid transparent;
+  border-left: 14px solid $brand-primary;
+  border-radius: 2px;
+  border-right: 14px solid $brand-primary;
+  height: 42px;
+  left: 17px;
+  position: absolute;
+  top: -3px;
+  width: 0;
+}
+
 .civicase__activity-icon--muted {
   color: $crm-grayblue-darker;
 }
@@ -60,6 +81,10 @@
 .civicase__activity-subject {
   color: $gray-darker;
   font-weight: 600;
+}
+
+.civicase__activity-first-row {
+  margin-bottom: 5px;
 }
 
 .civicase__activity-first-row,

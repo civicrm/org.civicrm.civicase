@@ -50,8 +50,8 @@
   top: 5px;
 
   &::after {
-    border: 7px solid #000;
-    border-color: transparent transparent #fff #fff;
+    border: 7px solid $crm-black;
+    border-color: transparent transparent $crm-white $crm-white;
     bottom: -2em;
     box-shadow: -2px 2px 3px 0 rgba(48, 40, 40, 0.1);
     box-sizing: border-box;

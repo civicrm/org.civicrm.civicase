@@ -17,7 +17,7 @@
   padding-right: 5px;
 }
 #bootstrap-theme .civicase-view-header {
-  background-color: #F3F6F7; 
+  background-color: #F3F6F7;
   border-radius: 2px 2px 0 0;
 }
 #bootstrap-theme .civicase-view-header h2 {
@@ -119,7 +119,7 @@
 }
 #bootstrap-theme .civicase-view-summary .row {
   border-bottom: 1px solid #e8eef0;
-  margin: 0;  
+  margin: 0;
 }
 #bootstrap-theme nav.civicase-view-tab-bar {
   background-color: #42AFCB;
@@ -138,7 +138,7 @@
 #bootstrap-theme .navbar.civicase-view-tab-bar .btn {
   background-color: transparent;
   border: 1px solid white;
-  color: white;  
+  color: white;
 }
 #bootstrap-theme .navbar.civicase-view-tab-bar .open .btn {
   border: 0 none;
@@ -223,7 +223,7 @@
 }
 #bootstrap-theme .select2-container,
 #bootstrap-theme .form-control.select2-container {
-  height: 30px 
+  height: 30px
 }
 #bootstrap-theme .select2-container .select2-choice {
   background-image: none;
@@ -270,7 +270,7 @@
 }
 
 #bootstrap-theme .select2-container.select2-dropdown-open,
-#bootstrap-theme .select2-container.select2-container-active .select2-choice, 
+#bootstrap-theme .select2-container.select2-container-active .select2-choice,
 #bootstrap-theme .select2-container.select2-container-active .select2-choices {
   box-shadow: none;
 }
@@ -404,15 +404,6 @@
   display: inline-block;
   margin-right: 20px;
   margin-left: 10px;
-}
-#bootstrap-theme .civicase-view-tasks .act-feed-item {
-  border-left: 5px solid;
-}
-#bootstrap-theme .civicase-view-tasks .act-feed-item.activity-overdue {
-  border-left-color: #e6807f !important;
-}
-#bootstrap-theme .civicase-view-tasks .act-feed-item.activity-overdue .cb-dot {
-  background-color: #e6807f !important;
 }
 #bootstrap-theme .case-tab-files .act-feed-panel {
   box-shadow: none;

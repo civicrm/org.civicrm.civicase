@@ -1,8 +1,8 @@
 .civicase__checkbox {
-  background-color: #fff;
+  background-color: $crm-white;
   border: 1px solid $crm-grayblue-darker;
   border-radius: 2px;
-  box-shadow: 0 6px 20px 0 rgba(49, 40, 40, 0.03);
+  box-shadow: $box-shadow-checkbox;
   box-sizing: border-box;
   height: 18px;
   width: 18px;
