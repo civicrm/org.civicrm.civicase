@@ -46,7 +46,7 @@
   font-size: 18px;
 }
 
-.civicase__activity-icon--flag {
+.civicase__activity-icon--ribbon {
   color: $crm-white;
   font-size: 22px;
   margin-top: -5px;
@@ -65,10 +65,6 @@
   width: 0;
 }
 
-.civicase__activity-icon--muted {
-  color: $crm-grayblue-darker;
-}
-
 .civicase__activity-date {
   color: $crm-gray-matte;
   margin-left: 5px;
@@ -83,20 +79,14 @@
   font-weight: 600;
 }
 
-.civicase__activity-first-row {
-  margin-bottom: 5px;
-}
-
-.civicase__activity-first-row,
-.civicase__activity-second-row,
-.civicase__activity-third-row {
+.civicase__activity-card-row {
   display: flex;
+  line-height: 1.8em;
   vertical-align: middle;
 }
 
-.civicase__activity-second-row,
-.civicase__activity-third-row {
-  line-height: 1.8em;
+.civicase__activity-card-row--first {
+  margin-bottom: 5px;
 }
 
 .civicase__activity-with {
