@@ -34,12 +34,12 @@
 }
 
 .civicase__table--caselist__body {
-  border-left: 1px solid #e8eef0;
+  border-left: 1px solid $gray-light;
 }
 
 .case-list-panel:not(.viewing-case) {
   .outer {
-    background: #fff;
+    background: $crm-white;
     position: relative;
   }
 
@@ -86,7 +86,7 @@
     }
 
     th:first-child {
-      background: #f3f6f7;
+      background: $gray-lighter;
       height: 61px;
       left: 0;
       position: absolute;
@@ -103,14 +103,14 @@
     }
 
     td {
-      border-bottom: 1px solid #e8eef0;
+      border-bottom: 1px solid $gray-light;
       height: 150px;
       min-width: 142px;
       padding: 10px 15px;
       padding-left: 20px;
 
       &:first-child {
-        background: #fff;
+        background: $crm-white;
         left: 0;
         position: absolute;
         -moz-transform: translateZ(0);
@@ -130,7 +130,7 @@
 
     &:not(.case-placeholder-row) {
       td:first-child:hover {
-        background: #d9edf7;
+        background: $case-card-hover;
       }
     }
 
