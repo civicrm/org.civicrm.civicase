@@ -110,26 +110,6 @@
     }
   }
 
-  .civicase__custom-scroller {
-    border: 0;
-    margin-left: 310px;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    width: calc(100% - 310px);
-
-    &.affix {
-      position: fixed;
-      top: 120px;
-      width: 890px;
-      z-index: 6;
-    }
-  }
-
-  .civicase__custom-scroller__bar {
-    height: 1px;
-    width: 100%;
-  }  
-
   .civicase__list-table__header.affix {
     th:nth-child(1) {
       left: 0;

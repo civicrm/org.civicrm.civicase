@@ -572,22 +572,6 @@
     };
   });
 
-  module.directive('calculateScrollWidth', function () {
-    return {
-      restrict: 'A',
-      link: function (scope, $el, attrs) {
-        scope.$watch(
-          function () {
-            return $('.civicase__list-table thead.affix-top').css('width');
-          },
-          function (width) {
-            $('.civicase__custom-scroller__bar').css('width', width);
-          }
-        );
-      }
-    };
-  });
-
   /**
    * Directive for the sticky table header functionality on case list page
    */
