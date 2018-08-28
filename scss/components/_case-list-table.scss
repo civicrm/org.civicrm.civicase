@@ -33,10 +33,6 @@
   }
 }
 
-.civicase__list-table__body {
-  border-left: 1px solid $gray-light;
-}
-
 
 .civicase__list-panel:not(.civicase__list-panel--case-detail) {
   .civicase__list-panel__inner {
@@ -45,6 +41,7 @@
   }
 
   .civicase__list {
+    border-left: 1px solid $gray-light;
     margin-left: 310px;
     overflow-x: auto;
     overflow-y: visible;

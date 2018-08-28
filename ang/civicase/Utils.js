@@ -1,8 +1,8 @@
 (function (angular, $, _, CRM) {
-  function getStatusType (status_id) {
+  function getStatusType (statusId) {
     var statusType;
     _.each(CRM.civicase.activityStatusTypes, function (statuses, type) {
-      if (statuses.indexOf(parseInt(status_id)) >= 0) {
+      if (statuses.indexOf(parseInt(statusId)) >= 0) {
         statusType = type;
       }
     });
@@ -25,7 +25,7 @@
           scope.sort.dir = (scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
         };
 
-        if (scope.sort.sortable && attrs.civicaseSortheader != '') {
+        if (scope.sort.sortable && attrs.civicaseSortheader !== '') {
           element
             .addClass('civicase-sortable')
             .on('click', function (e) {
@@ -57,8 +57,11 @@
   /** doNutty converts a dc.pieChart() to a stylized donut chart. */
   angular.module('civicase').factory('doNutty', function () {
     return function doNutty (chart, totalWidth, statCallback) {
-      var legendWidth = Math.floor(totalWidth / 2), radius = Math.floor(totalWidth / 4);
-      var padding = 10, thickness = 0.3;
+      var legendWidth = Math.floor(totalWidth / 2);
+      var radius = Math.floor(totalWidth / 4);
+      var padding = 10;
+      var thickness = 0.3;
+
       var legend;
 
       chart
@@ -111,10 +114,10 @@
   });
 
   angular.module('civicase').factory('formatActivity', function () {
-    var activityTypes = CRM.civicase.activityTypes,
-      activityStatuses = CRM.civicase.activityStatuses,
-      caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = CRM.civicase.caseStatuses;
+    var activityTypes = CRM.civicase.activityTypes;
+    var activityStatuses = CRM.civicase.activityStatuses;
+    var caseTypes = CRM.civicase.caseTypes;
+    var caseStatuses = CRM.civicase.caseStatuses;
     return function (act, caseId) {
       act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
       act.icon = activityTypes[act.activity_type_id].icon;
@@ -161,8 +164,8 @@
   });
 
   angular.module('civicase').factory('formatCase', function (formatActivity) {
-    var caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = CRM.civicase.caseStatuses;
+    var caseTypes = CRM.civicase.caseTypes;
+    var caseStatuses = CRM.civicase.caseStatuses;
     return function (item) {
       item.myRole = [];
       item.client = [];
@@ -188,7 +191,7 @@
         if (!contact.relationship_type_id) {
           item.client.push(contact);
         }
-        if (contact.contact_id == CRM.config.user_contact_id) {
+        if (contact.contact_id === CRM.config.user_contact_id) {
           item.myRole.push(contact.role);
         }
         if (contact.manager) {
@@ -202,8 +205,8 @@
   angular.module('civicase').factory('getActivityFeedUrl', function ($route, $location) {
     return function (caseId, category, status, id) {
       caseId = parseInt(caseId, 10);
-      var af = {},
-        currentPath = $location.path();
+      var af = {};
+      var currentPath = $location.path();
       if (category) {
         af['activity_type_id.grouping'] = category;
       }
@@ -405,8 +408,8 @@
       restrict: 'A',
       link: function (scope, elem, attrs) {
         CRM.loadScript(CRM.config.resourceBase + 'js/jquery/jquery.crmEditable.js').done(function () {
-          var textarea = elem.data('type') === 'textarea',
-            field = elem.data('field');
+          var textarea = elem.data('type') === 'textarea';
+          var field = elem.data('field');
           elem
             .html(textarea ? nl2br(scope.model[field]) : _.escape(scope.model[field]))
             .on('crmFormSuccess', function (e, value) {
@@ -449,7 +452,7 @@
           })
           .keyup(function (e) {
             // Down arrow
-            if (e.which == 40) {
+            if (e.which === 40) {
               $(this).closest('.searchable-dropdown').next().find('a').first().focus();
             }
           });
@@ -608,7 +611,7 @@
               $(this).css('min-width', width + 'px');
             });
 
-            $('#caselist-table').scroll(function () {
+            $('.civicase__list').scroll(function () {
               $el.scrollLeft($(this).scrollLeft());
             });
             $el.addClass('processed');
@@ -626,6 +629,8 @@
     return {
       restrict: 'A',
       link: function (scope, $el, attrs) {
+        var topPos;
+
         $(window).scroll(function () {
           if (!$el.hasClass('civicase__pager--fixed')) {
             topPos = $el.offset().top;

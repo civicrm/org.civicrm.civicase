@@ -26,7 +26,8 @@
       "CRM",
       "angular",
       "inject"
-    ]
+    ],
+    "var": "never"
   },
   "stylelint": {
     "extends": "stylelint-config-sass-guidelines",

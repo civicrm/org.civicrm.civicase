@@ -42,7 +42,7 @@
       civicase-sortheader="{{ header.sort }}">{{ header.label }}</th>
   </tr>
   </thead>
-  <tbody class="civicase__list-table__body">
+  <tbody>
   <tr ng-repeat="item in cases">
     <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="fixed-col">
       <div ng-if="!bulkAllowed" class="lockDiv">
