@@ -1,5 +1,5 @@
-<table ng-show="!caseIsFocused" class="table civicase__table--caselist">
-  <thead calculate-scroll-width sticky-table-header class="civicase__table--caselist__header">
+<table ng-show="!caseIsFocused" class="table civicase__list-table">
+  <thead calculate-scroll-width sticky-table-header class="civicase__list-table__header">
   <tr>
     <th class="fixed-col">
       <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases && bulkAllowed">
@@ -42,7 +42,7 @@
       civicase-sortheader="{{ header.sort }}">{{ header.label }}</th>
   </tr>
   </thead>
-  <tbody class="civicase__table--caselist__body">
+  <tbody class="civicase__list-table__body">
   <tr ng-repeat="item in cases">
     <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="fixed-col">
       <div ng-if="!bulkAllowed" class="lockDiv">
@@ -113,7 +113,7 @@
           >
           </div>
         </span>
-        <span ng-switch-when="status_badge" class="crm_notification-badge civicase__caselist-status" style="background-color: {{ item.color }}">
+        <span ng-switch-when="status_badge" class="crm_notification-badge civicase__list-status" style="background-color: {{ item.color }}">
           {{ item.status }}
         </span>
         <span ng-switch-when="contact_reference">{{ item[header.name].display_name }}</span>

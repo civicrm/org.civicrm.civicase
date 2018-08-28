@@ -20,12 +20,12 @@
     civicase-focused="caseIsFocused"
   >
   </div>
-  <div class="panel panel-default case-list-panel" ng-class="{'viewing-case': viewingCase, 'case-is-focused': caseIsFocused}">
-    <div class="scrolling outer">
-      <div class="custom-scroll-wrapper">
-        <div class="custom-scroll"></div>
+  <div class="panel panel-default civicase__list-panel" ng-class="{'civicase__list-panel--case-detail': viewingCase, 'case-is-focused': caseIsFocused}">
+    <div class="scrolling civicase__list-panel__inner">
+      <div class="civicase__custom-scroller">
+        <div class="civicase__custom-scroller__bar"></div>
       </div>
-      <div class="inner" id="caselist-table" ng-include="'~/civicase/CaseListTable.html'"></div>
+      <div class="civicase__list" id="caselist-table" ng-include="'~/civicase/CaseListTable.html'"></div>
     </div>
     <div class="center-block civicase__pager" sticky-footer-pager>
       <div class="pager-counter" ng-show="!viewingCase && page.total" ng-class=" !viewingCase && page.total > 1 ? 'pull-right' : 'text-right' " >

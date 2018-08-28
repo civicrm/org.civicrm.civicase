@@ -1,24 +1,24 @@
 /* CSS rules for Angular civicase list */
-#bootstrap-theme .case-list-panel,
+#bootstrap-theme .civicase__list-panel,
 #bootstrap-theme .civicase-view-with-search {
   position: relative;
   transition: width .2s linear;
 }
-#bootstrap-theme .case-list-panel,
-#bootstrap-theme .case-list-panel.viewing-case th:first-child,
-#bootstrap-theme .case-list-panel.viewing-case td:first-child {
+#bootstrap-theme .civicase__list-panel,
+#bootstrap-theme .civicase__list-panel.civicase__list-panel--case-detail th:first-child,
+#bootstrap-theme .civicase__list-panel.civicase__list-panel--case-detail td:first-child {
   width: 100%;
 }
-#bootstrap-theme .case-list-panel.viewing-case {
+#bootstrap-theme .civicase__list-panel.civicase__list-panel--case-detail {
   width: 25%;
 }
-#bootstrap-theme .case-list-panel.case-is-focused {
+#bootstrap-theme .civicase__list-panel.case-is-focused {
   background: #fff;
   height: calc(100% - 31px);
   position: absolute;
   width: 30px;
 }
-#bootstrap-theme .case-list-panel.case-is-focused .civicase__pager {
+#bootstrap-theme .civicase__list-panel.case-is-focused .civicase__pager {
   padding: 0;
 }
 
@@ -167,18 +167,18 @@
   color: #FFF;
 }
 
-#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
+#bootstrap-theme .dashboard-case-wrapper :not(.civicase__list-panel--case-detail) .scrolling .custom-scroll-wrapper.affix {
   top: 173px;
 }
 
-#bootstrap-theme .dashboard-case-wrapper div.case-list-panel:not(.viewing-case) .scrolling table tr th:first-child {
+#bootstrap-theme .dashboard-case-wrapper div.civicase__list-panel:not(.civicase__list-panel--case-detail) .scrolling table tr th:first-child {
   background: #FFFFFF;
 }
-#bootstrap-theme .dashboard-case-wrapper div.case-list-panel:not(.viewing-case) .scrolling table td {
+#bootstrap-theme .dashboard-case-wrapper div.civicase__list-panel:not(.civicase__list-panel--case-detail) .scrolling table td {
   padding-left: 20px;
 }
 
-#bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling .custom-scroll-wrapper.affix {
+#bootstrap-theme .dashboard-case-wrapper :not(.civicase__list-panel--case-detail) .scrolling .custom-scroll-wrapper.affix {
   width: 485px;
 }
 
