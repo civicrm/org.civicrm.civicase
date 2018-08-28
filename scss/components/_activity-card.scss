@@ -1,15 +1,19 @@
 .civicase__activity-card {
   box-shadow: $box-shadow-card;
+  cursor: pointer;
+  height: 100px;
   position: relative;
   width: 280px;
 
   .panel {
     box-shadow: none;
+    height: 100%;
     margin-bottom: 0;
   }
 
   .panel-body {
     border-top: 0 !important;
+    height: 100%;
 
     &:hover {
       background: $gray-lighter;
@@ -28,12 +32,9 @@
 }
 
 .civicase__activity-card--empty {
-  height: 100px;
-
   .panel-body {
     align-items: center;
     display: flex;
-    height: 100px;
     justify-content: center;
   }
 }
@@ -44,12 +45,23 @@
 
 .civicase__activity-icon {
   font-size: 18px;
+  width: 30px;
+}
+
+.civicase__activity-icon-arrow {
+  font-size: 10px;
+  font-weight: 700;
+  left: 24px;
+  position: absolute;
+  top: 10px;
 }
 
 .civicase__activity-icon--ribbon {
   color: $crm-white;
-  font-size: 22px;
-  margin-top: -5px;
+  font-size: 16px;
+  left: 4px;
+  position: relative;
+  top: -6px;
   z-index: 1;
 }
 
@@ -63,11 +75,15 @@
   position: absolute;
   top: -3px;
   width: 0;
+
+  &.text-danger {
+    border-left: 14px solid $brand-danger;
+    border-right: 14px solid $brand-danger;
+  }
 }
 
 .civicase__activity-date {
   color: $crm-gray-matte;
-  margin-left: 5px;
 }
 
 .civicase__activity__right-container {
@@ -135,9 +151,18 @@
 
 .civicase__activity-attachment__file-icon {
   color: $crm-gray-matte;
+}
+
+.civicase__activity-attachment-load {
+  padding: 10px 20px !important;
+}
+
+.civicase__activity-attachment-load-icon {
+  animation: infinite-rotation 2s linear reverse;
   font-size: 16px;
-  margin-right: 5px;
   margin-top: 3px;
+  position: relative;
+  top: 3px;
 }
 
 .civicase__activity-empty-message {
@@ -149,4 +174,14 @@
 .civicase__activity-empty-link {
   display: block;
   text-align: center;
+}
+
+@keyframes infinite-rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

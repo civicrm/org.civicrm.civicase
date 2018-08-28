@@ -458,45 +458,6 @@
     };
   });
 
-  // Display the list of target/assignee contacts for an activity
-  module.directive('civicaseActivityContacts', function () {
-    return {
-      restrict: 'A',
-      scope: {
-        data: '=civicaseActivityContacts'
-      },
-      link: function (scope, elem, attrs) {
-        scope.url = CRM.url;
-        scope.ts = CRM.ts('civicase');
-        function refresh () {
-          if (_.isPlainObject(scope.data)) {
-            scope.contacts = [];
-            _.each(scope.data, function (name, cid) {
-              scope.contacts.push({display_name: name, contact_id: cid});
-            });
-          } else {
-            scope.contacts = _.cloneDeep(scope.data);
-          }
-        }
-        scope.$watch('data', refresh);
-      },
-      template:
-        '<a ng-if="contacts.length" title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].contact_id}) }}">{{ contacts[0].display_name }}</a> ' +
-        '<span ng-if="contacts.length === 2">&amp; <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].contact_id}) }}">{{ contacts[1].display_name }}</a></span>' +
-        // preventDefault stops the browser from folling a link if this is used inside an <a> tag and the user clicks the button.
-        '<div class="btn-group btn-group-xs" ng-if="contacts.length > 2" ng-click="$event.preventDefault();">' +
-        '  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts(\'Additional Contacts\') }}">' +
-        '    + {{ contacts.length - 1 }}' +
-        '  </button>' +
-        '  <ul class="dropdown-menu" >' +
-        '    <li ng-repeat="(index, contact) in contacts" ng-if="index">' +
-        '      <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contact.contact_id}) }}">{{ contact.display_name }}</a>' +
-        '    </li>' +
-        '  </ul>' +
-        '</div>'
-    };
-  });
-
   // Editable custom data blocks
   module.directive('civicaseEditCustomData', function ($timeout) {
     return {

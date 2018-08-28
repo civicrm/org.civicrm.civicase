@@ -1,105 +1,83 @@
-<!-- <div style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};"
-  class="act-feed-item activity-card act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.status_css }}"
-  ng-class="{'is-completed': activity.is_completed, 'is-incomplete': !activity.is_completed, 'activity-overdue': activity.is_overdue}"
-  ng-click="viewInPopup($event, activity)"
->
-  <div class="act-feed-inner">
-    <div class="pull-right" ng-include="'~/civicase/ActivityCardMenu.html'"></div>
-    <div ng-include="'~/civicase/ActivityItemInnerWrapper.html'"></div>
-  </div>
-</div> -->
-
-<div class="civicase__activity-card civicase__activity-card--draft">
+<div ng-if="activity" class="civicase__activity-card" ng-class="{'civicase__activity-card--draft': activity.status==='Draft'}" ng-click="viewInPopup($event, activity)">
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="civicase__activity-card-row civicase__activity-card-row--first">
-        <i class="civicase__activity-icon text-primary material-icons">card_travel</i>
-        <span class="civicase__activity-date">10 Feb 2018</span>
-        <span class="civicase__activity__right-container">
 
-          <div class="btn-group civicase__activity-attachment__container">
-            <i class="civicase__activity-attachment__icon material-icons">attach_file</i>
+        <!-- Activity Icon -->
+        <span class="civicase__activity-icon">
+          <i
+            ng-if="activity.icon"
+            ng-class="{'civicase__activity-icon--ribbon': activity.category.indexOf('milestone') > -1, 'text-danger': activity.is_overdue}"
+            class="fa {{activity.icon}}"></i>
+        </span>
+        <div ng-class="{'text-danger': activity.is_overdue}" class="civicase__activity-icon-ribbon" ng-class="{'civicase__activity-icon--ribbon': activity.category.indexOf('milestone') > -1}"></div>
+        <!-- End - Activity Icon -->
+
+        <!-- Activity Date -->
+        <span class="civicase__activity-date">{{ CRM.utils.formatDate(activity.activity_date_time, 'dd M yy') }}</span>
+        <!-- End - Activity Date -->
+
+        <span class="civicase__activity__right-container">
+          <!-- Attachments -->
+          <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id">
+            <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
             <ul class="dropdown-menu">
-              <li>
-                <a href="#" class="civicase__activity-attachment__file-name">
-                  <i class="civicase__activity-attachment__file-icon material-icons">photo</i> sample.jpg
-                </a>
+              <li ng-if="!activity.attachments || !activity.attachments.length" class="civicase__activity-attachment-load">
+                <span>
+                  <i class="civicase__activity-attachment-load-icon text-primary material-icons">loop</i> &nbsp;{{ ts('Loading...') }}
+                </span>
               </li>
-              <li>
-                <a href="#" class="civicase__activity-attachment__file-name">
-                  <i class="civicase__activity-attachment__file-icon material-icons">photo</i> sample2.jpg
+              <li ng-repeat="file in activity.attachments || []">
+                <a class="civicase__activity-attachment__file-name"
+                  title="{{ file.description || ts('Download File') }}"
+                  href="{{ file.url }}">
+                  <i class="civicase__activity-attachment__file-icon crm-i {{ file.icon }}"></i> &nbsp;{{ file.name }}
                 </a>
               </li>
             </ul>
           </div>
+          <!-- End - Attachments -->
 
-          <i class="civicase__activity-star material-icons">star_border</i>
-          <i class="civicase__activity-star active material-icons">star</i>
+          <!-- Rating -->
+          <a ng-click="star(activity)" href ng-if="star && activity.is_star" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}">
+            <i ng-if="activity.is_star === '0'" class="civicase__activity-star material-icons">star_border</i>
+            <i ng-if="activity.is_star === '1'" class="civicase__activity-star active material-icons">star</i>
+          </a>
+          <!-- End - Rating -->
 
-          <span class="civicase__contact-avatar crm_notification-badge">DB</span>
+          <!-- Avatar -->
+          <span ng-if="activity.assignee_contact_name" contact-card avatar="true" contacts="activity.assignee_contact_name"></span>
+          <!-- End - Avatar -->
         </span>
       </div>
       <div class="civicase__activity-card-row">
-        <span class="civicase__activity-subject">Secure temporary housing</span>
-      </div>
-      <div class="civicase__activity-card-row">
-        <span class="civicase__activity-with">With:&nbsp;</span>
-        <div class="civicase__contact-card">
-          <i class="civicase__contact-icon material-icons">person</i>
-          <span class="civicase__contact-name">John Caseman</span>
+        <!-- Task - Checkbox -->
+        <span
+          ng-if="activity.category.indexOf('task') > -1"
+          class="civicase__checkbox"
+          title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}"
+          ng-click="markCompleted(activity); $event.stopPropagation();">
+          <i ng-if="activity.is_completed" class="civicase__checkbox--checked material-icons">check_box</i>
+        </span>
+        <!-- End - Task - Checkbox -->
 
-          <div class="btn-group civicase__contact-additional__container">
-            <span>+2</span>
-            <div class="civicase__contact-additional__arrow"></div>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+        <!-- Subject -->
+        <span class="civicase__activity-subject">{{ activity.subject ? activity.subject: activity.type }}</span>
+        <!-- End - Subject -->
+      </div>
+      <div class="civicase__activity-card-row" ng-if="activity.target_contact_name">
+        <!-- With -->
+        <span class="civicase__activity-with">With:&nbsp;</span>
+        <div class="civicase__contact-card" contact-card contacts="activity.target_contact_name">
         </div>
+        <!-- End - With -->
       </div>
     </div>
   </div>
 </div>
 
 <!-- No Activity -->
-<!-- <div class="civicase__activity-card civicase__activity-card--empty">
+<div ng-if="!activity" class="civicase__activity-card civicase__activity-card--empty">
   <div class="panel panel-default">
     <div class="panel-body">
       <div>
@@ -108,72 +86,4 @@
       </div>
     </div>
   </div>
-</div> -->
-
-<!-- Milestone Activity -->
-<!-- <div class="civicase__activity-card civicase__activity-card--draft">
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <div class="civicase__activity-card-row civicase__activity-card-row--first">
-
-        <i class="civicase__activity-icon--ribbon text-primary material-icons">notifications</i>
-        <div class="civicase__activity-icon-ribbon"></div>
-
-        <span class="civicase__activity-date">10 Feb 2018</span>
-        <span class="civicase__activity__right-container">
-
-          <div class="btn-group civicase__activity-attachment__container">
-            <i class="civicase__activity-attachment__icon material-icons">attach_file</i>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="#" class="civicase__activity-attachment__file-name">
-                  <i class="civicase__activity-attachment__file-icon material-icons">photo</i> sample.jpg
-                </a>
-              </li>
-              <li>
-                <a href="#" class="civicase__activity-attachment__file-name">
-                  <i class="civicase__activity-attachment__file-icon material-icons">photo</i> sample2.jpg
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <i class="civicase__activity-star material-icons">star_border</i>
-          <i class="civicase__activity-star active material-icons">star</i>
-
-          <span class="civicase__contact-avatar crm_notification-badge">DB</span>
-        </span>
-      </div>
-      <div class="civicase__activity-card-row">
-        <span class="civicase__checkbox">
-          <i class="civicase__checkbox--checked material-icons">check_box</i>
-        </span>
-        <span class="civicase__activity-subject">Secure temporary housing</span>
-      </div>
-      <div class="civicase__activity-card-row">
-        <span class="civicase__activity-with">With:&nbsp;</span>
-        <div class="civicase__contact-card">
-          <i class="civicase__contact-icon material-icons">person</i>
-          <span class="civicase__contact-name">John Caseman</span>
-
-          <div class="btn-group civicase__contact-additional__container">
-            <span>+2</span>
-            <div class="civicase__contact-additional__arrow"></div>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-                <a href="#">
-                  <i class="civicase__contact-icon material-icons">person</i>
-                  <span class="civicase__contact-name">John Caseman</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
+</div>

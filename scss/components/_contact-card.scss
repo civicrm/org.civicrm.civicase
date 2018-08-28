@@ -1,11 +1,18 @@
 .civicase__contact-card {
   color: $brand-primary;
   display: flex;
-  vertical-align: middle;
+
+  > span {
+    display: flex;
+  }
 }
 
 .civicase__contact-name {
   margin-left: 5px;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .civicase__contact-icon {
@@ -22,17 +29,11 @@
   }
 
   .dropdown-menu {
-    height: 200px;
+    display: block;
     margin-left: -77px;
+    max-height: 200px;
     overflow: auto;
     top: 29px;
-  }
-
-  &:hover {
-    .dropdown-menu,
-    .civicase__contact-additional__arrow {
-      display: block;
-    }
   }
 
   .civicase__contact-icon {
@@ -44,8 +45,35 @@
   }
 }
 
+.civicase__contact-avatar {
+  background: $contact-avatar-background;
+  padding: 5px;
+}
+
+.civicase__contact-additional__container--avatar {
+  background: $contact-avatar-background;
+  margin-left: 0;
+  margin-top: -10px;
+  opacity: 1 !important;
+  padding: 5px;
+
+  .dropdown-menu {
+    top: 29px;
+  }
+}
+
+.civicase__contact-avatar--image {
+  background: none;
+  padding: 0;
+
+  img {
+    border-radius: 2px;
+    height: 25px;
+    width: 25px;
+  }
+}
+
 .civicase__contact-additional__arrow {
-  display: none;
   position: relative;
   top: 5px;
 
@@ -65,4 +93,8 @@
     width: 0;
     z-index: 1000000;
   }
+}
+
+.civicase__contact-additional__arrow--avatar {
+  top: 10px;
 }

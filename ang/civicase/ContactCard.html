@@ -1,0 +1,55 @@
+<span ng-if="!isAvatar">
+  <!-- Contact Icons -->
+  <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
+  <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
+  <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
+  <!-- End - Contact Icons -->
+
+  <!-- Contact Name -->
+  <a
+    class="civicase__contact-name"
+    href="{{ url('civicrm/contact/view', {cid: contacts[0].contact_id}) }}"
+    title="{{ ts('View Contact') }}">{{ contacts[0].display_name }}
+  </a>
+  <!-- End - Contact Name -->
+</span>
+<span ng-if="isAvatar">
+  <!-- Contact Avatar -->
+  <a
+    href="{{ url('civicrm/contact/view', {cid: contacts[0].contact_id}) }}"
+    class="civicase__contact-avatar crm_notification-badge"
+    ng-class="{'civicase__contact-avatar--image': contacts[0].image_URL}"
+    title="{{contacts[0].display_name}}">
+    <img ng-if="contacts[0].image_URL" ng-src={{contacts[0].image_URL}}>
+    <span ng-if="!contacts[0].image_URL">{{contacts[0].avatar}}</span>
+  </a>
+  <!-- End - Contact Avatar -->
+</span>
+
+<!-- Additional Contact Dropdown -->
+<div
+  ng-if="contacts.length > 1"
+  ng-class="{'crm_notification-badge': isAvatar, 'civicase__contact-additional__container--avatar': isAvatar}"
+  class="btn-group civicase__contact-additional__container"
+  aria-haspopup="true"
+  aria-expanded="false">
+  <span ng-click="toggleDropdownVisibility($event)">+{{ contacts.length - 1 }}</span>
+  <div
+    ng-if="isPopupVisible"
+    ng-class="{'civicase__contact-additional__arrow--avatar': isAvatar}"
+    class="civicase__contact-additional__arrow">
+  </div>
+  <ul ng-if="isPopupVisible" class="dropdown-menu">
+    <li ng-repeat="(index, contact) in contacts" ng-if="index">
+      <a
+        title="{{ ts('View Contact') }}"
+        href="{{ url('civicrm/contact/view', {cid: contact.contact_id}) }}">
+        <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contact.contact_id) === 'Individual'">person</i>
+        <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contact.contact_id) === 'Household'">home</i>
+        <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contact.contact_id) === 'Organisation'">domain</i>
+        <span class="civicase__contact-name">{{ contact.display_name }}</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<!-- End - Additional Contact Dropdown -->
