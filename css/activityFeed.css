@@ -85,10 +85,6 @@
   font-size: 16px;
 }
 
-#bootstrap-theme .act-feed-item div.btn-group-sm>button.btn {
-  background-color: transparent;
-}
-
 #bootstrap-theme .act-filters .btn-group,
 #bootstrap-theme .act-filters .form-control {
   margin: .6em 0 .6em .6em;
@@ -133,24 +129,6 @@
   border-bottom: 1px solid #ddd;
 }
 
-#bootstrap-theme .act-feed-list-group .act-category-milestone.act-feed-item {
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  border-left: 5px solid;
-  border-right: 5px solid;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-#bootstrap-theme .act-feed-list-group .act-feed-item {
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-#bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item {
-  cursor: inherit;
-  margin: 15px 0;
-}
 #bootstrap-theme .act-feed-list-group:not(.viewing-activity) .list-group:not(.list-group-inner) {
   margin: 0 auto;
   width: 675px;
@@ -164,18 +142,11 @@
 #bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing {
   background-color: #D9EFF5;
 }
-#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:hover .act-feed-item:not(.act-category-milestone) .cb-dot,
-#bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item.is-viewing .act-feed-item:not(.act-category-milestone) .cb-dot {
-  border-color: #D9EFF5;
-}
 #bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item {
   margin-bottom: 17px;
 }
 #bootstrap-theme .act-feed-list-group .list-group-inner li.list-group-item:last-child {
   margin-bottom: 10px;
-}
-#bootstrap-theme .act-feed-list-group.act-feed-list-group-file .act-feed-item:hover {
-  background: inherit;
 }
 
 #bootstrap-theme .act-feed-inner {
@@ -189,18 +160,6 @@
   border-left: 1px solid #ddd;
 }
 
-#bootstrap-theme .act-feed-list-group .act-category-task .act-feed-inner {
-  padding-left: 5em;
-}
-
-#bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .act-subject {
-  font-weight: 600;
-}
-
-#bootstrap-theme .act-feed-list-group .act-category-alert .status-type-incomplete .cb-dot {
-  background-color: #e6807f;
-}
-
 #bootstrap-theme .activity-timeline .act-date {
   color: #525966;
   font-size: 16px;
@@ -210,25 +169,17 @@
   margin: 0;
 }
 
-#bootstrap-theme .activity-timeline .act-feed-item-content .act-date {
-  display: none; /* In the timeline, dates are shown above the activity card */
-}
-
-#bootstrap-theme .act-feed-list-group .act-task-checkbox { 
+#bootstrap-theme .act-feed-list-group .act-task-checkbox {
   color: #586277;
   cursor: pointer;
   font-size: 1.5em;
-  left: 34px;  
+  left: 34px;
   position: absolute;
   top: -6px;
 }
 
 #bootstrap-theme .act-feed-list-group .act-task-checkbox:hover i {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-}
-
-#bootstrap-theme .case-tab-files .act-feed-list-group .act-feed-item h4 {
-  margin: 0;
 }
 
 #bootstrap-theme .act-feed-list-group .act-subject {
@@ -242,57 +193,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-#bootstrap-theme .act-feed-list-group .act-category-milestone .act-subject {
-  font-weight: 600;
-}
-
-#bootstrap-theme .case-tab-files .act-feed-item .act-files a {
-  color: #4D5663;
-}
-
-#bootstrap-theme .case-tab-files .act-feed-item .act-files a .fa {
-  font-size: 16px;
-  margin-right: 10px;
-}
-
-#bootstrap-theme .case-tab-files .act-feed-item .act-files a span {
-  color: #4D5663;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-#bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn {
-  padding: 0 5px;
-  margin-left: 10px;
-}
-
-#bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn i {
-  color: #4D5663;
-}
-
-#bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn:hover,
-#bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group .btn:focus,
-#bootstrap-theme .case-tab-files .act-feed-item .act-files .btn-group.open .btn.dropdown-toggle {
-  background: transparent;
-  box-shadow: none;
-}
-
-#bootstrap-theme .case-tab-files  .act-feed-item .act-files .btn-group .btn:hover i,
-#bootstrap-theme .case-tab-files  .act-feed-item .act-files .btn-group .btn:focus i,
-#bootstrap-theme .case-tab-files  .act-feed-item .act-files .btn-group.open .btn.dropdown-toggle i {
-  color: #42AFCB;
-}
-#bootstrap-theme .case-tab-files  .act-feed-item .act-subject {
-  color: #727E8A;
-}
-#bootstrap-theme .case-tab-files  .act-feed-item .act-files p {
-  color: #727E8A;
-  font-size: 13px;
-  line-height: 18px;
-  margin-bottom: 10px;
-  margin-top: 5px;
 }
 
 #bootstrap-theme .act-star {
@@ -337,12 +237,12 @@
 #bootstrap-theme .act-list-controls label.btn {
   text-transform: none;
   font-weight: normal;
-  border: 1px solid #C2CFD8; 
+  border: 1px solid #C2CFD8;
 }
 #bootstrap-theme .act-list-controls label.btn:hover {
   border-color: #bfbfbf;
 }
-#bootstrap-theme .act-list-controls label.btn.active, 
+#bootstrap-theme .act-list-controls label.btn.active,
 #bootstrap-theme .act-list-controls label.btn:focus {
   background-color: #E8EEF0;
   box-shadow: inset 0 0 5px 0 rgba(0,0,0,0.1);
@@ -373,7 +273,7 @@
   display: inline-block;
   height: 30px;
   margin-left: 10px;
-  width: 1px; 
+  width: 1px;
 }
 #bootstrap-theme .act-list-controls .btn.btn-clean {
   border: none;
@@ -458,48 +358,6 @@
   top: 0 !important;
 }
 
-#bootstrap-theme .act-feed-item a.act-case-info {
-  background-color: #fff;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-}
-#bootstrap-theme .act-feed-item a.act-case-info:hover {
-  border: 1px solid #666;
-}
-#bootstrap-theme .act-feed-item a.act-case-info span {
-  display: inline-block;
-  padding: 4px 6px;
-  height: 28px;
-  border-radius: 4px 0 0 0;
-}
-#bootstrap-theme .act-feed-item a.act-case-info span:first-child {
-  color: #fff;
-  font-weight: 600;
-  padding-right: 12px;
-  position: relative;
-}
-#bootstrap-theme .act-feed-item a.act-case-info span:first-child:after {
-  content: '';
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 14px 0 14px 10px;
-  border-color: white transparent white transparent;
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-#bootstrap-theme .activity-timeline .act-feed-item {
-  margin: 0px 22px;
-}
-#bootstrap-theme .activity-timeline .act-feed-item.act-category-task {
-  border: !important;
-  border-radius: 0;
-}
 #bootstrap-theme .act-feed-panel .pager-show-more,
 #bootstrap-theme .act-feed-panel .pager-no-more {
   margin-bottom: 20px;
@@ -520,10 +378,6 @@
 #bootstrap-theme .activity-timeline .activity-item-menu.btn-group {
   margin-right: -5px;
   margin-top: -10px;
-}
-#bootstrap-theme .activity-timeline .act-category-communication .activity-item-menu.btn-group {
-  margin-top: 20px;
-  margin-right: 20px;
 }
 #bootstrap-theme .activity-timeline .act-star {
   margin-top: -5px;

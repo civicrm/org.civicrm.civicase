@@ -2,10 +2,37 @@
  * @file
  * File contains variables used for the app (e.g. path variables and color variables etc.)
  */
-  
+
 // Material icons related variables
 $material-icon-font-name: 'Material Icons';
 $material-icon-font-url: '../fonts/material-design-icons/';
 
 // Variables for shadows used
 $grey-shadow: 0 3px 8px 0 rgba(49, 40, 40, 0.25);
+
+// Shoreditch Colors
+$crm-gray-clay:             #222831 !default;
+$crm-gray-bright:           #393e46 !default;
+$gray-darker:               #464354 !default;
+$gray-dark:                 #4d4d69 !default;
+$gray-light:                #e8eef0 !default;
+$gray-lighter:              #f3f6f7 !default;
+$crm-gray-lightest:         #fafafb !default;
+$crm-gray-matte:            #9494a5 !default;
+
+$brand-primary:             #0071bd !default;
+$brand-success:             #44cb7e !default;
+$brand-info:                #0071bd !default;
+$brand-warning:             #e6ab5e !default;
+$brand-danger:              #cf3458 !default;
+
+$crm-grayblue-dark:         #d3dee2 !default;
+$crm-grayblue-darker:       #c2cfd8 !default;
+$crm-white:                 #fff !default;
+$crm-black:                 #000 !default;
+
+// Custom
+$box-shadow-card: 0 1px 4px 0 rgba(49, 40, 40, 0.2);
+$box-shadow-checkbox: 0 6px 20px 0 rgba(49, 40, 40, 0.03);
+
+$contact-avatar-background: #99c6e5;

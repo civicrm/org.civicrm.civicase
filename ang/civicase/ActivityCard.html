@@ -1,4 +1,4 @@
-<div style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};" 
+<!-- <div style="border-left-color: {{ activity.color }}; border-right-color: {{ activity.color }};"
   class="act-feed-item activity-card act-category-{{ activity.category.join(' act-category-') || 'none' }} {{ activity.status_css }}"
   ng-class="{'is-completed': activity.is_completed, 'is-incomplete': !activity.is_completed, 'activity-overdue': activity.is_overdue}"
   ng-click="viewInPopup($event, activity)"
@@ -7,4 +7,173 @@
     <div class="pull-right" ng-include="'~/civicase/ActivityCardMenu.html'"></div>
     <div ng-include="'~/civicase/ActivityItemInnerWrapper.html'"></div>
   </div>
+</div> -->
+
+<div class="civicase__activity-card civicase__activity-card--draft">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="civicase__activity-card-row civicase__activity-card-row--first">
+        <i class="civicase__activity-icon text-primary material-icons">card_travel</i>
+        <span class="civicase__activity-date">10 Feb 2018</span>
+        <span class="civicase__activity__right-container">
+
+          <div class="btn-group civicase__activity-attachment__container">
+            <i class="civicase__activity-attachment__icon material-icons">attach_file</i>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#" class="civicase__activity-attachment__file-name">
+                  <i class="civicase__activity-attachment__file-icon material-icons">photo</i> sample.jpg
+                </a>
+              </li>
+              <li>
+                <a href="#" class="civicase__activity-attachment__file-name">
+                  <i class="civicase__activity-attachment__file-icon material-icons">photo</i> sample2.jpg
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <i class="civicase__activity-star material-icons">star_border</i>
+          <i class="civicase__activity-star active material-icons">star</i>
+
+          <span class="civicase__contact-avatar crm_notification-badge">DB</span>
+        </span>
+      </div>
+      <div class="civicase__activity-card-row">
+        <span class="civicase__activity-subject">Secure temporary housing</span>
+      </div>
+      <div class="civicase__activity-card-row">
+        <span class="civicase__activity-with">With:&nbsp;</span>
+        <div class="civicase__contact-card">
+          <i class="civicase__contact-icon material-icons">person</i>
+          <span class="civicase__contact-name">John Caseman</span>
+
+          <div class="btn-group civicase__contact-additional__container">
+            <span>+2</span>
+            <div class="civicase__contact-additional__arrow"></div>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- No Activity -->
+<!-- <div class="civicase__activity-card civicase__activity-card--empty">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div>
+        <div class="civicase__activity-empty-message">No upcoming activity</div>
+        <a class="civicase__activity-empty-link" href="#">Click here to add an activity</a>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- Milestone Activity -->
+<!-- <div class="civicase__activity-card civicase__activity-card--draft">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="civicase__activity-card-row civicase__activity-card-row--first">
+
+        <i class="civicase__activity-icon--ribbon text-primary material-icons">notifications</i>
+        <div class="civicase__activity-icon-ribbon"></div>
+
+        <span class="civicase__activity-date">10 Feb 2018</span>
+        <span class="civicase__activity__right-container">
+
+          <div class="btn-group civicase__activity-attachment__container">
+            <i class="civicase__activity-attachment__icon material-icons">attach_file</i>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#" class="civicase__activity-attachment__file-name">
+                  <i class="civicase__activity-attachment__file-icon material-icons">photo</i> sample.jpg
+                </a>
+              </li>
+              <li>
+                <a href="#" class="civicase__activity-attachment__file-name">
+                  <i class="civicase__activity-attachment__file-icon material-icons">photo</i> sample2.jpg
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <i class="civicase__activity-star material-icons">star_border</i>
+          <i class="civicase__activity-star active material-icons">star</i>
+
+          <span class="civicase__contact-avatar crm_notification-badge">DB</span>
+        </span>
+      </div>
+      <div class="civicase__activity-card-row">
+        <span class="civicase__checkbox">
+          <i class="civicase__checkbox--checked material-icons">check_box</i>
+        </span>
+        <span class="civicase__activity-subject">Secure temporary housing</span>
+      </div>
+      <div class="civicase__activity-card-row">
+        <span class="civicase__activity-with">With:&nbsp;</span>
+        <div class="civicase__contact-card">
+          <i class="civicase__contact-icon material-icons">person</i>
+          <span class="civicase__contact-name">John Caseman</span>
+
+          <div class="btn-group civicase__contact-additional__container">
+            <span>+2</span>
+            <div class="civicase__contact-additional__arrow"></div>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+                <a href="#">
+                  <i class="civicase__contact-icon material-icons">person</i>
+                  <span class="civicase__contact-name">John Caseman</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
