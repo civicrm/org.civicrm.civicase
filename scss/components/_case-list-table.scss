@@ -5,32 +5,36 @@
     }
   }
 
-  .crm_notification-badge {
+  .civicase__caselist-status {
     line-height: 18px;
     padding: 0 10px;
   }
+}
 
-  &__header {
-    &.affix {
-      display: block;
-      left: 0;
-      margin-left: 310px;
-      overflow-x: hidden;
-      overflow-y: visible;
-      right: 0;
-      top: 60px;
-      z-index: 9999;
+.civicase__table--caselist__header {
+  &.affix {
+    display: block;
+    left: 0;
+    margin-left: 310px;
+    overflow-x: hidden;
+    overflow-y: visible;
+    right: 0;
+    top: 60px;
+    z-index: 9999;
 
-      tr {
-        display: table;
-        width: 100%;    
-      }
-
-      th {
-        display: table-cell;
-      }      
+    tr {
+      display: table;
+      width: 100%;    
     }
+
+    th {
+      display: table-cell;
+    }      
   }
+}
+
+.civicase__table--caselist__body {
+  border-left: 1px solid #e8eef0;
 }
 
 .case-list-panel:not(.viewing-case) {

@@ -22,16 +22,6 @@
   padding: 0;
 }
 
-/*#bootstrap-theme div.case-list-panel:not(.viewing-case) .outer {
-  background: #fff;
-  position: relative;
-}
-#bootstrap-theme div.case-list-panel:not(.viewing-case) .inner {  
-  margin-left: 310px;
-  overflow-x: auto;
-  overflow-y: visible;
-}*/
-
 #bootstrap-theme .case-list-checkbox {
   left: 15px;
   position: absolute;

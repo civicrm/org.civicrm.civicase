@@ -7,9 +7,6 @@
 $material-icon-font-name: 'Material Icons';
 $material-icon-font-url: '../fonts/material-design-icons/';
 
-// Variables for shadows used
-$grey-shadow: 0 3px 8px 0 rgba(49, 40, 40, 0.25);
-
 // Shoreditch Colors
 $crm-gray-clay:             #222831 !default;
 $crm-gray-bright:           #393e46 !default;
@@ -34,5 +31,6 @@ $crm-black:                 #000 !default;
 // Custom
 $box-shadow-card: 0 1px 4px 0 rgba(49, 40, 40, 0.2);
 $box-shadow-checkbox: 0 6px 20px 0 rgba(49, 40, 40, 0.03);
+$box-shadow-pager: 0 3px 8px 0 rgba(49, 40, 40, 0.25);
 
 $contact-avatar-background: #99c6e5;
