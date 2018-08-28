@@ -3,13 +3,10 @@
  * This file contains scss code for civicase case list tables and related styles
  */
 
-
-.civicase__pager--fixed {
-  bottom: 0;
+.civicase__pager {
   box-shadow: $box-shadow-pager;
-  left: 0;
-  position: fixed;
-  width: 100%;
+  position: relative;
+  z-index: 10;
 
   .disabled {
     display: none;
@@ -54,5 +51,12 @@
       font-weight: normal;
       margin-left: 5px;
     }
-  }
+  }  
+}
+
+.civicase__pager--fixed {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
 }

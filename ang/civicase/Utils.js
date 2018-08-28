@@ -1,15 +1,7 @@
 (function (angular, $, _, CRM) {
-  function getStatusType (statusId) {
-    var statusType;
-    _.each(CRM.civicase.activityStatusTypes, function (statuses, type) {
-      if (statuses.indexOf(parseInt(statusId)) >= 0) {
-        statusType = type;
-      }
-    });
-    return statusType;
-  }
+  var module = angular.module('civicase');
 
-  angular.module('civicase').directive('civicaseSortheader', function () {
+  module.directive('civicaseSortheader', function () {
     return {
       restrict: 'A',
       link: function (scope, element, attrs) {
@@ -47,7 +39,7 @@
     };
   });
 
-  angular.module('civicase').factory('civicaseInteger', function () {
+  module.factory('civicaseInteger', function () {
     var myFormat = CRM.visual.d3.format('.3s');
     return function (v) {
       return (v > -1000 & v < 1000) ? Math.round(v) : myFormat(v);
@@ -55,7 +47,7 @@
   });
 
   /** doNutty converts a dc.pieChart() to a stylized donut chart. */
-  angular.module('civicase').factory('doNutty', function () {
+  module.factory('doNutty', function () {
     return function doNutty (chart, totalWidth, statCallback) {
       var legendWidth = Math.floor(totalWidth / 2);
       var radius = Math.floor(totalWidth / 4);
@@ -113,7 +105,7 @@
     };
   });
 
-  angular.module('civicase').factory('formatActivity', function () {
+  module.factory('formatActivity', function () {
     var activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = CRM.civicase.activityStatuses;
     var caseTypes = CRM.civicase.caseTypes;
@@ -163,7 +155,7 @@
     };
   });
 
-  angular.module('civicase').factory('formatCase', function (formatActivity) {
+  module.factory('formatCase', function (formatActivity) {
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = CRM.civicase.caseStatuses;
     return function (item) {
@@ -202,7 +194,7 @@
     };
   });
 
-  angular.module('civicase').factory('getActivityFeedUrl', function ($route, $location) {
+  module.factory('getActivityFeedUrl', function ($route, $location) {
     return function (caseId, category, status, id) {
       caseId = parseInt(caseId, 10);
       var af = {};
@@ -232,7 +224,7 @@
     };
   });
 
-  angular.module('civicase').factory('templateExists', function ($templateCache) {
+  module.factory('templateExists', function ($templateCache) {
     return function (templateName) {
       return !!$templateCache.get(templateName);
     };
@@ -240,7 +232,7 @@
 
   // Export a set of civicase-related utility functions.
   // <div civicase-util="myhelper" />
-  angular.module('civicase').directive('civicaseUtil', function () {
+  module.directive('civicaseUtil', function () {
     return {
       restrict: 'EA',
       scope: {
@@ -260,7 +252,7 @@
   });
 
   // Angular binding for crm-popup links
-  angular.module('civicase').directive('crmPopupFormSuccess', function () {
+  module.directive('crmPopupFormSuccess', function () {
     return {
       restrict: 'A',
       link: function (scope, element, attrs) {
@@ -275,7 +267,7 @@
   });
 
   // Angular binding for civi ajax form events
-  angular.module('civicase').directive('crmFormSuccess', function () {
+  module.directive('crmFormSuccess', function () {
     return {
       restrict: 'A',
       link: function (scope, element, attrs) {
@@ -290,7 +282,7 @@
   });
 
   // Ex: <div crm-ui-date-range="model.some_field" />
-  angular.module('civicase').directive('crmUiDateRange', function ($timeout) {
+  module.directive('crmUiDateRange', function ($timeout) {
     var ts = CRM.ts('civicase');
     return {
       restrict: 'AE',
@@ -338,7 +330,7 @@
   });
 
   // Ex: <div crm-ui-number-range="model.some_field" />
-  angular.module('civicase').directive('crmUiNumberRange', function ($timeout) {
+  module.directive('crmUiNumberRange', function ($timeout) {
     var ts = CRM.ts('civicase');
     return {
       restrict: 'AE',
@@ -384,7 +376,7 @@
   });
 
   // Ensures that this value is removed from the model when the field is removed via ng-if
-  angular.module('civicase').directive('crmUiConditional', function () {
+  module.directive('crmUiConditional', function () {
     return {
       restrict: 'A',
       link: function (scope, elem, attrs) {
@@ -400,7 +392,7 @@
   });
 
   // Angular binding for CiviCRM's jQuery-based crm-editable
-  angular.module('civicase').directive('crmEditable', function ($timeout) {
+  module.directive('crmEditable', function ($timeout) {
     function nl2br (str) {
       return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br />$2');
     }
@@ -441,7 +433,7 @@
   // <ul class="dropdown-menu" >
   //   <li ng-repeat="item in listOfItems | filter:{label: itemSearchText}">...</li>
   // </ul>
-  angular.module('civicase').directive('searchableDropdown', function ($timeout) {
+  module.directive('searchableDropdown', function ($timeout) {
     return {
       restrict: 'C',
       link: function (scope, elem, attrs) {
@@ -467,7 +459,7 @@
   });
 
   // Display the list of target/assignee contacts for an activity
-  angular.module('civicase').directive('civicaseActivityContacts', function () {
+  module.directive('civicaseActivityContacts', function () {
     return {
       restrict: 'A',
       scope: {
@@ -506,7 +498,7 @@
   });
 
   // Editable custom data blocks
-  angular.module('civicase').directive('civicaseEditCustomData', function ($timeout) {
+  module.directive('civicaseEditCustomData', function ($timeout) {
     return {
       restrict: 'A',
       link: function (scope, elem, attrs) {
@@ -553,7 +545,7 @@
     };
   });
 
-  angular.module('civicase').directive('dropdownToggle', function ($timeout) {
+  module.directive('dropdownToggle', function ($timeout) {
     return {
       restrict: 'C',
       link: function (scope, $el, attrs) {
@@ -580,16 +572,16 @@
     };
   });
 
-  angular.module('civicase').directive('calculateScrollWidth', function () {
+  module.directive('calculateScrollWidth', function () {
     return {
       restrict: 'A',
       link: function (scope, $el, attrs) {
         scope.$watch(
           function () {
-            return $('.case-list-table thead.affix-top').css('width');
+            return $('.civicase__list-table thead.affix-top').css('width');
           },
           function (width) {
-            $('.custom-scroll').css('width', width);
+            $('.civicase__custom-scroller__bar').css('width', width);
           }
         );
       }
@@ -599,22 +591,40 @@
   /**
    * Directive for the sticky table header functionality on case list page
    */
-
-  angular.module('civicase').directive('stickyTableHeader', function () {
+  module.directive('stickyTableHeader', function () {
     return {
       restrict: 'A',
       link: function (scope, $el, attrs) {
-        $(window).scroll(function () {
-          if ($el.hasClass('affix-top') && !$el.hasClass('processed')) {
+        var $table = $('.civicase__list');
+
+        // Watch if loading completes
+        scope.$watch(function (scope) {
+          return !scope.isLoading;
+        },
+        function (completed) {
+          if (completed) { // loading complete
+            var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
+            var topPos = $el.offset().top - bodyPadding;
+            // Assign min-width values to th to have solid grid
             $('th', $el).each(function () {
-              var width = $(this).outerWidth();
-              $(this).css('min-width', width + 'px');
+              $(this).css('min-width', $(this).outerWidth() + 'px');
             });
 
-            $('.civicase__list').scroll(function () {
+            // Define when to make the element sticky (affixed)
+            $($el).affix({
+              offset: {
+                top: topPos
+              }
+            })
+            // After element is affixed set scrolling pos (to avoid glitch) and top position
+              .on('affixed.bs.affix', function () {
+                $el.scrollLeft($table.scrollLeft());
+                $el.css('top', bodyPadding + 'px');
+              });
+            // Attach scroll function
+            $table.scroll(function () {
               $el.scrollLeft($(this).scrollLeft());
             });
-            $el.addClass('processed');
           }
         });
       }
@@ -624,25 +634,44 @@
   /**
    * Directive for the sticky pager footer functionality on case list page
    */
-
-  angular.module('civicase').directive('stickyFooterPager', function () {
+  module.directive('stickyFooterPager', function () {
     return {
       restrict: 'A',
       link: function (scope, $el, attrs) {
-        var topPos;
-
-        $(window).scroll(function () {
-          if (!$el.hasClass('civicase__pager--fixed')) {
-            topPos = $el.offset().top;
-          }
-
-          if ((topPos - $(window).height() - $(window).scrollTop()) > 0) {
-            $el.addClass('civicase__pager--fixed');
-          } else {
-            $el.removeClass('civicase__pager--fixed');
+        // Watch if loading completes
+        scope.$watch(function (scope) {
+          return !scope.isLoading;
+        },
+        function (completed) {
+          if (completed) { // If loading completes
+            var topPos = $el.offset().top;
+            // see if element is in window view and add class likewise
+            if ((topPos - $(window).height() - $(window).scrollTop()) > 0) {
+              $el.addClass('civicase__pager--fixed');
+            } else {
+              $el.removeClass('civicase__pager--fixed');
+            }
+            // Same logic to window scroll
+            $(window).scroll(function () {
+              if ((topPos - $(window).height() - $(window).scrollTop()) > 0) {
+                $el.addClass('civicase__pager--fixed');
+              } else {
+                $el.removeClass('civicase__pager--fixed');
+              }
+            });
           }
         });
       }
     };
   });
+
+  function getStatusType (statusId) {
+    var statusType;
+    _.each(CRM.civicase.activityStatusTypes, function (statuses, type) {
+      if (statuses.indexOf(parseInt(statusId)) >= 0) {
+        statusType = type;
+      }
+    });
+    return statusType;
+  }
 })(angular, CRM.$, CRM._, CRM);

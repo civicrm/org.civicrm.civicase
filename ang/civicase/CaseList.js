@@ -61,10 +61,10 @@
   // CaseList controller
   angular.module('civicase').controller('CivicaseCaseList', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatCase) {
     // The ts() and hs() functions help load strings for this module.
-    var ts = $scope.ts = CRM.ts('civicase'),
-      firstLoad = true,
-      caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
+    var ts = $scope.ts = CRM.ts('civicase');
+    var firstLoad = true;
+    var caseTypes = CRM.civicase.caseTypes;
+    var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.cases = [];
@@ -120,8 +120,8 @@
 
     $scope.$watch('caseIsFocused', function () {
       $timeout(function () {
-        var $actHeader = $('.act-feed-panel .panel-header'),
-          $actControls = $('.act-feed-panel .act-list-controls');
+        var $actHeader = $('.act-feed-panel .panel-header');
+        var $actControls = $('.act-feed-panel .act-list-controls');
 
         if ($actHeader.hasClass('affix')) {
           $actHeader.css('width', $('.act-feed-panel').css('width'));
@@ -162,9 +162,9 @@
     };
 
     function setPageTitle () {
-      var viewingCase = $scope.viewingCase,
-        cases = $scope.cases,
-        filters = $scope.filters;
+      var viewingCase = $scope.viewingCase;
+      var cases = $scope.cases;
+      var filters = $scope.filters;
       // Hide page title when case is selected
       $('h1.crm-page-title').toggle(!viewingCase);
       if (viewingCase) {
@@ -202,7 +202,6 @@
       $scope.isLoading = true;
       setPageTitle();
       crmThrottle(_loadCases).then(function (result) {
-        var viewingCaseDetails;
         var cases = _.each(result[0].values, formatCase);
         if ($scope.viewingCase) {
           if ($scope.viewingCaseDetails) {
@@ -268,35 +267,9 @@
       getCases();
     };
     $timeout(getCases);
-
-    $timeout(function () {
-      var $listTable = $('.civicase__list-panel .civicase__list'),
-        $customScroll = $('.civicase__list-panel .civicase__custom-scroller__wrapper'),
-        $tableHeader = $('.civicase__list-panel .civicase__list table thead');
-
-      $($listTable).scroll(function () {
-        $customScroll.scrollLeft($listTable.scrollLeft());
-        $('thead.affix').scrollLeft($customScroll.scrollLeft());
-      });
-
-      $customScroll.scroll(function () {
-        $listTable.scrollLeft($customScroll.scrollLeft());
-        $('thead.affix').scrollLeft($customScroll.scrollLeft());
-      });
-
-      $([$tableHeader, $customScroll]).affix({
-        offset: {
-          top: $('.civicase__list-panel').offset().top - 50
-        }
-      })
-        .on('affixed.bs.affix', function () {
-          $('thead.affix').scrollLeft($customScroll.scrollLeft());
-        });
-    });
   });
 
   function caseListTableController ($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
-    var ts = $scope.ts = CRM.ts('civicase');
     var firstLoad = true;
 
     $scope.cases = [];
@@ -326,48 +299,21 @@
       return crmApi(params);
     }
 
-    // function getCases() {
-    //   debugger;
-    //   $scope.isLoading = true;
-    //   crmThrottle(_loadCases)
-    //     .then(function(result) {
-    //       $scope.cases = _.each(result[0].values, formatCase);
+    function getCases () {
+      $scope.isLoading = true;
+      crmThrottle(_loadCases)
+        .then(function (result) {
+          $scope.cases = _.each(result[0].values, formatCase);
 
-    //       if (firstLoad) {
-    //         $scope.headers = result[2].values;
-    //         firstLoad = false;
-    //       }
+          if (firstLoad) {
+            $scope.headers = result[2].values;
+            firstLoad = false;
+          }
 
-    //       $scope.totalCount = result[1];
-    //       $scope.isLoading = false;
-    //       debugger;
-    //       $timeout(function() {
-
-    //         var $listTable = $('.civicase__list-panel .civicase__list'),
-    //           $customScroll = $('.civicase__list-panel .civicase__custom-scroller'),
-    //           $tableHeader = $('.civicase__list-panel .civicase__list table thead');
-
-    //         $($listTable).scroll(function(){
-    //           $customScroll.scrollLeft($listTable.scrollLeft());
-    //           $('thead.affix').scrollLeft($customScroll.scrollLeft());
-    //         });
-
-    //         $customScroll.scroll(function(){
-    //           $listTable.scrollLeft($customScroll.scrollLeft());
-    //           $('thead.affix').scrollLeft($customScroll.scrollLeft());
-    //         });
-
-    //         $([$tableHeader, $customScroll]).affix({
-    //           offset: {
-    //              top: $('.civicase__list-panel').offset().top - 50
-    //           }
-    //         })
-    //         .on('affixed.bs.affix', function() {
-    //           $('thead.affix').scrollLeft($customScroll.scrollLeft());
-    //         });
-    //       });
-    //     });
-    // }
+          $scope.totalCount = result[1];
+          $scope.isLoading = false;
+        });
+    }
 
     $scope.viewCase = function (id, $event) {
       if (!$scope.bulkAllowed) {

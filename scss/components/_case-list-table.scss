@@ -28,6 +28,7 @@
     }
 
     th {
+      border-bottom: 1px solid $gray-light;
       display: table-cell;
     }      
   }
@@ -51,8 +52,10 @@
     table-layout: inherit;
 
     th {
+      font-size: 13px;
+      line-height: 18px;
       min-width: 142px;
-      padding: 10px 15px;
+      padding: 22px 15px;
     }
 
     th:first-child {
@@ -131,7 +134,6 @@
     th:nth-child(1) {
       left: 0;
       position: fixed;
-      top: 60px;
     }
   } 
 }
