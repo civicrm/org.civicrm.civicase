@@ -112,64 +112,11 @@
   overflow-y: auto;
   max-height: 400px;
 }
-#bootstrap-theme .act-feed-item {
-  border-radius: 2px;
-  cursor: pointer;
-  padding: 10px 0px 18px;
-}
-#bootstrap-theme .act-feed-item.act-category-milestone {
-  background: #F3F6F7;
-  border-bottom: 1px solid #ddd;
-  border-left: 5px solid;
-  border-right: 5px solid;
-  border-top: 1px solid #ddd;
-}
-#bootstrap-theme .act-feed-item.act-category-task {
-  border: 1px solid #E8EEF0 !important;
-  border-radius: 4px;
-}
-#bootstrap-theme .act-feed-item.act-category-task.activity-overdue {
-  border-color: #E8EEF0 !important;
-}
-#bootstrap-theme .act-feed-item .act-subject {
-  color: #4D5663;
-  display: inline-block;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 18px;
-  margin-right: 1em;
-  max-width: 70%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-#bootstrap-theme .act-feed-item.act-category-milestone .act-subject {
-  color: #4D5663;
-}
-#bootstrap-theme .act-feed-item.activity-overdue {
-  border-left-color: #E6807F !important;
-  border-right-color: #E6807F !important;
-}
-#bootstrap-theme .act-feed-item.activity-overdue .act-direction-icon{
-  color: #E6807F !important;
-}
-#bootstrap-theme .act-feed-item .cb-dot {
-  top: -7px;
-}
 #bootstrap-theme .act-feed-inner {
   padding-left: 30px;
 }
-#bootstrap-theme .act-feed-item.activity-overdue .cb-dot {
-  background: #E6807F !important;
-}
-#bootstrap-theme .act-feed-item.act-category-milestone .cb-dot {
-  border-color: #F3F6F7;
-}
 #bootstrap-theme .case-activity-card-wrapper .btn {
   border: none;
-}
-#bootstrap-theme .act-category-task .act-feed-inner {
-  padding-left: 5em;
 }
 #bootstrap-theme td.case-activity-card-wrapper .activity-card-menu {
   margin-top: -5px;
@@ -198,33 +145,6 @@
   fill: black;
 }
 
-#bootstrap-theme .act-category-communication .act-feed-item-content {
-  background-color: #F3F6F7;
-  border: 1px solid #E8EEF0;
-  border-radius: 4px;
-  margin-left: 5px;
-  padding: 5px 20px 10px;
-}
-#bootstrap-theme .act-category-communication .act-feed-item-content:before {
-  background: #F3F6F7;
-  border-left: 1px solid #E8EEF0;
-  border-top: 1px solid #E8EEF0;
-  content: ' ';
-  height: 8px;
-  left: 31px;
-  top: 15px;
-  position: absolute;
-  transform: rotate(-45deg);
-  width: 8px;
-}
-#bootstrap-theme .act-category-communication {
-  padding-top: 0;
-  padding-right: 0 !important;
-}
-#bootstrap-theme .act-category-communication .activity-card-menu.btn-group {
-  margin-top: 10px;
-  margin-right: 10px;
-}
 #bootstrap-theme .act-subject-draft {
   color: #525966;
   font-size: 13px;
@@ -294,12 +214,6 @@
 #bootstrap-theme .case-view-placeholder-panel .civicase-type-and-manager {
   padding: 5px 19px 5px 25px;
   margin-top: 12px;
-}
-#bootstrap-theme .activity-card.act-category-none {
-  border: 1px solid #E8EEF0;
-}
-#bootstrap-theme .activity-card.act-category-none.activity-overdue {
-  border-color: #E8EEF0 !important;
 }
 #bootstrap-theme .open>.dropdown-menu {
   position: fixed;

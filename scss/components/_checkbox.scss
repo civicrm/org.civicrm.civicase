@@ -1,0 +1,16 @@
+.civicase__checkbox {
+  background-color: $crm-white;
+  border: 1px solid $crm-grayblue-darker;
+  border-radius: 2px;
+  box-shadow: $box-shadow-checkbox;
+  box-sizing: border-box;
+  height: 18px;
+  width: 18px;
+}
+
+.civicase__checkbox--checked {
+  color: $crm-grayblue-darker;
+  font-size: 24px;
+  margin-left: -4px;
+  margin-top: -4px;
+}

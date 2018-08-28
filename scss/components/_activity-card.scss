@@ -1,0 +1,152 @@
+.civicase__activity-card {
+  box-shadow: $box-shadow-card;
+  position: relative;
+  width: 280px;
+
+  .panel {
+    box-shadow: none;
+    margin-bottom: 0;
+  }
+
+  .panel-body {
+    border-top: 0 !important;
+
+    &:hover {
+      background: $gray-lighter;
+    }
+  }
+
+  .civicase__contact-avatar {
+    margin-left: 5px;
+    margin-top: -10px;
+  }
+
+  .civicase__checkbox {
+    margin-right: 5px;
+    margin-top: 2px;
+  }
+}
+
+.civicase__activity-card--empty {
+  height: 100px;
+
+  .panel-body {
+    align-items: center;
+    display: flex;
+    height: 100px;
+    justify-content: center;
+  }
+}
+
+.civicase__activity-card--draft {
+  border: 1px dashed $crm-grayblue-darker;
+}
+
+.civicase__activity-icon {
+  font-size: 18px;
+}
+
+.civicase__activity-icon--ribbon {
+  color: $crm-white;
+  font-size: 22px;
+  margin-top: -5px;
+  z-index: 1;
+}
+
+.civicase__activity-icon-ribbon {
+  border-bottom: 6px solid transparent;
+  border-left: 14px solid $brand-primary;
+  border-radius: 2px;
+  border-right: 14px solid $brand-primary;
+  height: 42px;
+  left: 17px;
+  position: absolute;
+  top: -3px;
+  width: 0;
+}
+
+.civicase__activity-date {
+  color: $crm-gray-matte;
+  margin-left: 5px;
+}
+
+.civicase__activity__right-container {
+  margin-left: auto;
+}
+
+.civicase__activity-subject {
+  color: $gray-darker;
+  font-weight: 600;
+}
+
+.civicase__activity-card-row {
+  display: flex;
+  line-height: 1.8em;
+  vertical-align: middle;
+}
+
+.civicase__activity-card-row--first {
+  margin-bottom: 5px;
+}
+
+.civicase__activity-with {
+  color: $crm-gray-matte;
+}
+
+.civicase__activity-star {
+  color: $crm-grayblue-darker;
+  font-size: 18px;
+
+  &.active {
+    color: $brand-warning;
+  }
+}
+
+.civicase__activity-attachment__container {
+  margin-top: -6px;
+
+  a {
+    display: flex !important;
+  }
+
+  &.open .dropdown-toggle {
+    box-shadow: none;
+  }
+
+  &:hover {
+    .dropdown-menu {
+      display: block;
+    }
+  }
+}
+
+.civicase__activity-attachment__file-name {
+  color: $brand-primary !important;
+}
+
+.civicase__activity-attachment__icon {
+  color: $crm-grayblue-darker;
+  font-size: 18px;
+
+  &:hover {
+    color: $brand-primary;
+  }
+}
+
+.civicase__activity-attachment__file-icon {
+  color: $crm-gray-matte;
+  font-size: 16px;
+  margin-right: 5px;
+  margin-top: 3px;
+}
+
+.civicase__activity-empty-message {
+  color: $crm-gray-matte;
+  font-size: 16px;
+  text-align: center;
+}
+
+.civicase__activity-empty-link {
+  display: block;
+  text-align: center;
+}
