@@ -3,15 +3,7 @@
     <div class="panel-body">
       <div class="civicase__activity-card-row civicase__activity-card-row--first">
 
-        <!-- Activity Icon -->
-        <span class="civicase__activity-icon">
-          <i
-            ng-if="activity.icon"
-            ng-class="{'civicase__activity-icon--ribbon': activity.category.indexOf('milestone') > -1, 'text-danger': activity.is_overdue}"
-            class="fa {{activity.icon}}"></i>
-        </span>
-        <div ng-class="{'text-danger': activity.is_overdue}" class="civicase__activity-icon-ribbon" ng-class="{'civicase__activity-icon--ribbon': activity.category.indexOf('milestone') > -1}"></div>
-        <!-- End - Activity Icon -->
+        <span activity-icon="activity"></span>
 
         <!-- Activity Date -->
         <span class="civicase__activity-date">{{ CRM.utils.formatDate(activity.activity_date_time, 'dd M yy') }}</span>

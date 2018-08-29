@@ -1,0 +1,14 @@
+<span class="civicase__activity-icon">
+  <span>
+    <i
+      ng-if="activity.icon"
+      ng-class="{'civicase__activity-icon--ribbon': activity.category.indexOf('milestone') > -1, 'text-danger': activity.is_overdue}"
+      class="fa {{activity.icon}}"></i>
+
+    <i
+      ng-if="direction"
+      ng-class="{'text-danger': activity.is_overdue}"
+      class="civicase__activity-icon-arrow fa fa-arrow-{{ direction }}"></i>
+  </span>
+  <div ng-if="activity.category.indexOf('milestone') > -1" ng-class="{'text-danger': activity.is_overdue}" class="civicase__activity-icon-ribbon"></div>
+</span>

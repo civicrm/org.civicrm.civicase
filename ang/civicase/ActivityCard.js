@@ -20,6 +20,8 @@
     $scope.CRM = CRM;
     $scope.templateExists = templateExists;
 
+    // console.log($scope.activity.category);
+
     $scope.isActivityEditable = function (activity) {
       var type = CRM.civicase.activityTypes[activity.activity_type_id].name;
 
