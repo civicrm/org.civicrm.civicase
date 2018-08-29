@@ -579,7 +579,7 @@
     return {
       restrict: 'A',
       link: function (scope, $el, attrs) {
-        var $table = $('.civicase__list');
+        var $table = $('.civicase__case-list');
 
         // Watch if loading completes
         scope.$watch(function (scope) {

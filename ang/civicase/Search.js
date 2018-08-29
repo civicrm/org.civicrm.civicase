@@ -13,8 +13,8 @@
       };
     }
 
-    var caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = CRM.civicase.caseStatuses;
+    var caseTypes = CRM.civicase.caseTypes;
+    var caseStatuses = CRM.civicase.caseStatuses;
 
     $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
     $scope.caseStatusOptions = _.map(caseStatuses, mapSelectOptions);
@@ -29,11 +29,11 @@
       }
     });
 
-    var $tableHeader = $('.civicase__list-panel .civicase__list table thead');
+    var $tableHeader = $('.civicase__case-list-panel .civicase__case-list table thead');
 
     $scope.$watch('expanded', function () {
       $timeout(function () {
-        $($tableHeader).data('bs.affix').options.offset.top = $('.civicase__list-panel').offset().top - 50;
+        $($tableHeader).data('bs.affix').options.offset.top = $('.civicase__case-list-panel').offset().top - 50;
       });
     });
 
@@ -56,7 +56,7 @@
     function formatSearchFilters (inp) {
       var search = {};
       _.each(inp, function (val, key) {
-        if (!_.isEmpty(val) || (typeof val === 'number' && val) || typeof val === 'boolean' && val) {
+        if (!_.isEmpty(val) || ((typeof val === 'number') && val) || ((typeof val === 'boolean') && val)) {
           search[key] = val;
         }
       });

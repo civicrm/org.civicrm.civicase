@@ -1,7 +1,7 @@
-<table ng-show="!caseIsFocused" class="table civicase__list-table">
-  <thead sticky-table-header class="civicase__list-table__header">
+<table ng-show="!caseIsFocused" class="table civicase__case-list-table">
+  <thead sticky-table-header class="civicase__case-list-table__header">
   <tr>
-    <th class="civicase__list-column--fixed">
+    <th class="civicase__case-list-column--fixed">
       <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases && bulkAllowed">
         <input type="checkbox" ng-click="selectAll($event)" id="select-role-{{ $index }}" ng-checked="isSelection('all')" />
         <label for="select-role-{{ $index }}"></label>
@@ -44,7 +44,7 @@
   </thead>
   <tbody>
   <tr ng-repeat="item in cases">
-    <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="civicase__list-column--fixed">
+    <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="civicase__case-list-column--fixed">
       <div ng-if="!bulkAllowed" class="lockDiv">
         <div class="fa fa-lock"></div>
       </div>
@@ -113,7 +113,7 @@
           >
           </div>
         </span>
-        <span ng-switch-when="status_badge" class="crm_notification-badge civicase__list-status" style="background-color: {{ item.color }}">
+        <span ng-switch-when="status_badge" class="crm_notification-badge civicase__case-list-status" style="background-color: {{ item.color }}">
           {{ item.status }}
         </span>
         <span ng-switch-when="contact_reference">{{ item[header.name].display_name }}</span>
@@ -125,7 +125,7 @@
   </tr>
 
   <tr class="case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">
-    <td class="civicase__list-column--fixed">
+    <td class="civicase__case-list-column--fixed">
       <h2 style="width: 80%; margin-top: 10px;" class="oneline-loading-placeholder"></h2>
       <div style="width: 70%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
       <div style="width: 50%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
@@ -135,7 +135,7 @@
   </tr>
 
   <tr ng-if="!cases.length && !isLoading" class="civicase-panel-empty">
-    <td class="civicase__list-column--fixed"></td>
+    <td class="civicase__case-list-column--fixed"></td>
     <td colspan="3">
       <i class="fa fa-folder-o fa-big"></i>
       <div class="empty-label">{{ ts('No cases found matching the search criteria.') }}</div>

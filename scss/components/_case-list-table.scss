@@ -1,15 +1,15 @@
-.civicase__list-column--fixed {
+.civicase__case-list-column--fixed {
   .label {
     font-size: 0.8em;
   }
 }
 
-.civicase__list-status {
+.civicase__case-list-status {
   line-height: 18px;
   padding: 0 10px;
 }
 
-.civicase__list-table__header {
+.civicase__case-list-table__header {
   &.affix {
     display: block;
     left: 0;
@@ -33,20 +33,20 @@
 }
 
 
-.civicase__list-panel:not(.civicase__list-panel--case-detail) {
-  .civicase__list-panel__inner {
+.civicase__case-list-panel:not(.civicase__case-list-panel--case-detail) {
+  .civicase__case-list-panel__inner {
     background: $crm-white;
     position: relative;
   }
 
-  .civicase__list {
+  .civicase__case-list {
     border-left: 1px solid $gray-light;
     margin-left: 310px;
     overflow-x: auto;
     overflow-y: visible;
   }
 
-  .civicase__list-table {
+  .civicase__case-list-table {
     table-layout: inherit;
 
     th {
@@ -108,7 +108,7 @@
     }
   }
 
-  .civicase__list-table__header.affix {
+  .civicase__case-list-table__header.affix {
     th:nth-child(1) {
       left: 0;
       position: fixed;
