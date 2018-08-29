@@ -4,23 +4,25 @@
   module.service('ContactsData', ContactsDataService);
 
   function ContactsDataService (crmApi) {
-    var contacts = [];
-    var contactDetails = [];
+    var savedContacts = [];
+    var savedContactDetails = {};
 
     /**
      * Add data to the ContactsData service and fetches Profile Pic and Contact Type
      *
-     * @param {array} data
+     * @param {array} contacts
      */
-    this.add = function (data) {
-      contacts = _.uniq(contacts.concat(data));
+    this.add = function (contacts) {
+      contacts = _.uniq(contacts);
+      var newContacts = _.difference(contacts, savedContacts);
+      savedContacts = savedContacts.concat(newContacts);
 
       return crmApi('Contact', 'get', {
         sequential: 1,
         return: ['image_URL', 'contact_type'],
-        id: {IN: contacts}
+        id: {IN: newContacts}
       }).then(function (data) {
-        contactDetails = _.indexBy(data.values, 'contact_id');
+        savedContactDetails = _.extend(savedContactDetails, _.indexBy(data.values, 'contact_id'));
       });
     };
 
@@ -31,7 +33,7 @@
      * @return {String}
      */
     this.getImageUrlOf = function (contactID) {
-      return contactDetails[contactID] ? contactDetails[contactID].image_URL : '';
+      return savedContactDetails[contactID] ? savedContactDetails[contactID].image_URL : '';
     };
 
     /**
@@ -41,7 +43,7 @@
      * @return {String}
      */
     this.getContactIconOf = function (contactID) {
-      return contactDetails[contactID] ? contactDetails[contactID].contact_type : '';
+      return savedContactDetails[contactID] ? savedContactDetails[contactID].contact_type : '';
     };
   }
 })(angular, CRM.$, CRM._);
