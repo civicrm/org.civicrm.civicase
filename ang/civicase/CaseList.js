@@ -1,5 +1,7 @@
 (function (angular, $, _) {
-  angular.module('civicase').config(function ($routeProvider) {
+  var module = angular.module('civicase');
+
+  module.config(function ($routeProvider) {
     $routeProvider.when('/case/list', {
       reloadOnSearch: false,
       resolve: {
@@ -59,7 +61,7 @@
   }
 
   // CaseList controller
-  angular.module('civicase').controller('CivicaseCaseList', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatCase) {
+  module.controller('CivicaseCaseList', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatCase) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var firstLoad = true;
@@ -336,7 +338,7 @@
     getCases();
   }
 
-  angular.module('civicase').directive('caseListTable', function () {
+  module.directive('caseListTable', function () {
     return {
       restrict: 'A',
       controller: caseListTableController,
