@@ -22,7 +22,7 @@
   </div>
   <div class="panel panel-default civicase__case-list-panel" ng-class="{'civicase__case-list-panel--case-detail': viewingCase, 'case-is-focused': caseIsFocused}">
     <div class="civicase__case-list-panel__inner">
-      <div class="civicase__case-list" ng-include="'~/civicase/CaseListTable.html'"></div>
+      <div class="civicase__case-list" sticky-table-header ng-include="'~/civicase/CaseListTable.html'"></div>
     </div>
     <div class="center-block civicase__pager" sticky-footer-pager>
       <paging
