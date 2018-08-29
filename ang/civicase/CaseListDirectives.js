@@ -28,8 +28,14 @@
     function stickyTableHeaderLink (scope, $el, attrs) {
       var $table = $el;
       var $header = $el.find('thead');
+
       // Watch if loading completes
-      scope.$watch('isLoading', function (loading) {
+      (function init () {
+        // Watch if loading completes
+        scope.$watch('isLoading', checkIfLoadingCompleted);
+      }());
+
+      function checkIfLoadingCompleted (loading) {
         if (!loading) { // loading complete
           var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
           var topPos = $header.offset().top - bodyPadding;
@@ -58,7 +64,7 @@
             $header.scrollLeft($(this).scrollLeft());
           });
         }
-      });
+      }
     }
   });
 
@@ -82,7 +88,12 @@
      */
     function stickyFooterPagerLink (scope, $el, attrs) {
       // Watch if loading completes
-      scope.$watch('isLoading', function (loading) {
+      (function init () {
+        // Watch if loading completes
+        scope.$watch('isLoading', checkIfLoadingCompleted);
+      }());
+
+      function checkIfLoadingCompleted (loading) {
         if (!loading) { // If loading completes
           var topPos = $el.offset().top;
           // apply Fixed pager logic
@@ -92,11 +103,10 @@
             applyFixedPager(topPos);
           });
         }
-      });
+      }
 
       // Function to see ee if element is in window view and add class likewise
       function applyFixedPager (topPos) {
-        console.log(topPos);
         if ((topPos - $($window).height() - $($window).scrollTop()) > 0) {
           $el.addClass('civicase__pager--fixed');
         } else {
