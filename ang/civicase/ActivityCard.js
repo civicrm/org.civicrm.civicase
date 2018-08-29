@@ -1,30 +1,62 @@
 (function (angular, $, _) {
-  function activityCard ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi) {
+  var module = angular.module('civicase');
+
+  module.directive('caseActivityCard', function () {
+    return {
+      restrict: 'A',
+      templateUrl: '~/civicase/ActivityCard.html',
+      controller: caseActivityCardController,
+      scope: {
+        activity: '=caseActivityCard',
+        refresh: '=refreshCallback',
+        editActivityUrl: '=?editActivityUrl'
+      }
+    };
+  });
+
+  function caseActivityCardController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi) {
     var ts = $scope.ts = CRM.ts('civicase');
-    $scope.CRM = CRM;
     $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.CRM = CRM;
     $scope.templateExists = templateExists;
 
     $scope.isActivityEditable = function (activity) {
       var type = CRM.civicase.activityTypes[activity.activity_type_id].name;
+
       return (type !== 'Email' && type !== 'Print PDF Letter') && $scope.editActivityUrl;
     };
 
-    $scope.markCompleted = function (act) {
-      crmApi([['Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}]])
+    /**
+     * Mark an activity as complete
+     *
+     * @param {object} activity
+     */
+    $scope.markCompleted = function (activity) {
+      return crmApi([['Activity', 'create', {id: activity.id, status_id: activity.is_completed ? 'Scheduled' : 'Completed'}]])
         .then(function (data) {
           if (!data[0].is_error) {
-            act.is_completed = !act.is_completed;
+            activity.is_completed = !activity.is_completed;
           }
         });
     };
 
-    $scope.star = function (act) {
-      act.is_star = act.is_star === '1' ? '0' : '1';
+    /**
+     * Star/Favourite an activity
+     *
+     * @param {object} activity
+     */
+    $scope.star = function (activity) {
+      activity.is_star = activity.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues
-      $scope.refresh([['Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}]]);
+      $scope.refresh([['Activity', 'setvalue', {id: activity.id, field: 'is_star', value: activity.is_star}]]);
     };
 
+    /**
+     * Delete an activity
+     *
+     * @param {object} activity
+     * @param {jQuery} dialog - the dialog which should be closed once deletion is over
+     */
     $scope.deleteActivity = function (activity, dialog) {
       CRM.confirm({
         title: ts('Delete Activity'),
@@ -38,6 +70,12 @@
         });
     };
 
+    /**
+     * View an activity details in the popup
+     *
+     * @param {object} $event
+     * @param {object} activity
+     */
     $scope.viewInPopup = function ($event, activity) {
       if (!$event || !$($event.target).is('a, a *, input, button, button *')) {
         var context = activity.case_id ? 'case' : 'activity';
@@ -48,6 +86,7 @@
           .on('crmLoad', function () {
             $('a.delete.button').click(function () {
               $scope.deleteActivity(activity, form);
+
               return false;
             });
           });
@@ -71,7 +110,7 @@
             if (op === 'copy') {
               delete model.activity.id;
             }
-            if (model.activity.case_id && model.activity.case_id != act.case_id) {
+            if (model.activity.case_id && model.activity.case_id !== act.case_id) {
               $scope.refresh([['Activity', 'create', model.activity]]);
             }
             $(this).dialog('close');
@@ -80,6 +119,11 @@
       });
     };
 
+    /**
+     * Gets attachments for an activity
+     *
+     * @param {object} activity
+     */
     $scope.getAttachments = function (activity) {
       if (!activity.attachments) {
         activity.attachments = [];
@@ -94,17 +138,4 @@
       }
     };
   }
-
-  angular.module('civicase').directive('caseActivityCard', function () {
-    return {
-      restrict: 'A',
-      templateUrl: '~/civicase/ActivityCard.html',
-      controller: activityCard,
-      scope: {
-        activity: '=caseActivityCard',
-        refresh: '=refreshCallback',
-        editActivityUrl: '=?editActivityUrl'
-      }
-    };
-  });
 })(angular, CRM.$, CRM._);
