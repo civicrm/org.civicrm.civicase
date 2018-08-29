@@ -17,52 +17,60 @@
     };
 
     /**
-     * @function
      * Link function for stickyTableHeader Directive
      *
-     * @params
-     * scope: Scope under which directive is called
-     * $el: Element on which directive is called
-     * attrs: attributes of directive
+     * @param {object} scope
+     *   Scope under which directive is called
+     * @param {object} $el
+     *   Element on which directive is called
+     * @param {object} attrs
+     *   attributes of directive
      */
     function stickyTableHeaderLink (scope, $el, attrs) {
       var $table = $el;
       var $header = $el.find('thead');
 
-      // Watch if loading completes
       (function init () {
-        // Watch if loading completes
         scope.$watch('isLoading', checkIfLoadingCompleted);
       }());
 
+      /**
+       * Checks if loading completes and add logic
+       * for fixed footer
+       *
+       * @param {boolean} loading
+       */
       function checkIfLoadingCompleted (loading) {
-        if (!loading) { // loading complete
-          var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
-          var topPos = $header.offset().top - bodyPadding;
-
-          // Assign min-width values to th to have solid grid
+        if (!loading) {
+          /**
+           * Assign min-width values to th to have solid grid
+           * Timeout if 0s added to execute logic after DOM repainting completes
+           */
           $timeout(function () {
+            var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
+            var topPos = $header.offset().top - bodyPadding;
+
             $('th', $header).each(function () {
               $(this).css('min-width', $(this).outerWidth() + 'px');
             });
-          }, 0);
 
-          // Define when to make the element sticky (affixed)
-          $($header).affix({
-            offset: {
-              top: topPos
-            }
-          })
-          // After element is affixed set scrolling pos (to avoid glitch) and top position
-            .on('affixed.bs.affix', function () {
-              $header.scrollLeft($table.scrollLeft());
-              $header.css('top', bodyPadding + 'px');
+            // Define when to make the element sticky (affixed)
+            $($header).affix({
+              offset: {
+                top: topPos
+              }
+            })
+            // After element is affixed set scrolling pos (to avoid glitch) and top position
+              .on('affixed.bs.affix', function () {
+                $header.scrollLeft($table.scrollLeft());
+                $header.css('top', bodyPadding + 'px');
+              });
+
+            // Attach scroll function
+            $table.scroll(function () {
+              $header.scrollLeft($(this).scrollLeft());
             });
-
-          // Attach scroll function
-          $table.scroll(function () {
-            $header.scrollLeft($(this).scrollLeft());
-          });
+          }, 0);
         }
       }
     }
@@ -78,34 +86,43 @@
     };
 
     /**
-     * @function
      * Link function for stickyFooterPager Directive
      *
-     * @params
-     * scope: Scope under which directive is called
-     * $el: Element on which directive is called
-     * attrs: attributes of directive
+     * @param {object} scope
+     *   Scope under which directive is called
+     * @param {object} $el
+     *   Element on which directive is called
+     * @param {object} attrs
+     *   attributes of directive
      */
     function stickyFooterPagerLink (scope, $el, attrs) {
-      // Watch if loading completes
       (function init () {
-        // Watch if loading completes
         scope.$watch('isLoading', checkIfLoadingCompleted);
       }());
 
+      /**
+       * Checks if loading completes and add logic
+       * for fixed footer
+       *
+       * @param {boolean} loading
+       */
       function checkIfLoadingCompleted (loading) {
-        if (!loading) { // If loading completes
+        if (!loading) {
           var topPos = $el.offset().top;
-          // apply Fixed pager logic
+
           applyFixedPager(topPos);
-          // Same logic to window scroll
+
           $($window).scroll(function () {
             applyFixedPager(topPos);
           });
         }
       }
 
-      // Function to see ee if element is in window view and add class likewise
+      /**
+       * Applies fixed pager class based on scroll position
+       *
+       * @param {int} topPos
+       */
       function applyFixedPager (topPos) {
         if ((topPos - $($window).height() - $($window).scrollTop()) > 0) {
           $el.addClass('civicase__pager--fixed');
