@@ -116,7 +116,7 @@
 #bootstrap-theme .case-list-table th {
   padding: 10px;
 }
-#bootstrap-theme .case-list-table tr:not(.case-placeholder-row) td:first-child {
+#bootstrap-theme .case-list-table tr:not(.civicase__case-placeholder-row) td:first-child {
   cursor: pointer;
 }
 #bootstrap-theme .case-list-table th:first-child,

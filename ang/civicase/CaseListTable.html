@@ -77,7 +77,7 @@
     </td>
   </tr>
 
-  <tr class="case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">
+  <tr class="civicase__case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">
     <td class="civicase__case-card panel-default panel-strip-primary">
       <h2 style="width: 60%; margin-top: 10px;" class="oneline-loading-placeholder"></h2>
       <div style="width: 80%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
@@ -88,7 +88,7 @@
     <td ng-show="!viewingCase" ng-repeat="i in [1,2,3,4,5,6,7]"><div class="oneline-loading-placeholder"></div></td>
   </tr>
 
-  <tr ng-if="!cases.length && !isLoading" class="civicase-panel-empty">
+  <tr ng-if="!cases.length && !isLoading" class="civicase__panel-empty">
     <td class="civicase__case-card panel-default panel-strip-primary"></td>
     <td colspan="3">
       <i class="fa fa-folder-o fa-big"></i>
