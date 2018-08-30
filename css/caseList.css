@@ -36,7 +36,7 @@
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td:first-child {
   left: 0;
   position: absolute;  
-  width: 310px;
+  width: 380px;
   transform: translateZ(0);
   -moz-transform: translateZ(0);
   -webkit-transform: translateZ(0);
@@ -44,12 +44,6 @@
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr th:first-child {
   background: #F3F6F7;
   height: 61px;
-}
-#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td:first-child {
-  background: #fff;
-}
-#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr:not(.case-placeholder-row) td:first-child:hover {
-  background: #d9edf7;
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table tr td {
   border-bottom: 1px solid #e8eef0;
@@ -60,12 +54,12 @@
   position: relative;
 }
 #bootstrap-theme div.case-list-panel:not(.viewing-case) .inner {  
-  margin-left: 310px;
+  margin-left: 380px;
   overflow-x: auto;
   overflow-y: visible;
 }
-#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table th,
-#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table td {
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table th:not(:first-child),
+#bootstrap-theme div.case-list-panel:not(.viewing-case) .scrolling table td:not(:first-child) {
   min-width: 142px;
   padding: 10px 15px;
 }
@@ -119,8 +113,7 @@
   padding: 0;
   text-transform: none;
 }
-#bootstrap-theme .case-list-table th,
-#bootstrap-theme .case-list-table td {
+#bootstrap-theme .case-list-table th {
   padding: 10px;
 }
 #bootstrap-theme .case-list-table tr:not(.case-placeholder-row) td:first-child {
@@ -137,9 +130,7 @@
 #bootstrap-theme .case-list-table td:first-child:hover {
   background-color: #f2f9fc;
 }
-#bootstrap-theme .viewing-case .case-list-table td.case-selected-for-view {
-  background-color: #d9edf7;
-}
+
 #bootstrap-theme .case-list-table td:first-child h4 {
   display: inline-block;
   font-size: 16px;
@@ -327,10 +318,10 @@
 }
 #bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper {
   border: none;
-  margin-left: 310px;
+  margin-left: 380px;
   overflow-x: scroll;
   overflow-y:hidden;
-  width: calc(100% - 310px);
+  width: calc(100% - 380px);
 }
 #bootstrap-theme :not(.viewing-case) .scrolling .custom-scroll-wrapper .custom-scroll{
   height: 1px;
@@ -377,7 +368,7 @@
 #bootstrap-theme :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {
   left: 50%;
   margin-left: -600px;
-  min-width: 310px;
+  min-width: 380px;
   position: fixed;
 }
 #bootstrap-theme .dashboard-case-wrapper :not(.viewing-case) .scrolling table.case-list-table thead.affix .fixed-col {

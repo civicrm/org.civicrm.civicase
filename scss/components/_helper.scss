@@ -1,0 +1,35 @@
+.civicase__pipe {
+  font-weight: normal;
+  position: relative;
+  top: -1px;
+}
+
+.civicase__overdue {
+  color: $brand-danger !important;
+  position: relative;
+
+  &::before {
+    background-color: $brand-danger;
+    content: '';
+  }
+
+  &::after {
+    color: $crm-white;
+    content: '!';
+    top: 1px;
+  }
+
+  &::before,
+  &::after {
+    border-radius: 50%;
+    font-size: 11px;
+    height: 13px;
+    line-height: 1em;
+    position: absolute;
+    right: -20px;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 13px;
+  }
+}

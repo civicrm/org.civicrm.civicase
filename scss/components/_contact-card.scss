@@ -15,17 +15,18 @@
 }
 
 .civicase__contact-additional__container {
-  margin-left: 5px;
+  margin-left: 8px;
 
   a {
     display: flex !important;
   }
 
   .dropdown-menu {
-    height: 200px;
-    margin-left: -77px;
+    left: 50%;
+    max-height: 200px;
     overflow: auto;
-    top: 29px;
+    top: calc(100% + 5px);
+    transform: translateX(-50%);
   }
 
   &:hover {

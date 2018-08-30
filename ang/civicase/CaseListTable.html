@@ -44,61 +44,14 @@
   </thead>
   <tbody>
   <tr ng-repeat="item in cases">
-    <td ng-click="viewCase(item.id, $event)" ng-class="{'case-selected-for-view': viewingCase === item.id}" class="fixed-col">
-      <div ng-if="!bulkAllowed" class="lockDiv">
-        <div class="fa fa-lock"></div>
-      </div>
-      <div class="case-list-checkbox" ng-if="!viewingCase && selectedCases && bulkAllowed">
-        <input type="checkbox" ng-model="item.selected" />
-        <label></label>
-      </div>
-      <div class="case-list-info">
-        <h4>{{ item.client[0].display_name }}</h4>
-        <div class="btn-group btn-group-sm" ng-if="item.client.length > 1">
-          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Additional clients') }}">
-            +{{ item.client.length - 1 }}
-          </button>
-          <ul class="dropdown-menu" >
-            <li ng-repeat="(index, client) in item.client" ng-if="index">
-              <span>{{ client.display_name }}</span>
-            </li>
-          </ul>
-        </div>
-        <div ng-if="item.client[0].email">
-          <strong>{{ ts('Email:') }}</strong>
-          {{ item.client[0].email }}
-        </div>
-        <div ng-if="item.client[0].phone">
-          <strong>{{ ts('Phone:') }}</strong>
-          {{ item.client[0].phone }}
-        </div>
-        <div>
-          <strong>{{ ts('Case ID:') }}</strong>
-          {{ item.id }} &nbsp;
-          <span class="civicase-tags">
-            <span
-              class="label label-default"
-              title="{{ tag['tag_id.description'] }}"
-              ng-repeat="tag in item.tag_id || []"
-              ng-class="{'text-dark': CRM.utils.colorContrast(tag['tag_id.color'] || '#cccccc') === 'black'}"
-              style="background-color: {{ tag['tag_id.color'] }};"
-            >{{ tag['tag_id.name'] }}</span>
-          </span>
-        </div>
-        <div class="case-activity-summary-icons" ng-if="bulkAllowed">
-          <a class=""
-             ng-repeat="category in activityCategories"
-             ng-href="#{{ activityFeedUrl(item.id, category.name, 'incomplete') }}"
-             ng-class="{'item-overdue': item.activity_summary[category.name][0].is_overdue}"
-             ng-if="item.category_count.incomplete[category.name]"
-             title="{{ ts('%1 upcoming %2', {1: item.category_count.incomplete[category.name], 2: category.label}) }}"
-          >
-            <i class="fa {{ category.icon }}"></i>
-            <span class="badge noti-badge">{{ item.category_count.incomplete[category.name] }}</span>
-          </a>
-        </div>
-      </div>
+    <td ng-click="viewCase(item.id, $event)" ng-class="{'civicase__case-card--active': viewingCase === item.id}" class="civicase__case-card panel-default panel-strip-primary civicase__animated-checkbox-card" ng-include="'~/civicase/caseCard.html'">
     </td>
+    <!--
+      To do:
+      Add 
+      * use 'civicase__expanded-card' class : for enabled checkbox state
+      * use 'civicase__case-card--closed' class: for closed cases
+    </td>  -->   
     <td
       ng-show="!viewingCase"
       ng-repeat="header in headers"
@@ -125,9 +78,10 @@
   </tr>
 
   <tr class="case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">
-    <td class="fixed-col">
-      <h2 style="width: 80%; margin-top: 10px;" class="oneline-loading-placeholder"></h2>
-      <div style="width: 70%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
+    <td class="civicase__case-card panel-default panel-strip-primary">
+      <h2 style="width: 60%; margin-top: 10px;" class="oneline-loading-placeholder"></h2>
+      <div style="width: 80%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
+      <div style="width: 80%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
       <div style="width: 50%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
     </td>
     <td ng-show="!viewingCase"><div class="activity-card-loading-placeholder"><div></div></div></td>
@@ -135,7 +89,7 @@
   </tr>
 
   <tr ng-if="!cases.length && !isLoading" class="civicase-panel-empty">
-    <td class="fixed-col"></td>
+    <td class="civicase__case-card panel-default panel-strip-primary"></td>
     <td colspan="3">
       <i class="fa fa-folder-o fa-big"></i>
       <div class="empty-label">{{ ts('No cases found matching the search criteria.') }}</div>
