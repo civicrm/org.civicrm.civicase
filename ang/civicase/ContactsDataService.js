@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.service('ContactsData', ContactsDataService);
+  module.service('ContactsDataService', ContactsDataService);
 
   function ContactsDataService (crmApi) {
     var savedContacts = [];

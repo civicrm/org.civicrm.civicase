@@ -1,7 +1,7 @@
 (function (angular, $, _, CRM) {
   var module = angular.module('civicase');
 
-  module.directive('contactCard', function ($document, ContactsData) {
+  module.directive('contactCard', function ($document, ContactsDataService) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ContactCard.html',
@@ -13,7 +13,7 @@
     };
 
     function contactCardLink (scope, elem, attrs) {
-      scope.getContactIconOf = ContactsData.getContactIconOf;
+      scope.getContactIconOf = ContactsDataService.getContactIconOf;
       scope.isPopupVisible = false;
       scope.ts = CRM.ts('civicase');
       scope.url = CRM.url;
@@ -65,6 +65,7 @@
         if (names.length > 1) {
           initials += names[names.length - 1].substring(0, 1).toUpperCase();
         }
+
         return initials;
       }
 
@@ -87,7 +88,7 @@
           display_name: name,
           contact_id: contactID,
           avatar: avatarText,
-          image_URL: ContactsData.getImageUrlOf(contactID)
+          image_URL: ContactsDataService.getImageUrlOf(contactID)
         });
       }
 
@@ -97,7 +98,6 @@
       function refresh () {
         if (_.isPlainObject(scope.data)) {
           scope.contacts = [];
-
           _.each(scope.data, function (name, contactID) {
             if (scope.isAvatar) {
               prepareAvatarData(name, contactID);
