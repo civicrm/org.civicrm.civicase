@@ -213,7 +213,7 @@
 #bootstrap-theme .dashboard-case-wrapper .panel-default>.panel-heading .badge.badge-primary {
   background-color: #8EC68A;
 }
-#bootstrap-theme .dashboard-case-wrapper .case-list-panel {
+#bootstrap-theme .dashboard-case-wrapper .civicase__case-list-panel {
   padding: 0;
 }
 #bootstrap-theme .dashboard-case-wrapper .col-md-4 .panel-body {
@@ -238,7 +238,7 @@
 #bootstrap-theme .dashboard-case-wrapper .panel-title .badge {
   margin-left: 5px;
 }
-#bootstrap-theme .dashboard-case-wrapper .panel-body:not(.case-list-panel) {
+#bootstrap-theme .dashboard-case-wrapper .panel-body:not(.civicase__case-list-panel) {
   padding-top: 12px
 }
 #bootstrap-theme .dashboard-nav {

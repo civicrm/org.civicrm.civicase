@@ -3,6 +3,7 @@ var cv = require('civicrm-cv')({ mode: 'sync' });
 module.exports = function (config) {
   var civicrmPath = cv("path -d '[civicrm.root]'")[0].value;
   var extPath = cv('path -x uk.co.compucorp.civicase')[0].value;
+  var shoreditch = cv('path -x org.civicrm.shoreditch')[0].value;
 
   config.set({
     basePath: civicrmPath,
@@ -21,9 +22,10 @@ module.exports = function (config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-route/angular-route.min.js',
 
+      shoreditch + '/base/js/affix.js',
+
       // Global variables that need to be accessible in the test environment
       extPath + '/ang/test/global.js',
-
       // Source Files
       extPath + '/ang/civicase.js',
       { pattern: extPath + '/ang/civicase/**/*.js' },

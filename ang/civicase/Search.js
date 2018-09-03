@@ -1,11 +1,10 @@
-(function(angular, $, _) {
-
+(function (angular, $, _) {
   // Case search directive controller
-  function searchController($scope, $location, $timeout) {
+  function searchController ($scope, $location, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
 
-    function mapSelectOptions(opt) {
+    function mapSelectOptions (opt) {
       return {
         id: opt.value || opt.name,
         text: opt.label || opt.title,
@@ -14,8 +13,8 @@
       };
     }
 
-    var caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = CRM.civicase.caseStatuses;
+    var caseTypes = CRM.civicase.caseTypes;
+    var caseStatuses = CRM.civicase.caseStatuses;
 
     $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
     $scope.caseStatusOptions = _.map(caseStatuses, mapSelectOptions);
@@ -24,47 +23,46 @@
     $scope.checkPerm = CRM.checkPerm;
 
     $scope.filters = angular.extend({}, $scope.defaults);
-    $scope.$watchCollection('filters', function(){
+    $scope.$watchCollection('filters', function () {
       if (!$scope.expanded) {
         $scope.doSearch();
       }
     });
 
-    var $customScroll = $('.case-list-panel .custom-scroll-wrapper'),
-      $tableHeader = $('.case-list-panel .inner table thead');
+    var $tableHeader = $('.civicase__case-list-panel .civicase__case-list table thead');
 
-    $scope.$watch('expanded',function(){
-      $timeout(function(){
-        $($customScroll,$tableHeader).data('bs.affix').options.offset.top =  $('.case-list-panel').offset().top - 50;
+    $scope.$watch('expanded', function () {
+      $timeout(function () {
+        $($tableHeader).data('bs.affix').options.offset.top = $('.civicase__case-list-panel').offset().top - 50;
       });
     });
 
-    $scope.showMore = function() {
+    $scope.showMore = function () {
       $scope.expanded = true;
     };
 
-    $scope.isEnabled = function(field) {
+    $scope.isEnabled = function (field) {
       return !$scope.hiddenFilters || !$scope.hiddenFilters[field];
     };
 
-    $scope.setCaseManager = function() {
+    $scope.setCaseManager = function () {
       $scope.filters.case_manager = $scope.caseManagerIsMe() ? null : [CRM.config.user_contact_id];
     };
 
-    $scope.caseManagerIsMe = function() {
+    $scope.caseManagerIsMe = function () {
       return $scope.filters.case_manager && $scope.filters.case_manager.length === 1 && parseInt($scope.filters.case_manager[0], 10) === CRM.config.user_contact_id;
     };
 
-    function formatSearchFilters(inp) {
+    function formatSearchFilters (inp) {
       var search = {};
-      _.each(inp, function(val, key) {
-        if (!_.isEmpty(val) || (typeof val === 'number' && val) || typeof val === 'boolean' && val) {
+      _.each(inp, function (val, key) {
+        if (!_.isEmpty(val) || ((typeof val === 'number') && val) || ((typeof val === 'boolean') && val)) {
           search[key] = val;
         }
       });
       return search;
     }
-    $scope.doSearch = function() {
+    $scope.doSearch = function () {
       $scope.filterDescription = buildDescription();
       $scope.expanded = false;
       $scope.$parent.$eval($scope.onSearch, {
@@ -72,7 +70,7 @@
       });
     };
 
-    $scope.clearSearch = function() {
+    $scope.clearSearch = function () {
       $scope.filters = {};
       $scope.doSearch();
     };
@@ -102,20 +100,20 @@
         label: ts('Tags')
       }
     };
-    _.each(CRM.civicase.customSearchFields, function(group) {
-      _.each(group.fields, function(field) {
+    _.each(CRM.civicase.customSearchFields, function (group) {
+      _.each(group.fields, function (field) {
         allSearchFields['custom_' + field.id] = field;
       });
     });
-    function buildDescription() {
+    function buildDescription () {
       var des = [];
-      _.each($scope.filters, function(val, key) {
+      _.each($scope.filters, function (val, key) {
         var field = allSearchFields[key];
         if (field) {
           var d = {label: field.label};
           if (field.options) {
             var text = [];
-            _.each(val, function(o) {
+            _.each(val, function (o) {
               text.push(_.findWhere(field.options, {key: o}).value);
             });
             d.text = text.join(', ');
@@ -131,7 +129,7 @@
             } else if (val['>=']) {
               d.text = '≥ ' + val['>='];
             } else {
-              var k = _.findKey(val, function() {return true;});
+              var k = _.findKey(val, function () { return true; });
               d.text = k + ' ' + val[k];
             }
           } else if (typeof val === 'boolean') {
@@ -147,7 +145,7 @@
     $scope.filterDescription = buildDescription();
   }
 
-  angular.module('civicase').directive('civicaseSearch', function() {
+  angular.module('civicase').directive('civicaseSearch', function () {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/Search.html',
@@ -160,5 +158,4 @@
       }
     };
   });
-
 })(angular, CRM.$, CRM._);

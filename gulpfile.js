@@ -21,6 +21,7 @@ var transformSelectors = require('gulp-transform-selectors');
 var cssmin = require('gulp-cssmin');
 var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
+var autoprefixer = require('gulp-autoprefixer');
 var karma = require('karma');
 var path = require('path');
 
@@ -36,6 +37,10 @@ gulp.task('sass', function () {
   return gulp.src('scss/civicase.scss')
     .pipe(bulk())
     .pipe(sourcemaps.init())
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    }))
     .pipe(sass({
       outputStyle: 'compressed',
       precision: 10
