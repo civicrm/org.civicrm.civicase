@@ -1,4 +1,4 @@
-/* CSS rules for Angular civicase case list 
+/* CSS rules for Angular civicase case list
 #bootstrap-theme .civicase__case-list-panel,
 #bootstrap-theme .civicase-view-with-search {
   position: relative;
@@ -20,25 +20,6 @@
 }
 #bootstrap-theme .civicase__case-list-panel.case-is-focused .civicase__pager {
   padding: 0;
-}
-
-#bootstrap-theme .case-list-checkbox {
-  left: 15px;
-  position: absolute;
-  top: 18px;
-  width: 17px;
-}
-#bootstrap-theme .case-list-checkbox input[type="checkbox"] {
-  display: block;
-  margin-left: 0;
-  position: absolute;
-  opacity: 0;
-  transform: scale(1.2);
-  z-index: 1;
-}
-#bootstrap-theme .case-list-checkbox + div {
-  margin-left: 30px;
-  margin-top: 5px;
 }
 
 #bootstrap-theme .case-activity-summary-icons {
@@ -107,26 +88,7 @@
   top: 50%;
   width: 100%;
 }
-#bootstrap-theme th.civicase-sortable {
-  cursor: pointer;
-}
-#bootstrap-theme th.civicase-sortable:hover {
-  background-color: #f2f9fc;
-}
-#bootstrap-theme th.civicase-sortable.sorting {
-  background-color: #d9edf7;
-}
-#bootstrap-theme .cc-sort-icon {
-  position: absolute;
-  right: 9px;
-  top: 24px;
-}
-#bootstrap-theme .cc-sort-btn-group button {
-  border-right: 2px solid #f4f7f8;
-}
-#bootstrap-theme .cc-sort-btn-group button {
-  border-right: 2px solid #f4f7f8;
-}
+
 #bootstrap-theme .act-feed-panel input[type=checkbox] + label[for],
 #bootstrap-theme .act-feed-panel input[type=radio] + label[for] {
   color: #727E8A;

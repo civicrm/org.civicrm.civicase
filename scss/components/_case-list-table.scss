@@ -16,13 +16,13 @@
 
     tr {
       display: table;
-      width: 100%;    
+      width: 100%;
     }
 
     th {
       border-bottom: 1px solid $gray-light;
       display: table-cell;
-    }      
+    }
   }
 }
 
@@ -63,7 +63,7 @@
 
     th:first-child {
       background: $gray-lighter;
-      height: 61px;
+      height: 63px;
       left: 0;
       position: absolute;
       width: $case-card-width;
@@ -111,5 +111,45 @@
       left: 0;
       position: fixed;
     }
-  } 
+  }
+}
+
+.civicase__case-list-column--first {
+  padding: 15px 10px !important;
+}
+
+.civicase__case-list-sortable-header {
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray-light;
+  }
+
+  &.sorting {
+    background-color: $gray-light;
+  }
+}
+
+.civicase__case-list__toggle-sort {
+  color: $crm-gray-matte;
+  cursor: pointer;
+  font-size: 20px;
+  position: relative;
+  top: 7px;
+}
+
+.civicase__case-list__header-toggle-sort {
+  float: right;
+  position: relative;
+  top: 3px;
+}
+
+.civicase__case-sort-dropdown {
+  box-shadow: none;
+  display: inline-block;
+  width: 110px !important;
+
+  .select2-chosen {
+    padding-top: 1px;
+  }
 }
