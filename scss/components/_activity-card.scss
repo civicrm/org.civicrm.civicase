@@ -14,6 +14,7 @@
   .panel-body {
     border-top: 0 !important;
     height: 100%;
+    padding: 15px;
 
     &:hover {
       background: $gray-lighter;
@@ -43,10 +44,23 @@
   border: 1px dashed $crm-grayblue-darker;
 }
 
-.civicase__activity-icon {
+.civicase__activity-icon-container {
   color: $brand-primary;
   font-size: 18px;
   width: 30px;
+}
+
+.civicase__activity-icon-container--ribbon {
+  width: 38px;
+
+  .civicase__activity-icon {
+    color: $crm-white;
+    font-size: 16px;
+    left: 8px;
+    position: relative;
+    top: -6px;
+    z-index: 1;
+  }
 }
 
 .civicase__activity-no-icon {
@@ -57,7 +71,6 @@
   font-weight: 600;
   height: 24px;
   line-height: 20px;
-  margin-left: -3px;
   padding-left: 5px;
   position: relative;
   top: -2px;
@@ -73,15 +86,6 @@
   left: 24px;
   position: absolute;
   top: 11px;
-}
-
-.civicase__activity-icon--ribbon {
-  color: $crm-white;
-  font-size: 16px;
-  left: 4px;
-  position: relative;
-  top: -6px;
-  z-index: 1;
 }
 
 .civicase__activity-icon-ribbon {
@@ -177,7 +181,7 @@
 }
 
 .civicase__activity-attachment-load-icon {
-  animation: infinite-rotation 2s linear reverse;
+  animation: civicase__infinite-rotation 2s linear reverse;
   font-size: 16px;
   margin-top: 3px;
   position: relative;
@@ -193,14 +197,4 @@
 .civicase__activity-empty-link {
   display: block;
   text-align: center;
-}
-
-@keyframes infinite-rotation {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
 }

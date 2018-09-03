@@ -12,6 +12,13 @@
       link: contactCardLink
     };
 
+    /**
+     * Link function for contactCard directive
+     *
+     * @param {object} scope
+     * @param {object} elem
+     * @param {object} attrs
+     */
     function contactCardLink (scope, elem, attrs) {
       scope.getContactIconOf = ContactsDataService.getContactIconOf;
       scope.isPopupVisible = false;
@@ -47,8 +54,9 @@
           return;
         }
 
-        scope.isPopupVisible = false;
-        scope.$apply();
+        scope.$apply(function () {
+          scope.isPopupVisible = false;
+        });
       }
 
       /**

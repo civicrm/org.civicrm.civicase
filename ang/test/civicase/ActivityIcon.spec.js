@@ -22,7 +22,7 @@
       });
 
       it('complies the Action directive', function () {
-        expect(element.hasClass('civicase__activity-icon')).toBe(true);
+        expect(element.hasClass('civicase__activity-icon-container')).toBe(true);
       });
     });
 
@@ -30,13 +30,7 @@
       var element;
 
       beforeEach(function () {
-        var emailActivityTypeId;
-
-        _.each(CRM.civicase.activityTypes, function (activty, index) {
-          if (activty.name === 'Email') {
-            emailActivityTypeId = index;
-          }
-        });
+        var emailActivityTypeId = getIDOfActivityType('Email');
 
         $scope.activity = { activity_type_id: emailActivityTypeId };
 
@@ -53,13 +47,7 @@
       var element;
 
       beforeEach(function () {
-        var inboundActivityTypeId;
-
-        _.each(CRM.civicase.activityTypes, function (activty, index) {
-          if (activty.name === 'Inbound Email') {
-            inboundActivityTypeId = index;
-          }
-        });
+        var inboundActivityTypeId = getIDOfActivityType('Inbound Email');
 
         $scope.activity = { activity_type_id: inboundActivityTypeId };
 
@@ -71,5 +59,24 @@
         expect(element.isolateScope().direction).toBe('down');
       });
     });
+
+    /**
+     * Get the Activity ID from the Activity Name
+     *
+     * @param {String} activityName
+     * @return {String}
+     */
+    function getIDOfActivityType (activityName) {
+      var activityTypeId;
+
+      // get the id of activity type
+      _.each(CRM.civicase.activityTypes, function (activty, index) {
+        if (activty.name === activityName) {
+          activityTypeId = index;
+        }
+      });
+
+      return activityTypeId;
+    }
   });
 }(CRM._));

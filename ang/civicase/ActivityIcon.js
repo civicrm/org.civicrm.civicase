@@ -12,6 +12,13 @@
       link: activityIconLink
     };
 
+    /**
+     * Link function for activityIcon directive
+     *
+     * @param {object} scope
+     * @param {object} elem
+     * @param {object} attrs
+     */
     function activityIconLink (scope, elem, attrs) {
       var activityTypes = CRM.civicase.activityTypes;
       var activityType = activityTypes[scope.activity.activity_type_id];

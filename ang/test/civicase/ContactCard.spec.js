@@ -94,10 +94,20 @@
     });
 
     describe('when clicked outside', function () {
+      var originalFindFunction;
+
+      beforeEach(function () {
+        originalFindFunction = $.fn.find;
+        $.fn.find = jasmine.createSpy();
+      });
+
+      afterEach(function () {
+        $.fn.find = originalFindFunction;
+      });
+
       describe('when the clicked on the dropdown itself', function () {
         beforeEach(function () {
           compileDirective(false);
-          $.fn.find = jasmine.createSpy();
           $.fn.find.and.returnValue([1]); // clicked on the dropdown
           element.isolateScope().isPopupVisible = true;
           $document.trigger('click');
@@ -111,7 +121,6 @@
       describe('when the clicked outside', function () {
         beforeEach(function () {
           compileDirective(false);
-          $.fn.find = jasmine.createSpy();
           $.fn.find.and.returnValue([]); // clicked outside
           element.isolateScope().isPopupVisible = true;
           $document.trigger('click');

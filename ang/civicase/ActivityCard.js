@@ -17,10 +17,8 @@
   function caseActivityCardController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.activityFeedUrl = getActivityFeedUrl;
-    $scope.CRM = CRM;
+    $scope.formatDate = CRM.utils.formatDate;
     $scope.templateExists = templateExists;
-
-    // console.log($scope.activity.category);
 
     $scope.isActivityEditable = function (activity) {
       var type = CRM.civicase.activityTypes[activity.activity_type_id].name;
@@ -43,12 +41,12 @@
     };
 
     /**
-     * Star/Favourite an activity
+     * Toggle an activity as favourite
      *
      * @param {object} $event
      * @param {object} activity
      */
-    $scope.star = function ($event, activity) {
+    $scope.toggleActivityStar = function ($event, activity) {
       $event.stopPropagation();
       activity.is_star = activity.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues

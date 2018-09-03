@@ -6,7 +6,7 @@
         <span activity-icon="activity"></span>
 
         <!-- Activity Date -->
-        <span class="civicase__activity-date">{{ CRM.utils.formatDate(activity.activity_date_time, 'dd M yy') }}</span>
+        <span class="civicase__activity-date">{{ formatDate(activity.activity_date_time, 'dd M yy') }}</span>
         <!-- End - Activity Date -->
 
         <span class="civicase__activity__right-container">
@@ -31,7 +31,7 @@
           <!-- End - Attachments -->
 
           <!-- Rating -->
-          <a ng-click="star($event, activity)" href ng-if="star && activity.is_star" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}">
+          <a ng-click="toggleActivityStar($event, activity)" href ng-if="activity.is_star" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}">
             <i ng-if="activity.is_star === '0'" class="civicase__activity-star material-icons">star_border</i>
             <i ng-if="activity.is_star === '1'" class="civicase__activity-star active material-icons">star</i>
           </a>
