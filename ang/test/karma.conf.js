@@ -22,9 +22,10 @@ module.exports = function (config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-route/angular-route.min.js',
 
+      shoreditch + '/base/js/affix.js',
+
       // Global variables that need to be accessible in the test environment
       extPath + '/ang/test/global.js',
-      shoreditch + '/base/js/affix.js',
       // Source Files
       extPath + '/ang/civicase.js',
       { pattern: extPath + '/ang/civicase/**/*.js' },
