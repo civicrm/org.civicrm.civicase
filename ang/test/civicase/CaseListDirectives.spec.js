@@ -2,8 +2,7 @@
 
 describe('CaseListDirective', function () {
   describe('stickyTableHeader directive', function () {
-    var element, $compile, $rootScope, scope;
-    var affixReturnValue;
+    var element, $compile, $rootScope, scope, affixReturnValue, affixOriginalFunction;
 
     beforeEach(module('civicase'));
 
@@ -18,9 +17,14 @@ describe('CaseListDirective', function () {
     });
 
     beforeEach(function () {
+      affixOriginalFunction = CRM.$.fn.affix;
       CRM.$.fn.affix = jasmine.createSpy('affix');
       affixReturnValue = jasmine.createSpyObj('affix', ['on']);
       CRM.$.fn.affix.and.returnValue(affixReturnValue);
+    });
+
+    afterEach(function () {
+      CRM.$.fn.affix = affixOriginalFunction;
     });
 
     describe('if loading is not complete', function () {
@@ -64,7 +68,7 @@ describe('CaseListDirective', function () {
   });
 
   describe('stickyFooterPager directive', function () {
-    var element, $compile, $rootScope, scope;
+    var element, $compile, $rootScope, scope, offsetOriginalFunction, scrollTopOriginalFunction;
 
     beforeEach(module('civicase'));
 
@@ -73,6 +77,11 @@ describe('CaseListDirective', function () {
       $rootScope = _$rootScope_;
       scope = $rootScope.$new();
     }));
+
+    beforeEach(function () {
+      offsetOriginalFunction = CRM.$.fn.offset;
+      scrollTopOriginalFunction = CRM.$.fn.scrollTop;
+    });
 
     beforeEach(function () {
       // Creating a custom function to mock offset() jQuery function
@@ -84,6 +93,11 @@ describe('CaseListDirective', function () {
       CRM.$(element).find('.content').height('1000px');
     });
 
+    afterEach(function () {
+      CRM.$.fn.offset = offsetOriginalFunction;
+      CRM.$.fn.scrollTop = scrollTopOriginalFunction;
+    });
+
     describe('if loading is not complete', function () {
       beforeEach(function () {
         scope.isLoading = true;
@@ -91,10 +105,7 @@ describe('CaseListDirective', function () {
 
       describe('when pager is not in view', function () {
         beforeEach(function () {
-          CRM.$.fn.scrollTop = function () {
-            return 0;
-          };
-          scope.$digest();
+          mockjQueryScrollTop(scope, 0);
         });
 
         it('should not fix the pager to the footer', function () {
@@ -104,11 +115,7 @@ describe('CaseListDirective', function () {
 
       describe('when pager is in view', function () {
         beforeEach(function () {
-          CRM.$.fn.scrollTop = function () {
-            return 1200;
-          };
-
-          scope.$digest();
+          mockjQueryScrollTop(scope, 1200);
         });
 
         it('should not fix the pager to the footer', function () {
@@ -124,10 +131,7 @@ describe('CaseListDirective', function () {
 
       describe('when pager is not in view', function () {
         beforeEach(function () {
-          CRM.$.fn.scrollTop = function () {
-            return 0;
-          };
-          scope.$digest();
+          mockjQueryScrollTop(scope, 0);
         });
 
         it('should fix the pager to the footer', function () {
@@ -137,10 +141,7 @@ describe('CaseListDirective', function () {
 
       describe('when pager is in view', function () {
         beforeEach(function () {
-          CRM.$.fn.scrollTop = function () {
-            return 1200;
-          };
-          scope.$digest();
+          mockjQueryScrollTop(scope, 1200);
         });
 
         it('should not fix the pager to the footer', function () {
@@ -148,5 +149,20 @@ describe('CaseListDirective', function () {
         });
       });
     });
+
+    /**
+     * Mock jQuery scrollTop with given top value.
+     *
+     * @params {Object} scope
+     * @params {Number} top - px from top the screen should scroll to.
+     */
+    function mockjQueryScrollTop (scope, top) {
+      // Creating a custom function to mock offset() jQuery function
+      CRM.$.fn.scrollTop = function () {
+        return top;
+      };
+
+      scope.$digest();
+    }
   });
 });
