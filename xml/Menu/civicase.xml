@@ -17,4 +17,11 @@
     <title>ContactActivityTab</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/case/activity/download-all-files</path>
+    <page_callback>CRM_Civicase_Page_ActivityFiles::downloadAll</page_callback>
+    <title>Activity Files</title>
+    <access_callback>1</access_callback>
+    <is_public>true</is_public>
+  </item>
 </menu>
