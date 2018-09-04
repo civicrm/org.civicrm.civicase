@@ -44,7 +44,7 @@
   </thead>
   <tbody>
   <tr ng-repeat="item in cases">
-    <td ng-click="viewCase(item.id, $event)" ng-class="{'civicase__case-card--active': viewingCase === item.id}" class="civicase__case-card panel-default panel-strip-primary civicase__animated-checkbox-card" ng-include="'~/civicase/caseCard.html'">
+    <td ng-click="viewCase(item.id, $event)" ng-class="{'civicase__case-card--active': viewingCase === item.id}" class="" ng-include="'~/civicase/CaseCard.html'">
     </td>
     <!--
       To do:
@@ -77,18 +77,23 @@
   </tr>
 
   <tr class="civicase__case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">
-    <td class="civicase__case-card panel-default panel-strip-primary">
-      <h2 style="width: 60%; margin-top: 10px;" class="oneline-loading-placeholder"></h2>
-      <div style="width: 80%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
-      <div style="width: 80%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
-      <div style="width: 50%; margin-top: 15px;" class="oneline-loading-placeholder"></div>
+    <td>
+      <div class="civicase__case-card panel-default panel-strip-primary">
+        <div class="panel-body">
+          <h2 style="width: 60%; margin-top: 10px;" class="oneline-loading-placeholder"></h2>
+          <div style="width: 80%; margin-top: 10px;" class="oneline-loading-placeholder"></div>
+          <div style="width: 80%; margin-top: 10px;" class="oneline-loading-placeholder"></div>
+          <div style="width: 50%; margin-top: 10px;" class="oneline-loading-placeholder"></div>
+          <div style="width: 50%; margin-top: 10px;" class="oneline-loading-placeholder"></div>
+        </div>
+      </div>
     </td>
     <td ng-show="!viewingCase"><div class="activity-card-loading-placeholder"><div></div></div></td>
     <td ng-show="!viewingCase" ng-repeat="i in [1,2,3,4,5,6,7]"><div class="oneline-loading-placeholder"></div></td>
   </tr>
 
   <tr ng-if="!cases.length && !isLoading" class="civicase__panel-empty">
-    <td class="civicase__case-card panel-default panel-strip-primary"></td>
+    <td></td>
     <td colspan="3">
       <i class="fa fa-folder-o fa-big"></i>
       <div class="empty-label">{{ ts('No cases found matching the search criteria.') }}</div>

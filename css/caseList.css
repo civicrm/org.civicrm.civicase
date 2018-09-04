@@ -10,7 +10,7 @@
   width: 100%;
 }
 #bootstrap-theme .civicase__case-list-panel.civicase__case-list-panel--case-detail {
-  width: 25%;
+  width: 330px;
 }
 #bootstrap-theme .civicase__case-list-panel.case-is-focused {
   background: #fff;
@@ -162,20 +162,7 @@
   color: #FFF;
 }
 
-#bootstrap-theme .dashboard-case-wrapper :not(.civicase__case-list-panel--case-detail) .scrolling .custom-scroll-wrapper.affix {
-  top: 173px;
-}
 
-#bootstrap-theme .dashboard-case-wrapper div.civicase__case-list-panel:not(.civicase__case-list-panel--case-detail) .scrolling table tr th:first-child {
-  background: #FFFFFF;
-}
-#bootstrap-theme .dashboard-case-wrapper div.civicase__case-list-panel:not(.civicase__case-list-panel--case-detail) .scrolling table td {
-  padding-left: 20px;
-}
-
-#bootstrap-theme .dashboard-case-wrapper :not(.civicase__case-list-panel--case-detail) .scrolling .custom-scroll-wrapper.affix {
-  width: 485px;
-}
 
 div.lockDiv {
   width: 100%;

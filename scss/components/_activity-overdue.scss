@@ -1,11 +1,6 @@
-.civicase__pipe {
-  font-weight: normal;
-  position: relative;
-  top: -1px;
-}
-
-.civicase__overdue {
+.civicase__overdue-activity-icon {
   color: $brand-danger !important;
+  font-weight: 600;
   position: relative;
 
   &::before {
@@ -31,5 +26,15 @@
     top: 50%;
     transform: translateY(-50%);
     width: 13px;
+  }
+
+  &.civicase__overdue-activity-icon--count {
+    padding-left: 20px;
+
+    &::before,
+    &::after {
+      left: 2px;
+      right: auto;
+    }    
   }
 }

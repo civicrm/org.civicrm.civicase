@@ -1,6 +1,10 @@
 .civicase__case-card {
   box-shadow: none;
-  padding: 15px 20px 15px 30px;
+
+  .panel-body {
+    background-color: transparent;
+    border: 0 !important;
+  }
 
   .civicase__contact-card {
     font-size: 14px;
@@ -21,8 +25,8 @@
 }
 
 .civicase__case-card--closed {
-  background-image: repeating-linear-gradient(60deg, $gray-light, $gray-light 3px, $gray-lighter 3px, $gray-lighter 20px);
-  border-top: 1px solid $gray-light;
+  background-image: repeating-linear-gradient(60deg, $gray-light, $gray-light 2px, $gray-lighter 2px, $gray-lighter 20px);
+  min-height: 150px;
 
   .civicase__contact-name,
   .civicase__contact-additional__container,
@@ -35,13 +39,15 @@
   }
 
   .civicase__case-card__next-milestone-date,
-  .civicase__case-card__task-count,
-  .civicase__case-card__other-count {
+  .civicase__case-card__activity-count {
     color: inherit;
     font-weight: 400;
   }  
 }
 
+.civicase__case-card--active {
+  border: 1px solid $brand-primary !important;
+}
 
 .civicase__case-card__case-id {
   color: $crm-gray-matte;
@@ -67,22 +73,25 @@
 }
 
 .civicase__case-card__next-milestone-date,
-.civicase__case-card__task-count,
-.civicase__case-card__other-count {
+.civicase__case-card__activity-count {
   color: $brand-primary;
   font-weight: 600;
 }
 
-.civicase__case-card__tags,
+.civicase__case-card__activity-count--zero {
+  color: $crm-gray-matte;
+}
+
+.civicase__case-card__tags-container,
 .civicase__case-card__info {
   display: flex;
 }
 
-.civicase__case-card__tags {
+.civicase__case-card__tags-container {
   padding: 5px 0;
 }
 
 .civicase__case-card__tag,
-.civicase__case-card__info-item {
+.civicase__case-card__activity-count-container {
   margin-right: 8px;
 }
