@@ -1,5 +1,7 @@
 .civicase__case-card {
+  border-radius: 0 !important; // Todo remove important after general.css is refactored.
   box-shadow: none;
+  margin-bottom: 0;
 
   .panel-body {
     background-color: transparent;

@@ -44,7 +44,7 @@
   </thead>
   <tbody>
   <tr ng-repeat="item in cases">
-    <td ng-click="viewCase(item.id, $event)" ng-class="{'civicase__case-card--active': viewingCase === item.id}" class="" ng-include="'~/civicase/CaseCard.html'">
+    <td ng-click="viewCase(item.id, $event)" ng-include="'~/civicase/CaseCard.html'">
     </td>
     <!--
       To do:
