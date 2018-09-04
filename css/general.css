@@ -31,24 +31,7 @@
   width: 10px;
   display: inline-block;
 }
-#bootstrap-theme .civicase-panel-empty {
-  margin-bottom: 110px;
-  margin-top: 110px;
-  padding: 5px;
-  text-align: center;
-}
-#bootstrap-theme .civicase-panel-empty .fa.fa-big {
-  color: #C9D6DC;
-  font-size: 64px;
-}
-#bootstrap-theme .civicase-panel-empty .empty-label{
-  color: #BECDD4;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 19px;
-  padding: 18px 0;
-  text-align: center;
-}
+
 #bootstrap-theme .crm-ui-range > span {
   width: 50%;
   display: inline-block;

@@ -1,0 +1,95 @@
+.civicase__case-card {
+  border-radius: 0 !important; // Todo remove important after general.css is refactored.
+  box-shadow: none;
+  margin-bottom: 0;
+
+  .panel-body {
+    background-color: transparent;
+    border: 0 !important;
+  }
+
+  .civicase__contact-card {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+  }
+
+  .civicase__contact-icon {
+    color: $crm-grayblue-darker;
+    font-size: 24px;
+    margin-top: -3px;
+  }
+
+  .civicase__checkbox {
+    left: 20px;
+    top: 15px;
+  }
+}
+
+.civicase__case-card--closed {
+  background-image: repeating-linear-gradient(60deg, $gray-light, $gray-light 2px, $gray-lighter 2px, $gray-lighter 20px);
+  min-height: 150px;
+
+  .civicase__contact-name,
+  .civicase__contact-additional__container,
+  .civicase__case-card__type {
+    text-decoration: line-through;
+  }
+
+  .civicase__case-card__next-milestone-date,
+  .civicase__case-card__activity-count {
+    color: inherit;
+    font-weight: 400;
+  }  
+}
+
+.civicase__case-card--active {
+  border: 1px solid $brand-primary !important;
+}
+
+.civicase__case-card__case-id {
+  color: $crm-gray-matte;
+  position: absolute;
+  right: 20px;
+  top: 15px;
+}
+
+.civicase__case-card__type {
+  color: $gray-dark;
+}
+
+.civicase__case-card__contact,
+.civicase__case-card__type,
+.civicase__case-card__activity-info,
+.civicase__case-card__next-milestone {
+  margin-bottom: 3px;
+}
+
+.civicase__case-card__next-milestone,
+.civicase__case-card__activity-info {
+  color: $crm-gray-matte;
+}
+
+.civicase__case-card__next-milestone-date,
+.civicase__case-card__activity-count {
+  color: $brand-primary;
+  font-weight: 600;
+}
+
+.civicase__case-card__activity-count--zero {
+  color: $crm-gray-matte;
+}
+
+.civicase__case-card__tags-container,
+.civicase__case-card__activity-info {
+  display: flex;
+}
+
+.civicase__case-card__tags-container {
+  padding: 5px 0;
+}
+
+.civicase__case-card__tag,
+.civicase__case-card__activity-count-container {
+  margin-right: 8px;
+}
