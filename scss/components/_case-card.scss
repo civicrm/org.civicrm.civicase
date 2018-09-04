@@ -34,10 +34,6 @@
     text-decoration: line-through;
   }
 
-  .civicase__case-card__next-milestone {
-    display: none;
-  }
-
   .civicase__case-card__next-milestone-date,
   .civicase__case-card__activity-count {
     color: inherit;
@@ -62,13 +58,13 @@
 
 .civicase__case-card__contact,
 .civicase__case-card__type,
-.civicase__case-card__info,
+.civicase__case-card__activity-info,
 .civicase__case-card__next-milestone {
   margin-bottom: 3px;
 }
 
 .civicase__case-card__next-milestone,
-.civicase__case-card__info {
+.civicase__case-card__activity-info {
   color: $crm-gray-matte;
 }
 
@@ -83,7 +79,7 @@
 }
 
 .civicase__case-card__tags-container,
-.civicase__case-card__info {
+.civicase__case-card__activity-info {
   display: flex;
 }
 

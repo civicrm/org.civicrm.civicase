@@ -94,7 +94,7 @@
 
   <tr ng-if="!cases.length && !isLoading" class="civicase__panel-empty">
     <td></td>
-    <td colspan="3">
+    <td colspan="{{ headers.length }}">
       <i class="fa fa-folder-o fa-big"></i>
       <div class="empty-label">{{ ts('No cases found matching the search criteria.') }}</div>
     </td>
