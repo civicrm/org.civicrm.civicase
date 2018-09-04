@@ -37,6 +37,10 @@
       padding: 0;
     }
   }
+
+  &.civicase__case-list-panel--case-detail {
+    width: 25%;
+  }
 }
 
 .civicase__case-list-panel:not(.civicase__case-list-panel--case-detail) {

@@ -79,7 +79,7 @@
   /**
    * Directive for the sticky pager footer functionality on case list page
    */
-  module.directive('stickyFooterPager', function ($window) {
+  module.directive('stickyFooterPager', function ($window, $timeout) {
     return {
       restrict: 'A',
       link: stickyFooterPagerLink
@@ -108,9 +108,12 @@
        */
       function checkIfLoadingCompleted (loading) {
         if (!loading) {
-          var topPos = $el.offset().top;
+          var topPos;
 
-          applyFixedPager(topPos);
+          $timeout(function () {
+            topPos = $el.offset().top;
+            applyFixedPager(topPos);
+          });
 
           $($window).scroll(function () {
             applyFixedPager(topPos);

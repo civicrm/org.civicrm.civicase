@@ -68,14 +68,15 @@ describe('CaseListDirective', function () {
   });
 
   describe('stickyFooterPager directive', function () {
-    var element, $compile, $rootScope, scope, offsetOriginalFunction, scrollTopOriginalFunction;
+    var element, $compile, $timeout, $rootScope, scope, offsetOriginalFunction, scrollTopOriginalFunction;
 
     beforeEach(module('civicase'));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       scope = $rootScope.$new();
+      $timeout = _$timeout_;
     }));
 
     beforeEach(function () {
@@ -99,13 +100,9 @@ describe('CaseListDirective', function () {
     });
 
     describe('if loading is not complete', function () {
-      beforeEach(function () {
-        scope.isLoading = true;
-      });
-
       describe('when pager is not in view', function () {
         beforeEach(function () {
-          mockjQueryScrollTop(scope, 0);
+          setupCommonSteps(true, scope, 0);
         });
 
         it('should not fix the pager to the footer', function () {
@@ -115,7 +112,7 @@ describe('CaseListDirective', function () {
 
       describe('when pager is in view', function () {
         beforeEach(function () {
-          mockjQueryScrollTop(scope, 1200);
+          setupCommonSteps(true, scope, 1200);
         });
 
         it('should not fix the pager to the footer', function () {
@@ -125,13 +122,9 @@ describe('CaseListDirective', function () {
     });
 
     describe('if loading is complete', function () {
-      beforeEach(function () {
-        scope.isLoading = false;
-      });
-
       describe('when pager is not in view', function () {
         beforeEach(function () {
-          mockjQueryScrollTop(scope, 0);
+          setupCommonSteps(false, scope, 0);
         });
 
         it('should fix the pager to the footer', function () {
@@ -141,7 +134,7 @@ describe('CaseListDirective', function () {
 
       describe('when pager is in view', function () {
         beforeEach(function () {
-          mockjQueryScrollTop(scope, 1200);
+          setupCommonSteps(false, scope, 1200);
         });
 
         it('should not fix the pager to the footer', function () {
@@ -151,18 +144,24 @@ describe('CaseListDirective', function () {
     });
 
     /**
-     * Mock jQuery scrollTop with given top value.
+     * Common setup for tests
      *
+     * @params {boolean} loading - wheather loading is complete
      * @params {Object} scope
      * @params {Number} top - px from top the screen should scroll to.
      */
-    function mockjQueryScrollTop (scope, top) {
+    function setupCommonSteps (loading, scope, top) {
+      scope.isLoading = loading;
       // Creating a custom function to mock offset() jQuery function
       CRM.$.fn.scrollTop = function () {
         return top;
       };
 
       scope.$digest();
+
+      if (!loading) {
+        $timeout.flush(); // Flushing any timeouts used.
+      }
     }
   });
 });
