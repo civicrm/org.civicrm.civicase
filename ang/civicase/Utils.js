@@ -1,21 +1,11 @@
-(function(angular, $, _, CRM) {
+(function (angular, $, _, CRM) {
+  var module = angular.module('civicase');
 
-  function getStatusType(status_id) {
-    var statusType;
-    _.each(CRM.civicase.activityStatusTypes, function(statuses, type) {
-      if (statuses.indexOf(parseInt(status_id)) >= 0) {
-        statusType = type;
-      }
-    });
-    return statusType;
-  }
-
-  angular.module('civicase').directive('civicaseSortheader', function() {
+  module.directive('civicaseSortheader', function () {
     return {
       restrict: 'A',
-      link: function(scope, element, attrs) {
-
-        function change() {
+      link: function (scope, element, attrs) {
+        function change () {
           element.toggleClass('sorting', attrs.civicaseSortheader === scope.sort.field);
           element.find('i.cc-sort-icon').remove();
           if (attrs.civicaseSortheader === scope.sort.field) {
@@ -23,11 +13,11 @@
           }
         }
 
-        scope.changeSortDir = function() {
+        scope.changeSortDir = function () {
           scope.sort.dir = (scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
         };
 
-        if (scope.sort.sortable && attrs.civicaseSortheader != '') {
+        if (scope.sort.sortable && attrs.civicaseSortheader !== '') {
           element
             .addClass('civicase-sortable')
             .on('click', function (e) {
@@ -49,59 +39,62 @@
     };
   });
 
-  angular.module('civicase').factory('civicaseInteger', function() {
-    var myFormat = CRM.visual.d3.format(".3s");
-    return function(v) {
+  module.factory('civicaseInteger', function () {
+    var myFormat = CRM.visual.d3.format('.3s');
+    return function (v) {
       return (v > -1000 & v < 1000) ? Math.round(v) : myFormat(v);
     };
   });
 
   /** doNutty converts a dc.pieChart() to a stylized donut chart. */
-  angular.module('civicase').factory('doNutty', function() {
-    return function doNutty(chart, totalWidth, statCallback) {
-      var legendWidth = Math.floor(totalWidth / 2), radius = Math.floor(totalWidth / 4);
-      var padding = 10, thickness = 0.3;
+  module.factory('doNutty', function () {
+    return function doNutty (chart, totalWidth, statCallback) {
+      var legendWidth = Math.floor(totalWidth / 2);
+      var radius = Math.floor(totalWidth / 4);
+      var padding = 10;
+      var thickness = 0.3;
+
       var legend;
 
       chart
-          .width(legendWidth + (radius * 2))
-          .height(radius * 2)
-          .innerRadius(Math.floor(radius * (1-thickness)))
-          .cx(radius);
+        .width(legendWidth + (radius * 2))
+        .height(radius * 2)
+        .innerRadius(Math.floor(radius * (1 - thickness)))
+        .cx(radius);
 
-      function moveLegend() {
-        var size  = chart.group().size();
+      function moveLegend () {
+        var size = chart.group().size();
         legend.gap(padding);
-        var legendHeight = (size * legend.itemHeight()) + ((size-1) * legend.gap());
+        var legendHeight = (size * legend.itemHeight()) + ((size - 1) * legend.gap());
         legend
-            .x(padding+(radius * 2))
-            .y((chart.height() - legendHeight)/2);
+          .x(padding + (radius * 2))
+          .y((chart.height() - legendHeight) / 2);
         legend.render();
       }
 
       var g;
       chart
-        .on('postRender', function(){
+        .on('postRender', function () {
           legend = CRM.visual.dc.legend();
           chart.legend(legend);
           moveLegend();
           var stat = statCallback();
           g = chart.svg()
-              .append("g")
-              .classed('dc-donutty-label', 'true')
-              .attr("transform", "translate(" + radius + "," + radius + ")");
-          g.append("text")
-              .attr("dy", "0em")
-              .attr("text-anchor", "middle")
-              .classed("dc-donutty-label-main", "true")
-              .text(stat.number);
-          g.append("text")
-              .attr("dy", "1em")
-              .attr("text-anchor", "middle")
-              .classed("dc-donutty-label-sub", "true")
-              .text(stat.text);
+            .append('g')
+            .classed('dc-donutty-label', 'true')
+            .attr('transform', 'translate(' + radius + ',' + radius + ')');
+          g.append('text')
+            .attr('dy', '0em')
+            .attr('text-anchor', 'middle')
+            .classed('dc-donutty-label-main', 'true')
+            .text(stat.number);
+          g.append('text')
+            .attr('dy', '1em')
+            .attr('text-anchor', 'middle')
+            .classed('dc-donutty-label-sub', 'true')
+            .text(stat.text);
         })
-        .on('postRedraw', function(){
+        .on('postRedraw', function () {
           moveLegend();
           if (g) {
             var stat = statCallback();
@@ -109,15 +102,14 @@
             g.selectAll('.dc-donutty-label-sub').text(stat.text);
           }
         });
-
     };
   });
 
-  angular.module('civicase').factory('formatActivity', function() {
-    var activityTypes = CRM.civicase.activityTypes,
-      activityStatuses = CRM.civicase.activityStatuses,
-      caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = CRM.civicase.caseStatuses;
+  module.factory('formatActivity', function () {
+    var activityTypes = CRM.civicase.activityTypes;
+    var activityStatuses = CRM.civicase.activityStatuses;
+    var caseTypes = CRM.civicase.caseTypes;
+    var caseStatuses = CRM.civicase.caseStatuses;
     return function (act, caseId) {
       act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
       act.icon = activityTypes[act.activity_type_id].icon;
@@ -141,7 +133,7 @@
       }
       if (act['case_id.case_type_id']) {
         act.case = {};
-        _.each(act, function(val, key) {
+        _.each(act, function (val, key) {
           if (key.indexOf('case_id.') === 0) {
             act.case[key.replace('case_id.', '')] = val;
             delete act[key];
@@ -150,7 +142,7 @@
         act.case.client = [];
         act.case.status = caseStatuses[act.case.status_id];
         act.case.type = caseTypes[act.case.case_type_id];
-        _.each(act.case.contacts, function(contact) {
+        _.each(act.case.contacts, function (contact) {
           if (!contact.relationship_type_id) {
             act.case.client.push(contact);
           }
@@ -163,10 +155,10 @@
     };
   });
 
-  angular.module('civicase').factory('formatCase', function(formatActivity) {
-    var caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = CRM.civicase.caseStatuses;
-    return function(item) {
+  module.factory('formatCase', function (formatActivity) {
+    var caseTypes = CRM.civicase.caseTypes;
+    var caseStatuses = CRM.civicase.caseStatuses;
+    return function (item) {
       item.myRole = [];
       item.client = [];
       item.subject = (typeof item.subject === 'undefined') ? '' : item.subject;
@@ -175,23 +167,23 @@
       item.case_type = caseTypes[item.case_type_id].title;
       item.selected = false;
       item.is_deleted = item.is_deleted === '1';
-      _.each(item.activity_summary, function(activities) {
-        _.each(activities, function(act) {
+      _.each(item.activity_summary, function (activities) {
+        _.each(activities, function (act) {
           formatActivity(act, item.id);
         });
       });
 
-      _.each(item, function(field) {
-        if (field && typeof field.activity_date_time != 'undefined') {
+      _.each(item, function (field) {
+        if (field && typeof field.activity_date_time !== 'undefined') {
           formatActivity(field, item.id);
         }
       });
 
-      _.each(item.contacts, function(contact) {
+      _.each(item.contacts, function (contact) {
         if (!contact.relationship_type_id) {
           item.client.push(contact);
         }
-        if (contact.contact_id == CRM.config.user_contact_id) {
+        if (contact.contact_id === CRM.config.user_contact_id) {
           item.myRole.push(contact.role);
         }
         if (contact.manager) {
@@ -202,13 +194,13 @@
     };
   });
 
-  angular.module('civicase').factory('getActivityFeedUrl', function($route, $location) {
-    return function(caseId, category, status, id) {
+  module.factory('getActivityFeedUrl', function ($route, $location) {
+    return function (caseId, category, status, id) {
       caseId = parseInt(caseId, 10);
-      var af = {},
-        currentPath = $location.path();
+      var af = {};
+      var currentPath = $location.path();
       if (category) {
-        af["activity_type_id.grouping"] = category;
+        af['activity_type_id.grouping'] = category;
       }
       if (status) {
         af.status_id = CRM.civicase.activityStatusTypes[status];
@@ -232,15 +224,15 @@
     };
   });
 
-  angular.module('civicase').factory('templateExists', function($templateCache) {
-    return function(templateName) {
+  module.factory('templateExists', function ($templateCache) {
+    return function (templateName) {
       return !!$templateCache.get(templateName);
     };
   });
 
   // Export a set of civicase-related utility functions.
   // <div civicase-util="myhelper" />
-  angular.module('civicase').directive('civicaseUtil', function(){
+  module.directive('civicaseUtil', function () {
     return {
       restrict: 'EA',
       scope: {
@@ -248,9 +240,9 @@
       },
       controller: function ($scope, formatActivity) {
         var util = this;
-        util.formatActivity = function(a) {formatActivity(a);return a;};
-        util.formatActivities = function(rows) {_.each(rows, formatActivity);return rows;};
-        util.isSameDate = function(d1, d2) {
+        util.formatActivity = function (a) { formatActivity(a); return a; };
+        util.formatActivities = function (rows) { _.each(rows, formatActivity); return rows; };
+        util.isSameDate = function (d1, d2) {
           return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
         };
 
@@ -260,29 +252,29 @@
   });
 
   // Angular binding for crm-popup links
-  angular.module('civicase').directive('crmPopupFormSuccess', function(){
+  module.directive('crmPopupFormSuccess', function () {
     return {
       restrict: 'A',
-      link: function(scope, element, attrs) {
+      link: function (scope, element, attrs) {
         element.addClass('crm-popup')
-          .on('crmPopupFormSuccess', function(event, element, data) {
-            scope.$apply(function() {
-              scope.$eval(attrs.crmPopupFormSuccess, {"$event": event, "$data": data});
+          .on('crmPopupFormSuccess', function (event, element, data) {
+            scope.$apply(function () {
+              scope.$eval(attrs.crmPopupFormSuccess, {'$event': event, '$data': data});
             });
           });
       }
     };
   });
-  
+
   // Angular binding for civi ajax form events
-  angular.module('civicase').directive('crmFormSuccess', function(){
+  module.directive('crmFormSuccess', function () {
     return {
       restrict: 'A',
-      link: function(scope, element, attrs) {
+      link: function (scope, element, attrs) {
         element
-          .on('crmFormSuccess', function(event, data) {
-            scope.$apply(function() {
-              scope.$eval(attrs.crmFormSuccess, {"$event": event, "$data": data});
+          .on('crmFormSuccess', function (event, data) {
+            scope.$apply(function () {
+              scope.$eval(attrs.crmFormSuccess, {'$event': event, '$data': data});
             });
           });
       }
@@ -290,7 +282,7 @@
   });
 
   // Ex: <div crm-ui-date-range="model.some_field" />
-  angular.module('civicase').directive('crmUiDateRange', function($timeout) {
+  module.directive('crmUiDateRange', function ($timeout) {
     var ts = CRM.ts('civicase');
     return {
       restrict: 'AE',
@@ -305,7 +297,7 @@
         element.addClass('crm-ui-range');
 
         // Respond to user interaction with the date widgets
-        element.on('change', function(e, context) {
+        element.on('change', function (e, context) {
           if (context === 'userInput' || context === 'crmClear') {
             $timeout(function () {
               if (scope.input.from && scope.input.to) {
@@ -321,7 +313,7 @@
           }
         });
 
-        scope.$watchCollection('data', function() {
+        scope.$watchCollection('data', function () {
           if (!scope.data) {
             scope.input = {};
           } else if (scope.data.BETWEEN) {
@@ -338,7 +330,7 @@
   });
 
   // Ex: <div crm-ui-number-range="model.some_field" />
-  angular.module('civicase').directive('crmUiNumberRange', function($timeout) {
+  module.directive('crmUiNumberRange', function ($timeout) {
     var ts = CRM.ts('civicase');
     return {
       restrict: 'AE',
@@ -353,7 +345,7 @@
         element.addClass('crm-ui-range');
 
         // Respond to user interaction with the number widgets
-        element.on('change', function() {
+        element.on('change', function () {
           $timeout(function () {
             if (scope.input.from && scope.input.to) {
               scope.data = {BETWEEN: [scope.input.from, scope.input.to]};
@@ -367,7 +359,7 @@
           });
         });
 
-        scope.$watchCollection('data', function() {
+        scope.$watchCollection('data', function () {
           if (!scope.data) {
             scope.input = {};
           } else if (scope.data.BETWEEN) {
@@ -384,7 +376,7 @@
   });
 
   // Ensures that this value is removed from the model when the field is removed via ng-if
-  angular.module('civicase').directive('crmUiConditional', function() {
+  module.directive('crmUiConditional', function () {
     return {
       restrict: 'A',
       link: function (scope, elem, attrs) {
@@ -400,27 +392,27 @@
   });
 
   // Angular binding for CiviCRM's jQuery-based crm-editable
-  angular.module('civicase').directive('crmEditable', function($timeout) {
-    function nl2br(str) {
+  module.directive('crmEditable', function ($timeout) {
+    function nl2br (str) {
       return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br />$2');
     }
     return {
       restrict: 'A',
       link: function (scope, elem, attrs) {
         CRM.loadScript(CRM.config.resourceBase + 'js/jquery/jquery.crmEditable.js').done(function () {
-          var textarea = elem.data('type') === 'textarea',
-            field = elem.data('field');
+          var textarea = elem.data('type') === 'textarea';
+          var field = elem.data('field');
           elem
             .html(textarea ? nl2br(scope.model[field]) : _.escape(scope.model[field]))
-            .on('crmFormSuccess', function(e, value) {
-              $timeout(function() {
-                scope.$apply(function() {
+            .on('crmFormSuccess', function (e, value) {
+              $timeout(function () {
+                scope.$apply(function () {
                   scope.model[field] = value;
                 });
               });
             })
             .crmEditable();
-          scope.$watchCollection('model', function(model) {
+          scope.$watchCollection('model', function (model) {
             elem.html(textarea ? nl2br(model[field]) : _.escape(model[field]));
           });
         });
@@ -441,24 +433,24 @@
   // <ul class="dropdown-menu" >
   //   <li ng-repeat="item in listOfItems | filter:{label: itemSearchText}">...</li>
   // </ul>
-  angular.module('civicase').directive('searchableDropdown', function($timeout) {
+  module.directive('searchableDropdown', function ($timeout) {
     return {
       restrict: 'C',
-      link: function(scope, elem, attrs) {
+      link: function (scope, elem, attrs) {
         $('input', elem)
-          .attr('placeholder', "\uF002")
-          .click(function(e) {
+          .attr('placeholder', '\uF002')
+          .click(function (e) {
             e.stopPropagation();
           })
-          .keyup(function(e) {
+          .keyup(function (e) {
             // Down arrow
-            if (e.which == 40) {
+            if (e.which === 40) {
               $(this).closest('.searchable-dropdown').next().find('a').first().focus();
             }
           });
-        elem.on('click', function() {
+        elem.on('click', function () {
           var $input = $('input', this).val('').change();
-          $timeout(function() {
+          $timeout(function () {
             $input.focus();
           }, 100);
         });
@@ -466,53 +458,14 @@
     };
   });
 
-  // Display the list of target/assignee contacts for an activity
-  angular.module('civicase').directive('civicaseActivityContacts', function() {
-    return {
-      restrict: 'A',
-      scope: {
-        data: '=civicaseActivityContacts'
-      },
-      link: function (scope, elem, attrs) {
-        scope.url = CRM.url;
-        scope.ts = CRM.ts('civicase');
-        function refresh() {
-          if (_.isPlainObject(scope.data)) {
-            scope.contacts = [];
-            _.each(scope.data, function (name, cid) {
-              scope.contacts.push({display_name: name, contact_id: cid});
-            });
-          } else {
-            scope.contacts = _.cloneDeep(scope.data);
-          }
-        }
-        scope.$watch('data', refresh);
-      },
-      template:
-        '<a ng-if="contacts.length" title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contacts[0].contact_id}) }}">{{ contacts[0].display_name }}</a> ' +
-        '<span ng-if="contacts.length === 2">&amp; <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contacts[1].contact_id}) }}">{{ contacts[1].display_name }}</a></span>' +
-        // preventDefault stops the browser from folling a link if this is used inside an <a> tag and the user clicks the button.
-        '<div class="btn-group btn-group-xs" ng-if="contacts.length > 2" ng-click="$event.preventDefault();">' +
-        '  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts(\'Additional Contacts\') }}">' +
-        '    + {{ contacts.length - 1 }}' +
-        '  </button>' +
-        '  <ul class="dropdown-menu" >' +
-        '    <li ng-repeat="(index, contact) in contacts" ng-if="index">' +
-        '      <a title="{{ ts(\'View Contact\') }}" href="{{ url(\'civicrm/contact/view\', {cid: contact.contact_id}) }}">{{ contact.display_name }}</a>' +
-        '    </li>' +
-        '  </ul>' +
-        '</div>'
-    };
-  });
-
   // Editable custom data blocks
-  angular.module('civicase').directive('civicaseEditCustomData', function($timeout) {
+  module.directive('civicaseEditCustomData', function ($timeout) {
     return {
       restrict: 'A',
       link: function (scope, elem, attrs) {
         var form;
 
-        function close() {
+        function close () {
           form.remove();
           elem.show();
           form = null;
@@ -520,7 +473,7 @@
 
         elem
           .addClass('crm-editable-enabled')
-          .on('click', function(e) {
+          .on('click', function (e) {
             if (!form) {
               var url = CRM.url('civicrm/case/cd/edit', {
                 cgcount: 1,
@@ -536,12 +489,12 @@
               form = $('<div></div>').html(elem.hide().html());
               form.insertAfter(elem)
                 .on('click', '.cancel', close)
-                .on('crmLoad', function() {
+                .on('crmLoad', function () {
                   // Workaround bug where href="#" changes the angular route
                   $('a.crm-clear-link', form).removeAttr('href');
                 })
-                .on('crmFormSuccess', function(e, data) {
-                  scope.$apply(function() {
+                .on('crmFormSuccess', function (e, data) {
+                  scope.$apply(function () {
                     scope.pushCaseData(data.civicase_reload[0]);
                     close();
                   });
@@ -553,48 +506,40 @@
     };
   });
 
-  angular.module('civicase').directive('dropdownToggle', function($timeout) {
+  module.directive('dropdownToggle', function ($timeout) {
     return {
       restrict: 'C',
-      link: function(scope, $el, attrs) {
-        function dropDownFixPosition(button,dropdown){
-          var dropDownTop = - $(window).scrollTop() + button.offset().top + button.outerHeight();
-          dropdown.css('top', dropDownTop + "px");
-          if(dropdown.hasClass('dropdown-menu-right')) {
-            dropdown.css('left', button.offset().left - dropdown.outerWidth() + button.outerWidth() + "px");
-          }
-          else {
-            dropdown.css('left', button.offset().left + "px");
+      link: function (scope, $el, attrs) {
+        function dropDownFixPosition (button, dropdown) {
+          var dropDownTop = -$(window).scrollTop() + button.offset().top + button.outerHeight();
+          dropdown.css('top', dropDownTop + 'px');
+          if (dropdown.hasClass('dropdown-menu-right')) {
+            dropdown.css('left', button.offset().left - dropdown.outerWidth() + button.outerWidth() + 'px');
+          } else {
+            dropdown.css('left', button.offset().left + 'px');
           }
         }
 
-        $timeout(function() {
-          $($el).click(function(){
-            dropDownFixPosition($(this),$(this).next('.dropdown-menu'));
+        $timeout(function () {
+          $($el).click(function () {
+            dropDownFixPosition($(this), $(this).next('.dropdown-menu'));
           });
 
-          document.addEventListener('scroll', function(e){
-            dropDownFixPosition($($el),$($el).next('.dropdown-menu'));
+          document.addEventListener('scroll', function (e) {
+            dropDownFixPosition($($el), $($el).next('.dropdown-menu'));
           }, true);
         });
       }
     };
   });
 
-  angular.module('civicase').directive('calculateScrollWidth', function() {
-    return {
-      restrict: 'A',
-      link: function(scope, $el, attrs) {
-        scope.$watch(
-          function () {
-            return $('.case-list-table thead.affix-top').css('width');
-          },
-          function(width) {
-            $('.custom-scroll').css('width', width);
-          }
-        );
+  function getStatusType (statusId) {
+    var statusType;
+    _.each(CRM.civicase.activityStatusTypes, function (statuses, type) {
+      if (statuses.indexOf(parseInt(statusId)) >= 0) {
+        statusType = type;
       }
-    };
-  });
-
+    });
+    return statusType;
+  }
 })(angular, CRM.$, CRM._, CRM);

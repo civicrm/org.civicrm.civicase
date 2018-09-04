@@ -55,6 +55,7 @@
   "devDependencies": {
     "civicrm-cv": "^0.1.2",
     "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^6.0.0",
     "gulp-cssmin": "^0.2.0",
     "gulp-postcss": "^7.0.1",
     "gulp-rename": "^1.4.0",
@@ -68,6 +69,7 @@
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.2",
+    "karma-ng-html2js-preprocessor": "^1.0.0",
     "lint-staged": "^7.2.0",
     "postcss-discard-duplicates": "^2.1.0",
     "postcss-prefix-selector": "^1.6.0",

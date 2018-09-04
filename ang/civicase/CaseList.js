@@ -1,10 +1,11 @@
-(function(angular, $, _) {
+(function (angular, $, _) {
+  var module = angular.module('civicase');
 
-  angular.module('civicase').config(function($routeProvider) {
+  module.config(function ($routeProvider) {
     $routeProvider.when('/case/list', {
       reloadOnSearch: false,
       resolve: {
-        hiddenFilters: function() {}
+        hiddenFilters: function () {}
       },
       controller: 'CivicaseCaseList',
       templateUrl: '~/civicase/CaseList.html'
@@ -12,7 +13,7 @@
   });
 
   // Common function to get api params for fetching case list in various contexts
-  function loadCaseApiParams(filters, sort, page) {
+  function loadCaseApiParams (filters, sort, page) {
     var returnParams = {
       sequential: 1,
       return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
@@ -29,16 +30,14 @@
     if (sort.field !== 'id') {
       returnParams.options.sort += ', id';
     }
-    var params = {"case_type_id.is_active": 1};
-    _.each(filters, function(val, filter) {
+    var params = {'case_type_id.is_active': 1};
+    _.each(filters, function (val, filter) {
       if (val || typeof val === 'boolean') {
         if (typeof val === 'number' || typeof val === 'boolean') {
           params[filter] = val;
-        }
-        else if (typeof val === 'object' && !$.isArray(val)) {
+        } else if (typeof val === 'object' && !$.isArray(val)) {
           params[filter] = val;
-        }
-        else if (val.length) {
+        } else if (val.length) {
           params[filter] = $.isArray(val) ? {IN: val} : {LIKE: '%' + val + '%'};
         }
       }
@@ -62,12 +61,12 @@
   }
 
   // CaseList controller
-  angular.module('civicase').controller('CivicaseCaseList', function($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatCase) {
+  module.controller('CivicaseCaseList', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatCase, ContactsDataService) {
     // The ts() and hs() functions help load strings for this module.
-    var ts = $scope.ts = CRM.ts('civicase'),
-      firstLoad = true,
-      caseTypes = CRM.civicase.caseTypes,
-      caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
+    var ts = $scope.ts = CRM.ts('civicase');
+    var firstLoad = true;
+    var caseTypes = CRM.civicase.caseTypes;
+    var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.cases = [];
@@ -91,18 +90,18 @@
       $scope.bulkAllowed = true;
     }
 
-    $scope.$bindToRoute({expr:'searchIsOpen', param: 'sx', format: 'bool', default: false});
-    $scope.$bindToRoute({expr:'sort.field', param:'sf', format: 'raw', default: 'contact_id.sort_name'});
-    $scope.$bindToRoute({expr:'sort.dir', param:'sd', format: 'raw', default: 'ASC'});
-    $scope.$bindToRoute({expr:'caseIsFocused', param:'focus', format: 'bool', default: false});
-    $scope.$bindToRoute({expr:'filters', param:'cf', default: {}});
-    $scope.$bindToRoute({expr:'viewingCase', param:'caseId', format: 'raw'});
-    $scope.$bindToRoute({expr:'viewingCaseTab', param:'tab', format: 'raw', default:'summary'});
-    $scope.$bindToRoute({expr:'page.size', param:'cps', format: 'int', default: 15});
-    $scope.$bindToRoute({expr:'page.num', param:'cpn', format: 'int', default: 1});
+    $scope.$bindToRoute({expr: 'searchIsOpen', param: 'sx', format: 'bool', default: false});
+    $scope.$bindToRoute({expr: 'sort.field', param: 'sf', format: 'raw', default: 'contact_id.sort_name'});
+    $scope.$bindToRoute({expr: 'sort.dir', param: 'sd', format: 'raw', default: 'ASC'});
+    $scope.$bindToRoute({expr: 'caseIsFocused', param: 'focus', format: 'bool', default: false});
+    $scope.$bindToRoute({expr: 'filters', param: 'cf', default: {}});
+    $scope.$bindToRoute({expr: 'viewingCase', param: 'caseId', format: 'raw'});
+    $scope.$bindToRoute({expr: 'viewingCaseTab', param: 'tab', format: 'raw', default: 'summary'});
+    $scope.$bindToRoute({expr: 'page.size', param: 'cps', format: 'int', default: 15});
+    $scope.$bindToRoute({expr: 'page.num', param: 'cpn', format: 'int', default: 1});
     $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
 
-    $scope.viewCase = function(id, $event) {
+    $scope.viewCase = function (id, $event) {
       if (!$scope.bulkAllowed) {
         return;
       }
@@ -121,40 +120,37 @@
       setPageTitle();
     };
 
-    
-    $scope.$watch('caseIsFocused', function() {
-      $timeout(function() {
-        var $actHeader = $('.act-feed-panel .panel-header'),
-        $actControls = $('.act-feed-panel .act-list-controls');
+    $scope.$watch('caseIsFocused', function () {
+      $timeout(function () {
+        var $actHeader = $('.act-feed-panel .panel-header');
+        var $actControls = $('.act-feed-panel .act-list-controls');
 
-        if($actHeader.hasClass('affix')) {
-            $actHeader.css('width',$('.act-feed-panel').css('width'));
-        }
-        else {
+        if ($actHeader.hasClass('affix')) {
+          $actHeader.css('width', $('.act-feed-panel').css('width'));
+        } else {
           $actHeader.css('width', 'auto');
         }
 
-        if($actControls.hasClass('affix')) {
-            $actControls.css('width',$actHeader.css('width'));
-        }
-        else {
+        if ($actControls.hasClass('affix')) {
+          $actControls.css('width', $actHeader.css('width'));
+        } else {
           $actControls.css('width', 'auto');
         }
-      },1500);
+      }, 1500);
     });
 
-    var unfocusCase = $scope.unfocusCase = function() {
+    var unfocusCase = $scope.unfocusCase = function () {
       $scope.caseIsFocused = false;
     };
 
-    $scope.selectAll = function(e) {
+    $scope.selectAll = function (e) {
       var checked = e.target.checked;
-      _.each($scope.cases, function(item) {
+      _.each($scope.cases, function (item) {
         item.selected = checked;
       });
     };
 
-    $scope.isSelection = function(condition) {
+    $scope.isSelection = function (condition) {
       if (!$scope.cases) {
         return false;
       }
@@ -167,10 +163,10 @@
       return count === condition;
     };
 
-    function setPageTitle() {
-      var viewingCase = $scope.viewingCase,
-        cases = $scope.cases,
-        filters = $scope.filters;
+    function setPageTitle () {
+      var viewingCase = $scope.viewingCase;
+      var cases = $scope.cases;
+      var filters = $scope.filters;
       // Hide page title when case is selected
       $('h1.crm-page-title').toggle(!viewingCase);
       if (viewingCase) {
@@ -185,7 +181,7 @@
       } else {
         var status = [];
         if (filters.status_id && filters.status_id.length) {
-          _.each(filters.status_id, function(s) {
+          _.each(filters.status_id, function (s) {
             status.push(_.findWhere(caseStatuses, {name: s}).label);
           });
         } else {
@@ -193,7 +189,7 @@
         }
         var type = [];
         if (filters.case_type_id && filters.case_type_id.length) {
-          _.each(filters.case_type_id, function(t) {
+          _.each(filters.case_type_id, function (t) {
             type.push(_.findWhere(caseTypes, {name: t}).title);
           });
         }
@@ -204,12 +200,32 @@
       }
     }
 
-    var getCases = $scope.getCases = function() {
+    /**
+     * Fetch Contacts Profile Pic and Type
+     *
+     * @param {array} cases
+     */
+    function fetchContactsData (cases) {
+      var contacts = [];
+
+      _.each(cases, function (data) {
+        if (data.next_activity) {
+          contacts = contacts.concat(data.next_activity.assignee_contact_id);
+          contacts = contacts.concat(data.next_activity.target_contact_id);
+        }
+      });
+
+      ContactsDataService.add(contacts);
+    }
+
+    var getCases = $scope.getCases = function () {
       $scope.isLoading = true;
       setPageTitle();
-      crmThrottle(_loadCases).then(function(result) {
-        var viewingCaseDetails;
+      crmThrottle(_loadCases).then(function (result) {
         var cases = _.each(result[0].values, formatCase);
+
+        fetchContactsData(cases);
+
         if ($scope.viewingCase) {
           if ($scope.viewingCaseDetails) {
             var currentCase = _.findWhere(cases, {id: $scope.viewingCase});
@@ -234,18 +250,18 @@
       });
     };
 
-    $scope.refresh = function(apiCalls) {
+    $scope.refresh = function (apiCalls) {
       $scope.isLoading = true;
       if (!apiCalls) apiCalls = [];
       apiCalls = apiCalls.concat(loadCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page));
-      crmApi(apiCalls, true).then(function(result) {
+      crmApi(apiCalls, true).then(function (result) {
         $scope.cases = _.each(result[apiCalls.length - 2].values, formatCase);
         $scope.totalCount = result[apiCalls.length - 1];
         $scope.isLoading = false;
       });
     };
 
-    function _loadCases() {
+    function _loadCases () {
       var params = loadCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page);
 
       if (firstLoad && $scope.viewingCase) {
@@ -257,7 +273,7 @@
       return crmApi(params);
     }
 
-    function getCasesFromWatcher(newValue, oldValue) {
+    function getCasesFromWatcher (newValue, oldValue) {
       if (newValue !== oldValue) {
         getCases();
       }
@@ -265,46 +281,18 @@
 
     $scope.$watchCollection('sort', getCasesFromWatcher);
     $scope.$watchCollection('page', getCasesFromWatcher);
-    $scope.$watch('cases', function(cases) {
+    $scope.$watch('cases', function (cases) {
       $scope.selectedCases = _.filter(cases, 'selected');
     }, true);
 
-    $scope.applyAdvSearch = function(newFilters) {
+    $scope.applyAdvSearch = function (newFilters) {
       $scope.filters = newFilters;
       getCases();
     };
-
     $timeout(getCases);
-
-    $timeout(function() {
-
-      var $listTable = $('.case-list-panel .inner'),
-        $customScroll = $('.case-list-panel .custom-scroll-wrapper'),
-        $tableHeader = $('.case-list-panel .inner table thead');
-
-      $($listTable).scroll(function(){
-        $customScroll.scrollLeft($listTable.scrollLeft());
-        $('thead.affix').scrollLeft($customScroll.scrollLeft());
-      });
-
-      $customScroll.scroll(function(){
-        $listTable.scrollLeft($customScroll.scrollLeft());
-        $('thead.affix').scrollLeft($customScroll.scrollLeft());
-      });
-
-      $([$tableHeader, $customScroll]).affix({
-        offset: {
-           top: $('.case-list-panel').offset().top - 50
-        }
-      })
-      .on('affixed.bs.affix', function() {
-        $('thead.affix').scrollLeft($customScroll.scrollLeft());
-      });
-    });
   });
 
-  function caseListTableController($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
-    var ts = $scope.ts = CRM.ts('civicase');
+  function caseListTableController ($scope, $location, crmApi, formatCase, crmThrottle, $timeout, getActivityFeedUrl) {
     var firstLoad = true;
 
     $scope.cases = [];
@@ -324,7 +312,7 @@
       $scope.bulkAllowed = true;
     }
 
-    function _loadCases() {
+    function _loadCases () {
       var params = loadCaseApiParams($scope.filters, $scope.sort, $scope.page);
 
       if (firstLoad) {
@@ -334,10 +322,10 @@
       return crmApi(params);
     }
 
-    function getCases() {
+    function getCases () {
       $scope.isLoading = true;
       crmThrottle(_loadCases)
-        .then(function(result) {
+        .then(function (result) {
           $scope.cases = _.each(result[0].values, formatCase);
 
           if (firstLoad) {
@@ -347,36 +335,10 @@
 
           $scope.totalCount = result[1];
           $scope.isLoading = false;
-
-          $timeout(function() {
-
-            var $listTable = $('.case-list-panel .inner'),
-              $customScroll = $('.case-list-panel .custom-scroll-wrapper'),
-              $tableHeader = $('.case-list-panel .inner table thead');
-
-            $($listTable).scroll(function(){
-              $customScroll.scrollLeft($listTable.scrollLeft());
-              $('thead.affix').scrollLeft($customScroll.scrollLeft());
-            });
-
-            $customScroll.scroll(function(){
-              $listTable.scrollLeft($customScroll.scrollLeft());
-              $('thead.affix').scrollLeft($customScroll.scrollLeft());
-            });
-
-            $([$tableHeader, $customScroll]).affix({
-              offset: {
-                 top: $('.case-list-panel').offset().top - 50
-              }
-            })
-            .on('affixed.bs.affix', function() {
-              $('thead.affix').scrollLeft($customScroll.scrollLeft());
-            });
-          });
         });
     }
 
-    $scope.viewCase = function(id, $event) {
+    $scope.viewCase = function (id, $event) {
       if (!$scope.bulkAllowed) {
         return;
       }
@@ -397,7 +359,7 @@
     getCases();
   }
 
-  angular.module('civicase').directive('caseListTable', function() {
+  module.directive('caseListTable', function () {
     return {
       restrict: 'A',
       controller: caseListTableController,
@@ -410,5 +372,4 @@
       }
     };
   });
-
 })(angular, CRM.$, CRM._);
