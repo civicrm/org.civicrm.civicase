@@ -118,6 +118,8 @@
           $($window).scroll(function () {
             applyFixedPager(topPos);
           });
+        } else {
+          $el.removeClass('civicase__pager--fixed');
         }
       }
 
@@ -157,13 +159,6 @@
         initiateSortFunctionality();
         scope.$watchCollection('sort', sortWatchHandler);
       }());
-
-      /**
-       * Change Sort Direction
-       */
-      scope.changeSortDir = function () {
-        scope.sort.dir = (scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
-      };
 
       /**
        * Initiate the sort functionality if the header is sortable

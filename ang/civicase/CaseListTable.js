@@ -8,7 +8,7 @@
     };
   });
 
-  module.controller('CivicaseCaseListTableController', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, getActivityFeedUrl, formatCase) {
+  module.controller('CivicaseCaseListTableController', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, getActivityFeedUrl, formatCase, ContactsDataService) {
     var firstLoad = true;
     var caseTypes = CRM.civicase.caseTypes;
 
@@ -39,6 +39,13 @@
     $scope.applyAdvSearch = function (newFilters) {
       $scope.filters = newFilters;
       getCases();
+    };
+
+    /**
+     * Change Sort Direction
+     */
+    $scope.changeSortDir = function () {
+      $scope.sort.dir = ($scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
     };
 
     $scope.isSelection = function (condition) {
@@ -142,6 +149,23 @@
     }
 
     /**
+     * Fetch Contacts Profile Pic and Type
+     *
+     * @param {array} cases
+     */
+    function fetchContactsData (cases) {
+      var contacts = [];
+
+      _.each(cases, function (data) {
+        if (data.next_activity) {
+          contacts = contacts.concat(data.next_activity.assignee_contact_id);
+          contacts = contacts.concat(data.next_activity.target_contact_id);
+        }
+      });
+
+      ContactsDataService.add(contacts);
+    }
+    /**
      * Get all cases
      */
     function getCases () {
@@ -151,6 +175,8 @@
       crmThrottle(makeApiCallToLoadCases)
         .then(function (result) {
           var cases = _.each(result[0].values, formatCase);
+
+          fetchContactsData(cases);
 
           if ($scope.viewingCase) {
             if ($scope.viewingCaseDetails) {
