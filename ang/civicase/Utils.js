@@ -1,44 +1,6 @@
 (function (angular, $, _, CRM) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseSortheader', function () {
-    return {
-      restrict: 'A',
-      link: function (scope, element, attrs) {
-        function change () {
-          element.toggleClass('sorting', attrs.civicaseSortheader === scope.sort.field);
-          element.find('.civicase__case-list__header-toggle-sort').remove();
-          if (attrs.civicaseSortheader === scope.sort.field) {
-            element.append('<i class="civicase__case-list__header-toggle-sort material-icons">arrow_' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + 'ward</i>');
-          }
-        }
-
-        scope.changeSortDir = function () {
-          scope.sort.dir = (scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
-        };
-
-        if (scope.sort.sortable && attrs.civicaseSortheader !== '') {
-          element
-            .addClass('civicase__case-list-sortable-header')
-            .on('click', function (e) {
-              scope.$apply(function () {
-                if ($(e.target).is('th, .civicase__case-sort-icon')) {
-                  if (scope.sort.field === attrs.civicaseSortheader) {
-                    scope.changeSortDir();
-                  } else {
-                    scope.sort.field = attrs.civicaseSortheader;
-                    scope.sort.dir = 'ASC';
-                  }
-                }
-              });
-            });
-        }
-
-        scope.$watchCollection('sort', change);
-      }
-    };
-  });
-
   module.factory('civicaseInteger', function () {
     var myFormat = CRM.visual.d3.format('.3s');
     return function (v) {
