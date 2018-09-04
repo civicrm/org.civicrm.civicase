@@ -7,9 +7,9 @@
       link: function (scope, element, attrs) {
         function change () {
           element.toggleClass('sorting', attrs.civicaseSortheader === scope.sort.field);
-          element.find('i.cc-sort-icon').remove();
+          element.find('.civicase__case-list__header-toggle-sort').remove();
           if (attrs.civicaseSortheader === scope.sort.field) {
-            element.append('<i class="cc-sort-icon fa fa-arrow-circle-' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + '"></i>');
+            element.append('<i class="civicase__case-list__header-toggle-sort material-icons">arrow_' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + 'ward</i>');
           }
         }
 
@@ -19,10 +19,10 @@
 
         if (scope.sort.sortable && attrs.civicaseSortheader !== '') {
           element
-            .addClass('civicase-sortable')
+            .addClass('civicase__case-list-sortable-header')
             .on('click', function (e) {
               scope.$apply(function () {
-                if ($(e.target).is('th, .cc-sort-icon')) {
+                if ($(e.target).is('th, .civicase__case-sort-icon')) {
                   if (scope.sort.field === attrs.civicaseSortheader) {
                     scope.changeSortDir();
                   } else {
