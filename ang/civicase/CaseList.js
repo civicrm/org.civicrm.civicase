@@ -61,7 +61,7 @@
   }
 
   // CaseList controller
-  module.controller('CivicaseCaseList', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatCase) {
+  module.controller('CivicaseCaseList', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, hiddenFilters, getActivityFeedUrl, formatCase, ContactsDataService) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var firstLoad = true;
@@ -200,11 +200,32 @@
       }
     }
 
+    /**
+     * Fetch Contacts Profile Pic and Type
+     *
+     * @param {array} cases
+     */
+    function fetchContactsData (cases) {
+      var contacts = [];
+
+      _.each(cases, function (data) {
+        if (data.next_activity) {
+          contacts = contacts.concat(data.next_activity.assignee_contact_id);
+          contacts = contacts.concat(data.next_activity.target_contact_id);
+        }
+      });
+
+      ContactsDataService.add(contacts);
+    }
+
     var getCases = $scope.getCases = function () {
       $scope.isLoading = true;
       setPageTitle();
       crmThrottle(_loadCases).then(function (result) {
         var cases = _.each(result[0].values, formatCase);
+
+        fetchContactsData(cases);
+
         if ($scope.viewingCase) {
           if ($scope.viewingCaseDetails) {
             var currentCase = _.findWhere(cases, {id: $scope.viewingCase});

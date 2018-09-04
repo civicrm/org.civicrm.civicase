@@ -9,4 +9,5 @@
   angular.module('ui.bootstrap', []);
   angular.module('uibTabsetClass', []);
   angular.module('dialogService', []);
+  angular.module('civicase.data', []);
 })();

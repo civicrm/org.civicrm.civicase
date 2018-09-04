@@ -1,5 +1,5 @@
 (function () {
-  CRM.civicase = {};
+  var module = angular.module('civicase.data');
   CRM.civicase.caseActions = [
     {
       'id': '1',
@@ -72,4 +72,8 @@
       }
     }
   ];
+
+  module.constant('CaseActionsData', {
+    values: CRM.civicase.caseActions
+  });
 }());

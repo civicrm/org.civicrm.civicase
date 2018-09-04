@@ -26,17 +26,30 @@ module.exports = function (config) {
 
       // Global variables that need to be accessible in the test environment
       extPath + '/ang/test/global.js',
+
+      // angular templates
+      extPath + '/ang/civicase/*.html',
+
       // Source Files
       extPath + '/ang/civicase.js',
       { pattern: extPath + '/ang/civicase/**/*.js' },
 
       // Spec files
+      { pattern: extPath + '/ang/test/mocks/modules.mock.js' },
       { pattern: extPath + '/ang/test/mocks/**/*.js' },
       { pattern: extPath + '/ang/test/civicase/**/*.js' }
     ],
     exclude: [
     ],
-    preprocessors: {
+    // Used to transform angular templates in JS strings
+    preprocessors: (function (obj) {
+      obj[extPath + '/ang/civicase/*.html'] = ['ng-html2js'];
+      return obj;
+    })({}),
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'ext/civicase/ang',
+      prependPrefix: '~',
+      moduleName: 'civicase.templates'
     },
     reporters: ['progress'],
     // web server port
