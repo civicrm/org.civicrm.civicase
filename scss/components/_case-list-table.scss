@@ -128,8 +128,8 @@
     background-color: $gray-light;
   }
 
-  &.sorting {
-    background-color: $gray-light;
+  &.active {
+    background-color: $gray-light !important;
   }
 }
 

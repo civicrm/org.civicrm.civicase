@@ -164,7 +164,7 @@
        * Initiate the sort functionality if the header is sortable
        */
       function initiateSortFunctionality () {
-        if (scope.sort.sortable && attrs.civicaseSortheader !== '') {
+        if (scope.sort.sortable && attrs.civicaseCaseListSortHeader !== '') {
           element
             .addClass('civicase__case-list-sortable-header')
             .on('click', headerClickEventHandler);
@@ -191,12 +191,11 @@
        * Watch event for the Sort property
        */
       function sortWatchHandler () {
-        var sortIcon = '<i class="civicase__case-list__header-toggle-sort material-icons">arrow_' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + 'ward</i>';
-
-        element.toggleClass('sorting', attrs.civicaseCaseListSortHeader === scope.sort.field);
+        element.toggleClass('active', attrs.civicaseCaseListSortHeader === scope.sort.field);
         element.find('.civicase__case-list__header-toggle-sort').remove();
 
         if (attrs.civicaseCaseListSortHeader === scope.sort.field) {
+          var sortIcon = '<i class="civicase__case-list__header-toggle-sort material-icons">arrow_' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + 'ward</i>';
           element.append(sortIcon);
         }
       }

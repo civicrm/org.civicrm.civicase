@@ -68,7 +68,7 @@ describe('CaseListDirective', function () {
   });
 
   describe('stickyFooterPager directive', function () {
-    var element, $compile, $timeout, $rootScope, scope, offsetOriginalFunction, scrollTopOriginalFunction;
+    var element, $compile, $timeout, $rootScope, scope, offsetOriginalFunction, scrollTopOriginalFunction, removeClassOriginalFunction;
 
     beforeEach(module('civicase'));
 
@@ -82,9 +82,11 @@ describe('CaseListDirective', function () {
     beforeEach(function () {
       offsetOriginalFunction = CRM.$.fn.offset;
       scrollTopOriginalFunction = CRM.$.fn.scrollTop;
+      removeClassOriginalFunction = CRM.$.fn.removeClass;
     });
 
     beforeEach(function () {
+      CRM.$.fn.removeClass = jasmine.createSpy('removeClass');
       // Creating a custom function to mock offset() jQuery function
       CRM.$.fn.offset = function () {
         return { top: 1000 };
@@ -97,9 +99,20 @@ describe('CaseListDirective', function () {
     afterEach(function () {
       CRM.$.fn.offset = offsetOriginalFunction;
       CRM.$.fn.scrollTop = scrollTopOriginalFunction;
+      CRM.$.fn.removeClass = removeClassOriginalFunction;
     });
 
     describe('if loading is not complete', function () {
+      describe('basic tests', function () {
+        beforeEach(function () {
+          setupCommonSteps(true, scope, 0);
+        });
+
+        it('removes the sticky footer feature', function () {
+          expect(CRM.$.fn.removeClass).toHaveBeenCalledWith('civicase__pager--fixed');
+        });
+      });
+
       describe('when pager is not in view', function () {
         beforeEach(function () {
           setupCommonSteps(true, scope, 0);
@@ -162,6 +175,177 @@ describe('CaseListDirective', function () {
       if (!loading) {
         $timeout.flush(); // Flushing any timeouts used.
       }
+    }
+  });
+
+  describe('civicaseCaseListSortHeader directive', function () {
+    var element, $compile, $rootScope, scope, addClassOriginalFunction, toggleClassOriginalFunction, findOriginalFunction, removeOriginalFunction;
+
+    beforeEach(module('civicase'));
+
+    beforeEach(inject(function (_$compile_, _$rootScope_) {
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+      scope = $rootScope.$new();
+    }));
+
+    beforeEach(function () {
+      addClassOriginalFunction = CRM.$.fn.addClass;
+      findOriginalFunction = CRM.$.fn.find;
+      removeOriginalFunction = CRM.$.fn.remove;
+      toggleClassOriginalFunction = CRM.$.fn.toggleClass;
+
+      spyOn(CRM.$.fn, 'addClass').and.callThrough();
+      spyOn(CRM.$.fn, 'find').and.callThrough();
+      spyOn(CRM.$.fn, 'remove').and.callThrough();
+      spyOn(CRM.$.fn, 'toggleClass').and.callThrough();
+    });
+
+    afterEach(function () {
+      CRM.$.fn.addClass = addClassOriginalFunction;
+      CRM.$.fn.find = findOriginalFunction;
+      CRM.$.fn.remove = removeOriginalFunction;
+      CRM.$.fn.toggleClass = toggleClassOriginalFunction;
+    });
+
+    describe('basic tests', function () {
+      var header;
+
+      describe('when sortable is false', function () {
+        beforeEach(function () {
+          scope.sort = { field: '', dir: '', sortable: false };
+          header = {
+            display_type: 'activity_card',
+            label: 'Next Activity',
+            name: 'next_activity',
+            sort: 'next_activity'
+          };
+          compileDirective(scope, header);
+        });
+
+        it('does not make the header sortable', function () {
+          expect(CRM.$.fn.addClass).not.toHaveBeenCalledWith('civicase__case-list-sortable-header');
+        });
+      });
+      describe('when header is blank', function () {
+        beforeEach(function () {
+          scope.sort = { field: '', dir: '', sortable: true };
+          header = '';
+          compileDirective(scope, header);
+        });
+
+        it('does not make the header sortable', function () {
+          expect(CRM.$.fn.addClass).not.toHaveBeenCalledWith('civicase__case-list-sortable-header');
+        });
+      });
+      describe('when sortable is true and header is not blank', function () {
+        describe('basic tests', function () {
+          beforeEach(function () {
+            scope.sort = { field: '', dir: '', sortable: true };
+            header = 'next_activity';
+            compileDirective(scope, header);
+          });
+
+          it('makes the header sortable', function () {
+            expect(CRM.$.fn.addClass).toHaveBeenCalledWith('civicase__case-list-sortable-header');
+          });
+        });
+
+        describe('headerClickEventHandler', function () {
+          describe('when the clicked header is already sorted', function () {
+            beforeEach(function () {
+              header = 'next_activity';
+              scope.sort = { field: header, dir: '', sortable: true };
+              scope.changeSortDir = jasmine.createSpy('changeSortDir');
+              compileDirective(scope, header);
+              element.trigger('click');
+            });
+
+            it('changes the sorting direction', function () {
+              expect(scope.changeSortDir).toHaveBeenCalled();
+            });
+          });
+
+          describe('when the clicked header is not already sorted', function () {
+            beforeEach(function () {
+              header = 'next_activity';
+              scope.sort = { field: 'not_next_activity', dir: '', sortable: true };
+              scope.changeSortDir = jasmine.createSpy('changeSortDir');
+              compileDirective(scope, header);
+              element.trigger('click');
+            });
+
+            it('sorts the clicked header', function () {
+              expect(scope.sort.field).toBe(header);
+            });
+
+            it('sorts the clicked header in ascending order', function () {
+              expect(scope.sort.dir).toBe('ASC');
+            });
+          });
+        });
+
+        describe('sortWatchHandler', function () {
+          beforeEach(function () {
+            header = 'next_activity';
+            scope.sort = { field: header, dir: '', sortable: true };
+            scope.changeSortDir = jasmine.createSpy('changeSortDir');
+            compileDirective(scope, header);
+          });
+
+          describe('when the clicked header is already sorted', function () {
+            beforeEach(function () {
+              scope.sort = { field: header, dir: 'ASC', sortable: true };
+              scope.$digest();
+            });
+
+            it('changes the sorting icon direction', function () {
+              expect(element.hasClass('active')).toBe(true);
+            });
+
+            it('removes the sorting icon before adding a new one', function () {
+              expect(CRM.$.fn.find).toHaveBeenCalledWith('.civicase__case-list__header-toggle-sort');
+              expect(CRM.$.fn.remove).toHaveBeenCalled();
+            });
+
+            it('adds the sorting icon before adding a new one', function () {
+              expect(element.html()).toContain('civicase__case-list__header-toggle-sort');
+            });
+          });
+
+          describe('when the sorting direction is ascending', function () {
+            beforeEach(function () {
+              scope.sort = { field: header, dir: 'ASC', sortable: true };
+              scope.$digest();
+            });
+
+            it('adds the upward sorting icon', function () {
+              expect(element.html()).toContain('arrow_upward');
+            });
+          });
+
+          describe('when the sorting direction is decsending', function () {
+            beforeEach(function () {
+              scope.sort = { field: header, dir: 'DESC', sortable: true };
+              scope.$digest();
+            });
+
+            it('adds the upward sorting icon', function () {
+              expect(element.html()).toContain('arrow_downward');
+            });
+          });
+        });
+      });
+    });
+
+    /**
+     * Compiles the directive
+     *
+     * @param {object} scope
+     * @param {string} header
+     */
+    function compileDirective (scope, header) {
+      element = $compile(angular.element('<div civicase-case-list-sort-header=' + header + '></div>'))(scope);
     }
   });
 });
