@@ -21,7 +21,6 @@
     <path>civicrm/case/activity/download-all-files</path>
     <page_callback>CRM_Civicase_Page_ActivityFiles::downloadAll</page_callback>
     <title>Activity Files</title>
-    <access_callback>1</access_callback>
-    <is_public>true</is_public>
+    <access_arguments>access all cases and activities;access my cases and activities</access_arguments>
   </item>
 </menu>
