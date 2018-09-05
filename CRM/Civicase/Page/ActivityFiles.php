@@ -12,9 +12,10 @@ class CRM_Civicase_Page_ActivityFiles {
     $zipDestination = self::getDestinationPath();
     $zipFullPath = $zipDestination . '/' . $zipName;
     $files = self::getActivityFilePaths($activity['id']);
+    $zipFileResource = self::createZipFile($zipFullPath, $files);
 
-    self::createOrUpdateZipFile($zipFullPath, $files);
-    self::downloadZipFile($zipFullPath);
+    unlink($zipFullPath);
+    self::downloadZipFileResource($zipName, $zipFileResource);
   }
 
   /**
@@ -100,15 +101,19 @@ class CRM_Civicase_Page_ActivityFiles {
   }
 
   /**
-   * Creates or updates a zip file at the given path and containing the given files.
+   * Creates a zip file at the given path and containing the given files.
    *
    * @param string $zipFullPath
    * @param array $filePaths
+   *
+   * @return resource
    */
-  private static function createOrUpdateZipFile($zipFullPath, $filePaths) {
-    $zipName = basename($zipFullPath);
-    $zip = new ZipArchive();
+  private static function createZipFile($zipFullPath, $filePaths) {
     $mode = ZipArchive::CREATE | ZipArchive::OVERWRITE;
+    $zip = new ZipArchive();
+    $zipName = basename($zipFullPath);
+    $zipFileResource = NULL;
+
     $zip->open($zipFullPath, $mode);
 
     foreach ($filePaths as $filePath) {
@@ -118,18 +123,17 @@ class CRM_Civicase_Page_ActivityFiles {
     }
 
     $zip->close();
+
+    return readfile($zipFullPath, FALSE, $zipFileResource);
   }
 
   /**
-   * Setups the given zip file so it can be downloaded by the browser.
+   * Setups the given zip file resource so it can be downloaded by the browser.
    *
-   * @param string $zipFullPath
+   * @param string $zipName
+   * @param resource $zipFileResource
    */
-  private static function downloadZipFile($zipFullPath) {
-    $zipName = basename($zipFullPath);
-    $fileResource = NULL;
-
-    readfile($zipFullPath, FALSE, $fileResource);
+  private static function downloadZipFileResource($zipName, $zipFileResource) {
     CRM_Utils_System::download($zipName, 'application/zip', $fileResource);
   }
 
