@@ -6,16 +6,32 @@ class CRM_Civicase_Page_ActivityFiles {
    * Download all activity files contained in a single zip file.
    */
   public static function downloadAll() {
-    $activityId = CRM_Utils_Array::value('activity_id', $_GET);
-    self::validateActivityId($activityId);
+    $activity = self::getActivityFromRequest();
 
-    $zipName = 'activity-' . $activityId . '-files.zip';
+    $zipName = self::getZipName($activity);
     $zipDestination = self::getDestinationPath();
     $zipFullPath = $zipDestination . '/' . $zipName;
-    $files = self::getActivityFilePaths($activityId);
+    $files = self::getActivityFilePaths($activity['id']);
 
     self::createOrUpdateZipFile($zipFullPath, $files);
     self::downloadZipFile($zipFullPath);
+  }
+
+  /**
+   * Returns the activity specified by the request. In case the request gives
+   * an invalid activity id it throws a 404 status code.
+   */
+  private static function getActivityFromRequest() {
+    $activityId = CRM_Utils_Array::value('activity_id', $_GET);
+    self::validateActivityId($activityId);
+
+    $activityResult = civicrm_api3('Activity', 'get', ['id' => $activityId]);
+
+    if ($activityResult['count'] === 0) {
+      return self::throw404StatusCode();
+    }
+
+    return CRM_Utils_Array::first($activityResult['values']);
   }
 
   /**
@@ -25,9 +41,30 @@ class CRM_Civicase_Page_ActivityFiles {
    */
   private static function validateActivityId($activityId) {
     if (empty($activityId)) {
-      http_response_code(404);
-      CRM_Utils_System::civiExit();
+      self::throw404StatusCode();
     }
+  }
+
+  /**
+   * Throws a 404 status code and closes the connection.
+   */
+  private static function throw404StatusCode() {
+    http_response_code(404);
+    CRM_Utils_System::civiExit();
+  }
+
+  /**
+   * Given an activity, it returns the name for the zip file containing all of
+   * its files. Ex: 123-department-relocation.zip
+   *
+   * @param array $activity
+   *
+   * @return string
+   */
+  private static function getZipName($activity) {
+    $activitySlug = CRM_Utils_String::munge($activity['subject'], '-');
+
+    return $activity['id'] . '-' . $activitySlug . '.zip';
   }
 
   /**
