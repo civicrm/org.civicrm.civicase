@@ -23,12 +23,13 @@ class CRM_Civicase_Page_ActivityFiles {
    */
   private static function getActivityFromRequest() {
     $activityId = CRM_Utils_Array::value('activity_id', $_GET);
+
     self::validateActivityId($activityId);
 
     $activityResult = civicrm_api3('Activity', 'get', ['id' => $activityId]);
 
     if ($activityResult['count'] === 0) {
-      return self::throw404StatusCode();
+      return self::throwStatusCode('404 Not Found');
     }
 
     return CRM_Utils_Array::first($activityResult['values']);
@@ -41,15 +42,17 @@ class CRM_Civicase_Page_ActivityFiles {
    */
   private static function validateActivityId($activityId) {
     if (empty($activityId)) {
-      self::throw404StatusCode();
+      self::throwStatusCode('400 Bad Request');
     }
   }
 
   /**
-   * Throws a 404 status code and closes the connection.
+   * Throws a specific status code and closes the connection.
+   *
+   * @param string $statusCode
    */
-  private static function throw404StatusCode() {
-    http_response_code(404);
+  private static function throwStatusCode($statusCode) {
+    CRM_Utils_System::setHttpHeader('Status', $statusCode);
     CRM_Utils_System::civiExit();
   }
 
