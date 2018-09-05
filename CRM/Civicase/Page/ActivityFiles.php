@@ -27,7 +27,10 @@ class CRM_Civicase_Page_ActivityFiles {
 
     self::validateActivityId($activityId);
 
-    $activityResult = civicrm_api3('Activity', 'get', ['id' => $activityId]);
+    $activityResult = civicrm_api3('Activity', 'get', [
+      'id' => $activityId,
+      'return' => [ 'activity_type_id.label' ]
+    ]);
 
     if ($activityResult['count'] === 0) {
       return self::throwStatusCode('404 Not Found');
@@ -59,16 +62,14 @@ class CRM_Civicase_Page_ActivityFiles {
 
   /**
    * Given an activity, it returns the name for the zip file containing all of
-   * its files. Ex: 123-department-relocation.zip
+   * its files. Ex: Activity Open Case 123.zip
    *
    * @param array $activity
    *
    * @return string
    */
   private static function getZipName($activity) {
-    $activitySlug = CRM_Utils_String::munge($activity['subject'], '-');
-
-    return $activity['id'] . '-' . $activitySlug . '.zip';
+    return 'Activity ' . $activity['activity_type_id.label'] . ' ' . $activity['id'] . '.zip';
   }
 
   /**
@@ -85,7 +86,7 @@ class CRM_Civicase_Page_ActivityFiles {
   /**
    * Returns a list of file paths that are part of a given activity.
    *
-   * @param int $activityId
+   * @param int|string $activityId
    *
    * @return array
    */
