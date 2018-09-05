@@ -22,15 +22,7 @@
   height: 0px;
   transition: height .2s linear;
 }
-#bootstrap-theme .civicase-icon-placeholder {
-  color: white;
-  position: relative;
-  left: -14px;
-  font-size: 10px;
-  top: -1px;
-  width: 10px;
-  display: inline-block;
-}
+
 
 #bootstrap-theme .crm-ui-range > span {
   width: 50%;
@@ -133,71 +125,7 @@
   font-size: 13px;
   margin-right: 10px;
 }
-#bootstrap-theme .activity-card-loading-placeholder {
-  border: 1px solid #E8EEF0;
-  border-radius: 4px;
-  height: 90px;
-  margin-bottom: 10px;
-  position: relative;
-}
-#bootstrap-theme .activity-card-loading-placeholder:before {
-  content: ' ';
-  position: absolute;
-  left: 1em;
-  top: 0.4em;
-  width: 2.7em;
-  height: 2.7em;
-  background-color: #EDF3F5;
-  border-radius: 1.5em;
-  font-size: 1.5em;
-  text-align: center;
-  padding-top: .2em;
-  border: .4em solid white;
-}
-#bootstrap-theme .activity-card-loading-placeholder:after {
-  content: ' ';
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  height: 30px;
-  width: 12px;
-  background-color: #EDF3F5;
-}
-#bootstrap-theme .activity-card-loading-placeholder div {
-  margin-left: 90px;
-  margin-right: 90px;
-}
-#bootstrap-theme .activity-card-loading-placeholder div:before,
-#bootstrap-theme .activity-card-loading-placeholder div:after {
-  content: ' ';
-  display: block;
-  height: 10px;
-  background-color: #EDF3F5;
-  margin-top: 23px;
-}
-#bootstrap-theme .oneline-loading-placeholder:before {
-  content: ' ';
-  display: block;
-  height: 1em;
-  background-color: #EDF3F5;
-}
-#bootstrap-theme .placeholder-big:before {
-  height: 1.5em;
-}
-#bootstrap-theme .panel-header .oneline-loading-placeholder:before {
-  background-color: #d7e0e8;
-}
-#bootstrap-theme .panel-default .case-view-placeholder-panel .panel-body {
-  border-top: 0 none;
-}
-#bootstrap-theme .case-view-placeholder-panel nav.civicase-view-tab-bar {
-  height: 53px;
-  background-color: #d5e3e6;
-}
-#bootstrap-theme .case-view-placeholder-panel .civicase-type-and-manager {
-  padding: 5px 19px 5px 25px;
-  margin-top: 12px;
-}
+
 #bootstrap-theme .open>.dropdown-menu {
   position: fixed;
   width: fit-content;

@@ -484,6 +484,8 @@ function civicase_civicrm_pageRun(&$page) {
     // NEW: http://localhost/civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=51&tab=summary&sx=0
 
     $caseId = CRM_Utils_Request::retrieve('id', 'Positive');
+    print_r('hell yeah');
+        exit;
     if ($caseId) {
       $case = civicrm_api3('Case', 'getsingle', array(
         'id' => $caseId,
@@ -492,8 +494,13 @@ function civicase_civicrm_pageRun(&$page) {
       $url = CRM_Utils_System::url('civicrm/case/a/', NULL, TRUE,
         "/case/list?sf=id&sd=DESC&caseId={$caseId}&cf=%7B%22status_id%22:%5B%22{$case['status_id.name']}%22%5D,%22case_type_id%22:%5B%22{$case['case_type_id.name']}%22%5D%7D",
         FALSE);
+
       CRM_Utils_System::redirect($url);
     }
+  }
+
+  if ($page instanceof CRM_Civicase_Page_CaseAngular) {
+    CRM_Core_Resources::singleton()->addScriptFile('uk.co.compucorp.civicase', 'packages/moment.min.js');
   }
 }
 

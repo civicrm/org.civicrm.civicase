@@ -1,0 +1,111 @@
+.civicase-icon-placeholder {
+  color: $placeholder-grey;
+  display: inline-block;
+  font-size: 10px;
+  left: -14px;
+  position: relative;
+  top: -1px;
+  width: 10px;
+}
+
+.activity-card-loading-placeholder {
+  border: 1px solid $placeholder-grey;
+  border-radius: 4px;
+  height: 90px;
+  margin-bottom: 10px;
+  position: relative;
+  width: 280px;
+
+  &::before {
+    background-color: $placeholder-grey;
+    border: 0.4em solid $crm-white;
+    border-radius: 1.5em;
+    content: ' ';
+    font-size: 1.5em;
+    height: 2.7em;
+    left: 1em;
+    padding-top: 0.2em;
+    position: absolute;
+    text-align: center;
+    top: 0.4em;
+    width: 2.7em;
+  }
+
+  &::after {
+    background-color: $placeholder-grey;
+    content: ' ';
+    height: 30px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 12px;
+  }
+
+  div {
+    margin-left: 90px;
+    margin-right: 90px;
+
+    &::before {
+      background-color: $placeholder-grey;
+      content: ' ';
+      display: block;
+      height: 10px;
+      margin-top: 23px;
+    }
+
+    &::after {
+      background-color: $placeholder-grey;
+      content: ' ';
+      display: block;
+      height: 10px;
+      margin-top: 23px;
+    }
+  }
+}
+
+.oneline-loading-placeholder {
+  &::before {
+    background-color: $placeholder-grey;
+    content: ' ';
+    display: block;
+    height: 1em;
+  }
+}
+
+.placeholder-big {
+  &::before {
+    height: 1.5em;
+  }
+}
+
+.panel-header {
+  .oneline-loading-placeholder {
+    &::before {
+      background-color: $placeholder-grey;
+    }
+  }
+}
+
+.panel-default {
+  .case-view-placeholder-panel {
+    .panel-body {
+      border-top: 0 none;
+    }
+  }
+}
+
+.case-view-placeholder-panel {
+  .civicase-view-tab-bar {
+    background-color: $placeholder-grey;
+    height: 53px;
+  }
+
+  .civicase-type-and-manager {
+    margin-top: 12px;
+    padding: 5px 19px 5px 25px;
+  }
+}
+
+.oneline-loading-placeholder-strip {
+  border-left-color: $placeholder-grey !important;
+}

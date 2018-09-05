@@ -4,6 +4,7 @@
   module.directive('contactCard', function ($document, ContactsDataService) {
     return {
       restrict: 'A',
+      replace: true,
       templateUrl: '~/civicase/ContactCard.html',
       scope: {
         data: '=contacts',

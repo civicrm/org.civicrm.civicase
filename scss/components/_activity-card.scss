@@ -111,6 +111,11 @@
 
 .civicase__activity__right-container {
   margin-left: auto;
+
+  > * {
+    display: inline-block !important;
+    vertical-align: middle;
+  }
 }
 
 .civicase__activity-subject {
@@ -142,8 +147,6 @@
 }
 
 .civicase__activity-attachment__container {
-  margin-top: -6px;
-
   a {
     display: flex !important;
   }

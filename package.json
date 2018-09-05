@@ -25,7 +25,8 @@
     "globals": [
       "CRM",
       "angular",
-      "inject"
+      "inject",
+      "moment"
     ]
   },
   "stylelint": {

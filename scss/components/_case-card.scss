@@ -1,6 +1,8 @@
+
 .civicase__case-card {
   border-radius: 0 !important; // Todo remove important after general.css is refactored.
   box-shadow: none;
+  height: 100%;
   margin-bottom: 0;
 
   .panel-body {
@@ -44,7 +46,9 @@
 }
 
 .civicase__case-card--active {
-  border: 1px solid $brand-primary !important;
+  border-bottom: 1px solid $brand-primary !important;
+  border-right: 1px solid $brand-primary !important;
+  border-top: 1px solid $brand-primary !important;
 }
 
 .civicase__case-card__case-id {
@@ -92,4 +96,24 @@
 .civicase__case-card__tag,
 .civicase__case-card__activity-count-container {
   margin-right: 8px;
+}
+
+.civicase__case-card-lock {
+  color: #fff;
+  font-size: 38px;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  &:hover {
+    color: inherit;
+  }
+}
+
+.civicase__case-card-lock__inner {
+  position: absolute;
+  right: 20px;
+  top: 57px;
 }

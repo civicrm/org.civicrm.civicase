@@ -1,15 +1,3 @@
-/* CSS rules for Angular civicase view */
-#bootstrap-theme .civicase-view-with-search {
-  width: 75%;
-  padding-left: 10px;
-}
-#bootstrap-theme .civicase-view-with-search.case-is-focused {
-  width: 100%;
-  padding-left: 40px;
-}
-#bootstrap-theme .civicase-view-with-search.case-is-focused > .panel > .panel-header {
-  border-radius: 2px 2px 0 0;
-}
 #bootstrap-theme .btn {
   font-weight: 600;
 }
@@ -526,10 +514,4 @@
   top: 60px;
   width: inherit;
   z-index: 600;
-}
-#bootstrap-theme .civicase-view-with-search .civicase-view-tab-bar.affix {
-  width: 890px;
-}
-#bootstrap-theme .civicase-view-with-search.case-is-focused .civicase-view-tab-bar.affix {
-  width: 1160px;
 }
