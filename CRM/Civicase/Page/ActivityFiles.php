@@ -7,7 +7,6 @@ class CRM_Civicase_Page_ActivityFiles {
    */
   public static function downloadAll() {
     $activityId = CRM_Utils_Array::value('activity_id', $_GET);
-
     self::validateActivityId($activityId);
 
     $zipName = 'activity-' . $activityId . '-files.zip';
@@ -86,14 +85,10 @@ class CRM_Civicase_Page_ActivityFiles {
    */
   private static function downloadZipFile($zipFullPath) {
     $zipName = basename($zipFullPath);
+    $fileResource = NULL;
 
-    header('Content-Type: application/zip');
-    header('Content-disposition: attachment; filename=' . $zipName);
-    header('Content-Length: ' . filesize($zipFullPath));
-
-    readfile($zipFullPath);
-
-    CRM_Utils_System::civiExit();
+    readfile($zipFullPath, FALSE, $fileResource);
+    CRM_Utils_System::download($zipName, 'application/zip', $fileResource);
   }
 
 }
