@@ -33,7 +33,7 @@ class CRM_Civicase_Page_ActivityFiles {
     ]);
 
     if ($activityResult['count'] === 0) {
-      return self::throwStatusCode('404 Not Found');
+      return self::throwStatusCode(404);
     }
 
     return CRM_Utils_Array::first($activityResult['values']);
@@ -46,17 +46,17 @@ class CRM_Civicase_Page_ActivityFiles {
    */
   private static function validateActivityId($activityId) {
     if (empty($activityId)) {
-      self::throwStatusCode('400 Bad Request');
+      self::throwStatusCode(400);
     }
   }
 
   /**
    * Throws a specific status code and closes the connection.
    *
-   * @param string $statusCode
+   * @param int $statusCode
    */
   private static function throwStatusCode($statusCode) {
-    CRM_Utils_System::setHttpHeader('Status', $statusCode);
+    http_response_code($statusCode);
     CRM_Utils_System::civiExit();
   }
 
