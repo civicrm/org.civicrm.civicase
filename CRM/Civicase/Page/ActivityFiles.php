@@ -69,7 +69,9 @@ class CRM_Civicase_Page_ActivityFiles {
    * @return string
    */
   private static function getZipName($activity) {
-    return 'Activity ' . $activity['activity_type_id.label'] . ' ' . $activity['id'] . '.zip';
+    $name = 'Activity ' . $activity['activity_type_id.label'] . ' ' . $activity['id'];
+
+    return CRM_Utils_String::munge($name, ' ') . '.zip';
   }
 
   /**
