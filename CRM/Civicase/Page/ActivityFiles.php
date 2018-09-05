@@ -109,7 +109,9 @@ class CRM_Civicase_Page_ActivityFiles {
     $zip->open($zipFullPath, $mode);
 
     foreach ($filePaths as $filePath) {
-      $zip->addFile($filePath, substr($filePath, strrpos($filePath, '/') + 1));
+      $fileName = basename($filePath);
+
+      $zip->addFile($filePath, $fileName);
     }
 
     $zip->close();
