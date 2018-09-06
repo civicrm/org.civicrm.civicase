@@ -12,9 +12,10 @@
     };
   });
 
-  module.controller('CivicaseCaseCardController', function ($scope) {
-    $scope.CRM = CRM;
+  module.controller('CivicaseCaseCardController', function ($scope, getActivityFeedUrl) {
     var categoryCount = $scope.data.category_count;
+    $scope.CRM = CRM;
+    $scope.activityFeedUrl = getActivityFeedUrl;
 
     countOtherTasks();
 

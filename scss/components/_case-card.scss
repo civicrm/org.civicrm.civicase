@@ -78,6 +78,10 @@
 .civicase__case-card__activity-count {
   color: $brand-primary;
   font-weight: 600;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .civicase__case-card__activity-count--zero {
