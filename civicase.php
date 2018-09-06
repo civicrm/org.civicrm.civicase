@@ -484,8 +484,6 @@ function civicase_civicrm_pageRun(&$page) {
     // NEW: http://localhost/civicrm/case/a/#/case/list?sf=contact_id.sort_name&sd=ASC&focus=0&cf=%7B%7D&caseId=51&tab=summary&sx=0
 
     $caseId = CRM_Utils_Request::retrieve('id', 'Positive');
-    print_r('hell yeah');
-        exit;
     if ($caseId) {
       $case = civicrm_api3('Case', 'getsingle', array(
         'id' => $caseId,
@@ -498,7 +496,7 @@ function civicase_civicrm_pageRun(&$page) {
       CRM_Utils_System::redirect($url);
     }
   }
-
+  // Adds Moment.js file to Civicase Angular Page.
   if ($page instanceof CRM_Civicase_Page_CaseAngular) {
     CRM_Core_Resources::singleton()->addScriptFile('uk.co.compucorp.civicase', 'packages/moment.min.js');
   }
