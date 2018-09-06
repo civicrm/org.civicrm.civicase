@@ -1,6 +1,73 @@
-.civicase__case-list-status {
-  line-height: 18px;
-  padding: 0 10px;
+.civicase__case-list-table-container {
+  border-left: 1px solid $gray-light;
+  margin-left: $case-card-width;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.civicase__case-list-table {
+  table-layout: inherit;
+
+  th {
+    line-height: 18px;
+    min-width: 142px;
+    padding: 22px 15px !important;
+  }
+
+  .civicase__case-list-column--first {
+    padding: 16px 10px !important;
+  }
+
+  th:first-child {
+    background: $gray-lighter;
+    left: 0;
+    position: absolute;
+    width: $case-card-width;
+  }
+
+  th:nth-child(2) {
+    max-width: 320px;
+    min-width: 320px;
+    position: relative;
+  }
+
+  tr {
+    height: 150px;
+  }
+
+  thead tr {
+    height: 63px;
+  }
+
+  td {
+    height: 150px;
+    min-width: 142px;
+    padding: 20px;
+
+    &:first-child {
+      background: $crm-white;
+      left: 0;
+      padding: 0;
+      position: absolute;
+      width: $case-card-width;
+    }
+
+    &:nth-child(2) {
+      vertical-align: middle;
+    }
+  }
+
+  &:not(.civicase__case-placeholder-row) {
+    td:first-child:hover {
+      background: $case-card-hover;
+    }
+  }
+
+  .case-activity-card-wrapper {
+    max-width: 320px;
+    min-width: 320px;
+    position: relative;
+  }
 }
 
 .civicase__case-list-table__header {
@@ -23,89 +90,7 @@
       border-bottom: 1px solid $gray-light;
       display: table-cell;
     }
-  }
-}
 
-.civicase__case-list-panel {
-  .civicase__case-list-table {
-    td:first-child,
-    th:first-child {
-      width: $case-card-width;
-    }
-
-    td:first-child {
-      padding: 0;
-    }
-  }
-
-  &.civicase__case-list-panel--case-detail {
-    width: $case-card-width;
-  }
-}
-
-.civicase__case-list-panel:not(.civicase__case-list-panel--case-detail) {
-  .civicase__case-list-panel__inner {
-    background: $crm-white;
-    position: relative;
-  }
-
-  .civicase__case-list {
-    border-left: 1px solid $gray-light;
-    margin-left: $case-card-width;
-    overflow-x: auto;
-    overflow-y: visible;
-  }
-
-  .civicase__case-list-table {
-    table-layout: inherit;
-
-    th {
-      line-height: 18px;
-      min-width: 142px;
-      padding: 22px 15px;
-    }
-
-    th:first-child {
-      background: $gray-lighter;
-      left: 0;
-      position: absolute;
-      width: $case-card-width;
-    }
-
-    th:nth-child(2) {
-      position: relative;
-    }
-
-    td {
-      min-width: 142px;
-      padding: 20px;
-
-      &:first-child {
-        background: $crm-white;
-        height: 145px;
-        left: 0;
-        padding: 0;
-        position: absolute;
-        width: $case-card-width;
-      }
-
-      &:nth-child(2) {
-        vertical-align: middle;
-      }
-    }
-
-    &:not(.case-placeholder-row) {
-      td:first-child:hover {
-        background: $case-card-hover;
-      }
-    }
-
-    .case-activity-card-wrapper {
-      position: relative;
-    }
-  }
-
-  .civicase__case-list-table__header.affix {
     th:nth-child(1) {
       left: 0;
       position: fixed;
@@ -113,8 +98,27 @@
   }
 }
 
-.civicase__case-list-column--first {
-  padding: 15px 10px !important;
+.civicase__case-list-status {
+  line-height: 18px;
+  padding: 0 10px;
+}
+
+.civicase__case-list {
+  margin: 0;
+}
+
+.civicase__case-list-panel {
+  padding: 0;
+}
+
+.civicase__case-list-panel--summary {
+  float: left;
+  width: 330px;
+}
+
+.civicase__case-details-panel {
+  float: right;
+  width: calc(100% - 330px);
 }
 
 .civicase__case-list-sortable-header {
