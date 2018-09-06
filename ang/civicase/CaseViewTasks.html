@@ -22,7 +22,7 @@
   </ul>
   <ul class="list-group act-feed-list-group" ng-if="!item.tasks.length && item.category_count.incomplete.task">
     <li class="list-group-item" ng-repeat="placeholder in panelPlaceholders(item.category_count.incomplete.task)">
-      <div class="activity-card-loading-placeholder"><div></div></div>
+      <div class="civicase__loading-placeholder__activity-card"><div></div></div>
     </li>
   </ul>
   <div class="civicase__panel-empty" ng-if="!item.category_count.incomplete.task">

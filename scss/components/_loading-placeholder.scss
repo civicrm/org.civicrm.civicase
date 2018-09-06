@@ -1,4 +1,4 @@
-.civicase-icon-placeholder {
+.civicase__loading-placeholder__icon {
   color: $placeholder-grey;
   display: inline-block;
   font-size: 10px;
@@ -8,7 +8,7 @@
   width: 10px;
 }
 
-.activity-card-loading-placeholder {
+.civicase__loading-placeholder__activity-card {
   border: 1px solid $placeholder-grey;
   border-radius: 4px;
   height: 90px;
@@ -63,7 +63,7 @@
   }
 }
 
-.oneline-loading-placeholder {
+.civicase__loading-placeholder__online {
   &::before {
     background-color: $placeholder-grey;
     content: ' ';
@@ -72,14 +72,14 @@
   }
 }
 
-.placeholder-big {
+.civicase__loading-placeholder--big {
   &::before {
     height: 1.5em;
   }
 }
 
 .panel-header {
-  .oneline-loading-placeholder {
+  .civicase__loading-placeholder__online {
     &::before {
       background-color: $placeholder-grey;
     }
@@ -87,14 +87,14 @@
 }
 
 .panel-default {
-  .case-view-placeholder-panel {
+  .civicase__loading-placeholder__case-view-panel {
     .panel-body {
       border-top: 0 none;
     }
   }
 }
 
-.case-view-placeholder-panel {
+.civicase__loading-placeholder__case-view-panel {
   .civicase-view-tab-bar {
     background-color: $placeholder-grey;
     height: 53px;
@@ -106,6 +106,6 @@
   }
 }
 
-.oneline-loading-placeholder-strip {
+.civicase__loading-placeholder__online-strip {
   border-left-color: $placeholder-grey !important;
 }

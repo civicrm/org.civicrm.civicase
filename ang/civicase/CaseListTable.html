@@ -83,18 +83,18 @@
         <!-- Loading state HTML -->
         <tr class="civicase__case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">
           <td>
-            <div class="civicase__case-card panel-default panel-strip-primary oneline-loading-placeholder-strip">
+            <div class="civicase__case-card panel-default panel-strip-primary civicase__loading-placeholder__online-strip">
               <div class="panel-body">
-                <h2 style="width: 60%; margin-top: 10px;" class="oneline-loading-placeholder"></h2>
-                <div style="width: 80%; margin-top: 10px;" class="oneline-loading-placeholder"></div>
-                <div style="width: 60%; margin-top: 10px;" class="oneline-loading-placeholder"></div>
-                <div style="width: 80%; margin-top: 10px;" class="oneline-loading-placeholder"></div>
-                <div style="width: 50%; margin-top: 10px;" class="oneline-loading-placeholder"></div>
+                <h2 style="width: 60%; margin-top: 10px;" class="civicase__loading-placeholder__online"></h2>
+                <div style="width: 80%; margin-top: 10px;" class="civicase__loading-placeholder__online"></div>
+                <div style="width: 60%; margin-top: 10px;" class="civicase__loading-placeholder__online"></div>
+                <div style="width: 80%; margin-top: 10px;" class="civicase__loading-placeholder__online"></div>
+                <div style="width: 50%; margin-top: 10px;" class="civicase__loading-placeholder__online"></div>
               </div>
             </div>
           </td>
-          <td ng-show="!viewingCase"><div class="activity-card-loading-placeholder"><div></div></div></td>
-          <td ng-show="!viewingCase" ng-repeat="i in [1,2,3,4,5,6,7]"><div class="oneline-loading-placeholder"></div></td>
+          <td ng-show="!viewingCase"><div class="civicase__loading-placeholder__activity-card"><div></div></div></td>
+          <td ng-show="!viewingCase" ng-repeat="i in [1,2,3,4,5,6,7]"><div class="civicase__loading-placeholder__online"></div></td>
         </tr>
         <!-- Empty State HTML -->
         <tr ng-if="!cases.length && !isLoading" class="civicase__panel-empty">
