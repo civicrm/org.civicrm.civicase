@@ -28,10 +28,10 @@
               </li>
               <li role="separator" class="divider"></li>
               <li>
-                <crm-url href="civicrm/case/activity/download-all-files" query="{ activity_id: activity.id }">
+                <a ng-href="{{ 'civicrm/case/activity/download-all-files' | crmUrl:{ activity_id: activity.id } }}">
                   <i class="civicase__activity-attachment__file-icon crm-i fa-download"></i>&nbsp;
                   Download all
-                </crm-url>
+                </a>
               </li>
             </ul>
           </div>

@@ -1,16 +1,18 @@
 /* eslint-env jasmine */
 (function (CRM, _) {
-  describe('CrmUrl', function () {
-    var $componentController, crmUrl;
+  describe('crmUrl', function () {
+    var $filter, crmUrl;
 
     beforeEach(module('civicase'));
 
-    beforeEach(inject(function (_$componentController_) {
-      $componentController = _$componentController_;
+    beforeEach(inject(function (_$filter_) {
+      $filter = _$filter_;
       CRM.url = jasmine.createSpy('url');
+
+      initCrmUrlFilter();
     }));
 
-    describe('getHrefLocation', function () {
+    describe('getting the href', function () {
       var hrefLocation;
       var expectedHref = '/civicrm/a/civicase';
       var expectedHrefLocation = 'http://civicrm.org/' + expectedHref;
@@ -18,12 +20,8 @@
 
       beforeEach(function () {
         CRM.url.and.returnValue(expectedHrefLocation);
-        initCrmUrlComponent({
-          href: expectedHref,
-          query: expectedQuery
-        });
 
-        hrefLocation = crmUrl.getHrefLocation();
+        hrefLocation = crmUrl(expectedHref, expectedQuery);
       });
 
       it('passes the href and query to CRM url', function () {
@@ -36,12 +34,10 @@
     });
 
     /**
-     * Initializes the CRM Url component and stores it in a variable.
-     *
-     * @param {Object} bindings dependencies to pass to the component as bindings.
+     * Initializes the CRM Url filter and stores it in a variable.
      */
-    function initCrmUrlComponent (bindings) {
-      crmUrl = $componentController('crmUrl', null, bindings || {});
+    function initCrmUrlFilter () {
+      crmUrl = $filter('crmUrl');
     }
   });
 })(CRM, CRM._);
