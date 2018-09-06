@@ -1,7 +1,7 @@
-/* globals angular, CRM */
-
 (function (angular, CRM) {
-  angular.module('civicase').filter('crmUrl', function () {
+  var module = angular.module('civicase');
+
+  module.filter('civicaseCrmUrl', function () {
     return crmUrlFilter;
   });
 

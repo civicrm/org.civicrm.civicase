@@ -26,11 +26,11 @@
                   <i class="civicase__activity-attachment__file-icon crm-i {{ file.icon }}"></i> &nbsp;{{ file.name }}
                 </a>
               </li>
-              <li role="separator" class="divider"></li>
-              <li>
-                <a ng-href="{{ 'civicrm/case/activity/download-all-files' | crmUrl:{ activity_id: activity.id } }}">
-                  <i class="civicase__activity-attachment__file-icon crm-i fa-download"></i>&nbsp;
-                  Download all
+              <li ng-if="activity.attachments.length" role="separator" class="divider"></li>
+              <li ng-if="activity.attachments.length">
+                <a class="civicase__activity-attachment__file-name"
+                  ng-href="{{ 'civicrm/case/activity/download-all-files' | civicaseCrmUrl:{ activity_id: activity.id } }}">
+                  <i class="civicase__activity-attachment__file-icon crm-i fa-download"></i> &nbsp;Download all
                 </a>
               </li>
             </ul>

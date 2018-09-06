@@ -37,7 +37,7 @@
      * Initializes the CRM Url filter and stores it in a variable.
      */
     function initCrmUrlFilter () {
-      crmUrl = $filter('crmUrl');
+      crmUrl = $filter('civicaseCrmUrl');
     }
   });
 })(CRM, CRM._);

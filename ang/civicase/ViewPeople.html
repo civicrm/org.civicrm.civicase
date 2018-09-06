@@ -80,7 +80,7 @@
           <div>{{ role.desc }}</div>
         </td>
         <td>
-          <a ng-if="role.contact_id" ng-href="{{ 'civicrm/contact/view' | crmUrl:{ cid: role.contact_id } }}">{{ role.display_name }}</a>
+          <a ng-if="role.contact_id" ng-href="{{ 'civicrm/contact/view' | civicaseCrmUrl:{ cid: role.contact_id } }}">{{ role.display_name }}</a>
           <span ng-if="!role.contact_id">{{ ts('Unassigned')  }}</span>
         </td>
         <td>{{ role.phone }}</td>
@@ -105,10 +105,10 @@
               </li>
               <li role="separator" class="divider"></li>
               <li ng-if="role.email">
-                <a class="crm-popup" ng-href="{{ 'civicrm/activity/email/add' | crmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id } }}">{{ ts('Send Email') }}</a>
+                <a class="crm-popup" ng-href="{{ 'civicrm/activity/email/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id } }}">{{ ts('Send Email') }}</a>
               </li>
               <li>
-                <a class="crm-popup" ng-href="{{ 'civicrm/activity/pdf/add' | crmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id, context: 'standalone' } }}">{{ ts('Print/Merge Document') }}</a>
+                <a class="crm-popup" ng-href="{{ 'civicrm/activity/pdf/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id, context: 'standalone' } }}">{{ ts('Print/Merge Document') }}</a>
               </li>
             </ul>
           </div>
@@ -134,7 +134,7 @@
 <div class="civicase-relationships-other case-people-subtab" ng-show="tab == 'relations'">
   <div class="case-people-status">
     <div class="btn-group btn-group-md pull-right">
-      <a ng-if="item.client.length === 1" class="btn btn-primary crm-popup" crm-popup-form-success="getRelations()" ng-href="{{ 'civicrm/contact/view/rel' | crmUrl:{ action: 'add', reset: 1, cid: item.client[0].contact_id } }}">
+      <a ng-if="item.client.length === 1" class="btn btn-primary crm-popup" crm-popup-form-success="getRelations()" ng-href="{{ 'civicrm/contact/view/rel' | civicaseCrmUrl:{ action: 'add', reset: 1, cid: item.client[0].contact_id } }}">
         <i class="fa fa-plus"></i> {{ ts('Relationship') }}
       </a>
       <button ng-if="item.client.length > 1" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -142,7 +142,7 @@
       </button>
       <ul ng-if="item.client.length > 1" class="dropdown-menu dropdown-menu-right" crm-popup-form-success="getRelations()">
         <li ng-repeat="client in item.client">
-          <a class="crm-popup" ng-href="{{ 'civicrm/contact/view/rel' | crmUrl:{ action: 'add', reset: 1, cid: client.contact_id } }}">
+          <a class="crm-popup" ng-href="{{ 'civicrm/contact/view/rel' | civicaseCrmUrl:{ action: 'add', reset: 1, cid: client.contact_id } }}">
             {{ client.display_name }}
           </a>
         </li>
@@ -193,7 +193,7 @@
           <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
           <label for="select-relation-{{ $index }}"></label>
         </td>
-        <td><a ng-href="{{ 'civicrm/contact/view' | crmUrl:{ cid: contact.contact_id } }}">{{ contact.display_name }}</a></td>
+        <td><a ng-href="{{ 'civicrm/contact/view' | civicaseCrmUrl:{ cid: contact.contact_id } }}">{{ contact.display_name }}</a></td>
         <td>{{ contact.relation }}</td>
         <td>{{ contact.client }}</td>
         <td>{{ contact.phone }}</td>
@@ -205,14 +205,14 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-right" crm-popup-form-success="getRelations()">
               <li>
-                <a class="crm-popup" ng-href="{{ 'civicrm/contact/view/rel' | crmUrl:{ action: 'update', reset: 1, id: contact.relationship_id, cid: contact.id, rtype: contact.relationship_direction } }}">{{ ts('Edit Relationship') }}</a>
+                <a class="crm-popup" ng-href="{{ 'civicrm/contact/view/rel' | civicaseCrmUrl:{ action: 'update', reset: 1, id: contact.relationship_id, cid: contact.id, rtype: contact.relationship_direction } }}">{{ ts('Edit Relationship') }}</a>
               </li>
               <li role="separator" class="divider"></li>
               <li ng-if="contact.email">
-                <a class="crm-popup" ng-href="{{ 'civicrm/activity/email/add' | crmUrl:{ 'add', caseid: item.id, reset: 1, cid: contact.id } }}">{{ ts('Send Email') }}</a>
+                <a class="crm-popup" ng-href="{{ 'civicrm/activity/email/add' | civicaseCrmUrl:{ 'add', caseid: item.id, reset: 1, cid: contact.id } }}">{{ ts('Send Email') }}</a>
               </li>
               <li>
-                <a class="crm-popup" ng-href="{{ 'civicrm/activity/pdf/add' | crmUrl:{ 'add', caseid: item.id, reset: 1, cid: contact.id, context: 'standalone' } }}">{{ ts('Print/Merge Document') }}</a>
+                <a class="crm-popup" ng-href="{{ 'civicrm/activity/pdf/add' | civicaseCrmUrl:{ 'add', caseid: item.id, reset: 1, cid: contact.id, context: 'standalone' } }}">{{ ts('Print/Merge Document') }}</a>
               </li>
             </ul>
           </div>
