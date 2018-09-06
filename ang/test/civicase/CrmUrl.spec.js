@@ -35,6 +35,11 @@
       });
     });
 
+    /**
+     * Initializes the CRM Url component and stores it in a variable.
+     *
+     * @param {Object} bindings dependencies to pass to the component as bindings.
+     */
     function initCrmUrlComponent (bindings) {
       crmUrl = $componentController('crmUrl', null, bindings || {});
     }
