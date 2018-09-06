@@ -68,7 +68,7 @@ describe('CaseListDirective', function () {
   });
 
   describe('stickyFooterPager directive', function () {
-    var element, $compile, $timeout, $rootScope, scope, offsetOriginalFunction, scrollTopOriginalFunction, removeClassOriginalFunction;
+    var element, $compile, $timeout, $rootScope, scope, offsetOriginalFunction, scrollTopOriginalFunction;
 
     beforeEach(module('civicase'));
 
@@ -82,11 +82,9 @@ describe('CaseListDirective', function () {
     beforeEach(function () {
       offsetOriginalFunction = CRM.$.fn.offset;
       scrollTopOriginalFunction = CRM.$.fn.scrollTop;
-      removeClassOriginalFunction = CRM.$.fn.removeClass;
     });
 
     beforeEach(function () {
-      CRM.$.fn.removeClass = jasmine.createSpy('removeClass');
       // Creating a custom function to mock offset() jQuery function
       CRM.$.fn.offset = function () {
         return { top: 1000 };
@@ -99,7 +97,6 @@ describe('CaseListDirective', function () {
     afterEach(function () {
       CRM.$.fn.offset = offsetOriginalFunction;
       CRM.$.fn.scrollTop = scrollTopOriginalFunction;
-      CRM.$.fn.removeClass = removeClassOriginalFunction;
     });
 
     describe('if loading is not complete', function () {
@@ -109,7 +106,7 @@ describe('CaseListDirective', function () {
         });
 
         it('removes the sticky footer feature', function () {
-          expect(CRM.$.fn.removeClass).toHaveBeenCalledWith('civicase__pager--fixed');
+          expect(element.hasClass('civicase__pager--fixed')).toBe(false);
         });
       });
 
@@ -179,7 +176,7 @@ describe('CaseListDirective', function () {
   });
 
   describe('civicaseCaseListSortHeader directive', function () {
-    var element, $compile, $rootScope, scope, addClassOriginalFunction, toggleClassOriginalFunction, findOriginalFunction, removeOriginalFunction;
+    var element, $compile, $rootScope, scope;
 
     beforeEach(module('civicase'));
 
@@ -188,25 +185,6 @@ describe('CaseListDirective', function () {
       $rootScope = _$rootScope_;
       scope = $rootScope.$new();
     }));
-
-    beforeEach(function () {
-      addClassOriginalFunction = CRM.$.fn.addClass;
-      findOriginalFunction = CRM.$.fn.find;
-      removeOriginalFunction = CRM.$.fn.remove;
-      toggleClassOriginalFunction = CRM.$.fn.toggleClass;
-
-      spyOn(CRM.$.fn, 'addClass').and.callThrough();
-      spyOn(CRM.$.fn, 'find').and.callThrough();
-      spyOn(CRM.$.fn, 'remove').and.callThrough();
-      spyOn(CRM.$.fn, 'toggleClass').and.callThrough();
-    });
-
-    afterEach(function () {
-      CRM.$.fn.addClass = addClassOriginalFunction;
-      CRM.$.fn.find = findOriginalFunction;
-      CRM.$.fn.remove = removeOriginalFunction;
-      CRM.$.fn.toggleClass = toggleClassOriginalFunction;
-    });
 
     describe('basic tests', function () {
       var header;
@@ -224,7 +202,7 @@ describe('CaseListDirective', function () {
         });
 
         it('does not make the header sortable', function () {
-          expect(CRM.$.fn.addClass).not.toHaveBeenCalledWith('civicase__case-list-sortable-header');
+          expect(element.hasClass('civicase__case-list-sortable-header')).not.toBe(true);
         });
       });
       describe('when header is blank', function () {
@@ -235,7 +213,7 @@ describe('CaseListDirective', function () {
         });
 
         it('does not make the header sortable', function () {
-          expect(CRM.$.fn.addClass).not.toHaveBeenCalledWith('civicase__case-list-sortable-header');
+          expect(element.hasClass('civicase__case-list-sortable-header')).not.toBe(true);
         });
       });
       describe('when sortable is true and header is not blank', function () {
@@ -247,7 +225,7 @@ describe('CaseListDirective', function () {
           });
 
           it('makes the header sortable', function () {
-            expect(CRM.$.fn.addClass).toHaveBeenCalledWith('civicase__case-list-sortable-header');
+            expect(element.hasClass('civicase__case-list-sortable-header')).toBe(true);
           });
         });
 
@@ -304,8 +282,7 @@ describe('CaseListDirective', function () {
             });
 
             it('removes the sorting icon before adding a new one', function () {
-              expect(CRM.$.fn.find).toHaveBeenCalledWith('.civicase__case-list__header-toggle-sort');
-              expect(CRM.$.fn.remove).toHaveBeenCalled();
+              expect(element.find('.civicase__case-list__header-toggle-sort').length).toBe(1);
             });
 
             it('adds the sorting icon before adding a new one', function () {

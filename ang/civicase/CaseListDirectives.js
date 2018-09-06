@@ -110,6 +110,8 @@
         if (!loading) {
           var topPos;
 
+          // $timeout is required to wait for the UI rendering to complete,
+          // to get the correct offset of the element.
           $timeout(function () {
             topPos = $el.offset().top;
             applyFixedPager(topPos);
@@ -195,7 +197,8 @@
         element.find('.civicase__case-list__header-toggle-sort').remove();
 
         if (attrs.civicaseCaseListSortHeader === scope.sort.field) {
-          var sortIcon = '<i class="civicase__case-list__header-toggle-sort material-icons">arrow_' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + 'ward</i>';
+          var direction = scope.sort.dir === 'ASC' ? 'up' : 'down';
+          var sortIcon = '<i class="civicase__case-list__header-toggle-sort material-icons">arrow_' + direction + 'ward</i>';
           element.append(sortIcon);
         }
       }
