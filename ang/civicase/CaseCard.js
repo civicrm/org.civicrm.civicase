@@ -13,12 +13,12 @@
   });
 
   module.controller('CivicaseCaseCardController', function ($scope, getActivityFeedUrl) {
-    var categoryCount = $scope.data.category_count;
     $scope.CRM = CRM;
     $scope.activityFeedUrl = getActivityFeedUrl;
 
     (function init () {
-      countOtherTasks();
+      countOverdueTasks($scope.data['api.Activity.get'].values);
+      countOtherTasks($scope.data.category_count);
     }());
 
     /**
@@ -47,7 +47,7 @@
      * Function to accumulate non communication and task counts as
      * other count for incomplete as well as completed tasks
      */
-    function countOtherTasks () {
+    function countOtherTasks (categoryCount) {
       _.each(_.keys(categoryCount), function (status) {
         var otherCount = 0;
         _.each(_.keys(categoryCount[status]), function (type) {
@@ -56,6 +56,21 @@
           }
           $scope.data.category_count[status].other = otherCount;
         });
+      });
+    }
+
+    /**
+     * Function to count overdue tasks.
+     */
+    function countOverdueTasks (activities) {
+      $scope.data.category_count.overdue = {};
+      _.each(activities, function (val, key) {
+        var category = CRM.civicase.activityTypes[val.activity_type_id].grouping;
+        if (category) {
+          if (moment(val.activity_date_time).isBefore(moment()) && CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1 && CRM.civicase.activityStatusTypes.cancelled.indexOf(parseInt(val.status_id, 10)) === -1) {
+            $scope.data.category_count.overdue[category] = $scope.data.category_count.overdue[category] + 1 || 1;
+          }
+        }
       });
     }
   });

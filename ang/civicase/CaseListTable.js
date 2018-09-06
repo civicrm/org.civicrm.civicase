@@ -31,7 +31,6 @@
       initiateWatchers();
 
       $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
-
       getCases();
     }());
 
@@ -169,7 +168,6 @@
      */
     function getCases () {
       $scope.isLoading = true;
-
       setPageTitle();
       crmThrottle(makeApiCallToLoadCases)
         .then(function (result) {
@@ -238,6 +236,7 @@
     function getCaseApiParams (filters, sort, page) {
       var returnParams = {
         sequential: 1,
+        'api.Activity.get': {},
         return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
         options: {
           sort: sort.field + ' ' + sort.dir,
@@ -289,7 +288,6 @@
      */
     function makeApiCallToLoadCases () {
       var params = getCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page);
-
       if (firstLoad && $scope.viewingCase) {
         params[0][2].options.page_of_record = $scope.viewingCase;
       } else if (firstLoad) {

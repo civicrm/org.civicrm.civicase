@@ -26,8 +26,8 @@
         expect(element.isolateScope().data.category_count.incomplete.other).toMatch(/\d{1,}/);
       });
 
-      it('calculates all other complete tasks count', function () {
-        expect(element.isolateScope().data.category_count.completed.other).toMatch(/\d{1,}/);
+      it('calculates all other overdue tasks count', function () {
+        expect(element.isolateScope().data.category_count.overdue.other).toMatch(/\d{1,}/);
       });
 
       it('checks the format of the date', function () {

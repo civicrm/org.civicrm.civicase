@@ -165,7 +165,7 @@
         af['activity_type_id.grouping'] = category;
       }
       if (status) {
-        af.status_id = CRM.civicase.activityStatusTypes[status];
+        af.status_id = CRM.civicase.activityStatusTypes[status] || 'overdue';
       }
       var p = {
         caseId: caseId,
