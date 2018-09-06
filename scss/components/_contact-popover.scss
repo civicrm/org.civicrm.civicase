@@ -1,0 +1,24 @@
+.contact-popover-container {
+  color: $gray-darker;
+  margin-left: -6px; // aligns the popover with the contact icon/avatar
+  max-width: 90vw;
+  width: $contact-popover-width;
+
+  h2,
+  hr {
+    margin: 16px 0;
+  }
+}
+
+.civicase__contact-popover__detail {
+  float: left;
+  margin-bottom: 10px;
+  width: 100%;
+
+  // displays ellipsis for text that overflows
+  [class*='col'] {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
