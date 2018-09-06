@@ -34,7 +34,7 @@
           </span>
         </h4>
         <div class="other-case-type-manager">
-          {{ relCase.case_type }} <a ng-href="{{ CRM.url('civicrm/contact/view', {cid: relCase.manager.contact_id}) }}">{{ relCase.manager.display_name }}</a>
+          {{ relCase.case_type }} <a ng-href="{{ 'civicrm/contact/view' | crmUrl:{ cid: relCase.manager.contact_id } }}">{{ relCase.manager.display_name }}</a>
         </div>
         <div class="other-case-subject">
           {{ relCase.subject }}
