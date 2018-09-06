@@ -17,7 +17,9 @@
     $scope.CRM = CRM;
     $scope.activityFeedUrl = getActivityFeedUrl;
 
-    countOtherTasks();
+    (function init () {
+      countOtherTasks();
+    }());
 
     /**
      * Function to check if the date is overdue
@@ -31,14 +33,24 @@
     };
 
     /**
+     * Function to formatDate in correct way
+     *
+     * @param {String} date ISO string
+     *
+     * @return {String} the formatted date
+     */
+    $scope.formatDate = function (date) {
+      return moment(date).format('DD/MM/YYYY');
+    };
+
+    /**
      * Function to accumulate non communication and task counts as
      * other count for incomplete as well as completed tasks
      */
     function countOtherTasks () {
-      Object.keys(categoryCount).forEach(function (status) {
+      _.each(_.keys(categoryCount), function (status) {
         var otherCount = 0;
-
-        Object.keys(categoryCount[status]).forEach(function (type) {
+        _.each(_.keys(categoryCount[status]), function (type) {
           if (type !== 'communication' && type !== 'task') {
             otherCount += categoryCount[status][type];
           }

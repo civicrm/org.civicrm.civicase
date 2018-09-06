@@ -16,7 +16,7 @@
     <div class="civicase__case-card__type">{{ data.case_type }} and its {{data.status}}</div>
     <div class="civicase__case-card__next-milestone" ng-if="data.activity_summary.milestone.length > 0">
       <span>Next Milestone: </span>
-      <span class="civicase__case-card__next-milestone-date" ng-class="{'civicase__overdue-activity-icon': isOverdue(data.activity_summary.milestone[0].activity_date_time)}">{{ CRM.utils.formatDate(data.activity_summary.milestone[0].activity_date_time) }} </span></div>
+      <span class="civicase__case-card__next-milestone-date" ng-class="{'civicase__overdue-activity-icon': isOverdue(data.activity_summary.milestone[0].activity_date_time)}">{{ formatDate(data.activity_summary.milestone[0].activity_date_time) }} </span></div>
     <div class="civicase__case-card__activity-info">
       <div class="civicase__case-card__activity-count-container">
         <span>Tasks: </span>
