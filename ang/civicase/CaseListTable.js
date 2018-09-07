@@ -8,12 +8,11 @@
     };
   });
 
-  module.controller('CivicaseCaseListTableController', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, getActivityFeedUrl, formatCase, ContactsDataService) {
+  module.controller('CivicaseCaseListTableController', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
     var firstLoad = true;
     var caseTypes = CRM.civicase.caseTypes;
 
     $scope.activityCategories = CRM.civicase.activityCategories;
-    $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.cases = [];
     $scope.caseStatuses = CRM.civicase.caseStatuses;
@@ -32,7 +31,6 @@
       initiateWatchers();
 
       $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
-
       getCases();
     }());
 
@@ -170,7 +168,6 @@
      */
     function getCases () {
       $scope.isLoading = true;
-
       setPageTitle();
       crmThrottle(makeApiCallToLoadCases)
         .then(function (result) {
@@ -244,7 +241,9 @@
           sort: sort.field + ' ' + sort.dir,
           limit: page.size,
           offset: page.size * (page.num - 1)
-        }
+        },
+        // To get the count of overdue tasks
+        'api.Activity.get': {}
       };
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
       if (sort.field !== 'id' && sort.field !== 'contact_id.sort_name') {
@@ -290,7 +289,6 @@
      */
     function makeApiCallToLoadCases () {
       var params = getCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page);
-
       if (firstLoad && $scope.viewingCase) {
         params[0][2].options.page_of_record = $scope.viewingCase;
       } else if (firstLoad) {

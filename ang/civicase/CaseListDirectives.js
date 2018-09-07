@@ -10,10 +10,10 @@
   /**
    * Directive for the sticky table header functionality on case list page
    */
-  module.directive('stickyTableHeader', function ($timeout) {
+  module.directive('civicaseStickyTableHeader', function ($timeout) {
     return {
       restrict: 'A',
-      link: stickyTableHeaderLink
+      link: civicaseStickyTableHeaderLink
     };
 
     /**
@@ -26,7 +26,7 @@
      * @param {object} attrs
      *   attributes of directive
      */
-    function stickyTableHeaderLink (scope, $el, attrs) {
+    function civicaseStickyTableHeaderLink (scope, $el, attrs) {
       var $table = $el;
       var $header = $el.find('thead');
 
@@ -79,10 +79,10 @@
   /**
    * Directive for the sticky pager footer functionality on case list page
    */
-  module.directive('stickyFooterPager', function ($window, $timeout) {
+  module.directive('civicaseStickyFooterPager', function ($window, $timeout) {
     return {
       restrict: 'A',
-      link: stickyFooterPagerLink
+      link: civicaseStickyFooterPagerLink
     };
 
     /**
@@ -95,7 +95,7 @@
      * @param {object} attrs
      *   attributes of directive
      */
-    function stickyFooterPagerLink (scope, $el, attrs) {
+    function civicaseStickyFooterPagerLink (scope, $el, attrs) {
       (function init () {
         scope.$watch('isLoading', checkIfLoadingCompleted);
       }());

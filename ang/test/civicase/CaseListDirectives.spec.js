@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 
 describe('CaseListDirective', function () {
-  describe('stickyTableHeader directive', function () {
+  describe('civicaseStickyTableHeader directive', function () {
     var element, $compile, $rootScope, scope, affixReturnValue, affixOriginalFunction;
 
     beforeEach(module('civicase'));
@@ -13,7 +13,7 @@ describe('CaseListDirective', function () {
     }));
 
     beforeEach(function () {
-      element = $compile(angular.element('<div sticky-table-header> <table><thead><th>Sample title</th><th>Sample title</th></thead></table></div>'))(scope);
+      element = $compile(angular.element('<div civicase-sticky-table-header> <table><thead><th>Sample title</th><th>Sample title</th></thead></table></div>'))(scope);
     });
 
     beforeEach(function () {
@@ -67,8 +67,8 @@ describe('CaseListDirective', function () {
     });
   });
 
-  describe('stickyFooterPager directive', function () {
-    var element, $compile, $timeout, $rootScope, scope, offsetOriginalFunction, scrollTopOriginalFunction;
+  describe('civicaseStickyFooterPager directive', function () {
+    var element, $compile, $rootScope, scope, offsetOriginalFunction, scrollTopOriginalFunction, $timeout;
 
     beforeEach(module('civicase'));
 
@@ -89,7 +89,7 @@ describe('CaseListDirective', function () {
       CRM.$.fn.offset = function () {
         return { top: 1000 };
       };
-      element = $compile(angular.element('<div class="parent"><div class="content"></div><div class="civicase__pager" sticky-footer-pager>Pager</div></div>'))(scope);
+      element = $compile(angular.element('<div class="parent"><div class="content"></div><div class="civicase__pager" civicase-sticky-footer-pager>Pager</div></div>'))(scope);
       // Setting up the height of the page be adding height to the content
       CRM.$(element).find('.content').height('1000px');
     });

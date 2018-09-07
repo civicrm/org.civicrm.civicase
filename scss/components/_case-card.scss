@@ -1,6 +1,8 @@
+
 .civicase__case-card {
   border-radius: 0 !important; // Todo remove important after general.css is refactored.
   box-shadow: none;
+  height: 100%;
   margin-bottom: 0;
 
   .panel-body {
@@ -12,6 +14,10 @@
     font-size: 14px;
     font-weight: 600;
     line-height: 18px;
+
+    > span {
+      display: flex;
+    }
   }
 
   .civicase__contact-icon {
@@ -44,7 +50,9 @@
 }
 
 .civicase__case-card--active {
-  border: 1px solid $brand-primary !important;
+  border-bottom: 1px solid $brand-primary !important;
+  border-right: 1px solid $brand-primary !important;
+  border-top: 1px solid $brand-primary !important;
 }
 
 .civicase__case-card__case-id {
@@ -74,6 +82,10 @@
 .civicase__case-card__activity-count {
   color: $brand-primary;
   font-weight: 600;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .civicase__case-card__activity-count--zero {
@@ -93,3 +105,24 @@
 .civicase__case-card__activity-count-container {
   margin-right: 8px;
 }
+
+// Todo to be removed once bulk actions has been discussed properly.
+// .civicase__case-card-lock {
+//   color: $crm-white;
+//   font-size: 38px;
+//   height: 100%;
+//   left: 0;
+//   position: absolute;
+//   top: 0;
+//   width: 100%;
+
+//   &:hover {
+//     color: inherit;
+//   }
+// }
+
+// .civicase__case-card-lock__inner {
+//   position: absolute;
+//   right: 20px;
+//   top: 57px;
+// }

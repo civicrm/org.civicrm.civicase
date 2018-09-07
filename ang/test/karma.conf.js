@@ -23,6 +23,7 @@ module.exports = function (config) {
       'bower_components/angular-route/angular-route.min.js',
 
       shoreditch + '/base/js/affix.js',
+      extPath + '/packages/moment.min.js',
 
       // Global variables that need to be accessible in the test environment
       extPath + '/ang/test/global.js',

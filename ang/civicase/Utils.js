@@ -156,7 +156,7 @@
     };
   });
 
-  module.factory('getActivityFeedUrl', function ($route, $location) {
+  module.factory('getActivityFeedUrl', function ($route, $location, $sce) {
     return function (caseId, category, status, id) {
       caseId = parseInt(caseId, 10);
       var af = {};
@@ -182,7 +182,9 @@
       } else {
         p = angular.extend({}, $route.current.params, p);
       }
-      return '/case/list?' + $.param(p);
+
+      // The value to mark as trusted in angular context for security.
+      return $sce.trustAsResourceUrl('/case/list?' + $.param(p));
     };
   });
 

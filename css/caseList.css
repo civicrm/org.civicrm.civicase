@@ -123,26 +123,4 @@
   background: #E6807F;
   color: #FFF;
 }
-
-
-
-div.lockDiv {
-  width: 100%;
-  height: 100%;
-  color: #fff;
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-size: 38px;
-}
-
-div.lockDiv div {
-  position: absolute;
-  top: 57px;
-  right: 20px;
-}
-
-div.lockDiv:hover {
-  color: inherit;
-}
 */

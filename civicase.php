@@ -492,8 +492,13 @@ function civicase_civicrm_pageRun(&$page) {
       $url = CRM_Utils_System::url('civicrm/case/a/', NULL, TRUE,
         "/case/list?sf=id&sd=DESC&caseId={$caseId}&cf=%7B%22status_id%22:%5B%22{$case['status_id.name']}%22%5D,%22case_type_id%22:%5B%22{$case['case_type_id.name']}%22%5D%7D",
         FALSE);
+
       CRM_Utils_System::redirect($url);
     }
+  }
+  // Adds Moment.js file to Civicase Angular Page.
+  if ($page instanceof CRM_Civicase_Page_CaseAngular) {
+    CRM_Core_Resources::singleton()->addScriptFile('uk.co.compucorp.civicase', 'packages/moment.min.js');
   }
 }
 

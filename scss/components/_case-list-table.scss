@@ -39,7 +39,7 @@
   }
 
   &.civicase__case-list-panel--case-detail {
-    width: 25%;
+    width: $case-card-width;
   }
 }
 
@@ -73,18 +73,16 @@
     }
 
     th:nth-child(2) {
-      max-width: 370px;
-      min-width: 370px;
       position: relative;
     }
 
     td {
-      height: 150px;
       min-width: 142px;
       padding: 20px;
 
       &:first-child {
         background: $crm-white;
+        height: 145px;
         left: 0;
         padding: 0;
         position: absolute;
@@ -103,8 +101,6 @@
     }
 
     .case-activity-card-wrapper {
-      max-width: 370px;
-      min-width: 370px;
       position: relative;
     }
   }

@@ -30,7 +30,7 @@
         <li ng-repeat="actType in availableActivityTypes | filter:{label: activityTypeSearchText}">
           <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" ng-href="{{ newActivityUrl(actType) }}">
             <i class="fa fa-fw {{ actType.icon || 'fa-circle' }}">
-              <span class="civicase-icon-placeholder" ng-if="!actType.icon">{{ actType.label[0] }}</span>
+              <span class="civicase__loading-placeholder__icon" ng-if="!actType.icon">{{ actType.label[0] }}</span>
             </i>
             {{ actType.label }}
           </a>
