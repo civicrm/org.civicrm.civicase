@@ -242,8 +242,7 @@
           limit: page.size,
           offset: page.size * (page.num - 1)
         },
-        // The chaining is smart enough to load activities in context of each caseid, so we probably don't need to
-        // pass case_id as a parameter
+        // To get the count of overdue tasks
         'api.Activity.get': {}
       };
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id

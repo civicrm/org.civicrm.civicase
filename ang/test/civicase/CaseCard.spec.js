@@ -32,7 +32,7 @@
 
     describe('formatDate()', function () {
       it('checks the format of the date', function () {
-        expect(element.isolateScope().formatDate(moment())).toBe('07/09/2018');
+        expect(element.isolateScope().formatDate(element.isolateScope().data.activity_summary.milestone[0].activity_date_time)).toBe('12/11/2017');
       });
     });
 
@@ -55,9 +55,9 @@
      * Function responsible for setting up compilation of the directive
      * @param {Object} Case card object
      */
-    function compileDirective (casObj) {
+    function compileDirective (caseObj) {
       element = $compile('<civicase-case-card case="case"></civicase-case-card>')($scope);
-      $scope.case = casObj;
+      $scope.case = caseObj;
       $scope.$digest();
     }
   });
