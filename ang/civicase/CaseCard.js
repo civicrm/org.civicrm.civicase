@@ -67,7 +67,9 @@
       _.each(activities, function (val, key) {
         var category = CRM.civicase.activityTypes[val.activity_type_id].grouping;
         if (category) {
-          if (moment(val.activity_date_time).isBefore(moment()) && CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1 && CRM.civicase.activityStatusTypes.cancelled.indexOf(parseInt(val.status_id, 10)) === -1) {
+          var dateInPast = moment(val.activity_date_time).isBefore(moment());
+          var isIncopmpleteTasks = CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1;
+          if (dateInPast && isIncopmpleteTasks) {
             $scope.data.category_count.overdue[category] = $scope.data.category_count.overdue[category] + 1 || 1;
           }
         }

@@ -1,7 +1,9 @@
 
 <!--  To do:
   Add
-  * use 'civicase__animated-checkbox-card--expanded' class : for enabled checkbox state -->
+  * use 'civicase__animated-checkbox-card--expanded' class : for enabled checkbox state 
+  * Update links with activityFeedUrl function activityFeedUrl(caseid, activityType to link, activityStatus to Link)
+  -->
 <div class="panel panel-default panel-strip-primary civicase__case-card civicase__animated-checkbox-card" ng-style="{'border-left-color': data.color}" ng-class="{'civicase__case-card--active': $parent.viewingCase === data.id, 'civicase__case-card--closed': data.status === 'Resolved'}" >
   <div class="panel-body">
     <div ng-if="!$parent.bulkAllowed" class="civicase__case-card-lock">
@@ -26,12 +28,12 @@
         <span>Tasks: </span>
         <a class="civicase__case-card__activity-count"
            ng-if="data.category_count.incomplete.task"
-           ng-href="#{{ activityFeedUrl(data.id, 'task', 'incomplete') }}"
+           ng-href="#"
         > {{ data.category_count.incomplete.task }} </a>
         <span ng-if="data.category_count.incomplete.task && data.category_count.overdue.task" class="civicase__pipe"> | </span>
         <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--count"
            ng-if="data.category_count.overdue.task"
-           ng-href="#{{ activityFeedUrl(data.id, 'task', 'overdue') }}"
+           ng-href="#"
         > {{ data.category_count.overdue.task }} </a>
         <span ng-if="!data.category_count.incomplete.task && !data.category_count.overdue.task" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
       </div>
@@ -39,12 +41,12 @@
         <span>Comms: </span>
         <a class="civicase__case-card__activity-count"
            ng-if="data.category_count.incomplete.communication"
-           ng-href="#{{ activityFeedUrl(data.id, 'communication', 'incomplete') }}"
+           ng-href="#"
         > {{ data.category_count.incomplete.communication }} </a>
         <span ng-if="data.category_count.incomplete.communication && data.category_count.overdue.communication" class="civicase__pipe"> | </span>
         <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--count"
            ng-if="data.category_count.overdue.communication"
-           ng-href="#{{ activityFeedUrl(data.id, 'communication', 'overdue') }}"
+           ng-href="#"
         > {{ data.category_count.overdue.communication }} </a>
         <span ng-if="!data.category_count.incomplete.communication && !data.category_count.overdue.communication" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
       </div>
@@ -52,12 +54,12 @@
         <span>Other: </span>
         <a class="civicase__case-card__activity-count"
            ng-if="data.category_count.incomplete.other"
-           ng-href="#{{ activityFeedUrl(data.id, 'other', 'incomplete') }}"
+           ng-href="#"
         > {{ data.category_count.incomplete.other }} </a>
         <span ng-if="data.category_count.incomplete.other && data.category_count.overdue.other" class="civicase__pipe"> | </span>
         <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--count"
            ng-if="data.category_count.overdue.other"
-           ng-href="#{{ activityFeedUrl(data.id, 'other', 'overdue') }}"
+           ng-href="#"
         > {{ data.category_count.overdue.other }} </a>
         <span ng-if="!data.category_count.incomplete.other && !data.category_count.overdue.other" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
       </div>      
