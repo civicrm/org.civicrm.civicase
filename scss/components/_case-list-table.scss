@@ -114,6 +114,10 @@
 .civicase__case-list-panel--summary {
   float: left;
   width: 330px;
+
+  .civicase__pager--fixed {
+    width: 330px;
+  }
 }
 
 .civicase__case-details-panel {

@@ -278,6 +278,10 @@
       return _.range(num > panelLimit ? panelLimit : num);
     };
 
+    $scope.focusToggle = function () {
+      $scope.isFocused = !$scope.isFocused;
+    };
+
     $scope.$watch('item', function () {
       // Fetch extra info about the case
       if ($scope.item && $scope.item.id && !$scope.item.definition) {

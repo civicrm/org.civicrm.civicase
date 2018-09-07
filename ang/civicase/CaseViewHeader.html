@@ -1,7 +1,7 @@
 <div crm-ui-debug="item"></div>
 <div class="civicase__case-header">
-  <button class="civicase__case-header__expand_button" ng-click="isFocused = true">
-    <i class="material-icons">keyboard_arrow_left</i>
+  <button class="civicase__case-header__expand_button" ng-click="focusToggle()">
+    <i class="material-icons">keyboard_arrow_{{isFocused ? 'right' : 'left'}}</i>
   </button>
   <div class="civicase__case-header__content">
     <div class="civicase__contact-card civicase__contact-card--client" contact-card contacts="item.client"></div>
@@ -9,8 +9,6 @@
       <span>{{ CRM.utils.formatDate(item.start_date) || '. . .' }}</span> -
       <span ng-if="item.end_date">{{ CRM.utils.formatDate(item.end_date) }}</span>
       <span ng-if="!item.end_date">{{ ts('Ongoing') }}</span>
-      <span class="civicase__pipe"> | </span>
-      <span>14 Hours</span>
     </div>
     <div class="civicase__case-header__case-info">
       <span>Case ID: </span>
@@ -30,11 +28,6 @@
           {{ item.case_type }}
         </span>
       </span>
-      <span class="civicase__pipe"> | </span>
-
-      <span>Source: </span>
-      <span class="civicase__case-header__case-source">Webform</span>
-      <span class="civicase__pipe"> | </span>
 
       <div
         ng-repeat="tag in item.tag_id || []"
