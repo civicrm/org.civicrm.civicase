@@ -53,7 +53,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="item in cases">
+        <tr ng-if="!isLoading" ng-repeat="item in cases" >
           <td ng-click="viewCase(item.id, $event)">
             <civicase-case-card case="item"></civicase-case-card>
           </td>
@@ -81,7 +81,7 @@
           </td>
         </tr>
         <!-- Loading state HTML -->
-        <tr class="civicase__case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="!cases.length && isLoading">
+        <tr class="civicase__case-placeholder-row" ng-repeat="placeholder in casePlaceholders" ng-if="isLoading">
           <td>
             <div class="civicase__case-card panel-default panel-strip-primary civicase__loading-placeholder__online-strip">
               <div class="panel-body">
