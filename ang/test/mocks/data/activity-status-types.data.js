@@ -7,7 +7,7 @@
     'incomplete': [1, 4, 7, 9, 10]
   };
 
-  module.constant('ActivityStatusTypes', {
+  module.constant('ActivityStatusTypesData', {
     values: CRM.civicase.activityStatusTypes
   });
 }());
