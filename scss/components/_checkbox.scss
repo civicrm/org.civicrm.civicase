@@ -13,7 +13,7 @@
   transition: 0.2s all cubic-bezier(0, 0, 0, 0.4);
   transition-delay: unset;
   width: 18px;
-
+  // This class is used on <input> element to be toggled (Added input element for accessibility)
   .civicase__checkbox__input {
     height: 100%;
     left: 0;

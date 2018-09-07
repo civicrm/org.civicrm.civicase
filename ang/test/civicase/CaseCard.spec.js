@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 (function ($) {
-  describe('caseCard', function () {
+  describe('civicaseCaseCard', function () {
     var element, $compile, $rootScope, $scope, CasesData, date;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data'));

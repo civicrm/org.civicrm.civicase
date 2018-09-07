@@ -6,9 +6,11 @@
   -->
 <div class="panel panel-default panel-strip-primary civicase__case-card civicase__animated-checkbox-card" ng-style="{'border-left-color': data.color}" ng-class="{'civicase__case-card--active': $parent.viewingCase === data.id, 'civicase__case-card--closed': data.status === 'Resolved'}" >
   <div class="panel-body">
-    <div ng-if="!$parent.bulkAllowed" class="civicase__case-card-lock">
+    <!--      
+      TODO: To be implemented when implementing bulk actions.
+     <div ng-if="!$parent.bulkAllowed" class="civicase__case-card-lock">
       <div class="civicase__case-card-lock__inner fa fa-lock"></div>
-    </div>
+    </div> -->
     <div class="civicase__checkbox" ng-if="!$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed">
       <input type="checkbox" class="civicase__checkbox__input" ng-model="item.selected" />
       <i class="civicase__checkbox--checked material-icons">check_box</i>

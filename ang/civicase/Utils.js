@@ -182,6 +182,8 @@
       } else {
         p = angular.extend({}, $route.current.params, p);
       }
+
+      // The value to mark as trusted in angular context for security.
       return $sce.trustAsResourceUrl('/case/list?' + $.param(p));
     };
   });

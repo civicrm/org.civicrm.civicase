@@ -63,7 +63,7 @@
   }
 }
 
-.civicase__loading-placeholder__online {
+.civicase__loading-placeholder__oneline {
   &::before {
     background-color: $placeholder-grey;
     content: ' ';
@@ -79,7 +79,7 @@
 }
 
 .panel-header {
-  .civicase__loading-placeholder__online {
+  .civicase__loading-placeholder__oneline {
     &::before {
       background-color: $placeholder-grey;
     }
@@ -106,6 +106,6 @@
   }
 }
 
-.civicase__loading-placeholder__online-strip {
+.civicase__loading-placeholder__oneline-strip {
   border-left-color: $placeholder-grey !important;
 }

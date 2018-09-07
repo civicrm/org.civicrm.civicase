@@ -13,7 +13,6 @@
   });
 
   module.controller('CivicaseCaseCardController', function ($scope, getActivityFeedUrl) {
-    $scope.CRM = CRM;
     $scope.activityFeedUrl = getActivityFeedUrl;
 
     (function init () {
@@ -25,7 +24,6 @@
      * Function to check if the date is overdue
      *
      * @param {String} date ISO string
-     *
      * @return {Boolean} if the date is overdue.
      */
     $scope.isOverdue = function (date) {
@@ -33,10 +31,9 @@
     };
 
     /**
-     * Function to formatDate in correct way
+     * Formats Date in correct format (DD/MM/YYYY)
      *
      * @param {String} date ISO string
-     *
      * @return {String} the formatted date
      */
     $scope.formatDate = function (date) {
@@ -46,10 +43,16 @@
     /**
      * Function to accumulate non communication and task counts as
      * other count for incomplete as well as completed tasks
+     *
+     * @param {Object} categoryCount
+     *  Object of related categoryCount of a case
      */
     function countOtherTasks (categoryCount) {
+      var otherCount;
+
       _.each(_.keys(categoryCount), function (status) {
-        var otherCount = 0;
+        otherCount = 0;
+
         _.each(_.keys(categoryCount[status]), function (type) {
           if (type !== 'communication' && type !== 'task') {
             otherCount += categoryCount[status][type];
@@ -61,15 +64,22 @@
 
     /**
      * Function to count overdue tasks.
+     *
+     * @param {Array} activities
+     *  Array of related activities to a case
      */
     function countOverdueTasks (activities) {
+      var ifDateInPast, isIncompleteTask, category;
+
       $scope.data.category_count.overdue = {};
       _.each(activities, function (val, key) {
-        var category = CRM.civicase.activityTypes[val.activity_type_id].grouping;
+        category = CRM.civicase.activityTypes[val.activity_type_id].grouping;
+
         if (category) {
-          var dateInPast = moment(val.activity_date_time).isBefore(moment());
-          var isIncopmpleteTasks = CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1;
-          if (dateInPast && isIncopmpleteTasks) {
+          ifDateInPast = moment(val.activity_date_time).isBefore(moment());
+          isIncompleteTask = CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1;
+
+          if (ifDateInPast && isIncompleteTask) {
             $scope.data.category_count.overdue[category] = $scope.data.category_count.overdue[category] + 1 || 1;
           }
         }

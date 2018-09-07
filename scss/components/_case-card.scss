@@ -102,22 +102,23 @@
   margin-right: 8px;
 }
 
-.civicase__case-card-lock {
-  color: #fff;
-  font-size: 38px;
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
+// Todo to be removed once bulk actions has been discussed properly.
+// .civicase__case-card-lock {
+//   color: $crm-white;
+//   font-size: 38px;
+//   height: 100%;
+//   left: 0;
+//   position: absolute;
+//   top: 0;
+//   width: 100%;
 
-  &:hover {
-    color: inherit;
-  }
-}
+//   &:hover {
+//     color: inherit;
+//   }
+// }
 
-.civicase__case-card-lock__inner {
-  position: absolute;
-  right: 20px;
-  top: 57px;
-}
+// .civicase__case-card-lock__inner {
+//   position: absolute;
+//   right: 20px;
+//   top: 57px;
+// }
