@@ -293,7 +293,7 @@
       restrict: 'A',
       template:
         '<div class="panel panel-default civicase-view-panel">' +
-          '<div class="panel-header" ng-if="item" ng-include="\'~/civicase/CaseViewHeader.html\'"></div>' +
+          '<div class="panel-header civicase__case-header" ng-if="item" ng-include="\'~/civicase/CaseViewHeader.html\'"></div>' +
           '<div class="panel-body case-view-body" ng-if="item" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
           '<div ng-if="!item" class="civicase__loading-placeholder__case-view-panel" ng-include="\'~/civicase/CaseViewPlaceholder.html\'"></div>' +
         '</div>' +

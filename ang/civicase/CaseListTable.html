@@ -1,4 +1,4 @@
-<div class="row civicase__case-list">
+<div class="civicase__case-list">
   <div
     class="panel panel-default civicase__case-list-panel"
     ng-class="{'civicase__case-list-panel--summary': viewingCase, 'case-is-focused': caseIsFocused}">
@@ -118,14 +118,14 @@
         text-prev="{{ ts('Prev') }}"
       ></paging>
     </div>
-    <div class="civicase-table-expander" ng-if="viewingCase && !caseIsFocused" ng-click="viewCase(null)"><div>&raquo;</div></div>
+    <!-- <div class="civicase-table-expander" ng-if="viewingCase && !caseIsFocused" ng-click="viewCase(null)"><div>&raquo;</div></div> -->
+
     <div class="civicase-table-placeholder" ng-if="caseIsFocused" ng-click="unfocusCase()"><div>&raquo;</div></div>
   </div>
-
   <div
     class="civicase__case-details-panel"
     ng-show="viewingCase"
-    ng-class="{'case-is-focused': caseIsFocused}"
+    ng-class="{'civicase__case-details-panel--focused': caseIsFocused}"
     civicase-view="viewingCaseDetails"
     civicase-tab="viewingCaseTab"
     civicase-focused="caseIsFocused"></div>

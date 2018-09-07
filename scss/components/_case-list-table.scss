@@ -121,6 +121,10 @@
   width: calc(100% - 330px);
 }
 
+.civicase__case-details-panel--focused {
+  width: 100%;
+}
+
 .civicase__case-list-sortable-header {
   cursor: pointer;
 
