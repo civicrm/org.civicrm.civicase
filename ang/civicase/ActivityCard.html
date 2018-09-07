@@ -48,7 +48,7 @@
           ng-if="activity.category.indexOf('task') > -1"
           class="civicase__checkbox"
           title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}"
-          ng-click="markCompleted(activity); $event.stopPropagation();">
+          ng-click="markCompleted(activity); $event.stopPropagation();" role="checkbox" aria-checked="{{activity.is_completed}}" tabindex="0" aria-labelledby="Mark complete/incomplete">
           <i ng-if="activity.is_completed" class="civicase__checkbox--checked material-icons">check_box</i>
         </span>
         <!-- End - Task - Checkbox -->

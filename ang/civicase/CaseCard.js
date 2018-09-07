@@ -21,7 +21,7 @@
     }());
 
     /**
-     * Function to check if the date is overdue
+     * To check if the date is overdue
      *
      * @param {String} date ISO string
      * @return {Boolean} if the date is overdue.
@@ -41,11 +41,10 @@
     };
 
     /**
-     * Function to accumulate non communication and task counts as
+     * To accumulate non communication and task counts as
      * other count for incomplete as well as completed tasks
      *
-     * @param {Object} categoryCount
-     *  Object of related categoryCount of a case
+     * @param {Object} categoryCount - Object of related categoryCount of a case
      */
     function countOtherTasks (categoryCount) {
       var otherCount;
@@ -63,10 +62,9 @@
     }
 
     /**
-     * Function to count overdue tasks.
+     * To count overdue tasks.
      *
-     * @param {Array} activities
-     *  Array of related activities to a case
+     * @param {Array} activities - Array of related activities to a case
      */
     function countOverdueTasks (activities) {
       var ifDateInPast, isIncompleteTask, category;

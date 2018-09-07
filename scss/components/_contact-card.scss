@@ -1,10 +1,10 @@
 .civicase__contact-card {
   color: $brand-primary;
   display: flex;
+}
 
-  > span {
-    display: flex;
-  }
+.civicase__contact-name-container {
+  display: flex;
 }
 
 .civicase__contact-name {
