@@ -3,7 +3,7 @@
     <div class="panel-body">
       <div class="civicase__activity-card-row civicase__activity-card-row--first">
 
-        <span activity-icon="activity"></span>
+        <span ng-if="activity.icon" activity-icon="activity"></span>
 
         <!-- Activity Date -->
         <span class="civicase__activity-date">{{ formatDate(activity.activity_date_time, 'dd M yy') }}</span>

@@ -113,16 +113,16 @@
 
 .civicase__case-list-panel--summary {
   float: left;
-  width: 330px;
+  width: $case-card-width;
 
   .civicase__pager--fixed {
-    width: 330px;
+    width: $case-card-width;
   }
 }
 
 .civicase__case-details-panel {
   float: right;
-  width: calc(100% - 330px);
+  width: calc(100% - #{$case-card-width});
 }
 
 .civicase__case-details-panel--focused {
@@ -162,5 +162,10 @@
 
   .select2-chosen {
     padding-top: 1px;
+  }
+
+  .select2-choice .select2-arrow {
+    padding: 0;
+    top: 0;
   }
 }

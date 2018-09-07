@@ -28,7 +28,7 @@
     font-size: 24px;
     font-weight: 600;
 
-    > span > .civicase__contact-icon {
+    > span > .civicase__contact-icon { /* stylelint-disable-line selector-max-compound-selectors */
       font-size: 30px;
       margin-top: 3px;
     }
@@ -78,6 +78,12 @@
   position: absolute;
   right: 20px;
   top: 20px;
+
+  .list-group-item-info {
+    color: $crm-gray-matte;
+    display: block;
+    padding: $crm-dropdown-item-padding;
+  }
 }
 
 .civicase__case-header__action-icon {

@@ -193,7 +193,6 @@
 
           if (typeof result[2] !== 'undefined') {
             $scope.headers = result[2].values;
-            console.log($scope.headers);
           }
 
           $scope.cases = cases;

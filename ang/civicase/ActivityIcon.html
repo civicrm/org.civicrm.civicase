@@ -2,14 +2,7 @@
   class="civicase__activity-icon-container"
   ng-class="{'civicase__activity-icon-container--ribbon': activity.category.indexOf('milestone') > -1}">
   <span>
-    <span
-      ng-if="!activity.icon && activity.category.indexOf('milestone') < 0"
-      ng-class="{'text-danger': activity.is_overdue}"
-      class="civicase__activity-no-icon">
-      {{activity.type[0]}}
-    </span>
     <i
-      ng-if="activity.icon"
       ng-class="{'text-danger': activity.is_overdue}"
       class="civicase__activity-icon fa {{activity.icon}}"></i>
 
