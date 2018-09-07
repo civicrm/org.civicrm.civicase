@@ -32,7 +32,7 @@
 
     describe('formatDate()', function () {
       it('checks the format of the date', function () {
-        expect(element.isolateScope().formatDate(element.isolateScope().data.activity_summary.milestone[0].activity_date_time)).toBe('12/11/2017');
+        expect(element.isolateScope().formatDate('2017-11-20 00:00:00')).toBe('20/11/2017');
       });
     });
 
