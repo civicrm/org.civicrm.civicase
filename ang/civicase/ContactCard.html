@@ -1,34 +1,38 @@
 <span class="civicase__contact-card">
-  <span ng-if="!isAvatar" class="civicase__contact-name-container">
-    <!-- Contact Icons -->
-    <span ng-if="!noIcon">
-      <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
-      <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
-      <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
+  <span uib-popover-template="'contact-popover.html'"
+    popover-class="contact-popover-container"
+    popover-placement="auto bottom-left"
+    popover-trigger="'mouseenter'">
+    <span ng-if="!isAvatar" class="civicase__contact-name-container">
+      <!-- Contact Icons -->
+      <span ng-if="!noIcon">
+        <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
+        <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
+        <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
+      </span>
+      <!-- End - Contact Icons -->
+
+      <!-- Contact Name -->
+      <a
+        class="civicase__contact-name"
+        href="{{ url('civicrm/contact/view', {cid: contacts[0].contact_id}) }}"
+        title="{{ ts('View Contact') }}">{{ contacts[0].display_name }}
+      </a>
+      <!-- End - Contact Name -->
     </span>
-    <!-- End - Contact Icons -->
-
-    <!-- Contact Name -->
-    <a
-      class="civicase__contact-name"
-      href="{{ url('civicrm/contact/view', {cid: contacts[0].contact_id}) }}"
-      title="{{ ts('View Contact') }}">{{ contacts[0].display_name }}
-    </a>
-    <!-- End - Contact Name -->
+    <span ng-if="isAvatar">
+      <!-- Contact Avatar -->
+      <a
+        href="{{ url('civicrm/contact/view', {cid: contacts[0].contact_id}) }}"
+        class="civicase__contact-avatar crm_notification-badge"
+        ng-class="{'civicase__contact-avatar--image': contacts[0].image_URL}"
+        title="{{contacts[0].display_name}}">
+        <img ng-if="contacts[0].image_URL" ng-src={{contacts[0].image_URL}}>
+        <span ng-if="!contacts[0].image_URL">{{contacts[0].avatar}}</span>
+      </a>
+      <!-- End - Contact Avatar -->
+    </span>
   </span>
-  <span ng-if="isAvatar">
-    <!-- Contact Avatar -->
-    <a
-      href="{{ url('civicrm/contact/view', {cid: contacts[0].contact_id}) }}"
-      class="civicase__contact-avatar crm_notification-badge"
-      ng-class="{'civicase__contact-avatar--image': contacts[0].image_URL}"
-      title="{{contacts[0].display_name}}">
-      <img ng-if="contacts[0].image_URL" ng-src={{contacts[0].image_URL}}>
-      <span ng-if="!contacts[0].image_URL">{{contacts[0].avatar}}</span>
-    </a>
-    <!-- End - Contact Avatar -->
-  </span>
-
   <!-- Additional Contact Dropdown -->
   <div
     ng-if="contacts.length > 1"
@@ -56,4 +60,64 @@
     </ul>
   </div>
   <!-- End - Additional Contact Dropdown -->
+  <script type="text/ng-template" id="contact-popover.html">
+    <div class="civicase__contact-popover">
+      <div class="col-xs-12">
+        <h2>John Smith</h2>
+        <hr />
+      </div>
+      <div class="col-xs-6">
+        <div class="row">
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>Home Phone</strong></div>
+            <div class="col-sm-7">09382 278 372</div>
+          </div>
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>Home Mobile</strong></div>
+            <div class="col-sm-7"></div>
+          </div>
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>Primary Address</strong></div>
+            <div class="col-sm-7">251 Maple Lane</div>
+          </div>
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>City</strong></div>
+            <div class="col-sm-7">Kinney</div>
+          </div>
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>State</strong></div>
+            <div class="col-sm-7">MN</div>
+          </div>
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>Postal Code</strong></div>
+            <div class="col-sm-7">37281</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="row">
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>Primary Email</strong></div>
+            <div class="col-sm-7">m.chambers@thisisanemail.comm.chambers@thisisanemail.com</div>
+          </div>
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>Groups</strong></div>
+            <div class="col-sm-7">Summer Program</div>
+          </div>
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>Tags</strong></div>
+            <div class="col-sm-7">Lorem</div>
+          </div>
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>Gender</strong></div>
+            <div class="col-sm-7">Female</div>
+          </div>
+          <div class="civicase__contact-popover__detail">
+            <div class="col-sm-5"><strong>Date of Birth</strong></div>
+            <div class="col-sm-7">September 9th, 1968</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </script>
 </span>
