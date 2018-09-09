@@ -64,6 +64,11 @@
               .on('affixed.bs.affix', function () {
                 $header.scrollLeft($table.scrollLeft());
                 $header.css('top', bodyPadding + 'px');
+                $table.css('padding-top', $header.height() + 'px');
+              })
+              .on('affixed-top.bs.affix', function () {
+                $header.css('top', 0);
+                $table.css('padding-top', 0);
               });
 
             // Attach scroll function

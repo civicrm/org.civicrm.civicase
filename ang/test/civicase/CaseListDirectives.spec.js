@@ -20,6 +20,7 @@ describe('CaseListDirective', function () {
       affixOriginalFunction = CRM.$.fn.affix;
       CRM.$.fn.affix = jasmine.createSpy('affix');
       affixReturnValue = jasmine.createSpyObj('affix', ['on']);
+      affixReturnValue.on.and.returnValue(affixReturnValue);
       CRM.$.fn.affix.and.returnValue(affixReturnValue);
     });
 
@@ -44,6 +45,10 @@ describe('CaseListDirective', function () {
       it('does not binds the scroll position of table content to the table header', function () {
         expect(affixReturnValue.on).not.toHaveBeenCalledWith('affixed.bs.affix', jasmine.any(Function));
       });
+
+      it('does not resets the padding for top header and when the header gets back to its state', function () {
+        expect(affixReturnValue.on).not.toHaveBeenCalledWith('affixed-top.bs.affix', jasmine.any(Function));
+      });
     });
 
     describe('if loading is complete', function () {
@@ -63,6 +68,10 @@ describe('CaseListDirective', function () {
 
       it('binds the scroll position of table content to the table header', function () {
         expect(affixReturnValue.on).toHaveBeenCalledWith('affixed.bs.affix', jasmine.any(Function));
+      });
+
+      it('resets the padding for top header and when the header gets back to its state', function () {
+        expect(affixReturnValue.on).toHaveBeenCalledWith('affixed-top.bs.affix', jasmine.any(Function));
       });
     });
   });
