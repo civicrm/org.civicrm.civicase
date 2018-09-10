@@ -48,7 +48,7 @@ gulp.task('sass', function () {
     .pipe(stripCssComments({ preserve: false }))
     .pipe(postcss([postcssPrefix({
       prefix: bootstrapNamespace + ' ',
-      exclude: [/^body/, /page-civicrm-case/, outsideNamespaceRegExp]
+      exclude: [/^body/, /contact-popover-container/, /page-civicrm-case/, outsideNamespaceRegExp]
     }), postcssDiscardDuplicates]))
     .pipe(transformSelectors(removeOutsideNamespaceMarker, { splitOnCommas: true }))
     .pipe(cssmin({ sourceMap: true }))
