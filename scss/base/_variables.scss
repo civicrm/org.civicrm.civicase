@@ -28,6 +28,18 @@ $crm-grayblue-darker:       #c2cfd8 !default;
 $crm-white:                 #fff !default;
 $crm-black:                 #000 !default;
 
+//== Dropdowns
+//
+//## Dropdown menu container and contents.
+
+$dropdown-link-hover-bg:    $gray-lighter !default;
+$dropdown-header-color:     $gray-darker !default;
+
+$crm-dropdown-container-padding: 4px 0 9px 0;
+$crm-dropdown-item-padding:      7px 19px 7px 24px;
+$crm-dropdown-divider-margin:    7px 0;
+
+
 // Custom
 $box-shadow-card: 0 1px 4px 0 rgba(49, 40, 40, 0.2);
 $box-shadow-checkbox: 0 6px 20px 0 rgba(49, 40, 40, 0.03);

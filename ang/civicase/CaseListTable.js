@@ -155,6 +155,10 @@
       var contacts = [];
 
       _.each(cases, function (data) {
+        contacts = contacts.concat(CRM._.map(data.contacts, function (contact) {
+          return contact.contact_id;
+        }));
+
         if (data.next_activity) {
           contacts = contacts.concat(data.next_activity.assignee_contact_id);
           contacts = contacts.concat(data.next_activity.target_contact_id);
@@ -291,7 +295,9 @@
       var params = getCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page);
       if (firstLoad && $scope.viewingCase) {
         params[0][2].options.page_of_record = $scope.viewingCase;
-      } else if (firstLoad) {
+      }
+
+      if (firstLoad) {
         params.push(['Case', 'getcaselistheaders']);
       }
 

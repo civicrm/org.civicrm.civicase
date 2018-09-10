@@ -8,6 +8,7 @@
 }
 
 .civicase__contact-name {
+  color: inherit;
   margin-left: 5px;
   max-width: 130px;
   overflow: hidden;
@@ -15,13 +16,15 @@
   white-space: nowrap;
 }
 
-.civicase__contact-icon {
-  color: $crm-gray-matte;
+.civicase__contact-icon,
+.civicase__contact-icon-additional {
+  color: $crm-grayblue-darker;
   font-size: 18px;
   margin-top: 2px;
 }
 
 .civicase__contact-additional__container {
+  color: $brand-primary;
   cursor: pointer;
   margin-left: 8px;
 
@@ -30,18 +33,12 @@
   }
 
   .dropdown-menu {
+    display: block;
     left: 50%;
     max-height: 200px;
     overflow: auto;
     top: calc(100% + 5px);
     transform: translateX(-50%);
-  }
-
-  &:hover {
-    .dropdown-menu,
-    .civicase__contact-additional__arrow {
-      display: block;
-    }
   }
 
   .civicase__contact-icon {
@@ -78,7 +75,6 @@
 }
 
 .civicase__contact-additional__arrow {
-  display: none;
   position: relative;
   top: 6px;
 

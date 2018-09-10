@@ -1,12 +1,12 @@
 
 <!--  To do:
   Add
-  * use 'civicase__animated-checkbox-card--expanded' class : for enabled checkbox state 
+  * use 'civicase__animated-checkbox-card--expanded' class : for enabled checkbox state
   * Update links with activityFeedUrl function activityFeedUrl(caseid, activityType to link, activityStatus to Link)
   -->
 <div class="panel panel-default panel-strip-primary civicase__case-card civicase__animated-checkbox-card" ng-style="{'border-left-color': data.color}" ng-class="{'civicase__case-card--active': $parent.viewingCase === data.id, 'civicase__case-card--closed': data.status === 'Resolved'}" >
   <div class="panel-body">
-    <!--      
+    <!--
       TODO: To be implemented when implementing bulk actions.
       Click event to be implemented as a part of bulk actions
      <div ng-if="!$parent.bulkAllowed" class="civicase__case-card-lock">
@@ -21,7 +21,7 @@
     <div class="civicase__case-card__type">{{ data.case_type }}</div>
     <div class="civicase__case-card__next-milestone" ng-if="data.activity_summary.milestone.length > 0">
       <span>Next Milestone: </span>
-      <a class="civicase__case-card__next-milestone-date" 
+      <a class="civicase__case-card__next-milestone-date"
          ng-class="{'civicase__overdue-activity-icon': isOverdue(data.activity_summary.milestone[0].activity_date_time)}"
          ng-href="#{{ activityFeedUrl(data.id, 'milestone', 'incomplete', data.activity_summary.milestone[0].id) }}"
          title="{{data.activity_summary.milestone[0].subject || data.activity_summary.milestone[0].type;}}"
@@ -66,7 +66,7 @@
            ng-href="#{{ activityFeedUrl(data.id, null, 'incomplete') }}"
         > {{ data.category_count.overdue.other }} </a>
         <span ng-if="!data.category_count.incomplete.other && !data.category_count.overdue.other" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
-      </div>      
+      </div>
     </div>
     <div class="civicase__case-card__tags-container" ng-if="data.tag_id">
       <span

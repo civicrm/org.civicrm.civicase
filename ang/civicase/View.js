@@ -1,5 +1,21 @@
 (function (angular, $, _) {
-  // CaseList directive controller
+  var module = angular.module('civicase');
+
+  module.directive('civicaseView', function () {
+    return {
+      restrict: 'A',
+      templateUrl: '~/civicase/View.html',
+      controller: 'caseViewController',
+      scope: {
+        activeTab: '=civicaseTab',
+        isFocused: '=civicaseFocused',
+        item: '=civicaseView'
+      }
+    };
+  });
+
+  module.controller('caseViewController', caseViewController);
+
   function caseViewController ($scope, crmApi, formatActivity, formatCase, getActivityFeedUrl, $route, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
@@ -85,8 +101,9 @@
     }
 
     function getAvailableActivityTypes (activityCount, definition) {
-      var ret = [],
-        exclude = ['Change Case Status', 'Change Case Type'];
+      var ret = [];
+      var exclude = ['Change Case Status', 'Change Case Type'];
+
       _.each(definition.activityTypes, function (actSpec) {
         if (exclude.indexOf(actSpec.name) < 0) {
           var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
@@ -114,8 +131,8 @@
 
     $scope.$watch('isFocused', function () {
       $timeout(function () {
-        var $actHeader = $('.act-feed-panel .panel-header'),
-          $actControls = $('.act-feed-panel .act-list-controls');
+        var $actHeader = $('.act-feed-panel .panel-header');
+        var $actControls = $('.act-feed-panel .act-list-controls');
 
         if ($actHeader.hasClass('affix')) {
           $actHeader.css('width', $('.act-feed-panel').css('width'));
@@ -221,15 +238,16 @@
     };
 
     $scope.newActivityUrl = function (actType) {
-      var path = 'civicrm/case/activity',
-        args = {
-          action: 'add',
-          reset: 1,
-          cid: $scope.item.client[0].contact_id,
-          caseid: $scope.item.id,
-          atype: actType.id,
-          civicase_reload: $scope.caseGetParams()
-        };
+      var path = 'civicrm/case/activity';
+      var args = {
+        action: 'add',
+        reset: 1,
+        cid: $scope.item.client[0].contact_id,
+        caseid: $scope.item.id,
+        atype: actType.id,
+        civicase_reload: $scope.caseGetParams()
+      };
+
       // CiviCRM requires nonstandard urls for a couple special activity types
       if (actType.name === 'Email') {
         path = 'civicrm/activity/email/add';
@@ -278,6 +296,13 @@
       return _.range(num > panelLimit ? panelLimit : num);
     };
 
+    /**
+    * Toggle focus of the Summary View
+    */
+    $scope.focusToggle = function () {
+      $scope.isFocused = !$scope.isFocused;
+    };
+
     $scope.$watch('item', function () {
       // Fetch extra info about the case
       if ($scope.item && $scope.item.id && !$scope.item.definition) {
@@ -288,46 +313,35 @@
     });
   }
 
-  angular.module('civicase').directive('civicaseView', function () {
+  module.directive('caseTabAffix', function ($timeout) {
     return {
-      restrict: 'A',
-      template:
-        '<div class="panel panel-default civicase-view-panel">' +
-          '<div class="panel-header" ng-if="item" ng-include="\'~/civicase/CaseViewHeader.html\'"></div>' +
-          '<div class="panel-body case-view-body" ng-if="item" ng-include="\'~/civicase/CaseTabs.html\'"></div>' +
-          '<div ng-if="!item" class="civicase__loading-placeholder__case-view-panel" ng-include="\'~/civicase/CaseViewPlaceholder.html\'"></div>' +
-        '</div>' +
-        '<div class="panel panel-primary civicase-view-other-cases-panel" ng-if="item && item.relatedCases.length && activeTab === \'summary\'" ng-include="\'~/civicase/CaseViewOtherCases.html\'"></div>',
-      controller: caseViewController,
-      scope: {
-        activeTab: '=civicaseTab',
-        isFocused: '=civicaseFocused',
-        item: '=civicaseView'
-      }
+      scope: {},
+      link: casetabAffixLink
     };
-  })
-    .directive('caseTabAffix', function ($timeout) {
-      return {
-        scope: {},
-        link: function (scope, $el, attrs) {
-          $timeout(function () {
-            $caseNavigation = $('.civicase-view-tab-bar'),
-            $civicrmMenu = $('#civicrm-menu'),
-            $casePanelBody = $('.civicase-view-panel > .panel-body');
 
-            $caseNavigation.affix({
-              offset: {
-                top: $casePanelBody.offset().top - 87
-              }
-            })
-              .on('affixed.bs.affix', function () {
-                $caseNavigation.css('top', $civicrmMenu.height());
-              })
-              .on('affixed-top.bs.affix', function () {
-                $caseNavigation.css('top', 'auto');
-              });
-          });
-        }
-      };
-    });
+    /**
+     * Link function for caseTabAffix
+     *
+     * @param {Object} scope
+     * @param {Object} $el
+     * @param {Object} attrs
+     */
+    function casetabAffixLink (scope, $el, attrs) {
+      $timeout(function () {
+        var $caseNavigation = $('.civicase-view-tab-bar');
+        var $civicrmMenu = $('#civicrm-menu');
+        var $casePanelBody = $('.civicase-view-panel > .panel-body');
+
+        $caseNavigation.affix({
+          offset: {
+            top: $casePanelBody.offset().top - 87
+          }
+        }).on('affixed.bs.affix', function () {
+          $caseNavigation.css('top', $civicrmMenu.height());
+        }).on('affixed-top.bs.affix', function () {
+          $caseNavigation.css('top', 'auto');
+        });
+      });
+    }
+  });
 })(angular, CRM.$, CRM._);
