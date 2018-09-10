@@ -1,8 +1,7 @@
 <div class="civicase__case-list">
   <div
-    ng-hide="caseIsFocused"
     class="panel panel-default civicase__case-list-panel"
-    ng-class="{'civicase__case-list-panel--summary': viewingCase}">
+    ng-class="{'civicase__case-list-panel--summary': viewingCase, 'civicase__case-list-panel--focused': caseIsFocused}">
     <div class="civicase__case-list-table-container" sticky-table-header>
       <table ng-show="!caseIsFocused" class="table civicase__case-list-table" >
         <thead class="civicase__case-list-table__header">
@@ -122,8 +121,7 @@
   </div>
   <div
     class="civicase__case-details-panel"
-    ng-show="viewingCase"
-    ng-class="{'civicase__case-details-panel--focused': caseIsFocused}"
+    ng-class="{'civicase__case-details-panel--focused': caseIsFocused, 'civicase__case-details-panel--summary': viewingCase}"
     civicase-view="viewingCaseDetails"
     civicase-tab="viewingCaseTab"
     civicase-focused="caseIsFocused"></div>

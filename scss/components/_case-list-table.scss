@@ -108,7 +108,10 @@
 }
 
 .civicase__case-list-panel {
+  overflow: hidden;
   padding: 0;
+  position: absolute;
+  transition: width 0.3s linear;
 }
 
 .civicase__case-list-panel--summary {
@@ -120,8 +123,18 @@
   }
 }
 
+.civicase__case-list-panel--focused {
+  width: 0;
+}
+
 .civicase__case-details-panel {
   float: right;
+  overflow: hidden;
+  transition: width 0.3s;
+  width: 0;
+}
+
+.civicase__case-details-panel--summary {
   width: calc(100% - #{$case-card-width});
 }
 
