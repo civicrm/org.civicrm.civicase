@@ -1,15 +1,14 @@
 <div crm-ui-debug="cases"></div>
 <div crm-ui-debug="viewingCase"></div>
 <div crm-ui-debug="viewingCaseTab"></div>
-<h1 crm-page-title>{{ pageTitle }}</h1>
 <div id="bootstrap-theme" class="clearfix civicase__container">
-
-  <div class="panel panel-default civicase-search-panel clearfix" ng-class="{'case-is-focused': caseIsFocused}" civicase-search="filters" hidden-filters="hiddenFilters" expanded="searchIsOpen" on-search="applyAdvSearch(selectedFilters)">
+  <h1 crm-page-title>Manage Cases</h1>  <!-- Added for SEO purpose (This will be hidden through css) -->
+  <civicase-search filters="filters" hidden-filters="hiddenFilters" expanded="searchIsOpen" on-search="applyAdvSearch(selectedFilters)">
     <div class="civicase-filters-placeholder" ng-click="unfocusCase()">
       <i class="fa fa-angle-double-down" aria-hidden="true"></i>
       {{ ts('Filters') }}
       <i class="fa fa-angle-double-down" aria-hidden="true"></i>
     </div>
-  </div>
+  </civicase-search>
   <civicase-case-list-table></civicase-case-list-table>
 </div>

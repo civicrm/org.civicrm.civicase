@@ -62,8 +62,13 @@
             })
             // After element is affixed set scrolling pos (to avoid glitch) and top position
               .on('affixed.bs.affix', function () {
-                $header.scrollLeft($table.scrollLeft());
-                $header.css('top', bodyPadding + 'px');
+                $header.scrollLeft($table.scrollLeft()); // Bind scrolling
+                $header.css('top', bodyPadding + 'px'); // Set top pos to body padding so that it don't overlap with the toolbar
+                $table.css('padding-top', $header.height() + 'px'); // Add top padding to remove the glitch when header moves out of DOM relative position
+              })
+              .on('affixed-top.bs.affix', function () {
+                $header.css('top', 0); // Resets top pos when in default state
+                $table.css('padding-top', 0); // Resets padding top when in default state
               });
 
             // Attach scroll function
