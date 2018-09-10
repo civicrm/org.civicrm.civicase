@@ -147,11 +147,11 @@
 
   angular.module('civicase').directive('civicaseSearch', function () {
     return {
-      restrict: 'A',
+      replace: true,
       templateUrl: '~/civicase/Search.html',
       controller: searchController,
       scope: {
-        defaults: '=civicaseSearch',
+        defaults: '=filters',
         hiddenFilters: '=',
         onSearch: '@',
         expanded: '='
