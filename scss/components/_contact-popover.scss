@@ -10,6 +10,7 @@
 
   .civicase__contact-popover__header {
     h2 {
+      line-height: 24px;
       margin: 0;
     }
 
@@ -37,12 +38,18 @@
 
   .civicase__contact-popover__detail-header,
   .civicase__contact-popover__detail-value {
+    color: $gray-dark;
     float: left;
-    // displays ellipsis for text that overflows
+    line-height: 18px;
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 55%;
+
+    strong {
+      color: $gray-darker;
+      font-weight: 600;
+    }
   }
 
   .civicase__contact-popover__detail-header {
