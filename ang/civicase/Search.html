@@ -1,20 +1,20 @@
-<div class="panel panel-default civicase__filter-search-panel clearfix" ng-class="{'case-is-focused': $parent.caseIsFocused}">
+<div class="panel panel-default civicase__case-filter-panel clearfix" ng-class="{'case-is-focused': $parent.caseIsFocused}">
   <div crm-ui-debug="filters"></div>
-  <div class="panel-header civicase__filter-search-panel__header">
-    <h3 class="civicase__filter-search-panel__header-title"> {{ $parent.pageTitle }} </h3>
-    <form class="form-inline civicase-filters civicase__filter-search-panel__filters-container">
-      <input class="form-control civicase__filter-search-panel__filter" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Case Type: Any'), data: caseTypeOptions}" ng-model="filters.case_type_id" />
-      <input class="form-control civicase__filter-search-panel__filter" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
-      <input class="form-control civicase__filter-search-panel__filter" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
-      <button class="btn btn-primary btn-sm pull-right civicase__filter-search-panel__button civicase__filter-search-panel__button--others" ng-click="showMore()" ng-show="!expanded">
+  <div class="panel-header">
+    <h3 class="civicase__case-filter-panel__title"> {{ $parent.pageTitle }} </h3>
+    <form class="form-inline civicase-filters civicase__case-filters-container">
+      <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Case Type: Any'), data: caseTypeOptions}" ng-model="filters.case_type_id" />
+      <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
+      <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
+      <button class="btn btn-primary btn-sm pull-right civicase__case-filter-panel__button civicase__case-filter-panel__button--others" ng-click="showMore()" ng-show="!expanded">
         <i class="fa fa-gear"></i> {{ filterDescription.length ? ts('Edit Search') : ts('Other Criteria') }}
       </button>
-      <button class="btn btn-primary btn-sm pull-right civicase__filter-search-panel__button civicase__filter-search-panel__button--search" ng-click="doSearch()" ng-show="expanded">
+      <button class="btn btn-primary btn-sm pull-right civicase__case-filter-panel__button civicase__case-filter-panel__button--search" ng-click="doSearch()" ng-show="expanded">
         <i class="fa fa-search"></i> {{ ts('Search') }}
       </button>
     </form>
   </div>
-  <form class="panel-body form-horizontal civicase__filter-search-panel__form" ng-show="expanded">
+  <form class="panel-body form-horizontal civicase__case-filter-panel__form" ng-show="expanded">
     <div class="form-group">
       <label ng-if="isEnabled('id')" class="control-label col-lg-2">{{ ts('Case ID') }}</label>
       <div class="col-lg-4">
@@ -60,13 +60,13 @@
     <div ng-include="'~/civicase/CaseSearchCustom.html'"></div>
     <hr />
     <div>
-      <button class="btn btn-primary btn-sm civicase__filter-search-panel__button civicase__filter-search-panel__button--search" ng-click="doSearch()" ng-show="expanded">
+      <button class="btn btn-primary btn-sm civicase__case-filter-panel__button civicase__case-filter-panel__button--search" ng-click="doSearch()" ng-show="expanded">
         <i class="fa fa-search"></i> {{ ts('Search') }}
       </button>
     </div>
   </form>
-  <div class="panel-body civicase__filter-search-panel__description" ng-if="!expanded && filterDescription.length">
-    <button class="btn btn-danger btn-sm pull-right civicase__filter-search-panel__button civicase__filter-search-panel__button--clear" ng-click="clearSearch()">
+  <div class="panel-body civicase__case-filter-panel__description" ng-if="!expanded && filterDescription.length">
+    <button class="btn btn-danger btn-sm pull-right civicase__case-filter-panel__button civicase__case-filter-panel__button--clear" ng-click="clearSearch()">
       <i class="fa fa-ban"></i> {{ ts('Clear Search') }}
     </button>
     <ul class="civicase__filter-search-description">
