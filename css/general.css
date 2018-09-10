@@ -1,4 +1,4 @@
-#bootstrap-theme .text-dark {
+/* #bootstrap-theme .text-dark {
   color: #383f4b;
 }
 #bootstrap-theme .btn .caret {
@@ -24,11 +24,13 @@
 }
 
 /* Customize tabs on "View Contact" page */
+/*
 #civicaseContactTab h1[crm-page-title=""] {
     display: none;
 }
 
 /* Searchable dropdown widget */
+/*
 #bootstrap-theme .dropdown-toggle.searchable-dropdown > input {
   margin: 0;
   display: none;
@@ -104,4 +106,4 @@
 #bootstrap-theme .open>.dropdown-menu {
   position: fixed;
   width: fit-content;
-}
+} */

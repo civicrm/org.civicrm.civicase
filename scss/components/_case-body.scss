@@ -1,3 +1,56 @@
 .civicase__case-body {
   padding: 0;
 }
+
+
+.civicase__summary-tab__basic-details {
+  .panel-body {
+    display: flex;
+    flex-direction: row;
+    padding: 32px 48px;
+  }
+}
+
+.civicase__summary-tab__subject-container {
+  flex-basis: 50%;
+  padding-right: 48px;
+}
+
+.civicase__summary-tab__subject {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.civicase__summary-tab__details {
+  color: $crm-gray-matte;
+  margin: 13px 0;
+}
+
+.civicase__summary-tab__last-updated {
+  color: $crm-gray-matte;
+}
+
+.civicase__summary-activity-count {
+  align-items: center;
+  border-left: 1px solid $gray-light;
+  display: flex;
+  flex-basis: 16.6%;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  > div:nth-child(1) {
+    font-size: 56px;
+    font-weight: 600;
+  }
+
+  > div:nth-child(2) {
+    color: $crm-gray-matte;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.civicase__summary-overdue-count {
+  font-weight: 600;
+}

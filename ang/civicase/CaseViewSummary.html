@@ -1,4 +1,39 @@
-<div class="civicase-view-summary crm-entity" data-entity="Case" data-id="{{ item.id }}">
+<div class="civicase__summary-tab">
+  <!-- Subject and QuickLinks -->
+  <div class="panel panel-default civicase__summary-tab__basic-details">
+    <div class="panel-body">
+      <div class="civicase__summary-tab__subject-container">
+        <div class="civicase__summary-tab__subject">Case Subject Lorem Ipsum</div>
+        <div class="civicase__summary-tab__details">
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+        </div>
+        <div>
+          <span class="civicase__summary-tab__last-updated">Case last updated: </span>
+          <span>28th April 2018</span>
+        </div>
+      </div>
+      <div class="civicase__summary-activity-count">
+        <div>12</div>
+        <div>Open Tasks</div>
+        <div class="text-danger civicase__summary-overdue-count">1 overdue</div>
+      </div>
+      <div class="civicase__summary-activity-count">
+        <div>3</div>
+        <div>Unread Comms</div>
+        <div class="text-danger civicase__summary-overdue-count">1 overdue</div>
+      </div>
+      <div class="civicase__summary-activity-count">
+        <div>5</div>
+        <div>Scheduled Activities</div>
+        <div class="text-danger civicase__summary-overdue-count">1 overdue</div>
+      </div>
+    </div>
+  </div>
+  <!-- End - Subject and QuickLinks -->
+</div>
+
+
+<!-- <div class="civicase-view-summary crm-entity" data-entity="Case" data-id="{{ item.id }}">
   <div class="row civicase-summary-top-outer">
     <div class="civicase-case-subject col-md-6">
       <label class="civicase-case-subject-label">Subject: </label>
@@ -35,5 +70,5 @@
       <div ng-include="'~/civicase/CaseViewTasks.html'"></div>
     </div>
   </div>
-  
-</div>
+
+</div> -->
