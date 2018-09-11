@@ -40,7 +40,7 @@
       />
     </span>
     <span ng-switch-when="Select Date">
-      <span placeholder="{{ field.label }}" crm-ui-date-range="filters[field.name]"></span>
+      <civicase-ui-date-range placeholder="{{ field.label }}" date-range="filters[field.name]"></civicase-ui-date-range>
     </span>
     <span ng-switch-default>
       <input placeholder="{{ field.label }}" type="{{ field.data_type === 'Number' || field.data_type === 'Integer' ? 'number' : 'text' }}" ng-if="!field.options && !field.is_search_range" class="form-control" id="case_search_field_custom_{{ field.id }}" ng-model="filters[field.name]" />

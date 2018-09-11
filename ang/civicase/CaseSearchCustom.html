@@ -13,7 +13,7 @@
           />
         </div>
         <div ng-switch-when="Select Date">
-          <div crm-ui-conditional id="case_search_field_custom_{{ field.id }}" crm-ui-date-range="filters[field.name]"></div>
+          <civicase-ui-date-range crm-ui-conditional id="case_search_field_custom_{{ field.id }}" date-range="filters[field.name]"></civicase-ui-date-range>
         </div>
         <div ng-switch-default>
           <input crm-ui-conditional type="{{ field.data_type === 'Number' || field.data_type === 'Integer' ? 'number' : 'text' }}" ng-if="!field.options && !field.is_search_range" class="form-control" id="case_search_field_custom_{{ field.id }}" ng-model="filters[field.name]" />

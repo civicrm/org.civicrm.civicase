@@ -2,77 +2,67 @@
   <div crm-ui-debug="filters"></div>
   <div class="panel-header">
     <h3 class="civicase__case-filter-panel__title"> {{ $parent.pageTitle }} </h3>
-    <form class="form-inline civicase-filters civicase__case-filters-container">
+    <form class="form-inline civicase__case-filters-container">
       <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Case Type: Any'), data: caseTypeOptions}" ng-model="filters.case_type_id" />
       <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
       <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
-      <button class="btn btn-primary btn-sm pull-right civicase__case-filter-panel__button civicase__case-filter-panel__button--others" ng-click="showMore()" ng-show="!expanded">
+      <button class="btn btn-primary btn-sm pull-right civicase__case-filter-panel__button" ng-click="expanded = true" ng-show="!expanded">
         <i class="fa fa-gear"></i> {{ filterDescription.length ? ts('Edit Search') : ts('Other Criteria') }}
       </button>
-      <button class="btn btn-primary btn-sm pull-right civicase__case-filter-panel__button civicase__case-filter-panel__button--search" ng-click="doSearch()" ng-show="expanded">
+      <button class="btn btn-primary btn-sm pull-right civicase__case-filter-panel__button" ng-click="doSearch()" ng-show="expanded">
         <i class="fa fa-search"></i> {{ ts('Search') }}
       </button>
     </form>
   </div>
   <form class="panel-body form-horizontal civicase__case-filter-panel__form" ng-show="expanded">
-    <div class="form-group">
-      <label ng-if="isEnabled('id')" class="control-label col-lg-2">{{ ts('Case ID') }}</label>
-      <div class="col-lg-4">
-        <input ng-if="isEnabled('id')" class="form-control" type="number" ng-model="filters.id" />
+    <div class="civicase__case-filter-form-elements-container">
+      <div ng-if="isEnabled('id')" class="civicase__case-filter-form-elements civicase__case-filter-form-elements--case-id">
+        <label >{{ ts('Case ID') }}</label>
+        <input class="form-control" type="number" ng-model="filters.id" />
       </div>
-    </div>
-    <div class="form-group">
-      <label ng-if="isEnabled('contact_id')" class="control-label col-lg-2">{{ ts('Client Name or Email') }}</label>
-      <div class="col-lg-4">
-        <input ng-if="isEnabled('contact_id')" class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.contact_id" />
+      <div ng-if="isEnabled('contact_id')" class="civicase__case-filter-form-elements">
+        <label>{{ ts('Client Name or Email') }}</label>
+        <input class="form-control" class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.contact_id" />
       </div>
-      <div class="col-lg-6">
-        <div ng-if="checkPerm('administer CiviCase') && isEnabled('is_deleted')">
-          <input type="checkbox" ng-model="filters.is_deleted" id="case_search_field_is_deleted" />
-          <label for="case_search_field_is_deleted" class="control-label">{{ ts('Deleted Cases') }}</label>
+      <div class="civicase__case-filter-form-elements" ng-if="checkPerm('administer CiviCase') && isEnabled('is_deleted')">
+        <span class="civicase__checkbox" role="checkbox" aria-checked="{{filters.is_deleted}}" tabindex="0" aria-labelledby="Deleted Cases" ng-click="toggleIsDeleted($event)" ng-keydown="toggleIsDeleted($event)">
+          <i ng-if="filters.is_deleted" class="civicase__checkbox--checked material-icons">check_box</i>
+        </span>
+        <label ng-click="toggleIsDeleted($event)" for="case_search_field_is_deleted" class="control-label">{{ ts('Deleted Cases') }}</label>
+      </div>
+      <div ng-if="isEnabled('start_date')" class="civicase__case-filter-form-elements">
+        <label>{{ ts('Case Start Date') }}</label>
+        <civicase-ui-date-range date-range="filters.start_date"></civicase-ui-date-range>
+      </div>
+      <div  ng-if="isEnabled('end_date')" class="civicase__case-filter-form-elements">
+        <label> {{ ts('Case End Date') }}</label>
+        <civicase-ui-date-range date-range="filters.end_date"></civicase-ui-date-range>
+      </div>
+      <div class="civicase__case-filter-form-elements">
+        <label>{{ ts('Tagged') }}</label>
+        <div>
+          <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'LIKE':'%civicrm_case%'}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
         </div>
       </div>
-    </div>
-    <div class="form-group" ng-if="isEnabled('case_manager')">
-      <label for="case_search_field_case_manager" class="control-label col-lg-2">{{ ts('Case Manager') }}</label>
-      <div class="col-lg-4">
-        <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.case_manager" id="case_search_field_case_manager" />
-      </div>
-    </div>
-    <div class="form-group">
-      <label ng-if="isEnabled('start_date')" class="control-label col-lg-2">{{ ts('Case Start Date') }}</label>
-      <div class="col-lg-4">
-        <div ng-if="isEnabled('start_date')" crm-ui-date-range="filters.start_date"></div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label ng-if="isEnabled('end_date')" class="control-label col-lg-2">{{ ts('Case End Date') }}</label>
-      <div class="col-lg-4">
-        <div ng-if="isEnabled('end_date')" crm-ui-date-range="filters.end_date"></div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-lg-2">{{ ts('Tagged') }}</label>
-      <div class="col-lg-4">
-        <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'LIKE':'%civicrm_case%'}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
-      </div>
-    </div>
-    <div ng-include="'~/civicase/CaseSearchCustom.html'"></div>
-    <hr />
-    <div>
-      <button class="btn btn-primary btn-sm civicase__case-filter-panel__button civicase__case-filter-panel__button--search" ng-click="doSearch()" ng-show="expanded">
-        <i class="fa fa-search"></i> {{ ts('Search') }}
-      </button>
+      <div class="civicase__case-filter-form-elements" ng-include="'~/civicase/CaseSearchCustom.html'"></div>
     </div>
   </form>
   <div class="panel-body civicase__case-filter-panel__description" ng-if="!expanded && filterDescription.length">
-    <button class="btn btn-danger btn-sm pull-right civicase__case-filter-panel__button civicase__case-filter-panel__button--clear" ng-click="clearSearch()">
-      <i class="fa fa-ban"></i> {{ ts('Clear Search') }}
-    </button>
-    <ul class="civicase__filter-search-description">
-      <li ng-repeat="des in filterDescription" class="col-lg-6">
+    <ul class="civicase__filter-search-description-list-container">
+      <li ng-repeat="des in filterDescription" class="col-lg-6 civicase__filter-search-description-list">
         <strong>{{ des.label }}:</strong> {{ des.text }}
       </li>
     </ul>
+    <button class="btn btn-danger btn-sm pull-right civicase__case-filter-panel__button" ng-click="clearSearch()">
+      <i class="fa fa-ban"></i> {{ ts('Clear Search') }}
+    </button>    
   </div>
 </div>
+
+<!-- Todo: Use this HTML to remove unneccesary functions and code, to be fixed in C51-35
+ <div class="form-group" ng-if="isEnabled('case_manager')"> 
+   <label for="case_search_field_case_manager" class="control-label col-lg-2">{{ ts('Case Manager') }}</label>
+   <div class="col-lg-4"> 
+     <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.case_manager" id="case_search_field_case_manager" /> 
+   </div> 
+ </div> -->

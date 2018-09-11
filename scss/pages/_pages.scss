@@ -1,5 +1,26 @@
+/* stylelint-disable selector-max-id */
 .page-civicrm-case-a { 
   #page { 
     margin: 0;
+    padding-top: 0;
   }
+
+  .page-title {
+    @extend %element-invisible;
+  }
+
+  #branding {
+    padding: 16px 0 !important;
+
+    .breadcrumb {
+      left: 0;
+      line-height: 18px;
+      padding: 0 20px;
+      top: 0;
+
+      > a { /* stylelint-disable selector-max-compound-selectors */
+        left: 0;
+      }
+    }
+  }  
 }
