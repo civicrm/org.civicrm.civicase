@@ -1,11 +1,16 @@
-.contact-popover-container {
-  color: $gray-darker;
-  max-width: 90vw;
-  padding: 20px;
-  width: $contact-popover-width;
+.___outside-namespace {
+  .contact-popover-container {
+    border: 1px solid $gray-light;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px 0 rgba(49, 40, 40, 0.13);
+    color: $gray-darker;
+    max-width: 90vw;
+    padding: 20px;
+    width: $contact-popover-width;
 
-  .popover-content {
-    padding: 0;
+    .popover-content {
+      padding: 0;
+    }
   }
 
   .civicase__contact-popover__header {
@@ -16,6 +21,7 @@
 
     // HRs outside of #bootstrap-theme don't have margins
     hr {
+      background-color: $gray-light;
       margin: 16px 0;
     }
   }
