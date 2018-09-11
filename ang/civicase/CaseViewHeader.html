@@ -4,7 +4,14 @@
     <i class="material-icons">keyboard_arrow_{{isFocused ? 'right' : 'left'}}</i>
   </button>
   <div class="civicase__case-header__content">
-    <div class="civicase__contact-card civicase__contact-card--client" contact-card contacts="item.client"></div>
+    <div class="civicase__case-header__content__first-row">
+      <i
+        ng-if="item.is_deleted"
+        class="civicase__case-header__content__trash text-danger material-icons"
+        title="{{ ts('Case is in Trash') }}">delete_outline
+      </i>
+      <div class="civicase__contact-card--client" contact-card contacts="item.client" no-icon="item.is_deleted"></div>
+    </div>
     <div class="civicase__case-header__dates">
       <span>{{ CRM.utils.formatDate(item.start_date) || '. . .' }}</span> -
       <span ng-if="item.end_date">{{ CRM.utils.formatDate(item.end_date) }}</span>
@@ -51,7 +58,7 @@
       <button
         type="button"
         style="background-color: {{ caseStatuses[item.status_id].color }};"
-        class="btn btn-primary dropdown-toggle"
+        class="btn btn-primary"
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Change case status') }}">
         {{ item.status }}
         <span class="caret"></span>
@@ -71,7 +78,7 @@
       </ul>
     </div>
     <div class="btn-group btn-group-md">
-      <button type="button" class="civicase__case-header__action-icon btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button type="button" class="civicase__case-header__action-icon btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="material-icons">menu</i>
       </button>
       <ul

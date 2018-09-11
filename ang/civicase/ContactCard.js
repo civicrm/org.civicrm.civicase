@@ -8,7 +8,8 @@
       templateUrl: '~/civicase/ContactCard.html',
       scope: {
         data: '=contacts',
-        isAvatar: '=avatar'
+        isAvatar: '=avatar',
+        noIcon: '=noIcon'
       },
       link: contactCardLink
     };

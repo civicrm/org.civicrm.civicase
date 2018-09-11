@@ -53,6 +53,18 @@
   }
 }
 
+.civicase__case-header__content__first-row {
+  display: flex;
+}
+
+.civicase__case-header__content__trash {
+  font-size: 30px;
+  margin-right: 5px;
+  position: relative;
+  top: 2px;
+  width: 20px;
+}
+
 .civicase__case-header__dates,
 .civicase__case-header__case-info {
   color: $crm-gray-matte;
