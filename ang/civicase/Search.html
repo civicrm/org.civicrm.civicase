@@ -34,11 +34,11 @@
       </div>
       <div class="civicase__case-filter-form-elements">
         <label ng-if="isEnabled('start_date')">{{ ts('Case Start Date') }}</label>
-        <div ng-if="isEnabled('start_date')" crm-ui-date-range="filters.start_date"></div>
+        <civicase-ui-date-range ng-if="isEnabled('start_date')" date-range="filters.start_date"></civicase-ui-date-range>
       </div>
       <div class="civicase__case-filter-form-elements">
         <label ng-if="isEnabled('end_date')">{{ ts('Case End Date') }}</label>
-        <div ng-if="isEnabled('end_date')" crm-ui-date-range="filters.end_date"></div>
+        <civicase-ui-date-range ng-if="isEnabled('end_date')" date-range="filters.end_date"></civicase-ui-date-range>
       </div>
       <div class="civicase__case-filter-form-elements">
         <label>{{ ts('Tagged') }}</label>
