@@ -32,9 +32,19 @@
     width: 240px;
   }
 
+  .select2-choice {
+    height: auto;
+    line-height: 18px;
+    padding: 5px 10px;
+  }
+
+  .select2-arrow b {
+    margin-top: 0;
+    width: 20px;
+  }  
+
   .select2-choices {
     background-image: none;
-    padding: 2.5px 5px;
 
     &::before {
       top: 7px;
@@ -97,7 +107,7 @@
   &.civicase__case-filter-form-elements--case-id {
     .form-control {
       max-width: 160px;
-    }  
+    }
   }
 }
 

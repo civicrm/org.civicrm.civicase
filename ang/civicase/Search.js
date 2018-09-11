@@ -51,10 +51,23 @@
       }
     };
 
+    var caseRelationshipConfig = [
+      {
+        'text': 'All Cases',
+        'id': 'all'
+      }, {
+        'text': 'My cases',
+        'id': 'case_manager'
+      }, {
+        'text': 'Cases I am involved',
+        'id': 'contact_id'
+      }
+    ];
+
     $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
     $scope.caseStatusOptions = _.map(caseStatuses, mapSelectOptions);
     $scope.customGroups = CRM.civicase.customSearchFields;
-    $scope._ = _;
+    $scope.caseRelationshipOptions = caseRelationshipConfig;
     $scope.checkPerm = CRM.checkPerm;
     $scope.filterDescription = buildDescription();
     $scope.filters = angular.extend({}, $scope.defaults);
@@ -77,6 +90,16 @@
           }
         });
       });
+    });
+
+    /**
+     * Watcher for relationshipType filter
+     */
+    $scope.$watch('relationshipType', function () {
+      if ($scope.relationshipType) {
+        $scope.relationshipType[0] === 'case_manager' ? $scope.filters.case_manager = [CRM.config.user_contact_id] : delete ($scope.filters.case_manager);
+        $scope.relationshipType[0] === 'contact_id' ? $scope.filters.contact_id = [CRM.config.user_contact_id] : delete ($scope.filters.contact_id);
+      }
     });
 
     /**
