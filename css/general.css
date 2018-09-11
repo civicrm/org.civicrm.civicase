@@ -23,31 +23,6 @@
   transition: height .2s linear;
 }
 
-
-#bootstrap-theme .crm-ui-range > span {
-  width: 50%;
-  display: inline-block;
-}
-#bootstrap-theme .crm-ui-range span.crm-form-date-wrapper {
-  width: 100%;
-  display: inline-block;
-  position: relative;
-}
-#bootstrap-theme .crm-ui-range span.crm-form-date-wrapper .crm-clear-link {
-  color: #42AFCB;
-  position: absolute;
-  right: 46px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-#bootstrap-theme .crm-ui-range span.crm-form-date-wrapper .crm-clear-link i.fa-times:before {
-  content: '\f057';
-}
-#bootstrap-theme .crm-ui-range .crm-form-date {
-  width: 100%;
-  display: inline-block;
-}
-
 /* Customize tabs on "View Contact" page */
 #civicaseContactTab h1[crm-page-title=""] {
     display: none;

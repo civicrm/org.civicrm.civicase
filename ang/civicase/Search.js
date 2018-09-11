@@ -1,81 +1,31 @@
 (function (angular, $, _) {
-  // Case search directive controller
-  function searchController ($scope, $location, $timeout) {
+  var module = angular.module('civicase');
+
+  module.directive('civicaseSearch', function () {
+    return {
+      replace: true,
+      templateUrl: '~/civicase/Search.html',
+      controller: searchController,
+      scope: {
+        defaults: '=filters',
+        hiddenFilters: '=',
+        onSearch: '@',
+        expanded: '='
+      }
+    };
+  });
+
+  /**
+   * Controller Function for civicase-search directive
+   *
+   * @param {object} $scope
+   * @param {object} $timeout
+   */
+  function searchController ($scope, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
-
-    function mapSelectOptions (opt) {
-      return {
-        id: opt.value || opt.name,
-        text: opt.label || opt.title,
-        color: opt.color,
-        icon: opt.icon
-      };
-    }
-
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = CRM.civicase.caseStatuses;
-
-    $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
-    $scope.caseStatusOptions = _.map(caseStatuses, mapSelectOptions);
-    $scope.customGroups = CRM.civicase.customSearchFields;
-    $scope._ = _;
-    $scope.checkPerm = CRM.checkPerm;
-
-    $scope.filters = angular.extend({}, $scope.defaults);
-    $scope.$watchCollection('filters', function () {
-      if (!$scope.expanded) {
-        $scope.doSearch();
-      }
-    });
-
-    var $tableHeader = $('.civicase__case-list-panel .civicase__case-list table thead');
-
-    $scope.$watch('expanded', function () {
-      $timeout(function () {
-        $($tableHeader).data('bs.affix').options.offset.top = $('.civicase__case-list-panel').offset().top - 50;
-      });
-    });
-
-    $scope.showMore = function () {
-      $scope.expanded = true;
-    };
-
-    $scope.isEnabled = function (field) {
-      return !$scope.hiddenFilters || !$scope.hiddenFilters[field];
-    };
-
-    $scope.setCaseManager = function () {
-      $scope.filters.case_manager = $scope.caseManagerIsMe() ? null : [CRM.config.user_contact_id];
-    };
-
-    $scope.caseManagerIsMe = function () {
-      return $scope.filters.case_manager && $scope.filters.case_manager.length === 1 && parseInt($scope.filters.case_manager[0], 10) === CRM.config.user_contact_id;
-    };
-
-    function formatSearchFilters (inp) {
-      var search = {};
-      _.each(inp, function (val, key) {
-        if (!_.isEmpty(val) || ((typeof val === 'number') && val) || ((typeof val === 'boolean') && val)) {
-          search[key] = val;
-        }
-      });
-      return search;
-    }
-    $scope.doSearch = function () {
-      $scope.filterDescription = buildDescription();
-      $scope.expanded = false;
-      $scope.$parent.$eval($scope.onSearch, {
-        selectedFilters: formatSearchFilters($scope.filters)
-      });
-    };
-
-    $scope.clearSearch = function () {
-      $scope.filters = {};
-      $scope.doSearch();
-    };
-
-    // Describe selected filters when collapsed
     var allSearchFields = {
       id: {
         label: ts('Case ID'),
@@ -100,11 +50,147 @@
         label: ts('Tags')
       }
     };
+
+    $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
+    $scope.caseStatusOptions = _.map(caseStatuses, mapSelectOptions);
+    $scope.customGroups = CRM.civicase.customSearchFields;
+    $scope._ = _;
+    $scope.checkPerm = CRM.checkPerm;
+    $scope.filterDescription = buildDescription();
+    $scope.filters = angular.extend({}, $scope.defaults);
+
+    /**
+     * Describe selected filters when collapsed
+     */
     _.each(CRM.civicase.customSearchFields, function (group) {
       _.each(group.fields, function (field) {
         allSearchFields['custom_' + field.id] = field;
       });
     });
+
+    /**
+     * Watcher for expanded state and update tableHeader top offset likewise
+     */
+    $scope.$watch('expanded', function () {
+      $timeout(function () {
+        var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
+        var $tableHeader = $('.civicase__case-list-table__header');
+        var topPos = $tableHeader.offset().top - bodyPadding;
+        $tableHeader.affix({
+          offset: {
+            top: topPos
+          }
+        });
+      });
+    });
+
+    /**
+     * Watcher for filter collection to update the search
+     * Only works when dropdown is unexpanded
+     */
+    $scope.$watchCollection('filters', function () {
+      if (!$scope.expanded) {
+        $scope.doSearch();
+      }
+    });
+
+    /**
+     * Expand the dropdown when clicked on other criteria button
+     */
+    $scope.showMore = function () {
+      $scope.expanded = true;
+    };
+
+    /**
+     * Toggle logic for show deleted cases checkbox
+     *
+     * @param {object} $event - event object of Event API
+     */
+    $scope.toggleIsDeleted = function ($event) {
+      if ($event.type === 'click' || ($event.type === 'keydown' && ($event.keyCode === 32 || $event.keyCode === 13))) {
+        $scope.filters.is_deleted = !$scope.filters.is_deleted;
+        $event.preventDefault();
+      }
+    };
+
+    /**
+     * Logic to show filter only when not hidden
+     * This is configured from the backend
+     *
+     * @param {string} field - key of the field to be checked for
+     */
+    $scope.isEnabled = function (field) {
+      return !$scope.hiddenFilters || !$scope.hiddenFilters[field];
+    };
+
+    //
+    $scope.setCaseManager = function () {
+      $scope.filters.case_manager = $scope.caseManagerIsMe() ? null : [CRM.config.user_contact_id];
+    };
+    /**
+     * Checks if the current logged in user is a case manager
+     */
+    $scope.caseManagerIsMe = function () {
+      return $scope.filters.case_manager && $scope.filters.case_manager.length === 1 && parseInt($scope.filters.case_manager[0], 10) === CRM.config.user_contact_id;
+    };
+
+    /**
+     * Logic to setup filter params and call search API
+     * to feed results for cases
+     */
+    $scope.doSearch = function () {
+      $scope.filterDescription = buildDescription();
+      $scope.expanded = false;
+      $scope.$parent.$eval($scope.onSearch, {
+        selectedFilters: formatSearchFilters($scope.filters)
+      });
+    };
+
+    /**
+     * Logic for clearing search filters
+     */
+    $scope.clearSearch = function () {
+      $scope.filters = {};
+      $scope.doSearch();
+    };
+
+    /**
+     * Logic to map the option parameter from API
+     * to show up correctly on the UI.
+     *
+     * @param {object} opt object for caseTypes
+     * @return {object} mapped value to be used in UI
+     */
+    function mapSelectOptions (opt) {
+      return {
+        id: opt.value || opt.name,
+        text: opt.label || opt.title,
+        color: opt.color,
+        icon: opt.icon
+      };
+    }
+
+    /**
+     * Formats search fitler as per the API request header format
+     *
+     * @params {object} inp - Object for input option to be formatted
+     * @return (object} search - returns formatted key value pair of filters
+     */
+    function formatSearchFilters (inp) {
+      var search = {};
+      _.each(inp, function (val, key) {
+        if (!_.isEmpty(val) || ((typeof val === 'number') && val) || ((typeof val === 'boolean') && val)) {
+          search[key] = val;
+        }
+      });
+      return search;
+    }
+
+    /**
+     * Builds human readable filter description to be shown on the UI
+     *
+     * @return {Array} des - Arrayed output to be shown as the fitler description with human readable key value pair
+     */
     function buildDescription () {
       var des = [];
       _.each($scope.filters, function (val, key) {
@@ -142,20 +228,5 @@
       });
       return des;
     }
-    $scope.filterDescription = buildDescription();
   }
-
-  angular.module('civicase').directive('civicaseSearch', function () {
-    return {
-      replace: true,
-      templateUrl: '~/civicase/Search.html',
-      controller: searchController,
-      scope: {
-        defaults: '=filters',
-        hiddenFilters: '=',
-        onSearch: '@',
-        expanded: '='
-      }
-    };
-  });
 })(angular, CRM.$, CRM._);

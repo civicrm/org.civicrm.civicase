@@ -1,0 +1,22 @@
+.crm-ui-range {
+  > span {
+    display: inline-block;
+  }
+
+  .crm-form-date-wrapper {
+    display: inline-block;
+    position: relative;  
+  }
+
+  .crm-clear-link {
+    color: #42afcb;
+    position: absolute;
+    right: 46px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    .fa-times::before {
+      content: '\f057';
+    }      
+  }  
+}

@@ -1,0 +1,117 @@
+.civicase__case-filter-panel {
+  box-shadow: none;
+  margin-bottom: 0;
+
+  .panel-header {
+    position: relative;    
+  }
+}
+
+.civicase__case-filter-panel__title {
+  left: 20px;
+  line-height: 1.3;
+  margin: 0;
+  max-width: calc(((100% - 950px) / 2) - 20px); // total width - width of the search criterion and its left half section minus left 20px spacing.
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.civicase__case-filters-container {
+  display: flex;
+  justify-content: center;
+  left: 0;
+  padding: 15px 0;
+  top: 0;
+}
+
+input.civicase__case-filter__input.form-control { /* stylelint-disable selector-no-qualifying-type */
+  width: 240px;
+}
+
+.civicase__case-filter__input.form-control {
+  border: 1px solid $crm-grayblue-darker;
+  border-radius: 2px;
+  box-shadow: none;
+  margin: 0 8px;
+  padding: 0;
+
+  .select2-choices {
+    background-image: none;
+    padding: 2.5px 5px;
+
+    &::before {
+      top: 7px;
+    }
+  }
+}
+
+.civicase__case-filter-panel__button {
+  margin: 0 8px;
+  width: 158px;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  .fa {
+    font-size: 18px;
+    margin-right: 7px;
+    position: relative;
+    top: 2px;    
+  }
+}
+
+.civicase__case-filter-form-elements-container {
+  margin: 0 auto;
+  width: 926px;
+}
+
+.civicase__case-filter-form-elements {
+  clear: both;
+  margin-bottom: 10px;
+
+  .form-control {
+    max-width: 385px;
+  }
+
+  label {
+    color: #9494a5;
+    font-weight: 400;
+  }
+
+  .civicase__checkbox {
+    display: inline-block;
+    margin-right: 5px;
+    top: 4px;
+  }
+
+  .crm-ui-range {
+    .crm-form-date {
+      display: inline-block;
+      width: 125px;
+    }
+
+    > span {
+      display: inline-block;
+      margin-right: 16px;
+    }
+  }
+
+  &.civicase__case-filter-form-elements--case-id {
+    .form-control {
+      max-width: 160px;
+    }  
+  }
+}
+
+.civicase__case-filter-panel__description {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.civicase__filter-search-description-list-container {
+  flex: 1 0 0;
+  margin-bottom: 0;
+}

@@ -253,8 +253,8 @@
       scope: {
         data: '=crmUiDateRange'
       },
-      template: '<span><input class="form-control" crm-ui-datepicker="{time: false}" ng-model="input.from" placeholder="' + ts('From') + '" /></span>' +
-        '<span><input class="form-control" crm-ui-datepicker="{time: false}" ng-model="input.to" placeholder="' + ts('To') + '" /></span>',
+      template: '<input class="form-control" crm-ui-datepicker="{time: false}" ng-model="input.from" placeholder="' + ts('From') + '" />' +
+        '<input class="form-control" crm-ui-datepicker="{time: false}" ng-model="input.to" placeholder="' + ts('To') + '" />',
       link: function (scope, element, attrs) {
         scope.input = {};
 
@@ -304,6 +304,7 @@
       template: '<span><input class="form-control" type="number" ng-model="input.from" placeholder="' + ts('From') + '" /></span>' +
         '<span><input class="form-control" type="number" ng-model="input.to" placeholder="' + ts('To') + '" /></span>',
       link: function (scope, element, attrs) {
+        console.log(12);
         scope.input = {};
 
         element.addClass('crm-ui-range');
