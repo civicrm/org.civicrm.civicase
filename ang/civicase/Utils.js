@@ -317,10 +317,9 @@
       template: '<span><input class="form-control" type="number" ng-model="input.from" placeholder="' + ts('From') + '" /></span>' +
         '<span><input class="form-control" type="number" ng-model="input.to" placeholder="' + ts('To') + '" /></span>',
       link: function (scope, element, attrs) {
-        console.log(12);
         scope.input = {};
 
-        element.addClass('crm-ui-range');
+        element.addClass('civicase__ui-range');
 
         // Respond to user interaction with the number widgets
         element.on('change', function () {
