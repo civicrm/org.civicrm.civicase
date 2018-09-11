@@ -9,7 +9,7 @@
 
 .civicase__case-filter-panel__title {
   left: 20px;
-  line-height: 1.3;
+  line-height: 1.3em;
   margin: 0;
   max-width: calc(((100% - 950px) / 2) - 20px); // total width - width of the search criterion and its left half section minus left 20px spacing.
   position: absolute;
@@ -25,16 +25,12 @@
   top: 0;
 }
 
-input.civicase__case-filter__input.form-control { /* stylelint-disable selector-no-qualifying-type */
-  width: 240px;
-}
-
 .civicase__case-filter__input.form-control {
-  border: 1px solid $crm-grayblue-darker;
-  border-radius: 2px;
-  box-shadow: none;
   margin: 0 8px;
-  padding: 0;
+
+  &:not(.select2-container) {
+    width: 240px;
+  }
 
   .select2-choices {
     background-image: none;
@@ -76,7 +72,7 @@ input.civicase__case-filter__input.form-control { /* stylelint-disable selector-
   }
 
   label {
-    color: #9494a5;
+    color: $crm-gray-matte;
     font-weight: 400;
   }
 

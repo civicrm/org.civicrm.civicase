@@ -6,12 +6,7 @@
   }
 
   .page-title {
-    // styles for `element-invisible`
-    clip: rect(1px 1px 1px 1px);
-    clip: rect(1px, 1px, 1px, 1px);
-    height: 1px;
-    overflow: hidden;
-    position: absolute !important;
+    @extend %element-invisible;
   }
 
   #branding {

@@ -5,7 +5,7 @@
     return {
       replace: true,
       templateUrl: '~/civicase/Search.html',
-      controller: searchController,
+      controller: 'civicaseSearchController',
       scope: {
         defaults: '=filters',
         hiddenFilters: '=',
@@ -21,8 +21,8 @@
    * @param {object} $scope
    * @param {object} $timeout
    */
-  function searchController ($scope, $timeout) {
-    // The ts() and hs() functions help load strings for this module.
+  module.controller('civicaseSearchController', function ($scope, $timeout) {
+    // The ts() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = CRM.civicase.caseStatuses;
@@ -59,14 +59,9 @@
     $scope.filterDescription = buildDescription();
     $scope.filters = angular.extend({}, $scope.defaults);
 
-    /**
-     * Describe selected filters when collapsed
-     */
-    _.each(CRM.civicase.customSearchFields, function (group) {
-      _.each(group.fields, function (field) {
-        allSearchFields['custom_' + field.id] = field;
-      });
-    });
+    (function init () {
+      describeSelectedFilters();
+    }());
 
     /**
      * Watcher for expanded state and update tableHeader top offset likewise
@@ -95,38 +90,37 @@
     });
 
     /**
-     * Expand the dropdown when clicked on other criteria button
-     */
-    $scope.showMore = function () {
-      $scope.expanded = true;
-    };
-
-    /**
-     * Toggle logic for show deleted cases checkbox
+     * Check/Uncheck `Show deleted` filters
      *
      * @param {object} $event - event object of Event API
      */
     $scope.toggleIsDeleted = function ($event) {
-      if ($event.type === 'click' || ($event.type === 'keydown' && ($event.keyCode === 32 || $event.keyCode === 13))) {
+      var pressedSpaceOrEnter = $event.type === 'keydown' && ($event.keyCode === 32 || $event.keyCode === 13);
+
+      if ($event.type === 'click' || pressedSpaceOrEnter) {
         $scope.filters.is_deleted = !$scope.filters.is_deleted;
         $event.preventDefault();
       }
     };
 
     /**
-     * Logic to show filter only when not hidden
+     * Show filter only when not hidden
      * This is configured from the backend
      *
      * @param {string} field - key of the field to be checked for
+     * @return {Boolean} - boolean value if the filter is enabled
      */
     $scope.isEnabled = function (field) {
       return !$scope.hiddenFilters || !$scope.hiddenFilters[field];
     };
 
-    //
+    /**
+     * Set case manager filter value
+     */
     $scope.setCaseManager = function () {
       $scope.filters.case_manager = $scope.caseManagerIsMe() ? null : [CRM.config.user_contact_id];
     };
+
     /**
      * Checks if the current logged in user is a case manager
      */
@@ -135,7 +129,7 @@
     };
 
     /**
-     * Logic to setup filter params and call search API
+     * Setup filter params and call search API
      * to feed results for cases
      */
     $scope.doSearch = function () {
@@ -147,7 +141,7 @@
     };
 
     /**
-     * Logic for clearing search filters
+     * Resets filter options and reload search items
      */
     $scope.clearSearch = function () {
       $scope.filters = {};
@@ -155,7 +149,7 @@
     };
 
     /**
-     * Logic to map the option parameter from API
+     * Map the option parameter from API
      * to show up correctly on the UI.
      *
      * @param {object} opt object for caseTypes
@@ -228,5 +222,16 @@
       });
       return des;
     }
-  }
+
+    /**
+     * Describe selected filters when loaded
+     */
+    function describeSelectedFilters () {
+      _.each(CRM.civicase.customSearchFields, function (group) {
+        _.each(group.fields, function (field) {
+          allSearchFields['custom_' + field.id] = field;
+        });
+      });
+    }
+  });
 })(angular, CRM.$, CRM._);
