@@ -145,24 +145,20 @@
     });
 
     describe('toggleIsDeleted($event)', function () {
-      beforeEach(function () {
-        event = {};
-        event.preventDefault = jasmine.createSpy('event');
-      });
-
-      describe('click event triggered', function () {
+      describe('when is_deleted is true', function () {
         beforeEach(function () {
-          event.type = 'click';
+          element.isolateScope().filters.is_deleted = true;
         });
 
-        describe('when isDeleted is true', function () {
+        describe('click event triggered', function () {
           beforeEach(function () {
-            element.isolateScope().filters.is_deleted = true;
-            element.isolateScope().toggleIsDeleted(event);
+            event = $.Event('click');
+            spyOn(event, 'preventDefault');
+            element.find('.civicase__checkbox').trigger(event);
           });
 
-          it('isDeleted to be false', function () {
-            expect(element.isolateScope().filters.is_deleted).toBe(false);
+          it('hides the checkbox', function () {
+            expect(element.find('.civicase__checkbox').find('.civicase__checkbox--checked').length).toBe(0);
           });
 
           it('event.preventDefault to be called', function () {
@@ -170,36 +166,15 @@
           });
         });
 
-        describe('when isDeleted is false', function () {
+        describe('Enter button is pressed', function () {
           beforeEach(function () {
-            element.isolateScope().filters.is_deleted = false;
-            element.isolateScope().toggleIsDeleted(event);
+            event = $.Event('keydown', {keyCode: 13});
+            spyOn(event, 'preventDefault');
+            element.find('.civicase__checkbox').trigger(event);
           });
 
-          it('isDeleted to be true', function () {
-            expect(element.isolateScope().filters.is_deleted).toBe(true);
-          });
-
-          it('event.preventDefault to be called', function () {
-            expect(event.preventDefault).toHaveBeenCalled();
-          });
-        });
-      });
-
-      describe('keydown event triggered with enter key', function () {
-        beforeEach(function () {
-          event.type = 'keydown';
-          event.keyCode = 13;
-        });
-
-        describe('when isDeleted is true', function () {
-          beforeEach(function () {
-            element.isolateScope().filters.is_deleted = true;
-            element.isolateScope().toggleIsDeleted(event);
-          });
-
-          it('isDeleted to be false', function () {
-            expect(element.isolateScope().filters.is_deleted).toBe(false);
+          it('hides the checkbox', function () {
+            expect(element.find('.civicase__checkbox').find('.civicase__checkbox--checked').length).toBe(0);
           });
 
           it('event.preventDefault to be called', function () {
@@ -207,14 +182,15 @@
           });
         });
 
-        describe('when isDeleted is false', function () {
+        describe('Space button is pressed', function () {
           beforeEach(function () {
-            element.isolateScope().filters.is_deleted = false;
-            element.isolateScope().toggleIsDeleted(event);
+            event = $.Event('keydown', {keyCode: 32});
+            spyOn(event, 'preventDefault');
+            element.find('.civicase__checkbox').trigger(event);
           });
 
-          it('isDeleted to be true', function () {
-            expect(element.isolateScope().filters.is_deleted).toBe(true);
+          it('hides the checkbox', function () {
+            expect(element.find('.civicase__checkbox').find('.civicase__checkbox--checked').length).toBe(0);
           });
 
           it('event.preventDefault to be called', function () {
@@ -223,20 +199,20 @@
         });
       });
 
-      describe('keydown event triggered with space key', function () {
+      describe('when is_deleted is false', function () {
         beforeEach(function () {
-          event.type = 'keydown';
-          event.keyCode = 32;
+          element.isolateScope().filters.is_deleted = false;
         });
 
-        describe('when isDeleted is true', function () {
+        describe('click event triggered', function () {
           beforeEach(function () {
-            element.isolateScope().filters.is_deleted = true;
-            element.isolateScope().toggleIsDeleted(event);
+            event = $.Event('click');
+            spyOn(event, 'preventDefault');
+            element.find('.civicase__checkbox').trigger(event);
           });
 
-          it('isDeleted to be false', function () {
-            expect(element.isolateScope().filters.is_deleted).toBe(false);
+          it('shows the checkbox', function () {
+            expect(element.find('.civicase__checkbox').find('.civicase__checkbox--checked').length).toBe(1);
           });
 
           it('event.preventDefault to be called', function () {
@@ -244,14 +220,31 @@
           });
         });
 
-        describe('when isDeleted is false', function () {
+        describe('Enter button is pressed', function () {
           beforeEach(function () {
-            element.isolateScope().filters.is_deleted = false;
-            element.isolateScope().toggleIsDeleted(event);
+            event = $.Event('keydown', {keyCode: 13});
+            spyOn(event, 'preventDefault');
+            element.find('.civicase__checkbox').trigger(event);
           });
 
-          it('isDeleted to be true', function () {
-            expect(element.isolateScope().filters.is_deleted).toBe(true);
+          it('shows the checkbox', function () {
+            expect(element.find('.civicase__checkbox').find('.civicase__checkbox--checked').length).toBe(1);
+          });
+
+          it('event.preventDefault to be called', function () {
+            expect(event.preventDefault).toHaveBeenCalled();
+          });
+        });
+
+        describe('Space button is pressed', function () {
+          beforeEach(function () {
+            event = $.Event('keydown', {keyCode: 32});
+            spyOn(event, 'preventDefault');
+            element.find('.civicase__checkbox').trigger(event);
+          });
+
+          it('shows the checkbox', function () {
+            expect(element.find('.civicase__checkbox').find('.civicase__checkbox--checked').length).toBe(1);
           });
 
           it('event.preventDefault to be called', function () {
