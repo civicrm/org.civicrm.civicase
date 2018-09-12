@@ -23,7 +23,9 @@
     /**
      * Add data to the ContactsData service and fetches Profile Pic and Contact Type
      *
-     * @param {array} contacts
+     * @param {Array} contacts
+     * @return {Promise} resolves to undefined when the information for the given contacts
+     * has been fetched and stored.
      */
     this.add = function (contacts) {
       contacts = _.uniq(contacts);
@@ -52,7 +54,7 @@
      * Returns the cached information for the given contact.
      *
      * @param {String} contactID
-     * @return {Object}
+     * @return {Object} contact object of the passed contact ID.
      */
     this.getCachedContact = function (contactID) {
       var phones;
