@@ -132,6 +132,24 @@
       });
     });
 
+    describe('Contact popover information', function () {
+      var expectedContact;
+
+      beforeEach(function () {
+        expectedContact = {
+          contact_id: 123,
+          display_name: 'Jon Snow'
+        };
+
+        spyOn(ContactsDataService, 'getCachedContact').and.returnValue(expectedContact);
+        compileDirective(false, expectedContact.contact_id, expectedContact.display_name);
+      });
+
+      it('provides the main contact information to the popover', function () {
+        expect(element.isolateScope().mainContact).toEqual(expectedContact);
+      });
+    });
+
     function compileDirective (isAvatar, contactID, contactDisplayName) {
       element = $compile('<div contact-card contacts="contacts" avatar="isAvatar">')($scope);
       $scope.isAvatar = isAvatar;

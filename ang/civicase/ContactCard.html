@@ -67,57 +67,57 @@
   </div>
   <!-- End - Additional Contact Dropdown -->
   <script type="text/ng-template" id="contact-popover.html">
-    <div class="civicase__contact-popover" ng-init="contact = getContact(contacts[0].contact_id);">
+    <div class="civicase__contact-popover">
       <div class="civicase__contact-popover__header">
-        <h2>{{contact.display_name}}</h2>
+        <h2>{{mainContact.display_name}}</h2>
         <hr />
       </div>
       <div class="civicase__contact-popover__column">
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Home Phone</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.phone.phone}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.phone.phone}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Home Mobile</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.mobile.phone}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.mobile.phone}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Primary Address</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.street_address}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.street_address}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>City</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.city}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.city}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>State</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.state_province}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.state_province}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Postal Code</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.postal_code}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.postal_code}}</div>
         </div>
       </div>
       <div class="civicase__contact-popover__column">
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Primary Email</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.email}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.email}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Groups</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contactgroups}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.groups}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Tags</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.tags}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.tags}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Gender</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.gender}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.gender}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Date of Birth</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{contact.birth_date | date:'longDate'}}</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.birth_date | date:'longDate'}}</div>
         </div>
       </div>
     </div>

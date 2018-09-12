@@ -2,9 +2,12 @@
   var module = angular.module('civicase');
 
   module.directive('contactCard', function ($document, ContactsDataService) {
+    contactCardController.$inject = ['$scope'];
+
     return {
       restrict: 'A',
       replace: true,
+      controller: contactCardController,
       templateUrl: '~/civicase/ContactCard.html',
       scope: {
         data: '=contacts',
@@ -14,33 +17,36 @@
       link: contactCardLink
     };
 
-    /**
-     * Link function for contactCard directive
-     *
-     * @param {object} scope
-     * @param {object} elem
-     * @param {object} attrs
-     */
-    function contactCardLink (scope, elem, attrs) {
+    function contactCardController (scope) {
       scope.getContactIconOf = ContactsDataService.getContactIconOf;
       scope.isPopupVisible = false;
       scope.ts = CRM.ts('civicase');
       scope.url = CRM.url;
+      scope.mainContact = null;
 
       (function init () {
         scope.$watch('data', refresh);
-        $document.bind('click', closeDropdownIfClickedOutside);
       }());
 
       /**
-       * Returns the cached information for the given contact.
-       *
-       * @param {String} contactID
-       * @return {Object}
+       * Watch function for data refresh
        */
-      scope.getContact = function (contactID) {
-        return ContactsDataService.getCachedContact(contactID);
-      };
+      function refresh () {
+        if (_.isPlainObject(scope.data)) {
+          scope.contacts = [];
+          _.each(scope.data, function (name, contactID) {
+            if (scope.isAvatar) {
+              prepareAvatarData(name, contactID);
+            } else {
+              scope.contacts.push({display_name: name, contact_id: contactID});
+            }
+          });
+        } else {
+          scope.contacts = _.cloneDeep(scope.data);
+        }
+
+        scope.mainContact = ContactsDataService.getCachedContact(scope.contacts[0].contact_id);
+      }
 
       /**
        * Toggle dropdown visibility
@@ -51,25 +57,6 @@
         scope.isPopupVisible = !scope.isPopupVisible;
         $event.stopPropagation();
       };
-
-      /**
-       * Close the Dropdown when clicked outside
-       *
-       * @param {object} event
-       */
-      function closeDropdownIfClickedOutside (event) {
-        var isClickedElementChildOfPopup = elem
-          .find(event.target)
-          .length > 0;
-
-        if (isClickedElementChildOfPopup) {
-          return;
-        }
-
-        scope.$apply(function () {
-          scope.isPopupVisible = false;
-        });
-      }
 
       /**
        * Get initials from the sent parameter
@@ -113,24 +100,6 @@
       }
 
       /**
-       * Watch function for data refresh
-       */
-      function refresh () {
-        if (_.isPlainObject(scope.data)) {
-          scope.contacts = [];
-          _.each(scope.data, function (name, contactID) {
-            if (scope.isAvatar) {
-              prepareAvatarData(name, contactID);
-            } else {
-              scope.contacts.push({display_name: name, contact_id: contactID});
-            }
-          });
-        } else {
-          scope.contacts = _.cloneDeep(scope.data);
-        }
-      }
-
-      /**
        * Checks whether the sent parameter is a valid email address
        *
        * @param {String} email
@@ -140,6 +109,38 @@
         var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         return re.test(String(email).toLowerCase());
+      }
+    }
+
+    /**
+     * Link function for contactCard directive
+     *
+     * @param {object} scope
+     * @param {object} elem
+     * @param {object} attrs
+     */
+    function contactCardLink (scope, elem, attrs) {
+      (function init () {
+        $document.bind('click', closeDropdownIfClickedOutside);
+      }());
+
+      /**
+       * Close the Dropdown when clicked outside
+       *
+       * @param {object} event
+       */
+      function closeDropdownIfClickedOutside (event) {
+        var isClickedElementChildOfPopup = elem
+          .find(event.target)
+          .length > 0;
+
+        if (isClickedElementChildOfPopup) {
+          return;
+        }
+
+        scope.$apply(function () {
+          scope.isPopupVisible = false;
+        });
       }
     }
   });
