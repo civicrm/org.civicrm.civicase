@@ -71,7 +71,49 @@
         'state_province_name': 'California',
         'state_province': 'CA',
         'country': 'United States',
-        'id': '1'
+        'id': '1',
+        'api.Phone.get': {
+          'is_error': 0,
+          'version': 3,
+          'count': 2,
+          'values': [
+            {
+              'id': '172',
+              'phone': '123123123',
+              'phone_type_id.name': 'Mobile'
+            },
+            {
+              'id': '171',
+              'phone': '9991112222',
+              'phone_type_id.name': 'Phone'
+            }
+          ]
+        },
+        'api.GroupContact.get': {
+          'is_error': 0,
+          'version': 3,
+          'count': 2,
+          'values': [
+            {
+              'id': '102',
+              'group_id': '1',
+              'title': 'Administrators',
+              'visibility': 'User and User Admin Only',
+              'is_hidden': '0',
+              'in_date': '2018-09-11 03:17:26',
+              'in_method': 'Admin'
+            },
+            {
+              'id': '103',
+              'group_id': '5',
+              'title': 'Case Resources',
+              'visibility': 'User and User Admin Only',
+              'is_hidden': '0',
+              'in_date': '2018-09-11 03:17:29',
+              'in_method': 'Admin'
+            }
+          ]
+        }
       },
       {
         'contact_id': '2',
@@ -143,7 +185,49 @@
         'state_province_name': '',
         'state_province': '',
         'country': '',
-        'id': '2'
+        'id': '2',
+        'api.Phone.get': {
+          'is_error': 0,
+          'version': 3,
+          'count': 2,
+          'values': [
+            {
+              'id': '172',
+              'phone': '123123123',
+              'phone_type_id.name': 'Mobile'
+            },
+            {
+              'id': '171',
+              'phone': '9991112222',
+              'phone_type_id.name': 'Phone'
+            }
+          ]
+        },
+        'api.GroupContact.get': {
+          'is_error': 0,
+          'version': 3,
+          'count': 2,
+          'values': [
+            {
+              'id': '102',
+              'group_id': '1',
+              'title': 'Administrators',
+              'visibility': 'User and User Admin Only',
+              'is_hidden': '0',
+              'in_date': '2018-09-11 03:17:26',
+              'in_method': 'Admin'
+            },
+            {
+              'id': '103',
+              'group_id': '5',
+              'title': 'Case Resources',
+              'visibility': 'User and User Admin Only',
+              'is_hidden': '0',
+              'in_date': '2018-09-11 03:17:29',
+              'in_method': 'Admin'
+            }
+          ]
+        }
       },
       {
         'contact_id': '3',
@@ -215,7 +299,49 @@
         'state_province_name': '',
         'state_province': '',
         'country': '',
-        'id': '3'
+        'id': '3',
+        'api.Phone.get': {
+          'is_error': 0,
+          'version': 3,
+          'count': 2,
+          'values': [
+            {
+              'id': '172',
+              'phone': '123123123',
+              'phone_type_id.name': 'Mobile'
+            },
+            {
+              'id': '171',
+              'phone': '9991112222',
+              'phone_type_id.name': 'Phone'
+            }
+          ]
+        },
+        'api.GroupContact.get': {
+          'is_error': 0,
+          'version': 3,
+          'count': 2,
+          'values': [
+            {
+              'id': '102',
+              'group_id': '1',
+              'title': 'Administrators',
+              'visibility': 'User and User Admin Only',
+              'is_hidden': '0',
+              'in_date': '2018-09-11 03:17:26',
+              'in_method': 'Admin'
+            },
+            {
+              'id': '103',
+              'group_id': '5',
+              'title': 'Case Resources',
+              'visibility': 'User and User Admin Only',
+              'is_hidden': '0',
+              'in_date': '2018-09-11 03:17:29',
+              'in_method': 'Admin'
+            }
+          ]
+        }
       },
       {
         'contact_id': '4',
@@ -285,7 +411,49 @@
         'state_province_name': 'Georgia',
         'state_province': 'GA',
         'country': 'United States',
-        'id': '4'
+        'id': '4',
+        'api.Phone.get': {
+          'is_error': 0,
+          'version': 3,
+          'count': 2,
+          'values': [
+            {
+              'id': '172',
+              'phone': '123123123',
+              'phone_type_id.name': 'Mobile'
+            },
+            {
+              'id': '171',
+              'phone': '9991112222',
+              'phone_type_id.name': 'Phone'
+            }
+          ]
+        },
+        'api.GroupContact.get': {
+          'is_error': 0,
+          'version': 3,
+          'count': 2,
+          'values': [
+            {
+              'id': '102',
+              'group_id': '1',
+              'title': 'Administrators',
+              'visibility': 'User and User Admin Only',
+              'is_hidden': '0',
+              'in_date': '2018-09-11 03:17:26',
+              'in_method': 'Admin'
+            },
+            {
+              'id': '103',
+              'group_id': '5',
+              'title': 'Case Resources',
+              'visibility': 'User and User Admin Only',
+              'is_hidden': '0',
+              'in_date': '2018-09-11 03:17:29',
+              'in_method': 'Admin'
+            }
+          ]
+        }
       }
     ]
   });

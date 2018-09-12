@@ -33,6 +33,16 @@
       }());
 
       /**
+       * Returns the cached information for the given contact.
+       *
+       * @param {String} contactID
+       * @return {Object}
+       */
+      scope.getContact = function (contactID) {
+        return ContactsDataService.getCachedContact(contactID);
+      };
+
+      /**
        * Toggle dropdown visibility
        *
        * @param {object} $event
