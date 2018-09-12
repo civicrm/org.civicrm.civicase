@@ -63,7 +63,6 @@
         'id': 'contact_id'
       }
     ];
-
     $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
     $scope.caseStatusOptions = _.map(caseStatuses, mapSelectOptions);
     $scope.customGroups = CRM.civicase.customSearchFields;
@@ -73,7 +72,7 @@
     $scope.filters = angular.extend({}, $scope.defaults);
 
     (function init () {
-      describeSelectedFilters();
+      passCustomSearchFieldsToSearchFilters();
     }());
 
     /**
@@ -135,13 +134,6 @@
      */
     $scope.isEnabled = function (field) {
       return !$scope.hiddenFilters || !$scope.hiddenFilters[field];
-    };
-
-    /**
-     * Set case manager filter value
-     */
-    $scope.setCaseManager = function () {
-      $scope.filters.case_manager = $scope.caseManagerIsMe() ? null : [CRM.config.user_contact_id];
     };
 
     /**
@@ -247,9 +239,9 @@
     }
 
     /**
-     * Describe selected filters when loaded
+     * Pass custom search fields to search filter fields object
      */
-    function describeSelectedFilters () {
+    function passCustomSearchFieldsToSearchFilters () {
       _.each(CRM.civicase.customSearchFields, function (group) {
         _.each(group.fields, function (field) {
           allSearchFields['custom_' + field.id] = field;
