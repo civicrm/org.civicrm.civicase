@@ -330,7 +330,7 @@
       $timeout(function () {
         var $caseNavigation = $('.civicase-view-tab-bar');
         var $civicrmMenu = $('#civicrm-menu');
-        var $casePanelBody = $('.civicase-view-panel > .panel-body');
+        var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
 
         $caseNavigation.affix({
           offset: {

@@ -141,10 +141,15 @@
 }
 
 .civicase__case-details-panel {
+  box-shadow: none;
   float: right;
   overflow: hidden;
   transition: width 0.3s;
   width: 0;
+
+  .panel-body {
+    background: none;
+  }
 }
 
 .civicase__case-details-panel--summary {

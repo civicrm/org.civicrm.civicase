@@ -20,8 +20,8 @@
           $actControls = $('.act-feed-panel .act-list-controls'),
           $civicrmMenu = $('#civicrm-menu'),
           $feedActivity = $('.act-feed-view-activity'),
-          $casePanelBody = $('.civicase-view-panel > .panel-body'),
-          $casePanel = $('.civicase-view-panel');
+          $casePanelBody = $('.civicase__case-details-panel > .panel-body'),
+          $casePanel = $('.civicase__case-details-panel');
 
 
         if($casePanel.length < 1) {
@@ -52,7 +52,7 @@
           .on('affixed-top.bs.affix', function() {
             $actHeader.css('width','auto');
           });
-        
+
         $actControls.affix({offset: {top: $casePanelBody.offset().top - 73} })
           .css('width',$actHeader.css('width'))
           .on('affixed.bs.affix', function() {
