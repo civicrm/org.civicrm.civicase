@@ -2,7 +2,6 @@
   padding: 0;
 }
 
-
 .civicase__summary-tab__basic-details {
   .panel-body {
     display: flex;
@@ -19,15 +18,18 @@
 .civicase__summary-tab__subject {
   font-size: 20px;
   font-weight: 600;
+  line-height: 27px;
 }
 
 .civicase__summary-tab__description {
   color: $crm-gray-matte;
+  line-height: 18px;
   margin: 13px 0;
 }
 
 .civicase__summary-tab__last-updated {
   color: $crm-gray-matte;
+  line-height: 18px;
 }
 
 .civicase__summary-activity-count {
@@ -36,21 +38,22 @@
   display: flex;
   flex-basis: 16.6%;
   flex-direction: column;
+  font-weight: 600;
   justify-content: center;
   text-align: center;
 
   > div:nth-child(1) {
     font-size: 56px;
-    font-weight: 600;
+    line-height: 76px;
   }
 
   > div:nth-child(2) {
     color: $crm-gray-matte;
     font-size: 16px;
-    font-weight: 600;
+    line-height: 22px;
   }
 }
 
 .civicase__summary-overdue-count {
-  font-weight: 600;
+  line-height: 18px;
 }
