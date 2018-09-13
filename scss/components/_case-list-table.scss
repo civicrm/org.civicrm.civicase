@@ -115,20 +115,24 @@
 }
 
 .civicase__case-list-panel {
+  border-top: 1px solid $crm-grayblue-dark;
+  box-shadow: none;
   overflow: hidden;
   padding: 0;
-  position: absolute;
   transition: width 0.3s linear;
-  border-top: 1px solid $crm-grayblue-dark;
-  box-shadow: none;  
 }
 
 .civicase__case-list-panel--summary {
   float: left;
+  position: absolute;
   width: $case-card-width;
 
   .civicase__pager--fixed {
     width: $case-card-width;
+  }
+
+  .civicase__case-list-column--first {
+    background: $crm-white !important;
   }
 }
 
