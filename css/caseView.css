@@ -542,3 +542,19 @@
 #bootstrap-theme .civicase-view-with-search.case-is-focused .civicase-view-tab-bar.affix {
   width: 1160px;
 }
+
+/* Caseview menu dropdown */
+#bootstrap-theme .dropdown-menu>li {
+  position: relative;
+}
+#bootstrap-theme ul.dropdown-menu li > ul.dropdown-menu.sub-menu {
+  width: 100%;
+  left: -100%;
+  margin-top: -40px;
+  position: absolute;
+}
+#bootstrap-theme ul.dropdown-menu li:hover > ul.dropdown-menu.sub-menu {
+  visibility: visible;
+  opacity: 1;
+  display: block;
+}
