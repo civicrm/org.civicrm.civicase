@@ -1,22 +1,22 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseView', function () {
+  module.directive('civicaseCaseDetails', function () {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/View.html',
-      controller: 'caseViewController',
+      templateUrl: '~/civicase/CaseDetails.html',
+      controller: 'civicaseCaseDetailsController',
       scope: {
         activeTab: '=civicaseTab',
         isFocused: '=civicaseFocused',
-        item: '=civicaseView'
+        item: '=civicaseCaseDetails'
       }
     };
   });
 
-  module.controller('caseViewController', caseViewController);
+  module.controller('civicaseCaseDetailsController', civicaseCaseDetailsController);
 
-  function caseViewController ($scope, crmApi, formatActivity, formatCase, getActivityFeedUrl, $route, $timeout) {
+  function civicaseCaseDetailsController ($scope, crmApi, formatActivity, formatCase, getActivityFeedUrl, $route, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;

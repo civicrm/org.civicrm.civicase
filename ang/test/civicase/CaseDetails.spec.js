@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 
-describe('View', function () {
+describe('civicaseCaseDetails', function () {
   var element, $compile, $rootScope, $scope, CasesData;
 
   beforeEach(module('civicase.templates', 'civicase', 'civicase.data'));
@@ -37,7 +37,7 @@ describe('View', function () {
 
   function compileDirective () {
     $scope.viewingCaseDetails = CasesData.values[0];
-    element = $compile('<div civicase-view="viewingCaseDetails"></div>')($scope);
+    element = $compile('<div civicase-case-details="viewingCaseDetails"></div>')($scope);
     $scope.$digest();
   }
 });
