@@ -1,4 +1,20 @@
-<nav class="navbar civicase-view-tab-bar navbar-inverse" case-tab-affix>
+<ul class="nav nav-pills nav-pills-horizontal nav-pills-horizontal-primary">
+  <li ng-repeat="tab in tabs" ng-class="{active: activeTab === tab.name}">
+    <a href ng-click="selectTab(tab.name)">
+      {{ tab.label }}
+      <span class="sr-only" ng-if="activeTab === tab.name">{{ ts('Current') }}</span>
+    </a>
+  </li>
+</ul>
+<div class="tab-content">
+  <div class="civicase__case-tab--summary" ng-show="activeTab === 'summary'" ng-include="'~/civicase/CaseViewSummary.html'"></div>
+  <div class="civicase__case-tab--activities" ng-if="activeTab === 'activities'" civicase-activity-feed="{case_id: item.id}" refresh-callback="refresh"></div>
+  <div class="civicase__case-tab--people" ng-if="activeTab === 'people'" civicase-view-people="item" refresh-callback="refresh"></div>
+  <div class="civicase__case-tab--files" ng-if="activeTab === 'files'" civicase-view-files="item"></div>
+</div>
+
+
+<!-- <nav class="navbar civicase-view-tab-bar navbar-inverse" case-tab-affix>
   <div class="container-fluid">
     <ul class="nav navbar-nav">
       <li ng-repeat="tab in tabs" ng-class="{active: activeTab === tab.name}">
@@ -42,4 +58,4 @@
 <div class="case-tab-summary" ng-show="activeTab === 'summary'" ng-include="'~/civicase/CaseViewSummary.html'"></div>
 <div class="case-tab-activities" ng-if="activeTab === 'activities'" civicase-activity-feed="{case_id: item.id}" refresh-callback="refresh"></div>
 <div class="case-tab-people" ng-if="activeTab === 'people'" civicase-view-people="item" refresh-callback="refresh"></div>
-<div class="case-tab-files" ng-if="activeTab === 'files'" civicase-view-files="item"></div>
+<div class="case-tab-files" ng-if="activeTab === 'files'" civicase-view-files="item"></div> -->

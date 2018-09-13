@@ -19,7 +19,7 @@ describe('View', function () {
     });
 
     it('complies the directive', function () {
-      expect(element.html()).toContain('civicase-view-panel');
+      expect(element.html()).toContain('civicase__case-header');
     });
   });
 

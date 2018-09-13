@@ -5,6 +5,7 @@
 
 .civicase__case-header__expand_button {
   background: none;
+  border-left: 1px solid $gray-light;
   border-right: 1px solid $gray-light;
   bottom: 0;
   color: $crm-grayblue-darker;
@@ -51,6 +52,18 @@
   .civicase__case-card__tag {
     margin-top: -4px;
   }
+}
+
+.civicase__case-header__content__first-row {
+  display: flex;
+}
+
+.civicase__case-header__content__trash {
+  font-size: 30px;
+  margin-right: 5px;
+  position: relative;
+  top: 2px;
+  width: 20px;
 }
 
 .civicase__case-header__dates,

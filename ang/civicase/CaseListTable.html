@@ -2,7 +2,7 @@
   <div
     class="panel panel-default civicase__case-list-panel"
     ng-class="{'civicase__case-list-panel--summary': viewingCase, 'civicase__case-list-panel--focused': caseIsFocused}">
-    <div class="civicase__case-list-table-container" sticky-table-header>
+    <div class="civicase__case-list-table-container" civicase-sticky-table-header>
       <table ng-show="!caseIsFocused" class="table civicase__case-list-table" >
         <thead class="civicase__case-list-table__header">
         <tr>
@@ -102,7 +102,7 @@
         </tbody>
       </table>
     </div>
-    <div class="center-block civicase__pager" sticky-footer-pager>
+    <div class="center-block civicase__pager" civicase-sticky-footer-pager>
       <paging
         ng-show="!caseIsFocused && page.total > 1"
         page="page.num"
@@ -120,7 +120,7 @@
     </div>
   </div>
   <div
-    class="civicase__case-details-panel"
+    class="panel panel-default civicase__case-details-panel"
     ng-class="{'civicase__case-details-panel--focused': caseIsFocused, 'civicase__case-details-panel--summary': viewingCase}"
     civicase-view="viewingCaseDetails"
     civicase-tab="viewingCaseTab"
