@@ -187,6 +187,17 @@
       return item;
     }
 
+    /**
+     * Formats Date in given format
+     *
+     * @param {String} date ISO string
+     * @param {String} format Date format
+     * @return {String} the formatted date
+     */
+    $scope.formatDate = function (date, format) {
+      return moment(date).format(format);
+    };
+
     $scope.gotoCase = function (item, $event) {
       if ($event && $($event.target).is('a, a *, input, button, button *')) {
         return;
@@ -204,12 +215,35 @@
       if ($scope.item && data.id === $scope.item.id) {
         // Maintain the reference to the variable in the parent scope.
         delete ($scope.item.tag_id);
-        _.assign($scope.item, formatCaseDetails(data));
+        _.defaults($scope.item, formatCaseDetails(data));
+        countScheduledActivities();
         $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
         $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
         $scope.$broadcast('updateCaseData');
       }
     };
+
+    /**
+     * Counts the Scheduled Activities and the overdues
+     */
+    function countScheduledActivities () {
+      var status, ifDateInPast;
+      var scheduled = { count: 0, overdue: 0 };
+
+      _.each($scope.item.allActivities, function (val, key) {
+        status = CRM.civicase.activityStatuses[val.status_id];
+
+        if (status.label === 'Scheduled') {
+          scheduled.count++;
+
+          ifDateInPast = moment(val.activity_date_time).isBefore(moment());
+          if (ifDateInPast) {
+            scheduled.overdue++;
+          }
+        }
+      });
+      $scope.item.category_count.scheduled = scheduled;
+    }
 
     $scope.refresh = function (apiCalls) {
       if (!_.isArray(apiCalls)) apiCalls = [];

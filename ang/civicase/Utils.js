@@ -129,6 +129,15 @@
       item.case_type = caseTypes[item.case_type_id].title;
       item.selected = false;
       item.is_deleted = item.is_deleted === '1';
+
+      // Save all activities in a new meaningful key
+      if (item['api.Activity.get']) {
+        item.allActivities = item['api.Activity.get'].values;
+        delete item['api.Activity.get'];
+
+        countOverdueTasks(item);
+      }
+
       _.each(item.activity_summary, function (activities) {
         _.each(activities, function (act) {
           formatActivity(act, item.id);
@@ -154,6 +163,29 @@
       });
       return item;
     };
+
+    /**
+     * To count overdue tasks.
+     *
+     * @param {Array} activities - Array of related activities to a case
+     */
+    function countOverdueTasks (item) {
+      var ifDateInPast, isIncompleteTask, category;
+
+      item.category_count.overdue = {};
+      _.each(item.allActivities, function (val, key) {
+        category = CRM.civicase.activityTypes[val.activity_type_id].grouping;
+
+        if (category) {
+          ifDateInPast = moment(val.activity_date_time).isBefore(moment());
+          isIncompleteTask = CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1;
+
+          if (ifDateInPast && isIncompleteTask) {
+            item.category_count.overdue[category] = item.category_count.overdue[category] + 1 || 1;
+          }
+        }
+      });
+    }
   });
 
   module.factory('getActivityFeedUrl', function ($route, $location, $sce) {

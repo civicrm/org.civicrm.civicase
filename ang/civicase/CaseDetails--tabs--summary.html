@@ -3,29 +3,43 @@
   <div class="panel panel-default civicase__summary-tab__basic-details">
     <div class="panel-body">
       <div class="civicase__summary-tab__subject-container">
-        <div class="civicase__summary-tab__subject">Case Subject Lorem Ipsum</div>
+        <div class="civicase__summary-tab__subject">
+          <p crm-editable="item" data-field="subject" data-type="textarea" crm-form-success="onChangeSubject($data)"></p>
+        </div>
         <div class="civicase__summary-tab__description">
           Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
         </div>
         <div>
           <span class="civicase__summary-tab__last-updated">Case last updated: </span>
-          <span>28th April 2018</span>
+          <span>{{formatDate(item.modified_date, 'DD MMMM YYYY' )}}</span>
         </div>
       </div>
       <div class="civicase__summary-activity-count">
-        <div>12</div>
+        <div>{{item.category_count.incomplete.task}}</div>
         <div>Open Tasks</div>
-        <div class="text-danger civicase__summary-overdue-count">1 overdue</div>
+        <div
+          ng-if="item.category_count.overdue.task > 0"
+          class="text-danger civicase__summary-overdue-count">
+          {{item.category_count.overdue.task}} overdue
+        </div>
       </div>
       <div class="civicase__summary-activity-count">
-        <div>3</div>
+        <div>{{item.category_count.incomplete.communication}}</div>
         <div>Unread Comms</div>
-        <div class="text-danger civicase__summary-overdue-count">1 overdue</div>
+        <div
+          ng-if="item.category_count.overdue.communication > 0"
+          class="text-danger civicase__summary-overdue-count">
+          {{item.category_count.overdue.communication}} overdue
+        </div>
       </div>
       <div class="civicase__summary-activity-count">
-        <div>5</div>
+        <div>{{item.category_count.scheduled.count}}</div>
         <div>Scheduled Activities</div>
-        <div class="text-danger civicase__summary-overdue-count">1 overdue</div>
+        <div
+          ng-if="item.category_count.scheduled.overdue > 0"
+          class="text-danger civicase__summary-overdue-count">
+          {{item.category_count.scheduled.overdue}} overdue
+        </div>
       </div>
     </div>
   </div>

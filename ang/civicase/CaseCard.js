@@ -16,7 +16,6 @@
     $scope.activityFeedUrl = getActivityFeedUrl;
 
     (function init () {
-      countOverdueTasks($scope.data['api.Activity.get'].values);
       countOtherTasks($scope.data.category_count);
     }());
 
@@ -58,29 +57,6 @@
           }
           $scope.data.category_count[status].other = otherCount;
         });
-      });
-    }
-
-    /**
-     * To count overdue tasks.
-     *
-     * @param {Array} activities - Array of related activities to a case
-     */
-    function countOverdueTasks (activities) {
-      var ifDateInPast, isIncompleteTask, category;
-
-      $scope.data.category_count.overdue = {};
-      _.each(activities, function (val, key) {
-        category = CRM.civicase.activityTypes[val.activity_type_id].grouping;
-
-        if (category) {
-          ifDateInPast = moment(val.activity_date_time).isBefore(moment());
-          isIncompleteTask = CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1;
-
-          if (ifDateInPast && isIncompleteTask) {
-            $scope.data.category_count.overdue[category] = $scope.data.category_count.overdue[category] + 1 || 1;
-          }
-        }
       });
     }
   });
