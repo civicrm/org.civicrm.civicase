@@ -412,7 +412,7 @@
           var textarea = elem.data('type') === 'textarea';
           var field = elem.data('field');
           elem
-            .html(textarea ? nl2br(scope.model[field]) : _.escape(scope.model[field]))
+            .html(textarea ? nl2br(getValue()) : _.escape(getValue()))
             .on('crmFormSuccess', function (e, value) {
               $timeout(function () {
                 scope.$apply(function () {
@@ -422,9 +422,16 @@
             })
             .crmEditable();
           scope.$watchCollection('model', function (model) {
-            elem.html(textarea ? nl2br(model[field]) : _.escape(model[field]));
+            elem.html(textarea ? nl2br(getValue()) : _.escape(getValue()));
           });
         });
+
+        function getValue () {
+          var field = elem.data('field');
+          var placeholder = attrs.placeholder;
+
+          return (scope.model[field] && scope.model[field] !== '') ? scope.model[field] : placeholder;
+        }
       },
       scope: {
         model: '=crmEditable'

@@ -1,13 +1,13 @@
-<div class="civicase__summary-tab">
+<div class="civicase__summary-tab crm-entity" data-entity="Case" data-id="{{ item.id }}">
   <!-- Subject and QuickLinks -->
   <div class="panel panel-default civicase__summary-tab__basic-details">
     <div class="panel-body">
       <div class="civicase__summary-tab__subject-container">
         <div class="civicase__summary-tab__subject">
-          <p crm-editable="item" data-field="subject" data-type="textarea" crm-form-success="onChangeSubject($data)"></p>
+          <p crm-editable="item" data-field="subject" data-type="textarea" data-placeholder="Click to add subject" crm-form-success="onChangeSubject($data)"></p>
         </div>
         <div class="civicase__summary-tab__description">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+          <p crm-editable="item" data-field="details" data-type="textarea" data-placeholder="This case doesn't currently have a description. Click here to add now"></p>
         </div>
         <div>
           <span class="civicase__summary-tab__last-updated">Case last updated: </span>
@@ -25,7 +25,7 @@
       </div>
       <div class="civicase__summary-activity-count">
         <div>{{item.category_count.incomplete.communication ? item.category_count.incomplete.communication : 0}}</div>
-        <div>Unread Comms</div>
+        <div>Incomplete Comms</div>
         <div
           ng-if="item.category_count.overdue.communication > 0"
           class="text-danger civicase__summary-overdue-count">
