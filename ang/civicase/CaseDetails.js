@@ -23,17 +23,161 @@
     var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var panelLimit = 5;
+
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;
     $scope.item = null;
+    $scope.tabs = [
+      {name: 'summary', label: ts('Summary')},
+      {name: 'activities', label: ts('Activities')},
+      {name: 'people', label: ts('People')},
+      {name: 'files', label: ts('Files')}
+    ];
+
+    (function init () {
+      $scope.$watch('isFocused', isFocusedWatcher);
+      $scope.$watch('item', itemWatcher);
+    }());
+
+    $scope.addTimeline = function (name) {
+      $scope.refresh([['Case', 'addtimeline', {case_id: $scope.item.id, 'timeline': name}]]);
+    };
+
     $scope.caseGetParams = function () {
       return JSON.stringify(caseGetParams());
     };
-    // Categories to show in the summary block
-    $scope.upNextCategories = _.cloneDeep(CRM.civicase.activityCategories);
-    delete $scope.upNextCategories.alert;
-    delete $scope.upNextCategories.system;
+
+    $scope.editActivityUrl = function (id) {
+      return CRM.url('civicrm/case/activity', {
+        action: 'update',
+        reset: 1,
+        cid: $scope.item.client[0].contact_id,
+        caseid: $scope.item.id,
+        id: id,
+        civicase_reload: $scope.caseGetParams()
+      });
+    };
+
+    /**
+     * Toggle focus of the Summary View
+     */
+    $scope.focusToggle = function () {
+      $scope.isFocused = !$scope.isFocused;
+    };
+
+    /**
+     * Formats Date in given format
+     *
+     * @param {String} date ISO string
+     * @param {String} format Date format
+     * @return {String} the formatted date
+     */
+    $scope.formatDate = function (date, format) {
+      return moment(date).format(format);
+    };
+
+    $scope.getActivityType = function (name) {
+      return _.findKey(activityTypes, {name: name});
+    };
+
+    $scope.gotoCase = function (item, $event) {
+      if ($event && $($event.target).is('a, a *, input, button, button *')) {
+        return;
+      }
+      var cf = {
+        case_type_id: [caseTypes[item.case_type_id].name],
+        status_id: [caseStatuses[item.status_id].name]
+      };
+      var p = angular.extend({}, $route.current.params, {caseId: item.id, cf: JSON.stringify(cf)});
+      $route.updateParams(p);
+    };
+
+    // Copied from ActivityList.js - used by the Recent Communication panel
+    $scope.isSameDate = function (d1, d2) {
+      return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
+    };
+
+    $scope.markCompleted = function (act) {
+      $scope.refresh([['Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}]]);
+    };
+
+    $scope.newActivityUrl = function (actType) {
+      var path = 'civicrm/case/activity';
+      var args = {
+        action: 'add',
+        reset: 1,
+        cid: $scope.item.client[0].contact_id,
+        caseid: $scope.item.id,
+        atype: actType.id,
+        civicase_reload: $scope.caseGetParams()
+      };
+
+      // CiviCRM requires nonstandard urls for a couple special activity types
+      if (actType.name === 'Email') {
+        path = 'civicrm/activity/email/add';
+        args.context = 'standalone';
+        delete args.cid;
+      }
+      if (actType.name === 'Print PDF Letter') {
+        path = 'civicrm/activity/pdf/add';
+        args.context = 'standalone';
+      }
+      return CRM.url(path, args);
+    };
+
+    // Create activity when changing case subject
+    $scope.onChangeSubject = function (newSubject) {
+      CRM.api3('Activity', 'create', {
+        case_id: $scope.item.id,
+        activity_type_id: 'Change Case Subject',
+        subject: newSubject,
+        status_id: 'Completed'
+      });
+    };
+
+    $scope.panelPlaceholders = function (num) {
+      return _.range(num > panelLimit ? panelLimit : num);
+    };
+
+    $scope.pushCaseData = function (data) {
+      // If the user has already clicked through to another case by the time we get this data back, stop.
+      if ($scope.item && data.id === $scope.item.id) {
+        // Maintain the reference to the variable in the parent scope.
+        delete ($scope.item.tag_id);
+        _.defaults($scope.item, formatCaseDetails(data));
+        countScheduledActivities();
+        $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
+        $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
+        $scope.$broadcast('updateCaseData');
+      }
+    };
+
+    $scope.refresh = function (apiCalls) {
+      if (!_.isArray(apiCalls)) apiCalls = [];
+      apiCalls.push(['Case', 'getdetails', caseGetParams()]);
+      crmApi(apiCalls, true).then(function (result) {
+        $scope.pushCaseData(result[apiCalls.length - 1].values[0]);
+      });
+    };
+
+    $scope.selectTab = function (tab) {
+      $scope.activeTab = tab;
+      if (typeof $scope.isFocused === 'boolean') {
+        $scope.isFocused = true;
+      }
+    };
+
+    $scope.viewActivityUrl = function (id) {
+      return CRM.url('civicrm/case/activity', {
+        action: 'update',
+        reset: 1,
+        cid: $scope.item.client[0].contact_id,
+        caseid: $scope.item.id,
+        id: id,
+        civicase_reload: $scope.caseGetParams()
+      });
+    };
 
     function caseGetParams () {
       return {
@@ -88,65 +232,27 @@
       };
     }
 
-    function getAllowedCaseStatuses (definition) {
-      var ret = _.cloneDeep(caseStatuses);
-      if (definition.statuses && definition.statuses.length) {
-        _.each(_.cloneDeep(ret), function (status, id) {
-          if (definition.statuses.indexOf(status.name) < 0) {
-            delete (ret[id]);
-          }
-        });
-      }
-      return ret;
-    }
+    /**
+     * Counts the Scheduled Activities and the overdues
+     */
+    function countScheduledActivities () {
+      var status, ifDateInPast;
+      var scheduled = { count: 0, overdue: 0 };
 
-    function getAvailableActivityTypes (activityCount, definition) {
-      var ret = [];
-      var exclude = ['Change Case Status', 'Change Case Type'];
+      _.each($scope.item.allActivities, function (val, key) {
+        status = CRM.civicase.activityStatuses[val.status_id];
 
-      _.each(definition.activityTypes, function (actSpec) {
-        if (exclude.indexOf(actSpec.name) < 0) {
-          var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
-          if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances < activityCount[actTypeId])) {
-            ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
+        if (status.label === 'Scheduled') {
+          scheduled.count++;
+
+          ifDateInPast = moment(val.activity_date_time).isBefore(moment());
+          if (ifDateInPast) {
+            scheduled.overdue++;
           }
         }
       });
-      return _.sortBy(ret, 'label');
+      $scope.item.category_count.scheduled = scheduled;
     }
-
-    $scope.tabs = [
-      {name: 'summary', label: ts('Summary')},
-      {name: 'activities', label: ts('Activities')},
-      {name: 'people', label: ts('People')},
-      {name: 'files', label: ts('Files')}
-    ];
-
-    $scope.selectTab = function (tab) {
-      $scope.activeTab = tab;
-      if (typeof $scope.isFocused === 'boolean') {
-        $scope.isFocused = true;
-      }
-    };
-
-    $scope.$watch('isFocused', function () {
-      $timeout(function () {
-        var $actHeader = $('.act-feed-panel .panel-header');
-        var $actControls = $('.act-feed-panel .act-list-controls');
-
-        if ($actHeader.hasClass('affix')) {
-          $actHeader.css('width', $('.act-feed-panel').css('width'));
-        } else {
-          $actHeader.css('width', 'auto');
-        }
-
-        if ($actControls.hasClass('affix')) {
-          $actControls.css('width', $actHeader.css('width'));
-        } else {
-          $actControls.css('width', 'auto');
-        }
-      }, 1500);
-    });
 
     function formatAct (act) {
       return formatActivity(act, $scope.item.id);
@@ -187,164 +293,60 @@
       return item;
     }
 
-    /**
-     * Formats Date in given format
-     *
-     * @param {String} date ISO string
-     * @param {String} format Date format
-     * @return {String} the formatted date
-     */
-    $scope.formatDate = function (date, format) {
-      return moment(date).format(format);
-    };
-
-    $scope.gotoCase = function (item, $event) {
-      if ($event && $($event.target).is('a, a *, input, button, button *')) {
-        return;
+    function getAllowedCaseStatuses (definition) {
+      var ret = _.cloneDeep(caseStatuses);
+      if (definition.statuses && definition.statuses.length) {
+        _.each(_.cloneDeep(ret), function (status, id) {
+          if (definition.statuses.indexOf(status.name) < 0) {
+            delete (ret[id]);
+          }
+        });
       }
-      var cf = {
-        case_type_id: [caseTypes[item.case_type_id].name],
-        status_id: [caseStatuses[item.status_id].name]
-      };
-      var p = angular.extend({}, $route.current.params, {caseId: item.id, cf: JSON.stringify(cf)});
-      $route.updateParams(p);
-    };
+      return ret;
+    }
 
-    $scope.pushCaseData = function (data) {
-      // If the user has already clicked through to another case by the time we get this data back, stop.
-      if ($scope.item && data.id === $scope.item.id) {
-        // Maintain the reference to the variable in the parent scope.
-        delete ($scope.item.tag_id);
-        _.defaults($scope.item, formatCaseDetails(data));
-        countScheduledActivities();
-        $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
-        $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
-        $scope.$broadcast('updateCaseData');
-      }
-    };
+    function getAvailableActivityTypes (activityCount, definition) {
+      var ret = [];
+      var exclude = ['Change Case Status', 'Change Case Type'];
 
-    /**
-     * Counts the Scheduled Activities and the overdues
-     */
-    function countScheduledActivities () {
-      var status, ifDateInPast;
-      var scheduled = { count: 0, overdue: 0 };
-
-      _.each($scope.item.allActivities, function (val, key) {
-        status = CRM.civicase.activityStatuses[val.status_id];
-
-        if (status.label === 'Scheduled') {
-          scheduled.count++;
-
-          ifDateInPast = moment(val.activity_date_time).isBefore(moment());
-          if (ifDateInPast) {
-            scheduled.overdue++;
+      _.each(definition.activityTypes, function (actSpec) {
+        if (exclude.indexOf(actSpec.name) < 0) {
+          var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
+          if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances < activityCount[actTypeId])) {
+            ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
           }
         }
       });
-      $scope.item.category_count.scheduled = scheduled;
+      return _.sortBy(ret, 'label');
     }
 
-    $scope.refresh = function (apiCalls) {
-      if (!_.isArray(apiCalls)) apiCalls = [];
-      apiCalls.push(['Case', 'getdetails', caseGetParams()]);
-      crmApi(apiCalls, true).then(function (result) {
-        $scope.pushCaseData(result[apiCalls.length - 1].values[0]);
-      });
-    };
-
-    // Create activity when changing case subject
-    $scope.onChangeSubject = function (newSubject) {
-      CRM.api3('Activity', 'create', {
-        case_id: $scope.item.id,
-        activity_type_id: 'Change Case Subject',
-        subject: newSubject,
-        status_id: 'Completed'
-      });
-    };
-
-    $scope.markCompleted = function (act) {
-      $scope.refresh([['Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}]]);
-    };
-
-    $scope.getActivityType = function (name) {
-      return _.findKey(activityTypes, {name: name});
-    };
-
-    $scope.newActivityUrl = function (actType) {
-      var path = 'civicrm/case/activity';
-      var args = {
-        action: 'add',
-        reset: 1,
-        cid: $scope.item.client[0].contact_id,
-        caseid: $scope.item.id,
-        atype: actType.id,
-        civicase_reload: $scope.caseGetParams()
-      };
-
-      // CiviCRM requires nonstandard urls for a couple special activity types
-      if (actType.name === 'Email') {
-        path = 'civicrm/activity/email/add';
-        args.context = 'standalone';
-        delete args.cid;
-      }
-      if (actType.name === 'Print PDF Letter') {
-        path = 'civicrm/activity/pdf/add';
-        args.context = 'standalone';
-      }
-      return CRM.url(path, args);
-    };
-
-    $scope.editActivityUrl = function (id) {
-      return CRM.url('civicrm/case/activity', {
-        action: 'update',
-        reset: 1,
-        cid: $scope.item.client[0].contact_id,
-        caseid: $scope.item.id,
-        id: id,
-        civicase_reload: $scope.caseGetParams()
-      });
-    };
-
-    $scope.viewActivityUrl = function (id) {
-      return CRM.url('civicrm/case/activity', {
-        action: 'update',
-        reset: 1,
-        cid: $scope.item.client[0].contact_id,
-        caseid: $scope.item.id,
-        id: id,
-        civicase_reload: $scope.caseGetParams()
-      });
-    };
-
-    $scope.addTimeline = function (name) {
-      $scope.refresh([['Case', 'addtimeline', {case_id: $scope.item.id, 'timeline': name}]]);
-    };
-
-    // Copied from ActivityList.js - used by the Recent Communication panel
-    $scope.isSameDate = function (d1, d2) {
-      return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
-    };
-
-    $scope.panelPlaceholders = function (num) {
-      return _.range(num > panelLimit ? panelLimit : num);
-    };
-
-    /**
-    * Toggle focus of the Summary View
-    */
-    $scope.focusToggle = function () {
-      $scope.isFocused = !$scope.isFocused;
-    };
-
-    $scope.$watch('item', function () {
+    function itemWatcher () {
       // Fetch extra info about the case
       if ($scope.item && $scope.item.id && !$scope.item.definition) {
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
         });
       }
-    });
+    }
+
+    function isFocusedWatcher () {
+      $timeout(function () {
+        var $actHeader = $('.act-feed-panel .panel-header');
+        var $actControls = $('.act-feed-panel .act-list-controls');
+
+        if ($actHeader.hasClass('affix')) {
+          $actHeader.css('width', $('.act-feed-panel').css('width'));
+        } else {
+          $actHeader.css('width', 'auto');
+        }
+
+        if ($actControls.hasClass('affix')) {
+          $actControls.css('width', $actHeader.css('width'));
+        } else {
+          $actControls.css('width', 'auto');
+        }
+      }, 1500);
+    }
   }
 
   module.directive('caseTabAffix', function ($timeout) {
