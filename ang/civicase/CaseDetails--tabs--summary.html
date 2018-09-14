@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="civicase__summary-activity-count">
-        <div>{{item.category_count.incomplete.task}}</div>
+        <div>{{item.category_count.incomplete.task ? item.category_count.incomplete.task : 0}}</div>
         <div>Open Tasks</div>
         <div
           ng-if="item.category_count.overdue.task > 0"
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="civicase__summary-activity-count">
-        <div>{{item.category_count.incomplete.communication}}</div>
+        <div>{{item.category_count.incomplete.communication ? item.category_count.incomplete.communication : 0}}</div>
         <div>Unread Comms</div>
         <div
           ng-if="item.category_count.overdue.communication > 0"

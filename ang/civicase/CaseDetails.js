@@ -322,6 +322,7 @@
 
     function itemWatcher () {
       // Fetch extra info about the case
+      console.log($scope.item);
       if ($scope.item && $scope.item.id && !$scope.item.definition) {
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
