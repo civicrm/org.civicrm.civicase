@@ -349,23 +349,23 @@
     }
   }
 
-  module.directive('caseTabAffix', function ($timeout) {
+  module.directive('civicaseCaseTabAffix', function ($timeout) {
     return {
       scope: {},
-      link: casetabAffixLink
+      link: civicaseCaseTabAffix
     };
 
     /**
-     * Link function for caseTabAffix
+     * Link function for civicaseCaseTabAffix
      *
      * @param {Object} scope
      * @param {Object} $el
      * @param {Object} attrs
      */
-    function casetabAffixLink (scope, $el, attrs) {
+    function civicaseCaseTabAffix (scope, $el, attrs) {
       $timeout(function () {
-        var $caseNavigation = $('.civicase-view-tab-bar');
-        var $civicrmMenu = $('#civicrm-menu');
+        var $caseNavigation = $('.civicase__case-body_tab');
+        var $toolbarDrawer = $('#toolbar');
         var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
 
         $caseNavigation.affix({
@@ -373,7 +373,7 @@
             top: $casePanelBody.offset().top - 87
           }
         }).on('affixed.bs.affix', function () {
-          $caseNavigation.css('top', $civicrmMenu.height());
+          $caseNavigation.css('top', $toolbarDrawer.height());
         }).on('affixed-top.bs.affix', function () {
           $caseNavigation.css('top', 'auto');
         });

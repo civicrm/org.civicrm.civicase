@@ -2,6 +2,22 @@
   padding: 0;
 }
 
+.civicase__case-body_tab {
+  z-index: 1;
+}
+
+.civicase__case-details-panel--summary {
+  .civicase__case-body_tab.affix {
+    width: calc(100% - #{$case-card-width});
+  }
+}
+
+.civicase__case-details-panel--focused {
+  .civicase__case-body_tab.affix {
+    width: 100%;
+  }
+}
+
 .civicase__summary-tab__basic-details {
   .panel-body {
     display: flex;
