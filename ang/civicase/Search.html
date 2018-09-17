@@ -3,9 +3,9 @@
   <div class="panel-header">
     <h3 class="civicase__case-filter-panel__title"> {{ $parent.pageTitle }} </h3>
     <form class="form-inline civicase__case-filters-container">
-      <input class="form-control civicase__case-filter__input" ng-list autocomplete="new-password" crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Case Type: Any'), data: caseTypeOptions}" ng-model="filters.case_type_id" />
-      <input class="form-control civicase__case-filter__input" ng-list autocomplete="new-password" crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
-      <input class="form-control civicase__case-filter__input" ng-list autocomplete="new-password" crm-ui-select="{allowClear: false, multiple: false, placeholder: ts('Relationship Type: All'), data: caseRelationshipOptions}" ng-model="relationshipType" />
+      <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Case Type: Any'), data: caseTypeOptions}" ng-model="filters.case_type_id" />
+      <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
+      <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: false, multiple: false, placeholder: ts('Relationship Type: All'), data: caseRelationshipOptions}" ng-model="relationshipType" />
       <button class="btn btn-primary btn-sm pull-right civicase__case-filter-panel__button" ng-click="expanded = true" ng-show="!expanded">
         <i class="fa fa-gear"></i> {{ filterDescription.length ? ts('Edit Search') : ts('Other Criteria') }}
       </button>

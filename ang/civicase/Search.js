@@ -18,11 +18,10 @@
     /**
      * Link function for the directive
      *
-     * @param {Object} scope
-     * @param {Object} element
-     * @param {Object} attr
+     * @param {object} scope
+     * @param {object} element
+     * @param {object} attr
     */
-
     function civicaseSearchLink (scope, element, attr) {
       /**
        * The logic is for disabling chrome autofills. New chrome version needs auto complete to be set to 'new-password'.
