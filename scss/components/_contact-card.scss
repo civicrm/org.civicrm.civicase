@@ -21,6 +21,11 @@
   color: $crm-grayblue-darker;
   font-size: 18px;
   margin-top: 2px;
+
+  &:hover {
+    color: $brand-primary;
+    cursor: pointer;
+  }
 }
 
 .civicase__contact-additional__container {
