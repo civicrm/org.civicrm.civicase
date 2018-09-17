@@ -1,5 +1,6 @@
 <div class="civicase__activities-calendar">
   <div uib-datepicker
       ng-model="activitiesCalendar.selectedDate"
+      ng-change="activitiesCalendar.onDateSelected()"
       datepicker-options="activitiesCalendar.calendarOptions"></div>
 </div>
