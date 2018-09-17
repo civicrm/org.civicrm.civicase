@@ -18,7 +18,7 @@
         <div>{{item.category_count.incomplete.task ? item.category_count.incomplete.task : 0}}</div>
         <div>Open Tasks</div>
         <div
-          ng-if="item.category_count.overdue.task > 0"
+          ng-class="{ 'invisible': !item.category_count.overdue.task }"
           class="text-danger civicase__summary-overdue-count">
           {{item.category_count.overdue.task}} overdue
         </div>
