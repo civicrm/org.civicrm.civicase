@@ -174,7 +174,7 @@
 
       item.category_count.overdue = {};
       _.each(item.allActivities, function (val, key) {
-        category = CRM.civicase.activityTypes[val.activity_type_id].grouping;
+        category = CRM.civicase.activityTypes[val.activity_type_id].grouping || 'unlisted';
 
         if (category) {
           ifDateInPast = moment(val.activity_date_time).isBefore(moment());
@@ -182,6 +182,10 @@
 
           if (ifDateInPast && isIncompleteTask) {
             item.category_count.overdue[category] = item.category_count.overdue[category] + 1 || 1;
+
+            if (category !== 'communication' && category !== 'task') {
+              item.category_count.overdue['other'] = item.category_count.overdue['other'] + 1 || 1;
+            }
           }
         }
       });

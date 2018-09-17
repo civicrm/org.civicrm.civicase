@@ -16,7 +16,7 @@
     $scope.activityFeedUrl = getActivityFeedUrl;
 
     (function init () {
-      countOtherTasks($scope.data.category_count);
+      countIncompleteOtherTasks($scope.data.category_count);
     }());
 
     /**
@@ -41,22 +41,26 @@
 
     /**
      * To accumulate non communication and task counts as
-     * other count for incomplete as well as completed tasks
+     * other count for incomplete tasks
      *
      * @param {Object} categoryCount - Object of related categoryCount of a case
      */
-    function countOtherTasks (categoryCount) {
+    function countIncompleteOtherTasks (categoryCount) {
       var otherCount;
 
       _.each(_.keys(categoryCount), function (status) {
-        otherCount = 0;
+        if (status === 'incomplete') {
+          otherCount = $scope.data.allActivities.filter(function (activity) {
+            return CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(activity.status_id)) !== -1;
+          }).length;
 
-        _.each(_.keys(categoryCount[status]), function (type) {
-          if (type !== 'communication' && type !== 'task') {
-            otherCount += categoryCount[status][type];
-          }
-          $scope.data.category_count[status].other = otherCount;
-        });
+          _.each(_.keys(categoryCount[status]), function (type) {
+            if (type === 'communication' || type === 'task') {
+              otherCount -= categoryCount[status][type];
+            }
+            $scope.data.category_count[status].other = otherCount;
+          });
+        }
       });
     }
   });
