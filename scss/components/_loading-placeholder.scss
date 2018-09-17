@@ -72,6 +72,15 @@
   }
 }
 
+.civicase__loading-placeholder__date {
+  background-color: $placeholder-grey;
+
+  &::before {
+    border-left-color: darken($placeholder-grey, 7%);
+    border-top-color: darken($placeholder-grey, 7%);
+  }
+}
+
 .civicase__loading-placeholder--big {
   &::before {
     height: 1.5em;

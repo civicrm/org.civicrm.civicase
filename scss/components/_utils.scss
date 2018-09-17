@@ -2,3 +2,25 @@
   position: relative;
   top: -1px;
 }
+
+.civicase__3-dot-menu {
+  .btn {
+    border: 0;
+    height: 18px;
+    margin-left: 6px !important;
+    padding: 0;
+    top: 0;
+    width: 18px;
+
+    &.dropdown-toggle {
+      background: transparent;
+      box-shadow: none;
+    }
+  }
+
+  > .dropdown-menu {
+    left: 50% !important;
+    top: 150% !important;
+    transform: translateX(-50%);
+  }
+}

@@ -1,4 +1,6 @@
 <div class="civicase__summary-tab">
+  <div crm-ui-debug="item"></div>
+  <div crm-ui-debug="item.activity_summary.milestone"></div>
   <!-- Subject and QuickLinks -->
   <div class="panel panel-default civicase__summary-tab__basic-details">
     <div class="panel-body">
@@ -29,7 +31,64 @@
       </div>
     </div>
   </div>
+
   <!-- End - Subject and QuickLinks -->
+  <div class="civicase__summary-tab-row">
+    <div class="civicase__summary-tab-tile col-lg-6">
+      <!-- next milestone card -->
+      <h3> Next Milestone </h3>
+      <div class="civicase__activity-card civicase__activity-card--big">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <!-- ActivityICon directive -->
+            <span class="civicase__activity-icon-container civicase__activity-icon-container--ribbon">
+              <span>
+                <i class="text-danger civicase__activity-icon fa fa-bell"></i>
+              </span>
+              <!-- Activity Ribbon -->
+              <span class="text-danger civicase__activity-icon-ribbon"></span>
+            </span>
+            <!-- ActivityICon directive End -->            
+            <div class="civicase__activity-card--big__inner">
+              <!-- Top section -->
+              <div class="civicase__activity-card-row">
+                <span class="civicase__activity-big-title">Mental evaluation lorem ipsum dolor sit enim</span>
+                <span ng-if="item.activity_summary.milestone[0].assignee_contact_name" contact-card avatar="true" contacts="item.activity_summary.milestone[0].assignee_contact_name"></span>
+                <div ng-include="'~/civicase/ActivityCard--Menu.html'"></div>
+              </div>
+              <!-- End - top section -->
+                <!-- Description -->
+              <div class="civicase__activity-big-subject">Subject ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam nim ipsam voluptatem quia voluptas sit aspernatur.</div>
+              <!-- End - description -->
+              <!-- Tags -->
+              <div class="civicase__activity__tags-container">
+                <span class="badge" style="background-color: red;">lorem</span>
+                <span class="badge" style="background-color: red;">ipsum</span>
+              </div>
+              <!-- End - Tags -->
+              <!-- With -->
+              <div class="civicase__activity-card-row">
+                <span class="civicase__activity-with">With:&nbsp;</span>
+                <span class="civicase__contact-card" contact-card contacts="item.activity_summary.milestone[0].target_contact_name"></span>
+              </div>
+              <!-- End - With --> 
+              <div class="civicase__activity-card-big-date civicase__activity-card-big-date--overdue">
+                <div class="civicase__activity-card-big-date-inner">
+                  <span class="civicase__activity-card-big-date__due-on"> Due on </span>
+                  <span class="civicase__activity-card-big-date__ddmm"> 10 Feb </span>
+                  <span class="civicase__activity-card-big-date__yyyy"> 2018 </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+    </div>
+    <div class="col-lg-3">
+    </div>
+  </div>
 </div>
 
 
@@ -72,3 +131,4 @@
   </div>
 
 </div> -->
+_

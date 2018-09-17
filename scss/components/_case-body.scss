@@ -1,8 +1,14 @@
 .civicase__case-body {
   padding: 0;
+
+  .tab-content {
+    background: transparent;
+  }
 }
 
 .civicase__summary-tab__basic-details {
+  background: $crm-white;
+
   .panel-body {
     display: flex;
     flex-direction: row;
@@ -56,4 +62,12 @@
 
 .civicase__summary-overdue-count {
   line-height: 18px;
+}
+
+.civicase__summary-tab-tile {
+  padding: 14px;
+}
+
+.civicase__summary-tab-row {
+  padding: 14px;  
 }
