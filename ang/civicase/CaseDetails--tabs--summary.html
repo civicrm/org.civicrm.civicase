@@ -14,7 +14,7 @@
           <span>{{formatDate(item.modified_date, 'DD MMMM YYYY' )}}</span>
         </div>
       </div>
-      <div class="civicase__summary-activity-count">
+      <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, 'task', 'incomplete') }}">
         <div>{{item.category_count.incomplete.task ? item.category_count.incomplete.task : 0}}</div>
         <div>Open Tasks</div>
         <div
@@ -22,17 +22,17 @@
           class="text-danger civicase__summary-overdue-count">
           {{item.category_count.overdue.task}} overdue
         </div>
-      </div>
-      <div class="civicase__summary-activity-count">
+      </a>
+      <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, 'communication', 'incomplete') }}">
         <div>{{item.category_count.incomplete.communication ? item.category_count.incomplete.communication : 0}}</div>
-        <div>Incomplete Comms</div>
+        <div>Unread Comms</div>
         <div
           ng-if="item.category_count.overdue.communication > 0"
           class="text-danger civicase__summary-overdue-count">
           {{item.category_count.overdue.communication}} overdue
         </div>
-      </div>
-      <div class="civicase__summary-activity-count">
+      </a>
+      <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, null, null, 'Scheduled') }}">
         <div>{{item.category_count.scheduled.count}}</div>
         <div>Scheduled Activities</div>
         <div

@@ -51,12 +51,18 @@
 .civicase__summary-activity-count {
   align-items: center;
   border-left: 1px solid $gray-light;
+  color: $gray-darker;
   display: flex;
   flex-basis: 16.6%;
   flex-direction: column;
   font-weight: 600;
   justify-content: center;
   text-align: center;
+
+  &:hover {
+    color: $gray-darker;
+    text-decoration: none;
+  }
 
   > div:nth-child(1) {
     font-size: 56px;

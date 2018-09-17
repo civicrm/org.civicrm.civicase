@@ -92,7 +92,7 @@
       describe('$scope.relationshipType', function () {
         describe('I am the case manager', function () {
           beforeEach(function () {
-            element.isolateScope().relationshipType = ['case_manager'];
+            element.isolateScope().relationshipType = ['is_case_manager'];
             $scope.$digest();
           });
 
@@ -102,7 +102,7 @@
         });
         describe('I am involved in the case', function () {
           beforeEach(function () {
-            element.isolateScope().relationshipType = ['contact_id'];
+            element.isolateScope().relationshipType = ['is_involved'];
             $scope.$digest();
           });
 

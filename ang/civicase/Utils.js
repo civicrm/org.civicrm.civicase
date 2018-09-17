@@ -193,15 +193,20 @@
   });
 
   module.factory('getActivityFeedUrl', function ($route, $location, $sce) {
-    return function (caseId, category, status, id) {
+    return function (caseId, category, statusType, status, id) {
       caseId = parseInt(caseId, 10);
       var af = {};
       var currentPath = $location.path();
       if (category) {
         af['activity_type_id.grouping'] = category;
       }
+      if (statusType) {
+        af.status_id = CRM.civicase.activityStatusTypes[statusType];
+      }
       if (status) {
-        af.status_id = CRM.civicase.activityStatusTypes[status];
+        af.status_id = [_.findKey(CRM.civicase.activityStatuses, function (statusObj) {
+          return statusObj.name === status;
+        })];
       }
       var p = {
         caseId: caseId,
