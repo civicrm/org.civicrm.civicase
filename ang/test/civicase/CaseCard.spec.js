@@ -52,6 +52,8 @@
      * @param {Object} Case card object
      */
     function compileDirective (caseObj) {
+      caseObj.allActivities = caseObj['api.Activity.get'].values;
+
       element = $compile('<civicase-case-card case="case"></civicase-case-card>')($scope);
       $scope.case = caseObj;
       $scope.$digest();
