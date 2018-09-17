@@ -11,6 +11,14 @@
     .popover-content {
       padding: 0;
     }
+
+    &.bottom > .arrow {
+      border-bottom-color: $gray-light;
+    }
+
+    &.top > .arrow {
+      border-top-color: $gray-light;
+    }
   }
 
   .civicase__contact-popover__header {

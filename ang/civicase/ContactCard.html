@@ -69,55 +69,55 @@
   <script type="text/ng-template" id="contact-popover.html">
     <div class="civicase__contact-popover">
       <div class="civicase__contact-popover__header">
-        <h2>John Smith</h2>
+        <h2>{{mainContact.display_name}}</h2>
         <hr />
       </div>
       <div class="civicase__contact-popover__column">
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Home Phone</strong></div>
-          <div class="civicase__contact-popover__detail-value">09382 278 372</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.phone.phone}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Home Mobile</strong></div>
-          <div class="civicase__contact-popover__detail-value"></div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.mobile.phone}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Primary Address</strong></div>
-          <div class="civicase__contact-popover__detail-value">251 Maple Lane</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.street_address}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>City</strong></div>
-          <div class="civicase__contact-popover__detail-value">Kinney</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.city}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>State</strong></div>
-          <div class="civicase__contact-popover__detail-value">MN</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.state_province}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Postal Code</strong></div>
-          <div class="civicase__contact-popover__detail-value">37281</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.postal_code}}</div>
         </div>
       </div>
       <div class="civicase__contact-popover__column">
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Primary Email</strong></div>
-          <div class="civicase__contact-popover__detail-value">m.chambers@thisisanemail.comm.chambers@thisisanemail.com</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.email}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Groups</strong></div>
-          <div class="civicase__contact-popover__detail-value">Summer Program</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.groups}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Tags</strong></div>
-          <div class="civicase__contact-popover__detail-value">Lorem</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.tags}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Gender</strong></div>
-          <div class="civicase__contact-popover__detail-value">Female</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.gender}}</div>
         </div>
         <div class="civicase__contact-popover__detail-group">
           <div class="civicase__contact-popover__detail-header"><strong>Date of Birth</strong></div>
-          <div class="civicase__contact-popover__detail-value">September 9th, 1968</div>
+          <div class="civicase__contact-popover__detail-value">{{mainContact.birth_date | date:'longDate'}}</div>
         </div>
       </div>
     </div>
