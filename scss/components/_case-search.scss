@@ -1,4 +1,5 @@
 .civicase__case-filter-panel {
+  background-color: $gray-lighter;
   box-shadow: none;
   margin-bottom: 0;
 
@@ -8,8 +9,9 @@
 }
 
 .civicase__case-filter-panel__title {
+  font-size: 18px;
   left: 20px;
-  line-height: 1.3em;
+  line-height: 24px;
   margin: 0;
   max-width: calc(((100% - 950px) / 2) - 20px); // total width - width of the search criterion and its left half section minus left 20px spacing.
   position: absolute;
@@ -21,7 +23,7 @@
   display: flex;
   justify-content: center;
   left: 0;
-  padding: 15px 0;
+  padding: 13.5px 0;
   top: 0;
 }
 

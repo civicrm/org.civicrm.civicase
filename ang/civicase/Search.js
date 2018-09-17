@@ -50,19 +50,19 @@
         label: ts('Tags')
       }
     };
-
     var caseRelationshipConfig = [
       {
         'text': 'All Cases',
         'id': 'all'
       }, {
         'text': 'My cases',
-        'id': 'case_manager'
+        'id': 'is_case_manager'
       }, {
         'text': 'Cases I am involved',
-        'id': 'contact_id'
+        'id': 'is_involved'
       }
     ];
+
     $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
     $scope.caseStatusOptions = _.map(caseStatuses, mapSelectOptions);
     $scope.customGroups = CRM.civicase.customSearchFields;
@@ -72,13 +72,17 @@
     $scope.filters = angular.extend({}, $scope.defaults);
 
     (function init () {
-      passCustomSearchFieldsToSearchFilters();
+      setCustomSearchFieldsAsSearchFilters();
+
+      $scope.$watch('expanded', expandedWatcher);
+      $scope.$watch('relationshipType', relationshipTypeWatcher);
+      $scope.$watchCollection('filters', filtersWatcher);
     }());
 
     /**
      * Watcher for expanded state and update tableHeader top offset likewise
      */
-    $scope.$watch('expanded', function () {
+    function expandedWatcher () {
       $timeout(function () {
         var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
         var $tableHeader = $('.civicase__case-list-table__header');
@@ -89,27 +93,27 @@
           }
         });
       });
-    });
+    }
 
     /**
      * Watcher for relationshipType filter
      */
-    $scope.$watch('relationshipType', function () {
+    function relationshipTypeWatcher () {
       if ($scope.relationshipType) {
-        $scope.relationshipType[0] === 'case_manager' ? $scope.filters.case_manager = [CRM.config.user_contact_id] : delete ($scope.filters.case_manager);
-        $scope.relationshipType[0] === 'contact_id' ? $scope.filters.contact_id = [CRM.config.user_contact_id] : delete ($scope.filters.contact_id);
+        $scope.relationshipType[0] === 'is_case_manager' ? $scope.filters.case_manager = [CRM.config.user_contact_id] : delete ($scope.filters.case_manager);
+        $scope.relationshipType[0] === 'is_involved' ? $scope.filters.contact_id = [CRM.config.user_contact_id] : delete ($scope.filters.contact_id);
       }
-    });
+    }
 
     /**
      * Watcher for filter collection to update the search
      * Only works when dropdown is unexpanded
      */
-    $scope.$watchCollection('filters', function () {
+    function filtersWatcher () {
       if (!$scope.expanded) {
         $scope.doSearch();
       }
-    });
+    }
 
     /**
      * Check/Uncheck `Show deleted` filters
@@ -239,9 +243,9 @@
     }
 
     /**
-     * Pass custom search fields to search filter fields object
+     * Set custom search fields to search filter fields object
      */
-    function passCustomSearchFieldsToSearchFilters () {
+    function setCustomSearchFieldsAsSearchFilters () {
       _.each(CRM.civicase.customSearchFields, function (group) {
         _.each(group.fields, function (field) {
           allSearchFields['custom_' + field.id] = field;

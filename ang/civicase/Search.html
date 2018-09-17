@@ -44,7 +44,7 @@
           <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'LIKE':'%civicrm_case%'}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
         </div>
       </div>
-      <div ng-include="'~/civicase/CaseSearchCustom.html'"></div>
+      <div ng-include="'~/civicase/Search--custom.html'"></div>
     </div>
   </form>
   <div class="panel-body civicase__case-filter-panel__description" ng-if="!expanded && filterDescription.length">
