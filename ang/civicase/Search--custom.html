@@ -1,7 +1,7 @@
-<div class="clearfix civicase-search-custom">
-  <fieldset ng-repeat="group in customGroups" class="col-lg-6" ng-if="!filters.case_type_id || !filters.case_type_id.length || !group.caseTypes || !group.caseTypes.length || _.intersection(group.caseTypes, filters.case_type_id).length">
-    <legend>{{ group.title }}</legend>
-    <div ng-repeat="field in group.fields">
+<div class="clearfix">
+  <fieldset ng-repeat="group in customGroups" class="civicase__case-filter-fieldset" ng-if="!filters.case_type_id || !filters.case_type_id.length || !group.caseTypes || !group.caseTypes.length || _.intersection(group.caseTypes, filters.case_type_id).length">
+    <legend class="civicase__case-filter-form-legend">{{ group.title }}</legend>
+    <div ng-repeat="field in group.fields" class="civicase__case-filter-form-elements">
       <label for="case_search_field_custom_{{ field.id }}">{{ field.label }}</label>
       <div ng-switch="field.html_type">
         <div ng-switch-when="Autocomplete-Select">
