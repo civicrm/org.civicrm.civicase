@@ -44,7 +44,7 @@
           <input class="form-control" ng-list crm-entityref="{entity: 'Tag', api: {params: {used_for: {'LIKE':'%civicrm_case%'}, is_selectable: 1}}, select: {multiple: true}}" ng-model="filters.tag_id">
         </div>
       </div>
-      <div class="civicase__case-filter-form-elements" ng-include="'~/civicase/CaseSearchCustom.html'"></div>
+      <div ng-include="'~/civicase/CaseSearchCustom.html'"></div>
     </div>
   </form>
   <div class="panel-body civicase__case-filter-panel__description" ng-if="!expanded && filterDescription.length">
@@ -58,11 +58,3 @@
     </button>    
   </div>
 </div>
-
-<!-- Todo: Use this HTML to remove unneccesary functions and code, to be fixed in C51-35
- <div class="form-group" ng-if="isEnabled('case_manager')"> 
-   <label for="case_search_field_case_manager" class="control-label col-lg-2">{{ ts('Case Manager') }}</label>
-   <div class="col-lg-4"> 
-     <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.case_manager" id="case_search_field_case_manager" /> 
-   </div> 
- </div> -->

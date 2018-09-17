@@ -121,3 +121,18 @@
   flex: 1 0 0;
   margin-bottom: 0;
 }
+
+
+.civicase__case-filter-form-legend {
+  border-color: $gray-light;
+  color: $gray-darker;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  margin-bottom: 20px;
+  padding: 0 0 8px;
+}
+
+.civicase__case-filter-fieldset {
+  margin: 15px 0;
+}
