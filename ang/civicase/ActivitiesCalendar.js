@@ -2,6 +2,9 @@
   var module = angular.module('civicase');
 
   module.component('civicaseActivitiesCalendar', {
+    bindings: {
+      activities: '='
+    },
     controller: activitiesCalendar,
     controllerAs: 'activitiesCalendar',
     templateUrl: '~/civicase/ActivitiesCalendar.html'

@@ -40,7 +40,20 @@
               'tag_id.description'
             ],
             'options': jasmine.any(Object),
-            'api.Activity.get': {},
+            'api.Activity.get.1': {
+              'case_id': '$value.id',
+              'return': [
+                'activity_type_id',
+                'activity_date_time',
+                'status_id',
+                'is_star',
+                'case_id',
+                'is_overdue',
+                'source_contact_id',
+                'target_contact_id',
+                'assignee_contact_id'
+              ]
+            },
             'case_type_id.is_active': 1,
             'id': { 'LIKE': '%' + $scope.filters.id + '%' },
             'contact_is_deleted': 0

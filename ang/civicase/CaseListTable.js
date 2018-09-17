@@ -249,8 +249,21 @@
           limit: page.size,
           offset: page.size * (page.num - 1)
         },
-        // To get the count of overdue tasks
-        'api.Activity.get.1': {}
+        // Gets all the activities for the case
+        'api.Activity.get.1': {
+          case_id: '$value.id',
+          return: [
+            'activity_type_id',
+            'activity_date_time',
+            'status_id',
+            'is_star',
+            'case_id',
+            'is_overdue',
+            'source_contact_id',
+            'target_contact_id',
+            'assignee_contact_id'
+          ]
+        }
       };
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
       if (sort.field !== 'id' && sort.field !== 'contact_id.sort_name') {
