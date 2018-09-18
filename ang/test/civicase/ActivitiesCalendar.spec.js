@@ -1,18 +1,19 @@
 /* eslint-env jasmine */
 
-(function ($, moment) {
+(function ($, _, moment) {
   describe('ActivitiesCalendar', function () {
     var $componentController, $scope, $rootScope, activitiesCalendar, activitiesMockData,
-      dates;
+      dates, formatActivity, mockCaseId;
 
     beforeEach(module('civicase', 'civicase.data'));
 
     beforeEach(inject(function (_$componentController_, _$rootScope_,
-      _activitiesMockData_, datesMockData) {
+      _activitiesMockData_, datesMockData, _formatActivity_) {
       $componentController = _$componentController_;
       $rootScope = _$rootScope_;
       activitiesMockData = _activitiesMockData_.get();
       dates = datesMockData;
+      formatActivity = _formatActivity_;
     }));
 
     describe('calendar options', function () {
@@ -38,9 +39,13 @@
         beforeEach(function () {
           spyOn($scope, '$emit').and.callThrough();
 
-          expectedSelectedActivities = activitiesMockData.filter(function (activity) {
-            return moment(activity.activity_date_time).isSame(dates.today, 'day');
-          });
+          expectedSelectedActivities = activitiesMockData
+            .filter(function (activity) {
+              return moment(activity.activity_date_time).isSame(dates.today, 'day');
+            })
+            .map(function (activity) {
+              return formatActivity(activity, mockCaseId);
+            });
 
           activitiesCalendar.selectedDate = dates.today;
           activitiesCalendar.onDateSelected();
@@ -63,7 +68,7 @@
           activitiesCalendar.onDateSelected();
         });
 
-        it('only provides the activities for the given date', function () {
+        it('does not provide any activities for the selected date', function () {
           expect(activitiesCalendar.selectedActivites).toEqual([]);
         });
 
@@ -82,10 +87,14 @@
     function initComponent (activities) {
       $scope = $rootScope.$new();
       activities = activities || [];
+      mockCaseId = _.uniqueId();
 
       activitiesCalendar = $componentController('civicaseActivitiesCalendar',
         { $scope: $scope },
-        { activities: activitiesMockData }
+        {
+          activities: activitiesMockData,
+          caseId: mockCaseId
+        }
       );
     }
   });
@@ -249,4 +258,4 @@
       activitiesCalendar.find('.popover').hide(); // Bootstrap hides this automatically
     }
   });
-})(CRM.$, moment);
+})(CRM.$, CRM._, moment);

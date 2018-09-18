@@ -3,7 +3,8 @@
 
   module.component('civicaseActivitiesCalendar', {
     bindings: {
-      activities: '='
+      activities: '=',
+      caseId: '='
     },
     controller: activitiesCalendar,
     controllerAs: 'activitiesCalendar',
@@ -22,9 +23,9 @@
     };
   }]);
 
-  activitiesCalendar.$inject = ['$scope'];
+  activitiesCalendar.$inject = ['$scope', 'formatActivity'];
 
-  function activitiesCalendar ($scope) {
+  function activitiesCalendar ($scope, formatActivity) {
     var vm = this;
 
     vm.calendarOptions = { showWeeks: false };
@@ -38,9 +39,13 @@
      * selected date. Triggers when the calendar date changes.
      */
     function onDateSelected () {
-      vm.selectedActivites = vm.activities.filter(function (activity) {
-        return moment(activity.activity_date_time).isSame(vm.selectedDate, 'day');
-      });
+      vm.selectedActivites = vm.activities
+        .filter(function (activity) {
+          return moment(activity.activity_date_time).isSame(vm.selectedDate, 'day');
+        })
+        .map(function (activity) {
+          return formatActivity(activity, vm.caseId);
+        });
 
       if (vm.selectedActivites.length) {
         $scope.$emit('civicaseActivitiesCalendar::openActivitiesPopover');

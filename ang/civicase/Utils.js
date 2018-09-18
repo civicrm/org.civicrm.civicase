@@ -72,6 +72,7 @@
     var activityStatuses = CRM.civicase.activityStatuses;
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = CRM.civicase.caseStatuses;
+
     return function (act, caseId) {
       act.category = (activityTypes[act.activity_type_id].grouping ? activityTypes[act.activity_type_id].grouping.split(',') : []);
       act.icon = activityTypes[act.activity_type_id].icon;
@@ -83,9 +84,11 @@
       act.is_overdue = (typeof act.is_overdue === 'string') ? (act.is_overdue === '1') : act.is_overdue;
       act.color = activityStatuses[act.status_id].color || '#42afcb';
       act.status_css = 'status-type-' + act.status_type + ' activity-status-' + act.status_name.toLowerCase().replace(' ', '-');
+
       if (act.category.indexOf('alert') > -1) {
         act.color = ''; // controlled by css
       }
+
       if (caseId && (!act.case_id || act.case_id === caseId || _.contains(act.case_id, caseId))) {
         act.case_id = caseId;
       } else if (act.case_id) {
@@ -93,17 +96,21 @@
       } else {
         act.case_id = null;
       }
+
       if (act['case_id.case_type_id']) {
         act.case = {};
+
         _.each(act, function (val, key) {
           if (key.indexOf('case_id.') === 0) {
             act.case[key.replace('case_id.', '')] = val;
             delete act[key];
           }
         });
+
         act.case.client = [];
         act.case.status = caseStatuses[act.case.status_id];
         act.case.type = caseTypes[act.case.case_type_id];
+
         _.each(act.case.contacts, function (contact) {
           if (!contact.relationship_type_id) {
             act.case.client.push(contact);
@@ -112,14 +119,18 @@
             act.case.manager = contact;
           }
         });
+
         delete act.case.contacts;
       }
+
+      return act;
     };
   });
 
   module.factory('formatCase', function (formatActivity) {
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = CRM.civicase.caseStatuses;
+
     return function (item) {
       item.myRole = [];
       item.client = [];
@@ -155,13 +166,16 @@
         if (!contact.relationship_type_id) {
           item.client.push(contact);
         }
+
         if (contact.contact_id === CRM.config.user_contact_id) {
           item.myRole.push(contact.role);
         }
+
         if (contact.manager) {
           item.manager = contact;
         }
       });
+
       return item;
     };
 
