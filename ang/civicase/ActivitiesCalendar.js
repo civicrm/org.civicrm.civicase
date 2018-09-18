@@ -1,18 +1,17 @@
 (function ($, angular) {
   var module = angular.module('civicase');
 
-  module.component('civicaseActivitiesCalendar', {
-    bindings: {
-      activities: '=',
-      caseId: '='
-    },
-    controller: activitiesCalendar,
-    controllerAs: 'activitiesCalendar',
-    templateUrl: '~/civicase/ActivitiesCalendar.html'
-  });
-
-  module.directive('civicaseActivitiesCalendarDomEvents', ['$uibPosition', function ($uibPosition) {
+  module.directive('civicaseActivitiesCalendar', ['$uibPosition', function ($uibPosition) {
     return {
+      scope: {
+        activities: '=',
+        caseId: '='
+      },
+      controller: 'civicaseActivitiesCalendarController',
+      controllerAs: 'activitiesCalendar',
+      bindToController: true,
+      templateUrl: '~/civicase/ActivitiesCalendar.html',
+      restrict: 'E',
       link: function ($scope, element) {
         civicaseActivitiesCalendarDomEvents({
           $scope: $scope,
@@ -23,9 +22,11 @@
     };
   }]);
 
-  activitiesCalendar.$inject = ['$scope', 'formatActivity'];
+  module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
-  function activitiesCalendar ($scope, formatActivity) {
+  civicaseActivitiesCalendarController.$inject = ['$scope', 'formatActivity'];
+
+  function civicaseActivitiesCalendarController ($scope, formatActivity) {
     var vm = this;
 
     vm.calendarOptions = { showWeeks: false };

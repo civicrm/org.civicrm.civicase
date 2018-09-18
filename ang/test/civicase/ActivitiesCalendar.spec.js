@@ -1,15 +1,15 @@
 /* eslint-env jasmine */
 
 (function ($, _, moment) {
-  describe('ActivitiesCalendar', function () {
-    var $componentController, $scope, $rootScope, activitiesCalendar, activitiesMockData,
+  describe('civicaseActivitiesCalendarController', function () {
+    var $controller, $scope, $rootScope, activitiesCalendar, activitiesMockData,
       dates, formatActivity, mockCaseId;
 
     beforeEach(module('civicase', 'civicase.data'));
 
-    beforeEach(inject(function (_$componentController_, _$rootScope_,
+    beforeEach(inject(function (_$controller_, _$rootScope_,
       _activitiesMockData_, datesMockData, _formatActivity_) {
-      $componentController = _$componentController_;
+      $controller = _$controller_;
       $rootScope = _$rootScope_;
       activitiesMockData = _activitiesMockData_.get();
       dates = datesMockData;
@@ -18,7 +18,7 @@
 
     describe('calendar options', function () {
       beforeEach(function () {
-        initComponent();
+        initController();
       });
 
       it('hides the weeks panel from the calendar', function () {
@@ -30,7 +30,7 @@
 
     describe('selected activities', function () {
       beforeEach(function () {
-        initComponent();
+        initController();
       });
 
       describe('when selecting a date with activities included', function () {
@@ -84,12 +84,12 @@
      *
      * @param {Array} activities.
      */
-    function initComponent (activities) {
+    function initController (activities) {
       $scope = $rootScope.$new();
       activities = activities || [];
       mockCaseId = _.uniqueId();
 
-      activitiesCalendar = $componentController('civicaseActivitiesCalendar',
+      activitiesCalendar = $controller('civicaseActivitiesCalendarController',
         { $scope: $scope },
         {
           activities: activitiesMockData,
