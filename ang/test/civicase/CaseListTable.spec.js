@@ -2,27 +2,30 @@
 
 (function (_) {
   describe('CaseListTable', function () {
-    var $scope, crmApi;
+    var $controller, $q, $scope, CasesData, crmApi, formatCase;
 
-    beforeEach(module('civicase', 'crmUtil'));
+    beforeEach(module('civicase', 'civicase.data', 'crmUtil'));
 
-    beforeEach(inject(function ($controller, $rootScope, _crmApi_) {
+    beforeEach(inject(function (_$controller_, _$q_, $rootScope, _CasesData_, _crmApi_,
+      _formatCase_) {
+      $controller = _$controller_;
+      $q = _$q_;
       $scope = $rootScope.$new();
+      CasesData = _CasesData_;
       crmApi = _crmApi_;
+      formatCase = _formatCase_;
       // custom function added by civicrm:
       $scope.$bindToRoute = jasmine.createSpy('$bindToRoute');
       $scope.filters = {
         id: _.uniqueId()
       };
-
-      $controller('CivicaseCaseListTableController', {
-        $scope: $scope
-      });
     }));
 
     describe('on init', function () {
-      it('requests the cases data', function () {
-        expect(crmApi).toHaveBeenCalledWith([
+      var expectedApiCallParams, expectedCases;
+
+      beforeEach(function () {
+        expectedApiCallParams = [
           ['Case', 'getcaselist', jasmine.objectContaining({
             'sequential': 1,
             'return': [
@@ -64,8 +67,30 @@
             'contact_is_deleted': 0
           })],
           ['Case', 'getcaselistheaders']
-        ]);
+        ];
+
+        crmApi.and.returnValue($q.resolve([_.cloneDeep(CasesData)]));
+        expectedCases = _.chain(CasesData.values).cloneDeep().map(formatCase).value();
+        initController();
+        $scope.$digest();
+      });
+
+      it('requests the cases data', function () {
+        expect(crmApi).toHaveBeenCalledWith(expectedApiCallParams);
+      });
+
+      it('stores the cases after formatting them', function () {
+        expect($scope.cases).toEqual(expectedCases);
       });
     });
+
+    /**
+     * Initializes the case list table controller.
+     */
+    function initController () {
+      $controller('CivicaseCaseListTableController', {
+        $scope: $scope
+      });
+    }
   });
 })(CRM._);
