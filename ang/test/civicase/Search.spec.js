@@ -89,25 +89,26 @@
         });
       });
 
-      describe('$scope.relationshipType', function () {
-        describe('I am the case manager', function () {
+      describe('when updating the relationship types', function () {
+        describe('when I am the case manager', function () {
           beforeEach(function () {
             element.isolateScope().relationshipType = ['is_case_manager'];
             $scope.$digest();
           });
 
-          it('update  $scope.filters.case_manager', function () {
-            expect(element.isolateScope().filters.case_manager).toEqual([203]);
+          it('sets the case manager filter equal to my id', function () {
+            expect(element.isolateScope().filters.case_manager).toEqual([CRM.config.user_contact_id]);
           });
         });
-        describe('I am involved in the case', function () {
+
+        describe('when I am involved in the case', function () {
           beforeEach(function () {
             element.isolateScope().relationshipType = ['is_involved'];
             $scope.$digest();
           });
 
-          it('update  $scope.filters.contact_id', function () {
-            expect(element.isolateScope().filters.contact_id).toEqual([203]);
+          it('sets the contact id filter equal to my id', function () {
+            expect(element.isolateScope().filters.contact_id).toEqual([CRM.config.user_contact_id]);
           });
         });
       });
