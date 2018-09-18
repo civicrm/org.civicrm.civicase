@@ -165,13 +165,15 @@
 
       describe('opening the popover over the current selected date', function () {
         describe('when opening the popover', function () {
-          var activeButton, expectedOffset, popover;
+          var activeButton, expectedOffset, popover, jQueryOffsetFn;
 
           beforeEach(function (done) {
             var container = $('#bootstrap-theme');
-            var mockBodyOffset = { top: 500, left: 500 };
+            var mockBodyOffset = { top: 600, left: 500 };
+            jQueryOffsetFn = $.fn.offset;
 
-            initDirective();
+            // Mocking the offset method because the original can fail randomly:
+            spyOn($.fn, 'offset').and.returnValue({ top: 200, left: 100 });
 
             popover = activitiesCalendar.find('.activities-calendar-popover');
             activeButton = activitiesCalendar.find('.uib-day .active');
@@ -183,6 +185,10 @@
             $uibPosition.positionElements.and.returnValue(mockBodyOffset);
             activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
             setTimeout(done);
+          });
+
+          afterEach(function () {
+            $.fn.offset = jQueryOffsetFn;
           });
 
           it('appends the popover to the bootstrap theme element', function () {
