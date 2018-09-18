@@ -50,7 +50,7 @@
       $event.stopPropagation();
       activity.is_star = activity.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues
-      $scope.refresh([['Activity', 'setvalue', {id: activity.id, field: 'is_star', value: activity.is_star}]]);
+      $scope.refresh([['Activity', 'setvalue', {id: activity.id, field: 'is_star', value: activity.is_star}]], true);
     };
 
     /**
