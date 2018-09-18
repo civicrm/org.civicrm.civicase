@@ -24,10 +24,6 @@
       it('calculates all tasks which are incomplete count', function () {
         expect(element.isolateScope().data.category_count.incomplete.task).toBe(2);
       });
-
-      it('calculates all other overdue activities count', function () {
-        expect(element.isolateScope().data.category_count.overdue.other).toBe(6);
-      });
     });
 
     describe('formatDate()', function () {
@@ -56,6 +52,8 @@
      * @param {Object} Case card object
      */
     function compileDirective (caseObj) {
+      caseObj.allActivities = caseObj['api.Activity.get'].values;
+
       element = $compile('<civicase-case-card case="case"></civicase-case-card>')($scope);
       $scope.case = caseObj;
       $scope.$digest();

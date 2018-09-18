@@ -16,8 +16,7 @@
     $scope.activityFeedUrl = getActivityFeedUrl;
 
     (function init () {
-      countOverdueTasks($scope.data['api.Activity.get'].values);
-      countOtherTasks($scope.data.category_count);
+      countIncompleteOtherTasks($scope.data.category_count);
     }());
 
     /**
@@ -41,45 +40,26 @@
     };
 
     /**
-     * To accumulate non communication and task counts as
-     * other count for incomplete as well as completed tasks
+     * Accumulates non communication and task counts as
+     * other count for incomplete tasks
      *
      * @param {Object} categoryCount - Object of related categoryCount of a case
      */
-    function countOtherTasks (categoryCount) {
+    function countIncompleteOtherTasks (categoryCount) {
       var otherCount;
 
       _.each(_.keys(categoryCount), function (status) {
-        otherCount = 0;
+        if (status === 'incomplete') {
+          otherCount = $scope.data.allActivities.filter(function (activity) {
+            return CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(activity.status_id)) !== -1;
+          }).length;
 
-        _.each(_.keys(categoryCount[status]), function (type) {
-          if (type !== 'communication' && type !== 'task') {
-            otherCount += categoryCount[status][type];
-          }
-          $scope.data.category_count[status].other = otherCount;
-        });
-      });
-    }
-
-    /**
-     * To count overdue tasks.
-     *
-     * @param {Array} activities - Array of related activities to a case
-     */
-    function countOverdueTasks (activities) {
-      var ifDateInPast, isIncompleteTask, category;
-
-      $scope.data.category_count.overdue = {};
-      _.each(activities, function (val, key) {
-        category = CRM.civicase.activityTypes[val.activity_type_id].grouping;
-
-        if (category) {
-          ifDateInPast = moment(val.activity_date_time).isBefore(moment());
-          isIncompleteTask = CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1;
-
-          if (ifDateInPast && isIncompleteTask) {
-            $scope.data.category_count.overdue[category] = $scope.data.category_count.overdue[category] + 1 || 1;
-          }
+          _.each(_.keys(categoryCount[status]), function (type) {
+            if (type === 'communication' || type === 'task') {
+              otherCount -= categoryCount[status][type];
+            }
+            categoryCount[status].other = otherCount;
+          });
         }
       });
     }

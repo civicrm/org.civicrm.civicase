@@ -1,34 +1,46 @@
-<div class="civicase__summary-tab">
-  <div crm-ui-debug="item"></div>
-  <div crm-ui-debug="item.activity_summary.milestone"></div>
+<div class="civicase__summary-tab crm-entity" data-entity="Case" data-id="{{ item.id }}">
   <!-- Subject and QuickLinks -->
   <div class="panel panel-default civicase__summary-tab__basic-details">
     <div class="panel-body">
       <div class="civicase__summary-tab__subject-container">
-        <div class="civicase__summary-tab__subject">Case Subject Lorem Ipsum</div>
-        <div class="civicase__summary-tab__description">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+        <div class="civicase__summary-tab__subject">
+          <p crm-editable="item" data-field="subject" data-type="textarea" data-placeholder="Click to add subject" crm-form-success="onChangeSubject($data)"></p>
         </div>
+        <!-- <div class="civicase__summary-tab__description"> -->
+          <!-- <p crm-editable="item" data-field="details" data-type="textarea" data-placeholder="This case doesn't currently have a description. Click here to add now"></p> -->
+        <!-- </div> -->
         <div>
           <span class="civicase__summary-tab__last-updated">Case last updated: </span>
-          <span>28th April 2018</span>
+          <span>{{formatDate(item.modified_date, 'DD MMMM YYYY' )}}</span>
         </div>
       </div>
-      <div class="civicase__summary-activity-count">
-        <div>12</div>
+      <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, 'task', 'incomplete') }}">
+        <div>{{item.category_count.incomplete.task || 0}}</div>
         <div>Open Tasks</div>
-        <div class="text-danger civicase__summary-overdue-count">1 overdue</div>
-      </div>
-      <div class="civicase__summary-activity-count">
-        <div>3</div>
+        <div
+          ng-class="{ 'invisible': !item.category_count.overdue.task }"
+          class="text-danger civicase__summary-overdue-count">
+          {{item.category_count.overdue.task}} overdue
+        </div>
+      </a>
+      <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, 'communication', 'incomplete') }}">
+        <div>{{item.category_count.incomplete.communication ? item.category_count.incomplete.communication : 0}}</div>
         <div>Unread Comms</div>
-        <div class="text-danger civicase__summary-overdue-count">1 overdue</div>
-      </div>
-      <div class="civicase__summary-activity-count">
-        <div>5</div>
+        <div
+          ng-class="{ 'invisible': !item.category_count.overdue.communication }"
+          class="text-danger civicase__summary-overdue-count">
+          {{item.category_count.overdue.communication}} overdue
+        </div>
+      </a>
+      <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, null, null, 'Scheduled') }}">
+        <div>{{item.category_count.scheduled.count}}</div>
         <div>Scheduled Activities</div>
-        <div class="text-danger civicase__summary-overdue-count">1 overdue</div>
-      </div>
+        <div
+          ng-class="{ 'invisible': !item.category_count.scheduled.overdue }"
+          class="text-danger civicase__summary-overdue-count">
+          {{item.category_count.scheduled.overdue}} overdue
+        </div>
+      </a>
     </div>
   </div>
   <!-- End - Subject and QuickLinks -->

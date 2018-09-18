@@ -8,7 +8,7 @@
     };
   });
 
-  module.controller('CivicaseCaseListTableController', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
+  module.controller('CivicaseCaseListTableController', function ($scope, $window, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
     var firstLoad = true;
     var caseTypes = CRM.civicase.caseTypes;
 
@@ -66,9 +66,10 @@
      * Refresh the Case List View
      *
      * @param {array} apiCalls
+     * @param {boolean} backgroundLoading - if loading animation should not be shown
      */
-    $scope.refresh = function (apiCalls) {
-      $scope.isLoading = true;
+    $scope.refresh = function (apiCalls, backgroundLoading) {
+      $scope.isLoading = true && !backgroundLoading;
 
       apiCalls = apiCalls || [];
       apiCalls = apiCalls.concat(getCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page));
@@ -201,6 +202,7 @@
           $scope.page.total = Math.ceil(result[1] / $scope.page.size);
           setPageTitle();
           firstLoad = $scope.isLoading = false;
+          $($window).scrollTop(0); // Scrolls the window to top once new data loads
         });
     }
 

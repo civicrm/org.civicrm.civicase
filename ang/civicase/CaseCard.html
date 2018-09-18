@@ -12,7 +12,6 @@
      <div ng-if="!$parent.bulkAllowed" class="civicase__case-card-lock">
       <div class="civicase__case-card-lock__inner fa fa-lock"></div>
     </div> -->
-
     <span class="civicase__checkbox" ng-if="!$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed" role="checkbox" aria-checked="{{activity.is_completed}}" tabindex="0" aria-labelledby="Mark complete/incomplete">
       <i ng-if="data.selected" class="civicase__checkbox--checked material-icons">check_box</i>
     </span>
@@ -23,7 +22,7 @@
       <span>Next Milestone: </span>
       <a class="civicase__case-card__next-milestone-date"
          ng-class="{'civicase__overdue-activity-icon': isOverdue(data.activity_summary.milestone[0].activity_date_time)}"
-         ng-href="#{{ activityFeedUrl(data.id, 'milestone', 'incomplete', data.activity_summary.milestone[0].id) }}"
+         ng-href="#{{ activityFeedUrl(data.id, 'milestone', 'incomplete', null, data.activity_summary.milestone[0].id) }}"
          title="{{data.activity_summary.milestone[0].subject || data.activity_summary.milestone[0].type;}}"
       >{{ formatDate(data.activity_summary.milestone[0].activity_date_time) }} </a>
     </div>
