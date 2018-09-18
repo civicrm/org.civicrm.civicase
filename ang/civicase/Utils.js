@@ -174,6 +174,7 @@
       var otherCategories = ['communication', 'task'];
 
       caseObj.category_count.overdue = {};
+
       _.each(caseObj.allActivities, function (val, key) {
         category = CRM.civicase.activityTypes[val.activity_type_id].grouping || 'unlisted';
 
