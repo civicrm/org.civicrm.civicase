@@ -202,7 +202,7 @@
           $scope.page.total = Math.ceil(result[1] / $scope.page.size);
           setPageTitle();
           firstLoad = $scope.isLoading = false;
-          $($window).scrollTop(0);
+          $($window).scrollTop(0); // Scrolls the window to top once new data loads
         });
     }
 
