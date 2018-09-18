@@ -167,25 +167,24 @@
     /**
      * To count overdue tasks.
      *
-     * @param {Array} activities - Array of related activities to a case
+     * @param {Object} caseObj
      */
-    function countOverdueTasks (item) {
+    function countOverdueTasks (caseObj) {
       var ifDateInPast, isIncompleteTask, category;
+      var otherCategories = ['communication', 'task'];
 
-      item.category_count.overdue = {};
-      _.each(item.allActivities, function (val, key) {
+      caseObj.category_count.overdue = {};
+      _.each(caseObj.allActivities, function (val, key) {
         category = CRM.civicase.activityTypes[val.activity_type_id].grouping || 'unlisted';
 
-        if (category) {
-          ifDateInPast = moment(val.activity_date_time).isBefore(moment());
-          isIncompleteTask = CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1;
+        ifDateInPast = moment(val.activity_date_time).isBefore(moment());
+        isIncompleteTask = CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1;
 
-          if (ifDateInPast && isIncompleteTask) {
-            item.category_count.overdue[category] = item.category_count.overdue[category] + 1 || 1;
+        if (ifDateInPast && isIncompleteTask) {
+          caseObj.category_count.overdue[category] = caseObj.category_count.overdue[category] + 1 || 1;
 
-            if (category !== 'communication' && category !== 'task') {
-              item.category_count.overdue['other'] = item.category_count.overdue['other'] + 1 || 1;
-            }
+          if (!_.includes(otherCategories, category)) {
+            caseObj.category_count.overdue['other'] = caseObj.category_count.overdue['other'] + 1 || 1;
           }
         }
       });

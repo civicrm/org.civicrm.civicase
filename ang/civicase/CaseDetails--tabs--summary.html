@@ -15,7 +15,7 @@
         </div>
       </div>
       <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, 'task', 'incomplete') }}">
-        <div>{{item.category_count.incomplete.task ? item.category_count.incomplete.task : 0}}</div>
+        <div>{{item.category_count.incomplete.task || 0}}</div>
         <div>Open Tasks</div>
         <div
           ng-class="{ 'invisible': !item.category_count.overdue.task }"
@@ -27,7 +27,7 @@
         <div>{{item.category_count.incomplete.communication ? item.category_count.incomplete.communication : 0}}</div>
         <div>Unread Comms</div>
         <div
-          ng-if="item.category_count.overdue.communication > 0"
+          ng-class="{ 'invisible': !item.category_count.overdue.communication }"
           class="text-danger civicase__summary-overdue-count">
           {{item.category_count.overdue.communication}} overdue
         </div>
@@ -36,7 +36,7 @@
         <div>{{item.category_count.scheduled.count}}</div>
         <div>Scheduled Activities</div>
         <div
-          ng-if="item.category_count.scheduled.overdue > 0"
+          ng-class="{ 'invisible': !item.category_count.scheduled.overdue }"
           class="text-danger civicase__summary-overdue-count">
           {{item.category_count.scheduled.overdue}} overdue
         </div>

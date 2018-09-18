@@ -40,7 +40,7 @@
     };
 
     /**
-     * To accumulate non communication and task counts as
+     * Accumulates non communication and task counts as
      * other count for incomplete tasks
      *
      * @param {Object} categoryCount - Object of related categoryCount of a case
@@ -58,7 +58,7 @@
             if (type === 'communication' || type === 'task') {
               otherCount -= categoryCount[status][type];
             }
-            $scope.data.category_count[status].other = otherCount;
+            categoryCount[status].other = otherCount;
           });
         }
       });
