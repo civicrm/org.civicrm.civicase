@@ -129,6 +129,15 @@
       item.case_type = caseTypes[item.case_type_id].title;
       item.selected = false;
       item.is_deleted = item.is_deleted === '1';
+
+      // Save all activities in a new meaningful key
+      if (item['api.Activity.get']) {
+        item.allActivities = item['api.Activity.get'].values;
+        delete item['api.Activity.get'];
+
+        countOverdueTasks(item);
+      }
+
       _.each(item.activity_summary, function (activities) {
         _.each(activities, function (act) {
           formatActivity(act, item.id);
@@ -154,18 +163,50 @@
       });
       return item;
     };
+
+    /**
+     * To count overdue tasks.
+     *
+     * @param {Object} caseObj
+     */
+    function countOverdueTasks (caseObj) {
+      var ifDateInPast, isIncompleteTask, category;
+      var otherCategories = ['communication', 'task'];
+
+      caseObj.category_count.overdue = {};
+
+      _.each(caseObj.allActivities, function (val, key) {
+        category = CRM.civicase.activityTypes[val.activity_type_id].grouping || 'unlisted';
+
+        ifDateInPast = moment(val.activity_date_time).isBefore(moment());
+        isIncompleteTask = CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(val.status_id, 10)) > -1;
+
+        if (ifDateInPast && isIncompleteTask) {
+          caseObj.category_count.overdue[category] = caseObj.category_count.overdue[category] + 1 || 1;
+
+          if (!_.includes(otherCategories, category)) {
+            caseObj.category_count.overdue['other'] = caseObj.category_count.overdue['other'] + 1 || 1;
+          }
+        }
+      });
+    }
   });
 
   module.factory('getActivityFeedUrl', function ($route, $location, $sce) {
-    return function (caseId, category, status, id) {
+    return function (caseId, category, statusType, status, id) {
       caseId = parseInt(caseId, 10);
       var af = {};
       var currentPath = $location.path();
       if (category) {
         af['activity_type_id.grouping'] = category;
       }
+      if (statusType) {
+        af.status_id = CRM.civicase.activityStatusTypes[statusType];
+      }
       if (status) {
-        af.status_id = CRM.civicase.activityStatusTypes[status];
+        af.status_id = [_.findKey(CRM.civicase.activityStatuses, function (statusObj) {
+          return statusObj.name === status;
+        })];
       }
       var p = {
         caseId: caseId,
@@ -370,34 +411,66 @@
 
   // Angular binding for CiviCRM's jQuery-based crm-editable
   module.directive('crmEditable', function ($timeout) {
-    function nl2br (str) {
-      return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br />$2');
-    }
     return {
       restrict: 'A',
-      link: function (scope, elem, attrs) {
-        CRM.loadScript(CRM.config.resourceBase + 'js/jquery/jquery.crmEditable.js').done(function () {
-          var textarea = elem.data('type') === 'textarea';
-          var field = elem.data('field');
-          elem
-            .html(textarea ? nl2br(scope.model[field]) : _.escape(scope.model[field]))
-            .on('crmFormSuccess', function (e, value) {
-              $timeout(function () {
-                scope.$apply(function () {
-                  scope.model[field] = value;
-                });
-              });
-            })
-            .crmEditable();
-          scope.$watchCollection('model', function (model) {
-            elem.html(textarea ? nl2br(model[field]) : _.escape(model[field]));
-          });
-        });
-      },
+      link: crmEditableLink,
       scope: {
         model: '=crmEditable'
       }
     };
+
+    /**
+     * Link function for crmEditable directive
+     *
+     * @param {object} scope
+     * @param {object} elem
+     * @param {object} attrs
+     */
+    function crmEditableLink (scope, elem, attrs) {
+      CRM.loadScript(CRM.config.resourceBase + 'js/jquery/jquery.crmEditable.js').done(function () {
+        var textarea = elem.data('type') === 'textarea';
+        var field = elem.data('field');
+        elem
+          .html(textarea ? nl2br(getHTMLToShow(scope, elem, attrs)) : _.escape(getHTMLToShow(scope, elem, attrs)))
+          .on('crmFormSuccess', function (e, value) {
+            $timeout(function () {
+              scope.$apply(function () {
+                scope.model[field] = value;
+              });
+            });
+          })
+          .crmEditable();
+        scope.$watchCollection('model', function (model) {
+          elem.html(textarea ? nl2br(getHTMLToShow(scope, elem, attrs)) : _.escape(getHTMLToShow(scope, elem, attrs)));
+        });
+      });
+    }
+
+    /**
+     * Converts New Line to HTML Break markup
+     *
+     * @param {String} str
+     * @return {String}
+     */
+    function nl2br (str) {
+      return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br />$2');
+    }
+
+    /**
+     * Retuns the text to be shown as HTML,
+     * if the model value is null or empty string, retuns the placeholder
+     *
+     * @param {object} scope
+     * @param {object} elem
+     * @param {object} attrs
+     * @return {String}
+     */
+    function getHTMLToShow (scope, elem, attrs) {
+      var field = elem.data('field');
+      var placeholder = attrs.placeholder;
+
+      return (scope.model[field] && scope.model[field] !== '') ? scope.model[field] : placeholder;
+    }
   });
 
   // Enhances searchable buttons with the class "searchable-dropdown"

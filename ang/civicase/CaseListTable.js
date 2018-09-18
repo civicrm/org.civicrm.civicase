@@ -66,9 +66,10 @@
      * Refresh the Case List View
      *
      * @param {array} apiCalls
+     * @param {boolean} backgroundLoading - if loading animation should not be shown
      */
-    $scope.refresh = function (apiCalls) {
-      $scope.isLoading = true;
+    $scope.refresh = function (apiCalls, backgroundLoading) {
+      $scope.isLoading = true && !backgroundLoading;
 
       apiCalls = apiCalls || [];
       apiCalls = apiCalls.concat(getCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page));

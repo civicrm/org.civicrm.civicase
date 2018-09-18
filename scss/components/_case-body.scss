@@ -2,6 +2,22 @@
   padding: 0;
 }
 
+.civicase__case-body_tab {
+  z-index: 1;
+}
+
+.civicase__case-details-panel--summary {
+  .civicase__case-body_tab.affix {
+    width: calc(100% - #{$case-card-width});
+  }
+}
+
+.civicase__case-details-panel--focused {
+  .civicase__case-body_tab.affix {
+    width: 100%;
+  }
+}
+
 .civicase__summary-tab__basic-details {
   .panel-body {
     display: flex;
@@ -35,12 +51,18 @@
 .civicase__summary-activity-count {
   align-items: center;
   border-left: 1px solid $gray-light;
+  color: $gray-darker;
   display: flex;
   flex-basis: 16.6%;
   flex-direction: column;
   font-weight: 600;
   justify-content: center;
   text-align: center;
+
+  &:hover {
+    color: $gray-darker;
+    text-decoration: none;
+  }
 
   > div:nth-child(1) {
     font-size: 56px;

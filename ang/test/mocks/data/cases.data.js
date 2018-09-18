@@ -184,6 +184,17 @@
             }
           ]
         },
+        'activity_count': {
+          13: '1',
+          15: '4',
+          16: '1',
+          53: '1'
+        },
+        'api.Case.get.1': { 'values': [] },
+        'api.Case.get.2': { 'values': [] },
+        'api.Activity.get.1': { 'values': [] },
+        'api.Activity.get.3': { 'values': [] },
+        'api.CustomValue.gettree': { 'values': [] },
         'category_count': {
           'incomplete': {
             'task': 2,
