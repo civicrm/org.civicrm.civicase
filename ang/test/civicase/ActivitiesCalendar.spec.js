@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 
-(function (moment) {
+(function ($, moment) {
   describe('ActivitiesCalendar', function () {
     var $componentController, $scope, $rootScope, activitiesCalendar, activitiesMockData,
       dates;
@@ -91,18 +91,27 @@
   });
 
   describe('Activities Calendar DOM Events', function () {
-    var $compile, $rootScope, $scope, activitiesMockData, activitiesCalendar;
+    var $compile, $rootScope, $scope, $uibPosition, activitiesMockData, activitiesCalendar;
 
-    beforeEach(module('civicase', 'civicase.data', 'civicase.templates'));
+    beforeEach(module('civicase', 'civicase.data', 'civicase.templates', function ($provide) {
+      $uibPosition = jasmine.createSpyObj('$uibPosition', ['positionElements']);
+
+      $uibPosition.positionElements.and.returnValue({ top: 0, left: 0 });
+      $provide.value('$uibPosition', $uibPosition);
+    }));
 
     beforeEach(inject(function (_$compile_, _$rootScope_, _activitiesMockData_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       activitiesMockData = _activitiesMockData_.get();
+
+      $('<div id="bootstrap-theme"></div>').appendTo('body');
     }));
 
     afterEach(function () {
       activitiesCalendar && activitiesCalendar.remove();
+      $('#bootstrap-theme').remove();
+      $(document).off('mouseup');
     });
 
     describe('activities popover', function () {
@@ -111,24 +120,26 @@
       });
 
       describe('when the "open activities popover" event is emitted', function () {
-        beforeEach(function () {
+        beforeEach(function (done) {
           activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
+          setTimeout(done);
         });
 
         it('displays the activities popover', function () {
-          expect(activitiesCalendar.find('.activities-calendar-popover').is(':visible')).toBe(true);
+          expect($('.activities-calendar-popover').is(':visible')).toBe(true);
         });
       });
 
       describe('when the "open activities popover" event is not emitted', function () {
         it('does not display the activities popover', function () {
-          expect(activitiesCalendar.find('.activities-calendar-popover').is(':visible')).toBe(false);
+          expect($('.activities-calendar-popover').is(':visible')).toBe(false);
         });
       });
 
       describe('closing the popover', function () {
-        beforeEach(function () {
+        beforeEach(function (done) {
           activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
+          setTimeout(done);
         });
 
         describe('when clicking outside the popover', function () {
@@ -137,21 +148,84 @@
           });
 
           it('closes the popover', function () {
-            expect(activitiesCalendar.find('.activities-calendar-popover').is(':visible')).toBe(false);
+            expect($('.activities-calendar-popover').is(':visible')).toBe(false);
           });
         });
 
         describe('when clicking inside the popover', function () {
           beforeEach(function () {
-            activitiesCalendar.find('.activities-calendar-popover').mouseup();
+            $('.activities-calendar-popover').mouseup();
           });
 
           it('does not close the popover', function () {
-            expect(activitiesCalendar.find('.activities-calendar-popover').is(':visible')).toBe(true);
+            expect($('.activities-calendar-popover').is(':visible')).toBe(true);
+          });
+        });
+      });
+
+      describe('opening the popover over the current selected date', function () {
+        describe('when opening the popover', function () {
+          var activeButton, expectedOffset, popover;
+
+          beforeEach(function (done) {
+            var container = $('#bootstrap-theme');
+            var mockBodyOffset = { top: 500, left: 500 };
+
+            initDirective();
+
+            popover = activitiesCalendar.find('.activities-calendar-popover');
+            activeButton = activitiesCalendar.find('.uib-day .active');
+            expectedOffset = {
+              top: mockBodyOffset.top - container.offset().top + 'px',
+              left: mockBodyOffset.left - container.offset().left + 'px'
+            };
+
+            $uibPosition.positionElements.and.returnValue(mockBodyOffset);
+            activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
+            setTimeout(done);
+          });
+
+          it('appends the popover to the bootstrap theme element', function () {
+            expect(popover.parent().is('#bootstrap-theme')).toBe(true);
+          });
+
+          it('gets the active element position relative to the body', function () {
+            expect($uibPosition.positionElements).toHaveBeenCalledWith(jasmine.any(Object), jasmine.any(Object), 'bottom', true);
+            // this tests that the right elements have been passed to "positionElements":
+            expect(activeButton.is($uibPosition.positionElements.calls.mostRecent().args[0])).toEqual(true);
+            expect(popover.is($uibPosition.positionElements.calls.mostRecent().args[1])).toEqual(true);
+          });
+
+          it('has the same offset as the active day', function () {
+            expect(popover.css(['top', 'left']))
+              .toEqual(expectedOffset);
           });
         });
       });
     });
+
+    /**
+     * Appends a mock calendar table element inside the uib-datepicker element.
+     */
+    function appendMockCalendarTable () {
+      var calendarTable = `<table>
+        <tbody>
+          <tr class="uib-weeks">
+            <td class="uib-day">
+              <button><span>28</span></button>
+            </td>
+            <td class="uib-day">
+              <button class="active"><span>29</span></button>
+            </td>
+            <td class="uib-day">
+              <button><span>30</span></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>`;
+
+      activitiesCalendar.find('[uib-datepicker]').append(calendarTable);
+    }
 
     /**
      * Initializes the activities calendar dom events directive in the context of its
@@ -165,7 +239,8 @@
 
       activitiesCalendar.appendTo('body');
       $scope.$digest();
+      appendMockCalendarTable();
       activitiesCalendar.find('.popover').hide(); // Bootstrap hides this automatically
     }
   });
-})(moment);
+})(CRM.$, moment);
