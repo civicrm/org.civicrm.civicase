@@ -31,9 +31,8 @@
       </div>
     </div>
   </div>
-
   <!-- End - Subject and QuickLinks -->
-  <div class="civicase__summary-tab-row">
+  <div class="civicase__summary-tab-row clearfix">
     <div class="civicase__summary-tab-tile col-lg-6">
       <!-- next milestone card -->
       <h3> Next Milestone </h3>
@@ -48,7 +47,8 @@
               <!-- Activity Ribbon -->
               <span class="text-danger civicase__activity-icon-ribbon"></span>
             </span>
-            <!-- ActivityICon directive End -->            
+            <!-- ActivityICon directive End -->
+            <!-- Activity Body -->
             <div class="civicase__activity-card--big__inner">
               <!-- Top section -->
               <div class="civicase__activity-card-row">
@@ -72,6 +72,7 @@
                 <span class="civicase__contact-card" contact-card contacts="item.activity_summary.milestone[0].target_contact_name"></span>
               </div>
               <!-- End - With --> 
+              <!-- Big Date -->
               <div class="civicase__activity-card-big-date civicase__activity-card-big-date--overdue">
                 <div class="civicase__activity-card-big-date-inner">
                   <span class="civicase__activity-card-big-date__due-on"> Due on </span>
@@ -79,7 +80,21 @@
                   <span class="civicase__activity-card-big-date__yyyy"> 2018 </span>
                 </div>
               </div>
+              <!-- End Big Date -->
             </div>
+            <!-- Activity Body -->
+              <!-- No result behaviour -->
+<!--             <div class="civicase__activity-card--big--empty">
+              <div class="civicase__activity-card--big--empty-icon civicase__activity-icon-container civicase__activity-icon-container--ribbon">
+                <span>
+                  <i class="civicase__activity-icon fa fa-star"></i>
+                </span>
+                <span class="civicase__activity-icon-ribbon"></span>            
+              </div>
+              <div class="civicase__activity-card--big--empty-title"> No upcoming milestones </div>
+              <div class="civicase__activity-card--big--empty-description"> Click on the button below to add a milestone to this case </div>
+              <div class="civicase__activity-card--big--empty-button btn"> ADD MILESTONE </div>
+            </div> -->
           </div>
         </div>
       </div>
