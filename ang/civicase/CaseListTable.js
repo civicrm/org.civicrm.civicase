@@ -8,7 +8,7 @@
     };
   });
 
-  module.controller('CivicaseCaseListTableController', function ($scope, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
+  module.controller('CivicaseCaseListTableController', function ($scope, $window, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
     var firstLoad = true;
     var caseTypes = CRM.civicase.caseTypes;
 
@@ -202,6 +202,7 @@
           $scope.page.total = Math.ceil(result[1] / $scope.page.size);
           setPageTitle();
           firstLoad = $scope.isLoading = false;
+          $($window).scrollTop(0);
         });
     }
 

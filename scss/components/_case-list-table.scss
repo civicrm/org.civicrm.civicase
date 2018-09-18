@@ -78,6 +78,7 @@
 
 .civicase__case-list-table__header {
   &.affix {
+    border-left: 1px solid $gray-light;
     border-top: 1px solid $crm-grayblue-dark;
     display: block;
     left: 0;
