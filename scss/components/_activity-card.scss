@@ -1,10 +1,7 @@
 .civicase__activity-card {
   background: $crm-white;
-  box-shadow: $box-shadow-card;
   cursor: pointer;
-  height: 100px;
   position: relative;
-  width: 280px;
 
   .panel {
     box-shadow: none;
@@ -24,7 +21,6 @@
 
   .civicase__contact-avatar {
     margin-left: 5px;
-    margin-top: -10px;
   }
 
   .civicase__checkbox {

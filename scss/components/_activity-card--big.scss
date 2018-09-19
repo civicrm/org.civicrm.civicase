@@ -1,19 +1,12 @@
-.civicase__activity-card.civicase__activity-card--big {
+.civicase__activity-card--big {
   box-shadow: $box-shadow-card-big;
   height: auto;
+  min-height: 265px;
   width: 100%;
 
-  .panel-body {
-    display: flex;
+  &.panel-body {
     min-height: 265px;
     padding: 24px;
-  }
-
-  .panel-body:hover {
-    .civicase__big-date::before {
-      border-bottom: 24px solid $gray-lighter;
-      border-right: 24px solid $gray-lighter;
-    }
   }
 
   .civicase__activity-card-inner {
