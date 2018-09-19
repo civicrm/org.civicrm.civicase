@@ -2,7 +2,7 @@
 
 (function ($, _, moment) {
   describe('civicaseActivitiesCalendarController', function () {
-    var $controller, $scope, $rootScope, activitiesCalendar, activitiesMockData,
+    var $controller, $scope, $rootScope, activitiesMockData,
       dates, formatActivity, mockCaseId;
 
     beforeEach(module('civicase', 'civicase.data'));
@@ -22,7 +22,7 @@
       });
 
       it('hides the weeks panel from the calendar', function () {
-        expect(activitiesCalendar.calendarOptions).toEqual(jasmine.objectContaining({
+        expect($scope.calendarOptions).toEqual(jasmine.objectContaining({
           showWeeks: false
         }));
       });
@@ -47,15 +47,15 @@
               return formatActivity(activity, mockCaseId);
             });
 
-          activitiesCalendar.selectedDate = dates.today;
-          activitiesCalendar.onDateSelected();
+          $scope.selectedDate = dates.today;
+          $scope.onDateSelected();
         });
 
         it('only provides the activities for the given date', function () {
-          expect(activitiesCalendar.selectedActivites).toEqual(expectedSelectedActivities);
+          expect($scope.selectedActivites).toEqual(expectedSelectedActivities);
         });
 
-        it('emits an "open activities popover" event', function () {
+        it('opens the activities popover', function () {
           expect($scope.$emit).toHaveBeenCalledWith('civicaseActivitiesCalendar::openActivitiesPopover');
         });
       });
@@ -64,15 +64,15 @@
         beforeEach(function () {
           spyOn($scope, '$emit').and.callThrough();
 
-          activitiesCalendar.selectedDate = dates.nextWeek;
-          activitiesCalendar.onDateSelected();
+          $scope.selectedDate = dates.nextWeek;
+          $scope.onDateSelected();
         });
 
         it('does not provide any activities for the selected date', function () {
-          expect(activitiesCalendar.selectedActivites).toEqual([]);
+          expect($scope.selectedActivites).toEqual([]);
         });
 
-        it('does not not emit the "open activities popover" event', function () {
+        it('does not open the activities popover', function () {
           expect($scope.$emit).not.toHaveBeenCalledWith('civicaseActivitiesCalendar::openActivitiesPopover');
         });
       });
@@ -86,21 +86,18 @@
      */
     function initController (activities) {
       $scope = $rootScope.$new();
-      activities = activities || [];
+      activities = activities || activitiesMockData;
       mockCaseId = _.uniqueId();
 
-      activitiesCalendar = $controller('civicaseActivitiesCalendarController',
-        { $scope: $scope },
-        {
-          activities: activitiesMockData,
-          caseId: mockCaseId
-        }
-      );
+      $scope.activities = activities;
+      $scope.caseId = mockCaseId;
+
+      $controller('civicaseActivitiesCalendarController', { $scope: $scope });
     }
   });
 
   describe('Activities Calendar DOM Events', function () {
-    var $compile, $rootScope, $scope, $uibPosition, activitiesMockData, activitiesCalendar;
+    var $compile, $rootScope, $scope, $timeout, $uibPosition, activitiesMockData, activitiesCalendar;
 
     beforeEach(module('civicase', 'civicase.data', 'civicase.templates', function ($provide) {
       $uibPosition = jasmine.createSpyObj('$uibPosition', ['positionElements']);
@@ -109,9 +106,10 @@
       $provide.value('$uibPosition', $uibPosition);
     }));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _activitiesMockData_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_, _activitiesMockData_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
+      $timeout = _$timeout_;
       activitiesMockData = _activitiesMockData_.get();
 
       $('<div id="bootstrap-theme"></div>').appendTo('body');
@@ -129,9 +127,9 @@
       });
 
       describe('when the "open activities popover" event is emitted', function () {
-        beforeEach(function (done) {
+        beforeEach(function () {
           activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
-          setTimeout(done);
+          $timeout.flush();
         });
 
         it('displays the activities popover', function () {
@@ -146,9 +144,9 @@
       });
 
       describe('closing the popover', function () {
-        beforeEach(function (done) {
+        beforeEach(function () {
           activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
-          setTimeout(done);
+          $timeout.flush();
         });
 
         describe('when clicking outside the popover', function () {
@@ -176,7 +174,7 @@
         describe('when opening the popover', function () {
           var activeButton, expectedOffset, popover, jQueryOffsetFn;
 
-          beforeEach(function (done) {
+          beforeEach(function () {
             var container = $('#bootstrap-theme');
             var mockBodyOffset = { top: 600, left: 500 };
             jQueryOffsetFn = $.fn.offset;
@@ -193,7 +191,7 @@
 
             $uibPosition.positionElements.and.returnValue(mockBodyOffset);
             activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
-            setTimeout(done);
+            $timeout.flush();
           });
 
           afterEach(function () {

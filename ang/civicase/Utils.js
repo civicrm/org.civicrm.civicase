@@ -67,7 +67,7 @@
     };
   });
 
-  module.factory('formatActivity', ['ContactsDataService', function (ContactsDataService) {
+  module.factory('formatActivity', function (ContactsDataService) {
     var activityTypes = CRM.civicase.activityTypes;
     var activityStatuses = CRM.civicase.activityStatuses;
     var caseTypes = CRM.civicase.caseTypes;
@@ -154,7 +154,7 @@
         activity[fieldForName][contact.id] = contact.display_name;
       });
     }
-  }]);
+  });
 
   module.factory('formatCase', function (formatActivity) {
     var caseTypes = CRM.civicase.caseTypes;
