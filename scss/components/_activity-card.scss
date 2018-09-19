@@ -107,14 +107,14 @@
 }
 
 .civicase__activity-title {
-  font-weight: 600;
+  font-weight: $crm-font-weight-heading;
   margin-bottom: 10px;
 }
 
 
 .civicase__activity-subject {
   color: $gray-darker;
-  font-weight: 600;
+  font-weight: $crm-font-weight-heading;
 }
 
 .civicase__activity-card-row {

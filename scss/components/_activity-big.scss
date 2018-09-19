@@ -70,7 +70,7 @@
   .civicase__activity-subject {
     color: $crm-gray-matte;
     font-size: 13px;
-    font-weight: normal;
+    font-weight: $crm-font-weight-content;
     line-height: 18px;
     margin-bottom: 25px;
   }  
@@ -108,7 +108,7 @@
 
 .civicase__activity-card--big--empty-title {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: $crm-font-weight-heading;
   line-height: 27px;
   margin: 15px 0 5px;
 }

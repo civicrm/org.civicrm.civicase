@@ -39,7 +39,7 @@
 
 .civicase__summary-tab__subject {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: $crm-font-weight-heading;
   line-height: 27px;
   margin: 0 0 13px;
 }
@@ -61,7 +61,7 @@
   display: flex;
   flex-basis: 16.6%;
   flex-direction: column;
-  font-weight: 600;
+  font-weight: $crm-font-weight-heading;
   justify-content: center;
   text-align: center;
 

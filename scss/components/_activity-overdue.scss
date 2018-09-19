@@ -1,6 +1,6 @@
 .civicase__overdue-activity-icon {
   color: $brand-danger !important;
-  font-weight: 600;
+  font-weight: $crm-font-weight-heading;
   position: relative;
 
   &::before {
