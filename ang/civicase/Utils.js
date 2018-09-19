@@ -85,8 +85,6 @@
       act.color = activityStatuses[act.status_id].color || '#42afcb';
       act.status_css = 'status-type-' + act.status_type + ' activity-status-' + act.status_name.toLowerCase().replace(' ', '-');
 
-      formatActivityContactNames(act);
-
       if (act.category.indexOf('alert') > -1) {
         act.color = ''; // controlled by css
       }
@@ -127,33 +125,6 @@
 
       return act;
     };
-
-    /**
-     * Adds the target, assignee, and source contact display names to the activity.
-     *
-     * @param {Object} activity
-     */
-    function formatActivityContactNames (activity) {
-      var fields = [
-        'target_contact',
-        'assignee_contact',
-        'source_contact'
-      ];
-
-      fields.forEach(function (field) {
-        var fieldForName = field + '_name';
-        var fieldForId = field + '_id';
-        var contactId = activity[fieldForId];
-        var contact = ContactsDataService.getCachedContact(contactId);
-
-        if (!contact) {
-          return;
-        }
-
-        activity[fieldForName] = {};
-        activity[fieldForName][contact.id] = contact.display_name;
-      });
-    }
   });
 
   module.factory('formatCase', function (formatActivity) {

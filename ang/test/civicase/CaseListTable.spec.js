@@ -52,9 +52,9 @@
                 'is_star',
                 'case_id',
                 'is_overdue',
-                'source_contact_id',
-                'target_contact_id',
-                'assignee_contact_id'
+                'source_contact_name',
+                'target_contact_name',
+                'assignee_contact_name'
               ]
             },
             'case_type_id.is_active': 1,
