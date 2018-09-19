@@ -1,0 +1,21 @@
+.civicase__activities-calendar__day-status-completed,
+.civicase__activities-calendar__day-status-overdue,
+.civicase__activities-calendar__day-status-scheduled {
+  button::after {
+    background-color: $brand-success;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 6px;
+    margin: 3px 0 -9px 5px;
+    width: 6px;
+  }
+}
+
+.civicase__activities-calendar__day-status-overdue button::after {
+  background-color: $brand-danger;
+}
+
+.civicase__activities-calendar__day-status-scheduled button::after {
+  background-color: $brand-info;
+}
