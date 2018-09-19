@@ -1,4 +1,4 @@
-(function ($, angular) {
+(function ($, _, angular) {
   var module = angular.module('civicase');
 
   module.directive('civicaseActivitiesCalendar', function ($timeout, $uibPosition) {
@@ -66,7 +66,7 @@
       }
 
       /**
-       * Opens up the activitis popover and binds the mouseup event in order
+       * Opens up the activities popover and binds the mouseup event in order
        * to close the popover.
        */
       function openActivitiesPopover () {
@@ -79,11 +79,61 @@
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
   function civicaseActivitiesCalendarController ($scope, formatActivity) {
-    $scope.calendarOptions = { showWeeks: false };
+    $scope.calendarOptions = { showWeeks: false, customClass: getDayCustomClass };
     $scope.selectedActivites = [];
     $scope.selectedDate = null;
 
     $scope.onDateSelected = onDateSelected;
+
+    /**
+     * Determines if all the given activities have been completed.
+     *
+     * @param {Array} activities
+     */
+    function checkIfAllActivitiesHaveBeenCompleted (activities) {
+      return _.every(activities, function (activity) {
+        return _.includes(CRM.civicase.activityStatusTypes.completed, +activity.status_id);
+      });
+    }
+
+    /**
+     * Returns the activities that belong to the given date.
+     *
+     * @param {Date} date
+     */
+    function getActivitiesForDate (date) {
+      return $scope.activities.filter(function (activity) {
+        return moment(activity.activity_date_time).isSame(date, 'day');
+      });
+    }
+
+    /**
+     * Returns the class that the given date should have depending on the status
+     * of all the activities for the date.
+     *
+     * @param {Object} params
+     * @param {Date}   params.date the given date that requires the class
+     * @param {String} params.mode the current viewing mode of the calendar.
+     *   can be "day", "month", or "year".
+     */
+    function getDayCustomClass (params) {
+      var allActivitiesHaveBeenCompleted;
+      var activities = getActivitiesForDate(params.date);
+      var isDateInThePast = moment().isAfter(params.date, 'day');
+
+      if (activities.length === 0 || params.mode !== 'day') {
+        return;
+      }
+      allActivitiesHaveBeenCompleted = checkIfAllActivitiesHaveBeenCompleted(activities);
+
+      if (isDateInThePast && !allActivitiesHaveBeenCompleted) {
+        return 'civicase__activities-calendar__day-status-overdue';
+      } else if (allActivitiesHaveBeenCompleted) {
+        return 'civicase__activities-calendar__day-status-completed';
+      } else {
+        return 'civicase__activities-calendar__day-status-scheduled';
+      }
+    }
 
     /**
      * Stores the activities that are on the same date as the calendar's
@@ -103,4 +153,4 @@
       }
     }
   }
-})(CRM.$, angular);
+})(CRM.$, CRM._, angular);

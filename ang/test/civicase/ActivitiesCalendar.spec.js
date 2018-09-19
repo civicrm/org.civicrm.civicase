@@ -26,6 +26,164 @@
           showWeeks: false
         }));
       });
+
+      it('provides a method to style each calendar day', function () {
+        expect(typeof $scope.calendarOptions.customClass).toBe('function');
+      });
+    });
+
+    describe('calendar days status', function () {
+      var customClass;
+
+      describe('when the given calendar mode is for months', function () {
+        beforeEach(function () {
+          initController();
+
+          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'month' });
+        });
+
+        it('displays the months as normal without any custom class', function () {
+          expect(typeof customClass).toBe('undefined');
+        });
+      });
+
+      describe('when the given calendar mode is for years', function () {
+        beforeEach(function () {
+          initController();
+
+          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'year' });
+        });
+
+        it('displays the years as normal without any custom class', function () {
+          expect(typeof customClass).toBe('undefined');
+        });
+      });
+
+      describe('when all the activities for the current date are completed', function () {
+        beforeEach(function () {
+          var activities = [
+            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) }
+          ];
+
+          initController(activities);
+
+          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'day' });
+        });
+
+        it('marks the day as having completed all of its activities', function () {
+          expect(customClass).toBe('civicase__activities-calendar__day-status-completed');
+        });
+      });
+
+      describe('when all the activities for a given date in the past are completed', function () {
+        beforeEach(function () {
+          var activities = [
+            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) }
+          ];
+
+          initController(activities);
+
+          customClass = $scope.calendarOptions.customClass({ date: dates.yesterday, mode: 'day' });
+        });
+
+        it('marks the day as having completed all of its activities', function () {
+          expect(customClass).toBe('civicase__activities-calendar__day-status-completed');
+        });
+      });
+
+      describe('when all the activities for a given date in the future are completed', function () {
+        beforeEach(function () {
+          var activities = [
+            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) }
+          ];
+
+          initController(activities);
+
+          customClass = $scope.calendarOptions.customClass({ date: dates.tomorrow, mode: 'day' });
+        });
+
+        it('marks the day as having completed all of its activities', function () {
+          expect(customClass).toBe('civicase__activities-calendar__day-status-completed');
+        });
+      });
+
+      describe('when there are no activities for the given date', function () {
+        beforeEach(function () {
+          var activities = [
+            { activity_date_time: dates.tomorrow },
+            { activity_date_time: dates.tomorrow },
+            { activity_date_time: dates.tomorrow }
+          ];
+
+          initController(activities);
+
+          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'day' });
+        });
+
+        it('displays the day as normal without any status', function () {
+          expect(typeof customClass).toBe('undefined');
+        });
+      });
+
+      describe('when there is at least one activity that is overdue for a given date in the past', function () {
+        beforeEach(function () {
+          var activities = [
+            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete) }
+          ];
+
+          initController(activities);
+
+          customClass = $scope.calendarOptions.customClass({ date: dates.yesterday, mode: 'day' });
+        });
+
+        it('marks the day as having overdue activities', function () {
+          expect(customClass).toBe('civicase__activities-calendar__day-status-overdue');
+        });
+      });
+
+      describe('when there is at least one activity that is overdue for a given date in the future', function () {
+        beforeEach(function () {
+          var activities = [
+            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete) }
+          ];
+
+          initController(activities);
+
+          customClass = $scope.calendarOptions.customClass({ date: dates.tomorrow, mode: 'day' });
+        });
+
+        it('marks the day as having scheduled activities', function () {
+          expect(customClass).toBe('civicase__activities-calendar__day-status-scheduled');
+        });
+      });
+
+      describe('when there is at least one activity that is overdue for the current date', function () {
+        beforeEach(function () {
+          var activities = [
+            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete) }
+          ];
+
+          initController(activities);
+
+          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'day' });
+        });
+
+        it('marks the day as having scheduled activities', function () {
+          expect(customClass).toBe('civicase__activities-calendar__day-status-scheduled');
+        });
+      });
     });
 
     describe('selected activities', function () {
