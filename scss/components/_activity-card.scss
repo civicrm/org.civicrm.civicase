@@ -33,6 +33,11 @@
   }
 }
 
+.civicase__activity-card-inner {
+  position: relative;
+  width: 100%;
+}
+
 .civicase__activity-card--empty {
   .panel-body {
     align-items: center;
@@ -100,6 +105,12 @@
     vertical-align: middle;
   }
 }
+
+.civicase__activity-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
 
 .civicase__activity-subject {
   color: $gray-darker;
@@ -183,212 +194,4 @@
 .civicase__activity-empty-link {
   display: block;
   text-align: center;
-}
-
-/** Designs for big activity card **/
-
-.civicase__activity-card--big {
-  box-shadow: 0 3px 8px 0 rgba(49, 40, 40, 0.15);
-  height: auto;
-  width: 100%;
-
-  .panel-body {
-    display: flex;
-    min-height: 265px;
-    padding: 24px;
-  }
-
-  .panel-body:hover {
-    .civicase__activity-card-big-date::before {
-      border-bottom: 24px solid $gray-lighter;
-      border-right: 24px solid $gray-lighter;
-    }
-  }
-
-  .civicase__contact-card {
-    align-items: center;
-    justify-content: center;
-  }
-
-  .civicase__contact-additional__container--avatar {
-    margin-left: 5px;
-    margin-top: 1px;    
-  }
-
-  .civicase__contact-avatar {
-    margin-top: 0;
-  }
-
-  .civicase__activity-card-row {
-    align-items: flex-start;
-  }
-
-  .civicase__activity-icon-container--ribbon {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    left: 10px;
-    position: absolute;
-    top: 0;
-    width: 40px;
-  }
-
-  .civicase__activity-icon-container--ribbon .civicase__activity-icon {
-    font-size: 22px;
-    left: 0;
-    top: 16px;
-  }
-
-  .civicase__activity-icon-ribbon {
-    border-bottom-width: 10px;
-    border-width: 20px;
-    height: 64px;
-    left: 0;
-  }
-
-  .civicase__activity__tags-container {
-    margin-bottom: 10px;
-  }
-}
-
-.civicase__activity-card--big__inner {
-  padding-left: 50px;
-  padding-right: 230px;
-  position: relative;
-  width: 100%;
-}
-
-.civicase__activity-card-big-date {
-  background: $brand-primary;
-  border-radius: 10px;
-  display: inline-block;
-  padding: 48px 24px 26px;
-  position: absolute;
-  right: 0;
-  top: 0;
-
-  &::after {
-    background: $gray-lighter;
-    border-radius: 100%;
-    box-shadow: 121px 0 0 0 $gray-lighter;
-    content: '';
-    height: 16px;
-    left: 40px;
-    position: absolute;
-    top: 15px;
-    width: 16px;
-  }
-
-  &::before {
-    border-bottom: 24px solid $crm-white;
-    border-left: 24px solid darken($brand-primary, 7%);
-    border-right: 24px solid $crm-white;
-    border-top: 24px solid darken($brand-primary, 7%);
-    border-top-left-radius: 10px;
-    bottom: 0;
-    content: '';
-    height: 0;
-    position: absolute;
-    right: 0;
-    width: 0;
-  }
-}
-
-.civicase__activity-card-big-date--overdue {
-  background: $brand-danger;
-
-  &::before {
-    border-left: 24px solid darken($brand-danger, 7%);
-    border-top: 24px solid darken($brand-danger, 7%);
-  }  
-}
-
-.civicase__activity-card-big-date-inner {
-  align-items: center;
-  background: $gray-lighter;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  font-weight: 600;
-  height: 142px;
-  justify-content: center;
-  width: 165px;
-}
-
-.civicase__activity-card-big-date__due-on {
-  color: $calendar-due-text;
-}
-
-.civicase__activity-card-big-date__ddmm {
-  color: $gray-darker;
-  font-size: 32px;
-  line-height: 43px;
-  margin: 5px 0;
-}
-
-.civicase__activity-card-big-date__yyyy {
-  color: $gray-darker;
-  font-size: 16px;
-  line-height: 22px;
-
-}
-
-.civicase__activity-big-title {
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 27px;
-  margin-bottom: 10px;
-}
-
-.civicase__activity-big-subject {
-  color: $crm-gray-matte;
-  font-size: 13px;
-  line-height: 18px;
-  margin-bottom: 25px;
-}
-
-/* Empty state styles */
-.civicase__activity-card--big--empty {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-
-  .civicase__activity-card--big--empty-icon {
-    left: 0;
-    padding-bottom: 20px;
-    position: relative;
-    right: 0;
-    top: 0;
-    width: 32px;
-
-    .civicase__activity-icon {
-      top: 8px;
-    }
-
-    .civicase__activity-icon-ribbon {
-      border-bottom-width: 8px;
-      border-left-color: $activity-no-result-icon-color;
-      border-right-color: $activity-no-result-icon-color;
-      border-width: 16px;
-      height: 48px;
-    }
-  }
-}
-
-.civicase__activity-card--big--empty-title {
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 27px;
-  margin: 15px 0 5px;
-}
-
-.civicase__activity-card--big--empty-description {
-  color: $crm-gray-matte;
-  margin-bottom: 20px;
-}
-
-.civicase__activity-card--big--empty-button {
-  border-color: $brand-primary !important;
 }

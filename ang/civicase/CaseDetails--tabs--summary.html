@@ -61,16 +61,16 @@
             </span>
             <!-- ActivityICon directive End -->
             <!-- Activity Body -->
-            <div class="civicase__activity-card--big__inner">
+            <div class="civicase__activity-card-inner">
               <!-- Top section -->
               <div class="civicase__activity-card-row">
-                <span class="civicase__activity-big-title">Mental evaluation lorem ipsum dolor sit enim</span>
+                <span class="civicase__activity-title">Mental evaluation lorem ipsum dolor sit enim</span>
                 <span ng-if="item.activity_summary.milestone[0].assignee_contact_name" contact-card avatar="true" contacts="item.activity_summary.milestone[0].assignee_contact_name"></span>
                 <div ng-include="'~/civicase/ActivityCard--Menu.html'"></div>
               </div>
               <!-- End - top section -->
                 <!-- Description -->
-              <div class="civicase__activity-big-subject">Subject ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam nim ipsam voluptatem quia voluptas sit aspernatur.</div>
+              <div class="civicase__activity-subject">Subject ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam nim ipsam voluptatem quia voluptas sit aspernatur.</div>
               <!-- End - description -->
               <!-- Tags -->
               <div class="civicase__activity__tags-container">
@@ -85,11 +85,11 @@
               </div>
               <!-- End - With --> 
               <!-- Big Date -->
-              <div class="civicase__activity-card-big-date civicase__activity-card-big-date--overdue">
-                <div class="civicase__activity-card-big-date-inner">
-                  <span class="civicase__activity-card-big-date__due-on"> Due on </span>
-                  <span class="civicase__activity-card-big-date__ddmm"> 10 Feb </span>
-                  <span class="civicase__activity-card-big-date__yyyy"> 2018 </span>
+              <div class="civicase__big-date civicase__big-date--overdue">
+                <div class="civicase__big-date__inner">
+                  <span class="civicase__big-date__due-on"> Due on </span>
+                  <span class="civicase__big-date__ddmm"> 10 Feb </span>
+                  <span class="civicase__big-date__yyyy"> 2018 </span>
                 </div>
               </div>
               <!-- End Big Date -->
@@ -158,4 +158,3 @@
   </div>
 
 </div> -->
-_

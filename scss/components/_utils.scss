@@ -3,11 +3,11 @@
   top: -1px;
 }
 
-.civicase__3-dot-menu {
+.civicase__3-dot-menu.btn-group {
   .btn {
     border: 0;
     height: 18px;
-    margin-left: 6px !important;
+    margin-left: 6px;
     padding: 0;
     top: 0;
     width: 18px;
@@ -19,8 +19,8 @@
   }
 
   > .dropdown-menu {
-    left: 50% !important;
-    top: 150% !important;
+    left: 50% !important; // important used to override incorrect inline styles
+    top: 150% !important; // important used to override incorrect inline styles
     transform: translateX(-50%);
   }
 }
