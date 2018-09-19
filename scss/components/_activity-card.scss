@@ -107,14 +107,14 @@
 }
 
 .civicase__activity-title {
-  font-weight: $crm-font-weight-heading;
+  font-weight: $font-weight-heading;
   margin-bottom: 10px;
 }
 
 
 .civicase__activity-subject {
   color: $gray-darker;
-  font-weight: $crm-font-weight-heading;
+  font-weight: $font-weight-heading;
 }
 
 .civicase__activity-card-row {
@@ -166,6 +166,28 @@
 
   &:hover {
     color: $brand-primary;
+  }
+}
+
+.civicase__activity-card-menu.btn-group {
+  .btn {
+    border: 0;
+    height: 18px;
+    margin-left: 6px;
+    padding: 0;
+    top: 0;
+    width: 18px;
+
+    &.dropdown-toggle {
+      background: transparent;
+      box-shadow: none;
+    }
+  }
+
+  > .dropdown-menu {
+    left: 50% !important; // important used to override incorrect inline styles
+    top: 150% !important; // important used to override incorrect inline styles
+    transform: translateX(-100%);
   }
 }
 

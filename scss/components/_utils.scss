@@ -2,25 +2,3 @@
   position: relative;
   top: -1px;
 }
-
-.civicase__3-dot-menu.btn-group {
-  .btn {
-    border: 0;
-    height: 18px;
-    margin-left: 6px;
-    padding: 0;
-    top: 0;
-    width: 18px;
-
-    &.dropdown-toggle {
-      background: transparent;
-      box-shadow: none;
-    }
-  }
-
-  > .dropdown-menu {
-    left: 50% !important; // important used to override incorrect inline styles
-    top: 150% !important; // important used to override incorrect inline styles
-    transform: translateX(-50%);
-  }
-}

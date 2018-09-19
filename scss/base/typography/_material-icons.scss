@@ -6,7 +6,7 @@
 @font-face {
   font-family: $material-icon-font-name;
   font-style: normal;
-  font-weight: $crm-font-weight-content;
+  font-weight: $font-weight-content;
   src: local('Material Icons'),
     local('MaterialIcons-Regular'),
     url(#{$material-icon-font-url}MaterialIcons-Regular.woff2) format('woff2'),

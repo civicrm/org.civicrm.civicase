@@ -28,10 +28,6 @@ $crm-grayblue-darker:       #c2cfd8 !default;
 $crm-white:                 #fff !default;
 $crm-black:                 #000 !default;
 
-// Font weights
-$crm-font-weight-heading:   600 !default;
-$crm-font-weight-content:   400 !default;
-
 //== Dropdowns
 //
 //## Dropdown menu container and contents.
@@ -53,8 +49,12 @@ $contact-avatar-background: #99c6e5;
 $case-card-hover: #d9edf7;
 $calendar-due-text-color: #a9a9b7;
 $activity-no-result-icon-color: #cde1ed;
-
 $placeholder-grey: #edf3f5;
+
+// Font weights
+$font-weight-heading:   600 !default;
+$font-weight-content:   400 !default;
+
 //Widths and other sizes
 $case-card-width: 400px;
 $contact-popover-width: 708px;

@@ -27,7 +27,7 @@
   [title='Previous Page'] {
     a::before {
       content: '\00ab';  //laquo
-      font-weight: $crm-font-weight-content;
+      font-weight: $font-weight-content;
       margin-right: 5px;
     }
   }
@@ -35,7 +35,7 @@
   [title='First Page'] {
     a::before {
       content: '\2039';  //lsaquo
-      font-weight: $crm-font-weight-content;
+      font-weight: $font-weight-content;
       margin-right: 5px;
     }    
   }
@@ -43,7 +43,7 @@
   [title='Last Page'] {
     a::after {
       content: '\00bb';  //raquo
-      font-weight: $crm-font-weight-content;
+      font-weight: $font-weight-content;
       margin-left: 5px;
     }    
   }
@@ -51,7 +51,7 @@
   [title='Next Page'] {
     a::after {
       content: '\203A';  //rsaquo
-      font-weight: $crm-font-weight-content;
+      font-weight: $font-weight-content;
       margin-left: 5px;
     }
   }  
