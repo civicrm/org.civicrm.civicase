@@ -11,7 +11,7 @@
       $q = _$q_;
       $rootScope = _$rootScope_;
       ContactsDataService = _ContactsDataService_;
-      ContactsData = _ContactsData_;
+      ContactsData = _.cloneDeep(_ContactsData_);
       crmApi = _crmApi_;
     }));
 
@@ -37,12 +37,12 @@
             'contact_type',
             'display_name',
             'email',
-            'gender',
+            'gender_id',
             'image_URL',
             'postal_code',
             'state_province',
             'street_address',
-            'tags'
+            'tag'
           ],
           'api.Phone.get': {
             'contact_id': '$value.id',
@@ -92,12 +92,14 @@
       describe('when the contact exists', function () {
         beforeEach(function () {
           var phones;
+          ContactsData.values[0].tags = 'tag1,tag2,tag3';
 
           crmApi.and.returnValue($q.resolve(ContactsData));
           ContactsDataService.add(ContactsData.values);
           $rootScope.$digest();
 
-          expectedContact = _.clone(ContactsData.values[0]);
+          expectedContact = _.cloneDeep(ContactsData.values[0]);
+          expectedContact.tags = expectedContact.tags.split(',').join(', ');
           phones = _.indexBy(expectedContact['api.Phone.get'].values, 'phone_type_id.name');
 
           expectedContact.mobile = phones['Mobile'];

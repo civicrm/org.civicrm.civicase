@@ -12,12 +12,12 @@
       'contact_type',
       'display_name',
       'email',
-      'gender',
+      'gender_id',
       'image_URL',
       'postal_code',
       'state_province',
       'street_address',
-      'tags'
+      'tag'
     ];
 
     /**
@@ -68,6 +68,7 @@
       contact.mobile = phones['Mobile'];
       contact.phone = phones['Phone'];
       contact.groups = _.map(contact['api.GroupContact.get'].values, 'title').join(', ');
+      contact.tags = (contact.tags + '').split(',').join(', '); // Adds spacing to the tags
 
       delete contact['api.Phone.get'];
       delete contact['api.GroupContact.get'];
