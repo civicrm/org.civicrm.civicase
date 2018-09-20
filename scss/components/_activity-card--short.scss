@@ -2,7 +2,7 @@
   box-shadow: $box-shadow-activity-card;
   min-height: 100px;
   position: relative;
-  width: 280px;
+  width: $activity-card-width;
 
   .civicase__contact-avatar {
     margin-top: -10px;

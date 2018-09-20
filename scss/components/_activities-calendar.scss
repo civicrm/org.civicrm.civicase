@@ -1,4 +1,4 @@
-$civicase-activities-calendar-active-day-background: #cde1ed;
+$activities-calendar-active-day-background: #cde1ed;
 
 .civicase__activities-calendar__day-status-completed,
 .civicase__activities-calendar__day-status-overdue,
@@ -83,7 +83,22 @@ $civicase-activities-calendar-active-day-background: #cde1ed;
   }
 
   .btn.active {
-    background-color: $civicase-activities-calendar-active-day-background;
+    background-color: $activities-calendar-active-day-background;
     color: $brand-primary;
+  }
+}
+
+.activities-calendar-popover {
+  border-color: $gray-light;
+  box-shadow: 0 2px 4px 0 rgba(49, 40, 40, 0.13);
+  max-width: $activity-card-width;
+
+  > .arrow {
+    border-bottom-color: $gray-light;
+  }
+
+  .popover-content {
+    overflow: hidden;
+    padding: 0;
   }
 }
