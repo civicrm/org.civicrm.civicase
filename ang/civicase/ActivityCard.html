@@ -1,88 +1,11 @@
-<div ng-if="activity" class="civicase__activity-card civicase__activity-card--small" ng-class="{'civicase__activity-card--draft': activity.status==='Draft'}" ng-click="viewInPopup($event, activity)">
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <div class="civicase__activity-card-row civicase__activity-card-row--first">
-
-        <span ng-if="activity.icon" activity-icon="activity"></span>
-
-        <!-- Activity Date -->
-        <span class="civicase__activity-date">{{ formatDate(activity.activity_date_time, 'dd M yy') }}</span>
-        <!-- End - Activity Date -->
-
-        <span class="civicase__activity__right-container">
-          <!-- Attachments -->
-          <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id">
-            <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
-            <ul class="dropdown-menu">
-              <li ng-if="!activity.attachments || !activity.attachments.length" class="civicase__activity-attachment-load">
-                <span>
-                  <i class="civicase__activity-attachment-load-icon text-primary material-icons">loop</i> &nbsp;{{ ts('Loading...') }}
-                </span>
-              </li>
-              <li ng-repeat="file in activity.attachments || []">
-                <a class="civicase__activity-attachment__file-name"
-                  title="{{ file.description || ts('Download File') }}"
-                  href="{{ file.url }}">
-                  <i class="civicase__activity-attachment__file-icon crm-i {{ file.icon }}"></i> &nbsp;{{ file.name }}
-                </a>
-              </li>
-              <li ng-if="activity.attachments.length" role="separator" class="divider"></li>
-              <li ng-if="activity.attachments.length">
-                <a class="civicase__activity-attachment__file-name"
-                  ng-href="{{ 'civicrm/case/activity/download-all-files' | civicaseCrmUrl:{ activity_id: activity.id } }}">
-                  <i class="civicase__activity-attachment__file-icon crm-i fa-download"></i> &nbsp;Download all
-                </a>
-              </li>
-            </ul>
-          </div>
-          <!-- End - Attachments -->
-
-          <!-- Rating -->
-          <a ng-click="toggleActivityStar($event, activity)" href ng-if="activity.is_star" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}">
-            <i ng-if="activity.is_star === '0'" class="civicase__activity-star material-icons">star_border</i>
-            <i ng-if="activity.is_star === '1'" class="civicase__activity-star active material-icons">star</i>
-          </a>
-          <!-- End - Rating -->
-
-          <!-- Avatar -->
-          <span ng-if="activity.assignee_contact_name" contact-card avatar="true" contacts="activity.assignee_contact_name"></span>
-          <!-- End - Avatar -->
-        </span>
-      </div>
-      <div class="civicase__activity-card-row">
-        <!-- Task - Checkbox -->
-        <span
-          ng-if="activity.category.indexOf('task') > -1"
-          class="civicase__checkbox"
-          title="{{ activity.is_completed ? ts('Mark incomplete') : ts('Mark complete') }}"
-          ng-click="markCompleted(activity); $event.stopPropagation();" role="checkbox" aria-checked="{{activity.is_completed}}" tabindex="0" aria-labelledby="Mark complete/incomplete">
-          <i ng-if="activity.is_completed" class="civicase__checkbox--checked material-icons">check_box</i>
-        </span>
-        <!-- End - Task - Checkbox -->
-
-        <!-- Subject -->
-        <span class="civicase__activity-subject">{{ activity.subject ? activity.subject: activity.type }}</span>
-        <!-- End - Subject -->
-      </div>
-      <div class="civicase__activity-card-row" ng-if="activity.target_contact_name">
-        <!-- With -->
-        <span class="civicase__activity-with">With:&nbsp;</span>
-        <div class="civicase__contact-card" contact-card contacts="activity.target_contact_name">
-        </div>
-        <!-- End - With -->
-      </div>
-    </div>
+<div ng-switch="mode">
+  <div ng-switch-when="short">
+    <div ng-include="'~/civicase/ActivityCard--Short.html'"></div>
   </div>
-</div>
-
-<!-- No Activity -->
-<div ng-if="!activity" class="civicase__activity-card civicase__activity-card--empty">
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <div>
-        <div class="civicase__activity-empty-message">No upcoming activity</div>
-        <a class="civicase__activity-empty-link" href="#">Click here to add an activity</a>
-      </div>
-    </div>
+  <div ng-switch-when="big">
+    <div ng-include="'~/civicase/ActivityCard--Big.html'"></div>
+  </div>
+  <div ng-switch-when="long">
+    <div ng-include="'~/civicase/ActivityCard--Long.html'"></div>
   </div>
 </div>

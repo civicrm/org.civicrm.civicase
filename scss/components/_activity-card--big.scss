@@ -1,16 +1,13 @@
 .civicase__activity-card--big {
-  box-shadow: $box-shadow-card-big;
   height: auto;
-  min-height: 265px;
+  min-height: 215px;
   width: 100%;
-
-  &.panel-body {
-    min-height: 265px;
-    padding: 24px;
-  }
 
   .civicase__activity-card-inner {
     padding-left: 50px;
+  }
+
+  .civicase__activity-card-inner--milestone {
     padding-right: 230px;
   }
 

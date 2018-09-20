@@ -1,0 +1,57 @@
+<div class="civicase__activity-card civicase__activity-card--big" ng-click="viewInPopup($event, activity)">
+
+  <span ng-if="activity.icon" activity-icon="activity"></span>
+  <!-- Activity Body -->
+  <div ng-if="activity" class="civicase__activity-card-inner" ng-class="{'civicase__activity-card-inner--milestone' :activity.category.indexOf('milestone') > -1}">
+    <!-- Top section -->
+    <div class="civicase__activity-card-row">
+      <span class="civicase__activity-title">{{ activity.type }}</span>
+      <span ng-if="activity.assignee_contact_name" contact-card avatar="true" contacts="activity.assignee_contact_name"></span>
+      <div ng-include="'~/civicase/ActivityCard--Menu.html'"></div>
+    </div>
+    <!-- End - top section -->
+      <!-- Description -->
+    <div class="civicase__activity-subject">{{ activity.subject }}</div>
+    <!-- End - description -->
+    <!-- Tags -->
+    <div class="civicase__activity__tags-container" ng-if="activity.tag_id">
+      <span
+        class="badge"
+        title="{{ tag['tag_id.description'] }}"
+        ng-repeat="tag in activity.tag_id || []"
+        style="background-color: {{ tag['tag_id.color'] }};"
+      >{{ tag['tag_id.name'] }}</span>
+    </div>    
+    <!-- End - Tags -->
+    <!-- With -->
+    <div class="civicase__activity-card-row">
+      <span class="civicase__activity-with">With:&nbsp;</span>
+      <span class="civicase__contact-card" contact-card contacts="activity.target_contact_name"></span>
+    </div>
+    <!-- End - With --> 
+    <!-- Big Date -->
+    <div ng-if="activity.category.indexOf('milestone') > -1" class="civicase__big-date" ng-class="{'civicase__big-date--overdue': isOverdue(activity.activity_date_time)}">
+      <div class="civicase__big-date__inner">
+        <span class="civicase__big-date__due-on"> Due on </span>
+        <span class="civicase__big-date__ddmm"> {{formatDate(activity.activity_date_time, 'DD MMM') }} </span>
+        <span class="civicase__big-date__yyyy"> {{formatDate(activity.activity_date_time, 'YYYY') }} </span>
+      </div>
+    </div>
+    <!-- End Big Date -->
+  </div>
+  <!-- Activity Body -->
+
+  <!-- No result behaviour -->
+  <div ng-if="!activity" class="civicase__activity-card--big--empty">
+    <div class="civicase__activity-card--big--empty-icon civicase__activity-icon-container civicase__activity-icon-container--ribbon">
+      <span>
+        <i class="civicase__activity-icon fa fa-star"></i>
+      </span>
+      <span class="civicase__activity-icon-ribbon"></span>            
+    </div>
+    <div class="civicase__activity-card--big--empty-title"> No upcoming milestones </div>
+    <div class="civicase__activity-card--big--empty-description"> Click on the button below to add a milestone to this case </div>
+    <div class="civicase__activity-card--big--empty-button btn"> ADD MILESTONE </div>
+  </div>
+  <!-- End of no result behaviour -->
+</div>

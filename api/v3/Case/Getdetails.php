@@ -112,7 +112,7 @@ function civicrm_api3_case_getdetails($params) {
         }
       }
       $activities = civicrm_api3('Activity', 'get', array(
-        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id'),
+        'return' => array('activity_type_id', 'subject', 'activity_date_time', 'status_id', 'case_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id', 'tag_id.name', 'tag_id.description', 'tag_id.color'),
         'check_permissions' => !empty($params['check_permissions']),
         'case_id' => array('IN' => $ids),
         'is_current_revision' => 1,

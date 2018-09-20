@@ -1,6 +1,7 @@
-.civicase__activity-card--small {
+.civicase__activity-card--short {
   box-shadow: $box-shadow-card;
   min-height: 100px;
+  position: relative;
   width: 280px;
 
   .civicase__contact-avatar {

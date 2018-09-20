@@ -9,7 +9,8 @@
       scope: {
         activity: '=caseActivityCard',
         refresh: '=refreshCallback',
-        editActivityUrl: '=?editActivityUrl'
+        editActivityUrl: '=?editActivityUrl',
+        mode: '=?mode'
       }
     };
   });
@@ -19,11 +20,33 @@
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.formatDate = CRM.utils.formatDate;
     $scope.templateExists = templateExists;
+    $scope.mode = $scope.mode || 'short';
 
     $scope.isActivityEditable = function (activity) {
       var type = CRM.civicase.activityTypes[activity.activity_type_id].name;
 
       return (type !== 'Email' && type !== 'Print PDF Letter') && $scope.editActivityUrl;
+    };
+
+    /**
+     * Formats Date in correct format (DD/MM/YYYY)
+     *
+     * @param {String} date ISO string
+     * @param {String} format ISO string
+     * @return {String} the formatted date
+     */
+    $scope.formatDate = function (date, format = 'DD/MM/YYYY') {
+      return moment(date).format(format);
+    };
+
+    /**
+     * To check if the date is overdue
+     *
+     * @param {String} date ISO string
+     * @return {Boolean} if the date is overdue.
+     */
+    $scope.isOverdue = function (date) {
+      return moment(date).isBefore(moment());
     };
 
     /**
