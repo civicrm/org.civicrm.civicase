@@ -28,14 +28,8 @@
       class="civicase__contact-avatar crm_notification-badge"
       ng-class="{'civicase__contact-avatar--image': contacts[0].image_URL}"
       title="{{contacts[0].display_name}}">
-      <span uib-popover-template="'contact-popover.html'"
-        popover-class="contact-popover-container"
-        popover-append-to-body="true"
-        popover-placement="auto bottom"
-        popover-trigger="'mouseenter'">
-        <img ng-if="contacts[0].image_URL" ng-src={{contacts[0].image_URL}}>
-        <span ng-if="!contacts[0].image_URL">{{contacts[0].avatar}}</span>
-      </span>
+      <img ng-if="contacts[0].image_URL" ng-src={{contacts[0].image_URL}}>
+      <span ng-if="!contacts[0].image_URL">{{contacts[0].avatar}}</span>
     </a>
     <!-- End - Contact Avatar -->
   </span>
