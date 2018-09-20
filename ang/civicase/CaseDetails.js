@@ -145,7 +145,7 @@
       if ($scope.item && data.id === $scope.item.id) {
         // Maintain the reference to the variable in the parent scope.
         delete ($scope.item.tag_id);
-        _.defaults($scope.item, formatCaseDetails(data));
+        _.assign($scope.item, formatCaseDetails(data));
         countScheduledActivities();
         $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
         $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
@@ -196,8 +196,10 @@
           is_deleted: 0,
           return: ['case_type_id', 'start_date', 'end_date', 'status_id', 'contacts', 'subject']
         },
+        // To get the count of overdue tasks
+        'api.Activity.get.1': {},
         // For the "recent communication" panel
-        'api.Activity.get.1': {
+        'api.Activity.get.2': {
           case_id: '$value.id',
           is_current_revision: 1,
           is_test: 0,
@@ -220,7 +222,7 @@
         'api.CustomValue.gettree': {
           entity_id: '$value.id',
           entity_type: 'Case',
-          return: ['custom_group.id', 'custom_group.name', 'custom_group.title', 'custom_group.collapse_display', 'custom_field.name', 'custom_field.label', 'custom_value.display']
+          return: ['custom_group.id', 'custom_group.name', 'custom_group.title', 'custom_field.name', 'custom_field.label', 'custom_value.display']
         },
         // Relationship description field
         'api.Relationship.get': {
@@ -275,20 +277,13 @@
       delete (item['api.Case.get.1']);
       delete (item['api.Case.get.2']);
       // Recent communications
-      item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.1'].values), formatAct);
-      delete (item['api.Activity.get.1']);
+      item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.2'].values), formatAct);
+      delete (item['api.Activity.get.2']);
       // Tasks
       item.tasks = _.each(_.cloneDeep(item['api.Activity.get.3'].values), formatAct);
       delete (item['api.Activity.get.3']);
       // Custom fields
       item.customData = item['api.CustomValue.gettree'].values || [];
-      _.each(item.customData, function (customGroup, index) {
-        customGroup.collapse_display = customGroup.collapse_display === '1';
-        // Maintain collapse state
-        if ($scope.item && $scope.item.customData) {
-          customGroup.collapse_display = $scope.item.customData[index].collapse_display;
-        }
-      });
       delete (item['api.CustomValue.gettree']);
       return item;
     }

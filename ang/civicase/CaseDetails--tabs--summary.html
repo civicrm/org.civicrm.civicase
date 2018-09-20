@@ -47,15 +47,18 @@
   <div class="civicase__summary-tab-row clearfix">
     <div class="civicase__summary-tab-tile col-lg-6 panel civicase__panel-transparent-header">
       <!-- next milestone card -->
-      <h3 class="panel-title"> Next Milestone </h3>
+      <div class="panel-heading">
+        <h3 class="panel-title">Next Milestone</h3>
+      </div>
       <div class="panel-body"
-        case-activity-card="item.activity_summary.milestone[1]"
+        case-activity-card="item.activity_summary.milestone[0]"
         refresh-callback="refresh"
         mode="'big'"
         edit-activity-url="editActivityUrl"
       ></div>
     </div>
   </div>
+  <div ng-include="'~/civicase/CaseDetails--tabs--summary--CustomData.html'"></div>
 </div>
 
 

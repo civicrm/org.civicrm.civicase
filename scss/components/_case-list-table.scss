@@ -125,7 +125,6 @@
 
 .civicase__case-list-panel--summary {
   float: left;
-  position: absolute;
   width: $case-card-width;
 
   .civicase__pager--fixed {
@@ -144,16 +143,18 @@
 .civicase__case-details-panel {
   box-shadow: none;
   float: right;
+  height: 0;
   overflow: hidden;
   transition: width 0.3s;
   width: 0;
 
-  .panel-body {
+  > .panel-body {
     background: none;
   }
 }
 
 .civicase__case-details-panel--summary {
+  height: auto;
   width: calc(100% - #{$case-card-width});
 }
 

@@ -20,10 +20,6 @@
       it('complies the case card directive', function () {
         expect(element.hasClass('civicase__case-card')).toBe(true);
       });
-
-      it('calculates all tasks which are incomplete count', function () {
-        expect(element.isolateScope().data.category_count.incomplete.task).toBe(2);
-      });
     });
 
     /**
@@ -31,7 +27,7 @@
      * @param {Object} Case card object
      */
     function compileDirective (caseObj) {
-      caseObj.allActivities = caseObj['api.Activity.get'].values;
+      caseObj.allActivities = caseObj['api.Activity.get.1'].values;
 
       element = $compile('<civicase-case-card case="case"></civicase-case-card>')($scope);
       $scope.case = caseObj;
