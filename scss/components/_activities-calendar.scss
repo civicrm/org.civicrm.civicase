@@ -1,3 +1,5 @@
+$civicase-activities-calendar-active-day-background: #cde1ed;
+
 .civicase__activities-calendar__day-status-completed,
 .civicase__activities-calendar__day-status-overdue,
 .civicase__activities-calendar__day-status-scheduled {
@@ -18,4 +20,70 @@
 
 .civicase__activities-calendar__day-status-scheduled button::after {
   background-color: $brand-info;
+}
+
+.civicase__activities-calendar {
+  table,
+  th,
+  .btn-default {
+    background: none;
+    color: $gray-darker;
+  }
+
+  table {
+    margin-bottom: 8px;
+  }
+
+  // this removes the box shadow border for the header:
+  thead th {
+    position: relative;
+    z-index: 1;
+  }
+
+  thead .btn {
+    font-size: 16px;
+    text-transform: none;
+  }
+
+  tr:nth-child(0n+2) th,
+  tbody td {
+    background: $crm-white;
+  }
+
+  // week days header
+  tr:nth-child(2n) th {
+    color: $crm-gray-matte;
+    font-size: 10px;
+    padding: 21px 12px;
+    text-transform: uppercase;
+  }
+
+  tbody {
+    box-shadow: 0 3px 8px 0 rgba(49, 40, 40, 0.15);
+  }
+
+  thead th:nth-child(1) {
+    border-top-left-radius: 2px;
+  }
+
+  thead th:nth-last-child(1) {
+    border-top-right-radius: 2px;
+  }
+
+  tr:nth-last-child(1) td:nth-child(1) {
+    border-bottom-left-radius: 2px;
+  }
+
+  tr:nth-last-child(1) td:nth-last-child(1) {
+    border-bottom-right-radius: 2px;
+  }
+
+  tbody .btn {
+    font-weight: $crm-font-weight-h3;
+  }
+
+  .btn.active {
+    background-color: $civicase-activities-calendar-active-day-background;
+    color: $brand-primary;
+  }
 }
