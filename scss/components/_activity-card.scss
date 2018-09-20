@@ -111,6 +111,9 @@
 .civicase__activity-subject {
   color: $gray-darker;
   font-weight: $font-weight-heading;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .civicase__activity-card-row {
