@@ -148,7 +148,7 @@
   transition: width 0.3s;
   width: 0;
 
-  .panel-body {
+  > .panel-body {
     background: none;
   }
 }

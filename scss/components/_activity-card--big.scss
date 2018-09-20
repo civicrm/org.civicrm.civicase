@@ -1,5 +1,4 @@
 .civicase__activity-card--big {
-  box-shadow: $box-shadow-card-big;
   height: auto;
   min-height: 265px;
   width: 100%;
@@ -16,7 +15,7 @@
 
   .civicase__contact-additional__container--avatar {
     margin-left: 5px;
-    margin-top: 1px;    
+    margin-top: 1px;
   }
 
   .civicase__contact-avatar {
@@ -66,7 +65,7 @@
     font-weight: $font-weight-content;
     line-height: 18px;
     margin-bottom: 25px;
-  }  
+  }
 }
 
 /* Empty state styles */

@@ -63,13 +63,14 @@ describe('civicaseCaseDetails', function () {
     beforeEach(function () {
       compileDirective();
       element.isolateScope().item = CasesData.values[0];
-      element.isolateScope().item.allActivities = CasesData.values[0]['api.Activity.get'].values;
+      element.isolateScope().item.allActivities = CasesData.values[0]['api.Activity.get.1'].values;
 
       element.isolateScope().pushCaseData(CasesData.values[0]);
     });
 
-    it('calculates the scheduled activities count and overdues', function () {
+    it('calculates the incomplete tasks and scheduled activities', function () {
       expect(element.isolateScope().item.category_count.scheduled).toEqual({ count: 14, overdue: 12 });
+      expect(element.isolateScope().item.category_count.incomplete.task).toBe(2);
     });
     /* TODO - Rest of function needs to be unit tested */
   });
