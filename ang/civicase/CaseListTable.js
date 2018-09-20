@@ -111,6 +111,7 @@
         }
       }
       setPageTitle();
+      $($window).scrollTop(0); // Scrolls the window to top once new data loads
     };
 
     /**
