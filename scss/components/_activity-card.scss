@@ -1,9 +1,7 @@
 .civicase__activity-card {
-  box-shadow: $box-shadow-card;
+  background: $crm-white;
   cursor: pointer;
-  height: 100px;
   position: relative;
-  width: 280px;
 
   .panel {
     box-shadow: none;
@@ -23,13 +21,17 @@
 
   .civicase__contact-avatar {
     margin-left: 5px;
-    margin-top: -10px;
   }
 
   .civicase__checkbox {
     margin-right: 5px;
     margin-top: 2px;
   }
+}
+
+.civicase__activity-card-inner {
+  position: relative;
+  width: 100%;
 }
 
 .civicase__activity-card--empty {
@@ -100,9 +102,15 @@
   }
 }
 
+.civicase__activity-title {
+  font-weight: $font-weight-heading;
+  margin-bottom: 10px;
+}
+
+
 .civicase__activity-subject {
   color: $gray-darker;
-  font-weight: 600;
+  font-weight: $font-weight-heading;
 }
 
 .civicase__activity-card-row {
@@ -154,6 +162,28 @@
 
   &:hover {
     color: $brand-primary;
+  }
+}
+
+.civicase__activity-card-menu.btn-group {
+  .btn {
+    border: 0;
+    height: 18px;
+    margin-left: 6px;
+    padding: 0;
+    top: 0;
+    width: 18px;
+
+    &.dropdown-toggle {
+      background: transparent;
+      box-shadow: none;
+    }
+  }
+
+  > .dropdown-menu {
+    left: 50% !important; // important used to override incorrect inline styles
+    top: 150% !important; // important used to override incorrect inline styles
+    transform: translateX(-100%);
   }
 }
 

@@ -1,5 +1,9 @@
 .civicase__case-body {
   padding: 0;
+
+  .tab-content {
+    background: transparent;
+  }
 }
 
 .civicase__case-body_tab {
@@ -19,6 +23,8 @@
 }
 
 .civicase__summary-tab__basic-details {
+  background: $crm-white;
+
   .panel-body {
     display: flex;
     flex-direction: row;
@@ -33,7 +39,7 @@
 
 .civicase__summary-tab__subject {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: $font-weight-heading;
   line-height: 27px;
   margin: 0 0 13px;
 }
@@ -55,7 +61,7 @@
   display: flex;
   flex-basis: 16.6%;
   flex-direction: column;
-  font-weight: 600;
+  font-weight: $font-weight-heading;
   justify-content: center;
   text-align: center;
 
@@ -78,4 +84,16 @@
 
 .civicase__summary-overdue-count {
   line-height: 18px;
+}
+
+.civicase__summary-tab-tile {
+  padding: 14px;
+
+  > h3 {
+    margin: 3px 0 12px;
+  }  
+}
+
+.civicase__summary-tab-row {
+  padding: 14px;  
 }

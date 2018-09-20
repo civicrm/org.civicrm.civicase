@@ -1,0 +1,9 @@
+.civicase__activity-card--small {
+  box-shadow: $box-shadow-card;
+  min-height: 100px;
+  width: 280px;
+
+  .civicase__contact-avatar {
+    margin-top: -10px;
+  }
+}

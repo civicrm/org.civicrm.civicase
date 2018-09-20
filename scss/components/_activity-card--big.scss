@@ -1,0 +1,116 @@
+.civicase__activity-card--big {
+  box-shadow: $box-shadow-card-big;
+  height: auto;
+  min-height: 265px;
+  width: 100%;
+
+  &.panel-body {
+    min-height: 265px;
+    padding: 24px;
+  }
+
+  .civicase__activity-card-inner {
+    padding-left: 50px;
+    padding-right: 230px;
+  }
+
+  .civicase__contact-additional__container--avatar {
+    margin-left: 5px;
+    margin-top: 1px;    
+  }
+
+  .civicase__contact-avatar {
+    margin-top: 0;
+  }
+
+  .civicase__activity-card-row {
+    align-items: flex-start;
+  }
+
+  .civicase__activity-icon-container--ribbon {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    left: 10px;
+    position: absolute;
+    top: 0;
+    width: 40px;
+
+    .civicase__activity-icon-ribbon {
+      border-bottom-width: 10px;
+      border-left-width: 20px;
+      border-right-width: 20px;
+      height: 64px;
+      left: 0;
+    }
+
+    .civicase__activity-icon {
+      font-size: 22px;
+      left: 0;
+      top: 16px;
+    }
+  }
+
+  .civicase__activity__tags-container {
+    margin-bottom: 10px;
+  }
+
+  .civicase__activity-title {
+    font-size: 20px;
+    line-height: 27px;
+  }
+
+  .civicase__activity-subject {
+    color: $crm-gray-matte;
+    font-size: 13px;
+    font-weight: $font-weight-content;
+    line-height: 18px;
+    margin-bottom: 25px;
+  }  
+}
+
+/* Empty state styles */
+.civicase__activity-card--big--empty {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.civicase__activity-card--big--empty-icon {
+  left: 0;
+  padding-bottom: 20px;
+  position: relative;
+  right: 0;
+  top: 0;
+  width: 32px;
+
+  .civicase__activity-icon {
+    top: 8px;
+  }
+
+  .civicase__activity-icon-ribbon {
+    border-bottom-width: 8px;
+    border-left-color: $activity-no-result-icon-color;
+    border-right-color: $activity-no-result-icon-color;
+    border-width: 16px;
+    height: 48px;
+  }
+}
+
+.civicase__activity-card--big--empty-title {
+  font-size: 20px;
+  font-weight: $font-weight-heading;
+  line-height: 27px;
+  margin: 15px 0 5px;
+}
+
+.civicase__activity-card--big--empty-description {
+  color: $crm-gray-matte;
+  margin-bottom: 20px;
+}
+
+.civicase__activity-card--big--empty-button {
+  border-color: $brand-primary !important;
+}
