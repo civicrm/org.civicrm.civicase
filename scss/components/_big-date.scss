@@ -1,5 +1,5 @@
 /** Big calendar type date styling **/
-.civicase__big-date {
+.civicase__highlighted-date {
   background: $brand-primary;
   border-radius: 10px;
   display: inline-block;
@@ -35,7 +35,7 @@
   }
 }
 
-.civicase__big-date--overdue {
+.civicase__highlighted-date--overdue {
   background: $brand-danger;
 
   &::before {
@@ -44,7 +44,7 @@
   }  
 }
 
-.civicase__big-date__inner {
+.civicase__highlighted-date__inner {
   align-items: center;
   background: $gray-lighter;
   border-radius: 4px;
@@ -56,18 +56,18 @@
   width: 165px;
 }
 
-.civicase__big-date__due-on {
+.civicase__highlighted-date__due-on {
   color: $calendar-due-text-color;
 }
 
-.civicase__big-date__ddmm {
+.civicase__highlighted-date__ddmm {
   color: $gray-darker;
   font-size: 32px;
   line-height: 43px;
   margin: 5px 0;
 }
 
-.civicase__big-date__yyyy {
+.civicase__highlighted-date__yyyy {
   color: $gray-darker;
   font-size: 16px;
   line-height: 22px;

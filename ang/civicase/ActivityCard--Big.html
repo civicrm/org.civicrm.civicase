@@ -31,11 +31,11 @@
     </div>
     <!-- End - With --> 
     <!-- Big Date -->
-    <div ng-if="activity.category.indexOf('milestone') > -1" class="civicase__big-date" ng-class="{'civicase__big-date--overdue': isOverdue(activity.activity_date_time)}">
-      <div class="civicase__big-date__inner">
-        <span class="civicase__big-date__due-on"> Due on </span>
-        <span class="civicase__big-date__ddmm"> {{formatDate(activity.activity_date_time, 'DD MMM') }} </span>
-        <span class="civicase__big-date__yyyy"> {{formatDate(activity.activity_date_time, 'YYYY') }} </span>
+    <div ng-if="activity.category.indexOf('milestone') > -1" class="civicase__highlighted-date" ng-class="{'civicase__highlighted-date--overdue': isOverdue(activity.activity_date_time)}">
+      <div class="civicase__highlighted-date__inner">
+        <span class="civicase__highlighted-date__due-on"> Due on </span>
+        <span class="civicase__highlighted-date__ddmm"> {{formatDate(activity.activity_date_time, 'DD MMM') }} </span>
+        <span class="civicase__highlighted-date__yyyy"> {{formatDate(activity.activity_date_time, 'YYYY') }} </span>
       </div>
     </div>
     <!-- End Big Date -->
