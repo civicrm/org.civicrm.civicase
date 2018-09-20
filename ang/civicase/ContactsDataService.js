@@ -36,6 +36,7 @@
         'sequential': 1,
         'id': { 'IN': newContacts },
         'return': requiredContactFields,
+        'options': { 'limit': 0 },
         'api.Phone.get': {
           'contact_id': '$value.id',
           'phone_type_id.name': { 'IN': [ 'Mobile', 'Phone' ] },

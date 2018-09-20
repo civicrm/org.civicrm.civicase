@@ -31,6 +31,7 @@
       beforeEach(function () {
         expectedApiParams = {
           'sequential': 1,
+          'options': { 'limit': 0 },
           'return': [
             'birth_date',
             'city',
