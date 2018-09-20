@@ -72,29 +72,32 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 215px;
   width: 100%;
+
+  .civicase__activity-icon-container--ribbon {
+    left: 0;
+    padding-bottom: 20px;
+    position: relative;
+    right: 0;
+    top: 0;
+    width: 32px;
+
+    .civicase__activity-icon {
+      top: 8px;
+    }
+
+    .civicase__activity-icon-ribbon {
+      border-bottom-width: 8px;
+      border-left-color: $activity-no-result-icon-color;
+      border-right-color: $activity-no-result-icon-color;
+      border-width: 16px;
+      height: 48px;
+    }
+  }  
 }
 
-.civicase__activity-card--big--empty-icon {
-  left: 0;
-  padding-bottom: 20px;
-  position: relative;
-  right: 0;
-  top: 0;
-  width: 32px;
 
-  .civicase__activity-icon {
-    top: 8px;
-  }
-
-  .civicase__activity-icon-ribbon {
-    border-bottom-width: 8px;
-    border-left-color: $activity-no-result-icon-color;
-    border-right-color: $activity-no-result-icon-color;
-    border-width: 16px;
-    height: 48px;
-  }
-}
 
 .civicase__activity-card--big--empty-title {
   font-size: 20px;
