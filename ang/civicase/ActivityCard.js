@@ -10,7 +10,8 @@
         activity: '=caseActivityCard',
         refresh: '=refreshCallback',
         editActivityUrl: '=?editActivityUrl',
-        mode: '=?mode'
+        mode: '=?mode',
+        type: '=type'
       }
     };
   });
