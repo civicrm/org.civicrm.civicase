@@ -1,4 +1,4 @@
-(function () {
+(function (angular, CRM) {
   var module = angular.module('civicase.data');
 
   CRM.civicase.activityStatuses = {
@@ -63,4 +63,4 @@
   module.constant('ActivityStatusesData', {
     values: CRM.civicase.activityStatuses
   });
-}());
+})(angular, CRM);

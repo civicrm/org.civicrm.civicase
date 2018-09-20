@@ -242,10 +242,27 @@
      */
     function getCaseApiParams (filters, sort, page) {
       var returnActParams = {
+        case_id: '$value.id',
         options: {
           sort: 'activity_date_time ASC'
         },
-        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id', 'is_overdue', 'case_id']
+        return: [
+          'subject',
+          'details',
+          'activity_type_id',
+          'status_id',
+          'source_contact_name',
+          'target_contact_name',
+          'assignee_contact_name',
+          'activity_date_time',
+          'is_star',
+          'original_id',
+          'tag_id.name',
+          'tag_id.description',
+          'tag_id.color',
+          'file_id',
+          'is_overdue',
+          'case_id']
       };
       var returnParams = {
         sequential: 1,
@@ -258,6 +275,7 @@
         // To get the count of overdue tasks
         'api.Activity.get.1': returnActParams
       };
+
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
       if (sort.field !== 'id' && sort.field !== 'contact_id.sort_name') {
         returnParams.options.sort += ', contact_id.sort_name';

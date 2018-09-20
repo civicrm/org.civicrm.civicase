@@ -196,8 +196,21 @@
           is_deleted: 0,
           return: ['case_type_id', 'start_date', 'end_date', 'status_id', 'contacts', 'subject']
         },
-        // To get the count of overdue tasks
-        'api.Activity.get.1': {},
+        // Gets all the activities for the case
+        'api.Activity.get.1': {
+          case_id: '$value.id',
+          return: [
+            'activity_type_id',
+            'activity_date_time',
+            'status_id',
+            'is_star',
+            'case_id',
+            'is_overdue',
+            'source_contact_name',
+            'target_contact_name',
+            'assignee_contact_name'
+          ]
+        },
         // For the "recent communication" panel
         'api.Activity.get.2': {
           case_id: '$value.id',
