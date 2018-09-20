@@ -8,6 +8,14 @@
 
 .civicase__case-body_tab {
   z-index: 1;
+
+  &.affix {
+    z-index: 11;
+
+    + .tab-content {
+      padding-top: 50px;
+    }
+  }
 }
 
 .civicase__case-details-panel--summary {
