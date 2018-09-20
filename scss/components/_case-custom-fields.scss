@@ -47,7 +47,7 @@
   .custom_field-row {
     label {
       color: $crm-gray-matte;
-      font-weight: 400 !important;
+      font-weight: $font-weight-content !important;
     }
 
     &:not(:first-child) {
