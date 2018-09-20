@@ -131,11 +131,12 @@
       item.is_deleted = item.is_deleted === '1';
 
       // Save all activities in a new meaningful key
-      if (item['api.Activity.get']) {
-        item.allActivities = item['api.Activity.get'].values;
-        delete item['api.Activity.get'];
+      if (item['api.Activity.get.1']) {
+        item.allActivities = item['api.Activity.get.1'].values;
+        delete item['api.Activity.get.1'];
 
         countOverdueTasks(item);
+        countIncompleteOtherTasks(item);
       }
 
       _.each(item.activity_summary, function (activities) {
@@ -187,6 +188,31 @@
           if (!_.includes(otherCategories, category)) {
             caseObj.category_count.overdue['other'] = caseObj.category_count.overdue['other'] + 1 || 1;
           }
+        }
+      });
+    }
+
+    /**
+     * Accumulates non communication and task counts as
+     * other count for incomplete tasks
+     *
+     * @param {Object} categoryCount - Object of related categoryCount of a case
+     */
+    function countIncompleteOtherTasks (item) {
+      var otherCount;
+
+      _.each(_.keys(item.category_count), function (status) {
+        if (status === 'incomplete') {
+          otherCount = item.allActivities.filter(function (activity) {
+            return CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(activity.status_id)) !== -1;
+          }).length;
+
+          _.each(_.keys(item.category_count[status]), function (type) {
+            if (type === 'communication' || type === 'task') {
+              otherCount -= item.category_count[status][type];
+            }
+            item.category_count[status].other = otherCount;
+          });
         }
       });
     }

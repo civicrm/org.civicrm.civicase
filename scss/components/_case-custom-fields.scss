@@ -1,0 +1,107 @@
+.civicase__case-custom-fields__container {
+  float: left;
+  width: 50%;
+
+  &:first-child {
+    padding: 0 15px 24px 24px;
+  }
+
+  &:nth-child(2) {
+    padding: 0 24px 24px 15px;
+  }
+
+  .crm-editable-enabled:not(.crm-editable-editing) {
+    &:hover {
+      border: 2px dashed transparent;
+      padding: 15px 20px;
+    }
+  }
+
+  .crm-case-custom-form-block {
+    padding: 15px 20px;
+
+    table {
+      width: 100%;
+    }
+  }
+
+  .crm-submit-buttons {
+    border: 0;
+    padding: 15px 8px 0;
+    text-align: right;
+  }
+
+  .crm-form-submit {
+    min-width: auto;
+    padding: 7px 19px;
+
+    &.cancel {
+      padding: 6px 19px;
+
+      &:hover {
+        color: $crm-white !important;
+      }
+    }
+  }
+
+  .custom_field-row {
+    label {
+      color: $crm-gray-matte;
+      font-weight: 400 !important;
+    }
+
+    &:not(:first-child) {
+      display: block;
+      margin-top: 16px;
+    }
+
+    td {
+      &:first-child {
+        display: block;
+        text-align: left;
+      }
+
+      &:nth-child(2) {
+        display: block;
+        margin-left: 7px;
+
+        input { /* stylelint-disable-line max-nesting-depth, selector-max-compound-selectors */
+          width: calc(100% - 4px);
+        }
+      }
+    }
+  }
+}
+
+.civicase__case-custom-fields {
+  &:not(:first-child) {
+    margin-top: 16px;
+  }
+}
+
+.civicase__case-custom-field__label {
+  color: $crm-gray-matte;
+}
+
+.civicase__case-custom-field__value {
+  color: $gray-darker;
+}
+
+.civicase__case-custom-fields__panel {
+  box-shadow: none;
+
+  .panel-heading {
+    background: transparent;
+    padding-left: 0;
+  }
+
+  .panel-title {
+    font-size: 16px;
+  }
+
+  .panel-body {
+    border-radius: 2px;
+    border-top: 0 !important;
+    box-shadow: $box-shadow-block;
+  }
+}

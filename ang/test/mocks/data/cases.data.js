@@ -192,21 +192,7 @@
         },
         'api.Case.get.1': { 'values': [] },
         'api.Case.get.2': { 'values': [] },
-        'api.Activity.get.1': { 'values': [] },
-        'api.Activity.get.3': { 'values': [] },
-        'api.CustomValue.gettree': { 'values': [] },
-        'category_count': {
-          'incomplete': {
-            'task': 2,
-            'communication': 2,
-            'milestone': 4,
-            'system': 1
-          },
-          'completed': {
-            'system': 2
-          }
-        },
-        'api.Activity.get': {
+        'api.Activity.get.1': {
           'is_error': 0,
           'version': 3,
           'count': 18,
@@ -500,6 +486,20 @@
               'source_contact_id': '202'
             }
           ]
+        },
+        'api.Activity.get.2': { 'values': [] },
+        'api.Activity.get.3': { 'values': [] },
+        'api.CustomValue.gettree': { 'values': [] },
+        'category_count': {
+          'incomplete': {
+            'task': 2,
+            'communication': 2,
+            'milestone': 4,
+            'system': 1
+          },
+          'completed': {
+            'system': 2
+          }
         },
         'manager': {
           'contact_id': '202',

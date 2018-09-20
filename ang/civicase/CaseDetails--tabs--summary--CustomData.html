@@ -1,0 +1,44 @@
+<div>
+  <div class="civicase__case-custom-fields__container">
+    <div
+      class="panel panel-default civicase__case-custom-fields__panel"
+      ng-repeat="(index, customGroup) in item.customData"
+      ng-if="$index % 2 === 0">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ ::customGroup.title }}</h3>
+      </div>
+      <div class="panel-body" civicase-edit-custom-data>
+        <div ng-repeat="field in customGroup.fields" class="civicase__case-custom-fields">
+          <div class="civicase__case-custom-field__label">{{ field.label }}</div>
+          <div class="civicase__case-custom-field__value">{{ field.value.display || 'Click to set value' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="civicase__case-custom-fields__container">
+    <div
+      class="panel panel-default civicase__case-custom-fields__panel"
+      ng-repeat="(index, customGroup) in item.customData"
+      ng-if="$index % 2 === 1">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ ::customGroup.title }}</h3>
+      </div>
+      <div class="panel-body" civicase-edit-custom-data>
+        <div ng-repeat="field in customGroup.fields" class="civicase__case-custom-fields">
+          <div class="civicase__case-custom-field__label">{{ field.label }}</div>
+          <div class="civicase__case-custom-field__value">{{ field.value.display || 'Click to set value' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div>
+  <h3>{{ ::customGroup.title }}</h3>
+  <div civicase-edit-custom-data>
+    <div ng-repeat="field in customGroup.fields">
+      <strong>{{ field.label }}:</strong>
+      {{ field.value.display }}
+    </div>
+  </div>
+</div> -->

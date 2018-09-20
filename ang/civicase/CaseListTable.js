@@ -249,7 +249,7 @@
           offset: page.size * (page.num - 1)
         },
         // To get the count of overdue tasks
-        'api.Activity.get': {}
+        'api.Activity.get.1': {}
       };
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
       if (sort.field !== 'id' && sort.field !== 'contact_id.sort_name') {
