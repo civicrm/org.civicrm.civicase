@@ -1,7 +1,7 @@
 <div>
   <div class="civicase__case-custom-fields__container">
     <div
-      class="panel panel-default civicase__case-custom-fields__panel"
+      class="panel panel-default civicase__panel-transparent-header"
       ng-repeat="(index, customGroup) in item.customData"
       ng-if="$index % 2 === 0">
       <div class="panel-heading">
@@ -17,7 +17,7 @@
   </div>
   <div class="civicase__case-custom-fields__container">
     <div
-      class="panel panel-default civicase__case-custom-fields__panel"
+      class="panel panel-default civicase__panel-transparent-header"
       ng-repeat="(index, customGroup) in item.customData"
       ng-if="$index % 2 === 1">
       <div class="panel-heading">
@@ -32,13 +32,3 @@
     </div>
   </div>
 </div>
-
-<!-- <div>
-  <h3>{{ ::customGroup.title }}</h3>
-  <div civicase-edit-custom-data>
-    <div ng-repeat="field in customGroup.fields">
-      <strong>{{ field.label }}:</strong>
-      {{ field.value.display }}
-    </div>
-  </div>
-</div> -->

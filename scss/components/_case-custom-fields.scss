@@ -86,22 +86,3 @@
 .civicase__case-custom-field__value {
   color: $gray-darker;
 }
-
-.civicase__case-custom-fields__panel {
-  box-shadow: none;
-
-  .panel-heading {
-    background: transparent;
-    padding-left: 0;
-  }
-
-  .panel-title {
-    font-size: 16px;
-  }
-
-  .panel-body {
-    border-radius: 2px;
-    border-top: 0 !important;
-    box-shadow: $box-shadow-block;
-  }
-}
