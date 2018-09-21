@@ -101,3 +101,9 @@
 .civicase__summary-tab-row {
   padding: 14px 14px 0;
 }
+
+.civicase__summary-tab__other-cases {
+  > .panel-collapse > .panel-body {
+    padding: 0;
+  }
+}

@@ -46,7 +46,36 @@
   .civicase__case-card__activity-count {
     color: inherit;
     font-weight: $font-weight-content;
-  }  
+  }
+}
+
+.civicase__case-card--other {
+  min-height: auto;
+
+  .civicase__contact-name,
+  .civicase__contact-additional__container {
+    color: $gray-darker;
+    font-size: 16px;
+  }
+
+  .civicase__contact-name {
+    max-width: none;
+  }
+}
+
+.civicase__case-card__right_container {
+  color: $crm-gray-matte;
+}
+
+.civicase__case-card__dates {
+  margin-right: 16px;
+  vertical-align: text-top;
+}
+
+.civicase__case-card__link-type {
+  font-size: 16px;
+  margin-left: 16px;
+  vertical-align: middle;
 }
 
 .civicase__case-card--active {
