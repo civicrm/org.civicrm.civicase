@@ -119,6 +119,9 @@ $activities-calendar-active-day-background: #cde1ed;
   .btn.active {
     background-color: $activities-calendar-active-day-background;
     color: $brand-primary;
+  }
+
+  .uib-day .btn.active {
     height: 23px;
     margin-top: 6px;
     padding: 0;
