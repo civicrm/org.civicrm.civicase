@@ -1,0 +1,193 @@
+{
+  "id": "civicase_legacy",
+  "viewports": [{
+    "name": "desktop",
+    "width": 1920,
+    "height": 3000
+  }],
+  "onBeforeScript": "onBefore.js",
+  "onReadyScript": "onReady.js",
+  "paths": {
+    "bitmaps_reference": "screenshots/reference",
+    "bitmaps_test": "screenshots/test",
+    "engine_scripts": "engine_scripts/puppet",
+    "html_report": "html_report",
+    "ci_report": "ci_report"
+  },
+  "scenarios": [
+    {
+      "label": "Civicase - Dashboard",
+      "url": "{url}/civicrm/case?reset=1",
+      "onReadyScript": "civicase/dashboard.js"
+    },
+    {
+      "label": "Civicase - Find Cases - Search",
+      "url": "{url}/civicrm/case/search?reset=1"
+    },
+    {
+      "label": "Civicase - Find My Cases",
+      "url": "{url}/civicrm/case?reset=1",
+      "onReadyScript": "civicase/find.js"
+    },
+    {
+      "label": "Civicase - Add Case",
+      "url": "{url}/civicrm/case/add?action=add&context=standalone&reset=1",
+      "onReadyScript": "civicase/add.js"
+    },
+    {
+      "label": "Civicase - Manage Case",
+      "url": "{url}/civicrm/case?reset=1",
+      "onReadyScript": "civicase/manage.js"
+    },
+    {
+      "label": "Civicase - Delete Case",
+      "url": "{url}/civicrm/case?reset=1",
+      "selectors": [".ui-dialog"],
+      "onReadyScript": "civicase/delete.js"
+    },
+    {
+      "label": "Civicase - Assign to others case",
+      "url": "{url}/civicrm/case?reset=1",
+      "selectors": [".ui-dialog"],
+      "onReadyScript": "civicase/assign-to-others.js"
+    },
+    {
+      "label": "Civicase - View case activity",
+      "url": "{url}/civicrm/case?reset=1",
+      "onReadyScript": "civicase/view-case-activity.js"
+    },
+    {
+      "label": "Civicase - Case Report",
+      "url": "{url}/civicrm/report/list?compid=7&reset=1"
+    },
+    {
+      "label": "Civicase - New Case Report",
+      "url": "{url}/civicrm/report/template/list?reset=1&compid=7"
+    },
+    {
+      "label": "Civicase - Case Summary Report - Columns",
+      "url": "{url}/civicrm/report/case/summary"
+    },
+    {
+      "label": "Civicase - Case Summary Report - Sorting",
+      "url": "{url}/civicrm/report/case/summary",
+      "onReadyScript": "civicase/summary-report/sorting.js"
+    },
+    {
+      "label": "Civicase - Case Summary Report - Filters",
+      "url": "{url}/civicrm/report/case/summary",
+      "onReadyScript": "civicase/summary-report/filters.js"
+    },
+    {
+      "label": "Civicase - Case Time Spent Report - Grouping",
+      "url": "{url}/civicrm/report/case/timespent",
+      "onReadyScript": "civicase/summary-report/grouping.js"
+    },
+    {
+      "label": "Civicase - Case Detail Report - Display Options",
+      "url": "{url}/civicrm/report/case/detail",
+      "onReadyScript": "civicase/summary-report/display-options.js"
+    },
+    {
+      "label": "Civicase - Constituent Summary Report - Title and Format",
+      "url": "{url}/civicrm/report/instance/1?reset=1&output=criteria",
+      "onReadyScript": "civicase/summary-report/title-and-format.js"
+    },
+    {
+      "label": "Civicase - Constituent Summary Report - Email Delivery",
+      "url": "{url}/civicrm/report/instance/1?reset=1&output=criteria",
+      "onReadyScript": "civicase/summary-report/email-delivery.js"
+    },
+    {
+      "label": "Civicase - Constituent Summary Report - Access",
+      "url": "{url}/civicrm/report/instance/1?reset=1&output=criteria",
+      "onReadyScript": "civicase/summary-report/access.js"
+    },
+    {
+      "label": "Civicase - Settings",
+      "url": "{url}/civicrm/admin/setting/case?reset=1"
+    },
+    {
+      "label": "Civicase - Settings - Case Type",
+      "url": "{url}/civicrm/a/#/caseType",
+      "onReadyScript": "civicase/wait-for-table.js"
+    },
+    {
+      "label": "Civicase - Settings - New Case Type - Case Roles",
+      "url": "{url}/civicrm/a/#/caseType/new",
+      "onReadyScript": "civicase/new-case-type/main.js"
+    },
+    {
+      "label": "Civicase - Settings - New Case Type - Case Statusses",
+      "url": "{url}/civicrm/a/#/caseType/new",
+      "onReadyScript": "civicase/new-case-type/statusses.js"
+    },
+    {
+      "label": "Civicase - Settings - New Case Type - Activity Types",
+      "url": "{url}/civicrm/a/#/caseType/new",
+      "onReadyScript": "civicase/new-case-type/activities-type.js"
+    },
+    {
+      "label": "Civicase - Settings - New Case Type - Standard Timelines",
+      "url": "{url}/civicrm/a/#/caseType/new",
+      "onReadyScript": "civicase/new-case-type/timeline.js"
+    },
+    {
+      "label": "Civicase - Settings - Redaction Rule Options",
+      "url": "{url}/civicrm/admin/options/redaction_rule?reset=1"
+    },
+    {
+      "label": "Civicase - Settings - Redaction Rule Options - Add New Redaction Rule",
+      "url": "{url}/civicrm/admin/options/redaction_rule?reset=1",
+      "onReadyScript": "civicase/redaction/new.js",
+      "selectors": [".ui-dialog"]
+    },
+    {
+      "label": "Civicase - Settings - Redaction Rule Options - Delete Redaction Rule",
+      "url": "{url}/civicrm/admin/options/redaction_rule?reset=1",
+      "onReadyScript": "civicase/redaction/delete.js",
+      "selectors": [".ui-dialog"]
+    },
+    {
+      "label": "Civicase - Settings - Case Status Options",
+      "url": "{url}/civicrm/admin/options/case_status?reset=1"
+    },
+    {
+      "label": "Civicase - Settings - Case Status Options - Edit",
+      "url": "{url}/civicrm/admin/options/case_status?reset=1",
+      "onReadyScript": "civicase/case-status/edit.js",
+      "selectors": [".ui-dialog"]
+    },
+    {
+      "label": "Civicase - Settings - Case Status Options - Disable",
+      "url": "{url}/civicrm/admin/options/case_status?reset=1",
+      "onReadyScript": "civicase/case-status/disable.js",
+      "selectors": [".ui-dialog"]
+    },
+    {
+      "label": "Civicase - Settings - Case Status Options - Delete",
+      "url": "{url}/civicrm/admin/options/case_status?reset=1",
+      "onReadyScript": "civicase/case-status/delete.js",
+      "selectors": [".ui-dialog"]
+    },
+    {
+    "label": "Civicase - Settings - Encounter Medium Options",
+    "url": "{url}/civicrm/admin/options/encounter_medium?reset=1"
+    },
+    {
+      "label": "Civicase - Settings - Encounter Medium Options - Edit",
+      "url": "{url}/civicrm/admin/options/encounter_medium?reset=1",
+      "onReadyScript": "civicase/encounter-medium/edit.js",
+      "selectors": [".ui-dialog"]
+    }
+  ],
+  "report": ["CLI", "browser"],
+  "engine": "puppeteer",
+  "engineOptions": {
+    "waitTimeout": 120000
+  },
+  "asyncCaptureLimit": 1,
+  "asyncCompareLimit": 50,
+  "debug": false,
+  "debugWindow": false
+}
