@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 (function ($) {
   describe('civicaseCaseCard', function () {
-    var element, $compile, $rootScope, $scope, CasesData, pastDate, futureDate;
+    var element, $compile, $rootScope, $scope, CasesData;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data'));
 
@@ -19,27 +19,6 @@
     describe('basic test', function () {
       it('complies the case card directive', function () {
         expect(element.hasClass('civicase__case-card')).toBe(true);
-      });
-    });
-
-    describe('formatDate()', function () {
-      it('checks the format of the date', function () {
-        expect(element.isolateScope().formatDate('2017-11-20 00:00:00')).toBe('20/11/2017');
-      });
-    });
-
-    describe('isOverdue()', function () {
-      beforeEach(function () {
-        pastDate = moment().subtract(7, 'd');
-        futureDate = moment().add(7, 'd');
-      });
-
-      it('checks the date is overdue ', function () {
-        expect(element.isolateScope().isOverdue(pastDate)).toBe(true);
-      });
-
-      it('checks the date is not overdue ', function () {
-        expect(element.isolateScope().isOverdue(futureDate)).toBe(false);
       });
     });
 

@@ -12,27 +12,9 @@
     };
   });
 
-  module.controller('CivicaseCaseCardController', function ($scope, getActivityFeedUrl) {
+  module.controller('CivicaseCaseCardController', function ($scope, getActivityFeedUrl, DateHelper) {
     $scope.activityFeedUrl = getActivityFeedUrl;
-
-    /**
-     * To check if the date is overdue
-     *
-     * @param {String} date ISO string
-     * @return {Boolean} if the date is overdue.
-     */
-    $scope.isOverdue = function (date) {
-      return moment(date).isBefore(moment());
-    };
-
-    /**
-     * Formats Date in correct format (DD/MM/YYYY)
-     *
-     * @param {String} date ISO string
-     * @return {String} the formatted date
-     */
-    $scope.formatDate = function (date) {
-      return moment(date).format('DD/MM/YYYY');
-    };
+    $scope.isOverdue = DateHelper.isOverdue;
+    $scope.formatDate = DateHelper.formatDate;
   });
 })(angular, CRM.$, CRM._, CRM);

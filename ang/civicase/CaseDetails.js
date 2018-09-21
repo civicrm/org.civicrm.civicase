@@ -334,7 +334,27 @@
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
         });
+
+        $scope.item.nextActivityNotMilestone = findNextActivityWhichIsNotMilestone($scope.item.allActivities);
       }
+    }
+
+    /**
+     * Find Recent Open activity which is not milestone
+     *
+     * @params {Array} - Array of activities
+     * @return {object} - next activity
+     */
+    function findNextActivityWhichIsNotMilestone (activities) {
+      var nextActivity = _.find(activities, function (activity) {
+        return CRM.civicase.activityTypes[activity.activity_type_id].grouping !== 'milestone';
+      });
+
+      nextActivity.type = CRM.civicase.activityTypes[nextActivity.activity_type_id].label;
+      nextActivity.category = [CRM.civicase.activityTypes[nextActivity.activity_type_id].grouping];
+      nextActivity.icon = CRM.civicase.activityTypes[nextActivity.activity_type_id].icon;
+
+      return nextActivity;
     }
 
     function isFocusedWatcher () {

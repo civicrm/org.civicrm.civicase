@@ -241,36 +241,40 @@
      * @return {array}
      */
     function getCaseApiParams (filters, sort, page) {
-      var returnParams = {
+      var returnActivityParams = {
+        case_id: '$value.id',
+        options: {
+          sort: 'activity_date_time ASC'
+        },
+        return: [
+          'subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
+          'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
+          'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
+          'is_overdue', 'case_id'
+        ]
+      };
+      var returnCaseParams = {
         sequential: 1,
-        return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+        return: [
+          'subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date',
+          'modified_date', 'contacts', 'activity_summary', 'category_count',
+          'tag_id.name', 'tag_id.color', 'tag_id.description'
+        ],
         options: {
           sort: sort.field + ' ' + sort.dir,
           limit: page.size,
           offset: page.size * (page.num - 1)
         },
-        // Gets all the activities for the case
-        'api.Activity.get.1': {
-          case_id: '$value.id',
-          return: [
-            'activity_type_id',
-            'activity_date_time',
-            'status_id',
-            'is_star',
-            'case_id',
-            'is_overdue',
-            'source_contact_name',
-            'target_contact_name',
-            'assignee_contact_name'
-          ]
-        }
+        // To get the count of overdue tasks
+        'api.Activity.get.1': returnActivityParams
       };
+
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
       if (sort.field !== 'id' && sort.field !== 'contact_id.sort_name') {
-        returnParams.options.sort += ', contact_id.sort_name';
+        returnCaseParams.options.sort += ', contact_id.sort_name';
       }
       if (sort.field !== 'id') {
-        returnParams.options.sort += ', id';
+        returnCaseParams.options.sort += ', id';
       }
       var params = {'case_type_id.is_active': 1};
       _.each(filters, function (val, filter) {
@@ -297,7 +301,7 @@
         params.is_deleted = 0;
       }
       return [
-        ['Case', 'getcaselist', $.extend(true, returnParams, params)],
+        ['Case', 'getcaselist', $.extend(true, returnCaseParams, params)],
         ['Case', 'getcount', params]
       ];
     }
