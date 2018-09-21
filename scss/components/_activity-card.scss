@@ -173,6 +173,10 @@
     top: 0;
     width: 18px;
 
+    .material-icons {
+      font-size: 18px;
+    }
+
     &.dropdown-toggle {
       background: transparent;
       box-shadow: none;
@@ -211,4 +215,28 @@
 .civicase__activity-empty-link {
   display: block;
   text-align: center;
+}
+
+.civicase__activity-no-result-icon {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 48px;
+  width: 48px;
+}
+
+.civicase__activity-no-result-icon--milestone {
+  background-image: url('../resources/icons/milestone.svg');
+}
+
+.civicase__activity-no-result-icon--activity {
+  background-image: url('../resources/icons/activities.svg');
+}
+
+.civicase__activity-no-result-icon--communication {
+  background-image: url('../resources/icons/activities.svg');
+}
+
+.civicase__activity-no-result-icon--tasks {
+  background-image: url('../resources/icons/activities.svg');
 }

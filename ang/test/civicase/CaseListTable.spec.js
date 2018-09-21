@@ -28,33 +28,22 @@
         expectedApiCallParams = [
           ['Case', 'getcaselist', jasmine.objectContaining({
             'sequential': 1,
-            'return': [
-              'subject',
-              'case_type_id',
-              'status_id',
-              'is_deleted',
-              'start_date',
-              'modified_date',
-              'contacts',
-              'activity_summary',
-              'category_count',
-              'tag_id.name',
-              'tag_id.color',
-              'tag_id.description'
+            return: [
+              'subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date',
+              'modified_date', 'contacts', 'activity_summary', 'category_count',
+              'tag_id.name', 'tag_id.color', 'tag_id.description'
             ],
             'options': jasmine.any(Object),
             'api.Activity.get.1': {
               'case_id': '$value.id',
-              'return': [
-                'activity_type_id',
-                'activity_date_time',
-                'status_id',
-                'is_star',
-                'case_id',
-                'is_overdue',
-                'source_contact_name',
-                'target_contact_name',
-                'assignee_contact_name'
+              'options': jasmine.objectContaining({
+                'sort': 'activity_date_time ASC'
+              }),
+              return: [
+                'subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
+                'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
+                'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
+                'is_overdue', 'case_id'
               ]
             },
             'case_type_id.is_active': 1,

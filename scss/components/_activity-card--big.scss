@@ -3,8 +3,14 @@
   min-height: 215px;
   width: 100%;
 
-  .civicase__activity-card-inner {
-    padding-left: 36px;
+  .civicase__activity-card-left {
+    left: 16px;
+    position: absolute;
+    top: 24px;
+
+    + .civicase__activity-card-inner {
+      padding-left: 36px;
+    }   
   }
 
   .civicase__activity-title {
@@ -17,25 +23,9 @@
     color: $gray-dark;
   }
 
-  &.civicase__activity-card--big--milestone {
-    .civicase__activity-card-inner {
-      padding-left: 50px;
-      padding-right: 230px;
-    }
-
-    .civicase__activity-title {
-      flex: 1 0 0;
-      font-size: 20px;
-      line-height: 27px;
-    }
-
-    .civicase__activity-icon-container {
-      left: 10px;
-      top: 0;
-    }  
+  .civicase__checkbox {
+    margin-left: 10px;
   }
-
-
 
   .civicase__contact-additional__container--avatar {
     margin-left: 5px;
@@ -54,9 +44,7 @@
     align-items: center;
     display: flex;
     justify-content: center;
-    left: 14px;
-    position: absolute;
-    top: 24px;
+    margin-bottom: 10px;
     width: 40px;
 
     .civicase__activity-icon-ribbon {
@@ -85,6 +73,25 @@
     line-height: 18px;
     margin-bottom: 25px;
   }
+
+  &.civicase__activity-card--big--milestone {
+    .civicase__activity-card-inner {
+      padding-left: 50px;
+      padding-right: 230px;
+    }
+
+    .civicase__activity-title {
+      flex: 1 0 0;
+      font-size: 20px;
+      line-height: 27px;
+    }
+
+    .civicase__activity-card-left {
+      left: 10px;
+      position: absolute;
+      top: 0;
+    }    
+  }  
 }
 
 /* Empty state styles */

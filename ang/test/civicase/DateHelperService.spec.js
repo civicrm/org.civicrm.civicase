@@ -11,7 +11,7 @@
       }));
 
       describe('formatDate()', function () {
-        it('checks the format of the date', function () {
+        it('returns the date in the DD/MM/YYYY format', function () {
           expect(DateHelper.formatDate('2017-11-20 00:00:00', 'DD/MM/YYYY')).toBe('20/11/2017');
         });
       });
@@ -22,11 +22,11 @@
           futureDate = moment().add(7, 'd');
         });
 
-        it('checks the date is overdue ', function () {
+        it('returns true when date is in past', function () {
           expect(DateHelper.isOverdue(pastDate)).toBe(true);
         });
 
-        it('checks the date is not overdue ', function () {
+        it('returns false when date is not in past', function () {
           expect(DateHelper.isOverdue(futureDate)).toBe(false);
         });
       });

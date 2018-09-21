@@ -346,18 +346,13 @@
      * @return {object} - next activity
      */
     function findNextActivityWhichIsNotMilestone (activities) {
-      var nextActivity;
-      var hit = false;
-
-      _.each(activities, function (act, key) {
-        if (CRM.civicase.activityTypes[act.activity_type_id].grouping !== 'milestone' && !hit) {
-          nextActivity = act;
-          nextActivity.type = CRM.civicase.activityTypes[act.activity_type_id].label;
-          nextActivity.category = [CRM.civicase.activityTypes[act.activity_type_id].grouping];
-          nextActivity.icon = CRM.civicase.activityTypes[act.activity_type_id].icon;
-          hit = true;
-        }
+      var nextActivity = _.find(activities, function (activity) {
+        return CRM.civicase.activityTypes[activity.activity_type_id].grouping !== 'milestone';
       });
+
+      nextActivity.type = CRM.civicase.activityTypes[nextActivity.activity_type_id].label;
+      nextActivity.category = [CRM.civicase.activityTypes[nextActivity.activity_type_id].grouping];
+      nextActivity.icon = CRM.civicase.activityTypes[nextActivity.activity_type_id].icon;
 
       return nextActivity;
     }

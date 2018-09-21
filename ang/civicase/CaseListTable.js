@@ -241,39 +241,32 @@
      * @return {array}
      */
     function getCaseApiParams (filters, sort, page) {
-      var returnActParams = {
+      var returnActivityParams = {
         case_id: '$value.id',
         options: {
           sort: 'activity_date_time ASC'
         },
         return: [
-          'subject',
-          'details',
-          'activity_type_id',
-          'status_id',
-          'source_contact_name',
-          'target_contact_name',
-          'assignee_contact_name',
-          'activity_date_time',
-          'is_star',
-          'original_id',
-          'tag_id.name',
-          'tag_id.description',
-          'tag_id.color',
-          'file_id',
-          'is_overdue',
-          'case_id']
+          'subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
+          'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
+          'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
+          'is_overdue', 'case_id'
+        ]
       };
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+        return: [
+          'subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date',
+          'modified_date', 'contacts', 'activity_summary', 'category_count',
+          'tag_id.name', 'tag_id.color', 'tag_id.description'
+        ],
         options: {
           sort: sort.field + ' ' + sort.dir,
           limit: page.size,
           offset: page.size * (page.num - 1)
         },
         // To get the count of overdue tasks
-        'api.Activity.get.1': returnActParams
+        'api.Activity.get.1': returnActivityParams
       };
 
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id

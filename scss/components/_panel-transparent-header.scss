@@ -13,14 +13,22 @@
 
   >.panel-body {
     background: $crm-white;
-    border: 1px solid $crm-white;
     border-radius: 2px;
     box-shadow: $box-shadow-block;
     padding: 24px;
     position: relative;
 
     &:hover {
-      border-color: $brand-primary;
+      background-color: $gray-lighter;
+
+      .civicase__highlighted-date::before {
+        border-bottom-color: $gray-lighter;
+        border-right-color: $gray-lighter;
+      }
+    }
+
+    .civicase__activity-card {
+      background-color: transparent;
     }
   }
 }
