@@ -253,7 +253,7 @@
           'is_overdue', 'case_id'
         ]
       };
-      var returnParams = {
+      var returnCaseParams = {
         sequential: 1,
         return: [
           'subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date',
@@ -271,10 +271,10 @@
 
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
       if (sort.field !== 'id' && sort.field !== 'contact_id.sort_name') {
-        returnParams.options.sort += ', contact_id.sort_name';
+        returnCaseParams.options.sort += ', contact_id.sort_name';
       }
       if (sort.field !== 'id') {
-        returnParams.options.sort += ', id';
+        returnCaseParams.options.sort += ', id';
       }
       var params = {'case_type_id.is_active': 1};
       _.each(filters, function (val, filter) {
@@ -301,7 +301,7 @@
         params.is_deleted = 0;
       }
       return [
-        ['Case', 'getcaselist', $.extend(true, returnParams, params)],
+        ['Case', 'getcaselist', $.extend(true, returnCaseParams, params)],
         ['Case', 'getcount', params]
       ];
     }

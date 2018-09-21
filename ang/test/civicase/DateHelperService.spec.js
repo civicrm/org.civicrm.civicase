@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 (function ($) {
-  describe('Utils', function () {
+  describe('DateHelper', function () {
     var DateHelper, pastDate, futureDate;
 
     beforeEach(module('civicase'));

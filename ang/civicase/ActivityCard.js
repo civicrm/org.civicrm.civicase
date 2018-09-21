@@ -7,11 +7,11 @@
       templateUrl: function (elem, attrs) {
         switch (attrs.mode) {
           case 'big':
-            return `~/civicase/ActivityCard--Big.html`;
+            return '~/civicase/ActivityCard--Big.html';
           case 'long':
-            return `~/civicase/ActivityCard--Long.html`;
+            return '~/civicase/ActivityCard--Long.html';
           default:
-            return `~/civicase/ActivityCard--Short.html`;
+            return '~/civicase/ActivityCard--Short.html';
         }
       },
       controller: caseActivityCardController,
@@ -27,7 +27,6 @@
   function caseActivityCardController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi, DateHelper) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.activityFeedUrl = getActivityFeedUrl;
-    $scope.formatDate = CRM.utils.formatDate;
     $scope.templateExists = templateExists;
     $scope.formatDate = DateHelper.formatDate;
     $scope.isOverdue = DateHelper.isOverdue;

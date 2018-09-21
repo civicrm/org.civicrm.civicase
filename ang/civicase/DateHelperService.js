@@ -15,7 +15,8 @@
     };
 
     /**
-     * Formats Date in correct format (DD/MM/YYYY)
+     * Formats Date in sent format
+     * Default format is (DD/MM/YYYY)
      *
      * @param {String} date ISO string
      * @param {String} format ISO string
