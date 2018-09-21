@@ -9,7 +9,9 @@ $activities-calendar-active-day-background: #cde1ed;
     content: '';
     display: block;
     height: 6px;
-    margin: 3px 0 -9px 5px;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%) translateY(3px);
     width: 6px;
   }
 }
@@ -45,8 +47,32 @@ $activities-calendar-active-day-background: #cde1ed;
     text-transform: none;
   }
 
+  // header arrow icons
+  thead .uib-left,
+  thead .uib-right {
+    max-width: 24px;
+    padding: 5px 0;
+  }
+
+  thead .material-icons {
+    font-size: 24px;
+    line-height: 24px;
+  }
+
+  // header title
+  .uib-title strong {
+    color: $gray-darker;
+    font-size: 16px;
+    font-weight: $crm-font-weight-h2;
+    line-height: 22px;
+  }
+
+  .uib-title span:nth-last-child(1) {
+    color: $crm-gray-matte;
+  }
+
   tr:nth-child(0n+2) th,
-  tbody td {
+  tbody {
     background: $crm-white;
   }
 
@@ -58,8 +84,8 @@ $activities-calendar-active-day-background: #cde1ed;
     text-transform: uppercase;
   }
 
-  tbody {
-    box-shadow: 0 3px 8px 0 rgba(49, 40, 40, 0.15);
+  tr:nth-child(2n) .current-week-day {
+    color: $brand-primary;
   }
 
   thead th:nth-child(1) {
@@ -78,13 +104,25 @@ $activities-calendar-active-day-background: #cde1ed;
     border-bottom-right-radius: 2px;
   }
 
+  tbody {
+    box-shadow: 0 3px 8px 0 rgba(49, 40, 40, 0.15);
+    padding-bottom: 20px;
+  }
+
   tbody .btn {
     font-weight: $crm-font-weight-h3;
+    padding: 11px 0;
+    position: relative;
+    width: 100%;
   }
 
   .btn.active {
     background-color: $activities-calendar-active-day-background;
     color: $brand-primary;
+    height: 23px;
+    margin-top: 6px;
+    padding: 0;
+    width: 23px;
   }
 }
 
