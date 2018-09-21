@@ -75,6 +75,48 @@ describe('civicaseCaseDetails', function () {
     /* TODO - Rest of function needs to be unit tested */
   });
 
+  describe('isCurrentRelatedCaseVisible()', function () {
+    var returnValue;
+
+    beforeEach(function () {
+      compileDirective();
+      element.isolateScope().item = {};
+      element.isolateScope().item.relatedCases = CasesData.values[0];
+      element.isolateScope().relatedCasesPager.num = 2;
+      element.isolateScope().relatedCasesPager.size = 5;
+    });
+
+    describe('when the index is between current range', function () {
+      beforeEach(function () {
+        returnValue = element.isolateScope().isCurrentRelatedCaseVisible(7);
+      });
+
+      it('shows the related case', function () {
+        expect(returnValue).toBe(true);
+      });
+    });
+
+    describe('when the index is more that the current range', function () {
+      beforeEach(function () {
+        returnValue = element.isolateScope().isCurrentRelatedCaseVisible(11);
+      });
+
+      it('hides the related case', function () {
+        expect(returnValue).toBe(false);
+      });
+    });
+
+    describe('when the index is less that the current range', function () {
+      beforeEach(function () {
+        returnValue = element.isolateScope().isCurrentRelatedCaseVisible(4);
+      });
+
+      it('hides the related case', function () {
+        expect(returnValue).toBe(false);
+      });
+    });
+  });
+
   function compileDirective () {
     $scope.viewingCaseDetails = CasesData.values[0];
     element = $compile('<div civicase-case-details="viewingCaseDetails"></div>')($scope);

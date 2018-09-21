@@ -149,27 +149,6 @@
     }
 
     /**
-     * Fetch Contacts Profile Pic and Type
-     *
-     * @param {array} cases
-     */
-    function fetchContactsData (cases) {
-      var contacts = [];
-
-      _.each(cases, function (data) {
-        contacts = contacts.concat(CRM._.map(data.contacts, function (contact) {
-          return contact.contact_id;
-        }));
-
-        if (data.next_activity) {
-          contacts = contacts.concat(data.next_activity.assignee_contact_id);
-          contacts = contacts.concat(data.next_activity.target_contact_id);
-        }
-      });
-
-      ContactsDataService.add(contacts);
-    }
-    /**
      * Get all cases
      */
     function getCases () {
@@ -178,8 +157,6 @@
       crmThrottle(makeApiCallToLoadCases)
         .then(function (result) {
           var cases = _.each(result[0].values, formatCase);
-
-          fetchContactsData(cases);
 
           if ($scope.viewingCase) {
             if ($scope.viewingCaseDetails) {

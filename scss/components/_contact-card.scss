@@ -7,7 +7,8 @@
   display: flex;
 }
 
-.civicase__contact-name {
+.civicase__contact-name,
+.civicase__contact-name-additional {
   color: inherit;
   margin-left: 5px;
   max-width: 130px;
@@ -50,7 +51,7 @@
     font-size: 18px;
   }
 
-  .civicase__contact-name {
+  .civicase__contact-name-additional {
     color: $brand-primary;
   }
 }

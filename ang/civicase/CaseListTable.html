@@ -50,7 +50,7 @@
         <tbody>
         <tr ng-if="!isLoading" ng-repeat="item in cases" >
           <td ng-click="viewCase(item.id, $event)">
-            <civicase-case-card case="item"></civicase-case-card>
+            <civicase-case-card mode="case-list" case="item"></civicase-case-card>
           </td>
           <td
             ng-show="!viewingCase"
@@ -65,7 +65,7 @@
                 >
                 </div>
               </span>
-              <span ng-switch-when="status_badge" class="crm_notification-badge civicase__case-list-status" style="background-color: {{ item.color }};">
+              <span ng-switch-when="status_badge" class="crm_notification-badge" style="background-color: {{ item.color }};">
                 {{ item.status }}
               </span>
               <span ng-switch-when="contact_reference">{{ item[header.name].display_name }}</span>

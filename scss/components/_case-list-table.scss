@@ -62,12 +62,6 @@
     }
   }
 
-  &:not(.civicase__case-placeholder-row) {
-    td:first-child:hover {
-      background: $case-card-hover;
-    }
-  }
-
   .case-activity-card-wrapper {
     max-width: 320px;
     min-width: 320px;
@@ -104,11 +98,6 @@
       position: fixed;
     }
   }
-}
-
-.civicase__case-list-status {
-  line-height: 18px;
-  padding: 0 10px;
 }
 
 .civicase__case-list {

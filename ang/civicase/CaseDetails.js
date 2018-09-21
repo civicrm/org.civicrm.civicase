@@ -24,6 +24,7 @@
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var panelLimit = 5;
 
+    $scope.relatedCasesPager = { total: 0, size: 5, num: 0, range: {} };
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;
@@ -91,6 +92,23 @@
       };
       var p = angular.extend({}, $route.current.params, {caseId: item.id, cf: JSON.stringify(cf)});
       $route.updateParams(p);
+    };
+
+    /**
+     * Decide if the sent related case is visible with respect to the pager
+     *
+     * @param {int} index
+     * @return {boolean}
+     */
+    $scope.isCurrentRelatedCaseVisible = function (index) {
+      $scope.relatedCasesPager.range.from = (($scope.relatedCasesPager.num - 1) * $scope.relatedCasesPager.size) + 1;
+      $scope.relatedCasesPager.range.to = ($scope.relatedCasesPager.num * $scope.relatedCasesPager.size);
+
+      if ($scope.relatedCasesPager.range.to > $scope.item.relatedCases.length) {
+        $scope.relatedCasesPager.range.to = $scope.item.relatedCases.length;
+      }
+
+      return index >= ($scope.relatedCasesPager.range.from - 1) && index < $scope.relatedCasesPager.range.to;
     };
 
     // Copied from ActivityList.js - used by the Recent Communication panel
@@ -180,37 +198,34 @@
     };
 
     function caseGetParams () {
+      var activityParams = {
+        case_id: '$value.id',
+        return: [
+          'activity_type_id', 'activity_date_time', 'status_id', 'is_star', 'case_id',
+          'is_overdue', 'source_contact_name', 'target_contact_name', 'assignee_contact_name'
+        ]
+      };
+
       return {
         id: $scope.item.id,
         return: ['subject', 'details', 'contact_id', 'case_type_id', 'status_id', 'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary', 'activity_count', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'tag_id.parent_id', 'related_case_ids'],
         // Related cases by contact
-        'api.Case.get.1': {
+        'api.Case.getcaselist.1': {
           contact_id: {IN: '$value.contact_id'},
           id: {'!=': '$value.id'},
           is_deleted: 0,
-          return: ['case_type_id', 'start_date', 'end_date', 'status_id', 'contacts', 'subject']
+          return: ['case_type_id', 'start_date', 'end_date', 'status_id', 'contacts', 'subject'],
+          'api.Activity.get.1': activityParams
         },
         // Linked cases
-        'api.Case.get.2': {
+        'api.Case.getcaselist.2': {
           id: {IN: '$value.related_case_ids'},
           is_deleted: 0,
-          return: ['case_type_id', 'start_date', 'end_date', 'status_id', 'contacts', 'subject']
+          return: ['case_type_id', 'start_date', 'end_date', 'status_id', 'contacts', 'subject'],
+          'api.Activity.get.1': activityParams
         },
         // Gets all the activities for the case
-        'api.Activity.get.1': {
-          case_id: '$value.id',
-          return: [
-            'activity_type_id',
-            'activity_date_time',
-            'status_id',
-            'is_star',
-            'case_id',
-            'is_overdue',
-            'source_contact_name',
-            'target_contact_name',
-            'assignee_contact_name'
-          ]
-        },
+        'api.Activity.get.1': activityParams,
         // For the "recent communication" panel
         'api.Activity.get.2': {
           case_id: '$value.id',
@@ -276,9 +291,9 @@
     function formatCaseDetails (item) {
       formatCase(item);
       item.definition = caseTypes[item.case_type_id].definition;
-      item.relatedCases = _.each(_.cloneDeep(item['api.Case.get.1'].values), formatCase);
+      item.relatedCases = _.each(_.cloneDeep(item['api.Case.getcaselist.1'].values), formatCase);
       // Add linked cases
-      _.each(_.cloneDeep(item['api.Case.get.2'].values), function (linkedCase) {
+      _.each(_.cloneDeep(item['api.Case.getcaselist.2'].values), function (linkedCase) {
         var existing = _.find(item.relatedCases, {id: linkedCase.id});
         if (existing) {
           existing.is_linked = true;
@@ -287,8 +302,10 @@
           item.relatedCases.push(formatCase(linkedCase));
         }
       });
-      delete (item['api.Case.get.1']);
-      delete (item['api.Case.get.2']);
+      $scope.relatedCasesPager.num = 1;
+
+      delete (item['api.Case.getcaselist.1']);
+      delete (item['api.Case.getcaselist.2']);
       // Recent communications
       item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.2'].values), formatAct);
       delete (item['api.Activity.get.2']);
@@ -298,6 +315,7 @@
       // Custom fields
       item.customData = item['api.CustomValue.gettree'].values || [];
       delete (item['api.CustomValue.gettree']);
+
       return item;
     }
 

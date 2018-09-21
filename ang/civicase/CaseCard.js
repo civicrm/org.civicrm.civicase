@@ -3,7 +3,9 @@
 
   module.directive('civicaseCaseCard', function () {
     return {
-      templateUrl: '~/civicase/CaseCard.html',
+      templateUrl: function (elem, attrs) {
+        return attrs.mode === 'other-case' ? '~/civicase/CaseCard--other-cases.html' : '~/civicase/CaseCard--case-list.html';
+      },
       replace: true,
       scope: {
         data: '=case'
