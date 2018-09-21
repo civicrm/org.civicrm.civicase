@@ -47,7 +47,7 @@
         beforeEach(function () {
           initController();
 
-          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'month' });
+          customClass = getDayCustomClass(dates.today, 'month');
         });
 
         it('displays the months as normal without any custom class', function () {
@@ -59,7 +59,7 @@
         beforeEach(function () {
           initController();
 
-          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'year' });
+          customClass = getDayCustomClass(dates.today, 'year');
         });
 
         it('displays the years as normal without any custom class', function () {
@@ -77,7 +77,7 @@
 
           initController(activities);
 
-          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'day' });
+          customClass = getDayCustomClass(dates.today);
         });
 
         it('marks the day as having completed all of its activities', function () {
@@ -95,7 +95,7 @@
 
           initController(activities);
 
-          customClass = $scope.calendarOptions.customClass({ date: dates.yesterday, mode: 'day' });
+          customClass = getDayCustomClass(dates.yesterday);
         });
 
         it('marks the day as having completed all of its activities', function () {
@@ -113,7 +113,7 @@
 
           initController(activities);
 
-          customClass = $scope.calendarOptions.customClass({ date: dates.tomorrow, mode: 'day' });
+          customClass = getDayCustomClass(dates.tomorrow);
         });
 
         it('marks the day as having completed all of its activities', function () {
@@ -131,7 +131,7 @@
 
           initController(activities);
 
-          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'day' });
+          customClass = getDayCustomClass(dates.today);
         });
 
         it('displays the day as normal without any status', function () {
@@ -149,7 +149,7 @@
 
           initController(activities);
 
-          customClass = $scope.calendarOptions.customClass({ date: dates.yesterday, mode: 'day' });
+          customClass = getDayCustomClass(dates.yesterday);
         });
 
         it('marks the day as having overdue activities', function () {
@@ -167,7 +167,7 @@
 
           initController(activities);
 
-          customClass = $scope.calendarOptions.customClass({ date: dates.tomorrow, mode: 'day' });
+          customClass = getDayCustomClass(dates.tomorrow);
         });
 
         it('marks the day as having scheduled activities', function () {
@@ -185,13 +185,54 @@
 
           initController(activities);
 
-          customClass = $scope.calendarOptions.customClass({ date: dates.today, mode: 'day' });
+          customClass = getDayCustomClass(dates.today);
         });
 
         it('marks the day as having scheduled activities', function () {
           expect(customClass).toBe('civicase__activities-calendar__day-status-scheduled');
         });
       });
+
+      describe('when the date is outside this month', function () {
+        beforeEach(function () {
+          var activities = [
+            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
+            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete) }
+          ];
+
+          initController(activities);
+
+          customClass = getDayCustomClass(moment(dates.today).add(1, 'month').toDate());
+        });
+
+        it('hides the day from the calendar', function () {
+          expect(customClass).toBe('civicase__activities-calendar__hidden-day');
+        });
+      });
+
+      /**
+       * Simulates a call from the date picker to the `customClass` method.
+       * Even if the method is passed from a particular instance, the method
+       * gets bound to the date picker, which allows access to some of its internal
+       * properties and methods.
+       *
+       * @param {String|Date} date the current date to use to determine the class.
+       * @param {String} mode the current view mode for the calendar. Can be
+       *  day, month, or year. Defaults to day.
+       * @return {String} the class name.
+       */
+      function getDayCustomClass (date, mode) {
+        var uibDatepicker = {
+          datepicker: {
+            activeDate: new Date(dates.today)
+          }
+        };
+        date = moment(date).toDate();
+        mode = mode || 'day';
+
+        return $scope.calendarOptions.customClass.call(uibDatepicker, { date: date, mode: mode });
+      }
     });
 
     describe('selected activities', function () {

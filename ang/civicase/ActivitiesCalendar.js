@@ -207,10 +207,16 @@
       var allActivitiesHaveBeenCompleted;
       var activities = getActivitiesForDate(params.date);
       var isDateInThePast = moment().isAfter(params.date, 'day');
+      var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
+
+      if (!isInCurrentMonth && params.mode === 'day') {
+        return 'civicase__activities-calendar__hidden-day';
+      }
 
       if (activities.length === 0 || params.mode !== 'day') {
         return;
       }
+
       allActivitiesHaveBeenCompleted = checkIfAllActivitiesHaveBeenCompleted(activities);
 
       if (isDateInThePast && !allActivitiesHaveBeenCompleted) {

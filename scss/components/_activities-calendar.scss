@@ -24,6 +24,10 @@ $activities-calendar-active-day-background: #cde1ed;
   background-color: $brand-info;
 }
 
+.civicase__activities-calendar__hidden-day button {
+  display: none;
+}
+
 .civicase__activities-calendar {
   table,
   th,
@@ -112,7 +116,12 @@ $activities-calendar-active-day-background: #cde1ed;
 
   tbody {
     box-shadow: 0 3px 8px 0 rgba(49, 40, 40, 0.15);
-    padding-bottom: 19px;
+    min-height: 205px;
+  }
+
+  [uib-monthpicker] tbody,
+  [uib-yearpicker] tbody {
+    min-height: 262px;
   }
 
   tbody .btn {
@@ -129,11 +138,12 @@ $activities-calendar-active-day-background: #cde1ed;
 
   .uib-day .btn.active {
     height: 23px;
-    margin-top: 6px;
+    margin-top: 4px;
     padding: 0;
     width: 23px;
   }
 }
+
 
 .activities-calendar-popover {
   border-color: $gray-light;
