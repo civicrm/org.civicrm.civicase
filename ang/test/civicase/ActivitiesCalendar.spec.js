@@ -263,13 +263,23 @@
   });
 
   describe('Activities Calendar DOM Events', function () {
-    var $compile, $rootScope, $scope, $timeout, $uibPosition, activitiesMockData, activitiesCalendar;
+    var $compile, $rootScope, $scope, $timeout, $uibPosition, activitiesMockData, activitiesCalendar, datepickerMock;
 
-    beforeEach(module('civicase', 'civicase.data', 'civicase.templates', function ($provide) {
+    beforeEach(module('civicase', 'civicase.data', 'civicase.templates', function ($compileProvider, $provide) {
       $uibPosition = jasmine.createSpyObj('$uibPosition', ['positionElements']);
+      datepickerMock = jasmine.createSpyObj('datepicker', ['refreshView']);
 
       $uibPosition.positionElements.and.returnValue({ top: 0, left: 0 });
       $provide.value('$uibPosition', $uibPosition);
+      $compileProvider.directive('uibDatepicker', function () {
+        return {
+          restrict: 'A',
+          scope: {},
+          controller: function ($scope) {
+            $scope.datepicker = datepickerMock;
+          }
+        };
+      });
     }));
 
     beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_, _activitiesMockData_) {
@@ -380,6 +390,25 @@
               .toEqual(expectedOffset);
           });
         });
+      });
+    });
+
+    describe('when the activities are updated', function () {
+      beforeEach(inject(function (datesMockData) {
+        var activities = [
+          { activity_date_time: datesMockData.today, status_id: _.sample(CRM.civicase.activityStatusTypes.scheduled) }
+        ];
+
+        initDirective(activities);
+        datepickerMock.refreshView.calls.reset();
+
+        $scope.activities[0].status_id = _.sample(CRM.civicase.activityStatusTypes.completed);
+
+        $scope.$digest();
+      }));
+
+      it('refreshes the datepicker so it displays the new activity statuses', function () {
+        expect(datepickerMock.refreshView).toHaveBeenCalledWith();
       });
     });
 
@@ -531,11 +560,14 @@
     /**
      * Initializes the activities calendar dom events directive in the context of its
      * parent controller.
+     *
+     * @param {Array} activities a list of activity objects to pass to the directive's scope.
+     *   defaults to all the activities mock data.
      */
-    function initDirective () {
+    function initDirective (activities) {
       var html = '<civicase-activities-calendar activities="activities"></civicase-activities-calendar>';
       $scope = $rootScope.$new();
-      $scope.activities = activitiesMockData;
+      $scope.activities = activities || activitiesMockData;
       activitiesCalendar = $compile(html)($scope);
 
       activitiesCalendar.appendTo('body');

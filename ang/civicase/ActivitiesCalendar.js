@@ -5,7 +5,8 @@
     return {
       scope: {
         activities: '=',
-        caseId: '='
+        caseId: '=',
+        refresh: '=refreshCallback'
       },
       controller: 'civicaseActivitiesCalendarController',
       templateUrl: '~/civicase/ActivitiesCalendar.html',
@@ -27,6 +28,11 @@
       (function init () {
         initDomWatchers();
         $scope.$on('civicaseActivitiesCalendar::openActivitiesPopover', openActivitiesPopover);
+        $scope.$on('civicaseActivitiesCalendar::refreshDatepicker', function () {
+          var datepickerScope = element.find('[uib-datepicker]').isolateScope();
+
+          datepickerScope.datepicker.refreshView();
+        });
       })();
 
       /**
@@ -159,6 +165,12 @@
     $scope.selectedDate = null;
 
     $scope.onDateSelected = onDateSelected;
+
+    (function init () {
+      $scope.$watch('activities', function () {
+        $scope.$broadcast('civicaseActivitiesCalendar::refreshDatepicker');
+      }, true);
+    })();
 
     /**
      * Determines if all the given activities have been completed.
