@@ -61,6 +61,8 @@ OK (51 tests, 381 assertions)
 ## BackstopJS Visual Regression testing
 This test suite is based on [BackstopJS](https://garris.github.io/BackstopJS) plugin. Backstop JS uses pupetter and headless chrome to create reference screenshots and use them to compare new screenshots and raise any incosistency in the visuals of the page (if introduced while developing something)
 
+***Note**: The backstop test suite for now only covers screens that are exposed by civicase *component* (and not the extension) that comes by default with core.
+
 Documentation available [here](https://github.com/garris/BackstopJS#backstopjs)
 
 #### Steps to setup
@@ -89,5 +91,3 @@ npm install
 BackstopJS supports taking multiple screenshot at once. Change the value of `asyncCaptureLimit` in _backstop.tpl.json_ to decide how many screenshots you want to take in parallel
 
 ***Note**: Please be aware that BackstopJS performance is heavily dependent on the specs of the machine it runs on, so make sure to choose a value that the tool can handle on your machine (otherwise you will encounter random timeout errors)*
-
-***Note**: The backstop test suite for now, only covers screens that are exposed by civicase *component* (and not the extension) that comes by default with core. The backstop JS test suite can be extended to cover the screens that are exposed by the extension.
