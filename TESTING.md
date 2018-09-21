@@ -88,4 +88,6 @@ npm install
 #### Parallel capturing
 BackstopJS supports taking multiple screenshot at once. Change the value of `asyncCaptureLimit` in _backstop.tpl.json_ to decide how many screenshots you want to take in parallel
 
-***Note**:Please be aware that BackstopJS performance is heavily dependent on the specs of the machine it runs on, so make sure to choose a value that the tool can handle on your machine (otherwise you will encounter random timeout errors)*
+***Note**: Please be aware that BackstopJS performance is heavily dependent on the specs of the machine it runs on, so make sure to choose a value that the tool can handle on your machine (otherwise you will encounter random timeout errors)*
+
+***Note**: The backstop test suite for now, only covers screens that are exposed by civicase *component* (and not the extension) that comes by default with core. The backstop JS test suite can be extended to cover the screens that are exposed by the extension.
