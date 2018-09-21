@@ -1,7 +1,7 @@
 <div class="civicase__activity-card civicase__activity-card--big" ng-click="viewInPopup($event, activity)" ng-class="{'civicase__activity-card--big--milestone' :activity.category.indexOf('milestone') > -1}">
 
-  <div ng-if="activity.icon || activity.category.indexOf('task') > -1" class="civicase__activity-card-left">
-    <span ng-if="activity.icon" activity-icon="activity"></span>
+  <div ng-if="activity.icon || activity.category.indexOf('task') > -1 || activity.category.indexOf('milestone') > -1" class="civicase__activity-card-left">
+    <span ng-if="activity.icon || activity.category.indexOf('milestone') > -1" activity-icon="activity"></span>
     <!-- Task - Checkbox -->
     <div
       ng-if="activity.category.indexOf('task') > -1"
@@ -17,11 +17,76 @@
     <!-- Top section -->
     <div class="civicase__activity-card-row">
       <span class="civicase__activity-title">{{ activity.type }}</span>
+      <!-- Attachments to show for milestones-->
+      <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id && activity.category.indexOf('milestone') > -1">
+        <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
+        <ul class="dropdown-menu">
+          <li ng-if="!activity.attachments || !activity.attachments.length" class="civicase__activity-attachment-load">
+            <span>
+              <i class="civicase__activity-attachment-load-icon text-primary material-icons">loop</i> &nbsp;{{ ts('Loading...') }}
+            </span>
+          </li>
+          <li ng-repeat="file in activity.attachments || []">
+            <a class="civicase__activity-attachment__file-name"
+              title="{{ file.description || ts('Download File') }}"
+              href="{{ file.url }}">
+              <i class="civicase__activity-attachment__file-icon crm-i {{ file.icon }}"></i> &nbsp;{{ file.name }}
+            </a>
+          </li>
+          <li ng-if="activity.attachments.length" role="separator" class="divider"></li>
+          <li ng-if="activity.attachments.length">
+            <a class="civicase__activity-attachment__file-name"
+              ng-href="{{ 'civicrm/case/activity/download-all-files' | civicaseCrmUrl:{ activity_id: activity.id } }}">
+              <i class="civicase__activity-attachment__file-icon crm-i fa-download"></i> &nbsp;Download all
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- End - Attachments -->
+      <!-- Stars to show for Milestons -->
+      <a ng-click="toggleActivityStar($event, activity)" href ng-if="activity.is_star && activity.category.indexOf('milestone') > -1" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}" class="civicase__activity-star__container">
+        <i ng-if="activity.is_star === '0'" class="civicase__activity-star material-icons">star_border</i>
+        <i ng-if="activity.is_star === '1'" class="civicase__activity-star active material-icons">star</i>
+      </a>
+      <!-- End - Rating -->      
       <span ng-if="activity.assignee_contact_name" contact-card avatar="true" contacts="activity.assignee_contact_name"></span>
       <div ng-include="'~/civicase/ActivityCard--Menu.html'"></div>
     </div>
     <!-- End - top section -->
-    <div class="civicase__activity-date" ng-if="activity.category.indexOf('milestone') == -1">{{formatDate(activity.activity_date_time, 'DD MMM YYYY') }}</div>
+    <div ng-if="activity.category.indexOf('milestone') == -1">
+      <span class="civicase__activity-date">{{formatDate(activity.activity_date_time, 'DD MMM YYYY') }}</span>
+      <!-- Attachments to show for milestones-->
+      <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id && activity.category.indexOf('milestone') == -1">
+        <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
+        <ul class="dropdown-menu">
+          <li ng-if="!activity.attachments || !activity.attachments.length" class="civicase__activity-attachment-load">
+            <span>
+              <i class="civicase__activity-attachment-load-icon text-primary material-icons">loop</i> &nbsp;{{ ts('Loading...') }}
+            </span>
+          </li>
+          <li ng-repeat="file in activity.attachments || []">
+            <a class="civicase__activity-attachment__file-name"
+              title="{{ file.description || ts('Download File') }}"
+              href="{{ file.url }}">
+              <i class="civicase__activity-attachment__file-icon crm-i {{ file.icon }}"></i> &nbsp;{{ file.name }}
+            </a>
+          </li>
+          <li ng-if="activity.attachments.length" role="separator" class="divider"></li>
+          <li ng-if="activity.attachments.length">
+            <a class="civicase__activity-attachment__file-name"
+              ng-href="{{ 'civicrm/case/activity/download-all-files' | civicaseCrmUrl:{ activity_id: activity.id } }}">
+              <i class="civicase__activity-attachment__file-icon crm-i fa-download"></i> &nbsp;Download all
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- End - Attachments -->
+      <!-- Stars to show for Milestons -->
+      <a ng-click="toggleActivityStar($event, activity)" href ng-if="activity.is_star && activity.category.indexOf('milestone') == -1" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}" class="civicase__activity-star__container">
+        <i ng-if="activity.is_star === '0'" class="civicase__activity-star material-icons">star_border</i>
+        <i ng-if="activity.is_star === '1'" class="civicase__activity-star active material-icons">star</i>
+      </a>
+    </div>
     <!-- Description -->
     <div class="civicase__activity-subject">{{ activity.subject }}</div>
     <!-- End - description -->
