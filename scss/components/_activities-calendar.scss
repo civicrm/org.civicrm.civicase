@@ -47,11 +47,17 @@ $activities-calendar-active-day-background: #cde1ed;
     text-transform: none;
   }
 
+  thead .btn.uib-left,
+  thead .btn.uib-title,
+  thead .btn.uib-right {
+    padding: 3px 0 8px;
+  }
+
   // header arrow icons
-  thead .uib-left,
-  thead .uib-right {
+  thead .btn.uib-left,
+  thead .btn.uib-right {
     max-width: 24px;
-    padding: 5px 0;
+    padding: 5px 0 0;
   }
 
   thead .material-icons {
@@ -106,12 +112,12 @@ $activities-calendar-active-day-background: #cde1ed;
 
   tbody {
     box-shadow: 0 3px 8px 0 rgba(49, 40, 40, 0.15);
-    padding-bottom: 20px;
+    padding-bottom: 19px;
   }
 
   tbody .btn {
     font-weight: $crm-font-weight-h3;
-    padding: 11px 0;
+    padding: 9px 0;
     position: relative;
     width: 100%;
   }
