@@ -30,6 +30,14 @@
       it('provides a method to style each calendar day', function () {
         expect(typeof $scope.calendarOptions.customClass).toBe('function');
       });
+
+      it('formats the calendar days using a single digit', function () {
+        expect($scope.calendarOptions.formatDay).toBe('d');
+      });
+
+      it('starts the week day on Mondays', function () {
+        expect($scope.calendarOptions.startingDay).toBe(1);
+      });
     });
 
     describe('calendar days status', function () {
@@ -375,21 +383,143 @@
       });
     });
 
+    describe('DOM manipulations', function () {
+      // Note: setTimeout is used because it's the only way to simulate the DOM Mutation
+
+      describe('calendar title', function () {
+        beforeEach(function (done) {
+          initDirective();
+          setTimeout(done);
+        });
+
+        it('splits the words in the calendar title and wraps them in spans', function () {
+          expect(activitiesCalendar.find('.uib-title strong').html()).toEqual('<span>Month </span><span>Year </span>');
+        });
+      });
+
+      describe('calendar icons', function () {
+        var leftIcon, rightIcon;
+
+        beforeEach(function (done) {
+          initDirective();
+          setTimeout(function () {
+            leftIcon = activitiesCalendar.find('thead tr:eq(0) th:eq(0) i');
+            rightIcon = activitiesCalendar.find('thead tr:eq(0) th:eq(2) i');
+
+            done();
+          });
+        });
+
+        it('changes the left chevron glyphicon into a material icon', function () {
+          expect(leftIcon.attr('class')).toBe('material-icons');
+          expect(leftIcon.text()).toBe('chevron_left');
+        });
+
+        it('changes the right chevron glyphicon into a material icon', function () {
+          expect(rightIcon.attr('class')).toBe('material-icons');
+          expect(rightIcon.text()).toBe('chevron_right');
+        });
+      });
+
+      describe('current week day', function () {
+        beforeEach(function () {
+          jasmine.clock().install();
+        });
+
+        afterEach(function () {
+          jasmine.clock().uninstall();
+        });
+
+        describe('when the week day is Sunday', function () {
+          beforeEach(function (done) {
+            setupCUrrentWeekDayTest(moment().isoWeekday(0), done);
+          });
+
+          it('marks Sunday as the current week day on the calendar', function () {
+            expect(activitiesCalendar.find('.current-week-day').text()).toBe('Sun');
+          });
+        });
+
+        describe('when the week day is Monday', function () {
+          beforeEach(function (done) {
+            setupCUrrentWeekDayTest(moment().isoWeekday(1), done);
+          });
+
+          it('marks Sunday as the current week day on the calendar', function () {
+            expect(activitiesCalendar.find('.current-week-day').text()).toBe('Mon');
+          });
+        });
+
+        describe('when the week day is Friday', function () {
+          beforeEach(function (done) {
+            setupCUrrentWeekDayTest(moment().isoWeekday(5), done);
+          });
+
+          it('marks Sunday as the current week day on the calendar', function () {
+            expect(activitiesCalendar.find('.current-week-day').text()).toBe('Fri');
+          });
+        });
+
+        /**
+         * Setups the test for the current week day by mocking the clock's date,
+         * initializing the directive, waiting for DOM mutations, and ticking the
+         * clocking forward.
+         *
+         * @param {Object} momentDate a reference to a moment date.
+         * @param {Function} done the function to execute after DOM Mutations have been applied.
+         */
+        function setupCUrrentWeekDayTest (momentDate, done) {
+          jasmine.clock().mockDate(momentDate.toDate());
+          initDirective();
+          setTimeout(done);
+          jasmine.clock().tick();
+        }
+      });
+    });
+
     /**
      * Appends a mock calendar table element inside the uib-datepicker element.
      */
     function appendMockCalendarTable () {
       var calendarTable = `<table>
+        <thead>
+          <tr>
+            <th><button><i class="glyphicon glyphicon-chevron-left"></i></button></th>
+            <th><button class="uib-title"><strong>Month Year</strong></button></th>
+            <th><button><i class="glyphicon glyphicon-chevron-right"></i></button></th>
+          </tr>
+          <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+          </tr>
+        </thead>
         <tbody>
           <tr class="uib-weeks">
             <td class="uib-day">
-              <button><span>28</span></button>
+              <button><span>06</span></button>
             </td>
             <td class="uib-day">
-              <button class="active"><span>29</span></button>
+              <button><span>07</span></button>
             </td>
             <td class="uib-day">
-              <button><span>30</span></button>
+              <button><span>08</span></button>
+            </td>
+            <td class="uib-day">
+              <button class="active"><span>09</span></button>
+            </td>
+            <td class="uib-day">
+              <button><span>10</span></button>
+            </td>
+            <td class="uib-day">
+              <button><span>11</span></button>
+            </td>
+            <td class="uib-day">
+              <button><span>12</span></button>
             </td>
           </tr>
         </tbody>
