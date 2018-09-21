@@ -109,4 +109,34 @@
   > .panel-collapse > .panel-body {
     padding: 0;
   }
+
+  .panel-footer {
+    border-top: 0;
+    padding: 0;
+  }
+
+  .civicase__pager {
+    border-top: 0;
+
+    paging {
+      float: right;
+    }
+
+    /* stylelint-disable selector-max-compound-selectors, selector-no-qualifying-type */
+    .pagination > li > a {
+      color: $crm-gray-matte;
+      font-weight: $font-weight-content;
+
+      &::after,
+      &::before {
+        display: none;
+      }
+    }
+
+
+    .pagination > li[title^='Page'].active > a {
+      color: $gray-darker;
+    }
+    /* stylelint-enable */
+  }
 }

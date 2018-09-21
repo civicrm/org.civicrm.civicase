@@ -24,6 +24,7 @@
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var panelLimit = 5;
 
+    $scope.relatedCasesPager = { total: 0, size: 5, num: 0, range: {} };
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;
@@ -91,6 +92,23 @@
       };
       var p = angular.extend({}, $route.current.params, {caseId: item.id, cf: JSON.stringify(cf)});
       $route.updateParams(p);
+    };
+
+    /**
+     * Decide if the sent related case is visible with respect to the pager
+     *
+     * @param {int} index
+     * @return {boolean}
+     */
+    $scope.isCurrentRelatedCaseVisible = function (index) {
+      $scope.relatedCasesPager.range.from = (($scope.relatedCasesPager.num - 1) * $scope.relatedCasesPager.size) + 1;
+      $scope.relatedCasesPager.range.to = ($scope.relatedCasesPager.num * $scope.relatedCasesPager.size);
+
+      if ($scope.relatedCasesPager.range.to > $scope.item.relatedCases.length) {
+        $scope.relatedCasesPager.range.to = $scope.item.relatedCases.length;
+      }
+
+      return index >= ($scope.relatedCasesPager.range.from - 1) && index < $scope.relatedCasesPager.range.to;
     };
 
     // Copied from ActivityList.js - used by the Recent Communication panel
@@ -284,6 +302,8 @@
           item.relatedCases.push(formatCase(linkedCase));
         }
       });
+      $scope.relatedCasesPager.num = 1;
+
       delete (item['api.Case.getcaselist.1']);
       delete (item['api.Case.getcaselist.2']);
       // Recent communications
@@ -295,6 +315,7 @@
       // Custom fields
       item.customData = item['api.CustomValue.gettree'].values || [];
       delete (item['api.CustomValue.gettree']);
+
       return item;
     }
 

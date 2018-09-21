@@ -127,7 +127,7 @@
     };
   });
 
-  module.factory('formatCase', function (formatActivity) {
+  module.factory('formatCase', function (formatActivity, ContactsDataService) {
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = CRM.civicase.caseStatuses;
 
@@ -176,8 +176,30 @@
         }
       });
 
+      fetchContactsData(item);
+
       return item;
     };
+
+    /**
+     * Fetch additional information about the contacts
+     *
+     * @param {object} caseObj
+     */
+    function fetchContactsData (caseObj) {
+      var contacts = [];
+
+      contacts = contacts.concat(CRM._.map(caseObj.contacts, function (contact) {
+        return contact.contact_id;
+      }));
+
+      if (caseObj.next_activity) {
+        contacts = contacts.concat(caseObj.next_activity.assignee_contact_id);
+        contacts = contacts.concat(caseObj.next_activity.target_contact_id);
+      }
+
+      ContactsDataService.add(contacts);
+    }
 
     /**
      * To count overdue tasks.
