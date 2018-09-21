@@ -2,8 +2,13 @@
 .civicase__case-card {
   border-radius: 0 !important; // Todo remove important after general.css is refactored.
   box-shadow: none;
+  cursor: pointer;
   height: 100%;
   margin-bottom: 0;
+
+  &:hover {
+    background: $case-card-hover;
+  }
 
   .panel-body {
     background-color: transparent;
@@ -34,7 +39,7 @@
 
 .civicase__case-card--closed {
   background-image: repeating-linear-gradient(60deg, $gray-light, $gray-light 2px, $gray-lighter 2px, $gray-lighter 20px);
-  min-height: 150px;
+  min-height: 149px;
 
   .civicase__contact-name,
   .civicase__contact-additional__container,

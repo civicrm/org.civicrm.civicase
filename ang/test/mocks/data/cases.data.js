@@ -190,8 +190,8 @@
           16: '1',
           53: '1'
         },
-        'api.Case.get.1': { 'values': [] },
-        'api.Case.get.2': { 'values': [] },
+        'api.Case.getcaselist.1': { 'values': [] },
+        'api.Case.getcaselist.2': { 'values': [] },
         'api.Activity.get.1': {
           'is_error': 0,
           'version': 3,

@@ -62,12 +62,6 @@
     }
   }
 
-  &:not(.civicase__case-placeholder-row) {
-    td:first-child:hover {
-      background: $case-card-hover;
-    }
-  }
-
   .case-activity-card-wrapper {
     max-width: 320px;
     min-width: 320px;
