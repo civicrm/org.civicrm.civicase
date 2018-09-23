@@ -129,12 +129,14 @@
        */
       function splitWordsInCalendarTitle () {
         var titleElement = element.find('thead .uib-title strong');
-        var title = titleElement.text();
+        var title = titleElement.text().trim();
         var titleWords = title.split(' ').map(function (word) {
-          return $('<span></span>').text(word + ' ');
+          return $('<span class="civicase__activities-calendar__title-word"></span>')
+            .text(word + ' ');
         });
 
-        titleElement.html(titleWords);
+        element.find('thead .uib-title span').remove();
+        titleElement.after(titleWords);
       }
 
       /**

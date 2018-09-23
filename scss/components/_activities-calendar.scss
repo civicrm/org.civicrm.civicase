@@ -51,17 +51,17 @@ $activities-calendar-active-day-background: #cde1ed;
     text-transform: none;
   }
 
-  thead .btn.uib-left,
-  thead .btn.uib-title,
-  thead .btn.uib-right {
+  thead .btn.uib-title {
+    margin-top: -3px;
     padding: 3px 0 8px;
   }
 
   // header arrow icons
   thead .btn.uib-left,
   thead .btn.uib-right {
+    margin-top: -3px;
     max-width: 24px;
-    padding: 5px 0 0;
+    padding: 3px 0 8px;
   }
 
   thead .material-icons {
@@ -70,7 +70,8 @@ $activities-calendar-active-day-background: #cde1ed;
   }
 
   // header title
-  .uib-title strong {
+  .uib-title strong,
+  .civicase__activities-calendar__title-word {
     color: $gray-darker;
     font-size: 16px;
     font-weight: $crm-font-weight-h2;
@@ -81,12 +82,25 @@ $activities-calendar-active-day-background: #cde1ed;
     color: $crm-gray-matte;
   }
 
+  [uib-daypicker] .uib-title strong { /* stylelint-disable selector-max-compound-selectors */
+    display: none;
+  }
+
+  [uib-monthpicker] .civicase__activities-calendar__title-word,
+  [uib-yearpicker] .civicase__activities-calendar__title-word {
+    display: none;
+  }
+
   tr:nth-child(0n+2) th,
   tbody {
     background: $crm-white;
   }
 
   // week days header
+  tr:nth-child(2n) {
+    margin-top: -3px;
+  }
+
   tr:nth-child(2n) th {
     color: $crm-gray-matte;
     font-size: 10px;
@@ -121,12 +135,13 @@ $activities-calendar-active-day-background: #cde1ed;
 
   [uib-monthpicker] tbody,
   [uib-yearpicker] tbody {
+    margin-top: -3px;
     min-height: 262px;
   }
 
   tbody .btn {
     font-weight: $crm-font-weight-h3;
-    padding: 9px 0;
+    padding: 10px 0;
     position: relative;
     width: 100%;
   }
@@ -138,7 +153,7 @@ $activities-calendar-active-day-background: #cde1ed;
 
   .uib-day .btn.active {
     height: 23px;
-    margin-top: 4px;
+    margin-top: 5px;
     padding: 0;
     width: 23px;
   }

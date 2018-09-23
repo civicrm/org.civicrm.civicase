@@ -457,13 +457,19 @@
       // Note: setTimeout is used because it's the only way to simulate the DOM Mutation
 
       describe('calendar title', function () {
+        var expectedTitle;
+
         beforeEach(function (done) {
+          expectedTitle = '<strong>Month Year</strong>';
+          expectedTitle += '<span class="civicase__activities-calendar__title-word">Month </span>';
+          expectedTitle += '<span class="civicase__activities-calendar__title-word">Year </span>';
+
           initDirective();
           setTimeout(done);
         });
 
         it('splits the words in the calendar title and wraps them in spans', function () {
-          expect(activitiesCalendar.find('.uib-title strong').html()).toEqual('<span>Month </span><span>Year </span>');
+          expect(activitiesCalendar.find('.uib-title').html()).toEqual(expectedTitle);
         });
       });
 
