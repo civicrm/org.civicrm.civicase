@@ -6,7 +6,7 @@
         <span ng-if="activity.icon || activity.category.indexOf('milestone') > -1" activity-icon="activity"></span>
 
         <!-- Activity Date -->
-        <span class="civicase__activity-date">{{ formatDate(activity.activity_date_time, 'DD MMM YYYY') }}</span>
+        <span class="civicase__activity-date" ng-class="{'civicase__overdue-activity-icon': activity.is_overdue}">{{ formatDate(activity.activity_date_time, 'DD MMM YYYY') }}</span>
         <!-- End - Activity Date -->
 
         <span class="civicase__activity__right-container">
