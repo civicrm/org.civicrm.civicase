@@ -3,12 +3,12 @@
   ng-class="{'civicase__activity-icon-container--ribbon': activity.category.indexOf('milestone') > -1}">
   <span>
     <i
-      ng-class="{'text-danger': activity.is_overdue}"
+      ng-class="{'text-danger': activity.is_overdue && !activity.is_completed, 'text-success': activity.is_completed}"
       class="civicase__activity-icon fa {{activity.icon}}"></i>
 
     <i
       ng-if="direction"
-      ng-class="{'text-danger': activity.is_overdue}"
+      ng-class="{'text-danger': activity.is_overdue && !activity.is_completed, 'text-success': activity.is_completed}"
       class="civicase__activity-icon-arrow fa fa-arrow-{{ direction }}"></i>
   </span>
   <!-- Activity Ribbon -->
