@@ -325,7 +325,7 @@
       item.customData = item['api.CustomValue.gettree'].values || [];
       delete (item['api.CustomValue.gettree']);
       // Set  next Acitivity which is not milestone
-      item.nextActivityNotMilestone = findNextActivityWhichIsNotMilestone(item.allActivities);
+      item.nextActivityNotMilestone = findNextIncompleteActivityWhichIsNotMilestone(item.allActivities);
 
       return item;
     }
@@ -364,7 +364,7 @@
           $scope.pushCaseData(info.values[0]);
         });
 
-        $scope.item.nextActivityNotMilestone = findNextActivityWhichIsNotMilestone($scope.item.allActivities); // to be removed after performace fix
+        $scope.item.nextActivityNotMilestone = findNextIncompleteActivityWhichIsNotMilestone($scope.item.allActivities); // to be removed after performace fix
       }
     }
 
@@ -374,9 +374,12 @@
      * @params {Array} - Array of activities
      * @return {object} - next activity
      */
-    function findNextActivityWhichIsNotMilestone (activities) {
+    function findNextIncompleteActivityWhichIsNotMilestone (activities) {
       var nextActivity = _.find(activities, function (activity) {
-        return CRM.civicase.activityTypes[activity.activity_type_id].grouping !== 'milestone';
+        var notMilestone = CRM.civicase.activityTypes[activity.activity_type_id].grouping !== 'milestone';
+        var notComplete = CRM.civicase.activityStatusTypes.completed.indexOf(parseInt(activity.status_id, 10)) === -1;
+
+        return notMilestone && notComplete;
       });
 
       nextActivity.type = CRM.civicase.activityTypes[nextActivity.activity_type_id].label;
