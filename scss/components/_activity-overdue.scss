@@ -1,6 +1,7 @@
 .civicase__overdue-activity-icon {
   color: $brand-danger !important;
   font-weight: $font-weight-heading;
+  padding-right: 20px;
   position: relative;
 
   &::before {
@@ -21,7 +22,7 @@
     height: 13px;
     line-height: 1em;
     position: absolute;
-    right: -20px;
+    right: 0;
     text-align: center;
     top: 50%;
     transform: translateY(-50%);
@@ -30,6 +31,7 @@
 
   &.civicase__overdue-activity-icon--count {
     padding-left: 20px;
+    padding-right: 0;
 
     &::before,
     &::after {

@@ -54,7 +54,7 @@
     </div>
     <!-- End - top section -->
     <div ng-if="activity.category.indexOf('milestone') == -1">
-      <span class="civicase__activity-date" ng-class="{'text-danger': activity.is_overdue}">{{formatDate(activity.activity_date_time, 'DD MMM YYYY') }}</span>
+      <span class="civicase__activity-date" ng-class="{'civicase__overdue-activity-icon': activity.is_overdue}">{{formatDate(activity.activity_date_time, 'DD MMM YYYY') }}</span>
       <!-- Attachments to show for milestones-->
       <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id && activity.category.indexOf('milestone') == -1">
         <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
