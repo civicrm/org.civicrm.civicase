@@ -2,12 +2,11 @@
   // CaseList directive controller
   function casePeopleController ($scope, crmApi) {
     // The ts() and hs() functions help load strings for this module.
-    var ts = $scope.ts = CRM.ts('civicase'),
-      item = $scope.item,
-      clientIds = _.map(item.client, 'contact_id'),
-      clients = _.indexBy(item.client, 'contact_id'),
-      relTypes = CRM.civicase.relationshipTypes,
-      relTypesByName = _.indexBy(relTypes, 'name_b_a');
+    var ts = $scope.ts = CRM.ts('civicase');
+    var item = $scope.item;
+    var clients = _.indexBy(item.client, 'contact_id');
+    var relTypes = CRM.civicase.relationshipTypes;
+    var relTypesByName = _.indexBy(relTypes, 'name_b_a');
 
     $scope.CRM = CRM;
     $scope.allowMultipleCaseClients = CRM.civicase.allowMultipleCaseClients;
@@ -47,12 +46,14 @@
     };
 
     var getCaseRoles = $scope.getCaseRoles = function () {
+      var caseRoles, allRoles, selected;
+
       if ($scope.item && $scope.item.definition && $scope.item.definition.caseRoles) {
         $scope.allRoles = _.each(_.cloneDeep($scope.item.definition.caseRoles), formatRole);
       }
-      var caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep($scope.allRoles),
-        allRoles = _.cloneDeep($scope.allRoles),
-        selected = getSelectedContacts('roles', true);
+      caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep($scope.allRoles);
+      allRoles = _.cloneDeep($scope.allRoles);
+      selected = getSelectedContacts('roles', true);
       if ($scope.rolesFilter) {
         caseRoles = $scope.rolesFilter === 'client' ? [] : [_.findWhere(caseRoles, {name: $scope.rolesFilter})];
       }
@@ -78,12 +79,12 @@
           if (!$scope.rolesFilter || role.name === $scope.rolesFilter) {
             $.extend(role, {checked: selected.indexOf(contact.contact_id) >= 0}, contact);
           }
-        } else if (!$scope.rolesFilter || $scope.rolesFilter == 'client') {
+        } else if (!$scope.rolesFilter || $scope.rolesFilter === 'client') {
           caseRoles.push($.extend({role: ts('Client'), checked: selected.indexOf(contact.contact_id) >= 0}, contact));
         }
       });
       _.each(caseRoles, function (role, index) {
-        if (role && role.role != 'Client' && (role.contact_id + '_' + role.relationship_type_id in relDesc)) {
+        if (role && role.role !== 'Client' && (role.contact_id + '_' + role.relationship_type_id in relDesc)) {
           caseRoles[index]['desc'] = relDesc[role.contact_id + '_' + role.relationship_type_id];
         }
       });
@@ -115,7 +116,7 @@
 
     $scope.assignRole = function (role, replace) {
       var message = '<input name="caseRoleSelector" placeholder="' + ts('Select Coantact') + '" />';
-      if (role.role != 'Client') {
+      if (role.role !== 'Client') {
         message = message + '<br/><textarea rows="3" cols="35" name="description" class="crm-form-textarea" style="margin-top: 10px;padding-left: 10px;border-color: #C2CFDE;color: #9494A4;" placeholder="Description"></textarea>';
       }
       CRM.confirm({
@@ -125,9 +126,10 @@
           $('[name=caseRoleSelector]', this).crmEntityRef({create: true, api: {params: {contact_type: role.contact_type, contact_sub_type: role.contact_sub_type}, extra: ['display_name']}});
         }
       }).on('crmConfirm:yes', function () {
-        var apiCalls = [],
-          val = $('[name=caseRoleSelector]', this).val(),
-          desc = $('[name=description]', this).val();
+        var params;
+        var apiCalls = [];
+        var val = $('[name=caseRoleSelector]', this).val();
+        var desc = $('[name=description]', this).val();
         if (replace) {
           apiCalls.push(unassignRoleCall(role));
         }
@@ -146,9 +148,7 @@
               params['contact_id_a'] = client.contact_id;
               apiCalls.push(['Relationship', 'create', params]);
             });
-          }
-          // Add case client
-          else {
+          } else { // Add case client
             apiCalls.push(['CaseContact', 'create', {case_id: item.id, contact_id: val}]);
           }
           apiCalls.push(['Activity', 'create', {
@@ -190,9 +190,7 @@
           is_active: 1,
           'api.Relationship.create': {is_active: 0, end_date: 'now'}
         }];
-      }
-      // Case Client
-      else {
+      } else { // Case Client
         return ['CaseContact', 'get', {
           case_id: item.id,
           contact_id: role.contact_id,
