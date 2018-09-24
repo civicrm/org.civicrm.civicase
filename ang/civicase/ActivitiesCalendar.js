@@ -221,10 +221,10 @@
 
       allActivitiesHaveBeenCompleted = checkIfAllActivitiesHaveBeenCompleted(activities);
 
-      if (isDateInThePast && !allActivitiesHaveBeenCompleted) {
-        return 'civicase__activities-calendar__day-status-overdue';
-      } else if (allActivitiesHaveBeenCompleted) {
+      if (allActivitiesHaveBeenCompleted) {
         return 'civicase__activities-calendar__day-status-completed';
+      } else if (isDateInThePast) {
+        return 'civicase__activities-calendar__day-status-overdue';
       } else {
         return 'civicase__activities-calendar__day-status-scheduled';
       }
