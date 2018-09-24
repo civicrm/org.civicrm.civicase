@@ -50,9 +50,10 @@
     };
 
     $scope.editActivityUrl = function (id) {
-      return CRM.url('civicrm/case/activity', {
+      return CRM.url('civicrm/activity', {
         action: 'update',
         reset: 1,
+        context: 'case',
         cid: $scope.item.client[0].contact_id,
         caseid: $scope.item.id,
         id: id,
