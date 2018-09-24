@@ -13,13 +13,11 @@
         data: '=contacts',
         isAvatar: '=avatar',
         noIcon: '=noIcon'
-      },
-      link: contactCardLink
+      }
     };
 
     function contactCardController (scope) {
       scope.getContactIconOf = ContactsDataService.getContactIconOf;
-      scope.isPopupVisible = false;
       scope.ts = CRM.ts('civicase');
       scope.url = CRM.url;
       scope.mainContact = null;
@@ -47,16 +45,6 @@
 
         scope.mainContact = ContactsDataService.getCachedContact(scope.contacts[0].contact_id);
       }
-
-      /**
-       * Toggle dropdown visibility
-       *
-       * @param {object} $event
-       */
-      scope.toggleDropdownVisibility = function ($event) {
-        scope.isPopupVisible = !scope.isPopupVisible;
-        $event.stopPropagation();
-      };
 
       /**
        * Get initials from the sent parameter
@@ -109,38 +97,6 @@
         var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         return re.test(String(email).toLowerCase());
-      }
-    }
-
-    /**
-     * Link function for contactCard directive
-     *
-     * @param {object} scope
-     * @param {object} elem
-     * @param {object} attrs
-     */
-    function contactCardLink (scope, elem, attrs) {
-      (function init () {
-        $document.bind('click', closeDropdownIfClickedOutside);
-      }());
-
-      /**
-       * Close the Dropdown when clicked outside
-       *
-       * @param {object} event
-       */
-      function closeDropdownIfClickedOutside (event) {
-        var isClickedElementChildOfPopup = elem
-          .find(event.target)
-          .length > 0;
-
-        if (isClickedElementChildOfPopup) {
-          return;
-        }
-
-        scope.$apply(function () {
-          scope.isPopupVisible = false;
-        });
       }
     }
   });
