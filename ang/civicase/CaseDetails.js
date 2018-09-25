@@ -256,7 +256,7 @@
         'api.Relationship.get': {
           case_id: '$value.id',
           is_active: 1,
-          return: ['id', 'relationship_type_id', 'contact_id_a', 'contact_id_b', 'description']
+          return: ['id', 'relationship_type_id', 'contact_id_a', 'contact_id_b', 'description', 'start_date']
         },
         sequential: 1
       };

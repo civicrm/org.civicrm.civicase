@@ -22,7 +22,7 @@
    * @param {Object} crmApi
    */
 
-  function civicaseViewPeopleController ($scope, crmApi) {
+  function civicaseViewPeopleController ($scope, crmApi, DateHelper) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var item = $scope.item;
@@ -47,6 +47,7 @@
     $scope.contactTasks = CRM.civicase.contactTasks;
     $scope.ceil = Math.ceil;
     $scope.allRoles = [];
+    $scope.formatDate = DateHelper.formatDate;
 
     var getSelectedContacts = $scope.getSelectedContacts = function (tab, onlyChecked) {
       var idField = (tab === 'roles' ? 'contact_id' : 'id');
@@ -60,7 +61,6 @@
 
     var getCaseRoles = $scope.getCaseRoles = function () {
       var caseRoles, allRoles, selected;
-
       if ($scope.item && $scope.item.definition && $scope.item.definition.caseRoles) {
         $scope.allRoles = _.each(_.cloneDeep($scope.item.definition.caseRoles), formatRole);
       }
@@ -75,6 +75,7 @@
       if (item['api.Relationship.get']) {
         _.each(item['api.Relationship.get'].values, function (relationship) {
           relDesc[relationship.contact_id_b + '_' + relationship.relationship_type_id] = relationship['description'] ? relationship['description'] : '';
+          relDesc[relationship.contact_id_b + '_' + relationship.relationship_type_id + '_date'] = relationship.start_date;
         });
       }
       _.each(item.contacts, function (contact) {
@@ -99,6 +100,7 @@
       _.each(caseRoles, function (role, index) {
         if (role && role.role !== 'Client' && (role.contact_id + '_' + role.relationship_type_id in relDesc)) {
           caseRoles[index]['desc'] = relDesc[role.contact_id + '_' + role.relationship_type_id];
+          caseRoles[index]['start_date'] = relDesc[role.contact_id + '_' + role.relationship_type_id + '_date'];
         }
       });
       $scope.rolesCount = caseRoles.length;

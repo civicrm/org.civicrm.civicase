@@ -63,11 +63,14 @@
         </select>
       </div>    
     </div>
+    <div>
+    </div>
     <table class="civicase__people-tab__table table">
       <thead class="civicase__people-tab__table-body">
         <tr>
           <th class="civicase__people-tab__table-column">{{ ts('Role') }}</th>
           <th class="civicase__people-tab__table-column">{{ ts('Name') }}</th>
+          <th class="civicase__people-tab__table-column">{{ ts('Start date') }}</th>
           <th class="civicase__people-tab__table-column">{{ ts('Phone') }}</th>
           <th class="civicase__people-tab__table-column">{{ ts('Email') }}</th>
           <th class="civicase__people-tab__table-column civicase__people-tab__table-column--last"></th>
@@ -90,6 +93,7 @@
             <a ng-if="role.contact_id" ng-href="{{ 'civicrm/contact/view' | civicaseCrmUrl:{ cid: role.contact_id } }}">{{ role.display_name }}</a>
             <span ng-if="!role.contact_id">{{ ts('Unassigned')  }}</span>
           </td>
+          <td class="civicase__people-tab__table-column">{{ role.start_date ? formatDate(role.start_date) : '' }}</td>
           <td class="civicase__people-tab__table-column">{{ role.phone }}</td>
           <td class="civicase__people-tab__table-column">{{ role.email }}</td>
           <td class="civicase__people-tab__table-column civicase__people-tab__table-column--last">
