@@ -169,7 +169,7 @@
       groups.push(upcoming = {key: 'upcoming', title: ts('Upcoming Activities'), activities: []});
       groups.push(past = {key: 'past', title: ts('Past Activities'), activities: []});
       _.each(activities, function (act) {
-        var activityDate = act.activity_date_time.slice(0, 10);
+        // var activityDate = act.activity_date_time.slice(0, 10);
         if (act.activity_date_time > now) {
           group = upcoming;
         } else if (overdue && act.is_overdue) {
@@ -177,11 +177,7 @@
         } else {
           group = past;
         }
-        subgroup = _.findWhere(group.activities, {date: activityDate});
-        if (!subgroup) {
-          group.activities.push(subgroup = {date: activityDate, activities: []});
-        }
-        subgroup.activities.push(act);
+        group.activities.push(act);
       });
       return groups;
     }
@@ -273,11 +269,7 @@
   angular.module('civicase').directive('civicaseActivityFeed', function () {
     return {
       restrict: 'A',
-      template:
-        '<div class="panel panel-default act-feed-panel">' +
-          '<div class="panel-header" civicase-activity-filters="filters"></div>' +
-          '<div class="panel-body clearfix" ng-include="\'~/civicase/ActivityList.html\'"></div>' +
-        '</div>',
+      templateUrl: '~/civicase/ActivityList.html',
       controller: activityFeedController,
       scope: {
         params: '=civicaseActivityFeed',

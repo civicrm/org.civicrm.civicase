@@ -11,13 +11,14 @@
 
     + .civicase__activity-card-inner {
       padding-left: 36px;
-    }   
+    }
   }
 
-  .civicase__activity-title {
+  .civicase__activity-type {
     flex: 1 0 0;
     font-size: 16px;
     line-height: 22px;
+    margin-bottom: 10px;
   }
 
   .civicase__activity-date {
@@ -97,7 +98,7 @@
       padding-right: 230px;
     }
 
-    .civicase__activity-title {
+    .civicase__activity-type {
       flex: 1 0 0;
       font-size: 20px;
       line-height: 27px;
@@ -106,15 +107,15 @@
     .civicase__activity-attachment__container,
     .civicase__activity-star__container {
       margin-left: 3px;
-      top: 4px;      
+      top: 4px;
     }
 
     .civicase__activity-card-left {
       left: 10px;
       position: absolute;
       top: 0;
-    }   
-  }  
+    }
+  }
 }
 
 /* Empty state styles */

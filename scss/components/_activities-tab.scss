@@ -1,0 +1,27 @@
+.civicase__activity-feed {
+  .panel-body {
+    background: transparent;
+  }
+
+  .civicase__panel-transparent-header {
+    width: 748px;
+
+    > .panel-body {
+      background: transparent;
+      border-top: 0;
+      box-shadow: none;
+      padding: 0;
+    }
+  }
+
+  .civicase__activity-card {
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 668px;
+  }
+
+  .civicase__activity-card--ribbon {
+    width: 100%;
+  }
+}

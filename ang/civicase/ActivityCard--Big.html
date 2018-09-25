@@ -16,7 +16,7 @@
   <div ng-if="activity" class="civicase__activity-card-inner">
     <!-- Top section -->
     <div class="civicase__activity-card-row">
-      <span class="civicase__activity-title">{{ activity.type }}</span>
+      <span class="civicase__activity-type">{{ activity.type }}</span>
       <!-- Attachments to show for milestones-->
       <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id && activity.category.indexOf('milestone') > -1">
         <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
@@ -87,9 +87,9 @@
         <i ng-if="activity.is_star === '1'" class="civicase__activity-star active material-icons">star</i>
       </a>
     </div>
-    <!-- Description -->
+    <!-- Subject -->
     <div class="civicase__activity-subject">{{ activity.subject }}</div>
-    <!-- End - description -->
+    <!-- End - Subject -->
     <!-- Tags -->
     <div class="civicase__activity__tags-container" ng-if="activity.tag_id">
       <span

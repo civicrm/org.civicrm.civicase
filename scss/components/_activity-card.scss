@@ -86,6 +86,11 @@
     border-left: 14px solid $brand-danger;
     border-right: 14px solid $brand-danger;
   }
+
+  &.text-success {
+    border-left: 14px solid $brand-success;
+    border-right: 14px solid $brand-success;
+  }
 }
 
 .civicase__activity-date {
@@ -101,9 +106,9 @@
   }
 }
 
-.civicase__activity-title {
+.civicase__activity-type {
+  color: $gray-darker;
   font-weight: $font-weight-heading;
-  margin-bottom: 10px;
 }
 
 

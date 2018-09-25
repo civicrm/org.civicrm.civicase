@@ -12,5 +12,5 @@
       class="civicase__activity-icon-arrow fa fa-arrow-{{ direction }}"></i>
   </span>
   <!-- Activity Ribbon -->
-  <span ng-if="activity.category.indexOf('milestone') > -1" ng-class="{'text-danger': activity.is_overdue}" class="civicase__activity-icon-ribbon"></span>
+  <span ng-if="activity.category.indexOf('milestone') > -1" ng-class="{'text-danger': activity.is_overdue && !activity.is_completed, 'text-success': activity.is_completed}" class="civicase__activity-icon-ribbon"></span>
 </span>

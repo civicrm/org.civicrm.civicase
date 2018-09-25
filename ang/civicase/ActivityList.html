@@ -1,12 +1,42 @@
-<div crm-ui-debug="activities"></div>
-<div class="act-feed-view-activity" civicase-activity-view="viewingActivity" refresh-callback="refreshAll" ng-class="{'cc-zero-w': !viewingActivity.id, 'cc-zero-h': !viewingActivity.id}"></div>
-<ul class="list-group act-feed-list-group activity-timeline" ng-class="{'viewing-activity': viewingActivity.id, 'followup-nested': displayOptions.followup_nested}">
+<div class="panel panel-default civicase__activity-feed">
+  <div class="panel-header" civicase-activity-filters="filters"></div>
+  <div class="panel-body clearfix">
+    <div crm-ui-debug="activities"></div>
+    <!-- activity details -->
+    <div class="act-feed-view-activity" civicase-activity-view="viewingActivity" refresh-callback="refreshAll" ng-class="{'cc-zero-w': !viewingActivity.id, 'cc-zero-h': !viewingActivity.id}"></div>
+    <!-- end activity details -->
+    <div class="list-group-item act-list-controls clearfix" ng-include="'~/civicase/ActivityControls.html'"></div>
+
+    <div
+      class="panel panel-default civicase__panel-transparent-header"
+      ng-if="activityGroup.activities.length" ng-repeat="activityGroup in activityGroups">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ activityGroup.title }}</h3>
+      </div>
+      <div class="panel-body">
+        <div ng-repeat="activity in activityGroup.activities">
+          <div
+            case-activity-card="activity"
+            mode="long"
+            refresh-callback="refresh">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- <ul class="list-group act-feed-list-group activity-timeline" ng-class="{'viewing-activity': viewingActivity.id, 'followup-nested': displayOptions.followup_nested}">
   <li class="list-group-item act-list-controls clearfix" ng-include="'~/civicase/ActivityControls.html'"></li>
   <li class="list-group-item activity-group-{{ activityGroup.key }}" ng-if="activityGroup.activities.length" ng-repeat="activityGroup in activityGroups">
     <h3>{{ activityGroup.title }}</h3>
     <ul class="list-group">
-      <li class="list-group-item" ng-repeat="dateGroup in activityGroup.activities">
-        <h4 class="act-date">
+      <li class="list-group-item" ng-repeat="dateGroup in activityGroup.activities"> -->
+        <!-- activity items -->
+        <!-- <h4 class="act-date">
           {{ CRM.utils.formatDate(dateGroup.date) }}
         </h4>
         <ul class="list-group list-group-inner">
@@ -18,11 +48,14 @@
             ng-class="{'is-viewing': activity.id === viewingActivity.id}"
           >
           </li>
-        </ul>
-      </li>
+        </ul> -->
+        <!-- end activity items -->
+      <!-- </li>
     </ul>
-  </li>
-  <li ng-if="isLoading" class="list-group-item activity-placeholder-group">
+  </li> -->
+
+  <!-- placeholder -->
+  <!-- <li ng-if="isLoading" class="list-group-item activity-placeholder-group">
     <h3><div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div></h3>
     <ul class="list-group">
       <li class="list-group-item">
@@ -34,6 +67,7 @@
         </ul>
       </li>
     </ul>
-  </li>
-  <li class="list-group-item act-list-pager text-center" ng-include="'~/civicase/Pager.html'"></li>
-</ul>
+  </li> -->
+  <!-- end placeholder -->
+  <!-- <li class="list-group-item act-list-pager text-center" ng-include="'~/civicase/Pager.html'"></li>
+</ul> -->
