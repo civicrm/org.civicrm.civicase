@@ -4,7 +4,7 @@
   module.directive('civicaseViewPeople', function () {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/CaseDetails--tabs--people.html',
+      templateUrl: '~/civicase/CaseDetailsPeople.html',
       controller: civicaseViewPeopleController,
       scope: {
         item: '=civicaseViewPeople',
