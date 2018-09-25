@@ -48,8 +48,21 @@
     $scope.ceil = Math.ceil;
     $scope.allRoles = [];
     $scope.formatDate = DateHelper.formatDate;
+    $scope.getCaseRoles = getCaseRoles;
+    $scope.getRelations = getRelations;
 
-    var getSelectedContacts = $scope.getSelectedContacts = function (tab, onlyChecked) {
+    (function init () {
+      $scope.$bindToRoute({expr: 'tab', param: 'peopleTab', format: 'raw', default: 'roles'});
+      $scope.$watch('item', getCaseRoles, true);
+      $scope.$watch('rolesFilter', getCaseRoles);
+      $scope.$watch('tab', function (tab) {
+        if (tab === 'relations' && !$scope.relations.length) {
+          getRelations();
+        }
+      });
+    }());
+
+    $scope.getSelectedContacts = function (tab, onlyChecked) {
       var idField = (tab === 'roles' ? 'contact_id' : 'id');
       if (onlyChecked || $scope[tab + 'SelectionMode'] === 'checked') {
         return _.collect(_.filter($scope[tab], {checked: true}), idField);
@@ -59,72 +72,36 @@
       return [];
     };
 
-    var getCaseRoles = $scope.getCaseRoles = function () {
-      var caseRoles, allRoles, selected;
-      if ($scope.item && $scope.item.definition && $scope.item.definition.caseRoles) {
-        $scope.allRoles = _.each(_.cloneDeep($scope.item.definition.caseRoles), formatRole);
-      }
-      caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep($scope.allRoles);
-      allRoles = _.cloneDeep($scope.allRoles);
-      selected = getSelectedContacts('roles', true);
-      if ($scope.rolesFilter) {
-        caseRoles = $scope.rolesFilter === 'client' ? [] : [_.findWhere(caseRoles, {name: $scope.rolesFilter})];
-      }
-      var relDesc = [];
-      // get relationship descriptions
-      if (item['api.Relationship.get']) {
-        _.each(item['api.Relationship.get'].values, function (relationship) {
-          relDesc[relationship.contact_id_b + '_' + relationship.relationship_type_id] = relationship['description'] ? relationship['description'] : '';
-          relDesc[relationship.contact_id_b + '_' + relationship.relationship_type_id + '_date'] = relationship.start_date;
-        });
-      }
-      _.each(item.contacts, function (contact) {
-        var role = contact.relationship_type_id ? _.findWhere(caseRoles, {relationship_type_id: contact.relationship_type_id}) : null;
-        if ((!role || role.contact_id) && contact.relationship_type_id) {
-          role = _.cloneDeep(_.findWhere(allRoles, {relationship_type_id: contact.relationship_type_id}));
-          if (!$scope.rolesFilter || role.name === $scope.rolesFilter) {
-            caseRoles.push(role);
-          }
-        }
-        // Apply filters
-        if ($scope.rolesAlphaFilter && contact.display_name.toUpperCase().indexOf($scope.rolesAlphaFilter) < 0) {
-          if (role) _.pull(caseRoles, role);
-        } else if (role) {
-          if (!$scope.rolesFilter || role.name === $scope.rolesFilter) {
-            $.extend(role, {checked: selected.indexOf(contact.contact_id) >= 0}, contact);
-          }
-        } else if (!$scope.rolesFilter || $scope.rolesFilter === 'client') {
-          caseRoles.push($.extend({role: ts('Client'), checked: selected.indexOf(contact.contact_id) >= 0}, contact));
-        }
-      });
-      _.each(caseRoles, function (role, index) {
-        if (role && role.role !== 'Client' && (role.contact_id + '_' + role.relationship_type_id in relDesc)) {
-          caseRoles[index]['desc'] = relDesc[role.contact_id + '_' + role.relationship_type_id];
-          caseRoles[index]['start_date'] = relDesc[role.contact_id + '_' + role.relationship_type_id + '_date'];
-        }
-      });
-      $scope.rolesCount = caseRoles.length;
-      // Apply pager
-      if ($scope.rolesCount <= (25 * ($scope.rolesPage - 1))) {
-        // Reset if out of range
-        $scope.rolesPage = 1;
-      }
-      $scope.roles = _.slice(caseRoles, (25 * ($scope.rolesPage - 1)), 25 * $scope.rolesPage);
-    };
-
     $scope.setSelectionMode = function (mode, tab) {
       $scope[tab + 'SelectionMode'] = mode;
+    };
+
+    $scope.setTab = function (tab) {
+      $scope.tab = tab;
+    };
+
+    $scope.setLetterFilter = function (letter, tab) {
+      if ($scope[tab + 'AlphaFilter'] === letter) {
+        $scope[tab + 'AlphaFilter'] = '';
+      } else {
+        $scope[tab + 'AlphaFilter'] = letter;
+      }
+      if (tab === 'roles') {
+        $scope.getCaseRoles();
+      } else {
+        $scope.getRelations();
+      }
     };
 
     $scope.doContactTask = function (tab) {
       var task = $scope.contactTasks[$scope[tab + 'SelectedTask']];
       $scope[tab + 'SelectedTask'] = '';
-      CRM.loadForm(CRM.url(task.url, {cids: getSelectedContacts(tab).join(',')}))
+      CRM.loadForm(CRM.url(task.url, {cids: $scope.getSelectedContacts(tab).join(',')}))
         .on('crmFormSuccess', $scope.refresh)
         .on('crmFormSuccess', function () {
           $scope.refresh();
           if (tab === 'relations') {
-            getRelations();
+            $scope.getRelations();
           }
         });
     };
@@ -214,28 +191,74 @@
       }
     }
 
-    $scope.$watch('item', getCaseRoles, true);
-    $scope.$watch('rolesFilter', getCaseRoles);
-    $scope.$bindToRoute({expr: 'tab', param: 'peopleTab', format: 'raw', default: 'roles'});
+    function formatRole (role) {
+      var relType = relTypesByName[role.name];
+      role.role = relType.label_b_a;
+      role.contact_type = relType.contact_type_b;
+      role.contact_sub_type = relType.contact_sub_type_b;
+      role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');
+      role.relationship_type_id = relType.id;
+    }
 
-    $scope.setTab = function (tab) {
-      $scope.tab = tab;
-    };
+    function getCaseRoles () {
+      var caseRoles, allRoles, selected;
+      var relDesc = [];
 
-    $scope.setLetterFilter = function (letter, tab) {
-      if ($scope[tab + 'AlphaFilter'] === letter) {
-        $scope[tab + 'AlphaFilter'] = '';
-      } else {
-        $scope[tab + 'AlphaFilter'] = letter;
+      if ($scope.item && $scope.item.definition && $scope.item.definition.caseRoles) {
+        $scope.allRoles = _.each(_.cloneDeep($scope.item.definition.caseRoles), formatRole);
       }
-      if (tab === 'roles') {
-        getCaseRoles();
-      } else {
-        getRelations();
+      caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep($scope.allRoles);
+      allRoles = _.cloneDeep($scope.allRoles);
+      selected = $scope.getSelectedContacts('roles', true);
+      if ($scope.rolesFilter) {
+        caseRoles = $scope.rolesFilter === 'client' ? [] : [_.findWhere(caseRoles, {name: $scope.rolesFilter})];
       }
-    };
 
-    var getRelations = $scope.getRelations = function () {
+      // get relationship descriptions
+      if (item['api.Relationship.get']) {
+        _.each(item['api.Relationship.get'].values, function (relationship) {
+          relDesc[relationship.contact_id_b + '_' + relationship.relationship_type_id] = relationship['description'] ? relationship['description'] : '';
+          relDesc[relationship.contact_id_b + '_' + relationship.relationship_type_id + '_date'] = relationship.start_date;
+        });
+      }
+      // get clients from the contacts
+      _.each(item.contacts, function (contact) {
+        var role = contact.relationship_type_id ? _.findWhere(caseRoles, {relationship_type_id: contact.relationship_type_id}) : null;
+        if ((!role || role.contact_id) && contact.relationship_type_id) {
+          role = _.cloneDeep(_.findWhere(allRoles, {relationship_type_id: contact.relationship_type_id}));
+          if (!$scope.rolesFilter || role.name === $scope.rolesFilter) {
+            caseRoles.push(role);
+          }
+        }
+        // Apply filters
+        if ($scope.rolesAlphaFilter && contact.display_name.toUpperCase().indexOf($scope.rolesAlphaFilter) < 0) {
+          if (role) _.pull(caseRoles, role);
+        } else if (role) {
+          if (!$scope.rolesFilter || role.name === $scope.rolesFilter) {
+            $.extend(role, {checked: selected.indexOf(contact.contact_id) >= 0}, contact);
+          }
+        } else if (!$scope.rolesFilter || $scope.rolesFilter === 'client') {
+          caseRoles.push($.extend({role: ts('Client'), checked: selected.indexOf(contact.contact_id) >= 0}, contact));
+        }
+      });
+
+      // Set description and start date for no clients case roles
+      _.each(caseRoles, function (role, index) {
+        if (role && role.role !== 'Client' && (role.contact_id + '_' + role.relationship_type_id in relDesc)) {
+          caseRoles[index]['desc'] = relDesc[role.contact_id + '_' + role.relationship_type_id];
+          caseRoles[index]['start_date'] = relDesc[role.contact_id + '_' + role.relationship_type_id + '_date'];
+        }
+      });
+      $scope.rolesCount = caseRoles.length;
+      // Apply pager
+      if ($scope.rolesCount <= (25 * ($scope.rolesPage - 1))) {
+        // Reset if out of range
+        $scope.rolesPage = 1;
+      }
+      $scope.roles = _.slice(caseRoles, (25 * ($scope.rolesPage - 1)), 25 * $scope.rolesPage);
+    }
+
+    function getRelations () {
       var params = {
         options: {limit: 25, offset: $scope.relationsPage - 1},
         case_id: item.id,
@@ -253,20 +276,6 @@
         });
         $scope.relationsCount = contacts.count;
       });
-    };
-    $scope.$watch('tab', function (tab) {
-      if (tab === 'relations' && !$scope.relations.length) {
-        getRelations();
-      }
-    });
-
-    function formatRole (role) {
-      var relType = relTypesByName[role.name];
-      role.role = relType.label_b_a;
-      role.contact_type = relType.contact_type_b;
-      role.contact_sub_type = relType.contact_sub_type_b;
-      role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');
-      role.relationship_type_id = relType.id;
     }
   }
 })(angular, CRM.$, CRM._);
