@@ -427,7 +427,7 @@
             expect(popover.is($uibPosition.positionElements.calls.mostRecent().args[1])).toEqual(true);
           });
 
-          fit('has the same offset as the active day', function () {
+          it('has the same offset as the active day', function () {
             expect(popover.css(['top', 'left']))
               .toEqual(expectedOffset);
           });

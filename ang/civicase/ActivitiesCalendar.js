@@ -132,6 +132,11 @@
         $(document).bind('mouseup', closeActivitiesDropdown);
       }
 
+      /**
+       * Positions the popover on top of the given element
+       *
+       * @param {Object} element a jQuery reference to the element to position the popover against.
+       */
       function positionPopoverOnTopOfElement (element) {
         var bodyOffset = $uibPosition.positionElements(element, popover, 'bottom', true);
 
