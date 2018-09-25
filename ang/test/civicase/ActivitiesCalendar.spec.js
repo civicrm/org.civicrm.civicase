@@ -5,7 +5,7 @@
     var $controller, $scope, $rootScope, activitiesMockData,
       dates, formatActivity, mockCaseId;
 
-    beforeEach(module('civicase', 'civicase.data'));
+    beforeEach(module('civicase', 'civicase.data', 'ui.bootstrap'));
 
     beforeEach(inject(function (_$controller_, _$rootScope_,
       _activitiesMockData_, datesMockData, _formatActivity_) {
@@ -312,14 +312,14 @@
 
       $uibPosition.positionElements.and.returnValue({ top: 0, left: 0 });
       $provide.value('$uibPosition', $uibPosition);
-      $compileProvider.directive('uibDatepicker', function () {
-        return {
+      $provide.decorator('uibDatepickerDirective', function ($delegate) {
+        return [{
           restrict: 'A',
           scope: {},
           controller: function ($scope) {
             $scope.datepicker = datepickerMock;
           }
-        };
+        }];
       });
     }));
 
@@ -453,106 +453,6 @@
       });
     });
 
-    describe('DOM manipulations', function () {
-      // Note: setTimeout is used because it's the only way to simulate the DOM Mutation
-
-      describe('calendar title', function () {
-        var expectedTitle;
-
-        beforeEach(function (done) {
-          expectedTitle = '<strong>Month Year</strong>';
-          expectedTitle += '<span class="civicase__activities-calendar__title-word">Month </span>';
-          expectedTitle += '<span class="civicase__activities-calendar__title-word">Year </span>';
-
-          initDirective();
-          setTimeout(done);
-        });
-
-        it('splits the words in the calendar title and wraps them in spans', function () {
-          expect(activitiesCalendar.find('.uib-title').html()).toEqual(expectedTitle);
-        });
-      });
-
-      describe('calendar icons', function () {
-        var leftIcon, rightIcon;
-
-        beforeEach(function (done) {
-          initDirective();
-          setTimeout(function () {
-            leftIcon = activitiesCalendar.find('thead tr:eq(0) th:eq(0) i');
-            rightIcon = activitiesCalendar.find('thead tr:eq(0) th:eq(2) i');
-
-            done();
-          });
-        });
-
-        it('changes the left chevron glyphicon into a material icon', function () {
-          expect(leftIcon.attr('class')).toBe('material-icons');
-          expect(leftIcon.text()).toBe('chevron_left');
-        });
-
-        it('changes the right chevron glyphicon into a material icon', function () {
-          expect(rightIcon.attr('class')).toBe('material-icons');
-          expect(rightIcon.text()).toBe('chevron_right');
-        });
-      });
-
-      describe('current week day', function () {
-        beforeEach(function () {
-          jasmine.clock().install();
-        });
-
-        afterEach(function () {
-          jasmine.clock().uninstall();
-        });
-
-        describe('when the week day is Sunday', function () {
-          beforeEach(function (done) {
-            setupCUrrentWeekDayTest(moment().isoWeekday(0), done);
-          });
-
-          it('marks Sunday as the current week day on the calendar', function () {
-            expect(activitiesCalendar.find('.current-week-day').text()).toBe('Sun');
-          });
-        });
-
-        describe('when the week day is Monday', function () {
-          beforeEach(function (done) {
-            setupCUrrentWeekDayTest(moment().isoWeekday(1), done);
-          });
-
-          it('marks Sunday as the current week day on the calendar', function () {
-            expect(activitiesCalendar.find('.current-week-day').text()).toBe('Mon');
-          });
-        });
-
-        describe('when the week day is Friday', function () {
-          beforeEach(function (done) {
-            setupCUrrentWeekDayTest(moment().isoWeekday(5), done);
-          });
-
-          it('marks Sunday as the current week day on the calendar', function () {
-            expect(activitiesCalendar.find('.current-week-day').text()).toBe('Fri');
-          });
-        });
-
-        /**
-         * Setups the test for the current week day by mocking the clock's date,
-         * initializing the directive, waiting for DOM mutations, and ticking the
-         * clocking forward.
-         *
-         * @param {Object} momentDate a reference to a moment date.
-         * @param {Function} done the function to execute after DOM Mutations have been applied.
-         */
-        function setupCUrrentWeekDayTest (momentDate, done) {
-          jasmine.clock().mockDate(momentDate.toDate());
-          initDirective();
-          setTimeout(done);
-          jasmine.clock().tick();
-        }
-      });
-    });
-
     /**
      * Appends a mock calendar table element inside the uib-datepicker element.
      */
@@ -601,7 +501,7 @@
         </tbody>
       </table>`;
 
-      activitiesCalendar.find('[uib-datepicker]').append(calendarTable);
+      activitiesCalendar.find('[uib-datepicker]').html(calendarTable);
     }
 
     /**

@@ -6,7 +6,6 @@
   angular.module('bw.paging', []);
   angular.module('crmRouteBinder', []);
   angular.module('crmResource', []);
-  angular.module('ui.bootstrap', []);
   angular.module('uibTabsetClass', []);
   angular.module('dialogService', []);
   angular.module('civicase.data', []);
