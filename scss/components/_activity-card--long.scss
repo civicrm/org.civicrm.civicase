@@ -77,4 +77,28 @@
       margin-left: 52px;
     }
   }
+
+  &.civicase__activity-card--draft {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .civicase__activity-icon-arrow {
+    left: 22px;
+    top: 8px;
+  }
+
+  .civicase__activity-card-row--communication {
+    > div {
+      > * {
+        display: inline-block !important;
+        vertical-align: middle;
+      }
+    }
+
+    .civicase__contact-card {
+      position: relative;
+      top: 2px;
+    }
+  }
 }

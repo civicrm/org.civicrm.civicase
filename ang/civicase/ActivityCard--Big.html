@@ -16,7 +16,7 @@
   <div ng-if="activity" class="civicase__activity-card-inner">
     <!-- Top section -->
     <div class="civicase__activity-card-row">
-      <span class="civicase__activity-type">{{ activity.type }}</span>
+        <span class="civicase__activity-type" ng-class="{'civicase__activity-type--completed': (activity.category.indexOf('task') > -1 && activity.is_completed)}">{{ activity.type }}</span>
       <!-- Attachments to show for milestones-->
       <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id && activity.category.indexOf('milestone') > -1">
         <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>

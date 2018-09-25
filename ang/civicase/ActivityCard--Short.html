@@ -61,7 +61,7 @@
         <!-- End - Task - Checkbox -->
 
         <!-- Type -->
-        <span class="civicase__activity-type">{{ activity.type }}</span>
+        <span class="civicase__activity-type" ng-class="{'civicase__activity-type--completed': (activity.category.indexOf('task') > -1 && activity.is_completed)}">{{ activity.type }}</span>
         <!-- End - Type -->
       </div>
       <div class="civicase__activity-card-row" ng-if="activity.target_contact_name">

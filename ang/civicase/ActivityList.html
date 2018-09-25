@@ -11,7 +11,7 @@
       class="panel panel-default civicase__panel-transparent-header"
       ng-if="activityGroup.activities.length" ng-repeat="activityGroup in activityGroups">
       <div class="panel-heading">
-        <h3 class="panel-title">{{ activityGroup.title }}</h3>
+        <h3 ng-class="{'civicase__overdue-activity-icon civicase__overdue-activity-icon--before': activityGroup.key === 'overdue'}"class="panel-title">{{ activityGroup.title }}
       </div>
       <div class="panel-body">
         <div ng-repeat="activity in activityGroup.activities">

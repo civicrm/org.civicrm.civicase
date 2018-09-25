@@ -29,7 +29,7 @@
     width: 13px;
   }
 
-  &.civicase__overdue-activity-icon--count {
+  &.civicase__overdue-activity-icon--before {
     padding-left: 20px;
     padding-right: 0;
 
@@ -37,6 +37,6 @@
     &::after {
       left: 2px;
       right: auto;
-    }    
+    }
   }
 }

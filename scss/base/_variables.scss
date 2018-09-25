@@ -39,6 +39,28 @@ $crm-font-weight-h4:          500 !default;
 $crm-font-weight-h5:          700 !default;
 $crm-font-weight-h6:          500 !default;
 
+
+$crm-lighten-percentage:    30% !default;
+
+//== Form states and alerts
+//
+//## Define colors for form feedback states and, by default, alerts.
+$state-success-border:           $brand-success !default;
+$state-info-border:              $brand-info !default;
+$state-warning-border:           $brand-warning !default;
+$state-danger-border:            $brand-danger !default;
+
+
+$alert-success-bg:               lighten($brand-success, $crm-lighten-percentage) !default;
+$alert-info-bg:                  lighten($brand-info, $crm-lighten-percentage) !default;
+$alert-warning-bg:               lighten($brand-warning, $crm-lighten-percentage) !default;
+$alert-danger-bg:                lighten($brand-danger, $crm-lighten-percentage) !default;
+
+$alert-success-text:             $gray-darker !default;
+$alert-info-text:                $gray-darker !default;
+$alert-warning-text:             $gray-darker !default;
+$alert-danger-text:              $gray-darker !default;
+
 //== Dropdowns
 //
 //## Dropdown menu container and contents.

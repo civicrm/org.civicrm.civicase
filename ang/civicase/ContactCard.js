@@ -39,6 +39,8 @@
               scope.contacts.push({display_name: name, contact_id: contactID});
             }
           });
+        } else if (typeof scope.data === 'string') {
+          scope.contacts = [{contact_id: scope.data, display_name: ContactsDataService.getCachedContact(scope.data).display_name}];
         } else {
           scope.contacts = _.cloneDeep(scope.data);
         }
