@@ -72,7 +72,11 @@
       ></div>
     </div>
     <div class="civicase__summary-tab-tile col-lg-3 panel civicase__panel-transparent-header">
-      <civicase-activities-calendar activities="item.allActivities" case-id="item.id"></civicase-activities-calendar>  
+      <civicase-activities-calendar
+        activities="item.allActivities"
+        case-id="item.id"
+        refresh-callback="refresh">
+      </civicase-activities-calendar>
     </div>
   </div>
   <div ng-include="'~/civicase/CaseDetails--tabs--summary--CustomData.html'"></div>
