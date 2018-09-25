@@ -2,13 +2,9 @@
   padding: 24px;
 
   .nav-tabs {
-    box-shadow: 0 6px 20px 0 rgba(49,40,40,0.03);
-  }
-
-  .nav>li>a {
-    line-height: 18px;
-    padding-bottom: 15px;
-    padding-top: 12px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    box-shadow: $box-shadow-checkbox;
   }
 
   .select2-choice {
@@ -20,15 +16,6 @@
       top: 0;
       width: 24px;
     }    
-  }
-
-  .table>tbody>tr>td {
-    padding: 16px 20px;
-  }
-
-  .table>thead>tr>th {
-    line-height: 18px;
-    padding: 16px 24px;
   }
 
   .civicase__checkbox {
@@ -44,19 +31,43 @@
       z-index: 11;
     }
   }
+
+  .civicase__people-tab-link {
+    line-height: 18px;
+    padding-bottom: 15px;
+    padding-top: 12px;
+  }
+
+  .civicase__people-tab__table-header {
+    .civicase__people-tab__table-column {
+      line-height: 18px;
+      padding: 16px 24px;     
+    } 
+  }
+
+  .civicase__people-tab__table-body {
+    .civicase__people-tab__table-column {
+      padding: 16px 20px;
+    }
+  }
 }
 
 .civicase__people-tab {
+  background: $crm-white;
   border-radius: 2px;
-  box-shadow: 0 3px 18px 0 rgba(49,40,40,0.25);
+  box-shadow: $box-shadow-pane;
   margin: 0 24px;  
 }
 
 .civicase__people-tab__sub-tab {
-  background: $crm-white;
+  .civicase__add-btn {
+    margin-right: -6px;
+    margin-top: -4px;
+  }
 }
 
 .civicase__people-tab__search {
+  background: $crm-white;
   padding: 20px 30px;
 
   h3 {
@@ -69,7 +80,7 @@
   display: flex;
   padding: 16px 0;
 
-  > input[type='radio'] {
+  > input {
     margin: 0 5px 0 9px;
   }
 
@@ -103,10 +114,14 @@
 }
 
 .civicase__people-tab__filter-alpha-pager {
-  a {
-    color: $gray-darker;
-    margin: 0 3px;
-    padding: 2px;
+  color: $gray-darker;
+  margin: 0 3px;
+  padding: 2px;
+
+  &.all,
+  &.active {
+    color: $brand-primary;
+    text-decoration: none;
   }
 
   &:first-child {
@@ -115,13 +130,25 @@
   }
 }
 
-.civicase__people-tab__table-last-col {
+.civicase__people-tab__table-column--first {
+  display: flex;
+
+  em {
+    font-weight: normal;
+  }
+
+  input {
+    margin: 0;
+  }
+}
+
+.civicase__people-tab__table-column--last {
   padding: 20px 0 !important;
 
   .dropdown-menu {
-    left: auto!important;
+    left: auto !important;
     right: 20px;
-    top: 100%!important;
+    top: 100% !important;    
   }
 
   .btn {
@@ -132,7 +159,7 @@
     position: relative;
 
     .dropdown-toggle {
-      background: none !important; 
+      background: none !important;
       box-shadow: none;    
     }
   }
@@ -140,18 +167,6 @@
   .material-icons {
     font-size: 18px;
     padding: 0;    
-  }
-}
-
-.civicase__people-tab__table-first-col {
-  display: flex;
-
-  em {
-    font-weight: normal;
-  }
-
-  input {
-    margin: 0;
   }
 }
 

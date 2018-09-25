@@ -1,6 +1,28 @@
 (function (angular, $, _) {
-  // CaseList directive controller
-  function casePeopleController ($scope, crmApi) {
+  var module = angular.module('civicase');
+
+  module.directive('civicaseViewPeople', function () {
+    return {
+      restrict: 'A',
+      templateUrl: '~/civicase/CaseDetails--tabs--people.html',
+      controller: civicaseViewPeopleController,
+      scope: {
+        item: '=civicaseViewPeople',
+        refresh: '=refreshCallback'
+      }
+    };
+  });
+
+  module.controller('civicaseViewPeopleController', civicaseViewPeopleController);
+
+  /**
+   * ViewPeople Controller
+   *
+   * @param {Object} $scope
+   * @param {Object} crmApi
+   */
+
+  function civicaseViewPeopleController ($scope, crmApi) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var item = $scope.item;
@@ -24,15 +46,6 @@
     $scope.letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     $scope.contactTasks = CRM.civicase.contactTasks;
     $scope.ceil = Math.ceil;
-
-    function formatRole (role) {
-      var relType = relTypesByName[role.name];
-      role.role = relType.label_b_a;
-      role.contact_type = relType.contact_type_b;
-      role.contact_sub_type = relType.contact_sub_type_b;
-      role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');
-      role.relationship_type_id = relType.id;
-    }
     $scope.allRoles = [];
 
     var getSelectedContacts = $scope.getSelectedContacts = function (tab, onlyChecked) {
@@ -201,8 +214,8 @@
 
     $scope.$watch('item', getCaseRoles, true);
     $scope.$watch('rolesFilter', getCaseRoles);
-
     $scope.$bindToRoute({expr: 'tab', param: 'peopleTab', format: 'raw', default: 'roles'});
+
     $scope.setTab = function (tab) {
       $scope.tab = tab;
     };
@@ -244,17 +257,14 @@
         getRelations();
       }
     });
-  }
 
-  angular.module('civicase').directive('civicaseViewPeople', function () {
-    return {
-      restrict: 'A',
-      templateUrl: '~/civicase/CaseDetails--tabs--people.html',
-      controller: casePeopleController,
-      scope: {
-        item: '=civicaseViewPeople',
-        refresh: '=refreshCallback'
-      }
-    };
-  });
+    function formatRole (role) {
+      var relType = relTypesByName[role.name];
+      role.role = relType.label_b_a;
+      role.contact_type = relType.contact_type_b;
+      role.contact_sub_type = relType.contact_sub_type_b;
+      role.description = (role.manager ? (ts('Case Manager.') + ' ') : '') + (relType.description || '');
+      role.relationship_type_id = relType.id;
+    }
+  }
 })(angular, CRM.$, CRM._);

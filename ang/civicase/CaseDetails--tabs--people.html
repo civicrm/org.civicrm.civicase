@@ -1,13 +1,16 @@
 <div class="civicase__people-tab">
+  <!-- Nav tabs -->
   <ul class="nav nav-tabs">
-    <li role="presentation" ng-class="{active: tab == 'roles'}"><a href ng-click="setTab('roles')">{{ ts('Case Roles') }}</a></li>
-    <li role="presentation" ng-class="{active: tab == 'relations'}"><a href ng-click="setTab('relations')">{{ ts('Other Relationships') }}</a></li>
+    <li role="presentation" ng-class="{active: tab == 'roles'}"><a href class="civicase__people-tab-link" ng-click="setTab('roles')">{{ ts('Case Roles') }}</a></li>
+    <li role="presentation" ng-class="{active: tab == 'relations'}"><a href class="civicase__people-tab-link" ng-click="setTab('relations')">{{ ts('Other Relationships') }}</a></li>
   </ul>
+  <!-- End Nav Tabs -->
+  <!-- Case Role Tab -->
   <div class="civicase__people-tab__sub-tab" ng-show="tab == 'roles'">
     <div class="civicase__people-tab__search">
       <div class="btn-group btn-group-md pull-right">
-        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-plus"></i> {{ ts('Add Case Role') }}
+        <button class="btn btn-primary civicase__add-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ ts('Add Case Role') }}
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
           <li ng-if="allowMultipleCaseClients">
@@ -48,8 +51,9 @@
       text-prev="{{ ts('< Prev') }}"
       >
       </paging>
-      <div class="civicase__people-tab__filter-alpha-pager">
-        <a ng-repeat="a in letters" href ng-class="{active: a === rolesAlphaFilter}" ng-click="setLetterFilter(a, 'roles')">{{ a }}</a>
+      <div>
+        <a ng-repeat="a in letters" class="civicase__people-tab__filter-alpha-pager" ng-class="{active: a === rolesAlphaFilter}" ng-click="setLetterFilter(a, 'roles')">{{ a }}</a>
+        <a href class="all" ng-click="setLetterFilter(undefined, 'roles')">All</a>
       </div>      
       <div class="civicase__people-tab__filter-role">
         <select class="form-control" ng-model="rolesFilter" crm-ui-select>
@@ -60,16 +64,18 @@
       </div>    
     </div>
     <table class="civicase__people-tab__table table">
-      <thead><tr>
-        <th>{{ ts('Role') }}</th>
-        <th>{{ ts('Name') }}</th>
-        <th>{{ ts('Phone') }}</th>
-        <th>{{ ts('Email') }}</th>
-        <th class="civicase__people-tab__table-last-col"></th>
-      </tr></thead>
-      <tbody>
+      <thead class="civicase__people-tab__table-body">
+        <tr>
+          <th class="civicase__people-tab__table-column">{{ ts('Role') }}</th>
+          <th class="civicase__people-tab__table-column">{{ ts('Name') }}</th>
+          <th class="civicase__people-tab__table-column">{{ ts('Phone') }}</th>
+          <th class="civicase__people-tab__table-column">{{ ts('Email') }}</th>
+          <th class="civicase__people-tab__table-column civicase__people-tab__table-column--last"></th>
+        </tr>
+      </thead>
+      <tbody class="civicase__people-tab__table-body">
         <tr ng-repeat="role in roles" ng-class="{unassigned: !role.contact_id}">
-          <td class="civicase__people-tab__table-first-col">
+          <td class="civicase__people-tab__table-column civicase__people-tab__table-column--first">
             <span ng-if="role.contact_id" class="civicase__checkbox" ng-if="!$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed" role="checkbox" aria-checked="{{activity.is_completed}}" tabindex="0" aria-labelledby="Mark complete/incomplete">
               <input id="select-role-{{ $index }}" class="civicase__people-tab__table-checkbox" type="checkbox" ng-model="role.checked" ng-click="setSelectionMode('checked', 'roles')" />
               <i ng-if="role.checked" class="civicase__checkbox--checked material-icons">check_box</i>
@@ -80,13 +86,13 @@
               <div>{{ role.desc }}</div>
             </label>
           </td>
-          <td>
+          <td class="civicase__people-tab__table-column">
             <a ng-if="role.contact_id" ng-href="{{ 'civicrm/contact/view' | civicaseCrmUrl:{ cid: role.contact_id } }}">{{ role.display_name }}</a>
             <span ng-if="!role.contact_id">{{ ts('Unassigned')  }}</span>
           </td>
-          <td>{{ role.phone }}</td>
-          <td>{{ role.email }}</td>
-          <td class="civicase__people-tab__table-last-col">
+          <td class="civicase__people-tab__table-column">{{ role.phone }}</td>
+          <td class="civicase__people-tab__table-column">{{ role.email }}</td>
+          <td class="civicase__people-tab__table-column civicase__people-tab__table-column--last">
             <div class="civicase__people-tab__table-assign-icon" ng-if="!role.contact_id" ng-click="assignRole(role)">
               <i class="fa fa-user-plus"></i>
             </div>
@@ -115,6 +121,13 @@
             </div>
           </td>
         </tr>
+        <tr ng-if="!roles.length">
+          <td colspan="9" style="text-align: center">
+            <button class="btn btn-default" disabled>
+              {{ ts('None Found') }}
+            </button>
+          </td>
+        </tr>        
       </tbody>
     </table>
     <div class="civicase__people-tab-counter clearfix">
@@ -135,16 +148,16 @@
       </paging>
     </div>
   </div>
-
-
+  <!-- End Case Roles Tab -->
+  <!-- Case Relationship tab -->
   <div class="civicase__people-tab__sub-tab" ng-show="tab == 'relations'">
     <div class="civicase__people-tab__search">
       <div class="btn-group btn-group-md pull-right">
-        <a ng-if="item.client.length === 1" class="btn btn-primary crm-popup" crm-popup-form-success="getRelations()" ng-href="{{ 'civicrm/contact/view/rel' | civicaseCrmUrl:{ action: 'add', reset: 1, cid: item.client[0].contact_id } }}">
-          <i class="fa fa-plus"></i> {{ ts('Relationship') }}
+        <a ng-if="item.client.length === 1" class="btn btn-primary civicase__add-btn crm-popup" crm-popup-form-success="getRelations()" ng-href="{{ 'civicrm/contact/view/rel' | civicaseCrmUrl:{ action: 'add', reset: 1, cid: item.client[0].contact_id } }}">
+          {{ ts('Relationship') }}
         </a>
-        <button ng-if="item.client.length > 1" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-plus"></i> {{ ts('Relationship') }} <span class="caret"></span>
+        <button ng-if="item.client.length > 1" class="btn btn-primary civicase__add-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ ts('Relationship') }} <span class="caret"></span>
         </button>
         <ul ng-if="item.client.length > 1" class="dropdown-menu dropdown-menu-right" crm-popup-form-success="getRelations()">
           <li ng-repeat="client in item.client">
@@ -183,27 +196,27 @@
         text-next="{{ ts('Next >') }}"
         text-prev="{{ ts('< Prev') }}"
       ></paging>
-      <div class="civicase__people-tab__filter-alpha-pager">
-        <a ng-repeat="a in letters" href ng-class="{active: a === relationsAlphaFilter}" ng-click="setLetterFilter(a, 'relations')">{{ a }}</a>
+      <div>
+        <a ng-repeat="a in letters" class="civicase__people-tab__filter-alpha-pager" ng-class="{active: a === relationsAlphaFilter}" ng-click="setLetterFilter(a, 'relations')">{{ a }}</a>
+        <a href class="all" ng-click="setLetterFilter(undefined, 'relations')">All</a>
       </div>
     </div>  
     <table class="civicase__people-tab__table table">
-      <thead><tr>
-        <th>{{ ts('Name') }}</th>
-        <th>{{ ts('Relationship') }}</th>
-        <th>{{ ts('Client') }}</th>
-        <th>{{ ts('Phone') }}</th>
-        <th>{{ ts('Email') }}</th>
-        <th class="civicase__people-tab__table-last-col"></th>
-      </tr></thead>
-      <tbody>
+      <thead class="civicase__people-tab__table-body">
+        <tr>
+          <th class="civicase__people-tab__table-column">{{ ts('Name') }}</th>
+          <th class="civicase__people-tab__table-column">{{ ts('Relationship') }}</th>
+          <th class="civicase__people-tab__table-column">{{ ts('Client') }}</th>
+          <th class="civicase__people-tab__table-column">{{ ts('Phone') }}</th>
+          <th class="civicase__people-tab__table-column">{{ ts('Email') }}</th>
+          <th class="civicase__people-tab__table-column civicase__people-tab__table-column--last"></th>
+        </tr>
+      </thead>
+      <tbody class="civicase__people-tab__table-body">
         <tr ng-repeat="contact in relations">
-          <td class="civicase__people-tab__table-first-col">
+          <td class="civicase__people-tab__table-column civicase__people-tab__table-column--first">
             <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
             <label for="select-relation-{{ $index }}"></label>
-          </td>
-          <td>
-          <td class="civicase__people-tab__table-first-col">
             <span ng-if="role.contact_id" class="civicase__checkbox" ng-if="!$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed" role="checkbox" aria-checked="{{activity.is_completed}}" tabindex="0" aria-labelledby="Mark complete/incomplete">
               <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
               <i ng-if="contact.checked" class="civicase__checkbox--checked material-icons">check_box</i>
@@ -212,11 +225,11 @@
               <a ng-href="{{ 'civicrm/contact/view' | civicaseCrmUrl:{ cid: contact.contact_id } }}">{{ contact.display_name }}</a>
             </label>            
           </td>
-          <td>{{ contact.relation }}</td>
-          <td>{{ contact.client }}</td>
-          <td>{{ contact.phone }}</td>
-          <td>{{ contact.email }}</td>
-          <td class="civicase__people-tab__table-last-col">
+          <td class="civicase__people-tab__table-column">{{ contact.relation }}</td>
+          <td class="civicase__people-tab__table-column">{{ contact.client }}</td>
+          <td class="civicase__people-tab__table-column">{{ contact.phone }}</td>
+          <td class="civicase__people-tab__table-column">{{ contact.email }}</td>
+          <td class="civicase__people-tab__table-column civicase__people-tab__table-column--last">
             <div class="btn-group btn-group-sm">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-ellipsis-v"></i>
@@ -236,13 +249,13 @@
             </div>
           </td>
         </tr>
-      <tr ng-if="!relations.length">
-        <td colspan="9" style="text-align: center">
-          <button class="btn btn-default" disabled>
-            {{ ts('None Found') }}
-          </button>
-        </td>
-      </tr>
+        <tr ng-if="!relations.length">
+          <td colspan="9" style="text-align: center">
+            <button class="btn btn-default" disabled>
+              {{ ts('None Found') }}
+            </button>
+          </td>
+        </tr>
       </tbody>
     </table>
     <div class="civicase__people-tab-counter clearfix">
@@ -263,4 +276,5 @@
       </paging>
     </div>
   </div>
+  <!-- End Case Relationship tab -->
 </div>
