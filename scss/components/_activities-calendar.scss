@@ -131,6 +131,11 @@ $activities-calendar-active-day-background: #cde1ed;
     min-height: 205px;
   }
 
+  [uib-monthpicker] thead,
+  [uib-yearpicker] thead {
+    padding-bottom: 7px;
+  }
+
   [uib-monthpicker] tbody,
   [uib-yearpicker] tbody {
     margin-top: -3px;
