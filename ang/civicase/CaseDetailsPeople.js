@@ -313,7 +313,6 @@
         $scope.rolesPage = 1;
       }
       $scope.roles = _.slice(caseRoles, (25 * ($scope.rolesPage - 1)), 25 * $scope.rolesPage);
-      // debugger;
     }
 
     /**
