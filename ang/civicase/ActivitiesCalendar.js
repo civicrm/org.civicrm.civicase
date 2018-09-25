@@ -85,14 +85,14 @@
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
   function civicaseActivitiesCalendarController ($scope, formatActivity) {
+    $scope.selectedActivites = [];
+    $scope.selectedDate = null;
     $scope.calendarOptions = {
       customClass: getDayCustomClass,
       formatDay: 'd',
       showWeeks: false,
       startingDay: 1
     };
-    $scope.selectedActivites = [];
-    $scope.selectedDate = null;
 
     $scope.onDateSelected = onDateSelected;
 
@@ -140,7 +140,7 @@
       var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
 
       if (!isInCurrentMonth && params.mode === 'day') {
-        return 'civicase__activities-calendar__hidden-day';
+        return 'invisible';
       }
 
       if (activities.length === 0 || params.mode !== 'day') {
@@ -150,11 +150,11 @@
       allActivitiesHaveBeenCompleted = checkIfAllActivitiesHaveBeenCompleted(activities);
 
       if (allActivitiesHaveBeenCompleted) {
-        return 'civicase__activities-calendar__day-status-completed';
+        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed';
       } else if (isDateInThePast) {
-        return 'civicase__activities-calendar__day-status-overdue';
+        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--overdue';
       } else {
-        return 'civicase__activities-calendar__day-status-scheduled';
+        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled';
       }
     }
 

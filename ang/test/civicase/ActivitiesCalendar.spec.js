@@ -51,7 +51,7 @@
         });
 
         it('displays the months as normal without any custom class', function () {
-          expect(typeof customClass).toBe('undefined');
+          expect(customClass).toBeUndefined();
         });
       });
 
@@ -63,7 +63,7 @@
         });
 
         it('displays the years as normal without any custom class', function () {
-          expect(typeof customClass).toBe('undefined');
+          expect(customClass).toBeUndefined();
         });
       });
 
@@ -81,7 +81,7 @@
         });
 
         it('marks the day as having completed all of its activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status-completed');
+          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed');
         });
       });
 
@@ -99,7 +99,7 @@
         });
 
         it('marks the day as having completed all of its activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status-completed');
+          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed');
         });
       });
 
@@ -117,7 +117,7 @@
         });
 
         it('marks the day as having completed all of its activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status-completed');
+          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed');
         });
       });
 
@@ -135,7 +135,7 @@
         });
 
         it('displays the day as normal without any status', function () {
-          expect(typeof customClass).toBe('undefined');
+          expect(customClass).toBeUndefined();
         });
       });
 
@@ -153,7 +153,7 @@
         });
 
         it('marks the day as having overdue activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status-overdue');
+          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--overdue');
         });
       });
 
@@ -171,7 +171,7 @@
         });
 
         it('marks the day as having scheduled activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status-scheduled');
+          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled');
         });
       });
 
@@ -189,7 +189,7 @@
         });
 
         it('marks the day as having scheduled activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status-scheduled');
+          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled');
         });
       });
 
@@ -207,7 +207,7 @@
         });
 
         it('hides the day from the calendar', function () {
-          expect(customClass).toBe('civicase__activities-calendar__hidden-day');
+          expect(customClass).toBe('invisible');
         });
       });
 
