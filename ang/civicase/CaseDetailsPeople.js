@@ -24,13 +24,12 @@
 
   function civicaseViewPeopleController ($scope, crmApi, DateHelper) {
     // The ts() and hs() functions help load strings for this module.
-    var ts = $scope.ts = CRM.ts('civicase');
+    var clients = _.indexBy($scope.item.client, 'contact_id');
     var item = $scope.item;
-    var clients = _.indexBy(item.client, 'contact_id');
     var relTypes = CRM.civicase.relationshipTypes;
     var relTypesByName = _.indexBy(relTypes, 'name_b_a');
+    var ts = $scope.ts = CRM.ts('civicase');
 
-    $scope.CRM = CRM;
     $scope.allowMultipleCaseClients = CRM.civicase.allowMultipleCaseClients;
     $scope.roles = [];
     $scope.rolesFilter = '';
@@ -47,8 +46,8 @@
     $scope.contactTasks = CRM.civicase.contactTasks;
     $scope.ceil = Math.ceil;
     $scope.allRoles = [];
+
     $scope.formatDate = DateHelper.formatDate;
-    $scope.getCaseRoles = getCaseRoles;
     $scope.getRelations = getRelations;
 
     (function init () {
@@ -62,6 +61,12 @@
       });
     }());
 
+    /**
+     * Get selected contacts from the selection bar
+     *
+     * @params {String} tab
+     * @params {Boolean} onlyChecked
+     */
     $scope.getSelectedContacts = function (tab, onlyChecked) {
       var idField = (tab === 'roles' ? 'contact_id' : 'id');
       if (onlyChecked || $scope[tab + 'SelectionMode'] === 'checked') {
@@ -72,27 +77,50 @@
       return [];
     };
 
+    /**
+     * Sets selection mode
+     *
+     * @params {String} mode
+     * @params {String} tab
+     */
     $scope.setSelectionMode = function (mode, tab) {
       $scope[tab + 'SelectionMode'] = mode;
     };
 
+    /**
+     * Sets selected tab
+     *
+     * @params {String} tag
+     */
     $scope.setTab = function (tab) {
       $scope.tab = tab;
     };
 
+    /**
+     * Filters result on the basis of letter clicked
+     *
+     * @params {String} letter
+     * @params {String} tab
+     */
     $scope.setLetterFilter = function (letter, tab) {
       if ($scope[tab + 'AlphaFilter'] === letter) {
         $scope[tab + 'AlphaFilter'] = '';
       } else {
         $scope[tab + 'AlphaFilter'] = letter;
       }
+
       if (tab === 'roles') {
-        $scope.getCaseRoles();
+        getCaseRoles();
       } else {
         $scope.getRelations();
       }
     };
 
+    /**
+     * Update the contacts with the task
+     *
+     * @params {String} tab
+     */
     $scope.doContactTask = function (tab) {
       var task = $scope.contactTasks[$scope[tab + 'SelectedTask']];
       $scope[tab + 'SelectedTask'] = '';
@@ -106,6 +134,12 @@
         });
     };
 
+    /**
+     * Assign the role to a contact
+     *
+     * @params {String} role
+     * @params {Boolean} replace
+     */
     $scope.assignRole = function (role, replace) {
       var message = '<input name="caseRoleSelector" placeholder="' + ts('Select Coantact') + '" />';
       if (role.role !== 'Client') {
@@ -155,6 +189,11 @@
       });
     };
 
+    /**
+     * Unassign the role to a contact
+     *
+     * @params {String} role
+     */
     $scope.unassignRole = function (role) {
       CRM.confirm({
         title: ts('Remove %1', {1: role.role}),
@@ -191,6 +230,11 @@
       }
     }
 
+    /**
+     * Formats the role in required format
+     *
+     * @params {Object} role
+     */
     function formatRole (role) {
       var relType = relTypesByName[role.name];
       role.role = relType.label_b_a;
@@ -200,6 +244,9 @@
       role.relationship_type_id = relType.id;
     }
 
+    /**
+     * Updates the case roles list
+     */
     function getCaseRoles () {
       var caseRoles, allRoles, selected;
       var relDesc = [];
@@ -258,6 +305,9 @@
       $scope.roles = _.slice(caseRoles, (25 * ($scope.rolesPage - 1)), 25 * $scope.rolesPage);
     }
 
+    /**
+     * Updates the case relationship list
+     */
     function getRelations () {
       var params = {
         options: {limit: 25, offset: $scope.relationsPage - 1},

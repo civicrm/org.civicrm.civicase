@@ -73,6 +73,14 @@
   h3 {
     margin: 0;
   }
+
+  .btn {
+    .material-icons {
+      margin-right: 5px;
+      position: relative;
+      top: 2px;
+    }
+  }
 }
 
 .civicase__people-tab__selection {
