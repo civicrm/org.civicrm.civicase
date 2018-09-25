@@ -46,6 +46,7 @@
     $scope.contactTasks = CRM.civicase.contactTasks;
     $scope.ceil = Math.ceil;
     $scope.allRoles = [];
+    $scope.isRolesLoading = true;
 
     $scope.formatDate = DateHelper.formatDate;
     $scope.getRelations = getRelations;
@@ -53,6 +54,11 @@
     (function init () {
       $scope.$bindToRoute({expr: 'tab', param: 'peopleTab', format: 'raw', default: 'roles'});
       $scope.$watch('item', getCaseRoles, true);
+      $scope.$watch('item.definition', function () {
+        if ($scope.item && $scope.item.definition && $scope.item.definition.caseRoles) {
+          $scope.allRoles = _.each(_.cloneDeep($scope.item.definition.caseRoles), formatRole);
+        }
+      });
       $scope.$watch('rolesFilter', getCaseRoles);
       $scope.$watch('tab', function (tab) {
         if (tab === 'relations' && !$scope.relations.length) {
@@ -244,18 +250,22 @@
       role.relationship_type_id = relType.id;
     }
 
+    if ($scope.item && $scope.item.definition && $scope.item.definition.caseRoles) {
+      $scope.allRoles = _.each(_.cloneDeep($scope.item.definition.caseRoles), formatRole);
+    }
     /**
      * Updates the case roles list
      */
     function getCaseRoles () {
-      var caseRoles, allRoles, selected;
+      var caseRoles, selected;
       var relDesc = [];
-
+      var allRoles = [];
       if ($scope.item && $scope.item.definition && $scope.item.definition.caseRoles) {
-        $scope.allRoles = _.each(_.cloneDeep($scope.item.definition.caseRoles), formatRole);
+        allRoles = _.each(_.cloneDeep($scope.item.definition.caseRoles), formatRole);
+        // Case Roles loading completes after all Roles are fetched
+        $scope.isRolesLoading = false;
       }
-      caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep($scope.allRoles);
-      allRoles = _.cloneDeep($scope.allRoles);
+      caseRoles = $scope.rolesAlphaFilter ? [] : _.cloneDeep(allRoles);
       selected = $scope.getSelectedContacts('roles', true);
       if ($scope.rolesFilter) {
         caseRoles = $scope.rolesFilter === 'client' ? [] : [_.findWhere(caseRoles, {name: $scope.rolesFilter})];
@@ -303,6 +313,7 @@
         $scope.rolesPage = 1;
       }
       $scope.roles = _.slice(caseRoles, (25 * ($scope.rolesPage - 1)), 25 * $scope.rolesPage);
+      // debugger;
     }
 
     /**
