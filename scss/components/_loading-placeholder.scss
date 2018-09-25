@@ -100,6 +100,10 @@
     .panel-body {
       border-top: 0 none;
     }
+
+    >.panel-body {
+      background-color: transparent;      
+    }
   }
 }
 
