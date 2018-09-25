@@ -406,6 +406,7 @@
               left: mockBodyOffset.left - container.offset().left + 'px'
             };
 
+            popover.width(100);
             $uibPosition.positionElements.and.returnValue(mockBodyOffset);
             activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
             $timeout.flush();
@@ -426,7 +427,7 @@
             expect(popover.is($uibPosition.positionElements.calls.mostRecent().args[1])).toEqual(true);
           });
 
-          it('has the same offset as the active day', function () {
+          fit('has the same offset as the active day', function () {
             expect(popover.css(['top', 'left']))
               .toEqual(expectedOffset);
           });

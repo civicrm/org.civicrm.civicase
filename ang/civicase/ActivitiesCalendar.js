@@ -23,6 +23,7 @@
     function civicaseActivitiesCalendarLink ($scope, element) {
       var bootstrapThemeContainer = $('#bootstrap-theme');
       var popover = element.find('.activities-calendar-popover');
+      var popoverArrow = popover.find('.arrow');
 
       (function init () {
         $scope.$on('civicaseActivitiesCalendar::openActivitiesPopover', openActivitiesPopover);
@@ -32,6 +33,57 @@
           datepickerScope.datepicker.refreshView();
         });
       })();
+
+      /**
+       * Adjusts the position of the popover element if hidden by the window's limits.
+       * For example, if the popover is hidden by the right window limit, it will position
+       * the popover relative to the bottom left of the element.
+       *
+       * @param {Object} element a jQuery reference to the element to position the popover against.
+       */
+      function adjustPopoverIfHiddenByWindowsLimits (element) {
+        var popoverArrowWidth = 22; // needs to be harcoded because how it is defined in Bootstrap
+        var isHidden = {
+          right: popover.position().left + popover.width() > $(window).width(),
+          left: popover.position().left - popover.width() < 0
+        };
+
+        if (isHidden.right) {
+          adjustPopoverToElement({
+            element: element,
+            direction: 'bottom-right',
+            arrowPosition: 'calc(100% - ' + popoverArrowWidth + 'px)',
+            arrowAdjustment: (popoverArrowWidth / 2)
+          });
+        } else if (isHidden.left) {
+          adjustPopoverToElement({
+            element: element,
+            direction: 'bottom-left',
+            arrowPosition: popoverArrowWidth + 'px',
+            arrowAdjustment: -(popoverArrowWidth / 2)
+          });
+        }
+      }
+
+      /**
+       * Adjusts the popover's position against the provided element and in the desired position direction.
+       *
+       * @param {Object} adjustments
+       * @param {Object} adjustments.element the jQuery reference to the element to position the popover against.
+       * @param {String} adjustments.direction the direction to position the popover against. Can be one of top, left, bottom, right,
+       *   or combinations such as bottom-right, etc.
+       * @param {String} adjustments.arrowPosition the popover's arrow position
+       * @param {Number} adjustments.arrowAdjustment this value can be used to make small adjustments to the popover
+       *   based on the position of the arrow so they can be aligned properly.
+       */
+      function adjustPopoverToElement (adjustments) {
+        var bodyOffset = $uibPosition.positionElements(adjustments.element, popover, adjustments.direction, true);
+
+        popoverArrow.css('left', adjustments.arrowPosition);
+        popover.css({
+          left: bodyOffset.left - bootstrapThemeContainer.offset().left + adjustments.arrowAdjustment
+        });
+      }
 
       /**
        * Closes the activities dropdown but only when clicking outside the popover
@@ -58,16 +110,16 @@
         // the current active day can only be determined in the next cicle:
         $timeout(function () {
           var activeDay = element.find('.uib-day .active');
-          var bodyOffset = {};
 
           popover.show();
           popover.appendTo(bootstrapThemeContainer);
 
-          bodyOffset = $uibPosition.positionElements(activeDay, popover, 'bottom', true);
-          popover.css({
-            top: bodyOffset.top - bootstrapThemeContainer.offset().top,
-            left: bodyOffset.left - bootstrapThemeContainer.offset().left
-          });
+          positionPopoverOnTopOfElement(activeDay);
+
+          // reset popover arrow's alignment:
+          popoverArrow.css('left', '50%');
+
+          adjustPopoverIfHiddenByWindowsLimits(activeDay);
         });
       }
 
@@ -78,6 +130,15 @@
       function openActivitiesPopover () {
         displayPopoverOnTopOfActiveDay();
         $(document).bind('mouseup', closeActivitiesDropdown);
+      }
+
+      function positionPopoverOnTopOfElement (element) {
+        var bodyOffset = $uibPosition.positionElements(element, popover, 'bottom', true);
+
+        popover.css({
+          top: bodyOffset.top - bootstrapThemeContainer.offset().top,
+          left: bodyOffset.left - bootstrapThemeContainer.offset().left
+        });
       }
     }
   });
