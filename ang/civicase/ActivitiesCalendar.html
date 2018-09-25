@@ -1,12 +1,18 @@
 <div class="civicase__activities-calendar">
   <div uib-datepicker
+    class="civicase__responsive-calendar"
+    template-url="~/civicase/ActivitiesCalendar--datepicker.html"
     ng-model="selectedDate"
     ng-change="onDateSelected()"
     datepicker-options="calendarOptions"></div>
   <div class="popover bottom activities-calendar-popover">
     <div class="arrow"></div>
     <div class="popover-content">
-      <div ng-repeat="activity in selectedActivites" case-activity-card="activity"></div>
+      <div ng-repeat="activity in selectedActivites"
+        case-activity-card="activity"
+        refresh-on-checkbox-toggle="true"
+        refresh-callback="refresh">
+      </div>
     </div>
   </div>
 </div>

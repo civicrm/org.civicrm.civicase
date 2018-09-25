@@ -3,6 +3,8 @@
 
   .tab-content {
     background: transparent;
+    position: relative;
+    z-index: 0; // fixes the stacking context of this element and its children.
   }
 }
 

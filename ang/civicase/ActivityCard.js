@@ -18,6 +18,7 @@
       scope: {
         activity: '=caseActivityCard',
         refresh: '=refreshCallback',
+        refreshOnCheckboxToggle: '=?',
         editActivityUrl: '=?editActivityUrl',
         type: '=type'
       }
@@ -47,6 +48,7 @@
         .then(function (data) {
           if (!data[0].is_error) {
             activity.is_completed = !activity.is_completed;
+            $scope.refreshOnCheckboxToggle && $scope.refresh();
           }
         });
     };

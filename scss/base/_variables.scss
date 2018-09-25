@@ -28,6 +28,17 @@ $crm-grayblue-darker:       #c2cfd8 !default;
 $crm-white:                 #fff !default;
 $crm-black:                 #000 !default;
 
+//== Typography
+//
+//## Font, line-height, and color for body text, headings, and more.
+
+$crm-font-weight-h1:          600 !default;
+$crm-font-weight-h2:          600 !default;
+$crm-font-weight-h3:          600 !default;
+$crm-font-weight-h4:          500 !default;
+$crm-font-weight-h5:          700 !default;
+$crm-font-weight-h6:          500 !default;
+
 //== Dropdowns
 //
 //## Dropdown menu container and contents.
@@ -45,16 +56,18 @@ $box-shadow-activity-card: 0 1px 4px 0 rgba(49, 40, 40, 0.2);
 $box-shadow-checkbox: 0 6px 20px 0 rgba(49, 40, 40, 0.03);
 $box-shadow-block: 0 3px 8px 0 rgba(49, 40, 40, 0.15);
 
+$activities-calendar-active-day-background: #cde1ed;
 $contact-avatar-background: #99c6e5;
 $case-card-hover: #d9edf7;
 $calendar-due-text-color: #a9a9b7;
-$activity-no-result-icon-color: #cde1ed;
 $placeholder-grey: #edf3f5;
+
 
 // Font weights
 $font-weight-heading:   600 !default;
 $font-weight-content:   400 !default;
 
 //Widths and other sizes
+$activity-card-short-width: 280px;
 $case-card-width: 400px;
 $contact-popover-width: 708px;
