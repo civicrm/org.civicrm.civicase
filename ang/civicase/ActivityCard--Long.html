@@ -5,8 +5,7 @@
     'civicase__activity-card--ribbon': activity.category.indexOf('milestone') > -1,
     'civicase__activity-card--alert': activity.category.indexOf('alert') > -1,
     'civicase__activity-card--file': activity.type === 'File Upload'
-  }"
-  ng-click="viewInPopup($event, activity)">
+  }">
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="civicase__activity-card-row civicase__activity-card-row--first">
@@ -86,7 +85,7 @@
           <!-- Avatar -->
           <span ng-if="activity.assignee_contact_name" contact-card avatar="true" contacts="activity.assignee_contact_name"></span>
           <!-- End - Avatar -->
-          <div ng-include="'~/civicase/ActivityCard--Menu.html'"></div>
+          <div ng-include="'~/civicase/ActivityCard--Menu--Feed.html'" ng-if="bulkAllowed"></div>
         </span>
       </div>
       <div class="civicase__activity-card-row">

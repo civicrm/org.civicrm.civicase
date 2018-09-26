@@ -20,7 +20,9 @@
             <div
               case-activity-card="activity"
               mode="long"
-              refresh-callback="refresh">
+              bulk-allowed="bulkAllowed"
+              ng-click="viewActivity(activity.id, $event)"
+              refresh-callback="refreshCase">
             </div>
           </div>
         </div>
