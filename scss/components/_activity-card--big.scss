@@ -1,7 +1,18 @@
 .civicase__activity-card--big {
   height: auto;
-  min-height: 215px;
+  min-height: 264px;
   width: 100%;
+
+  &:hover {
+    .civicase__highlighted-date::before {
+      border-bottom-color: $gray-lighter;
+      border-right-color: $gray-lighter;
+    }
+  }
+
+  .panel-body {
+    padding: 25px !important;
+  }
 
   .civicase__activity-card-left {
     left: 16px;

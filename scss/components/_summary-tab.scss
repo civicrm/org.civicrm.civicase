@@ -64,10 +64,19 @@
 
 .civicase__summary-tab-tile {
   padding: 14px;
-}
 
-.civicase__summary-tab-row {
-  padding: 14px 14px 0;
+  &:first-child {
+    padding-left: 25px;
+  }
+
+  &:last-child {
+    padding-right: 25px;
+  }
+
+  >.panel-body {
+    border-top: 0 !important;
+    padding: 0;
+  }
 }
 
 .civicase__summary-tab__other-cases {
