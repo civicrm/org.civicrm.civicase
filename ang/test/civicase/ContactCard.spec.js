@@ -1,14 +1,13 @@
 /* eslint-env jasmine */
 (function ($) {
   describe('contactCard', function () {
-    var element, crmApi, $q, $compile, $document, $rootScope, $scope, ContactsData, ContactsDataService;
+    var element, crmApi, $q, $compile, $rootScope, $scope, ContactsData, ContactsDataService;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data'));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$q_, _$document_, _crmApi_, _ContactsData_, _ContactsDataService_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$q_, _crmApi_, _ContactsData_, _ContactsDataService_) {
       $q = _$q_;
       $compile = _$compile_;
-      $document = _$document_;
       $rootScope = _$rootScope_;
       crmApi = _crmApi_;
       ContactsData = _ContactsData_;
@@ -69,65 +68,6 @@
 
         it('sets the image url for the sent contact', function () {
           expect(element.isolateScope().contacts[0].image_URL).toBe(ContactsData.values[0].image_URL);
-        });
-      });
-    });
-
-    describe('toggleDropdownVisibility', function () {
-      var event;
-
-      beforeEach(function () {
-        event = { stopPropagation: jasmine.createSpy() };
-
-        compileDirective(false);
-        element.isolateScope().isPopupVisible = false;
-        element.isolateScope().toggleDropdownVisibility(event);
-      });
-
-      it('toggles the dropdown visibility', function () {
-        expect(element.isolateScope().isPopupVisible).toBe(true);
-      });
-
-      it('stops the click event from propagating', function () {
-        expect(event.stopPropagation).toHaveBeenCalled();
-      });
-    });
-
-    describe('when clicked outside', function () {
-      var originalFindFunction;
-
-      beforeEach(function () {
-        originalFindFunction = $.fn.find;
-        $.fn.find = jasmine.createSpy();
-      });
-
-      afterEach(function () {
-        $.fn.find = originalFindFunction;
-      });
-
-      describe('when the clicked on the dropdown itself', function () {
-        beforeEach(function () {
-          compileDirective(false);
-          $.fn.find.and.returnValue([1]); // clicked on the dropdown
-          element.isolateScope().isPopupVisible = true;
-          $document.trigger('click');
-        });
-
-        it('does not change the dropdown visibility', function () {
-          expect(element.isolateScope().isPopupVisible).toBe(true);
-        });
-      });
-
-      describe('when the clicked outside', function () {
-        beforeEach(function () {
-          compileDirective(false);
-          $.fn.find.and.returnValue([]); // clicked outside
-          element.isolateScope().isPopupVisible = true;
-          $document.trigger('click');
-        });
-
-        it('changes the dropdown visibility', function () {
-          expect(element.isolateScope().isPopupVisible).toBe(false);
         });
       });
     });

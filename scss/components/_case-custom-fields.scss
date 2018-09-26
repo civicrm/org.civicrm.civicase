@@ -2,6 +2,10 @@
   float: left;
   width: 50%;
 
+  .panel-body {
+    border-top: 0 !important;
+  }
+
   &:first-child {
     padding: 0 15px 24px 24px;
   }

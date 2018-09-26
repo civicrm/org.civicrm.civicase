@@ -1,147 +1,77 @@
 (function (angular, $, _) {
-  angular.module('civicase').config(function ($routeProvider) {
+  var module = angular.module('civicase');
+
+  module.config(function ($routeProvider) {
     $routeProvider.when('/activity/feed', {
       reloadOnSearch: false,
       template: '<div id="bootstrap-theme" class="civicase__container" civicase-activity-feed="{}"></div>'
     });
   });
 
-  // ActivityFeed directive controller
-  function activityFeedController ($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, templateExists) {
+  module.directive('civicaseActivityFeed', function () {
+    return {
+      restrict: 'A',
+      templateUrl: '~/civicase/ActivityFeed.html',
+      controller: activityFeedController,
+      scope: {
+        params: '=civicaseActivityFeed',
+        refreshCase: '=?refreshCallback'
+      }
+    };
+  });
+
+  function activityFeedController ($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
-    var ITEMS_PER_PAGE = 25,
-      caseId = $scope.params ? $scope.params.case_id : null,
-      pageNum = 0;
-    $scope.CRM = CRM;
-    $scope.isLoading = true;
+    var ITEMS_PER_PAGE = 25;
+    var caseId = $scope.params ? $scope.params.case_id : null;
+    var pageNum = 0;
 
-    var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
-    var activityStatuses = $scope.activityStatuses = CRM.civicase.activityStatuses;
+    $scope.isLoading = true;
+    $scope.activityTypes = CRM.civicase.activityTypes;
+    $scope.activityStatuses = CRM.civicase.activityStatuses;
     $scope.activityCategories = CRM.civicase.activityCategories;
-    $scope.templateExists = templateExists;
     $scope.activities = {};
     $scope.activityGroups = [];
     $scope.remaining = true;
     $scope.viewingActivity = {};
-    $scope.$bindToRoute({
-      param: 'aid',
-      expr: 'aid',
-      format: 'raw',
-      default: 0
-    });
-    $scope.$bindToRoute({
-      expr: 'displayOptions',
-      param: 'ado',
-      default: angular.extend({}, {
-        followup_nested: true,
-        overdue_first: true,
-        include_case: true
-      }, $scope.params.displayOptions || {})
-    });
-    $scope.$bindToRoute({
-      expr: 'filters',
-      param: 'af',
-      default: {}
-    });
-
-    if (CRM.checkPerm('basic case information') &&
-      !CRM.checkPerm('administer CiviCase') &&
-      !CRM.checkPerm('access my cases and activities') &&
-      !CRM.checkPerm('access all cases and activities')
-    ) {
-      $scope.bulkAllowed = false;
-    } else {
-      $scope.bulkAllowed = true;
-    }
-
     $scope.refreshCase = $scope.refreshCase || _.noop;
-    $scope.refreshAll = function () {
-      $('.act-feed-panel .panel-body').block();
-      getActivities(false, $scope.refreshCase);
-    };
 
-    $scope.star = function (act) {
-      act.is_star = act.is_star === '1' ? '0' : '1';
-      // Setvalue api avoids messy revisioning issues
-      crmApi('Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}, {}).then($scope.refreshCase);
-    };
+    (function init () {
+      initiateBulkActions();
+      bindRouteParamsToScope();
+      initiateWatchersAndEvents();
+    }());
 
-    $scope.markCompleted = function (act) {
-      $('.act-feed-panel .panel-body').block();
-      crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {}).then($scope.refreshAll);
-    };
-
-    $scope.isSameDate = function (d1, d2) {
-      return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
-    };
-
+    /**
+     * Load next set of activities
+     */
     $scope.nextPage = function () {
       ++pageNum;
       getActivities(true);
     };
 
-    $scope.getAttachments = function (activity) {
-      if (!activity.attachments) {
-        activity.attachments = [];
-        CRM.api3('Attachment', 'get', {
-          entity_table: 'civicrm_activity',
-          entity_id: activity.id,
-          sequential: 1
-        }).done(function (data) {
-          activity.attachments = data.values;
-          $scope.$digest();
-        });
-      }
+    /**
+     * Refresh Activities
+     */
+    $scope.refreshAll = function () {
+      $('.act-feed-panel .panel-body').block();
+      getActivities(false, $scope.refreshCase);
     };
 
-    $scope.deleteActivity = function (activity) {
-      CRM.confirm({
-        title: ts('Delete Activity'),
-        message: ts('Permanently delete this %1 activity?', {1: activity.type})
-      })
-        .on('crmConfirm:yes', function () {
-          if ($scope.viewingActivity && $scope.viewingActivity.id == activity.id) {
-            $scope.viewingActivity = {};
-            $scope.aid = 0;
-          }
-          crmApi('Activity', 'delete', {id: activity.id}).then($scope.refreshAll);
-        });
-    };
-
-    $scope.moveCopyActivity = function (act, op) {
-      var model = {
-        ts: ts,
-        activity: _.cloneDeep(act)
-      };
-      dialogService.open('MoveCopyActFeed', '~/civicase/ActivityMoveCopy.html', model, {
-        autoOpen: false,
-        height: 'auto',
-        width: '40%',
-        title: op === 'move' ? ts('Move %1 Activity', {1: act.type}) : ts('Copy %1 Activity', {1: act.type}),
-        buttons: [{
-          text: ts('Save'),
-          icons: {primary: 'fa-check'},
-          click: function () {
-            if (op === 'copy') {
-              delete model.activity.id;
-            }
-            if (model.activity.case_id && model.activity.case_id != $scope.item.id) {
-              crmApi('Activity', 'create', model.activity).then($scope.refreshAll);
-            }
-            $(this).dialog('close');
-          }
-        }]
-      });
-    };
-
+    /**
+     * View an activity in details view
+     *
+     * @param {int} id
+     * @param {Event} e
+     */
     $scope.viewActivity = function (id, e) {
       if (e && $(e.target).closest('a, button').length) {
         return;
       }
       var act = _.find($scope.activities, {id: id});
       // If the same activity is selected twice, it's a deselection. If the activity doesn't exist, abort.
-      if (($scope.viewingActivity && $scope.viewingActivity.id == id) || !act) {
+      if (($scope.viewingActivity && $scope.viewingActivity.id === id) || !act) {
         $scope.viewingActivity = {};
         $scope.aid = 0;
       } else {
@@ -158,18 +88,57 @@
       }
     };
 
+    /**
+     * Initialise the Bulk Actions Functionality
+     */
+    function initiateBulkActions () {
+      if (CRM.checkPerm('basic case information') &&
+        !CRM.checkPerm('administer CiviCase') &&
+        !CRM.checkPerm('access my cases and activities') &&
+        !CRM.checkPerm('access all cases and activities')
+      ) {
+        $scope.bulkAllowed = false;
+      } else {
+        $scope.bulkAllowed = true;
+      }
+    }
+
+    /**
+     * Binds all route parameters to scope
+     */
+    function bindRouteParamsToScope () {
+      $scope.$bindToRoute({ param: 'aid', expr: 'aid', format: 'raw', default: 0 });
+      $scope.$bindToRoute({ expr: 'filters', param: 'af', default: {} });
+      $scope.$bindToRoute({
+        expr: 'displayOptions',
+        param: 'ado',
+        default: angular.extend({}, {
+          followup_nested: true,
+          overdue_first: true,
+          include_case: true
+        }, $scope.params.displayOptions || {})
+      });
+    }
+
+    /**
+     * Groups the activities into Overdue/Future/Past
+     *
+     * @param {Array} activities
+     * @return {Array}
+     */
     function groupActivities (activities) {
-      var groups = [], group, subgroup,
-        date = new Date(),
-        now = CRM.utils.formatDate(date, 'yy-mm-dd') + ' ' + date.toTimeString().slice(0, 8),
-        overdue, upcoming, past;
+      var group, overdue, upcoming, past;
+      var groups = [];
+      var date = new Date();
+      var now = CRM.utils.formatDate(date, 'yy-mm-dd') + ' ' + date.toTimeString().slice(0, 8);
+
       if ($scope.displayOptions.overdue_first) {
         groups.push(overdue = {key: 'overdue', title: ts('Overdue Activities'), activities: []});
       }
-      groups.push(upcoming = {key: 'upcoming', title: ts('Upcoming Activities'), activities: []});
-      groups.push(past = {key: 'past', title: ts('Past Activities'), activities: []});
+
+      groups.push(upcoming = {key: 'upcoming', title: ts('Future Activities'), activities: []});
+      groups.push(past = {key: 'past', title: ts('Past Activities - Prior to Today'), activities: []});
       _.each(activities, function (act) {
-        var activityDate = act.activity_date_time.slice(0, 10);
         if (act.activity_date_time > now) {
           group = upcoming;
         } else if (overdue && act.is_overdue) {
@@ -177,20 +146,24 @@
         } else {
           group = past;
         }
-        subgroup = _.findWhere(group.activities, {date: activityDate});
-        if (!subgroup) {
-          group.activities.push(subgroup = {date: activityDate, activities: []});
-        }
-        subgroup.activities.push(act);
+        group.activities.push(act);
       });
+
       return groups;
     }
 
+    /**
+     * Get all activities
+     *
+     * @param {Boolean} nextPage
+     * @param {Function} callback
+     */
     function getActivities (nextPage, callback) {
       if (nextPage !== true) {
         pageNum = 0;
       }
-      crmThrottle(_loadActivities).then(function (result) {
+
+      crmThrottle(loadActivities).then(function (result) {
         if (_.isFunction(callback)) {
           callback();
         }
@@ -215,7 +188,12 @@
       });
     }
 
-    function _loadActivities () {
+    /**
+     * Load activities
+     *
+     * @return {Promise}
+     */
+    function loadActivities () {
       var returnParams = {
         sequential: 1,
         return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id', 'is_overdue', 'case_id'],
@@ -264,25 +242,14 @@
       });
     }
 
-    $scope.$watchCollection('filters', getActivities);
-    $scope.$watchCollection('params.filters', getActivities);
-    $scope.$watchCollection('displayOptions', getActivities);
-    $scope.$on('updateCaseData', getActivities);
+    /**
+     * Initiate watchers and event handlers
+     */
+    function initiateWatchersAndEvents () {
+      $scope.$watchCollection('filters', getActivities);
+      $scope.$watchCollection('params.filters', getActivities);
+      $scope.$watchCollection('displayOptions', getActivities);
+      $scope.$on('updateCaseData', getActivities);
+    }
   }
-
-  angular.module('civicase').directive('civicaseActivityFeed', function () {
-    return {
-      restrict: 'A',
-      template:
-        '<div class="panel panel-default act-feed-panel">' +
-          '<div class="panel-header" civicase-activity-filters="filters"></div>' +
-          '<div class="panel-body clearfix" ng-include="\'~/civicase/ActivityList.html\'"></div>' +
-        '</div>',
-      controller: activityFeedController,
-      scope: {
-        params: '=civicaseActivityFeed',
-        refreshCase: '=?refreshCallback'
-      }
-    };
-  });
 })(angular, CRM.$, CRM._);

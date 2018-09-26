@@ -15,10 +15,12 @@
         }
       },
       controller: caseActivityCardController,
+      replace: true,
       scope: {
         activity: '=caseActivityCard',
         refresh: '=refreshCallback',
         refreshOnCheckboxToggle: '=?',
+        bulkAllowed: '=',
         editActivityUrl: '=?editActivityUrl',
         type: '=type'
       }

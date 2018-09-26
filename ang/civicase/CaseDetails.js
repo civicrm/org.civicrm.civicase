@@ -111,7 +111,7 @@
       return index >= ($scope.relatedCasesPager.range.from - 1) && index < $scope.relatedCasesPager.range.to;
     };
 
-    // Copied from ActivityList.js - used by the Recent Communication panel
+    // Copied from ActivityFeed.js - used by the Recent Communication panel
     $scope.isSameDate = function (d1, d2) {
       return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
     };

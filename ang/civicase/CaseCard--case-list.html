@@ -34,7 +34,7 @@
            ng-href="#{{ activityFeedUrl(data.id, 'task', 'incomplete') }}"
         > {{ data.category_count.incomplete.task }} </a>
         <span ng-if="data.category_count.incomplete.task && data.category_count.overdue.task" class="civicase__pipe"> | </span>
-        <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--count"
+        <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
            ng-if="data.category_count.overdue.task"
            ng-href="#{{ activityFeedUrl(data.id, 'task', 'incomplete') }}"
         > {{ data.category_count.overdue.task }} </a>
@@ -47,7 +47,7 @@
            ng-href="#{{ activityFeedUrl(data.id, 'communication', 'incomplete') }}"
         > {{ data.category_count.incomplete.communication }} </a>
         <span ng-if="data.category_count.incomplete.communication && data.category_count.overdue.communication" class="civicase__pipe"> | </span>
-        <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--count"
+        <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
            ng-if="data.category_count.overdue.communication"
            ng-href="#{{ activityFeedUrl(data.id, 'communication', 'incomplete') }}"
         > {{ data.category_count.overdue.communication }} </a>
@@ -60,7 +60,7 @@
            ng-href="#{{ activityFeedUrl(data.id, null, 'incomplete') }}"
         > {{ data.category_count.incomplete.other }} </a>
         <span ng-if="data.category_count.incomplete.other && data.category_count.overdue.other" class="civicase__pipe"> | </span>
-        <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--count"
+        <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
            ng-if="data.category_count.overdue.other"
            ng-href="#{{ activityFeedUrl(data.id, null, 'incomplete') }}"
         > {{ data.category_count.overdue.other }} </a>

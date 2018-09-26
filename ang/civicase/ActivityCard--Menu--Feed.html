@@ -1,17 +1,17 @@
-<div class="btn-group btn-group-sm activity-item-menu">
+<div class="btn-group btn-group-sm civicase__activity-card-menu">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <i class="fa fa-ellipsis-v"></i>
+    <i class="material-icons">more_vert</i>
   </button>
   <ul class="dropdown-menu dropdown-menu-right">
     <li>
       <a href ng-click="deleteActivity(activity)">
-        <i class="fa fa-trash"></i> {{ ts('Delete') }}
+        <i class="material-icons">delete</i> {{ ts('Delete') }}
       </a>
       <a href ng-click="moveCopyActivity(activity, 'move')">
-        <i class="fa fa-clipboard"></i> {{ ts('Move to Case') }}
+        <i class="material-icons">next_week</i> {{ ts('Move to Case') }}
       </a>
       <a href ng-click="moveCopyActivity(activity, 'copy')">
-        <i class="fa fa-files-o"></i> {{ ts('Copy to Case') }}
+        <i class="material-icons">filter_none</i> {{ ts('Copy to Case') }}
       </a>
     </li>
   </ul>

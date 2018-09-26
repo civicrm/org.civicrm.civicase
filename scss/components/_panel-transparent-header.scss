@@ -8,7 +8,7 @@
     .panel-title {
       font-size: 16px;
       margin: 3px 0 12px;
-    }    
+    }
   }
 
   >.panel-body {
@@ -17,18 +17,5 @@
     box-shadow: $box-shadow-block;
     padding: 24px;
     position: relative;
-
-    &:hover {
-      background-color: $gray-lighter;
-
-      .civicase__highlighted-date::before {
-        border-bottom-color: $gray-lighter;
-        border-right-color: $gray-lighter;
-      }
-    }
-
-    .civicase__activity-card {
-      background-color: transparent;
-    }
   }
 }

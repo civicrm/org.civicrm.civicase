@@ -2,6 +2,10 @@
   background: $crm-white;
   cursor: pointer;
 
+  &:hover {
+    background: $gray-lighter;
+  }
+
   .panel {
     box-shadow: none;
     height: 100%;
@@ -9,13 +13,10 @@
   }
 
   .panel-body {
+    background: none;
     border-top: 0 !important;
     height: 100%;
     padding: 15px;
-
-    &:hover {
-      background: $gray-lighter;
-    }
   }
 
   .civicase__contact-avatar {
@@ -43,6 +44,35 @@
 
 .civicase__activity-card--draft {
   border: 1px dashed $crm-grayblue-darker;
+}
+
+.civicase__activity-card--alert {
+  background: $alert-warning-bg;
+  border: 1px solid $state-warning-border;
+
+  &:hover {
+    background: $alert-warning-bg;
+    border-color: $crm-grayblue-darker;
+  }
+
+  .civicase__activity-subject {
+    color: $gray-dark;
+    white-space: initial;
+  }
+
+  .civicase__activity__tags-container {
+    margin-left: 30px;
+    margin-top: 2px;
+  }
+}
+
+.civicase__activity-card--file {
+  .civicase__activity-subject {
+    color: $gray-darker;
+    font-size: 16px;
+    font-weight: $font-weight-heading;
+    margin-left: 0;
+  }
 }
 
 .civicase__activity-icon-container {
@@ -86,6 +116,11 @@
     border-left: 14px solid $brand-danger;
     border-right: 14px solid $brand-danger;
   }
+
+  &.civicase__text-success {
+    border-left: 14px solid $brand-success;
+    border-right: 14px solid $brand-success;
+  }
 }
 
 .civicase__activity-date {
@@ -101,9 +136,13 @@
   }
 }
 
-.civicase__activity-title {
+.civicase__activity-type {
+  color: $gray-darker;
   font-weight: $font-weight-heading;
-  margin-bottom: 10px;
+}
+
+.civicase__activity-type--completed {
+  text-decoration: line-through;
 }
 
 
@@ -121,6 +160,11 @@
 
 .civicase__activity-card-row--first {
   margin-bottom: 5px;
+}
+
+.civicase__activity-card-row--file {
+  display: block;
+  margin-left: 30px;
 }
 
 .civicase__activity-with {
@@ -154,6 +198,10 @@
 
 .civicase__activity-attachment__file-name {
   color: $brand-primary !important;
+}
+
+.civicase__activity-attachment__file-description {
+  color: $crm-gray-matte;
 }
 
 .civicase__activity-attachment__icon {

@@ -1,0 +1,110 @@
+.civicase__activity-card--long {
+  box-shadow: $box-shadow-block;
+  position: relative;
+
+  .civicase__activity-icon-container {
+    .civicase__activity-icon-ribbon {
+      border-bottom-width: 10px;
+      border-left-width: 20px;
+      border-right-width: 20px;
+      height: 63px;
+    }
+
+    .civicase__activity-icon {
+      font-size: 22px;
+      left: 12px;
+      top: 0;
+    }
+  }
+
+  .civicase__activity-card-row--first {
+    margin-bottom: 0;
+  }
+
+  .civicase__activity-icon-container--ribbon {
+    width: 50px;
+  }
+
+  .civicase__checkbox {
+    margin-left: 10px;
+    margin-right: 8px;
+  }
+
+  .civicase__activity-type {
+    font-size: 16px;
+    margin-right: 12px;
+  }
+
+  .civicase__activity-attachment__icon {
+    margin-top: 2px;
+  }
+
+  .civicase__activity__tags-container {
+    margin-right: 10px;
+    margin-top: -3px;
+  }
+
+  .civicase__activity-star {
+    position: relative;
+    top: 3px;
+  }
+
+  .civicase__activity-date {
+    margin-left: 5px;
+  }
+
+  .civicase__contact-additional__container--avatar {
+    margin-top: 0;
+  }
+
+  .civicase__activity-subject {
+    color: $crm-gray-matte;
+    font-weight: $font-weight-content;
+    margin-left: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .civicase__activity-card-menu .btn-group .btn { /* stylelint-disable selector-max-compound-selectors */
+    margin-left: 0;
+  }
+
+  &.civicase__activity-card--ribbon {
+    min-height: 75px;
+
+    .civicase__activity-subject {
+      margin-left: 52px;
+    }
+  }
+
+  &.civicase__activity-card--with-checkbox {
+    .civicase__activity-subject {
+      margin-left: 64px;
+    }
+  }
+
+  &.civicase__activity-card--draft {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .civicase__activity-icon-arrow {
+    left: 22px;
+    top: 8px;
+  }
+
+  .civicase__activity-card-row--communication {
+    > div {
+      > * {
+        display: inline-block !important;
+        vertical-align: middle;
+      }
+    }
+
+    .civicase__contact-card {
+      position: relative;
+      top: 2px;
+    }
+  }
+}

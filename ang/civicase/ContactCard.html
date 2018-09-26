@@ -40,13 +40,16 @@
     class="btn-group civicase__contact-additional__container"
     aria-haspopup="true"
     aria-expanded="false">
-    <span ng-click="toggleDropdownVisibility($event)">+{{ contacts.length - 1 }}</span>
-    <div
-      ng-if="isPopupVisible"
-      ng-class="{'civicase__contact-additional__arrow--avatar': isAvatar}"
-      class="civicase__contact-additional__arrow">
-    </div>
-    <ul ng-if="isPopupVisible" class="dropdown-menu">
+    <span
+      uib-popover-template="'additional-contacts.html'"
+      popover-placement="bottom"
+      popover-trigger="'outsideClick'"
+      ng-click="$event.stopPropagation()">+{{ contacts.length - 1 }}
+    </span>
+  <!-- End - Additional Contact Dropdown -->
+
+  <script type="text/ng-template" id="additional-contacts.html">
+    <ul class="civicase__contact-additional__list">
       <li ng-repeat="(index, contact) in contacts" ng-if="index">
         <a
           title="{{ ts('View Contact') }}"
@@ -58,8 +61,8 @@
         </a>
       </li>
     </ul>
-  </div>
-  <!-- End - Additional Contact Dropdown -->
+  </script>
+
   <script type="text/ng-template" id="contact-popover.html">
     <div class="civicase__contact-popover">
       <div class="civicase__contact-popover__header">
