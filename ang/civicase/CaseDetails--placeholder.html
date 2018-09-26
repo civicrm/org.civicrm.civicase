@@ -14,8 +14,9 @@
     </div>
   </div>
 </div>
+
 <div class="panel-body civicase__case-body">
-  <nav class="navbar"></nav>
+  <nav class="navbar nav-pills-horizontal-primary"></nav>
   <div class="civicase__summary-tab" ng-show="activeTab === 'summary'">
     <!-- Subject and QuickLinks -->
     <div class="panel panel-default civicase__summary-tab__basic-details">
@@ -131,6 +132,19 @@
     <div class="civicase__loading-placeholder__oneline" style="width: 10em;  margin-bottom: 5px;"></div>
   </div>
   <div class="civicase__case-tab--files" ng-show="activeTab === 'files'">
+    <div class="panel panel-default civicase__panel-transparent-header">
+      <div class="panel-body">
+        <div class="clearfix civicase__file-upload-container">
+          <div class="civicase__file-upload-item civicase__file-upload-box pull-left">
+            <div class="civicase__file-upload-dropzone">
+              <div class="civicase__loading-placeholder__oneline" style="width: 1em; font-size: 36px;  margin-bottom: 18px;"></div>
+              <div class="civicase__loading-placeholder__oneline" style="width: 5em;  font-size: 14px; margin-bottom: 5px;"></div>
+              <div class="civicase__loading-placeholder__oneline" style="width: 10em;  margin-bottom: 5px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="civicase__loading-placeholder__oneline" style="width: 10em;  margin-bottom: 5px;"></div>
     <div class="civicase__loading-placeholder__oneline" style="width: 10em;  margin-bottom: 5px;"></div>
     <div class="civicase__loading-placeholder__oneline" style="width: 10em;  margin-bottom: 5px;"></div>
