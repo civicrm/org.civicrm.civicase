@@ -3,6 +3,7 @@
   ng-class="{
     'civicase__activity-card--draft': activity.status==='Draft',
     'civicase__activity-card--ribbon': activity.category.indexOf('milestone') > -1,
+    'civicase__activity-card--with-checkbox': activity.category.indexOf('task') > -1,
     'civicase__activity-card--alert': activity.category.indexOf('alert') > -1,
     'civicase__activity-card--file': activity.type === 'File Upload'
   }">
@@ -29,7 +30,7 @@
         </span>
         <span
           class="civicase__activity-subject"
-          ng-if="activity.type === 'File Upload'"">
+          ng-if="activity.type === 'File Upload'">
           {{ activity.subject || activity.type }}
         </span>
         <!-- End - Type -->

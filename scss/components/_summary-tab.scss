@@ -95,10 +95,6 @@
   .civicase__pager {
     border-top: 0;
 
-    paging {
-      float: right;
-    }
-
     /* stylelint-disable selector-max-compound-selectors, selector-no-qualifying-type */
     .pagination > li > a {
       color: $crm-gray-matte;

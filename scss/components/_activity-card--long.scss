@@ -78,6 +78,12 @@
     }
   }
 
+  &.civicase__activity-card--with-checkbox {
+    .civicase__activity-subject {
+      margin-left: 64px;
+    }
+  }
+
   &.civicase__activity-card--draft {
     background: transparent;
     box-shadow: none;

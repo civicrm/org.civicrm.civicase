@@ -27,7 +27,6 @@
     var caseId = $scope.params ? $scope.params.case_id : null;
     var pageNum = 0;
 
-    $scope.CRM = CRM;
     $scope.isLoading = true;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityStatuses = CRM.civicase.activityStatuses;
@@ -44,20 +43,28 @@
       initiateWatchersAndEvents();
     }());
 
-    $scope.isSameDate = function (d1, d2) {
-      return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
-    };
-
+    /**
+     * Load next set of activities
+     */
     $scope.nextPage = function () {
       ++pageNum;
       getActivities(true);
     };
 
+    /**
+     * Refresh Activities
+     */
     $scope.refreshAll = function () {
       $('.act-feed-panel .panel-body').block();
       getActivities(false, $scope.refreshCase);
     };
 
+    /**
+     * View an activity in details view
+     *
+     * @param {int} id
+     * @param {Event} e
+     */
     $scope.viewActivity = function (id, e) {
       if (e && $(e.target).closest('a, button').length) {
         return;
@@ -113,6 +120,12 @@
       });
     }
 
+    /**
+     * Groups the activities into Overdue/Future/Past
+     *
+     * @param {Array} activities
+     * @return {Array}
+     */
     function groupActivities (activities) {
       var group, overdue, upcoming, past;
       var groups = [];
@@ -126,7 +139,6 @@
       groups.push(upcoming = {key: 'upcoming', title: ts('Future Activities'), activities: []});
       groups.push(past = {key: 'past', title: ts('Past Activities - Prior to Today'), activities: []});
       _.each(activities, function (act) {
-        // var activityDate = act.activity_date_time.slice(0, 10);
         if (act.activity_date_time > now) {
           group = upcoming;
         } else if (overdue && act.is_overdue) {
@@ -140,6 +152,12 @@
       return groups;
     }
 
+    /**
+     * Get all activities
+     *
+     * @param {Boolean} nextPage
+     * @param {Function} callback
+     */
     function getActivities (nextPage, callback) {
       if (nextPage !== true) {
         pageNum = 0;
@@ -170,6 +188,11 @@
       });
     }
 
+    /**
+     * Load activities
+     *
+     * @return {Promise}
+     */
     function loadActivities () {
       var returnParams = {
         sequential: 1,
@@ -219,6 +242,9 @@
       });
     }
 
+    /**
+     * Initiate watchers and event handlers
+     */
     function initiateWatchersAndEvents () {
       $scope.$watchCollection('filters', getActivities);
       $scope.$watchCollection('params.filters', getActivities);
