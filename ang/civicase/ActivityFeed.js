@@ -20,7 +20,7 @@
     };
   });
 
-  function activityFeedController ($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, templateExists) {
+  function activityFeedController ($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25;
@@ -32,7 +32,6 @@
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityStatuses = CRM.civicase.activityStatuses;
     $scope.activityCategories = CRM.civicase.activityCategories;
-    $scope.templateExists = templateExists;
     $scope.activities = {};
     $scope.activityGroups = [];
     $scope.remaining = true;
@@ -45,64 +44,8 @@
       initiateWatchersAndEvents();
     }());
 
-    $scope.deleteActivity = function (activity) {
-      CRM.confirm({
-        title: ts('Delete Activity'),
-        message: ts('Permanently delete this %1 activity?', {1: activity.type})
-      }).on('crmConfirm:yes', function () {
-        if ($scope.viewingActivity && $scope.viewingActivity.id === activity.id) {
-          $scope.viewingActivity = {};
-          $scope.aid = 0;
-        }
-        crmApi('Activity', 'delete', {id: activity.id}).then($scope.refreshAll);
-      });
-    };
-
-    $scope.getAttachments = function (activity) {
-      if (!activity.attachments) {
-        activity.attachments = [];
-        CRM.api3('Attachment', 'get', {
-          entity_table: 'civicrm_activity',
-          entity_id: activity.id,
-          sequential: 1
-        }).done(function (data) {
-          activity.attachments = data.values;
-          $scope.$digest();
-        });
-      }
-    };
-
     $scope.isSameDate = function (d1, d2) {
       return d1 && d2 && (d1.slice(0, 10) === d2.slice(0, 10));
-    };
-
-    $scope.markCompleted = function (act) {
-      $('.act-feed-panel .panel-body').block();
-      crmApi('Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}, {}).then($scope.refreshAll);
-    };
-
-    $scope.moveCopyActivity = function (act, op) {
-      var model = { ts: ts, activity: _.cloneDeep(act) };
-
-      dialogService.open('MoveCopyActFeed', '~/civicase/ActivityMoveCopy.html', model, {
-        autoOpen: false,
-        height: 'auto',
-        width: '40%',
-        title: op === 'move' ? ts('Move %1 Activity', {1: act.type}) : ts('Copy %1 Activity', {1: act.type}),
-        buttons: [{
-          text: ts('Save'),
-          icons: {primary: 'fa-check'},
-          click: function () {
-            if (op === 'copy') {
-              delete model.activity.id;
-            }
-            if (model.activity.case_id && model.activity.case_id !== $scope.item.id) {
-              crmApi('Activity', 'create', model.activity).then($scope.refreshAll);
-            }
-            $(this).dialog('close');
-          }
-        }]
-      });
     };
 
     $scope.nextPage = function () {
@@ -113,12 +56,6 @@
     $scope.refreshAll = function () {
       $('.act-feed-panel .panel-body').block();
       getActivities(false, $scope.refreshCase);
-    };
-
-    $scope.star = function (act) {
-      act.is_star = act.is_star === '1' ? '0' : '1';
-      // Setvalue api avoids messy revisioning issues
-      crmApi('Activity', 'setvalue', {id: act.id, field: 'is_star', value: act.is_star}, {}).then($scope.refreshCase);
     };
 
     $scope.viewActivity = function (id, e) {
@@ -208,7 +145,7 @@
         pageNum = 0;
       }
 
-      crmThrottle(_loadActivities).then(function (result) {
+      crmThrottle(loadActivities).then(function (result) {
         if (_.isFunction(callback)) {
           callback();
         }
@@ -233,7 +170,7 @@
       });
     }
 
-    function _loadActivities () {
+    function loadActivities () {
       var returnParams = {
         sequential: 1,
         return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id', 'is_overdue', 'case_id'],
