@@ -201,8 +201,10 @@
       var activityParams = {
         case_id: '$value.id',
         return: [
-          'activity_type_id', 'activity_date_time', 'status_id', 'is_star', 'case_id',
-          'is_overdue', 'source_contact_name', 'target_contact_name', 'assignee_contact_name'
+          'subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
+          'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
+          'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
+          'is_overdue', 'case_id'
         ]
       };
 
@@ -288,6 +290,12 @@
       return formatActivity(act, $scope.item.id);
     }
 
+    /**
+     * Formats the case detail object in required format
+     *
+     * @params {Object} - object params
+     * @return {Object}
+     */
     function formatCaseDetails (item) {
       formatCase(item);
       item.definition = caseTypes[item.case_type_id].definition;
@@ -315,6 +323,8 @@
       // Custom fields
       item.customData = item['api.CustomValue.gettree'].values || [];
       delete (item['api.CustomValue.gettree']);
+      // Set  next Acitivity which is not milestone
+      item.nextActivityNotMilestone = findNextIncompleteActivityWhichIsNotMilestone(item.allActivities);
 
       return item;
     }
@@ -353,7 +363,7 @@
           $scope.pushCaseData(info.values[0]);
         });
 
-        $scope.item.nextActivityNotMilestone = findNextActivityWhichIsNotMilestone($scope.item.allActivities);
+        $scope.item.nextActivityNotMilestone = findNextIncompleteActivityWhichIsNotMilestone($scope.item.allActivities); // to be removed after performace fix
       }
     }
 
@@ -363,9 +373,12 @@
      * @params {Array} - Array of activities
      * @return {object} - next activity
      */
-    function findNextActivityWhichIsNotMilestone (activities) {
+    function findNextIncompleteActivityWhichIsNotMilestone (activities) {
       var nextActivity = _.find(activities, function (activity) {
-        return CRM.civicase.activityTypes[activity.activity_type_id].grouping !== 'milestone';
+        var notMilestone = CRM.civicase.activityTypes[activity.activity_type_id].grouping !== 'milestone';
+        var notComplete = CRM.civicase.activityStatusTypes.completed.indexOf(parseInt(activity.status_id, 10)) === -1;
+
+        return notMilestone && notComplete;
       });
 
       nextActivity.type = CRM.civicase.activityTypes[nextActivity.activity_type_id].label;
