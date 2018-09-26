@@ -55,6 +55,7 @@
   "homepage": "https://github.com/compucorp/uk.co.compucorp.civicase#readme",
   "devDependencies": {
     "civicrm-cv": "^0.1.2",
+    "civicrm-scssroot": "git://github.com/totten/civicrm-scssroot.git#v0.1.1",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^6.0.0",
     "gulp-cssmin": "^0.2.0",

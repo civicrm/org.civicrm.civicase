@@ -13,6 +13,7 @@
 var gulp = require('gulp');
 var bulk = require('gulp-sass-bulk-import');
 var sass = require('gulp-sass');
+var civicrmScssRoot = require('civicrm-scssroot')();
 var postcss = require('gulp-postcss');
 var postcssPrefix = require('postcss-prefix-selector');
 var postcssDiscardDuplicates = require('postcss-discard-duplicates');
@@ -29,11 +30,18 @@ var bootstrapNamespace = '#bootstrap-theme';
 var outsideNamespaceRegExp = /^\.___outside-namespace/;
 
 /**
+  * The gulp task updates and sync the scssRoot paths
+  */
+gulp.task('sass:sync', () => {
+  civicrmScssRoot.updateSync();
+});
+
+/**
  * The gulp task compiles and minifies scss/civicase.scss file into css/civicase.min.css.
  * Also prefix the output css selector with `#bootstrap-theme` selector except the output.
  * selector starts from either `body`, `page-civicrm-case` or `.___outside-namespace` classes.
  */
-gulp.task('sass', function () {
+gulp.task('sass', ['sass:sync'], function () {
   return gulp.src('scss/civicase.scss')
     .pipe(bulk())
     .pipe(sourcemaps.init())
@@ -43,6 +51,7 @@ gulp.task('sass', function () {
     }))
     .pipe(sass({
       outputStyle: 'compressed',
+      includePaths: civicrmScssRoot.getPath(),
       precision: 10
     }).on('error', sass.logError))
     .pipe(stripCssComments({ preserve: false }))
@@ -63,6 +72,7 @@ gulp.task('sass', function () {
 gulp.task('watch', function () {
   gulp.watch('scss/**/*.scss', ['sass']);
   gulp.watch(['ang/**/*.js', '!ang/test/karma.conf.js'], ['test']);
+  gulp.watch(civicrmScssRoot.getWatchList(), ['sass']);
 });
 
 /**

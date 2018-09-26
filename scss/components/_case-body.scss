@@ -31,3 +31,16 @@
     width: 100%;
   }
 }
+
+// Override specific to the next milestone card and next activity card
+@media (min-width: 1200px) and (max-width: 1549px) {
+  .civicase__case-details-panel--summary:not(.civicase__case-details-panel--focused) {
+    .civicase__summary-tab-tile--big-card.col-lg-6 {
+      width: 100%;
+    }
+
+    .civicase__summary-tab-tile--small-card.col-lg-3 {
+      width: 50%;
+    }
+  }
+}
