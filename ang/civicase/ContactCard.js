@@ -30,8 +30,9 @@
        * Watch function for data refresh
        */
       function refresh () {
+        scope.contacts = [];
+
         if (_.isPlainObject(scope.data)) {
-          scope.contacts = [];
           _.each(scope.data, function (name, contactID) {
             if (scope.isAvatar) {
               prepareAvatarData(name, contactID);
@@ -40,7 +41,11 @@
             }
           });
         } else if (typeof scope.data === 'string') {
-          scope.contacts = [{contact_id: scope.data, display_name: ContactsDataService.getCachedContact(scope.data).display_name}];
+          if (scope.isAvatar) {
+            prepareAvatarData(ContactsDataService.getCachedContact(scope.data).display_name, scope.data);
+          } else {
+            scope.contacts.push({display_name: ContactsDataService.getCachedContact(scope.data).display_name, contact_id: scope.data});
+          }
         } else {
           scope.contacts = _.cloneDeep(scope.data);
         }

@@ -166,8 +166,8 @@
       if ($scope.displayOptions.overdue_first) {
         groups.push(overdue = {key: 'overdue', title: ts('Overdue Activities'), activities: []});
       }
-      groups.push(upcoming = {key: 'upcoming', title: ts('Upcoming Activities'), activities: []});
-      groups.push(past = {key: 'past', title: ts('Past Activities'), activities: []});
+      groups.push(upcoming = {key: 'upcoming', title: ts('Future Activities'), activities: []});
+      groups.push(past = {key: 'past', title: ts('Past Activities - Prior to Today'), activities: []});
       _.each(activities, function (act) {
         // var activityDate = act.activity_date_time.slice(0, 10);
         if (act.activity_date_time > now) {

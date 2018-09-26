@@ -4,13 +4,16 @@
   }
 
   .civicase__panel-transparent-header {
-    width: 748px;
+    margin: auto;
+    width: 830px;
 
     > .panel-body {
       background: transparent;
       border-top: 0;
       box-shadow: none;
       padding: 0;
+
+
     }
 
     .panel-title.civicase__overdue-activity-icon--before {
@@ -27,6 +30,47 @@
       }
     }
   }
+}
+
+.civicase__activity-feed__activity-container {
+  display: inline-block;
+  width: 785px;
+}
+
+.civicase__activity-feed__list {
+  position: relative;
+
+  &:not(:last-child) {
+    &::before {
+      background-color: $crm-grayblue-darker;
+      bottom: 1px;
+      content: '';
+      left: 16px;
+      position: absolute;
+      top: 45px;
+      width: 8px;
+      z-index: 1;
+    }
+  }
+
+  > .civicase__contact-card {
+    display: inline-block;
+    margin-top: 2px;
+    position: relative;
+    vertical-align: top;
+    z-index: 2;
+
+    .civicase__contact-avatar {
+      height: 40px;
+      line-height: 30px;
+      width: 40px;
+    }
+
+    .civicase__contact-avatar--image img {
+      height: 40px;
+      width: 40px;
+    }
+  }
 
   .civicase__activity-card {
     margin-bottom: 15px;
@@ -36,6 +80,6 @@
   }
 
   .civicase__activity-card--ribbon {
-    width: 100%;
+    width: 748px;
   }
 }

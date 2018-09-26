@@ -189,14 +189,11 @@
     function fetchContactsData (caseObj) {
       var contacts = [];
 
-      contacts = contacts.concat(CRM._.map(caseObj.contacts, function (contact) {
-        return contact.contact_id;
-      }));
-
-      if (caseObj.next_activity) {
-        contacts = contacts.concat(caseObj.next_activity.assignee_contact_id);
-        contacts = contacts.concat(caseObj.next_activity.target_contact_id);
-      }
+      _.each(caseObj.allActivities, function (currentCase) {
+        contacts = contacts.concat(currentCase.assignee_contact_id);
+        contacts = contacts.concat(currentCase.target_contact_id);
+        contacts.push(currentCase.source_contact_id);
+      });
 
       ContactsDataService.add(contacts);
     }

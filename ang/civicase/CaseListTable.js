@@ -8,7 +8,7 @@
     };
   });
 
-  module.controller('CivicaseCaseListTableController', function ($scope, $window, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
+  module.controller('CivicaseCaseListTableController', function ($scope, $window, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase) {
     var firstLoad = true;
     var caseTypes = CRM.civicase.caseTypes;
 

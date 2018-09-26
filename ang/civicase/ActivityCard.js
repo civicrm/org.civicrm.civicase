@@ -15,6 +15,7 @@
         }
       },
       controller: caseActivityCardController,
+      replace: true,
       scope: {
         activity: '=caseActivityCard',
         refresh: '=refreshCallback',

@@ -4,6 +4,10 @@
   position: relative;
   width: $activity-card-short-width;
 
+  .panel-body {
+    min-height: 100px;
+  }
+
   .civicase__contact-avatar {
     margin-top: -10px;
   }

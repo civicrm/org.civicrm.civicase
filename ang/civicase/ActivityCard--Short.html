@@ -1,5 +1,11 @@
-<div ng-if="activity" class="civicase__activity-card civicase__activity-card--short" ng-class="{'civicase__activity-card--draft': activity.status==='Draft'}" ng-click="viewInPopup($event, activity)">
-  <div class="panel panel-default">
+<div
+  class="civicase__activity-card civicase__activity-card--short"
+  ng-class="{
+    'civicase__activity-card--draft': activity.status==='Draft',
+    'civicase__activity-card--empty': !activity
+  }"
+  ng-click="viewInPopup($event, activity)">
+  <div ng-if="activity" class="panel panel-default">
     <div class="panel-body">
       <div class="civicase__activity-card-row civicase__activity-card-row--first">
 
@@ -73,11 +79,9 @@
       </div>
     </div>
   </div>
-</div>
 
-<!-- No Activity -->
-<div ng-if="!activity" class="civicase__activity-card civicase__activity-card--empty">
-  <div class="panel panel-default">
+  <!-- No Activity -->
+  <div ng-if="!activity" class="panel panel-default">
     <div class="panel-body">
       <div>
         <div class="civicase__activity-empty-message">No upcoming activity</div>

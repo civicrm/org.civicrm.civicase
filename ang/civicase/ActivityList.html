@@ -14,11 +14,14 @@
         <h3 ng-class="{'civicase__overdue-activity-icon civicase__overdue-activity-icon--before': activityGroup.key === 'overdue'}"class="panel-title">{{ activityGroup.title }}
       </div>
       <div class="panel-body">
-        <div ng-repeat="activity in activityGroup.activities">
-          <div
-            case-activity-card="activity"
-            mode="long"
-            refresh-callback="refresh">
+        <div class="civicase__activity-feed__list" ng-repeat="activity in activityGroup.activities">
+          <span ng-if="activity.source_contact_id" contact-card avatar="true" contacts="activity.source_contact_id"></span>
+          <div class="civicase__activity-feed__activity-container">
+            <div
+              case-activity-card="activity"
+              mode="long"
+              refresh-callback="refresh">
+            </div>
           </div>
         </div>
       </div>
