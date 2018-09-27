@@ -101,7 +101,7 @@
             <div class="civicase__people-tab__table-assign-icon" ng-if="!role.contact_id" ng-click="assignRole(role)">
               <i class="fa fa-user-plus"></i>
             </div>
-            <div ng-if="role.contact_id">
+            <div ng-if="role.contact_id" class="btn-group btn-group-sm">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="material-icons">more_vert</i>
               </button>
@@ -243,7 +243,7 @@
         </tr>
       </thead>
       <tbody class="civicase__people-tab__table-body">
-        <tr ng-repeat="contact in relations">
+        <tr ng-repeat="contact in relations" ng-if="!isRelationshipLoading">
           <td class="civicase__people-tab__table-column civicase__people-tab__table-column--first">
             <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
             <label for="select-relation-{{ $index }}"></label>
@@ -262,7 +262,7 @@
           <td class="civicase__people-tab__table-column civicase__people-tab__table-column--last">
             <div class="btn-group btn-group-sm">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-ellipsis-v"></i>
+                <i class="material-icons">more_vert</i>
               </button>
               <ul class="dropdown-menu dropdown-menu-right" crm-popup-form-success="getRelations()">
                 <li>
@@ -270,16 +270,35 @@
                 </li>
                 <li role="separator" class="divider"></li>
                 <li ng-if="contact.email">
-                  <a class="crm-popup" ng-href="{{ 'civicrm/activity/email/add' | civicaseCrmUrl:{ 'add', caseid: item.id, reset: 1, cid: contact.id } }}">{{ ts('Send Email') }}</a>
+                  <a class="crm-popup" ng-href="{{ 'civicrm/activity/email/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: contact.id } }}">{{ ts('Send Email') }}</a>
                 </li>
                 <li>
-                  <a class="crm-popup" ng-href="{{ 'civicrm/activity/pdf/add' | civicaseCrmUrl:{ 'add', caseid: item.id, reset: 1, cid: contact.id, context: 'standalone' } }}">{{ ts('Print/Merge Document') }}</a>
+                  <a class="crm-popup" ng-href="{{ 'civicrm/activity/pdf/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: contact.id, context: 'standalone' } }}">{{ ts('Print/Merge Document') }}</a>
                 </li>
               </ul>
             </div>
           </td>
         </tr>
-        <tr ng-if="!relations.length">
+        <tr ng-repeat="i in [1, 2, 3]" ng-if="isRelationshipLoading">
+          <td class="civicase__people-tab__table-column civicase__people-tab__table-column--first">
+            <div class="civicase__loading-placeholder__oneline" style="width: 1em; font-size: 24px; margin-right: 5px;"></div>
+            <label>
+              <div class="civicase__loading-placeholder__oneline" style="width: 16em; margin-bottom: 5px;"></div>
+              <div class="civicase__loading-placeholder__oneline" style="width: 16em; margin-bottom: 5px;"></div>
+              <div class="civicase__loading-placeholder__oneline" style="width: 16em; margin-bottom: 5px;"></div>
+            </label>
+          </td>
+          <td class="civicase__people-tab__table-column">
+            <div class="civicase__loading-placeholder__oneline" style="width: 10em; margin-bottom: 5px;"></div>
+          </th>
+          <td class="civicase__people-tab__table-column">
+            <div class="civicase__loading-placeholder__oneline" style="width: 10em; margin-bottom: 5px;"></div>
+          </td>
+          <td class="civicase__people-tab__table-column civicase__people-tab__table-column--last">
+            <div class="civicase__loading-placeholder__oneline" style="width: 0.5em; font-size: 20px;"></div>
+          </td>
+        </tr>
+        <tr ng-if="!relations.length && !isRelationshipLoading">
           <td colspan="9" class="text-center">
             <button class="btn btn-default" disabled>
               {{ ts('None Found') }}
