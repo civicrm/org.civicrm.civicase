@@ -362,8 +362,6 @@
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
         });
-
-        $scope.item.nextActivityNotMilestone = findNextIncompleteActivityWhichIsNotMilestone($scope.item.allActivities); // to be removed after performace fix
       }
     }
 

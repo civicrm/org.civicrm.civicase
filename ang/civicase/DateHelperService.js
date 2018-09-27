@@ -7,11 +7,19 @@
     /**
      * To check if the date is overdue
      *
-     * @param {String} date ISO string
+     * @param {Object} activity object
      * @return {Boolean} if the date is overdue.
      */
-    this.isOverdue = function (date) {
-      return moment(date).isBefore(moment());
+    this.isOverdue = function (activity) {
+      var isOverdue;
+
+      if (activity.is_overdue) {
+        isOverdue = typeof (activity.is_overdue) !== 'boolean' ? activity.is_overdue === '1' : activity.is_overdue;
+      } else {
+        isOverdue = moment(activity.activity_date_time).isBefore(moment());
+      }
+
+      return isOverdue;
     };
 
     /**
