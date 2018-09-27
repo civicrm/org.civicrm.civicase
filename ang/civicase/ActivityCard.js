@@ -32,7 +32,6 @@
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.templateExists = templateExists;
     $scope.formatDate = DateHelper.formatDate;
-    $scope.isOverdue = DateHelper.isOverdue;
 
     $scope.isActivityEditable = function (activity) {
       var type = CRM.civicase.activityTypes[activity.activity_type_id].name;

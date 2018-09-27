@@ -80,7 +80,7 @@
           <!-- End - Rating -->
 
           <!-- Activity Date -->
-          <span class="civicase__activity-date" ng-class="{'civicase__overdue-activity-icon': isOverdue(activity)}">{{formatDate(activity.activity_date_time, 'DD MMM YYYY')}}</span>
+          <span class="civicase__activity-date" ng-class="{'civicase__overdue-activity-icon': activity.is_overdue}">{{formatDate(activity.activity_date_time, 'DD MMM YYYY')}}</span>
           <!-- End - Activity Date -->
 
           <!-- Avatar -->
