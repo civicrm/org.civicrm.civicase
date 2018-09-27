@@ -143,7 +143,10 @@
 
       // Save all activities in a new meaningful key
       if (item['api.Activity.get.1']) {
-        item.allActivities = item['api.Activity.get.1'].values;
+        item.allActivities = _.each(_.cloneDeep(item['api.Activity.get.1'].values), function (act) {
+          formatActivity(act, item.id);
+        });
+
         delete item['api.Activity.get.1'];
 
         countOverdueTasks(item);

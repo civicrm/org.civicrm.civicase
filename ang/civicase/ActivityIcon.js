@@ -9,8 +9,7 @@
       scope: {
         activity: '=activityIcon'
       },
-      link: activityIconLink,
-      controller: activityIconController
+      link: activityIconLink
     };
 
     /**
@@ -33,14 +32,4 @@
       }
     }
   });
-
-  /**
-   * Controller function for activityIcon directive
-   *
-   * @param {object} $scope
-   * @param {object} DateHelper
-   */
-  function activityIconController ($scope, DateHelper) {
-    $scope.isOverdue = DateHelper.isOverdue;
-  }
 })(angular, CRM.$, CRM._, CRM);

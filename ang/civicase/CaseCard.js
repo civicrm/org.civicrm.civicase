@@ -16,7 +16,6 @@
 
   module.controller('CivicaseCaseCardController', function ($scope, getActivityFeedUrl, DateHelper) {
     $scope.activityFeedUrl = getActivityFeedUrl;
-    $scope.isOverdue = DateHelper.isOverdue;
     $scope.formatDate = DateHelper.formatDate;
   });
 })(angular, CRM.$, CRM._, CRM);
