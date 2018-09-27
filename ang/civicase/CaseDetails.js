@@ -200,6 +200,9 @@
     function caseGetParams () {
       var activityParams = {
         case_id: '$value.id',
+        options: {
+          sort: 'activity_date_time ASC'
+        },
         return: [
           'subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
           'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
