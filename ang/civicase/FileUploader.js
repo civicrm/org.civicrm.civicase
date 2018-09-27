@@ -92,7 +92,6 @@
     }
 
     // TODO: Test interrupted transfer.
-
     function pwait (delay) {
       var dfr = $q.defer();
       $timeout(function () { dfr.resolve(); }, delay);
