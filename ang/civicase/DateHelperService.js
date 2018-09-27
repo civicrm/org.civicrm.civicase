@@ -11,15 +11,9 @@
      * @return {Boolean} if the date is overdue.
      */
     this.isOverdue = function (activity) {
-      var isOverdue;
-
-      if (activity.is_overdue) {
-        isOverdue = typeof (activity.is_overdue) !== 'boolean' ? activity.is_overdue === '1' : activity.is_overdue;
-      } else {
-        isOverdue = moment(activity.activity_date_time).isBefore(moment());
+      if (typeof activity.is_overdue !== 'undefined') {
+        return typeof (activity.is_overdue) !== 'boolean' ? activity.is_overdue === '1' : activity.is_overdue;
       }
-
-      return isOverdue;
     };
 
     /**

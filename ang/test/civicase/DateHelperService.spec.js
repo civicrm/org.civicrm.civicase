@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 (function ($) {
   describe('DateHelper', function () {
-    var DateHelper, activitiesMockData, activitiyWithStringOverdue, activitiyWithBooleanOverdue, activitiyWithoutOverdue;
+    var DateHelper, activitiesMockData, activity;
 
     beforeEach(module('civicase', 'civicase.data'));
 
@@ -19,26 +19,51 @@
 
       describe('isOverdue()', function () {
         beforeEach(function () {
-          activitiyWithBooleanOverdue = activitiesMockData[0];
-          activitiyWithBooleanOverdue.is_overdue = true;
-
-          activitiyWithStringOverdue = activitiesMockData[0];
-          activitiyWithStringOverdue.is_overdue = '1';
-
-          activitiyWithoutOverdue = activitiesMockData[0];
-          delete (activitiyWithoutOverdue.is_overdue);
+          activity = activitiesMockData[0];
         });
 
-        it('returns true is_overdue is boolean', function () {
-          expect(DateHelper.isOverdue(activitiyWithBooleanOverdue)).toBe(true);
+        describe('when api returns boolean value for is_overdue', function () {
+          describe('when is_overdue is true', function () {
+            beforeEach(function () {
+              activity.is_overdue = true;
+            });
+
+            it('returns true if date is overdue', function () {
+              expect(DateHelper.isOverdue(activity)).toBe(true);
+            });
+          });
+
+          describe('when is_overdue is false', function () {
+            beforeEach(function () {
+              activity.is_overdue = false;
+            });
+
+            it('returns false if date is not overdue', function () {
+              expect(DateHelper.isOverdue(activity)).toBe(false);
+            });
+          });
         });
 
-        it('returns true is_overdue is String', function () {
-          expect(DateHelper.isOverdue(activitiyWithStringOverdue)).toBe(true);
-        });
+        describe('when api returns string value for is_overdue', function () {
+          describe('when is_overdue is true', function () {
+            beforeEach(function () {
+              activity.is_overdue = '1';
+            });
 
-        it('is not undefined when is_overdue is not present', function () {
-          expect(DateHelper.isOverdue(activitiyWithStringOverdue)).toBeDefined();
+            it('returns true if date is overdue', function () {
+              expect(DateHelper.isOverdue(activity)).toBe(true);
+            });
+          });
+
+          describe('when is_overdue is false', function () {
+            beforeEach(function () {
+              activity.is_overdue = '0';
+            });
+
+            it('returns false if date is not overdue', function () {
+              expect(DateHelper.isOverdue(activity)).toBe(false);
+            });
+          });
         });
       });
     });
