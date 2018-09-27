@@ -6,51 +6,52 @@
     </a>
   </li>
   <li class="pull-right" civicase-dropdown>
-    <button type="button" class="btn btn-primary" civicase-dropdown-toggle>
-      <i class="fa fa-plus-circle"></i>
-      Add new
-      <i class="fa fa-caret-down"></i>
-    </button>
-    <ul class="dropdown-menu">
-      <li><a href><i class="material-icons">email</i> Create email</a></li>
-      <li><a href><i class="material-icons">picture_as_pdf</i> Create PDF letter</a></li>
-      <li class="divider"></li>
-      <li class="activity-dropdown" civicase-dropdown>
-        <a href civicase-dropdown-toggle>
-          Add activity
-          <i class="fa fa-caret-right pull-right"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li>
-            <input class="form-control" type="text" ng-model="activityTypeSearchText" />
-          </li>
-          <li class="divider"></li>
-          <li ng-repeat="actType in availableActivityTypes | filter:{label: activityTypeSearchText}">
-            <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" ng-href="{{ newActivityUrl(actType) }}">
-              <i class="fa fa-fw {{ actType.icon || 'fa-circle' }}"></i>
-              {{ actType.label }}
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="timeline-dropdown" civicase-dropdown>
-        <a href civicase-dropdown-toggle>
-          Add timeline
-          <i class="fa fa-caret-right pull-right"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li>
-            <input class="form-control" type="text" ng-model="activitySetSearchText" />
-          </li>
-          <li class="divider"></li>
-          <li ng-repeat="timeline in item.definition.activitySets | filter:{label: activitySetSearchText}">
-            <a href crm-confirm="{message: ts('Add all activities from %1 to this case?', {1: timeline.label})}" on-yes="addTimeline(timeline.name)">
-              {{ timeline.label }}
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
+    <div class="civicase__case-details__add-new-dropdown">
+      <button type="button" class="btn btn-primary" civicase-dropdown-toggle>
+        <i class="fa fa-plus-circle"></i>Add new<i class="fa fa-caret-down"></i>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href><i class="material-icons">email</i> Create email</a></li>
+        <li><a href><i class="material-icons">picture_as_pdf</i> Create PDF letter</a></li>
+        <li class="divider"></li>
+        <li class="civicase__activity-dropdown" civicase-dropdown>
+          <a href civicase-dropdown-toggle>
+            Add activity
+            <i class="fa fa-caret-right pull-right"></i>
+          </a>
+          <ul class="dropdown-menu civicase__dropdown-menu--filters">
+            <li class="form-group has-feedback">
+              <input class="form-control" type="text" ng-model="activityTypeSearchText" />
+              <i class="fa fa-search form-control-feedback"></i>
+            </li>
+            <li class="divider"></li>
+            <li ng-repeat="actType in availableActivityTypes | filter:{label: activityTypeSearchText}">
+              <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" ng-href="{{ newActivityUrl(actType) }}">
+                <i class="fa fa-fw {{ actType.icon || 'fa-circle' }}"></i>{{ actType.label }}
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="civicase__timeline-dropdown" civicase-dropdown>
+          <a href civicase-dropdown-toggle>
+            Add timeline
+            <i class="fa fa-caret-right pull-right"></i>
+          </a>
+          <ul class="dropdown-menu civicase__dropdown-menu--filters">
+            <li class="form-group has-feedback">
+              <input class="form-control" type="text" ng-model="activitySetSearchText" />
+              <i class="fa fa-search form-control-feedback"></i>
+            </li>
+            <li class="divider"></li>
+            <li ng-repeat="timeline in item.definition.activitySets | filter:{label: activitySetSearchText}">
+              <a href crm-confirm="{message: ts('Add all activities from %1 to this case?', {1: timeline.label})}" on-yes="addTimeline(timeline.name)">
+                {{ timeline.label }}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </li>
 </ul>
 <div class="tab-content">
