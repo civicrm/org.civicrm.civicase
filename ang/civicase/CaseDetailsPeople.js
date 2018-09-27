@@ -47,6 +47,7 @@
     $scope.ceil = Math.ceil;
     $scope.allRoles = [];
     $scope.isRolesLoading = true;
+    $scope.isRelationshipLoading = true;
 
     $scope.formatDate = DateHelper.formatDate;
     $scope.getRelations = getRelations;
@@ -335,6 +336,7 @@
           rel.client = clients[rel.client_contact_id].display_name;
         });
         $scope.relationsCount = contacts.count;
+        $scope.isRelationshipLoading = false;
       });
     }
   }

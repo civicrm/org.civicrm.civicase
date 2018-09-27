@@ -21,7 +21,7 @@
     <div class="civicase__case-card__next-milestone" ng-if="data.activity_summary.milestone.length > 0">
       <span>Next Milestone: </span>
       <a class="civicase__case-card__next-milestone-date"
-         ng-class="{'civicase__overdue-activity-icon': isOverdue(data.activity_summary.milestone[0].activity_date_time)}"
+         ng-class="{'civicase__overdue-activity-icon': isOverdue(data.activity_summary.milestone[0])}"
          ng-href="#{{ activityFeedUrl(data.id, 'milestone', 'incomplete', null, data.activity_summary.milestone[0].id) }}"
          title="{{data.activity_summary.milestone[0].subject || data.activity_summary.milestone[0].type;}}"
       >{{ formatDate(data.activity_summary.milestone[0].activity_date_time, 'DD/MM/YYYY') }} </a>

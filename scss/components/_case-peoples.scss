@@ -91,6 +91,12 @@
       top: 2px;
     }
   }
+
+  .dropdown-menu {
+    left: auto !important;
+    right: 0;
+    top: 100% !important;
+  }
 }
 
 .civicase__people-tab__selection {
