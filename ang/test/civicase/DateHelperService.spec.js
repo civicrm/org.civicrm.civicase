@@ -1,13 +1,14 @@
 /* eslint-env jasmine */
 (function ($) {
   describe('DateHelper', function () {
-    var DateHelper, pastDate, futureDate;
+    var DateHelper, activitiesMockData, activitiyWithStringOverdue, activitiyWithBooleanOverdue, activitiyWithoutOverdue;
 
-    beforeEach(module('civicase'));
+    beforeEach(module('civicase', 'civicase.data'));
 
     describe('DateHelper', function () {
-      beforeEach(inject(function (_DateHelper_) {
+      beforeEach(inject(function (_DateHelper_, _activitiesMockData_) {
         DateHelper = _DateHelper_;
+        activitiesMockData = _activitiesMockData_.get();
       }));
 
       describe('formatDate()', function () {
@@ -18,16 +19,26 @@
 
       describe('isOverdue()', function () {
         beforeEach(function () {
-          pastDate = moment().subtract(7, 'd');
-          futureDate = moment().add(7, 'd');
+          activitiyWithBooleanOverdue = activitiesMockData[0];
+          activitiyWithBooleanOverdue.is_overdue = true;
+
+          activitiyWithStringOverdue = activitiesMockData[0];
+          activitiyWithStringOverdue.is_overdue = '1';
+
+          activitiyWithoutOverdue = activitiesMockData[0];
+          delete (activitiyWithoutOverdue.is_overdue);
         });
 
-        it('returns true when date is in past', function () {
-          expect(DateHelper.isOverdue(pastDate)).toBe(true);
+        it('returns true is_overdue is boolean', function () {
+          expect(DateHelper.isOverdue(activitiyWithBooleanOverdue)).toBe(true);
         });
 
-        it('returns false when date is not in past', function () {
-          expect(DateHelper.isOverdue(futureDate)).toBe(false);
+        it('returns true is_overdue is String', function () {
+          expect(DateHelper.isOverdue(activitiyWithStringOverdue)).toBe(true);
+        });
+
+        it('is not undefined when is_overdue is not present', function () {
+          expect(DateHelper.isOverdue(activitiyWithStringOverdue)).toBeDefined();
         });
       });
     });
