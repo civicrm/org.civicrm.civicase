@@ -1,44 +1,67 @@
-(function(angular, $, _) {
+(function (angular, $, _) {
+  var module = angular.module('civicase');
 
-  function FileListCtrl($scope, crmApi, crmBlocker, crmStatus) {
-    var ts = $scope.ts = CRM.ts('civicase'),
-      block = $scope.block = crmBlocker();
-    $scope.CRM = CRM;
-
-    $scope.$watchCollection('apiCtrl.result', function(r){
-      // prettier html
-      $scope.values = r.values;
-      $scope.xref = r.xref;
-      // Pre-sorting: (a) cast to array and (b) ensure stable check of isSameDate()
-      $scope.activities = r.xref ? _.sortBy(r.xref.activity, 'activity_date_time').reverse() : [];
-
-      $scope.filesByAct = {};
-      _.each(r.values, function(match){
-        if (!$scope.filesByAct[match.activity_id]) {
-          $scope.filesByAct[match.activity_id] = [];
-        }
-        $scope.filesByAct[match.activity_id].push(r.xref.file[match.id]);
-      });
-
-      $scope.delete = function(activity, file) {
-        var p = crmApi('Attachment', 'delete', {id: file.id})
-          .then(function(){
-            $scope.apiCtrl.refresh();
-          });
-        return block(crmStatus({start: ts('Deleting...'), success: ts('Deleted')}, p));
-      }
-    });
-  }
-
-  angular.module('civicase').directive('civicaseFileList', function() {
+  module.directive('civicaseFileList', function () {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/FileList.html',
-      controller: FileListCtrl,
+      controller: civicaseFileListController,
       scope: {
-        apiCtrl: '=civicaseFileList'
+        apiCtrl: '=civicaseFileList',
+        bulkAllowed: '='
       }
     };
   });
 
+  /**
+   * Controlle for File List
+   *
+   * @param {Object} $scope
+   * @param {Object} crmApi
+   * @param {Object} crmBlocker
+   * @param {Object} crmStatus
+   */
+  function civicaseFileListController ($scope, crmApi, crmBlocker, crmStatus) {
+    $scope.ts = CRM.ts('civicase');
+    $scope.block = crmBlocker();
+
+    (function init () {
+      $scope.$watchCollection('apiCtrl.result', apiCtrlWatcher);
+    }());
+
+    /**
+     * Deletes file of an activity
+     *
+     * @params {Object} activity
+     * @params {Object} file
+     */
+    $scope.delete = function (activity, file) {
+      var p = crmApi('Attachment', 'delete', {id: file.id})
+        .then(function () {
+          $scope.apiCtrl.refresh();
+        });
+      return $scope.block(crmStatus({start: $scope.ts('Deleting...'), success: $scope.ts('Deleted')}, p));
+    };
+
+    /**
+     * Watcher function for apiCtrl.result collection
+     *
+     * @params {Object} response
+     */
+    function apiCtrlWatcher (response) {
+      // prettier html
+      $scope.values = response.values;
+      $scope.xref = response.xref;
+      // Pre-sorting: (a) cast to array and (b) ensure stable check of isSameDate()
+      $scope.activities = response.xref ? _.sortBy(response.xref.activity, 'activity_date_time').reverse() : [];
+
+      $scope.filesByAct = {};
+      _.each(response.values, function (match) {
+        if (!$scope.filesByAct[match.activity_id]) {
+          $scope.filesByAct[match.activity_id] = [];
+        }
+        $scope.filesByAct[match.activity_id].push(response.xref.file[match.id]);
+      });
+    }
+  }
 })(angular, CRM.$, CRM._);

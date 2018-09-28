@@ -124,6 +124,7 @@
             href="{{ file.url }}">
             {{ file.name }}
           </a>
+          <div ng-include="'~/civicase/ActivityCard--Menu--File.html'" class="civicase__activity-attachment__file-options" ng-if="bulkAllowed"></div>
           <div class="civicase__activity-attachment__file-description">{{ file.description }}</div>
         </div>
       </div>
