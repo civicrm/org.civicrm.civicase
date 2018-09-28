@@ -433,10 +433,11 @@
         var $caseNavigation = $('.civicase__case-body_tab');
         var $toolbarDrawer = $('#toolbar');
         var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
+        var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
 
         $caseNavigation.affix({
           offset: {
-            top: $casePanelBody.offset().top - 87
+            top: $casePanelBody.offset().top - bodyPadding
           }
         }).on('affixed.bs.affix', function () {
           $caseNavigation.css('top', $toolbarDrawer.height());
