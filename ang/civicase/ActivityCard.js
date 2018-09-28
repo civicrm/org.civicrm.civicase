@@ -154,11 +154,11 @@
       }
 
       /**
-     * Deletes file of an activity
-     *
-     * @params {Object} activity
-     * @params {Object} file
-     */
+       * Deletes file of an activity
+       *
+       * @params {Object} activity
+       * @params {Object} file
+       */
       $scope.deleteFile = function (activity, file) {
         var p = crmApi('Attachment', 'delete', {id: file.id})
           .then(function () {
