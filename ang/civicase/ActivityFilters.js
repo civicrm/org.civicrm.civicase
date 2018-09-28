@@ -1,11 +1,25 @@
-(function(angular, $, _) {
+(function (angular, $, _) {
+  var module = angular.module('civicase');
 
-  angular.module('civicase').directive('civicaseActivityFilters', function($timeout, crmUiHelp) {
+  module.directive('civicaseActivityFilters', function ($timeout, crmUiHelp) {
+    return {
+      restrict: 'A',
+      scope: {
+        filters: '=civicaseActivityFilters',
+        displayOptions: '=displayOptions'
+      },
+      replace: true,
+      templateUrl: '~/civicase/ActivityFilters.html',
+      link: activityFiltersLink,
+      transclude: true
+    };
 
-    function activityFilters($scope, element, attrs) {
+    function activityFiltersLink ($scope, element, attrs) {
       var ts = $scope.ts = CRM.ts('civicase');
 
-      function mapSelectOptions(opt, id) {
+      $scope.activityCategories = CRM.civicase.activityCategories;
+
+      function mapSelectOptions (opt, id) {
         return {
           id: id,
           text: opt.label,
@@ -14,17 +28,15 @@
         };
       }
 
-      $timeout(function() {
+      $timeout(function () {
+        var $actHeader = $('.act-feed-panel .panel-header');
+        var $actControls = $('.act-feed-panel .act-list-controls');
+        var $civicrmMenu = $('#civicrm-menu');
+        var $feedActivity = $('.act-feed-view-activity');
+        var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
+        var $casePanel = $('.civicase__case-details-panel');
 
-        var $actHeader = $('.act-feed-panel .panel-header'),
-          $actControls = $('.act-feed-panel .act-list-controls'),
-          $civicrmMenu = $('#civicrm-menu'),
-          $feedActivity = $('.act-feed-view-activity'),
-          $casePanelBody = $('.civicase__case-details-panel > .panel-body'),
-          $casePanel = $('.civicase__case-details-panel');
-
-
-        if($casePanel.length < 1) {
+        if ($casePanel.length < 1) {
           $casePanel = $('.dashboard-activites');
           $casePanelBody = $('.dashboard-activites');
         }
@@ -34,42 +46,40 @@
             top: $casePanelBody.offset().top - 73,
             bottom: $(document).height() - ($casePanel.offset().top + $casePanel.height()) + 18
           }
-        })
-        .on('affixed.bs.affix', function() {
-          $feedActivity.css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height() + 59);
-        })
-        .on('affixed-top.bs.affix', function() {
-          $feedActivity.css('top','auto');
+        }).on('affixed.bs.affix', function () {
+          $feedActivity.css('top', $civicrmMenu.height() + $actHeader.height() + $actControls.height() + 59);
+        }).on('affixed-top.bs.affix', function () {
+          $feedActivity.css('top', 'auto');
         });
 
-        $actHeader.affix({offset: {top: $casePanelBody.offset().top - 73} })
+        $actHeader.affix({ offset: { top: $casePanelBody.offset().top - 73 } })
           .css('top', $civicrmMenu.height() + 53)
-          .css('width',$('.act-feed-panel').css('width'))
-          .on('affixed.bs.affix', function() {
-            $actHeader.css('width',$('.act-feed-panel').css('width'));
+          .css('width', $('.act-feed-panel').css('width'))
+          .on('affixed.bs.affix', function () {
+            $actHeader.css('width', $('.act-feed-panel').css('width'));
             $actHeader.css('top', $civicrmMenu.height() + 53);
           })
-          .on('affixed-top.bs.affix', function() {
-            $actHeader.css('width','auto');
+          .on('affixed-top.bs.affix', function () {
+            $actHeader.css('width', 'auto');
           });
 
-        $actControls.affix({offset: {top: $casePanelBody.offset().top - 73} })
-          .css('width',$actHeader.css('width'))
-          .on('affixed.bs.affix', function() {
-            $actControls.css('width',$actHeader.css('width'));
-            $actControls.css('top',$civicrmMenu.height() + $actHeader.height() + 53);
+        $actControls.affix({ offset: { top: $casePanelBody.offset().top - 73 } })
+          .css('width', $actHeader.css('width'))
+          .on('affixed.bs.affix', function () {
+            $actControls.css('width', $actHeader.css('width'));
+            $actControls.css('top', $civicrmMenu.height() + $actHeader.height() + 53);
           })
-          .on('affixed-top.bs.affix', function() {
-            $actControls.css('width','auto');
+          .on('affixed-top.bs.affix', function () {
+            $actControls.css('width', 'auto');
             $actControls.css('top', 'auto');
           });
 
-        $scope.$watchCollection('[filters, exposedFilters]', function(){
-          $timeout(function() {
-            $actControls.css('top',$civicrmMenu.height() + $actHeader.height() + 53);
+        $scope.$watchCollection('[filters, exposedFilters]', function () {
+          $timeout(function () {
+            $actControls.css('top', $civicrmMenu.height() + $actHeader.height() + 53);
             $feedActivity.not('.cc-zero-w')
               .height($(window).height() - ($civicrmMenu.height() + $actHeader.height() + $actControls.height()))
-              .css('top',$civicrmMenu.height() + $actHeader.height() + $actControls.height() + 53);
+              .css('top', $civicrmMenu.height() + $actHeader.height() + $actControls.height() + 53);
           });
         });
       });
@@ -145,11 +155,11 @@
         text: true
       };
       // Ensure set filters are also exposed
-      _.each($scope.filters, function(filter, key) {
+      _.each($scope.filters, function (filter, key) {
         $scope.exposedFilters[key] = true;
       });
 
-      $scope.exposeFilter = function(field, $event) {
+      $scope.exposeFilter = function (field, $event) {
         var shown = !$scope.exposedFilters[field.name];
         if (shown) {
           // Focus search element when selecting
@@ -168,30 +178,19 @@
         }
       };
 
-      $scope.hasFilters = function hasFilters() {
+      $scope.hasFilters = function hasFilters () {
         var result = false;
-        _.each($scope.filters, function(value){
+        _.each($scope.filters, function (value) {
           if (!_.isEmpty(value)) result = true;
         });
         return result;
       };
 
-      $scope.clearFilters = function clearFilters() {
-        _.each(_.keys($scope.filters), function(key){
+      $scope.clearFilters = function clearFilters () {
+        _.each(_.keys($scope.filters), function (key) {
           delete $scope.filters[key];
         });
       };
     }
-
-    return {
-      restrict: 'A',
-      scope: {
-        filters: '=civicaseActivityFilters'
-      },
-      templateUrl: '~/civicase/ActivityFilters.html',
-      link: activityFilters,
-      transclude: true
-    };
   });
-
 })(angular, CRM.$, CRM._);

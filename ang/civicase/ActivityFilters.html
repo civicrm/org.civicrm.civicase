@@ -1,4 +1,56 @@
-<form class="form-inline act-filters">
+<div class="panel-header civicase__activity-filter">
+  <div class="civicase__activity-filter__settings btn-group">
+    <button type="button" class="btn btn-default btn-clean dropdown-toggle" data-toggle="dropdown">
+      <i class="material-icons">settings</i> <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li>
+        <span>
+          <input type="checkbox" id="act_control_overdue_first" ng-model="displayOptions.overdue_first" />
+          <label for="act_control_overdue_first">{{ ts('Show overdue activities first') }}</label>
+        </span>
+      </li>
+      <li ng-show="!params.case_id && params.filters.contact_id">
+        <span>
+          <input type="checkbox" id="act_control_include_case" ng-model="displayOptions.include_case" />
+          <label for="act_control_include_case">{{ ts('Show case activities') }}</label>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <span class="pull-right">
+    <div civicase-activity-filters-contact="filters"></div>
+    <select
+      class="form-control civicase__activity-filter__category"
+      ng-model="filters['activity_type_id.grouping']" crm-ui-select>
+      <option value="">{{ ts('All Activity Categories') }}</option>
+      <option ng-repeat="(value, item) in ::activityCategories" value="{{ value }}" data-icon="{{ item.icon }}">
+        {{ item.label }}
+      </option>
+    </select>
+    <button
+      class="civicase__activity-filter__attachment btn btn-{{filters.file_id ? 'active' : 'default'}}"
+      ng-click="filters.file_id = filters.file_id ? null : {'IS NOT NULL': 1}"
+      title="{{ ts('Show only activities with attachments') }}">
+      <i class=" material-icons">attach_file</i>
+    </button>
+    <button
+      class="civicase__activity-filter__star btn btn-{{filters.is_star ? 'active' : 'default'}}"
+      ng-click="filters.is_star = filters.is_star ? null : '1'"
+      title="{{ ts('Show only starred items') }}">
+      <i ng-if="!filters.is_star" class="material-icons">star_border</i>
+      <i ng-if="filters.is_star" class="active material-icons">star</i>
+    </button>
+    <button
+      class="civicase__activity-filter__more btn btn-{{filters.is_star ? 'active' : 'default'}}"
+      ng-click="filters.moreFilters = filters.moreFilters ? false : true"
+      title="{{ ts('Show only starred items') }}">
+      <i class="material-icons">tune</i> <span>Filter Activities</span>
+    </button>
+  </span>
+</div>
+<!-- <form class="form-inline act-filters">
 
   <div class="btn-group btn-group-sm pull-right act-clear-filter" ng-show="hasFilters()">
     <button class="btn btn-danger btn-sm" ng-click="clearFilters()">
@@ -49,4 +101,4 @@
     </span>
   </span>
 
-</form>
+</form> -->

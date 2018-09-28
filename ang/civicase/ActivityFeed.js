@@ -30,7 +30,6 @@
     $scope.isLoading = true;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityStatuses = CRM.civicase.activityStatuses;
-    $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activities = {};
     $scope.activityGroups = [];
     $scope.bulkAllowed = BulkActions.isAllowed();
