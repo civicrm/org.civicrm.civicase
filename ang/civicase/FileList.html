@@ -11,7 +11,7 @@
       refresh-on-checkbox-toggle="true"
       bulk-allowed="bulkAllowed"
       ng-click="viewActivity(activity.id, $event)"
-      refresh-callback="refreshCase"
+      refresh-callback="apiCtrl.refresh"
       ng-repeat="activity in activities"
       >
     </div>

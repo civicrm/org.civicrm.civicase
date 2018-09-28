@@ -21,27 +21,12 @@
    * @param {Object} crmBlocker
    * @param {Object} crmStatus
    */
-  function civicaseFileListController ($scope, crmApi, crmBlocker, crmStatus) {
+  function civicaseFileListController ($scope, crmApi) {
     $scope.ts = CRM.ts('civicase');
-    $scope.block = crmBlocker();
 
     (function init () {
       $scope.$watchCollection('apiCtrl.result', apiCtrlWatcher);
     }());
-
-    /**
-     * Deletes file of an activity
-     *
-     * @params {Object} activity
-     * @params {Object} file
-     */
-    $scope.delete = function (activity, file) {
-      var p = crmApi('Attachment', 'delete', {id: file.id})
-        .then(function () {
-          $scope.apiCtrl.refresh();
-        });
-      return $scope.block(crmStatus({start: $scope.ts('Deleting...'), success: $scope.ts('Deleted')}, p));
-    };
 
     /**
      * Watcher function for apiCtrl.result collection

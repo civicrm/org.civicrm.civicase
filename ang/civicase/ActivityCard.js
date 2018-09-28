@@ -27,7 +27,7 @@
     };
   });
 
-  function caseActivityCardController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi, DateHelper) {
+  function caseActivityCardController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi, crmBlocker, crmStatus, DateHelper) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.templateExists = templateExists;
@@ -152,6 +152,20 @@
           $scope.$digest();
         });
       }
+
+      /**
+     * Deletes file of an activity
+     *
+     * @params {Object} activity
+     * @params {Object} file
+     */
+      $scope.deleteFile = function (activity, file) {
+        var p = crmApi('Attachment', 'delete', {id: file.id})
+          .then(function () {
+            $scope.refresh();
+          });
+        return crmBlocker(crmStatus({start: $scope.ts('Deleting...'), success: $scope.ts('Deleted')}, p));
+      };
     };
   }
 })(angular, CRM.$, CRM._);

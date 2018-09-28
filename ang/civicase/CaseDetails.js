@@ -376,15 +376,21 @@
      */
     function findNextIncompleteActivityWhichIsNotMilestone (activities) {
       var nextActivity = _.find(activities, function (activity) {
+        if (!activity) {
+          return false;
+        }
+
         var notMilestone = CRM.civicase.activityTypes[activity.activity_type_id].grouping !== 'milestone';
         var notComplete = CRM.civicase.activityStatusTypes.completed.indexOf(parseInt(activity.status_id, 10)) === -1;
 
         return notMilestone && notComplete;
       });
 
-      nextActivity.type = CRM.civicase.activityTypes[nextActivity.activity_type_id].label;
-      nextActivity.category = [CRM.civicase.activityTypes[nextActivity.activity_type_id].grouping];
-      nextActivity.icon = CRM.civicase.activityTypes[nextActivity.activity_type_id].icon;
+      if (nextActivity) {
+        nextActivity.type = CRM.civicase.activityTypes[nextActivity.activity_type_id].label;
+        nextActivity.category = [CRM.civicase.activityTypes[nextActivity.activity_type_id].grouping];
+        nextActivity.icon = CRM.civicase.activityTypes[nextActivity.activity_type_id].icon;
+      }
 
       return nextActivity;
     }

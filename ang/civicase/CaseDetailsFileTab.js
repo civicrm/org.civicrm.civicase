@@ -6,7 +6,8 @@
       restrict: 'AE',
       templateUrl: '~/civicase/CaseDetailsFileTab.html',
       scope: {
-        item: '=civicaseCaseDetailsFileTab'
+        item: '=civicaseCaseDetailsFileTab',
+        refresh: '=?refreshCallback'
       },
       controller: civicaseCaseDetailsFileTabController
     };

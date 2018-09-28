@@ -32,6 +32,10 @@
 
 .civicase__case-filter__input.form-control {
   margin: 0 8px;
+
+  &:not(.select2-container) {
+    width: 240px;
+  }
 }
 
 .civicase__case-filter-panel__button {
