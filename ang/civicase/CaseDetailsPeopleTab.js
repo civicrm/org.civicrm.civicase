@@ -1,13 +1,13 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseViewPeople', function () {
+  module.directive('civicaseCaseDetailsPeopleTab', function () {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/CaseDetailsPeople.html',
+      templateUrl: '~/civicase/CaseDetailsPeopleTab.html',
       controller: civicaseViewPeopleController,
       scope: {
-        item: '=civicaseViewPeople',
+        item: '=civicaseCaseDetailsPeopleTab',
         refresh: '=refreshCallback'
       }
     };
