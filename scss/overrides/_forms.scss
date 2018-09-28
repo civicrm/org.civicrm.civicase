@@ -1,3 +1,26 @@
 .form-control {
   box-shadow: unset;
+
+  &:not(.select2-container) {
+    width: 240px;
+  }
+
+  .select2-choice {
+    height: auto;
+    line-height: 18px;
+    padding: 5px 10px;
+  }
+
+  .select2-arrow b {
+    margin-top: 0;
+    width: 20px;
+  }
+
+  .select2-choices {
+    background-image: none;
+
+    &::before {
+      top: 7px;
+    }
+  }
 }
