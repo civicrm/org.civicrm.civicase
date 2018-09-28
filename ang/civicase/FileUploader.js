@@ -5,7 +5,7 @@
     return {
       restrict: 'A',
       templateUrl: '~/civicase/FileUploader.html',
-      controller: caseFilesController,
+      controller: caseFilesUploaderController,
       scope: {
         ctx: '=civicaseFileUploader',
         onUpload: '@'
@@ -13,7 +13,7 @@
     };
   });
 
-  function caseFilesController ($scope, crmApi, crmBlocker, crmStatus, FileUploader, $q, $timeout) {
+  function caseFilesUploaderController ($scope, crmApi, crmBlocker, crmStatus, FileUploader, $q, $timeout) {
     $scope.block = crmBlocker();
     $scope.ts = CRM.ts('civicase');
 
@@ -59,7 +59,7 @@
 
     $scope.deleteActivity = function deleteActivity () {
       $scope.uploader.clearQueue();
-      $scope.activity = null;
+      initActivity();
     };
 
     $scope.saveActivity = function saveActivity () {

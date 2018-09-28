@@ -1,8 +1,6 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  // "civicaseCaseDetailsFileTab" is a basic skeletal directive.
-  // Example usage: <div civicase-view-files="{foo: 1, bar: 2}"></div>
   module.directive('civicaseCaseDetailsFileTab', function () {
     return {
       restrict: 'AE',
