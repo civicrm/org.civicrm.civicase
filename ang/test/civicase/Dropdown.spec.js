@@ -9,8 +9,6 @@
     beforeEach(inject(function (_$compile_, _$rootScope_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
-
-      initDirective();
     }));
 
     afterEach(function () {
@@ -18,6 +16,10 @@
     });
 
     describe('opening the dropdown', function () {
+      beforeEach(function () {
+        initDirective();
+      });
+
       describe('when clicking on the toggle element', function () {
         beforeEach(function () {
           dropdowns.parent.find('[civicase-dropdown-toggle]:first').click();
@@ -41,6 +43,10 @@
     });
 
     describe('closing the dropdown', function () {
+      beforeEach(function () {
+        initDirective();
+      });
+
       beforeEach(function () {
         dropdowns.parent.find('[civicase-dropdown-toggle]:first').click();
       });
@@ -114,8 +120,50 @@
       });
     });
 
-    function initDirective () {
-      var html = `<span civicase-dropdown name="parent-dropdown">
+    describe('when the dropdown menu is triggered by mouse events', function () {
+      beforeEach(function () {
+        initDirective({ trigger: 'hover' });
+      });
+
+      describe('when the mouse passes over the dropdown element', function () {
+        beforeEach(function () {
+          dispatchMouseEvent('mouseover');
+        });
+
+        it('displays the dropdown menu', function () {
+          expect(dropdowns.parent.find('.dropdown-menu:first').is(':visible')).toBe(true);
+        });
+      });
+
+      describe('when the mouse passes over and then leaves the dropdown element', function () {
+        beforeEach(function () {
+          dispatchMouseEvent('mouseover');
+          dispatchMouseEvent('mouseout');
+        });
+
+        it('hides the dropdown menu', function () {
+          expect(dropdowns.parent.find('.dropdown-menu:first').is(':visible')).toBe(false);
+        });
+      });
+
+      /**
+       * Dispatches a mouse event to the dropdown toggle element.
+       *
+       * @param {String} eventType the mouse event type that is going to be dispatched to the element.
+       */
+      function dispatchMouseEvent (eventType) {
+        var event = document.createEvent('mouseevent');
+
+        event.initEvent(eventType, true, false);
+        dropdowns.parent.find('[civicase-dropdown-toggle]:first')[0].dispatchEvent(event);
+      }
+    });
+
+    function initDirective (options) {
+      var defaultOptions = { trigger: 'click' };
+      options = $.extend({}, defaultOptions, options);
+
+      var html = `<span civicase-dropdown name="parent-dropdown" civicase-dropdown-trigger="${options.trigger}">
         <button type="button" civicase-dropdown-toggle>Open dropdown</button>
         <ul class="dropdown-menu">
           <li><input /></li>

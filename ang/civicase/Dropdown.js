@@ -8,7 +8,7 @@
    */
   module.directive('civicaseDropdown', function () {
     return {
-      link: function (scope, $element) {
+      link: function (scope, $element, attrs) {
         var $dropdownMenu = $element.find('.dropdown-menu:first');
         var $toggleElement = $element.find('[civicase-dropdown-toggle]:first');
         var isOpen = false;
@@ -56,6 +56,29 @@
           $toggleElement.on('click', toggleDropdown);
           $('body').on('keydown', closeDropdownOnEscapeKeyPressed);
           $(document).on('click', closeDropdownOnClickOutside);
+
+          if (attrs.civicaseDropdownTrigger === 'hover') {
+            $element.on('mouseover', showDropdown);
+            $element.on('mouseout', hideDropdown);
+          }
+        }
+
+        /**
+         * Displays the dropdown menu.
+         */
+        function showDropdown () {
+          isOpen = true;
+
+          $dropdownMenu.show();
+        }
+
+        /**
+         * Hides the dropdown menu.
+         */
+        function hideDropdown () {
+          isOpen = false;
+
+          $dropdownMenu.hide();
         }
 
         /**
@@ -66,6 +89,8 @@
             $toggleElement.unbind('click', toggleDropdown);
             $('body').unbind('keydown', closeDropdownOnEscapeKeyPressed);
             $(document).unbind('click', closeDropdownOnClickOutside);
+            $element.unbind('mouseover', showDropdown);
+            $element.unbind('mouseout', hideDropdown);
           });
         }
 
@@ -73,11 +98,7 @@
          * Toggles the dropdown menu visibility
          */
         function toggleDropdown () {
-          var action;
-          isOpen = !isOpen;
-          action = isOpen ? 'show' : 'hide';
-
-          $dropdownMenu[action]();
+          isOpen ? hideDropdown() : showDropdown();
         }
       }
     };
