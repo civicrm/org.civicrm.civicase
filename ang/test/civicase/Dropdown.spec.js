@@ -159,6 +159,12 @@
       }
     });
 
+    /**
+     * Initializes the dropdown directive, stores a reference to the dropdown element
+     * and scope.
+     *
+     * @param {Object} options a list of configurations to pass to the dropdown directive.
+     */
     function initDirective (options) {
       var defaultOptions = { trigger: 'click' };
       options = $.extend({}, defaultOptions, options);

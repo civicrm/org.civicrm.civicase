@@ -27,9 +27,13 @@
     width: 180px;
   }
 
+  > .dropdown-menu {
+    margin-top: 8px;
+  }
+
   .dropdown-menu .fa-fw,
-  .dropdown-menu .material-icons, {
-    color: $icon-highlight-color;
+  a .material-icons, {
+    color: $brand-primary;
   }
 }
 

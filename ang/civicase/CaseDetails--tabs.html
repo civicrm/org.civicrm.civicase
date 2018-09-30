@@ -11,8 +11,22 @@
         <i class="fa fa-plus-circle"></i>Add new<i class="fa fa-caret-down"></i>
       </button>
       <ul class="dropdown-menu">
-        <li><a class="crm-popup" ng-href="{{ 'civicrm/activity/email/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id } }}"><i class="material-icons">email</i> {{ts('Create email')}}</a></li>
-        <li><a class="crm-popup" ng-href="{{ 'civicrm/activity/pdf/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id, context: 'standalone' } }}"><i class="material-icons">picture_as_pdf</i> {{ts('Create PDF letter')}}</a></li>
+        <li>
+          <a
+            class="crm-popup"
+            ng-href="{{ 'civicrm/activity/email/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id } }}">
+            <i class="material-icons">email</i>
+            {{ts('Create email')}}
+          </a>
+        </li>
+        <li>
+          <a
+            class="crm-popup"
+            ng-href="{{ 'civicrm/activity/pdf/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id, context: 'standalone' } }}">
+            <i class="material-icons">picture_as_pdf</i>
+            {{ts('Create PDF letter')}}
+          </a>
+        </li>
         <li class="divider"></li>
         <li class="civicase__activity-dropdown" civicase-dropdown civicase-dropdown-trigger="hover">
           <a href civicase-dropdown-toggle>
