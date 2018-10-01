@@ -85,7 +85,14 @@
     <div class="panel-body">
       <div>
         <div class="civicase__activity-empty-message">No upcoming activity</div>
-        <a class="civicase__activity-empty-link" href="#">Click here to add an activity</a>
+        <span civicase-dropdown>
+          <a class="civicase__activity-empty-link" href civicase-dropdown-toggle>
+            Click here to add an activity
+          </a>
+          <civicase-add-activity-menu
+            case="case">
+          </civicase-add-activity-menu>
+        </span>
       </div>
     </div>
   </div>
