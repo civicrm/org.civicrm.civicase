@@ -36,8 +36,8 @@
       }());
 
       /**
-       * Checks if loading completes and add logic
-       * for fixed header
+       * Loads only if loading completes and case is not focused
+       * for fixed header (isLoading watcher)
        *
        * @param {boolean} loading
        */
@@ -48,7 +48,8 @@
       }
 
       /**
-       * Checks if case is focused and completed
+       * Loads only if loading completes and case is not focused
+       * for fixed header (caseIsFocused watcher)
        *
        * @param {boolean} loading
        */

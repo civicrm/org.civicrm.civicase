@@ -28,9 +28,10 @@ describe('CaseListDirective', function () {
       CRM.$.fn.affix = affixOriginalFunction;
     });
 
-    describe('if loading is not complete', function () {
+    describe('if loading is not complete and case is focused', function () {
       beforeEach(function () {
         scope.isLoading = true;
+        scope.caseIsFocused = true;
         scope.$digest();
       });
 
@@ -51,9 +52,58 @@ describe('CaseListDirective', function () {
       });
     });
 
-    describe('if loading is complete', function () {
+    describe('if loading is not complete and case is not focused', function () {
+      beforeEach(function () {
+        scope.isLoading = true;
+        scope.caseIsFocused = false;
+        scope.$digest();
+      });
+
+      it('does not add min-width style to the table elements', function () {
+        expect(element.find('thead').html()).not.toContain('style="min-width');
+      });
+
+      it('does not makes the header sticky', function () {
+        expect(CRM.$.fn.affix).not.toHaveBeenCalledWith(jasmine.objectContaining({offset: {top: jasmine.any(Number)}}));
+      });
+
+      it('does not binds the scroll position of table content to the table header', function () {
+        expect(affixReturnValue.on).not.toHaveBeenCalledWith('affixed.bs.affix', jasmine.any(Function));
+      });
+
+      it('does not resets the padding for top header and when the header gets back to its state', function () {
+        expect(affixReturnValue.on).not.toHaveBeenCalledWith('affixed-top.bs.affix', jasmine.any(Function));
+      });
+    });
+
+    describe('if loading is complete and case is focused', function () {
       beforeEach(inject(function ($timeout) {
         scope.isLoading = false;
+        scope.caseIsFocused = true;
+        scope.$digest();
+      }));
+
+      it('does not add min-width style to the table elements', function () {
+        expect(element.find('thead').html()).not.toContain('style="min-width');
+      });
+
+      it('does not makes the header sticky', function () {
+        expect(CRM.$.fn.affix).not.toHaveBeenCalledWith(jasmine.objectContaining({offset: {top: jasmine.any(Number)}}));
+      });
+
+      it('does not binds the scroll position of table content to the table header', function () {
+        expect(affixReturnValue.on).not.toHaveBeenCalledWith('affixed.bs.affix', jasmine.any(Function));
+      });
+
+      it('does not resets the padding for top header and when the header gets back to its state', function () {
+        expect(affixReturnValue.on).not.toHaveBeenCalledWith('affixed-top.bs.affix', jasmine.any(Function));
+      });
+    });
+
+    describe('if loading is complete and case is not focussed', function () {
+      beforeEach(inject(function ($timeout) {
+        scope.isLoading = false;
+        scope.caseIsFocused = false;
         scope.$digest();
         $timeout.flush(); // Flushing any timeouts used.
       }));

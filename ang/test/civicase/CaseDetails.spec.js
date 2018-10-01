@@ -69,7 +69,7 @@ describe('civicaseCaseDetails', function () {
     });
 
     it('calculates the incomplete tasks and scheduled activities', function () {
-      expect(element.isolateScope().item.category_count.scheduled).toEqual({ count: 14, overdue: 12 });
+      expect(element.isolateScope().item.category_count.scheduled).toEqual(getScheduledActivitiesCount(element.isolateScope().item.allActivities));
       expect(element.isolateScope().item.category_count.incomplete.task).toBe(2);
     });
     /* TODO - Rest of function needs to be unit tested */
@@ -121,5 +121,25 @@ describe('civicaseCaseDetails', function () {
     $scope.viewingCaseDetails = CasesData.values[0];
     element = $compile('<div civicase-case-details="viewingCaseDetails"></div>')($scope);
     $scope.$digest();
+  }
+
+  /**
+   * Gets object containing correct count of total and overdue scheduled activities
+   *
+   * @params {Array} activities - total activities
+   * @return {Object} - with total count and overdue count
+   */
+  function getScheduledActivitiesCount (activities) {
+    var scheduledActivities = CRM._.filter(activities, function (act) {
+      return CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(act.status_id, 10)) > -1;
+    });
+    var overdueActivities = CRM._.filter(scheduledActivities, function (act) {
+      return moment().isAfter(act.activity_date_time);
+    });
+
+    return {
+      count: scheduledActivities.length,
+      overdue: overdueActivities.length
+    };
   }
 });
