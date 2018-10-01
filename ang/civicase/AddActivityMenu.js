@@ -5,15 +5,14 @@
     return {
       restrict: 'E',
       scope: {
-        case: '=',
-        onGetCaseParams: '&'
+        case: '='
       },
       controller: 'civicaseAddActivityMenuController',
       templateUrl: '~/civicase/AddActivityMenu.html'
     };
   });
 
-  module.controller('civicaseAddActivityMenuController', function ($scope) {
+  module.controller('civicaseAddActivityMenuController', function ($scope, getCaseQueryParams) {
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var definition = CRM.civicase.caseTypes[$scope.case.case_type_id].definition;
 
@@ -77,6 +76,7 @@
      * @return {String}
      */
     function newActivityUrl (actType) {
+      var caseQueryParams = JSON.stringify(getCaseQueryParams($scope.case.id));
       var path = 'civicrm/case/activity';
       var args = {
         action: 'add',
@@ -84,7 +84,7 @@
         cid: $scope.case.client[0].contact_id,
         caseid: $scope.case.id,
         atype: actType.id,
-        civicase_reload: $scope.onGetCaseParams()
+        civicase_reload: caseQueryParams
       };
 
       // CiviCRM requires nonstandard urls for a couple special activity types
