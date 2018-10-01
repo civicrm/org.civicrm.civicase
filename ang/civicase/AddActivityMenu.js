@@ -5,7 +5,10 @@
     return {
       restrict: 'E',
       scope: {
-        case: '='
+        case: '=',
+        excludeActivitiesBy: '@',
+        filterActivitiesBy: '@',
+        name: '='
       },
       controller: 'civicaseAddActivityMenuController',
       templateUrl: '~/civicase/AddActivityMenu.html'
@@ -65,6 +68,18 @@
           ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
         }
       });
+
+      if ($scope.excludeActivitiesBy) {
+        ret = ret.filter(function (activity) {
+          return !_.includes($scope.excludeActivitiesBy, activity.grouping);
+        });
+      }
+
+      if ($scope.filterActivitiesBy) {
+        ret = ret.filter(function (activity) {
+          return _.includes($scope.filterActivitiesBy, activity.grouping);
+        });
+      }
 
       return _.sortBy(ret, 'label');
     }

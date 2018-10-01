@@ -127,7 +127,19 @@
         <div class="civicase__activity-card--big--empty-title" ng-if="type === 'activity'"> No upcoming activities </div>
         <div class="civicase__activity-card--big--empty-description" ng-if="type === 'milestone'"> Click on the button below to add a milestone to this case </div>
         <div class="civicase__activity-card--big--empty-description" ng-if="type === 'activity'"> Click the button below to add an activity </div>
-        <div class="civicase__activity-card--big--empty-button btn" ng-if="type === 'milestone'"> ADD MILESTONE </div>
+        <span ng-if="type === 'milestone'" civicase-dropdown>
+          <div class="civicase__activity-card--big--empty-button btn"
+            civicase-dropdown-toggle>
+            <i class="material-icons">add_circle</i>
+            ADD MILESTONE
+            <i class="material-icons">arrow_drop_down</i>
+          </div>
+          <civicase-add-activity-menu
+            case="case"
+            name="yes"
+            filter-activities-by="milestone">
+          </civicase-add-activity-menu>
+        </span>
         <span ng-if="type === 'activity'" civicase-dropdown>
           <div class="civicase__activity-card--big--empty-button btn"
             civicase-dropdown-toggle>
@@ -135,7 +147,9 @@
             ADD ACTIVITY
             <i class="material-icons">arrow_drop_down</i>
           </div>
-          <civicase-add-activity-menu case="case">
+          <civicase-add-activity-menu
+            case="case"
+            exclude-activities-by="milestone">
           </civicase-add-activity-menu>
         </span>
       </div>
