@@ -11,7 +11,12 @@
 
   .dropdown-menu {
     width: 250px;
+  }
+}
 
+.civicase__activity-filter__settings,
+.civicase__activity-filter__add {
+  .dropdown-menu {
     li {
       padding: 0 20px;
 
@@ -103,5 +108,17 @@
     color: $gray-dark;
     position: relative;
     top: 2px;
+  }
+}
+
+.civicase__activity-filter__more-container {
+  margin-top: 15px;
+
+  > * {
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: top;
   }
 }

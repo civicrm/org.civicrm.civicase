@@ -180,9 +180,11 @@
 
       $scope.hasFilters = function hasFilters () {
         var result = false;
+
         _.each($scope.filters, function (value) {
           if (!_.isEmpty(value)) result = true;
         });
+
         return result;
       };
 
