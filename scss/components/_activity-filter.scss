@@ -125,3 +125,11 @@
     vertical-align: top;
   }
 }
+
+.civicase__activity-filter__custom {
+  .civicase__activity-filter__header {
+    border-bottom: 1px solid $gray-light;
+    display: block;
+    margin-top: 5px;
+  }
+}

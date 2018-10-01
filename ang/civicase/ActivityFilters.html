@@ -78,8 +78,8 @@
         </button>
         <ul class="dropdown-menu" role="menu">
           <li ng-repeat="field in (filteredFilters = (availableFilters | filter:{label: availableFilterSearchText}))">
-            <span ng-class="{'act-filter-has-header': field.group && ($first || field.group !== filteredFilters[$index - 1].group)}">
-              <span>
+            <span ng-class="{'civicase__activity-filter__custom': field.group && ($first || field.group !== filteredFilters[$index - 1].group)}">
+              <span class="civicase__activity-filter__header">
                 {{ field.group }}
               </span>
               <span ng-click="exposeFilter(field, $event)">
