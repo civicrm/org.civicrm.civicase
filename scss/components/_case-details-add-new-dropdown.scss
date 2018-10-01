@@ -11,6 +11,8 @@
 
   .btn-primary i:nth-child(1) {
     margin-right: 8px;
+    position: relative;
+    top: 1px;
   }
 
   .btn-primary i:nth-last-child(1) {
@@ -52,7 +54,11 @@
   }
 
   .form-control-feedback {
-    margin-right: 12px;
+    color: $gray-darker;
+    font-size: 14px;
+    margin-right: 8px;
+    margin-top: 7px;
+    position: absolute;
   }
 
   a {

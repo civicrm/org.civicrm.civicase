@@ -8,7 +8,7 @@
   <li class="pull-right" civicase-dropdown>
     <div class="civicase__case-details__add-new-dropdown">
       <button type="button" class="btn btn-primary" civicase-dropdown-toggle>
-        <i class="fa fa-plus-circle"></i>Add new<i class="fa fa-caret-down"></i>
+        <i class="material-icons">add_circle</i>Add new<i class="fa fa-caret-down"></i>
       </button>
       <ul class="dropdown-menu">
         <li>
@@ -36,7 +36,7 @@
           <ul class="dropdown-menu civicase__dropdown-menu--filters">
             <li class="form-group has-feedback">
               <input class="form-control" type="text" ng-model="activityTypeSearchText" />
-              <i class="fa fa-search form-control-feedback"></i>
+              <i class="material-icons form-control-feedback">search</i>
             </li>
             <li class="divider"></li>
             <li ng-repeat="actType in availableActivityTypes | filter:{label: activityTypeSearchText}">
@@ -54,7 +54,7 @@
           <ul class="dropdown-menu civicase__dropdown-menu--filters">
             <li class="form-group has-feedback">
               <input class="form-control" type="text" ng-model="activitySetSearchText" />
-              <i class="fa fa-search form-control-feedback"></i>
+              <i class="material-icons form-control-feedback">search</i>
             </li>
             <li class="divider"></li>
             <li ng-repeat="timeline in item.definition.activitySets | filter:{label: activitySetSearchText}">
