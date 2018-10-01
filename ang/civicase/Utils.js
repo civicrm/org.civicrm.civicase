@@ -335,7 +335,7 @@
           'activity_type_id.grouping': {LIKE: '%communication%'},
           'status_id.filter': 1,
           options: {limit: panelLimit, sort: 'activity_date_time DESC'},
-          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id']
+          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id']
         },
         // For the "tasks" panel
         'api.Activity.get.3': {
@@ -345,7 +345,7 @@
           'activity_type_id.grouping': {LIKE: '%task%'},
           'status_id.filter': 0,
           options: {limit: panelLimit, sort: 'activity_date_time ASC'},
-          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id']
+          return: ['activity_type_id', 'subject', 'activity_date_time', 'status_id', 'target_contact_name', 'assignee_contact_name', 'is_overdue', 'is_star', 'file_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id']
         },
         // Custom data
         'api.CustomValue.gettree': {

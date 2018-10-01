@@ -40,6 +40,7 @@
     (function init () {
       $scope.$watch('isFocused', isFocusedWatcher);
       $scope.$watch('item', itemWatcher);
+      initiateBulkActions();
     }());
 
     $scope.addTimeline = function (name) {
@@ -174,6 +175,21 @@
         civicase_reload: $scope.caseGetParams()
       });
     };
+
+    /**
+     * Initialise the Bulk Actions Functionality
+     */
+    function initiateBulkActions () {
+      if (CRM.checkPerm('basic case information') &&
+        !CRM.checkPerm('administer CiviCase') &&
+        !CRM.checkPerm('access my cases and activities') &&
+        !CRM.checkPerm('access all cases and activities')
+      ) {
+        $scope.bulkAllowed = false;
+      } else {
+        $scope.bulkAllowed = true;
+      }
+    }
 
     function caseGetParams () {
       return getCaseQueryParams($scope.item.id, panelLimit);

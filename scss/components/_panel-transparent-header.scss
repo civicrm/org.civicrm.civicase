@@ -9,6 +9,16 @@
       font-size: 16px;
       margin: 3px 0 12px;
     }
+
+    .civicase__pipe {
+      color: $crm-grayblue-darker;
+      font-weight: normal;
+      margin: 0 5px;   
+    }
+
+    label {
+      margin: 0 10px 0 0;
+    }
   }
 
   >.panel-body {
