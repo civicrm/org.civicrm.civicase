@@ -29,8 +29,8 @@
     width: 180px;
   }
 
-  > .dropdown-menu {
-    margin-top: 8px;
+  [civicase-dropdown] .dropdown-menu {
+    top: 0;
   }
 
   .dropdown-menu .fa-fw,

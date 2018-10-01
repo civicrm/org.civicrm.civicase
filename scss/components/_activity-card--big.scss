@@ -156,8 +156,23 @@
 
 .civicase__activity-card--big--empty-button {
   border-color: $brand-primary !important;
+  font-size: $font-size-base;
+  font-weight: $crm-font-weight-h3;
+  line-height: $font-size-h2;
+  padding: 10px 16px;
 
-  &:hover {
+
+  .material-icons {
+    position: relative;
+    top: 2px;
+  }
+
+  .material-icons:nth-child(1) {
+    color: $brand-primary;
+  }
+
+  &:hover,
+  &:hover .material-icons {
     background-color: $brand-primary;
     color: $crm-white;
   }
