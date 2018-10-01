@@ -121,30 +121,6 @@
       $scope.refresh([['Activity', 'create', {id: act.id, status_id: act.is_completed ? 'Scheduled' : 'Completed'}]]);
     };
 
-    $scope.newActivityUrl = function (actType) {
-      var path = 'civicrm/case/activity';
-      var args = {
-        action: 'add',
-        reset: 1,
-        cid: $scope.item.client[0].contact_id,
-        caseid: $scope.item.id,
-        atype: actType.id,
-        civicase_reload: $scope.caseGetParams()
-      };
-
-      // CiviCRM requires nonstandard urls for a couple special activity types
-      if (actType.name === 'Email') {
-        path = 'civicrm/activity/email/add';
-        args.context = 'standalone';
-        delete args.cid;
-      }
-      if (actType.name === 'Print PDF Letter') {
-        path = 'civicrm/activity/pdf/add';
-        args.context = 'standalone';
-      }
-      return CRM.url(path, args);
-    };
-
     // Create activity when changing case subject
     $scope.onChangeSubject = function (newSubject) {
       CRM.api3('Activity', 'create', {
@@ -167,7 +143,6 @@
         _.assign($scope.item, formatCaseDetails(data));
         countScheduledActivities();
         $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
-        $scope.availableActivityTypes = getAvailableActivityTypes($scope.item.activity_count, $scope.item.definition);
         $scope.$broadcast('updateCaseData');
       }
     };
@@ -346,21 +321,6 @@
         });
       }
       return ret;
-    }
-
-    function getAvailableActivityTypes (activityCount, definition) {
-      var ret = [];
-      var exclude = ['Change Case Status', 'Change Case Type'];
-
-      _.each(definition.activityTypes, function (actSpec) {
-        if (exclude.indexOf(actSpec.name) < 0) {
-          var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
-          if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances < activityCount[actTypeId])) {
-            ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
-          }
-        }
-      });
-      return _.sortBy(ret, 'label');
     }
 
     function itemWatcher () {

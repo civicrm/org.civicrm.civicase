@@ -19,7 +19,6 @@
      * @param {Object} attrs attributes and values attached to the dropdown element.
      */
     function civicaseDropdownLink (scope, $element, attrs) {
-      var $dropdownMenu = $element.find('.dropdown-menu:first');
       var $toggleElement = $element.find('[civicase-dropdown-toggle]:first');
       var isOpen = false;
 
@@ -34,6 +33,7 @@
        * @param {Object} event the DOM event that was triggered by the click.
        */
       function closeDropdownOnClickOutside (event) {
+        var $dropdownMenu = getChildDropdownMenu();
         var targetIsButtonOrLink = $(event.target).is('button, a');
         var targetIsInsideDropdown = $dropdownMenu[0].contains(event.target);
         var targetIsInsideContainer = $element[0].contains(event.target);
@@ -51,6 +51,8 @@
        * @param {Object} event the DOM event that was triggered by the key press.
        */
       function closeDropdownOnEscapeKeyPressed (event) {
+        var $dropdownMenu = getChildDropdownMenu();
+
         if (isOpen && event.key === 'Escape') {
           isOpen = false;
 
@@ -59,17 +61,22 @@
         }
       }
 
+      function getChildDropdownMenu () {
+        return $element.find('.dropdown-menu:first');
+      }
+
       /**
        * Hides the dropdown menu.
        */
       function hideDropdown () {
+        var $dropdownMenu = getChildDropdownMenu();
         isOpen = false;
 
         $dropdownMenu.hide();
       }
 
       /**
-       * Initializes the event listeners necesary to display or hide the dropdown menu.
+       * Initializes the event listeners necessary to display or hide the dropdown menu.
        */
       function initEventListeners () {
         $toggleElement.on('click', toggleDropdown);
@@ -86,6 +93,7 @@
        * Displays the dropdown menu.
        */
       function showDropdown () {
+        var $dropdownMenu = getChildDropdownMenu();
         isOpen = true;
 
         $dropdownMenu.show();
