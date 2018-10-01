@@ -77,6 +77,17 @@
     border-top: 0 !important;
     padding: 0;
   }
+
+  &.civicase__summary-tab-list-view {
+    > .panel-body {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .civicase__activity-card {
+      margin-bottom: 15px;
+    }
+  }
 }
 
 .civicase__summary-tab__other-cases {
