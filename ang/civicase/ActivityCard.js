@@ -18,11 +18,13 @@
       replace: true,
       scope: {
         activity: '=caseActivityCard',
+        case: '=?',
         refresh: '=refreshCallback',
         refreshOnCheckboxToggle: '=?',
         bulkAllowed: '=',
         editActivityUrl: '=?editActivityUrl',
-        type: '=type'
+        type: '=type',
+        onGetCaseParams: '&'
       }
     };
   });

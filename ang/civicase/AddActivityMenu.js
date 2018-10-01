@@ -6,8 +6,7 @@
       restrict: 'E',
       scope: {
         case: '=',
-        onGetCaseParams: '&',
-        onPushCaseData: '&'
+        onGetCaseParams: '&'
       },
       controller: 'civicaseAddActivityMenuController',
       templateUrl: '~/civicase/AddActivityMenu.html'
@@ -16,22 +15,25 @@
 
   module.controller('civicaseAddActivityMenuController', function ($scope) {
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
+    var definition = CRM.civicase.caseTypes[$scope.case.case_type_id].definition;
 
     $scope.newActivityUrl = newActivityUrl;
 
     (function init () {
       if (_.isEmpty($scope.case.activity_count)) {
         $scope.case.activity_count = getActivitiesCount();
-      }
-
-      $scope.$watch('case.definition', function (definition) {
-        if (!definition) {
-          return;
-        }
-
         $scope.availableActivityTypes = getAvailableActivityTypes(
           $scope.case.activity_count, definition);
-      });
+      } else {
+        $scope.$watch('case.definition', function (definition) {
+          if (!definition) {
+            return;
+          }
+
+          $scope.availableActivityTypes = getAvailableActivityTypes(
+            $scope.case.activity_count, definition);
+        });
+      }
     })();
 
     /**
