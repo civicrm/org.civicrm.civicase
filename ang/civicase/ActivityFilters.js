@@ -5,6 +5,7 @@
     return {
       restrict: 'A',
       scope: {
+        caseTimelines: '=',
         filters: '=civicaseActivityFilters',
         displayOptions: '=displayOptions'
       },

@@ -15,6 +15,7 @@
       controller: activityFeedController,
       scope: {
         params: '=civicaseActivityFeed',
+        caseTypeId: '=',
         refreshCase: '=?refreshCallback'
       }
     };
@@ -36,6 +37,7 @@
     $scope.remaining = true;
     $scope.viewingActivity = {};
     $scope.refreshCase = $scope.refreshCase || _.noop;
+    $scope.caseTimelines = CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets;
 
     (function init () {
       bindRouteParamsToScope();
@@ -203,9 +205,38 @@
       } else {
         returnParams.return = returnParams.return.concat(['case_id.case_type_id', 'case_id.status_id', 'case_id.contacts']);
       }
+
+      function getActivityTypeIDsFromTimeline () {
+        var activityTypeIDs = [];
+
+        if ($scope.filters.activitySet) {
+          var activitySet = _.find($scope.caseTimelines, function (activitySet) {
+            return activitySet.name === $scope.filters.activitySet;
+          });
+
+          if (activitySet) {
+            _.each(activitySet.activityTypes, function (activityTypeFromSet) {
+              activityTypeIDs.push(_.findKey(CRM.civicase.activityTypes, function (activitySet) {
+                return activitySet.name === activityTypeFromSet.name;
+              }));
+            });
+          }
+        }
+
+        if ($scope.filters['activity_type_id']) {
+          activityTypeIDs = activityTypeIDs.concat($scope.filters['activity_type_id']);
+        }
+
+        if (activityTypeIDs.length) {
+          params['activity_type_id'] = {IN: activityTypeIDs};
+        }
+      }
+
       _.each($scope.filters, function (val, key) {
         if (key[0] === '@') return; // Virtual params.
-        if (val) {
+        if (key === 'activity_type_id' || key === 'activitySet') {
+          getActivityTypeIDsFromTimeline();
+        } else if (val) {
           if (key === 'text') {
             params.subject = {LIKE: '%' + val + '%'};
             params.details = {LIKE: '%' + val + '%'};

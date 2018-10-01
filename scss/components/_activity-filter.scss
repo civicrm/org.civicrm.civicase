@@ -45,6 +45,8 @@
 }
 
 .civicase__activity-filter__contact {
+  margin-left: 16px;
+
   .btn {
     border: 1px solid $crm-grayblue-darker !important;
 
@@ -56,6 +58,7 @@
   }
 }
 
+.civicase__activity-filter__timeline,
 .civicase__activity-filter__category {
   display: inline-block;
   margin-left: 16px;

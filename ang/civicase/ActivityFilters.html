@@ -21,6 +21,15 @@
     </div>
 
     <span class="pull-right">
+      <select
+        class="form-control civicase__activity-filter__timeline"
+        ng-model="filters.activitySet" crm-ui-select>
+        <option value="">{{ ts('Select timeline') }}</option>
+        <option ng-repeat="item in ::caseTimelines" value="{{ item.name }}">
+          {{ item.label }}
+        </option>
+      </select>
+
       <div civicase-activity-filters-contact="filters"></div>
       <select
         class="form-control civicase__activity-filter__category"
@@ -44,15 +53,15 @@
         <i ng-if="filters.is_star" class="active material-icons">star</i>
       </button>
       <button
-        class="civicase__activity-filter__more btn btn-{{filters.moreFilters ? 'active' : 'default'}}"
-        ng-click="filters.moreFilters = filters.moreFilters ? false : true"
+        class="civicase__activity-filter__more btn btn-{{filters['@moreFilters'] ? 'active' : 'default'}}"
+        ng-click="filters['@moreFilters'] = filters['@moreFilters'] ? false : true"
         title="{{ ts('Show only starred items') }}">
         <i class="material-icons">tune</i> <span>Filter Activities</span>
       </button>
     </span>
   </div>
 
-  <form ng-show="filters.moreFilters" class="form-inline civicase__activity-filter__more-container">
+  <form ng-show="filters['@moreFilters']" class="form-inline civicase__activity-filter__more-container">
     <div class="btn-group btn-group-sm pull-right" ng-show="hasFilters()">
       <button class="btn btn-danger btn-sm" ng-click="clearFilters()">
         <i class="fa fa-ban"></i> {{ ts('Clear Filters') }}
