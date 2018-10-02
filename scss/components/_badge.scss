@@ -1,0 +1,13 @@
+.___outside-namespace .civicase__badge {
+  background-color: $brand-primary;
+  border-radius: 10px;
+  color: $crm-white;
+  display: inline-block;
+  font-size: 13px;
+  line-height: 18px;
+  padding: 0 7px;
+
+  &.text-dark {
+    color: $crm-black;
+  }
+}
