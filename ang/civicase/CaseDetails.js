@@ -24,6 +24,7 @@
     var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
     var panelLimit = 5;
 
+    $scope.areDetailsLoaded = false;
     $scope.relatedCasesPager = { total: 0, size: 5, num: 0, range: {} };
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.caseTypesLength = _.size(caseTypes);
@@ -172,6 +173,8 @@
     };
 
     $scope.refresh = function (apiCalls) {
+      $scope.areDetailsLoaded = false;
+
       if (!_.isArray(apiCalls)) apiCalls = [];
       apiCalls.push(['Case', 'getdetails', caseGetParams()]);
       crmApi(apiCalls, true).then(function (result) {
@@ -328,6 +331,7 @@
       delete (item['api.CustomValue.gettree']);
       // Set  next Acitivity which is not milestone
       item.nextActivityNotMilestone = findNextIncompleteActivityWhichIsNotMilestone(item.allActivities);
+      $scope.areDetailsLoaded = true;
 
       return item;
     }
@@ -362,6 +366,8 @@
     function itemWatcher () {
       // Fetch extra info about the case
       if ($scope.item && $scope.item.id && !$scope.item.definition) {
+        $scope.areDetailsLoaded = false;
+
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
         });
