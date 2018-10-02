@@ -236,11 +236,16 @@
       // Tasks
       item.tasks = _.each(_.cloneDeep(item['api.Activity.get.3'].values), formatAct);
       delete (item['api.Activity.get.3']);
+
+      // nextActivitiesList
+      item.nextActivities = _.each(_.cloneDeep(item['api.Activity.get.4'].values), formatAct);
+      delete (item['api.Activity.get.4']);
+
       // Custom fields
       item.customData = item['api.CustomValue.gettree'].values || [];
       delete (item['api.CustomValue.gettree']);
       // Set  next Acitivity which is not milestone
-      item.nextActivityNotMilestone = findNextIncompleteActivityWhichIsNotMilestone(item.allActivities);
+      item.nextActivityNotMilestone = findNextActivityWhichIsNotMilestone(item.nextActivities);
       $scope.areDetailsLoaded = true;
 
       return item;
@@ -275,12 +280,11 @@
      * @params {Array} - Array of activities
      * @return {object} - next activity
      */
-    function findNextIncompleteActivityWhichIsNotMilestone (activities) {
+    function findNextActivityWhichIsNotMilestone (activities) {
       var nextActivity = _.find(activities, function (activity) {
         var notMilestone = CRM.civicase.activityTypes[activity.activity_type_id].grouping !== 'milestone';
-        var notComplete = CRM.civicase.activityStatusTypes.completed.indexOf(parseInt(activity.status_id, 10)) === -1;
 
-        return notMilestone && notComplete;
+        return notMilestone;
       });
 
       if (!nextActivity) {
