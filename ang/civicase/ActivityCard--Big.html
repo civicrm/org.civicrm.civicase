@@ -1,5 +1,5 @@
 <div class="civicase__activity-card civicase__activity-card--big" ng-class="{'civicase__activity-card--big--milestone' :activity.category.indexOf('milestone') > -1}">
-  <div class="panel panel-default">
+  <div class="panel panel-default" ng-click="viewInPopup($event, activity)" ng-if="activity">
     <div class="panel-body">
       <div ng-if="activity.icon || activity.category.indexOf('task') > -1 || activity.category.indexOf('milestone') > -1" class="civicase__activity-card-left">
         <span ng-if="activity.icon || activity.category.indexOf('milestone') > -1" activity-icon="activity"></span>
@@ -14,10 +14,10 @@
         <!-- End - Task - Checkbox -->
       </div>
       <!-- Activity Body -->
-      <div ng-if="activity" class="civicase__activity-card-inner" ng-click="viewInPopup($event, activity)">
+      <div class="civicase__activity-card-inner">
         <!-- Top section -->
         <div class="civicase__activity-card-row">
-            <span class="civicase__activity-type" ng-class="{'civicase__activity-type--completed': (activity.category.indexOf('task') > -1 && activity.is_completed)}">{{ activity.type }}</span>
+          <span class="civicase__activity-type" ng-class="{'civicase__activity-type--completed': (activity.category.indexOf('task') > -1 && activity.is_completed)}">{{ activity.type }}</span>
           <!-- Attachments to show for milestones-->
           <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id && activity.category.indexOf('milestone') > -1">
             <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
@@ -118,37 +118,36 @@
         <!-- End Big Date -->
       </div>
       <!-- Activity Body -->
-
-      <!-- No result behaviour -->
-      <div ng-if="!activity" class="civicase__activity-card--big--empty">
-        <div ng-if="type === 'milestone'" class="civicase__activity-no-result-icon civicase__activity-no-result-icon--milestone"></div>
-        <div ng-if="type === 'activity'" class="civicase__activity-no-result-icon civicase__activity-no-result-icon--activity"></div>
-        <div class="civicase__activity-card--big--empty-title" ng-if="type === 'milestone'"> No upcoming milestones </div>
-        <div class="civicase__activity-card--big--empty-title" ng-if="type === 'activity'"> No upcoming activities </div>
-        <div class="civicase__activity-card--big--empty-description" ng-if="type === 'milestone'"> Click on the button below to add a milestone to this case </div>
-        <div class="civicase__activity-card--big--empty-description" ng-if="type === 'activity'"> Click the button below to add an activity </div>
-        <span ng-if="type === 'milestone'" civicase-dropdown>
-          <div class="civicase__activity-card--big--empty-button btn"
-            civicase-dropdown-toggle>
-            <i class="material-icons">add_circle</i>ADD MILESTONE<i class="fa fa-caret-down"></i>
-          </div>
-          <civicase-add-activity-menu
-            case="case"
-            filter-activities-by="milestone">
-          </civicase-add-activity-menu>
-        </span>
-        <span ng-if="type === 'activity'" civicase-dropdown>
-          <div class="civicase__activity-card--big--empty-button btn"
-            civicase-dropdown-toggle>
-            <i class="material-icons">add_circle</i>ADD ACTIVITY<i class="fa fa-caret-down"></i>
-          </div>
-          <civicase-add-activity-menu
-            case="case"
-            exclude-activities-by="milestone">
-          </civicase-add-activity-menu>
-        </span>
-      </div>
-      <!-- End of no result behaviour -->
     </div>
   </div>
+  <!-- No result behaviour -->
+  <div ng-if="!activity" class="civicase__activity-card--big--empty">
+    <div ng-if="type === 'milestone'" class="civicase__activity-no-result-icon civicase__activity-no-result-icon--milestone"></div>
+    <div ng-if="type === 'activity'" class="civicase__activity-no-result-icon civicase__activity-no-result-icon--activity"></div>
+    <div class="civicase__activity-card--big--empty-title" ng-if="type === 'milestone'"> No upcoming milestones </div>
+    <div class="civicase__activity-card--big--empty-title" ng-if="type === 'activity'"> No upcoming activities </div>
+    <div class="civicase__activity-card--big--empty-description" ng-if="type === 'milestone'"> Click on the button below to add a milestone to this case </div>
+    <div class="civicase__activity-card--big--empty-description" ng-if="type === 'activity'"> Click the button below to add an activity </div>
+    <span ng-if="type === 'milestone'" civicase-dropdown>
+      <div class="civicase__activity-card--big--empty-button btn"
+        civicase-dropdown-toggle>
+        <i class="material-icons">add_circle</i>ADD MILESTONE<i class="fa fa-caret-down"></i>
+      </div>
+      <civicase-add-activity-menu
+        case="case"
+        filter-activities-by="milestone">
+      </civicase-add-activity-menu>
+    </span>
+    <span ng-if="type === 'activity'" civicase-dropdown>
+      <div class="civicase__activity-card--big--empty-button btn"
+        civicase-dropdown-toggle>
+        <i class="material-icons">add_circle</i>ADD ACTIVITY<i class="fa fa-caret-down"></i>
+      </div>
+      <civicase-add-activity-menu
+        case="case"
+        exclude-activities-by="milestone">
+      </civicase-add-activity-menu>
+    </span>
+  </div>
+  <!-- End of no result behaviour -->
 </div>

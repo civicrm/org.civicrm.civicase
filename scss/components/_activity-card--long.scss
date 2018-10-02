@@ -105,10 +105,8 @@
 
   .civicase__activity-card-row--communication {
     > div {
-      > * {
-        display: inline-block !important;
-        vertical-align: middle;
-      }
+      align-items: center;
+      display: flex;
     }
 
     .civicase__contact-card {
