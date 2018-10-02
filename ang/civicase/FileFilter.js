@@ -7,7 +7,7 @@
       templateUrl: '~/civicase/FileFilter.html',
       controller: civicaseFileFilterController,
       scope: {
-        apiCtrl: '=civicaseFileFilter'
+        fileFilter: '=civicaseFileFilter'
       }
     };
   });
@@ -34,9 +34,9 @@
      */
     function customFiltersWatcher () {
       if (!_.isEmpty($scope.customFilters.grouping)) {
-        $scope.apiCtrl.params['activity_type_id.grouping'] = {'LIKE': '%' + $scope.customFilters.grouping + '%'};
+        $scope.fileFilter.params['activity_type_id.grouping'] = {'LIKE': '%' + $scope.customFilters.grouping + '%'};
       } else {
-        delete $scope.apiCtrl.params['activity_type_id.grouping'];
+        delete $scope.fileFilter.params['activity_type_id.grouping'];
       }
     }
   }

@@ -4,14 +4,14 @@
 <form>
   <fieldset ng-disabled="block.check()">
   <!-- Activity Feed -->
-  <div class="civicase__activity-feed__list"  ng-show="apiCtrl.result.count">
+  <div class="civicase__activity-feed__list"  ng-show="fileLists.result.count">
     <div
       case-activity-card="activity"
       mode="long"
       refresh-on-checkbox-toggle="true"
       bulk-allowed="bulkAllowed"
       ng-click="viewActivity(activity.id, $event)"
-      refresh-callback="apiCtrl.refresh"
+      refresh-callback="fileLists.refresh"
       ng-repeat="activity in activities"
       >
     </div>
@@ -19,7 +19,7 @@
   <!-- End Activity Feed -->
 
   <!-- Loading Placeholder -->
-  <div class="civicase__activity-feed__list" ng-if="apiCtrl.loading && !apiCtrl.result.count">
+  <div class="civicase__activity-feed__list" ng-if="fileLists.loading && !fileLists.result.count">
     <div class="civicase__activity-card civicase__activity-card--long" ng-repeat="i in [0,1,2]">
       <div class="panel panel-default">
         <div class="panel-body">
@@ -37,7 +37,7 @@
   <!-- End of Loading Placeholder -->
 
   <!-- No result HTML -->
-  <div ng-hide="apiCtrl.loading || apiCtrl.result.count" class="civicase__panel-empty">
+  <div ng-hide="fileLists.loading || fileLists.result.count" class="civicase__panel-empty">
     <i class="fa fa-file-o fa-big"></i>
     <div class="empty-label">{{ ts('No files found') }}</div>
   </div>

@@ -7,7 +7,7 @@
       templateUrl: '~/civicase/FileList.html',
       controller: civicaseFileListController,
       scope: {
-        apiCtrl: '=civicaseFileList',
+        fileLists: '=civicaseFileList',
         bulkAllowed: '='
       }
     };
@@ -25,15 +25,15 @@
     $scope.ts = CRM.ts('civicase');
 
     (function init () {
-      $scope.$watchCollection('apiCtrl.result', apiCtrlWatcher);
+      $scope.$watchCollection('fileLists.result', fileListsWatcher);
     }());
 
     /**
-     * Watcher function for apiCtrl.result collection
+     * Watcher function for fileLists.result collection
      *
      * @params {Object} response
      */
-    function apiCtrlWatcher (response) {
+    function fileListsWatcher (response) {
       // prettier html
       $scope.values = response.values;
       $scope.xref = response.xref;

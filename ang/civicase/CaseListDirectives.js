@@ -31,30 +31,18 @@
       var $header = $el.find('thead');
 
       (function init () {
-        scope.$watch('isLoading', checkIfLoadingCompleted);
-        scope.$watch('caseIsFocused', checkIfCaseIsFocused);
+        scope.$watch('isLoading', fixPositioningOnLoadingOrFocusChange);
+        scope.$watch('caseIsFocused', fixPositioningOnLoadingOrFocusChange);
       }());
 
       /**
        * Loads only if loading completes and case is not focused
-       * for fixed header (isLoading watcher)
+       * for fixed header
        *
        * @param {boolean} loading
        */
-      function checkIfLoadingCompleted (loading) {
-        if (!loading && !scope.caseIsFocused) {
-          computeFixPositioning();
-        }
-      }
-
-      /**
-       * Loads only if loading completes and case is not focused
-       * for fixed header (caseIsFocused watcher)
-       *
-       * @param {boolean} loading
-       */
-      function checkIfCaseIsFocused (focused) {
-        if (!scope.loading && !focused) {
+      function fixPositioningOnLoadingOrFocusChange () {
+        if (!scope.loading && !scope.caseIsFocused) {
           computeFixPositioning();
         }
       }
