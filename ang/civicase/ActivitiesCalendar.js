@@ -172,10 +172,23 @@
      * Determines if all the given activities have been completed.
      *
      * @param {Array} activities
+     * @return {Boolean}
      */
     function checkIfAllActivitiesHaveBeenCompleted (activities) {
       return _.every(activities, function (activity) {
         return _.includes(CRM.civicase.activityStatusTypes.completed, +activity.status_id);
+      });
+    }
+
+    /**
+     * Determines if at least one of the given activities is overdue.
+     *
+     * @param {Array} activities
+     * @return {Boolean}
+     */
+    function checkIfOneActivityIsOverdue (activities) {
+      return _.some(activities, function (activity) {
+        return activity.is_overdue;
       });
     }
 
@@ -200,9 +213,8 @@
      *   can be "day", "month", or "year".
      */
     function getDayCustomClass (params) {
-      var allActivitiesHaveBeenCompleted;
+      var allActivitiesHaveBeenCompleted, isOneActivityOverdue;
       var activities = getActivitiesForDate(params.date);
-      var isDateInThePast = moment().isAfter(params.date, 'day');
       var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
 
       if (!isInCurrentMonth && params.mode === 'day') {
@@ -214,10 +226,11 @@
       }
 
       allActivitiesHaveBeenCompleted = checkIfAllActivitiesHaveBeenCompleted(activities);
+      isOneActivityOverdue = checkIfOneActivityIsOverdue(activities);
 
       if (allActivitiesHaveBeenCompleted) {
         return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed';
-      } else if (isDateInThePast) {
+      } else if (isOneActivityOverdue) {
         return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--overdue';
       } else {
         return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled';

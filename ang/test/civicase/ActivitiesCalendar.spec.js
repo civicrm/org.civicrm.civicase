@@ -142,9 +142,9 @@
       describe('when there is at least one activity that is overdue for a given date in the past', function () {
         beforeEach(function () {
           var activities = [
-            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete) }
+            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed), is_overdue: false },
+            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed), is_overdue: false },
+            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete), is_overdue: true }
           ];
 
           initController(activities);
