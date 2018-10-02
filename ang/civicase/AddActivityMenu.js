@@ -16,10 +16,7 @@
   });
 
   module.controller('civicaseAddActivityMenuController', function ($scope, getCaseQueryParams) {
-    var activityTypes = $scope.activityTypes = CRM.civicase.activityTypes;
-    var definition = CRM.civicase.caseTypes[$scope.case.case_type_id].definition;
-
-    $scope.newActivityUrl = newActivityUrl;
+    var definition = caseTypes[$scope.case.case_type_id].definition;
 
     (function init () {
       if (_.isEmpty($scope.case.activity_count)) {
@@ -46,6 +43,7 @@
     function getActivitiesCount () {
       return _.transform($scope.case.allActivities, function (activitiesCount, activity) {
         var currentCount = activitiesCount[activity.activity_type_id] || 0;
+
         activitiesCount[activity.activity_type_id] = currentCount + 1;
       }, {});
     }
@@ -65,18 +63,19 @@
       _.each(definition.activityTypes, function (actSpec) {
         if (exclude.indexOf(actSpec.name) < 0) {
           var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
+
           ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
         }
       });
 
       if ($scope.excludeActivitiesBy) {
-        ret = ret.filter(function (activity) {
+        ret = _.filter(ret, function (activity) {
           return !_.includes($scope.excludeActivitiesBy, activity.grouping);
         });
       }
 
       if ($scope.filterActivitiesBy) {
-        ret = ret.filter(function (activity) {
+        ret = _.filter(ret, function (activity) {
           return _.includes($scope.filterActivitiesBy, activity.grouping);
         });
       }
@@ -90,7 +89,7 @@
      * @param {Object} actType
      * @return {String}
      */
-    function newActivityUrl (actType) {
+    $scope.newActivityUrl = function (actType) {
       var caseQueryParams = JSON.stringify(getCaseQueryParams($scope.case.id));
       var path = 'civicrm/case/activity';
       var args = {
@@ -115,6 +114,6 @@
       }
 
       return CRM.url(path, args);
-    }
+    };
   });
 })(CRM.$, CRM._, angular, CRM.civicase.activityTypes, CRM.civicase.caseTypes);

@@ -163,12 +163,14 @@
 
 
   .material-icons {
+    color: $brand-primary;
+    margin-right: 8px;
     position: relative;
     top: 2px;
   }
 
-  .material-icons:nth-child(1) {
-    color: $brand-primary;
+  i:nth-last-child(1) {
+    margin-left: 8px;
   }
 
   &:hover,
