@@ -1,4 +1,6 @@
 .dropdown-menu {
+  padding: 10px 0;
+
   > li {
     > a {
       line-height: 18px;
@@ -10,7 +12,7 @@
       font-size: 13px;
       margin-right: 3px;
       position: relative;
-      top: 1px;        
+      top: 2px;
     }    
   }
 }

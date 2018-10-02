@@ -39,6 +39,14 @@
     margin-top: 2px;
   }
 
+  .civicase__activity-attachment__file-options {
+    display: inline-block;
+
+    .civicase__activity-card-menu.btn-group>.dropdown-menu { /* stylelint-disable selector-max-compound-selectors */
+      transform: translateX(0);
+    }
+  }
+
   .civicase__activity__tags-container {
     margin-right: 10px;
     margin-top: -3px;
@@ -66,8 +74,9 @@
     white-space: nowrap;
   }
 
-  .civicase__activity-card-menu .btn-group .btn { /* stylelint-disable selector-max-compound-selectors */
+  .civicase__activity-card-menu.btn-group .btn {
     margin-left: 0;
+    top: -2px;
   }
 
   &.civicase__activity-card--ribbon {

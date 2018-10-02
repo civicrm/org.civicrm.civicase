@@ -31,52 +31,57 @@
       var $header = $el.find('thead');
 
       (function init () {
-        scope.$watch('isLoading', checkIfLoadingCompleted);
+        scope.$watch('isLoading', fixPositioningOnLoadingOrFocusChange);
+        scope.$watch('caseIsFocused', fixPositioningOnLoadingOrFocusChange);
       }());
 
       /**
-       * Checks if loading completes and add logic
-       * for fixed footer
+       * Loads only if loading completes and case is not focused
+       * for fixed header
        *
        * @param {boolean} loading
        */
-      function checkIfLoadingCompleted (loading) {
-        if (!loading) {
-          /**
-           * Assign min-width values to th to have solid grid
-           * Timeout if 0s added to execute logic after DOM repainting completes
-           */
-          $timeout(function () {
-            var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
-            var topPos = $header.offset().top - bodyPadding;
-
-            $('th', $header).each(function () {
-              $(this).css('min-width', $(this).outerWidth() + 'px');
-            });
-
-            // Define when to make the element sticky (affixed)
-            $($header).affix({
-              offset: {
-                top: topPos
-              }
-            })
-            // After element is affixed set scrolling pos (to avoid glitch) and top position
-              .on('affixed.bs.affix', function () {
-                $header.scrollLeft($table.scrollLeft()); // Bind scrolling
-                $header.css('top', bodyPadding + 'px'); // Set top pos to body padding so that it don't overlap with the toolbar
-                $table.css('padding-top', $header.height() + 'px'); // Add top padding to remove the glitch when header moves out of DOM relative position
-              })
-              .on('affixed-top.bs.affix', function () {
-                $header.css('top', 0); // Resets top pos when in default state
-                $table.css('padding-top', 0); // Resets padding top when in default state
-              });
-
-            // Attach scroll function
-            $table.scroll(function () {
-              $header.scrollLeft($(this).scrollLeft());
-            });
-          }, 0);
+      function fixPositioningOnLoadingOrFocusChange () {
+        if (!scope.loading && !scope.caseIsFocused) {
+          computeFixPositioning();
         }
+      }
+
+      /**
+       * Assign min-width values to th to have solid grid
+       * Timeout if 0s added to execute logic after DOM repainting completes
+       */
+      function computeFixPositioning () {
+        $timeout(function () {
+          var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
+          var topPos = $header.offset().top - bodyPadding;
+
+          $('th', $header).each(function () {
+            $(this).css('min-width', $(this).outerWidth() + 'px');
+          });
+
+          // Define when to make the element sticky (affixed)
+          $header.affix({
+            offset: {
+              top: topPos
+            }
+          })
+          // After element is affixed set scrolling pos (to avoid glitch) and top position
+            .on('affixed.bs.affix', function () {
+              $header.scrollLeft($table.scrollLeft()); // Bind scrolling
+              $header.css('top', bodyPadding + 'px'); // Set top pos to body padding so that it don't overlap with the toolbar
+              $table.css('padding-top', $header.height() + 'px'); // Add top padding to remove the glitch when header moves out of DOM relative position
+            })
+            .on('affixed-top.bs.affix', function () {
+              $header.css('top', 0); // Resets top pos when in default state
+              $table.css('padding-top', 0); // Resets padding top when in default state
+            });
+
+          // Attach scroll function
+          $table.scroll(function () {
+            $header.scrollLeft($(this).scrollLeft());
+          });
+        }, 0);
       }
     }
   });

@@ -1,15 +1,14 @@
 /* eslint-env jasmine */
 (function ($) {
   describe('civicaseSearch', function () {
-    var element, $compile, $rootScope, $scope, $timeout, event, CaseFilters, affixOriginalFunction, offsetOriginalFunction, originalDoSearch, orginalParentScope, affixReturnValue;
+    var element, $compile, $rootScope, $scope, event, CaseFilters, affixOriginalFunction, offsetOriginalFunction, originalDoSearch, orginalParentScope, affixReturnValue;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data'));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_, _CaseFilters_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _CaseFilters_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
-      $timeout = _$timeout_;
       CaseFilters = _CaseFilters_;
     }));
 
@@ -77,18 +76,6 @@
     });
 
     describe('watchers', function () {
-      describe('$scope.expanded', function () {
-        beforeEach(function () {
-          $scope.expanded = false;
-          $scope.$digest();
-          $timeout.flush(); // Flushing any timeouts used.
-        });
-
-        it('calls $affix function', function () {
-          expect(CRM.$.fn.affix).toHaveBeenCalledWith(jasmine.objectContaining({offset: {top: jasmine.any(Number)}}));
-        });
-      });
-
       describe('when updating the relationship types', function () {
         describe('when I am the case manager', function () {
           beforeEach(function () {

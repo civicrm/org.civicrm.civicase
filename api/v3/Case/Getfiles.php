@@ -267,9 +267,18 @@ function _civicrm_api3_case_getfiles_xref($matches) {
     $ids = array_unique(CRM_Utils_Array::collect($idField, $matches));
     // WISH: $result[$xrefName] = civicrm_api3($apiEntity, 'get', array('id'=>array('IN', $ids)))['values'];
     foreach ($ids as $id) {
-      $result[$xrefName][$id] = civicrm_api3($apiEntity, 'getsingle', array(
-        'id' => $id,
-      ));
+      $params = array(
+        'id' => $id
+      );
+
+      if ($xrefName ==  'activity') {
+        $params['return'] = array('subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
+          'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
+          'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
+          'is_overdue', 'case_id');
+        }
+
+      $result[$xrefName][$id] = civicrm_api3($apiEntity, 'getsingle', $params);
     }
   }
   return $result;
