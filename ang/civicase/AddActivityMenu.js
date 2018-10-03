@@ -1,4 +1,4 @@
-(function ($, _, angular, activityTypes, caseTypes) {
+(function ($, _, angular, civicase) {
   var module = angular.module('civicase');
 
   module.directive('civicaseAddActivityMenu', function () {
@@ -16,7 +16,7 @@
   });
 
   module.controller('civicaseAddActivityMenuController', function ($scope, getCaseQueryParams) {
-    var definition = caseTypes[$scope.case.case_type_id].definition;
+    var definition = civicase.caseTypes[$scope.case.case_type_id].definition;
 
     (function init () {
       if (_.isEmpty($scope.case.activity_count)) {
@@ -62,9 +62,9 @@
 
       _.each(definition.activityTypes, function (actSpec) {
         if (exclude.indexOf(actSpec.name) < 0) {
-          var actTypeId = _.findKey(activityTypes, {name: actSpec.name});
+          var actTypeId = _.findKey(civicase.activityTypes, {name: actSpec.name});
 
-          ret.push($.extend({id: actTypeId}, activityTypes[actTypeId]));
+          ret.push($.extend({id: actTypeId}, civicase.activityTypes[actTypeId]));
         }
       });
 
@@ -116,4 +116,4 @@
       return CRM.url(path, args);
     };
   });
-})(CRM.$, CRM._, angular, CRM.civicase.activityTypes, CRM.civicase.caseTypes);
+})(CRM.$, CRM._, angular, CRM.civicase);

@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 
-(function (_, caseTypes) {
+(function (_) {
   describe('AddActivityMenu', function () {
     describe('Add Activity Menu Controller', function () {
       var $controller, $rootScope, $scope;
@@ -18,6 +18,7 @@
         beforeEach(function () {
           var activityTypeIds = [_.uniqueId(), _.uniqueId(), _.uniqueId()];
           var mockCase = {
+            case_type_id: 1,
             allActivities: [
               { id: _.uniqueId(), activity_type_id: activityTypeIds[0] },
               { id: _.uniqueId(), activity_type_id: activityTypeIds[0] },
@@ -55,4 +56,4 @@
       }
     });
   });
-})(CRM._, CRM.civicase.caseTypes);
+})(CRM._);
