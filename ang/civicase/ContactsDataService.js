@@ -45,6 +45,11 @@
         'api.GroupContact.get': {
           'contact_id': '$value.id',
           'return': [ 'title' ]
+        },
+        'api.EntityTag.get': {
+          'entity_table': 'civicrm_contact',
+          'entity_id': '$value.id',
+          'return': [ 'tag_id.name', 'tag_id.description', 'tag_id.color' ]
         }
       }).then(function (data) {
         savedContactDetails = _.extend(savedContactDetails, _.indexBy(data.values, 'contact_id'));
