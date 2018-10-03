@@ -30,9 +30,13 @@
 }
 
 .civicase__contact-additional__container {
+  margin-left: 8px;
+}
+
+.civicase__contact-additional__container,
+.civicase__contact-additional__popover {
   color: $brand-primary;
   cursor: pointer;
-  margin-left: 8px;
 
   a {
     display: flex !important;
