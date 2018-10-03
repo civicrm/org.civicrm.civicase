@@ -16,16 +16,6 @@
       };
     }));
 
-    describe('default colour', function () {
-      beforeEach(function () {
-        initController(mockTag);
-      });
-
-      it('defines a default hex colour', function () {
-        expect($scope.defaultColour).toBe('#0071bd');
-      });
-    });
-
     describe('text colour', function () {
       describe('when the tag colour is dark', function () {
         beforeEach(function () {
@@ -52,16 +42,12 @@
       });
 
       describe('when no colour is defined', function () {
-        var expectedTextColour;
-
         beforeEach(function () {
           initController(mockTag);
-
-          expectedTextColour = colorContrast($scope.defaultColour);
         });
 
-        it('defines the text colour as the contrast of the default one', function () {
-          expect($scope.textColour).toBe(expectedTextColour);
+        it('does not define a text colour', function () {
+          expect($scope.textColour).toBeUndefined();
         });
       });
     });

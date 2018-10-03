@@ -13,7 +13,8 @@
   });
 
   module.controller('civicaseTagController', function ($scope) {
-    $scope.defaultColour = '#0071bd';
-    $scope.textColour = colorContrast($scope.tag['tag_id.color'] || $scope.defaultColour);
+    if ($scope.tag['tag_id.color']) {
+      $scope.textColour = colorContrast($scope.tag['tag_id.color']);
+    }
   });
 })(angular, CRM.utils.colorContrast);
