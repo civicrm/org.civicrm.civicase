@@ -29,6 +29,19 @@
     }());
 
     /**
+     * Refreshes the UI state after updating the db from the api calls
+     *
+     * @params {Array} apiCalls
+     */
+    $scope.refresh = function (apiCalls) {
+      if (!_.isArray(apiCalls)) apiCalls = [];
+
+      crmApi(apiCalls, true).then(function (result) {
+        $scope.fileLists.refresh();
+      });
+    };
+
+    /**
      * Watcher function for fileLists.result collection
      *
      * @params {Object} response
