@@ -35,6 +35,7 @@
      */
     $scope.refresh = function (apiCalls) {
       if (!_.isArray(apiCalls)) apiCalls = [];
+
       crmApi(apiCalls, true).then(function (result) {
         $scope.fileLists.refresh();
       });
