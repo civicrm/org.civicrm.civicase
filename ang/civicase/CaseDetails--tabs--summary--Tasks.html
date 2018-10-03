@@ -27,6 +27,15 @@
     <div class="civicase__activity-no-result-icon civicase__activity-no-result-icon--tasks"></div>
     <div class="civicase__activity-card--big--empty-title"> No new tasks </div>
     <div class="civicase__activity-card--big--empty-description"> Click on the button below to add a task to this case </div>
-    <div class="civicase__activity-card--big--empty-button btn"> Create new task </div>
+    <span civicase-dropdown>
+      <div class="civicase__activity-card--big--empty-button btn"
+        civicase-dropdown-toggle>
+        Create new tasks <i class="fa fa-caret-down"></i>
+      </div>
+      <civicase-add-activity-menu
+        case="item"
+        filter-activities-by="task">
+      </civicase-add-activity-menu>
+    </span>
   </div>
 </div>

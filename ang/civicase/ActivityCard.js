@@ -23,7 +23,8 @@
         refreshOnCheckboxToggle: '=?',
         bulkAllowed: '=',
         editActivityUrl: '=?editActivityUrl',
-        type: '=type'
+        type: '=type',
+        feedViewFn: '=feedViewFn'
       }
     };
   });

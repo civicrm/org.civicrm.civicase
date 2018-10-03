@@ -1,8 +1,13 @@
 .civicase__activity-card--big {
   display: flex;
+  flex-direction: column;
   height: auto;
   min-height: 264px;
   width: 100%;
+
+  .panel {
+    flex-grow: 1;
+  }
 
   &:hover {
     .civicase__highlighted-date::before {

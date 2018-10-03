@@ -299,6 +299,13 @@
         'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
         'is_overdue', 'case_id'
       ];
+      var allActivitiesParams = {
+        case_id: '$value.id',
+        options: {
+          sort: 'activity_date_time ASC'
+        },
+        return: activityReturnParams
+      };
       var caseReturnParams = [
         'subject', 'details', 'contact_id', 'case_type_id', 'status_id',
         'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary',
@@ -323,35 +330,17 @@
           id: {'!=': '$value.id'},
           is_deleted: 0,
           return: caseListReturnParams,
-          'api.Activity.get.1': {
-            case_id: '$value.id',
-            options: {
-              sort: 'activity_date_time ASC'
-            },
-            return: activityReturnParams
-          }
+          'api.Activity.get.1': allActivitiesParams
         },
         // Linked cases
         'api.Case.getcaselist.2': {
           id: {IN: '$value.related_case_ids'},
           is_deleted: 0,
           return: caseListReturnParams,
-          'api.Activity.get.1': {
-            case_id: '$value.id',
-            options: {
-              sort: 'activity_date_time ASC'
-            },
-            return: activityReturnParams
-          }
+          'api.Activity.get.1': allActivitiesParams
         },
         // Gets all the activities for the case
-        'api.Activity.get.1': {
-          case_id: '$value.id',
-          options: {
-            sort: 'activity_date_time ASC'
-          },
-          return: activityReturnParams
-        },
+        'api.Activity.get.1': allActivitiesParams,
         // For the "recent communication" panel
         'api.Activity.get.2': {
           case_id: '$value.id',

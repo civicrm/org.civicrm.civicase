@@ -22,6 +22,15 @@
     <div class="civicase__activity-no-result-icon civicase__activity-no-result-icon--communications"></div>
     <div class="civicase__activity-card--big--empty-title"> No past communications </div>
     <div class="civicase__activity-card--big--empty-description"> Click on the button below to add a communication to this case </div>
-    <div class="civicase__activity-card--big--empty-button btn"> Create new communication </div>
+    <span civicase-dropdown>
+      <div class="civicase__activity-card--big--empty-button btn"
+        civicase-dropdown-toggle>
+        Create new communication <i class="fa fa-caret-down"></i>
+      </div>
+      <civicase-add-activity-menu
+        case="item"
+        filter-activities-by="communication">
+      </civicase-add-activity-menu>
+    </span>
   </div>
 </div>
