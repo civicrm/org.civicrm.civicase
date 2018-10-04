@@ -5,7 +5,7 @@
     describe('Add Activity Menu Controller', function () {
       var $controller, $rootScope, $scope;
 
-      beforeEach(module('civicase'));
+      beforeEach(module('civicase', 'civicase.data'));
 
       beforeEach(inject(function (_$controller_, _$rootScope_) {
         $controller = _$controller_;
