@@ -19,6 +19,10 @@
       padding-top: 50px;
     }
   }
+
+  > [civicase-dropdown] {
+    opacity: 1;
+  }
 }
 
 .civicase__case-details-panel--summary {
