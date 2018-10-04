@@ -492,158 +492,20 @@
         'api.Activity.get.4': {
           'values': [
             {
-              'id': '1772',
+              'id': '1009',
+              'activity_type_id': '14',
               'subject': 'Some random subject is changed',
-              'activity_type_id': '60',
+              'activity_date_time': '2018-01-20 00:00:00',
               'status_id': '1',
-              'activity_date_time': '2018-09-27 23:00:00',
+              'priority_id': '2',
+              'is_test': '0',
+              'is_auto': '1',
+              'is_current_revision': '1',
+              'is_deleted': '0',
               'is_star': '0',
-              'is_overdue': true,
-              'case_id': '141',
-              'source_contact_id': '202',
-              'source_contact_name': 'admin@example.com',
-              'target_contact_id': [
-                '170'
-              ],
-              'target_contact_name': {
-                '170': 'Kiara Adams'
-              },
-              'assignee_contact_id': [],
-              'category': [
-                'milestone'
-              ],
-              'type': 'Secure temporary housing',
-              'status': 'Scheduled',
-              'status_name': 'Scheduled',
-              'status_type': 'incomplete',
-              'is_completed': false,
-              'color': '#42afcb',
-              'status_css': 'status-type-incomplete activity-status-scheduled'
-            },
-            {
-              'id': '1775',
-              'activity_type_id': '64',
-              'status_id': '1',
-              'activity_date_time': '2018-09-27 23:00:00',
-              'is_star': '0',
-              'file_id': [
-                '30'
-              ],
-              'is_overdue': true,
-              'case_id': '141',
-              'source_contact_id': '202',
-              'source_contact_name': 'admin@example.com',
-              'target_contact_id': [
-                '170'
-              ],
-              'target_contact_name': {
-                '170': 'Kiara Adams'
-              },
-              'assignee_contact_id': [],
-              'category': [
-                'milestone'
-              ],
-              'type': 'Long-term housing plan',
-              'status': 'Scheduled',
-              'status_name': 'Scheduled',
-              'status_type': 'incomplete',
-              'is_completed': false,
-              'color': '#42afcb',
-              'status_css': 'status-type-incomplete activity-status-scheduled'
-            },
-            {
-              'id': '1771',
-              'subject': 'Some random subject is changed',
-              'activity_type_id': '58',
-              'status_id': '1',
-              'activity_date_time': '2021-11-04 00:00:00',
-              'is_star': '0',
-              'original_id': '1771',
-              'file_id': [
-                '11'
-              ],
-              'is_overdue': false,
-              'case_id': '141',
-              'source_contact_id': '202',
-              'source_contact_name': 'admin@example.com',
-              'target_contact_id': [
-                '170',
-                '123',
-                '147'
-              ],
-              'target_contact_name': {
-                '123': 'Mrs. Betty Adams',
-                '147': 'Andrew Adams Sr.',
-                '170': 'Kiara Adams'
-              },
-              'assignee_contact_id': [
-                '123'
-              ],
-              'assignee_contact_name': {
-                '123': 'Mrs. Betty Adams'
-              },
-              'tag_id': {
-                '13': {
-                  'tag_id': '13',
-                  'tag_id.name': 'Leisurely',
-                  'tag_id.description': 'Leisurely activity',
-                  'tag_id.color': '#006f00'
-                }
-              },
-              'category': [
-                'milestone'
-              ],
-              'type': 'Mental health evaluation',
-              'status': 'Scheduled',
-              'status_name': 'Scheduled',
-              'status_type': 'incomplete',
-              'is_completed': false,
-              'color': '#42afcb',
-              'status_css': 'status-type-incomplete activity-status-scheduled'
-            },
-            {
-              'id': '1774',
-              'subject': 'Some random subject is changed',
-              'activity_type_id': '62',
-              'status_id': '1',
-              'activity_date_time': '2024-11-06 00:00:00',
-              'is_star': '0',
-              'original_id': '1774',
-              'is_overdue': false,
-              'case_id': '141',
-              'source_contact_id': '202',
-              'source_contact_name': 'admin@example.com',
-              'target_contact_id': [
-                '170'
-              ],
-              'target_contact_name': {
-                '170': 'Kiara Adams'
-              },
-              'assignee_contact_id': [],
-              'tag_id': {
-                '12': {
-                  'tag_id': '12',
-                  'tag_id.name': 'Strenuous',
-                  'tag_id.description': 'Strenuous activity',
-                  'tag_id.color': '#00ff00'
-                },
-                '13': {
-                  'tag_id': '13',
-                  'tag_id.name': 'Leisurely',
-                  'tag_id.description': 'Leisurely activity',
-                  'tag_id.color': '#006f00'
-                }
-              },
-              'category': [
-                null
-              ],
-              'type': 'Income and benefits stabilization',
-              'status': 'Scheduled',
-              'status_name': 'Scheduled',
-              'status_type': 'incomplete',
-              'is_completed': false,
-              'color': '#42afcb',
-              'status_css': 'status-type-incomplete activity-status-scheduled'
+              'created_date': '2018-08-06 14:14:56',
+              'modified_date': '2018-10-01 10:24:04',
+              'source_contact_id': '202'
             }
           ]
         },

@@ -77,16 +77,16 @@
     border-top: 0 !important;
     padding: 0;
   }
+}
 
-  &.civicase__summary-tab-list-view {
-    > .panel-body {
-      background: transparent;
-      box-shadow: none;
-    }
+.civicase__summary-tab__activity-list {
+  > .panel-body {
+    background: transparent;
+    box-shadow: none;
+  }
 
-    .civicase__activity-card {
-      margin-bottom: 15px;
-    }
+  .civicase__activity-card {
+    margin-bottom: 15px;
   }
 }
 

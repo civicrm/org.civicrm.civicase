@@ -27,7 +27,7 @@
     $scope.areDetailsLoaded = false;
     $scope.relatedCasesPager = { total: 0, size: 5, num: 0, range: {} };
     $scope.activityFeedUrl = getActivityFeedUrl;
-    $scope.bulkAllowed = BulkActions.areAvailable();
+    $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;
     $scope.item = null;
@@ -236,16 +236,14 @@
       // Tasks
       item.tasks = _.each(_.cloneDeep(item['api.Activity.get.3'].values), formatAct);
       delete (item['api.Activity.get.3']);
-
-      // nextActivitiesList
-      item.nextActivities = _.each(_.cloneDeep(item['api.Activity.get.4'].values), formatAct);
+      // nextActivitiesWhichIsNotMileStoneList
+      item.nextActivityNotMilestone = _.each(_.cloneDeep(item['api.Activity.get.4'].values), formatAct)[0];
       delete (item['api.Activity.get.4']);
 
       // Custom fields
       item.customData = item['api.CustomValue.gettree'].values || [];
       delete (item['api.CustomValue.gettree']);
-      // Set  next Acitivity which is not milestone
-      item.nextActivityNotMilestone = findNextActivityWhichIsNotMilestone(item.nextActivities);
+
       $scope.areDetailsLoaded = true;
 
       return item;
@@ -267,35 +265,10 @@
       // Fetch extra info about the case
       if ($scope.item && $scope.item.id && !$scope.item.definition) {
         $scope.areDetailsLoaded = false;
-
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
         });
       }
-    }
-
-    /**
-     * Find Recent Open activity which is not milestone
-     *
-     * @params {Array} - Array of activities
-     * @return {object} - next activity
-     */
-    function findNextActivityWhichIsNotMilestone (activities) {
-      var nextActivity = _.find(activities, function (activity) {
-        var notMilestone = CRM.civicase.activityTypes[activity.activity_type_id].grouping !== 'milestone';
-
-        return notMilestone;
-      });
-
-      if (!nextActivity) {
-        return;
-      }
-
-      nextActivity.type = CRM.civicase.activityTypes[nextActivity.activity_type_id].label;
-      nextActivity.category = [CRM.civicase.activityTypes[nextActivity.activity_type_id].grouping];
-      nextActivity.icon = CRM.civicase.activityTypes[nextActivity.activity_type_id].icon;
-
-      return nextActivity;
     }
 
     function isFocusedWatcher () {

@@ -19,7 +19,7 @@
      */
     function civicaseCaseDetailsFileTabController ($scope, BulkActions) {
       $scope.ts = CRM.ts('civicase');
-      $scope.bulkAllowed = BulkActions.areAvailable();
+      $scope.bulkAllowed = BulkActions.isAllowed();
     }
   });
 })(angular, CRM.$, CRM._);

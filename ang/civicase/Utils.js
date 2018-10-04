@@ -300,7 +300,7 @@
         'is_overdue', 'case_id'
       ];
       var allActivitiesParams = {
-        case_id: '$value.id',
+        case_id: caseId,
         options: {
           sort: 'activity_date_time ASC'
         },
@@ -317,7 +317,7 @@
         'custom_group.id', 'custom_group.name', 'custom_group.title',
         'custom_field.name', 'custom_field.label', 'custom_value.display'
       ];
-      var relationhipReturnParams = ['id', 'relationship_type_id', 'contact_id_a', 'contact_id_b', 'description', 'start_date'];
+      var relationshipReturnParams = ['id', 'relationship_type_id', 'contact_id_a', 'contact_id_b', 'description', 'start_date'];
 
       panelLimit = panelLimit || 5;
 
@@ -343,7 +343,7 @@
         'api.Activity.get.1': allActivitiesParams,
         // For the "recent communication" panel
         'api.Activity.get.2': {
-          case_id: '$value.id',
+          case_id: caseId,
           is_current_revision: 1,
           is_test: 0,
           'activity_type_id.grouping': {LIKE: '%communication%'},
@@ -353,7 +353,7 @@
         },
         // For the "tasks" panel
         'api.Activity.get.3': {
-          case_id: '$value.id',
+          case_id: caseId,
           is_current_revision: 1,
           is_test: 0,
           'activity_type_id.grouping': {LIKE: '%task%'},
@@ -363,11 +363,11 @@
         },
         // For the "Next Activity" panel
         'api.Activity.get.4': {
-          case_id: '$value.id',
+          case_id: caseId,
           status_id: {'!=': 'Completed'},
+          'activity_type_id.grouping': {'NOT LIKE': '%milestone%'},
           options: {
-            sort: 'activity_date_time ASC',
-            limit: 0
+            limit: 1
           },
           return: activityReturnParams
         },
@@ -379,9 +379,9 @@
         },
         // Relationship description field
         'api.Relationship.get': {
-          case_id: '$value.id',
+          case_id: caseId,
           is_active: 1,
-          return: relationhipReturnParams
+          return: relationshipReturnParams
         },
         sequential: 1
       };

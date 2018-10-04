@@ -9,7 +9,7 @@
      *
      * @return {Boolean}
      */
-    this.areAvailable = function () {
+    this.isAllowed = function () {
       if (CRM.checkPerm('basic case information') &&
       !CRM.checkPerm('administer CiviCase') &&
       !CRM.checkPerm('access my cases and activities') &&

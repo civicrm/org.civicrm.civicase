@@ -24,7 +24,7 @@
     $scope.sort = {sortable: true};
     $scope.ts = CRM.ts('civicase');
     $scope.viewingCaseDetails = null;
-    $scope.bulkAllowed = BulkActions.areAvailable();
+    $scope.bulkAllowed = BulkActions.isAllowed();
 
     (function init () {
       bindRouteParamsToScope();

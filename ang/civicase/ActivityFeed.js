@@ -33,7 +33,7 @@
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activities = {};
     $scope.activityGroups = [];
-    $scope.bulkAllowed = BulkActions.areAvailable();
+    $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.remaining = true;
     $scope.viewingActivity = {};
     $scope.refreshCase = $scope.refreshCase || _.noop;

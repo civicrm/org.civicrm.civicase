@@ -64,14 +64,13 @@ describe('civicaseCaseDetails', function () {
       compileDirective();
       element.isolateScope().item = CasesData.values[0];
       element.isolateScope().item.allActivities = CasesData.values[0]['api.Activity.get.1'].values;
-      element.isolateScope().item.nextActivities = CasesData.values[0]['api.Activity.get.4'].values;
+
       element.isolateScope().pushCaseData(CasesData.values[0]);
     });
 
-    it('calculates the incomplete tasks and scheduled activities and nextActivitiyWhichIsNotMilestone', function () {
+    it('calculates the incomplete tasks and scheduled activities', function () {
       expect(element.isolateScope().item.category_count.scheduled).toEqual(getScheduledActivitiesCount(element.isolateScope().item.allActivities));
       expect(element.isolateScope().item.category_count.incomplete.task).toBe(2);
-      expect(element.isolateScope().item.nextActivityNotMilestone.id).toBe('1774');
     });
     /* TODO - Rest of function needs to be unit tested */
   });

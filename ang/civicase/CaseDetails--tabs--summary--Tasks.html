@@ -1,6 +1,6 @@
 <div class="panel-heading clearfix">
   <h3 class="panel-title pull-left">
-    <label>{{ ts('Tasks') }}</label>
+    <span class="panel-title-inner">{{ ts('Tasks') }}</span>
     <span class="civicase__case-card__activity-count"> {{item.category_count.incomplete.task || 0}} </span>
     <span class="civicase__pipe" ng-if="item.category_count.overdue.task"> | </span>
     <span class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before" ng-if="item.category_count.overdue.task">{{item.category_count.overdue.task}} </span>
