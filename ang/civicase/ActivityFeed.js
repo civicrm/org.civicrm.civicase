@@ -59,7 +59,6 @@
      * Refresh Activities
      */
     $scope.refreshAll = function () {
-      $('.act-feed-panel .panel-body').block();
       getActivities(false, $scope.refreshCase);
     };
 
@@ -169,7 +168,6 @@
         if (!result.count && !pageNum) {
           $scope.remaining = false;
         }
-        $('.act-feed-panel .panel-body').unblock();
         if ($scope.aid && $scope.aid !== $scope.viewingActivity.id) {
           $scope.viewActivity($scope.aid);
         }

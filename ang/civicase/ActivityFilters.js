@@ -19,134 +19,7 @@
       var ts = $scope.ts = CRM.ts('civicase');
 
       $scope.activityCategories = CRM.civicase.activityCategories;
-
-      function mapSelectOptions (opt, id) {
-        return {
-          id: id,
-          text: opt.label,
-          color: opt.color,
-          icon: opt.icon
-        };
-      }
-
-      $timeout(function () {
-        var $actHeader = $('.act-feed-panel .panel-header');
-        var $actControls = $('.act-feed-panel .act-list-controls');
-        var $civicrmMenu = $('#civicrm-menu');
-        var $feedActivity = $('.act-feed-view-activity');
-        var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
-        var $casePanel = $('.civicase__case-details-panel');
-
-        if ($casePanel.length < 1) {
-          $casePanel = $('.dashboard-activites');
-          $casePanelBody = $('.dashboard-activites');
-        }
-
-        $feedActivity.affix({
-          offset: {
-            top: $casePanelBody.offset().top - 73,
-            bottom: $(document).height() - ($casePanel.offset().top + $casePanel.height()) + 18
-          }
-        }).on('affixed.bs.affix', function () {
-          $feedActivity.css('top', $civicrmMenu.height() + $actHeader.height() + $actControls.height() + 59);
-        }).on('affixed-top.bs.affix', function () {
-          $feedActivity.css('top', 'auto');
-        });
-
-        $actHeader.affix({ offset: { top: $casePanelBody.offset().top - 73 } })
-          .css('top', $civicrmMenu.height() + 53)
-          .css('width', $('.act-feed-panel').css('width'))
-          .on('affixed.bs.affix', function () {
-            $actHeader.css('width', $('.act-feed-panel').css('width'));
-            $actHeader.css('top', $civicrmMenu.height() + 53);
-          })
-          .on('affixed-top.bs.affix', function () {
-            $actHeader.css('width', 'auto');
-          });
-
-        $actControls.affix({ offset: { top: $casePanelBody.offset().top - 73 } })
-          .css('width', $actHeader.css('width'))
-          .on('affixed.bs.affix', function () {
-            $actControls.css('width', $actHeader.css('width'));
-            $actControls.css('top', $civicrmMenu.height() + $actHeader.height() + 53);
-          })
-          .on('affixed-top.bs.affix', function () {
-            $actControls.css('width', 'auto');
-            $actControls.css('top', 'auto');
-          });
-
-        $scope.$watchCollection('[filters, exposedFilters]', function () {
-          $timeout(function () {
-            $actControls.css('top', $civicrmMenu.height() + $actHeader.height() + 53);
-            $feedActivity.not('.cc-zero-w')
-              .height($(window).height() - ($civicrmMenu.height() + $actHeader.height() + $actControls.height()))
-              .css('top', $civicrmMenu.height() + $actHeader.height() + $actControls.height() + 53);
-          });
-        });
-      });
-
-      $scope.availableFilters = [
-        {
-          name: 'activity_type_id',
-          label: ts('Activity type'),
-          html_type: 'Select',
-          options: _.map(CRM.civicase.activityTypes, mapSelectOptions)
-        },
-        {
-          name: 'status_id',
-          label: ts('Status'),
-          html_type: 'Select',
-          options: _.map(CRM.civicase.activityStatuses, mapSelectOptions)
-        },
-        {
-          name: 'target_contact_id',
-          label: ts('With'),
-          html_type: 'Autocomplete-Select',
-          entity: 'Contact'
-        },
-        {
-          name: 'assignee_contact_id',
-          label: ts('Assigned to'),
-          html_type: 'Autocomplete-Select',
-          entity: 'Contact'
-        },
-        {
-          name: 'tag_id',
-          label: ts('Tagged'),
-          html_type: 'Autocomplete-Select',
-          entity: 'Tag',
-          api_params: {used_for: {LIKE: '%civicrm_activity%'}}
-        },
-        {
-          name: 'text',
-          label: ts('Contains text'),
-          html_type: 'Text'
-        }
-      ];
-      if (_.includes(CRM.config.enableComponents, 'CiviCampaign')) {
-        $scope.availableFilters.push({
-          name: 'campaign_id',
-          label: ts('Campaign'),
-          html_type: 'Autocomplete-Select',
-          entity: 'Campaign'
-        });
-      }
-      if (CRM.checkPerm('administer CiviCRM')) {
-        $scope.availableFilters.push({
-          name: 'is_deleted',
-          label: ts('Deleted Activities'),
-          html_type: 'Select',
-          options: [{id: 1, text: ts('Deleted')}, {id: 0, text: ts('Normal')}]
-        },
-        {
-          name: 'is_test',
-          label: ts('Test Activities'),
-          html_type: 'Select',
-          options: [{id: 1, text: ts('Test')}, {id: 0, text: ts('Normal')}]
-        });
-      }
-      $scope.availableFilters = $scope.availableFilters.concat(CRM.civicase.customActivityFields);
-
+      $scope.availableFilters = prepareAvailableFilters();
       // Default exposed filters
       $scope.exposedFilters = {
         activity_type_id: true,
@@ -155,10 +28,13 @@
         tag_id: true,
         text: true
       };
-      // Ensure set filters are also exposed
-      _.each($scope.filters, function (filter, key) {
-        $scope.exposedFilters[key] = true;
-      });
+
+      (function init () {
+        // Ensure set filters are also exposed
+        _.each($scope.filters, function (filter, key) {
+          $scope.exposedFilters[key] = true;
+        });
+      }());
 
       $scope.exposeFilter = function (field, $event) {
         var shown = !$scope.exposedFilters[field.name];
@@ -194,6 +70,111 @@
           delete $scope.filters[key];
         });
       };
+
+      function prepareAvailableFilters () {
+        var availableFilters = [
+          {
+            name: 'activity_type_id',
+            label: ts('Activity type'),
+            html_type: 'Select',
+            options: _.map(CRM.civicase.activityTypes, mapSelectOptions)
+          },
+          {
+            name: 'status_id',
+            label: ts('Status'),
+            html_type: 'Select',
+            options: _.map(CRM.civicase.activityStatuses, mapSelectOptions)
+          },
+          {
+            name: 'target_contact_id',
+            label: ts('With'),
+            html_type: 'Autocomplete-Select',
+            entity: 'Contact'
+          },
+          {
+            name: 'assignee_contact_id',
+            label: ts('Assigned to'),
+            html_type: 'Autocomplete-Select',
+            entity: 'Contact'
+          },
+          {
+            name: 'tag_id',
+            label: ts('Tagged'),
+            html_type: 'Autocomplete-Select',
+            entity: 'Tag',
+            api_params: {used_for: {LIKE: '%civicrm_activity%'}}
+          },
+          {
+            name: 'text',
+            label: ts('Contains text'),
+            html_type: 'Text'
+          }
+        ];
+
+        if (_.includes(CRM.config.enableComponents, 'CiviCampaign')) {
+          availableFilters.push({
+            name: 'campaign_id', label: ts('Campaign'), html_type: 'Autocomplete-Select', entity: 'Campaign'
+          });
+        }
+        if (CRM.checkPerm('administer CiviCRM')) {
+          availableFilters.push({
+            name: 'is_deleted',
+            label: ts('Deleted Activities'),
+            html_type: 'Select',
+            options: [{id: 1, text: ts('Deleted')}, {id: 0, text: ts('Normal')}]
+          },
+          {
+            name: 'is_test',
+            label: ts('Test Activities'),
+            html_type: 'Select',
+            options: [{id: 1, text: ts('Test')}, {id: 0, text: ts('Normal')}]
+          });
+        }
+
+        availableFilters = availableFilters.concat(CRM.civicase.customActivityFields);
+
+        return availableFilters;
+      }
+
+      function mapSelectOptions (opt, id) {
+        return {
+          id: id,
+          text: opt.label,
+          color: opt.color,
+          icon: opt.icon
+        };
+      }
+    }
+  });
+
+  module.directive('civicaseActivityFiltersAffix', function ($timeout) {
+    return {
+      link: civicaseActivityFiltersAffix
+    };
+
+    /**
+     * Link function for civicaseActivityFiltersAffix
+     *
+     * @param {Object} scope
+     * @param {Object} $el
+     * @param {Object} attrs
+     */
+    function civicaseActivityFiltersAffix (scope, $el, attrs) {
+      $timeout(function () {
+        var $filter = $('.civicase__activity-filter');
+        var $caseTabs = $('.civicase__case-body_tab');
+        var $toolbarDrawer = $('#toolbar');
+
+        $filter.affix({
+          offset: {
+            top: $filter.offset().top - ($toolbarDrawer.height() + $caseTabs.height())
+          }
+        }).on('affixed.bs.affix', function () {
+          $filter.css('top', $toolbarDrawer.height() + $caseTabs.height());
+        }).on('affixed-top.bs.affix', function () {
+          $filter.css('top', 'auto');
+        });
+      });
     }
   });
 })(angular, CRM.$, CRM._);
