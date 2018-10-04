@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 
 (function (_, caseTypes) {
-  fdescribe('AddActivityMenu', function () {
+  describe('AddActivityMenu', function () {
     describe('Add Activity Menu Controller', function () {
       var $controller, $rootScope, $scope;
 

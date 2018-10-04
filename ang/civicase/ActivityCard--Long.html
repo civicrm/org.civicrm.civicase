@@ -1,5 +1,6 @@
 <div
   class="civicase__activity-card civicase__activity-card--long"
+  ng-click="viewActivityDetails($event, activity)"
   ng-class="{
     'civicase__activity-card--draft': activity.status==='Draft',
     'civicase__activity-card--ribbon': activity.category.indexOf('milestone') > -1,

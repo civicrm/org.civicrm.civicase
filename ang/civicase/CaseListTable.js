@@ -8,7 +8,7 @@
     };
   });
 
-  module.controller('CivicaseCaseListTableController', function ($scope, $window, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase) {
+  module.controller('CivicaseCaseListTableController', function ($scope, $window, BulkActions, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase) {
     var firstLoad = true;
     var caseTypes = CRM.civicase.caseTypes;
 
@@ -24,9 +24,9 @@
     $scope.sort = {sortable: true};
     $scope.ts = CRM.ts('civicase');
     $scope.viewingCaseDetails = null;
+    $scope.bulkAllowed = BulkActions.isAllowed();
 
     (function init () {
-      initiateBulkActions();
       bindRouteParamsToScope();
       initiateWatchers();
 
@@ -191,21 +191,6 @@
       $scope.$watch('cases', function (cases) {
         $scope.selectedCases = _.filter(cases, 'selected');
       }, true);
-    }
-
-    /**
-     * Initialise the Bulk Actions Functionality
-     */
-    function initiateBulkActions () {
-      if (CRM.checkPerm('basic case information') &&
-      !CRM.checkPerm('administer CiviCase') &&
-      !CRM.checkPerm('access my cases and activities') &&
-      !CRM.checkPerm('access all cases and activities')
-      ) {
-        $scope.bulkAllowed = false;
-      } else {
-        $scope.bulkAllowed = true;
-      }
     }
 
     /**

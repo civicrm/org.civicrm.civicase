@@ -20,7 +20,7 @@
     };
   });
 
-  function activityFeedController ($scope, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
+  function activityFeedController ($scope, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25;
@@ -33,14 +33,17 @@
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activities = {};
     $scope.activityGroups = [];
+    $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.remaining = true;
     $scope.viewingActivity = {};
     $scope.refreshCase = $scope.refreshCase || _.noop;
 
     (function init () {
-      initiateBulkActions();
       bindRouteParamsToScope();
       initiateWatchersAndEvents();
+      $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
+        $scope.viewActivity(activity.id, $event);
+      });
     }());
 
     /**
@@ -87,21 +90,6 @@
         $scope.aid = act.id;
       }
     };
-
-    /**
-     * Initialise the Bulk Actions Functionality
-     */
-    function initiateBulkActions () {
-      if (CRM.checkPerm('basic case information') &&
-        !CRM.checkPerm('administer CiviCase') &&
-        !CRM.checkPerm('access my cases and activities') &&
-        !CRM.checkPerm('access all cases and activities')
-      ) {
-        $scope.bulkAllowed = false;
-      } else {
-        $scope.bulkAllowed = true;
-      }
-    }
 
     /**
      * Binds all route parameters to scope

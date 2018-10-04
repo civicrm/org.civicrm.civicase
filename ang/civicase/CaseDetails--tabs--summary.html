@@ -88,7 +88,10 @@
     </div>
   </div>
   <div ng-include="'~/civicase/CaseDetails--tabs--summary--CustomData.html'"></div>
-
+  <div class="clearfix">
+    <div class="civicase__summary-tab-tile civicase__summary-tab__activity-list col-lg-6 col-md-12 panel civicase__panel-transparent-header" ng-include="'~/civicase/CaseDetails--tabs--summary--RecentCommunications.html'"></div>
+    <div class="civicase__summary-tab-tile civicase__summary-tab__activity-list col-lg-6 col-md-12 panel civicase__panel-transparent-header" ng-include="'~/civicase/CaseDetails--tabs--summary--Tasks.html'"></div>
+  </div>  
   <!-- Other Cases -->
   <div ng-if="item && item.relatedCases.length" ng-include="'~/civicase/CaseDetails--other-cases.html'"></div>
   <!-- End - Other Cases -->
