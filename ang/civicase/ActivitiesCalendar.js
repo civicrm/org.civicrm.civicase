@@ -169,17 +169,6 @@
     })();
 
     /**
-     * Determines if all the given activities have been completed.
-     *
-     * @param {Array} activities
-     */
-    function checkIfAllActivitiesHaveBeenCompleted (activities) {
-      return _.every(activities, function (activity) {
-        return _.includes(CRM.civicase.activityStatusTypes.completed, +activity.status_id);
-      });
-    }
-
-    /**
      * Returns the activities that belong to the given date.
      *
      * @param {Date} date
@@ -200,9 +189,7 @@
      *   can be "day", "month", or "year".
      */
     function getDayCustomClass (params) {
-      var allActivitiesHaveBeenCompleted;
       var activities = getActivitiesForDate(params.date);
-      var isDateInThePast = moment().isAfter(params.date, 'day');
       var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
 
       if (!isInCurrentMonth && params.mode === 'day') {
@@ -213,15 +200,37 @@
         return;
       }
 
-      allActivitiesHaveBeenCompleted = checkIfAllActivitiesHaveBeenCompleted(activities);
-
-      if (allActivitiesHaveBeenCompleted) {
+      if (haveAllActivitiesBeenCompleted(activities)) {
         return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed';
-      } else if (isDateInThePast) {
+      } else if (isAnyActivityOverdue(activities)) {
         return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--overdue';
       } else {
         return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled';
       }
+    }
+
+    /**
+     * Determines if all the given activities have been completed.
+     *
+     * @param {Array} activities
+     * @return {Boolean}
+     */
+    function haveAllActivitiesBeenCompleted (activities) {
+      return _.every(activities, function (activity) {
+        return _.includes(CRM.civicase.activityStatusTypes.completed, +activity.status_id);
+      });
+    }
+
+    /**
+     * Determines if at least one of the given activities is overdue.
+     *
+     * @param {Array} activities
+     * @return {Boolean}
+     */
+    function isAnyActivityOverdue (activities) {
+      return _.some(activities, function (activity) {
+        return activity.is_overdue;
+      });
     }
 
     /**
