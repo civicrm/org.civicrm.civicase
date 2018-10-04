@@ -15,14 +15,20 @@
     function activityFiltersContactLink ($scope, $el, $attr) {
       $scope.ts = CRM.ts('civicase');
 
-      $scope.$watch('filters', function () {
+      (function init () {
+        $scope.$watch('filters', filtersWatcher);
+
+        $scope.$on('civicaseActivityFeed.query', feedQueryWatcher);
+      }());
+
+      function filtersWatcher () {
         // Ensure "All" checkbox renders.
         if ($scope.filters['@involvingContact'] === undefined) {
           $scope.filters['@involvingContact'] = '';
         }
-      });
+      }
 
-      $scope.$on('civicaseActivityFeed.query', function (event, filters, params) {
+      function feedQueryWatcher (event, filters, params) {
         switch (filters['@involvingContact']) {
           case 'myActivities':
             params.contact_id = 'user_contact_id';
@@ -40,7 +46,7 @@
           default:
             break;
         }
-      });
+      }
     }
   });
 })(angular, CRM.$, CRM._);
