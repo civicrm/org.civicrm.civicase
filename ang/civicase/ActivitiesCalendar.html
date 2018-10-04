@@ -8,7 +8,7 @@
   <div class="popover bottom activities-calendar-popover">
     <div class="arrow"></div>
     <div class="popover-content">
-      <div ng-repeat="activity in selectedActivites"
+      <div ng-repeat="activity in selectedActivites | orderBy: '-is_overdue'"
         case-activity-card="activity"
         refresh-on-checkbox-toggle="true"
         refresh-callback="refresh">
