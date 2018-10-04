@@ -31,14 +31,14 @@
       </select>
 
       <div civicase-activity-filters-contact="filters"></div>
-      <select
+
+      <input ng-list
+        ng-if="activityCategories"
         class="form-control civicase__activity-filter__category"
-        ng-model="filters['activity_type_id.grouping']" crm-ui-select>
-        <option value="">{{ ts('All Activity Categories') }}</option>
-        <option ng-repeat="(value, item) in ::activityCategories" value="{{ value }}" data-icon="{{ item.icon }}">
-          {{ item.label }}
-        </option>
-      </select>
+        placeholder="{{ ts('All Activity Categories') }}"
+        crm-ui-select="{allowClear: true, multiple: true, data: activityCategories}"
+        ng-model="filters['activity_type_id.grouping']" />
+
       <button
         class="civicase__activity-filter__attachment btn btn-{{filters.file_id ? 'active' : 'default'}}"
         ng-click="filters.file_id = filters.file_id ? null : {'IS NOT NULL': 1}"
@@ -92,8 +92,6 @@
       </span>
     </div>
 
-    <span class="filter-separator input-group"></span>
-
     <span ng-repeat="field in availableFilters" ng-if="exposedFilters[field.name]" data-activity-filter="{{ field.name }}" ng-switch="field.html_type">
       <span ng-switch-when="Autocomplete-Select">
         <input
@@ -112,6 +110,5 @@
         <input ng-list ng-if="field.options" class="form-control" placeholder="{{ field.label }}" crm-ui-select="{allowClear: true, multiple: true, data: field.options}" ng-model="filters[field.name]" />
       </span>
     </span>
-
   </form>
 </div>

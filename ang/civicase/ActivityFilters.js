@@ -18,7 +18,7 @@
     function activityFiltersLink ($scope, element, attrs) {
       var ts = $scope.ts = CRM.ts('civicase');
 
-      $scope.activityCategories = CRM.civicase.activityCategories;
+      $scope.activityCategories = prepareActivityCategories();
       $scope.availableFilters = prepareAvailableFilters();
       // Default exposed filters
       $scope.exposedFilters = {
@@ -55,7 +55,7 @@
         }
       };
 
-      $scope.hasFilters = function hasFilters () {
+      $scope.hasFilters = function () {
         var result = false;
 
         _.each($scope.filters, function (value) {
@@ -65,12 +65,17 @@
         return result;
       };
 
-      $scope.clearFilters = function clearFilters () {
+      $scope.clearFilters = function () {
         _.each(_.keys($scope.filters), function (key) {
           delete $scope.filters[key];
         });
       };
 
+      /**
+       * Prepare Activity Filters
+       *
+       * @return {Array}
+       */
       function prepareAvailableFilters () {
         var availableFilters = [
           {
@@ -136,6 +141,20 @@
         return availableFilters;
       }
 
+      /**
+       * Prepare Activity Categories
+       *
+       * @return {Array}
+       */
+      function prepareActivityCategories () {
+        return _.map(CRM.civicase.activityCategories, function (category, key) {
+          category.id = key;
+          category.text = category.label;
+
+          return category;
+        });
+      }
+
       function mapSelectOptions (opt, id) {
         return {
           id: id,
@@ -162,6 +181,7 @@
     function civicaseActivityFiltersAffix (scope, $el, attrs) {
       $timeout(function () {
         var $filter = $('.civicase__activity-filter');
+        var $feedBodyPanel = $('.civicase__activity-filter + .panel-body');
         var $caseTabs = $('.civicase__case-body_tab');
         var $toolbarDrawer = $('#toolbar');
 
@@ -171,8 +191,10 @@
           }
         }).on('affixed.bs.affix', function () {
           $filter.css('top', $toolbarDrawer.height() + $caseTabs.height());
+          $feedBodyPanel.css('padding-top', $filter.outerHeight());
         }).on('affixed-top.bs.affix', function () {
           $filter.css('top', 'auto');
+          $feedBodyPanel.css('padding-top', 0);
         });
       });
     }

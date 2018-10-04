@@ -1,6 +1,7 @@
 .civicase__activity-filter {
   background: $gray-light;
   padding: 16px 40px 0;
+  width: 100%;
   z-index: 4;
 }
 
@@ -60,12 +61,24 @@
   }
 }
 
+.civicase__activity-filter__timeline {
+  width: auto;
+}
+
+.civicase__activity-filter__category {
+  vertical-align: top;
+  width: 180px;
+
+  .crm-i {
+    color: $gray-dark;
+  }
+}
+
 .civicase__activity-filter__timeline,
 .civicase__activity-filter__category {
   display: inline-block;
   margin-left: 16px;
   padding: 1px 0 !important;
-  width: auto;
 
   .select2-choice {
     .select2-arrow {
