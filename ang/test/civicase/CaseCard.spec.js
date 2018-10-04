@@ -9,7 +9,7 @@
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
-      CasesData = _CasesData_;
+      CasesData = _CasesData_.get();
     }));
 
     beforeEach(function () {

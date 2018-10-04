@@ -41,6 +41,9 @@
     (function init () {
       bindRouteParamsToScope();
       initiateWatchersAndEvents();
+      $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
+        $scope.viewActivity(activity.id, $event);
+      });
     }());
 
     /**

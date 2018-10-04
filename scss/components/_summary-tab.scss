@@ -80,6 +80,12 @@
 }
 
 .civicase__summary-tab__activity-list {
+  > .panel-heading {
+    .civicase__case-card__activity-count:nth-child(2) {
+      margin-left: 10px;
+    }
+  }
+
   > .panel-body {
     background: transparent;
     box-shadow: none;

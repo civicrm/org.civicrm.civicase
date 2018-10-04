@@ -11,7 +11,7 @@
       $controller = _$controller_;
       $q = _$q_;
       $scope = $rootScope.$new();
-      CasesData = _CasesData_;
+      CasesData = _CasesData_.get();
       crmApi = _crmApi_;
       formatCase = _formatCase_;
       // custom function added by civicrm:
@@ -20,7 +20,6 @@
         id: _.uniqueId()
       };
     }));
-
     describe('on init', function () {
       var expectedApiCallParams, expectedCases;
 

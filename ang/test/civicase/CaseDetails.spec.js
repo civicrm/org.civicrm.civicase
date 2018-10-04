@@ -19,8 +19,7 @@ describe('civicaseCaseDetails', function () {
   beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    CasesData = _CasesData_;
-
+    CasesData = _CasesData_.get();
     $scope = $rootScope.$new();
   }));
 
@@ -68,8 +67,11 @@ describe('civicaseCaseDetails', function () {
       element.isolateScope().pushCaseData(CasesData.values[0]);
     });
 
-    it('calculates the incomplete tasks and scheduled activities', function () {
+    it('calculates the incomplete scheduled activities', function () {
       expect(element.isolateScope().item.category_count.scheduled).toEqual(getScheduledActivitiesCount(element.isolateScope().item.allActivities));
+    });
+
+    it('calculates the incomplete tasks activities', function () {
       expect(element.isolateScope().item.category_count.incomplete.task).toBe(2);
     });
     /* TODO - Rest of function needs to be unit tested */

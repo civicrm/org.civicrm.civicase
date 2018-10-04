@@ -24,7 +24,7 @@
         bulkAllowed: '=',
         editActivityUrl: '=?editActivityUrl',
         type: '=type',
-        feedViewFn: '=feedViewFn'
+        customClickEvent: '='
       }
     };
   });
@@ -89,7 +89,21 @@
     };
 
     /**
-     * View an activity details in the popup
+     * Click handler for Activity Card
+     *
+     * @param {object} $event
+     * @param {object} activity
+     */
+    $scope.viewActivityDetails = function ($event, activity) {
+      if ($scope.customClickEvent) {
+        $scope.$emit('civicaseAcitivityClicked', $event, activity);
+      } else {
+        $scope.viewInPopup($event, activity);
+      }
+    };
+
+    /**
+     * View the sent activity details in the popup
      *
      * @param {object} $event
      * @param {object} activity
