@@ -17,9 +17,17 @@
 
         <span class="civicase__activity__right-container">
           <!-- Attachments -->
-          <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id">
+          <div ng-if="activity.file_id"
+            class="btn-group civicase__activity-attachment__container"
+            uib-dropdown
+            dropdown-append-to="bootstrapThemeElement"
+            is-open="attachmentDropdownIsOpen"
+            ng-mouseover="attachmentDropdownIsOpen = true"
+            ng-mouseleave="attachmentDropdownIsOpen = false">
             <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
-            <ul class="dropdown-menu">
+            <ul class="civicase__activity-attachment__dropdown-menu"
+              uib-dropdown-menu
+              ng-mouseleave="attachmentDropdownIsOpen = false">
               <li ng-if="!activity.attachments || !activity.attachments.length" class="civicase__activity-attachment-load">
                 <span>
                   <i class="civicase__activity-attachment-load-icon text-primary material-icons">loop</i> &nbsp;{{ ts('Loading...') }}
