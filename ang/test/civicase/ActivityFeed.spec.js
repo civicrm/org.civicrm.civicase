@@ -42,12 +42,11 @@
 
           beforeEach(function () {
             initController();
-            $scope.filters.activitySet = CaseTypes.values['1'].definition.activitySets[0].name;
-            $scope.$digest();
+            $scope.filters.activitySet = CaseTypes.get()['1'].definition.activitySets[0].name;
             $scope.filters.activity_type_id = '5';
             $scope.$digest();
 
-            _.each(CaseTypes.values['1'].definition.activitySets[0].activityTypes, function (activityTypeFromSet) {
+            _.each(CaseTypes.get()['1'].definition.activitySets[0].activityTypes, function (activityTypeFromSet) {
               expectedActivityTypeIDs.push(_.findKey(CRM.civicase.activityTypes, function (activitySet) {
                 return activitySet.name === activityTypeFromSet.name;
               }));
