@@ -218,10 +218,10 @@
           }
         }).on('affixed.bs.affix', function () {
           $filter.css('top', $toolbarDrawer.height() + $caseTabs.height());
-          $feedBodyPanel.css('padding-top', $filter.outerHeight());
+          $feedBodyPanel.css('padding-top', $filter.outerHeight() + 15);
         }).on('affixed-top.bs.affix', function () {
           $filter.css('top', 'auto');
-          $feedBodyPanel.css('padding-top', 0);
+          $feedBodyPanel.css('padding-top', '15px');
         });
       });
     }
