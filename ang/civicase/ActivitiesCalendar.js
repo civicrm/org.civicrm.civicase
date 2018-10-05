@@ -6,7 +6,7 @@
       scope: {
         activities: '=',
         caseId: '=',
-        refresh: '=refreshCallback'
+        refreshCallback: '='
       },
       controller: 'civicaseActivitiesCalendarController',
       templateUrl: '~/civicase/ActivitiesCalendar.html',
@@ -160,13 +160,37 @@
       startingDay: 1
     };
 
-    $scope.onDateSelected = onDateSelected;
-
     (function init () {
       $scope.$watch('activities', function () {
         $scope.$broadcast('civicaseActivitiesCalendar::refreshDatepicker');
       }, true);
     })();
+
+    /**
+     * Stores the activities that are on the same date as the calendar's
+     * selected date. Triggers when the calendar date changes.
+     */
+    $scope.onDateSelected = function () {
+      $scope.selectedActivites = $scope.activities
+        .filter(function (activity) {
+          return moment(activity.activity_date_time).isSame($scope.selectedDate, 'day');
+        })
+        .map(function (activity) {
+          return formatActivity(activity, $scope.caseId);
+        });
+
+      if ($scope.selectedActivites.length) {
+        $scope.$emit('civicaseActivitiesCalendar::openActivitiesPopover');
+      }
+    };
+
+    /**
+     * Executes the refresh callback, but does not require the loading screen to be shown while
+     * the case is refreshed.
+     */
+    $scope.refresh = function () {
+      $scope.refreshCallback([], { useLoadingScreen: false });
+    };
 
     /**
      * Returns the activities that belong to the given date.
@@ -231,24 +255,6 @@
       return _.some(activities, function (activity) {
         return activity.is_overdue;
       });
-    }
-
-    /**
-     * Stores the activities that are on the same date as the calendar's
-     * selected date. Triggers when the calendar date changes.
-     */
-    function onDateSelected () {
-      $scope.selectedActivites = $scope.activities
-        .filter(function (activity) {
-          return moment(activity.activity_date_time).isSame($scope.selectedDate, 'day');
-        })
-        .map(function (activity) {
-          return formatActivity(activity, $scope.caseId);
-        });
-
-      if ($scope.selectedActivites.length) {
-        $scope.$emit('civicaseActivitiesCalendar::openActivitiesPopover');
-      }
     }
   }
 })(CRM.$, CRM._, angular);
