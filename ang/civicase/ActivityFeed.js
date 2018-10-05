@@ -12,7 +12,7 @@
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityFeed.html',
-      controller: activityFeedController,
+      controller: civicaseActivityFeedController,
       scope: {
         params: '=civicaseActivityFeed',
         caseTypeId: '=',
@@ -21,7 +21,9 @@
     };
   });
 
-  function activityFeedController ($scope, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
+  module.controller('civicaseActivityFeedController', civicaseActivityFeedController);
+
+  function civicaseActivityFeedController ($scope, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25;
