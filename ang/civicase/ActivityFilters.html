@@ -6,16 +6,12 @@
       </button>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <span>
-            <input type="checkbox" id="act_control_overdue_first" ng-model="displayOptions.overdue_first" />
-            <label for="act_control_overdue_first">{{ ts('Show overdue activities first') }}</label>
-          </span>
+          <input type="checkbox" id="act_control_overdue_first" ng-model="displayOptions.overdue_first" />
+          <label for="act_control_overdue_first">{{ ts('Show overdue activities first') }}</label>
         </li>
         <li ng-show="!params.case_id && params.filters.contact_id">
-          <span>
-            <input type="checkbox" id="act_control_include_case" ng-model="displayOptions.include_case" />
-            <label for="act_control_include_case">{{ ts('Show case activities') }}</label>
-          </span>
+          <input type="checkbox" id="act_control_include_case" ng-model="displayOptions.include_case" />
+          <label for="act_control_include_case">{{ ts('Show case activities') }}</label>
         </li>
       </ul>
     </div>

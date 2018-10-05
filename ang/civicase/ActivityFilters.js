@@ -15,7 +15,13 @@
       transclude: true
     };
 
-    function activityFiltersLink ($scope, element, attrs) {
+    /**
+     * Link function for civicaseActivityFilters
+     *
+     * @param {Object} $scope
+     * @param {Object} element
+     */
+    function activityFiltersLink ($scope, element) {
       var ts = $scope.ts = CRM.ts('civicase');
 
       $scope.activityCategories = prepareActivityCategories();
@@ -36,12 +42,19 @@
         });
       }());
 
+      /**
+       * Exposes the selected filter in the UI
+       *
+       * @param {Object} field
+       * @param {Object} $event
+       */
       $scope.exposeFilter = function (field, $event) {
         var shown = !$scope.exposedFilters[field.name];
         if (shown) {
           // Focus search element when selecting
           $timeout(function () {
             var $span = $('[data-activity-filter=' + field.name + ']', element);
+
             if ($('[crm-entityref], [crm-ui-select]', $span).length) {
               $('[crm-entityref], [crm-ui-select]', $span).select2('open');
             } else {
@@ -55,6 +68,11 @@
         }
       };
 
+      /**
+       * Checks if any filter has been applied
+       *
+       * @return {Boolean}
+       */
       $scope.hasFilters = function () {
         var result = false;
 
@@ -65,6 +83,9 @@
         return result;
       };
 
+      /**
+       * Clears all the filters
+       */
       $scope.clearFilters = function () {
         _.each(_.keys($scope.filters), function (key) {
           delete $scope.filters[key];
@@ -155,12 +176,19 @@
         });
       }
 
-      function mapSelectOptions (opt, id) {
+      /**
+       * Maps Options to be used in the dropdown
+       *
+       * @param {Object} option
+       * @param {int/string} id
+       * @return {Object}
+       */
+      function mapSelectOptions (option, id) {
         return {
           id: id,
-          text: opt.label,
-          color: opt.color,
-          icon: opt.icon
+          text: option.label,
+          color: option.color,
+          icon: option.icon
         };
       }
     }
@@ -176,9 +204,8 @@
      *
      * @param {Object} scope
      * @param {Object} $el
-     * @param {Object} attrs
      */
-    function civicaseActivityFiltersAffix (scope, $el, attrs) {
+    function civicaseActivityFiltersAffix (scope, $el) {
       $timeout(function () {
         var $filter = $('.civicase__activity-filter');
         var $feedBodyPanel = $('.civicase__activity-filter + .panel-body');

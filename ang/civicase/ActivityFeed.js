@@ -39,7 +39,7 @@
     $scope.remaining = true;
     $scope.viewingActivity = {};
     $scope.refreshCase = $scope.refreshCase || _.noop;
-    $scope.caseTimelines = CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets;
+    $scope.caseTimelines = _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label');
 
     (function init () {
       bindRouteParamsToScope();
