@@ -15,6 +15,7 @@
         }
       },
       controller: caseActivityCardController,
+      link: caseActivityCardLink,
       replace: true,
       scope: {
         activity: '=caseActivityCard',
@@ -183,5 +184,14 @@
         return crmBlocker(crmStatus({start: $scope.ts('Deleting...'), success: $scope.ts('Deleted')}, p));
       };
     };
+  }
+
+  /**
+   * Activity Card link function
+   *
+   * @param {Object} $scope
+   */
+  function caseActivityCardLink ($scope) {
+    $scope.bootstrapThemeElement = $('#bootstrap-theme');
   }
 })(angular, CRM.$, CRM._);
