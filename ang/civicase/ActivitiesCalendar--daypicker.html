@@ -40,7 +40,10 @@
             on dt"
           ng-click="select(dt.date)"
           ng-disabled="::dt.disabled"
-          tabindex="-1"><span ng-class="::{'text-muted': dt.secondary, 'text-info': dt.current}">{{::dt.label}}</span></button>
+          tabindex="-1">
+          <span ng-class="::{'text-muted': dt.secondary, 'text-info': dt.current}">{{::dt.label}}</span>
+          <i class="material-icons">lens</i>
+        </button>
       </td>
     </tr>
   </tbody>
