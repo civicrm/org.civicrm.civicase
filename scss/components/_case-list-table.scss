@@ -55,6 +55,7 @@
       padding: 0;
       position: absolute;
       width: $case-card-width;
+      z-index: 1;
     }
 
     &:nth-child(2) {
@@ -144,11 +145,11 @@
 
 .civicase__case-details-panel--summary {
   height: auto;
+  overflow: visible;
   width: calc(100% - #{$case-card-width});
 }
 
 .civicase__case-details-panel--focused {
-  overflow: visible;
   width: 100%;
 }
 
