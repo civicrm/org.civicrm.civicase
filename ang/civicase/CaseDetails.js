@@ -155,6 +155,7 @@
       apiCalls.push(['Case', 'getdetails', caseGetParams()]);
       crmApi(apiCalls, true).then(function (result) {
         $scope.pushCaseData(result[apiCalls.length - 1].values[0]);
+        $scope.areDetailsLoaded = true;
       });
     };
 
@@ -244,8 +245,6 @@
       item.customData = item['api.CustomValue.gettree'].values || [];
       delete (item['api.CustomValue.gettree']);
 
-      $scope.areDetailsLoaded = true;
-
       return item;
     }
 
@@ -267,6 +266,7 @@
         $scope.areDetailsLoaded = false;
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
+          $scope.areDetailsLoaded = true;
         });
       }
     }
