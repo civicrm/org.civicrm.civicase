@@ -1,6 +1,9 @@
 .civicase__activity-feed {
+  box-shadow: none;
+
   .panel-body {
     background: transparent;
+    border-top: 0 !important;
   }
 
   .civicase__panel-transparent-header {
@@ -79,5 +82,14 @@
 
   .civicase__activity-card--ribbon {
     width: 748px;
+  }
+}
+
+.civicase__activity-feed-pager__no-more {
+  > .btn {
+    background: transparent;
+    border: 0;
+    font-weight: $font-weight-heading;
+    margin-top: 70px;
   }
 }

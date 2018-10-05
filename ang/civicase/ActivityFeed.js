@@ -12,15 +12,18 @@
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityFeed.html',
-      controller: activityFeedController,
+      controller: civicaseActivityFeedController,
       scope: {
         params: '=civicaseActivityFeed',
+        caseTypeId: '=',
         refreshCase: '=?refreshCallback'
       }
     };
   });
 
-  function activityFeedController ($scope, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
+  module.controller('civicaseActivityFeedController', civicaseActivityFeedController);
+
+  function civicaseActivityFeedController ($scope, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25;
@@ -30,13 +33,13 @@
     $scope.isLoading = true;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityStatuses = CRM.civicase.activityStatuses;
-    $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activities = {};
     $scope.activityGroups = [];
     $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.remaining = true;
     $scope.viewingActivity = {};
     $scope.refreshCase = $scope.refreshCase || _.noop;
+    $scope.caseTimelines = _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label');
 
     (function init () {
       bindRouteParamsToScope();
@@ -58,7 +61,6 @@
      * Refresh Activities
      */
     $scope.refreshAll = function () {
-      $('.act-feed-panel .panel-body').block();
       getActivities(false, $scope.refreshCase);
     };
 
@@ -168,7 +170,6 @@
         if (!result.count && !pageNum) {
           $scope.remaining = false;
         }
-        $('.act-feed-panel .panel-body').unblock();
         if ($scope.aid && $scope.aid !== $scope.viewingActivity.id) {
           $scope.viewActivity($scope.aid);
         }
@@ -204,9 +205,12 @@
       } else {
         returnParams.return = returnParams.return.concat(['case_id.case_type_id', 'case_id.status_id', 'case_id.contacts']);
       }
+
       _.each($scope.filters, function (val, key) {
         if (key[0] === '@') return; // Virtual params.
-        if (val) {
+        if (key === 'activity_type_id' || key === 'activitySet') {
+          setActivityTypeIDsFilter(params);
+        } else if (val) {
           if (key === 'text') {
             params.subject = {LIKE: '%' + val + '%'};
             params.details = {LIKE: '%' + val + '%'};
@@ -238,6 +242,40 @@
       $scope.$watchCollection('params.filters', getActivities);
       $scope.$watchCollection('displayOptions', getActivities);
       $scope.$on('updateCaseData', getActivities);
+    }
+
+    /**
+     * When timeline/activity-set filter is applied,
+     * gets the activity type ids from the selected timeline.
+     * Also adds those activity types ids with the "Activity Type" filter
+     *
+     * @param {*} params
+     */
+    function setActivityTypeIDsFilter (params) {
+      var activityTypeIDs = [];
+
+      if ($scope.filters.activitySet) {
+        var activitySet = _.find($scope.caseTimelines, function (activitySet) {
+          return activitySet.name === $scope.filters.activitySet;
+        });
+
+        if (activitySet) {
+          _.each(activitySet.activityTypes, function (activityTypeFromSet) {
+            activityTypeIDs.push(_.findKey(CRM.civicase.activityTypes, function (activitySet) {
+              return activitySet.name === activityTypeFromSet.name;
+            }));
+          });
+        }
+      }
+
+      // add activity types ids from the "Activity Type" filter
+      if ($scope.filters['activity_type_id']) {
+        activityTypeIDs = activityTypeIDs.concat($scope.filters['activity_type_id']);
+      }
+
+      if (activityTypeIDs.length) {
+        params['activity_type_id'] = {IN: activityTypeIDs};
+      }
     }
   }
 })(angular, CRM.$, CRM._);

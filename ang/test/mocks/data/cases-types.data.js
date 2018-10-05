@@ -1,6 +1,7 @@
-(function () {
+(function (_) {
   var module = angular.module('civicase.data');
-  CRM.civicase.caseTypes = {
+
+  var caseTypesMock = {
     '1': {
       'name': 'housing_support',
       'title': 'Housing Support',
@@ -323,7 +324,18 @@
     }
   };
 
-  module.constant('CaseTypes', {
-    values: CRM.civicase.caseTypes
+  CRM.civicase.caseTypes = _.clone(caseTypesMock);
+
+  module.service('CaseTypes', function () {
+    return {
+      /**
+       * Returns a list of case types
+       *
+       * @return {Array}
+       */
+      get: function () {
+        return _.clone(caseTypesMock);
+      }
+    };
   });
-}());
+}(CRM._));

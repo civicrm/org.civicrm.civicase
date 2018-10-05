@@ -17,7 +17,7 @@
 
 <div class="panel-body civicase__case-body">
   <nav class="navbar nav-pills-horizontal-primary"></nav>
-  <div class="civicase__summary-tab" ng-show="activeTab === 'summary'">
+  <div class="civicase__summary-tab" ng-show="!activeTab || activeTab === 'summary'">
     <!-- Subject and QuickLinks -->
     <div class="panel panel-default civicase__summary-tab__basic-details">
       <div class="panel-body">
@@ -169,15 +169,45 @@
               </div>
             </div>
           </div>
-        </div>        
+        </div>
         <!-- End of Tasks -->
       </div>
     </div>
   </div>
-  <div class="civicase__case-tab--activity" ng-show="activeTab === 'activity'">
-    <div class="civicase__loading-placeholder__oneline" style="width: 10em;  margin-bottom: 5px;"></div>
-    <div class="civicase__loading-placeholder__oneline" style="width: 10em;  margin-bottom: 5px;"></div>
-    <div class="civicase__loading-placeholder__oneline" style="width: 10em;  margin-bottom: 5px;"></div>
+  <div class="civicase__case-tab--activity" ng-show="activeTab === 'activities'">
+    <div class="panel panel-default civicase__activity-feed">
+      <div class="panel-header civicase__activity-filter">
+        <div class="civicase__loading-placeholder__oneline pull-left" style="width: 1em; font-size: 30px;"></div>
+        <div class="civicase__loading-placeholder__oneline pull-right" style="width: 12em; font-size: 30px;"></div>
+      </div>
+
+      <div class="panel-body clearfix">
+        <div
+          class="panel panel-default civicase__panel-transparent-header">
+          <div class="panel-heading">
+            <h3><div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div></h3>
+          </div>
+          <div class="panel-body">
+            <div class="civicase__activity-feed__list">
+              <div class="civicase__activity-feed__activity-container">
+                <div class="civicase__activity-card civicase__activity-card--long" ng-repeat="i in [0,1,2,3,4]">
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <div class="civicase__activity-card-row" style="margin-bottom: 8px;">
+                        <div class="civicase__loading-placeholder__oneline" style="width: 0.8em; font-size: 24px; margin-right: 10px;"></div>
+                        <div class="civicase__loading-placeholder__oneline" style="width: 8em; font-size: 18px;"></div>
+                        <div class="civicase__activity__right-container civicase__loading-placeholder__oneline" style="width: 7em;"></div>
+                      </div>
+                      <div class="civicase__activity-card-row--file civicase__loading-placeholder__oneline" style="width: 8em; margin-bottom: 10px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="civicase__case-tab--files" ng-show="activeTab === 'files'">
     <div class="panel panel-default civicase__panel-transparent-header">

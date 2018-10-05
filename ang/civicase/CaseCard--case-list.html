@@ -57,12 +57,12 @@
         <span>Other: </span>
         <a class="civicase__case-card__activity-count"
            ng-if="data.category_count.incomplete.other"
-           ng-href="#{{ activityFeedUrl(data.id, null, 'incomplete') }}"
+           ng-href="#{{ activityFeedUrl(data.id, otherCategories, 'incomplete') }}"
         > {{ data.category_count.incomplete.other }} </a>
         <span ng-if="data.category_count.incomplete.other && data.category_count.overdue.other" class="civicase__pipe"> | </span>
         <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
            ng-if="data.category_count.overdue.other"
-           ng-href="#{{ activityFeedUrl(data.id, null, 'incomplete') }}"
+           ng-href="#{{ activityFeedUrl(data.id, otherCategories, 'incomplete') }}"
         > {{ data.category_count.overdue.other }} </a>
         <span ng-if="!data.category_count.incomplete.other && !data.category_count.overdue.other" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
       </div>
