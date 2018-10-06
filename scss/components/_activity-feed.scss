@@ -93,3 +93,97 @@
     margin-top: 70px;
   }
 }
+
+.civicase__activity-feed__list-container {
+  display: flex;
+  justify-content: center;
+}
+
+.civicase__activity-feed__details {
+  margin-top: 32px;
+  width: 484px;
+
+  .panel-body {
+    padding: 0;
+  }
+
+  .panel-subtitle {
+    color: $gray-darker;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.civicase__activity-feed__details__close {
+  color: $gray-darker;
+  font-size: 18px;
+  padding: 0;
+}
+
+.civicase__activity-feed__details__container {
+  /* stylelint-disable max-nesting-depth */
+  .form-layout,
+  .crm-accordion-body {
+    tbody {
+      td:nth-child(2) {
+        > * {
+          margin-bottom: 10px !important;
+        }
+
+        .crm-form-checkbox,
+        .crm-form-radio {
+          margin-right: 5px;
+          position: relative;
+          top: 2px;
+        }
+      }
+    }
+  }
+
+  .crm-info-panel,
+  .form-layout,
+  .crm-accordion-body {
+    box-shadow: none;
+
+    tbody {
+      > tr {
+        border: 0;
+
+        .label {
+          padding-left: 15px !important;
+        }
+      }
+    }
+
+    .label {
+      &,
+      label {
+        color: $crm-gray-matte !important;
+        font-weight: 400 !important;
+      }
+    }
+
+    .section-shown {
+      padding: 0;
+    }
+
+    .crm-accordion-body {
+      // padding: 0 !important;
+    }
+  }
+
+  .crm-button_qf_Activity_cancel {
+    display: none;
+  }
+
+  .crm-submit-buttons {
+    .edit {
+      @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+    }
+
+    .delete {
+      @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
+    }
+  }
+  /* stylelint-enable max-nesting-depth */
+}

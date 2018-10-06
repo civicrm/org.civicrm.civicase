@@ -55,12 +55,15 @@
     function loadActivity () {
       if (scope.activity.id) {
         var context = scope.activity.case_id ? 'case' : 'activity';
+
         CRM.loadForm(CRM.url('civicrm/activity', {
           action: 'view',
           id: scope.activity.id,
           reset: 1,
           context: context
-        }), {target: $(element).children('div.act-view-container')});
+        }), {target: $(element).find('div.civicase__activity-feed__details__container')});
+
+        element.find('.crm-submit-buttons a.edit').addClass('btn btn-primary');
       }
     }
   }

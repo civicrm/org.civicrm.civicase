@@ -1,9 +1,16 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <h3>{{ activity.type }}</h3>
-    <button class="btn btn-lg btn-link pull-right" ng-click="close()">
-      <i class="fa fa-close"></i>
+<!-- <h3></h3> -->
+
+<div class="panel panel-default panel-w-subheading">
+  <div class="panel-heading">
+    <span>ID-{{activity.id}}</span>
+    <button class="btn btn-lg btn-link pull-right civicase__activity-feed__details__close" ng-click="close()">
+      <i class="material-icons">clear</i>
     </button>
   </div>
-</nav>
-<div class="act-view-container"></div>
+  <div class="panel-subheading">
+    <h3 class="panel-subtitle">{{activity.type}}</h3>
+  </div>
+  <div class="panel-body">
+    <div class="civicase__activity-feed__details__container"></div>
+  </div>
+</div>
