@@ -161,7 +161,6 @@
   }
 }
 
-
 .activities-calendar-popover {
   border-color: $gray-light;
   border-radius: 2px;
@@ -178,4 +177,8 @@
     overflow-y: auto;
     padding: 0;
   }
+}
+
+.civicase__activities-calendar__dropdown {
+  transform: translateX(calc(-100% + #{$attachment-icon-width}));
 }

@@ -26,6 +26,7 @@
             ng-mouseleave="attachmentDropdownIsOpen = false">
             <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
             <ul class="civicase__activity-attachment__dropdown-menu"
+              ng-class="[customDropdownClass]"
               uib-dropdown-menu
               ng-mouseleave="attachmentDropdownIsOpen = false">
               <li ng-if="!activity.attachments || !activity.attachments.length" class="civicase__activity-attachment-load">

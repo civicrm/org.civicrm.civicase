@@ -10,6 +10,7 @@
     <div class="popover-content">
       <div ng-repeat="activity in selectedActivites | orderBy: '-is_overdue'"
         case-activity-card="activity"
+        custom-dropdown-class="civicase__activities-calendar__dropdown"
         refresh-on-checkbox-toggle="true"
         refresh-callback="refresh">
       </div>

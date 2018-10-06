@@ -20,6 +20,7 @@
       scope: {
         activity: '=caseActivityCard',
         case: '=?',
+        customDropdownClass: '@',
         refresh: '=refreshCallback',
         refreshOnCheckboxToggle: '=?',
         bulkAllowed: '=',
