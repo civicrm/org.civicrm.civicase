@@ -162,6 +162,8 @@
 
     (function init () {
       $scope.$watch('activities', function () {
+        $scope.selectedActivites = getSelectedActivities();
+
         $scope.$broadcast('civicaseActivitiesCalendar::refreshDatepicker');
       }, true);
     })();
@@ -171,13 +173,7 @@
      * selected date. Triggers when the calendar date changes.
      */
     $scope.onDateSelected = function () {
-      $scope.selectedActivites = $scope.activities
-        .filter(function (activity) {
-          return moment(activity.activity_date_time).isSame($scope.selectedDate, 'day');
-        })
-        .map(function (activity) {
-          return formatActivity(activity, $scope.caseId);
-        });
+      $scope.selectedActivites = getSelectedActivities();
 
       if ($scope.selectedActivites.length) {
         $scope.$emit('civicaseActivitiesCalendar::openActivitiesPopover');
@@ -231,6 +227,18 @@
       } else {
         return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled';
       }
+    }
+
+    /**
+     * Returns a list of selected activities for the currently selected date.
+     *
+     * @return {Array} a list of formatted activities.
+     */
+    function getSelectedActivities () {
+      return getActivitiesForDate($scope.selectedDate)
+        .map(function (activity) {
+          return formatActivity(activity, $scope.caseId);
+        });
     }
 
     /**
