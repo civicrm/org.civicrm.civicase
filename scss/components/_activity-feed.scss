@@ -107,7 +107,7 @@
 }
 
 .civicase__activity-feed__details {
-  margin-top: 32px;
+  margin-top: 37px;
   width: 484px;
 
   .panel-body {
@@ -118,6 +118,7 @@
     color: $gray-darker;
     font-size: 16px;
     font-weight: 600;
+    line-height: 25px;
   }
 }
 
@@ -125,6 +126,31 @@
   color: $gray-darker;
   font-size: 18px;
   padding: 0;
+}
+
+.civicase__activity-feed__details__right-container {
+  margin-left: auto;
+
+  > * {
+    display: inline-block !important;
+    vertical-align: middle;
+  }
+
+  .civicase__activity-date {
+    font-size: 13px;
+    font-weight: 400;
+    position: relative;
+    top: 2px;
+  }
+
+  .civicase__activity-star {
+    position: relative;
+    top: 2px;
+  }
+
+  .civicase__contact-additional__container--avatar {
+    margin-top: 0;
+  }
 }
 
 .civicase__activity-feed__details__id {
@@ -141,6 +167,10 @@
 
 .civicase__activity-feed__details__container {
   /* stylelint-disable max-nesting-depth */
+  .help {
+    display: none;
+  }
+
   .form-layout,
   .crm-accordion-body {
     tbody {
