@@ -6,7 +6,8 @@
         popover-class="contact-popover-container"
         popover-append-to-body="true"
         popover-placement="auto bottom"
-        popover-trigger="'mouseenter'">
+        popover-trigger="'mouseenter'"
+        ng-mouseover="initMainContact()">
         <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
         <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
         <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
@@ -46,7 +47,8 @@
       popover-trigger="'outsideClick'"
       popover-class="civicase__contact-additional__popover"
       civicase-popover-append-to-element="#bootstrap-theme"
-      ng-click="$event.stopPropagation()">+{{ contacts.length - 1 }}
+      ng-click="$event.stopPropagation()"
+      ng-mouseover="initMainContact()">+{{ contacts.length - 1 }}
     </span>
   <!-- End - Additional Contact Dropdown -->
 

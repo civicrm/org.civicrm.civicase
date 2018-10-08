@@ -83,6 +83,7 @@
 
         spyOn(ContactsDataService, 'getCachedContact').and.returnValue(expectedContact);
         compileDirective(false, expectedContact.contact_id, expectedContact.display_name);
+        element.isolateScope().initMainContact();
       });
 
       it('provides the main contact information to the popover', function () {
