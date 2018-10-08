@@ -1,19 +1,19 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityView', function () {
+  module.directive('civicaseActivityDetails', function () {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/ActivityView.html',
-      link: civicaseActivityViewLink,
+      templateUrl: '~/civicase/ActivityDetails.html',
+      link: civicaseActivityDetailsLink,
       scope: {
-        activity: '=civicaseActivityView',
+        activity: '=civicaseActivityDetails',
         refresh: '=refreshCallback'
       }
     };
   });
 
-  function civicaseActivityViewLink (scope, element, attrs) {
+  function civicaseActivityDetailsLink (scope, element, attrs) {
     var ts = CRM.ts('civicase');
 
     scope.close = function () {

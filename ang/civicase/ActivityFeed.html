@@ -2,7 +2,7 @@
   <div civicase-activity-filters="filters" case-timelines="caseTimelines" display-options="displayOptions"></div>
 
   <div class="panel-body clearfix">
-    <!-- <div crm-ui-debug="activities"></div> -->
+    <div crm-ui-debug="activities"></div>
     <div class="civicase__activity-feed__list-container">
       <div>
         <div
@@ -12,7 +12,10 @@
             <h3 ng-class="{'civicase__overdue-activity-icon civicase__overdue-activity-icon--before': activityGroup.key === 'overdue'}"class="panel-title">{{ activityGroup.title }}
           </div>
           <div class="panel-body">
-            <div class="civicase__activity-feed__list" ng-repeat="activity in activityGroup.activities">
+            <div
+              class="civicase__activity-feed__list"
+              ng-class="{'active': activity.id === viewingActivity.id}"
+              ng-repeat="activity in activityGroup.activities">
               <span ng-if="activity.source_contact_id" contact-card avatar="true" contacts="activity.source_contact_id"></span>
               <div class="civicase__activity-feed__activity-container">
                 <div
@@ -30,7 +33,7 @@
       </div>
       <!-- activity details -->
       <div class="civicase__activity-feed__details"
-        civicase-activity-view="viewingActivity"
+        civicase-activity-details="viewingActivity"
         refresh-callback="refreshAll"
         ng-show="viewingActivity.id">
       </div>
