@@ -127,6 +127,18 @@
   padding: 0;
 }
 
+.civicase__activity-feed__details__id {
+  line-height: 33px;
+}
+
+.civicase__activity-feed__details__status {
+  margin-right: 5px;
+}
+
+.civicase__activity-feed__details__priority {
+  margin-right: 15px;
+}
+
 .civicase__activity-feed__details__container {
   /* stylelint-disable max-nesting-depth */
   .form-layout,

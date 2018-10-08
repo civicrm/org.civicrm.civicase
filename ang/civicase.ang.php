@@ -40,6 +40,7 @@ $options = array(
   'activityTypes' => 'activity_type',
   'activityStatuses' => 'activity_status',
   'caseStatuses' => 'case_status',
+  'priority' => 'priority',
   'activityCategories' => 'activity_category',
 );
 foreach ($options as &$option) {
