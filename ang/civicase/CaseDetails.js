@@ -158,8 +158,13 @@
     $scope.refresh = function (apiCalls, options) {
       options = _.extend({}, { useLoadingScreen: true }, options);
 
-      if (options.useLoadingScreen) $scope.areDetailsLoaded = false;
-      if (!_.isArray(apiCalls)) apiCalls = [];
+      if (options.useLoadingScreen) {
+        $scope.areDetailsLoaded = false;
+      }
+
+      if (!_.isArray(apiCalls)) {
+        apiCalls = [];
+      }
 
       apiCalls.push(['Case', 'getdetails', caseGetParams()]);
       crmApi(apiCalls, true).then(function (result) {
