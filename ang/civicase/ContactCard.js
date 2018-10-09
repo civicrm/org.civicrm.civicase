@@ -27,6 +27,13 @@
       }());
 
       /**
+       * Initializes the main contact that is featured on the contact card's popover.
+       */
+      scope.initMainContact = function () {
+        scope.mainContact = ContactsDataService.getCachedContact(scope.contacts[0].contact_id);
+      };
+
+      /**
        * Watch function for data refresh
        */
       function refresh () {
@@ -49,8 +56,6 @@
         } else {
           scope.contacts = _.cloneDeep(scope.data);
         }
-
-        scope.mainContact = ContactsDataService.getCachedContact(scope.contacts[0].contact_id);
       }
 
       /**
