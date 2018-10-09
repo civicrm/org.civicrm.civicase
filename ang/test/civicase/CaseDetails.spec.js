@@ -1,213 +1,215 @@
 /* eslint-env jasmine */
 
-describe('civicaseCaseDetails', function () {
-  var $provide, element, $compile, $rootScope, $scope, CasesData, crmApiMock;
+(function (_) {
+  describe('civicaseCaseDetails', function () {
+    var $provide, element, $compile, $rootScope, $scope, CasesData, crmApiMock;
 
-  beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
-    $provide = _$provide_;
-  }));
+    beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
+      $provide = _$provide_;
+    }));
 
-  beforeEach(inject(function ($q) {
-    var formatCaseMock = jasmine.createSpy('formatCase');
-    crmApiMock = jasmine.createSpy('crmApi').and.returnValue($q.resolve());
+    beforeEach(inject(function ($q) {
+      var formatCaseMock = jasmine.createSpy('formatCase');
+      crmApiMock = jasmine.createSpy('crmApi').and.returnValue($q.resolve());
 
-    formatCaseMock.and.callFake(function (data) {
-      return data;
-    });
+      formatCaseMock.and.callFake(function (data) {
+        return data;
+      });
 
-    $provide.value('crmApi', crmApiMock);
-    $provide.value('formatCase', formatCaseMock);
-  }));
+      $provide.value('crmApi', crmApiMock);
+      $provide.value('formatCase', formatCaseMock);
+    }));
 
-  beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_) {
-    $compile = _$compile_;
-    $rootScope = _$rootScope_;
-    CasesData = _CasesData_.get();
-    $scope = $rootScope.$new();
-  }));
+    beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_) {
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+      CasesData = _CasesData_.get();
+      $scope = $rootScope.$new();
+    }));
 
-  describe('basic tests', function () {
-    beforeEach(function () {
-      compileDirective();
-    });
-
-    it('complies the directive', function () {
-      expect(element.html()).toContain('civicase__case-header');
-    });
-  });
-
-  describe('focusToggle()', function () {
-    beforeEach(function () {
-      compileDirective();
-      element.isolateScope().isFocused = true;
-      element.isolateScope().focusToggle();
-    });
-
-    it('toggles the focus state', function () {
-      expect(element.isolateScope().isFocused).toBe(false);
-    });
-  });
-
-  describe('formatDate()', function () {
-    var returnValue;
-
-    beforeEach(function () {
-      compileDirective();
-      returnValue = element.isolateScope().formatDate('2018-09-14 18:29:45', 'DD MMMM YYYY');
-    });
-
-    it('returns the date in the sent format', function () {
-      expect(returnValue).toBe('14 September 2018');
-    });
-  });
-
-  describe('pushCaseData()', function () {
-    beforeEach(function () {
-      compileDirective();
-      element.isolateScope().item = CasesData.values[0];
-      element.isolateScope().item.allActivities = CasesData.values[0]['api.Activity.get.1'].values;
-
-      element.isolateScope().pushCaseData(CasesData.values[0]);
-    });
-
-    it('calculates the incomplete scheduled activities', function () {
-      expect(element.isolateScope().item.category_count.scheduled).toEqual(getScheduledActivitiesCount(element.isolateScope().item.allActivities));
-    });
-
-    it('calculates the incomplete tasks activities', function () {
-      expect(element.isolateScope().item.category_count.incomplete.task).toBe(2);
-    });
-    /* TODO - Rest of function needs to be unit tested */
-  });
-
-  describe('isCurrentRelatedCaseVisible()', function () {
-    var returnValue;
-
-    beforeEach(function () {
-      compileDirective();
-      element.isolateScope().item = {};
-      element.isolateScope().item.relatedCases = CasesData.values[0];
-      element.isolateScope().relatedCasesPager.num = 2;
-      element.isolateScope().relatedCasesPager.size = 5;
-    });
-
-    describe('when the index is between current range', function () {
+    describe('basic tests', function () {
       beforeEach(function () {
-        returnValue = element.isolateScope().isCurrentRelatedCaseVisible(7);
+        compileDirective();
       });
 
-      it('shows the related case', function () {
-        expect(returnValue).toBe(true);
+      it('complies the directive', function () {
+        expect(element.html()).toContain('civicase__case-header');
       });
     });
 
-    describe('when the index is more that the current range', function () {
+    describe('focusToggle()', function () {
       beforeEach(function () {
-        returnValue = element.isolateScope().isCurrentRelatedCaseVisible(11);
+        compileDirective();
+        element.isolateScope().isFocused = true;
+        element.isolateScope().focusToggle();
       });
 
-      it('hides the related case', function () {
-        expect(returnValue).toBe(false);
+      it('toggles the focus state', function () {
+        expect(element.isolateScope().isFocused).toBe(false);
       });
     });
 
-    describe('when the index is less that the current range', function () {
+    describe('formatDate()', function () {
+      var returnValue;
+
       beforeEach(function () {
-        returnValue = element.isolateScope().isCurrentRelatedCaseVisible(4);
+        compileDirective();
+        returnValue = element.isolateScope().formatDate('2018-09-14 18:29:45', 'DD MMMM YYYY');
       });
 
-      it('hides the related case', function () {
-        expect(returnValue).toBe(false);
+      it('returns the date in the sent format', function () {
+        expect(returnValue).toBe('14 September 2018');
       });
     });
+
+    describe('pushCaseData()', function () {
+      beforeEach(function () {
+        compileDirective();
+        element.isolateScope().item = CasesData.values[0];
+        element.isolateScope().item.allActivities = CasesData.values[0]['api.Activity.get.1'].values;
+
+        element.isolateScope().pushCaseData(CasesData.values[0]);
+      });
+
+      it('calculates the incomplete scheduled activities', function () {
+        expect(element.isolateScope().item.category_count.scheduled).toEqual(getScheduledActivitiesCount(element.isolateScope().item.allActivities));
+      });
+
+      it('calculates the incomplete tasks activities', function () {
+        expect(element.isolateScope().item.category_count.incomplete.task).toBe(2);
+      });
+      /* TODO - Rest of function needs to be unit tested */
+    });
+
+    describe('isCurrentRelatedCaseVisible()', function () {
+      var returnValue;
+
+      beforeEach(function () {
+        compileDirective();
+        element.isolateScope().item = {};
+        element.isolateScope().item.relatedCases = CasesData.values[0];
+        element.isolateScope().relatedCasesPager.num = 2;
+        element.isolateScope().relatedCasesPager.size = 5;
+      });
+
+      describe('when the index is between current range', function () {
+        beforeEach(function () {
+          returnValue = element.isolateScope().isCurrentRelatedCaseVisible(7);
+        });
+
+        it('shows the related case', function () {
+          expect(returnValue).toBe(true);
+        });
+      });
+
+      describe('when the index is more that the current range', function () {
+        beforeEach(function () {
+          returnValue = element.isolateScope().isCurrentRelatedCaseVisible(11);
+        });
+
+        it('hides the related case', function () {
+          expect(returnValue).toBe(false);
+        });
+      });
+
+      describe('when the index is less that the current range', function () {
+        beforeEach(function () {
+          returnValue = element.isolateScope().isCurrentRelatedCaseVisible(4);
+        });
+
+        it('hides the related case', function () {
+          expect(returnValue).toBe(false);
+        });
+      });
+    });
+
+    function compileDirective () {
+      $scope.viewingCaseDetails = CasesData.values[0];
+      element = $compile('<div civicase-case-details="viewingCaseDetails"></div>')($scope);
+      $scope.$digest();
+    }
+
+    /**
+     * Gets object containing correct count of total and overdue scheduled activities
+     *
+     * @params {Array} activities - total activities
+     * @return {Object} - with total count and overdue count
+     */
+    function getScheduledActivitiesCount (activities) {
+      var scheduledActivities = _.filter(activities, function (act) {
+        return CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(act.status_id, 10)) > -1;
+      });
+      var overdueActivities = _.filter(scheduledActivities, function (act) {
+        return moment().isAfter(act.activity_date_time);
+      });
+
+      return {
+        count: scheduledActivities.length,
+        overdue: overdueActivities.length
+      };
+    }
   });
 
-  function compileDirective () {
-    $scope.viewingCaseDetails = CasesData.values[0];
-    element = $compile('<div civicase-case-details="viewingCaseDetails"></div>')($scope);
-    $scope.$digest();
-  }
+  describe('civicaseCaseDetailsController', function () {
+    var $controller, $provide, $rootScope, $route, $scope, CasesData, crmApiMock;
 
-  /**
-   * Gets object containing correct count of total and overdue scheduled activities
-   *
-   * @params {Array} activities - total activities
-   * @return {Object} - with total count and overdue count
-   */
-  function getScheduledActivitiesCount (activities) {
-    var scheduledActivities = CRM._.filter(activities, function (act) {
-      return CRM.civicase.activityStatusTypes.incomplete.indexOf(parseInt(act.status_id, 10)) > -1;
-    });
-    var overdueActivities = CRM._.filter(scheduledActivities, function (act) {
-      return moment().isAfter(act.activity_date_time);
-    });
+    beforeEach(module('civicase', 'civicase.data', function (_$provide_) {
+      $provide = _$provide_;
+    }));
 
-    return {
-      count: scheduledActivities.length,
-      overdue: overdueActivities.length
-    };
-  }
-});
+    beforeEach(inject(function (_$controller_, $q, _$rootScope_, _$route_, _CasesData_) {
+      $controller = _$controller_;
+      $rootScope = _$rootScope_;
+      $route = _$route_;
+      CasesData = _CasesData_;
+      crmApiMock = jasmine.createSpy('crmApi').and
+        .returnValue($q.defer().promise);
 
-describe('civicaseCaseDetailsController', function () {
-  var $controller, $provide, $rootScope, $route, $scope, CasesData, crmApiMock;
+      $provide.value('crmApi', crmApiMock);
+    }));
 
-  beforeEach(module('civicase', 'civicase.data', function (_$provide_) {
-    $provide = _$provide_;
-  }));
+    describe('viewing the case', function () {
+      describe('when requesting to view a case that is missing its details', function () {
+        beforeEach(function () {
+          initController();
+        });
 
-  beforeEach(inject(function (_$controller_, $q, _$rootScope_, _$route_, _CasesData_) {
-    $controller = _$controller_;
-    $rootScope = _$rootScope_;
-    $route = _$route_;
-    CasesData = _CasesData_;
-    crmApiMock = jasmine.createSpy('crmApi').and
-      .returnValue($q.defer().promise);
-
-    $provide.value('crmApi', crmApiMock);
-  }));
-
-  describe('viewing the case', function () {
-    describe('when requesting to view a case that is missing its details', function () {
-      beforeEach(function () {
-        initController();
+        it('requests the missing case details', function () {
+          expect(crmApiMock).toHaveBeenCalledWith(
+            'Case', 'getdetails', jasmine.any(Object)
+          );
+        });
       });
 
-      it('requests the missing case details', function () {
-        expect(crmApiMock).toHaveBeenCalledWith(
-          'Case', 'getdetails', jasmine.any(Object)
-        );
+      describe('when the case is locked for the current user', function () {
+        beforeEach(function () {
+          var caseItem = _.cloneDeep(CasesData.get().values[0]);
+          caseItem.lock = 1;
+
+          spyOn($route, 'updateParams');
+          initController(caseItem);
+        });
+
+        it('redirects the user to the case list', function () {
+          expect($route.updateParams).toHaveBeenCalledWith({ caseId: null });
+        });
       });
     });
 
-    describe('when the case is locked for the current user', function () {
-      beforeEach(function () {
-        var caseItem = CRM._.cloneDeep(CasesData.get().values[0]);
-        caseItem.lock = 1;
+    /**
+     * Initializes the case details controller.
+     *
+     * @param {Object} caseItem a case item to pass to the controller. Defaults to
+     * a case from the mock data.
+     */
+    function initController (caseItem) {
+      $scope = $rootScope.$new();
 
-        spyOn($route, 'updateParams');
-        initController(caseItem);
+      $controller('civicaseCaseDetailsController', {
+        $scope: $scope
       });
-
-      it('redirects the user to the case list', function () {
-        expect($route.updateParams).toHaveBeenCalledWith({ caseId: null });
-      });
-    });
+      $scope.item = caseItem || _.cloneDeep(CasesData.get().values[0]);
+      $scope.$digest();
+    }
   });
-
-  /**
-   * Initializes the case details controller.
-   *
-   * @param {Object} caseItem a case item to pass to the controller. Defaults to
-   * a case from the mock data.
-   */
-  function initController (caseItem) {
-    $scope = $rootScope.$new();
-
-    $controller('civicaseCaseDetailsController', {
-      $scope: $scope
-    });
-    $scope.item = caseItem || CRM._.cloneDeep(CasesData.get().values[0]);
-    $scope.$digest();
-  }
-});
+})(CRM._);
