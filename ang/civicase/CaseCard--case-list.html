@@ -8,12 +8,14 @@
   >
   <div class="panel-body">
     <span
-      class="civicase__checkbox civicase__checkbox--bulk-action"
+      class="civicase__checkbox"
       ng-if="!$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed"
       role="checkbox"
+      aria-checked="{{activity.is_completed}}"
       tabindex="0"
-      aria-labelledby="Select/Unselect"
+      aria-labelledby="Mark checked/unchecked"
       ng-click="toggleSelected(); $event.stopPropagation();">
+      <i class="material-icons civicase__case-lock" ng-if="data.lock">lock</i>
       <i ng-if="data.selected" class="civicase__checkbox--checked material-icons">check_box</i>
     </span>
     <div contact-card class="civicase__case-card__contact" contacts="data.client"></div>

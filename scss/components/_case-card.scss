@@ -35,6 +35,14 @@
     left: 20px;
     top: 15px;
   }
+
+  .civicase__case-lock {
+    color: $crm-gray-matte;
+    font-size: 40px;
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 20px);
+  }
 }
 
 .civicase__case-card--closed {
