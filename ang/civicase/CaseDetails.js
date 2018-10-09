@@ -148,13 +148,28 @@
       }
     };
 
-    $scope.refresh = function (apiCalls) {
-      $scope.areDetailsLoaded = false;
+    /**
+     * Refreshes the Case Details data
+     *
+     * @param {Array}   apiCalls extra api calls to load on refresh.
+     * @param {Object}  options aditional options to consider when refreshing the data.
+     * @param {Boolean} options.useLoadingScreen displays the loading screen while refreshing the data.
+     */
+    $scope.refresh = function (apiCalls, options) {
+      options = _.extend({}, { useLoadingScreen: true }, options);
 
-      if (!_.isArray(apiCalls)) apiCalls = [];
+      if (options.useLoadingScreen) {
+        $scope.areDetailsLoaded = false;
+      }
+
+      if (!_.isArray(apiCalls)) {
+        apiCalls = [];
+      }
+
       apiCalls.push(['Case', 'getdetails', caseGetParams()]);
       crmApi(apiCalls, true).then(function (result) {
         $scope.pushCaseData(result[apiCalls.length - 1].values[0]);
+        $scope.areDetailsLoaded = true;
       });
     };
 
@@ -244,8 +259,6 @@
       item.customData = item['api.CustomValue.gettree'].values || [];
       delete (item['api.CustomValue.gettree']);
 
-      $scope.areDetailsLoaded = true;
-
       return item;
     }
 
@@ -267,6 +280,7 @@
         $scope.areDetailsLoaded = false;
         crmApi('Case', 'getdetails', caseGetParams()).then(function (info) {
           $scope.pushCaseData(info.values[0]);
+          $scope.areDetailsLoaded = true;
         });
       }
     }

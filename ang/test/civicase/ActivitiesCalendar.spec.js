@@ -283,6 +283,40 @@
           expect($scope.$emit).not.toHaveBeenCalledWith('civicaseActivitiesCalendar::openActivitiesPopover');
         });
       });
+
+      describe('when the activities object is updated', function () {
+        beforeEach(function () {
+          var mockActivity = _.chain(activitiesMockData).first().clone().value();
+          mockActivity.activity_date_time = dates.nextWeek;
+          $scope.selectedDate = dates.nextWeek;
+
+          $scope.onDateSelected();
+
+          $scope.activities = [mockActivity];
+
+          $scope.$digest();
+        });
+
+        it('updates the selected activities', function () {
+          expect($scope.selectedActivites).toEqual($scope.activities);
+        });
+      });
+    });
+
+    describe('refresh callback', function () {
+      describe('when an activity is refreshed', function () {
+        beforeEach(function () {
+          initController();
+
+          $scope.refreshCallback = jasmine.createSpy('refreshCallback');
+
+          $scope.refresh();
+        });
+
+        it('refreshes the case details without using a loading screen', function () {
+          expect($scope.refreshCallback).toHaveBeenCalledWith([], { useLoadingScreen: false });
+        });
+      });
     });
 
     /**
@@ -513,9 +547,13 @@
      *   defaults to all the activities mock data.
      */
     function initDirective (activities) {
-      var html = '<civicase-activities-calendar activities="activities"></civicase-activities-calendar>';
+      var html = `<civicase-activities-calendar
+        activities="activities"
+        refresh-callback="refresh">
+      </civicase-activities-calendar>`;
       $scope = $rootScope.$new();
       $scope.activities = activities || activitiesMockData;
+      $scope.refresh = _.noop;
       activitiesCalendar = $compile(html)($scope);
 
       activitiesCalendar.appendTo('body');
