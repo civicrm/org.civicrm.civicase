@@ -66,6 +66,10 @@
   margin-bottom: 15px;
   padding: 15px;
 
+  > .panel {
+    margin-bottom: 0;
+  }
+
   >.panel-body {
     border-top: 0 !important;
     padding: 0;
