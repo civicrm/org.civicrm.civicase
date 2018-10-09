@@ -171,6 +171,12 @@ if (CRM_Core_Permission::check('administer CiviCase')) {
     'action' => 'mergeCases(cases)',
     'icon' => 'fa-compress',
   );
+  $options['caseActions'][] = array(
+    'title' => ts('Lock Case'),
+    'action' => 'lockCases(cases[0])',
+    'number' => 1,
+    'icon' => 'fa-lock',
+  );
 }
 if (CRM_Core_Permission::check('delete in CiviCase')) {
   $options['caseActions'][] = array(

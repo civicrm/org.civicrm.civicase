@@ -554,10 +554,38 @@ function _civicase_menu_walk(&$menu, $callback) {
 }
 
 /**
- * Implements hook_civicrm_selectWhereClause
+ * Implements hook_civicrm_selectWhereClause().
  */
 function civicase_civicrm_selectWhereClause($entity, &$clauses) {
   if ($entity === 'Case' && CRM_Core_Permission::check('basic case information')) {
     unset($clauses['id']);
   }
+}
+
+/**
+ * Implements hook_civicrm_entityTypes().
+ */
+function civicase_civicrm_entityTypes(&$entityTypes) {
+  $entityTypes[] = array(
+    'name'  => 'CaseContactLock',
+    'class' => 'CRM_Civicase_DAO_CaseContactLock',
+    'table' => 'civicase_contactlock',
+  );
+}
+
+/**
+ * Implements hook_civicrm_queryObjects().
+ */
+function civicase_civicrm_queryObjects(&$queryObjects, $type) {
+  if ($type == 'Contact') {
+    $queryObjects[] = new CRM_Civicase_BAO_Query();
+  }
+}
+
+/**
+ * Implements hook_civicrm_permission_check().
+ */
+function civicase_civicrm_permission_check($permission, &$granted) {
+  $permissionsChecker = new CRM_Civicase_Hook_Permissions_Check();
+  $granted = $permissionsChecker->validatePermission($permission, $granted);
 }
