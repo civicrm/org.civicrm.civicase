@@ -63,15 +63,8 @@
 }
 
 .civicase__summary-tab-tile {
-  padding: 14px;
-
-  &:first-child {
-    padding-left: 25px;
-  }
-
-  &:last-child {
-    padding-right: 25px;
-  }
+  margin-bottom: 15px;
+  padding: 15px;
 
   >.panel-body {
     border-top: 0 !important;
@@ -81,14 +74,16 @@
 
 .civicase__summary-tab-tile-container {
   display: flex;
+  padding: 0 15px;
   width: 100%;
 }
 
-.civicase__summary-tab-tile--fixed-card {
+.civicase__summary-tab-tile--fixed {
   width: 300px;
 }
 
-.civicase__summary-tab-tile--big-card {
+.civicase__summary-tab-tile--responsive {
+  flex-basis: calc(50% - 150px);
   flex-grow: 1;
 }
 

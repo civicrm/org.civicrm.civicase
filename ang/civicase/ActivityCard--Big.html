@@ -1,9 +1,9 @@
 <div class="civicase__activity-card civicase__activity-card--big">
   <div class="panel panel-default" ng-click="viewInPopup($event, activity)" ng-if="activity">
     <div class="panel-body">
-      <div class="civicase__activity-card-top clearfix">
+      <div class="civicase__activity-card-row civicase__activity-card-row--first clearfix">
         <span ng-if="activity.icon || activity.category.indexOf('milestone') > -1" class="pull-left" activity-icon="activity"></span>
-        <div class="civicase__activity-card-top-right pull-right">
+        <div class="civicase__activity__right-container pull-right">
           <!-- Attachments to show for milestones-->
           <div class="btn-group civicase__activity-attachment__container" ng-if="activity.file_id">
             <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
