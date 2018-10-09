@@ -7,44 +7,54 @@
 
   .panel {
     flex-grow: 1;
-  }
 
-  &:hover {
-    .civicase__highlighted-date::before {
-      border-bottom-color: $gray-lighter;
-      border-right-color: $gray-lighter;
+    .panel-body {
+      padding: 16px 24px 24px;
     }
   }
 
-  .panel-body {
-    padding: 25px !important;
+  .material-icons {
+    vertical-align: middle;
   }
 
-  .civicase__activity-card-left {
-    left: 16px;
-    position: absolute;
-    top: 24px;
-    z-index: 1;
+  .civicase__activity-card-menu {
+    top: -2px;
+  }
 
-    + .civicase__activity-card-inner {
-      padding-left: 36px;
-    }
+  .civicase__activity-card-top {
+    border-bottom: 1px solid $gray-light;
+    margin: 0 -24px 15px;
+    padding: 1px 16px 16px;
+  }
+
+  .civicase__activity-card-top-right {
+    align-items: center;
+    display: flex;
   }
 
   .civicase__activity-type {
     flex: 1 0 0;
     font-size: 16px;
     line-height: 22px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   .civicase__activity-date {
     color: $gray-dark;
-    margin-right: 3px;
+
+    .material-icons {
+      font-size: 22px;
+      margin-right: 5px;
+      position: relative;
+      top: -2px;
+    }
   }
 
-  .civicase__checkbox {
-    margin-left: 10px;
+  .civicase__activity-card {
+    .civicase__checkbox {
+      margin-left: 2px;
+      margin-right: 10px;
+    }
   }
 
   .civicase__contact-additional__container--avatar {
@@ -56,6 +66,10 @@
     margin-top: 0;
   }
 
+  .civicase__contact-icon {
+    margin-top: -3px;
+  }
+
   .civicase__activity-card-row {
     align-items: flex-start;
   }
@@ -64,21 +78,24 @@
     align-items: center;
     display: flex;
     justify-content: center;
-    margin-bottom: 10px;
-    width: 40px;
+    width: auto;
+
+    span:not(.civicase__activity-icon-ribbon) {
+      margin: 0 8px;
+    }
 
     .civicase__activity-icon-ribbon {
       border-bottom-width: 10px;
       border-left-width: 20px;
       border-right-width: 20px;
-      height: 64px;
-      left: 0;
+      height: 62px;
+      left: 16px;
     }
 
     .civicase__activity-icon {
       font-size: 22px;
-      left: 0;
-      top: 16px;
+      left: 2px;
+      vertical-align: middle;
     }
   }
 
@@ -91,7 +108,7 @@
     font-size: 13px;
     font-weight: $font-weight-content;
     line-height: 18px;
-    margin-bottom: 25px;
+    margin: 5px 0 17px;
   }
 
   .civicase__activity-attachment__container,
@@ -99,39 +116,8 @@
     position: relative;
   }
 
-  .civicase__activity-attachment__container {
-    margin-left: 3px;
-    top: 2px;
-  }
-
   .civicase__activity-star__container {
-    margin-left: 1px;
-    top: 4px;
-  }
-
-  &.civicase__activity-card--big--milestone {
-    .civicase__activity-card-inner {
-      padding-left: 50px;
-      padding-right: 230px;
-    }
-
-    .civicase__activity-type {
-      flex: 1 0 0;
-      font-size: 20px;
-      line-height: 27px;
-    }
-
-    .civicase__activity-attachment__container,
-    .civicase__activity-star__container {
-      margin-left: 3px;
-      top: 4px;
-    }
-
-    .civicase__activity-card-left {
-      left: 10px;
-      position: absolute;
-      top: 0;
-    }
+    margin-left: 4px;
   }
 }
 

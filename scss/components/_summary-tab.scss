@@ -79,6 +79,19 @@
   }
 }
 
+.civicase__summary-tab-tile-container {
+  display: flex;
+  width: 100%;
+}
+
+.civicase__summary-tab-tile--fixed-card {
+  width: 300px;
+}
+
+.civicase__summary-tab-tile--big-card {
+  flex-grow: 1;
+}
+
 .civicase__summary-tab__activity-list {
   > .panel-heading {
     .civicase__case-card__activity-count:nth-child(2) {
