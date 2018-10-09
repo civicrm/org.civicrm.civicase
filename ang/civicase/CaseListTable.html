@@ -83,6 +83,7 @@
             <span ng-switch on="header.display_type">
               <span ng-switch-when="activity_card">
                 <div
+                  ng-if="!item.lock"
                   case-activity-card="item[header.name]"
                   refresh-callback="refresh"
                   case="item"
