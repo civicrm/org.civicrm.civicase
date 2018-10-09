@@ -77,7 +77,7 @@
 
 .civicase__activity-icon-container {
   color: $brand-primary;
-  font-size: 18px;
+  font-size: $attachment-icon-width;
   width: 30px;
 }
 
@@ -194,6 +194,10 @@
       display: block;
     }
   }
+}
+
+.civicase__activity-attachment__dropdown-menu {
+  z-index: 1061;
 }
 
 .civicase__activity-attachment__file-name {
