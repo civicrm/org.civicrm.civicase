@@ -179,27 +179,8 @@
         }
       });
 
-      fetchContactsData(item);
-
       return item;
     };
-
-    /**
-     * Fetch additional information about the contacts
-     *
-     * @param {object} caseObj
-     */
-    function fetchContactsData (caseObj) {
-      var contacts = [];
-
-      _.each(caseObj.allActivities, function (currentCase) {
-        contacts = contacts.concat(currentCase.assignee_contact_id);
-        contacts = contacts.concat(currentCase.target_contact_id);
-        contacts.push(currentCase.source_contact_id);
-      });
-
-      ContactsDataService.add(contacts);
-    }
 
     /**
      * To count overdue tasks.

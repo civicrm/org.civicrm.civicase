@@ -32,6 +32,10 @@
       var newContacts = _.difference(contacts, savedContacts);
       savedContacts = savedContacts.concat(newContacts);
 
+      if (newContacts.length === 0) {
+        return;
+      }
+
       return crmApi('Contact', 'get', {
         'sequential': 1,
         'id': { 'IN': newContacts },

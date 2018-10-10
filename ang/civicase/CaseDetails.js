@@ -241,6 +241,7 @@
           item.relatedCases.push(formatCase(linkedCase));
         }
       });
+      $scope.$emit('civicase::fetchMoreContactsInformation', item.relatedCases);
       $scope.relatedCasesPager.num = 1;
 
       delete (item['api.Case.getcaselist.1']);
