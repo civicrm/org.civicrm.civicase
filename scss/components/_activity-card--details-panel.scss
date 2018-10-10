@@ -1,0 +1,136 @@
+.civicase__activity-card--details-panel {
+  margin-top: 37px;
+  width: 484px;
+
+  .panel-body {
+    padding: 0;
+  }
+
+  .panel-subtitle {
+    color: $gray-darker;
+    display: flex;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 25px;
+  }
+
+  .civicase__activity__right-container {
+    .civicase__activity-date {
+      font-size: 13px;
+      font-weight: 400;
+      position: relative;
+      top: 2px;
+    }
+
+    .civicase__activity-star {
+      position: relative;
+      top: 2px;
+    }
+
+    .civicase__contact-additional__container--avatar {
+      margin-top: 0;
+    }
+  }
+}
+
+.civicase__activity-card__close-panel {
+  color: $gray-darker;
+  font-size: 18px;
+  padding: 0;
+}
+
+.civicase__activity-card__status-dropdown {
+  margin-right: 5px;
+
+  .list-group-item-info {
+    color: $crm-gray-matte;
+    display: block;
+    padding: $crm-dropdown-item-padding;
+  }
+}
+
+.civicase__activity-card__priority-dropdown {
+  margin-right: 15px;
+
+  .list-group-item-info {
+    color: $crm-gray-matte;
+    display: block;
+    padding: $crm-dropdown-item-padding;
+  }
+}
+
+.civicase__activity-card-id {
+  line-height: 33px;
+}
+
+.civicase__activity-card--details-panel__container {
+  /* stylelint-disable max-nesting-depth, selector-max-compound-selectors */
+  .help {
+    display: none;
+  }
+
+  .form-layout,
+  .crm-accordion-body {
+    tbody {
+      td:nth-child(2) {
+        > * {
+          margin-bottom: 10px !important;
+        }
+
+        .crm-form-checkbox,
+        .crm-form-radio {
+          margin-right: 5px;
+          position: relative;
+          top: 2px;
+        }
+      }
+    }
+  }
+
+  .crm-info-panel,
+  .form-layout,
+  .crm-accordion-body {
+    box-shadow: none;
+
+    tbody {
+      > tr {
+        border: 0;
+
+        .label {
+          padding-left: 15px !important;
+        }
+      }
+    }
+
+    .label {
+      &,
+      label {
+        color: $crm-gray-matte !important;
+        font-weight: 400 !important;
+      }
+    }
+
+    .section-shown {
+      padding: 0;
+    }
+
+    .crm-accordion-body {
+      // padding: 0 !important;
+    }
+  }
+
+  .crm-button_qf_Activity_cancel {
+    display: none;
+  }
+
+  .crm-submit-buttons {
+    .edit {
+      @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+    }
+
+    .delete {
+      @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
+    }
+  }
+  /* stylelint-enable max-nesting-depth */
+}

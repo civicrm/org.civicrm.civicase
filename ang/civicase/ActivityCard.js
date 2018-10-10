@@ -1,11 +1,13 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('caseActivityCard', function () {
+  module.directive('caseActivityCard', function ($rootScope) {
     return {
       restrict: 'A',
       templateUrl: function (elem, attrs) {
         switch (attrs.mode) {
+          case 'details-panel':
+            return '~/civicase/ActivityCard--Details.html';
           case 'big':
             return '~/civicase/ActivityCard--Big.html';
           case 'long':
@@ -21,6 +23,7 @@
         activity: '=caseActivityCard',
         case: '=?',
         customDropdownClass: '@',
+        mode: '@',
         refresh: '=refreshCallback',
         refreshOnCheckboxToggle: '=?',
         bulkAllowed: '=',
@@ -29,13 +32,95 @@
         customClickEvent: '='
       }
     };
+
+    /**
+     * Link function for caseActivityCard
+     *
+     * @param {Object} $scope
+     * @param {Object} element
+     */
+    function caseActivityCardLink (scope, element, attrs) {
+      var ts = CRM.ts('civicase');
+      scope.bootstrapThemeElement = $('#bootstrap-theme');
+
+      (function init () {
+        if (scope.mode === 'details-panel') {
+          $rootScope.$on('civicase::activity-card::load-activity-form', loadActivityForm);
+          element.on('crmFormSuccess', scope.refresh);
+          element.on('crmLoad', crmLoadListener);
+        }
+      }());
+
+      /**
+       * Listener for crmLoad event
+       */
+      function crmLoadListener () {
+        // Workaround bug where href="#" changes the angular route
+        $('a.crm-clear-link', this).removeAttr('href');
+        $('a.delete.button', this).click(function (e) {
+          CRM.confirm({
+            title: ts('Delete Activity'),
+            message: ts('Permanently delete this %1 activity?', {1: scope.activity.type})
+          })
+            .on('crmConfirm:yes', function () {
+              $(element).children('div.act-view-container').block();
+              CRM.api3('Activity', 'delete', {id: scope.activity.id})
+                .done(scope.close)
+                .done(scope.refresh);
+            });
+          return false;
+        });
+
+        if (CRM.checkPerm('basic case information') &&
+          !CRM.checkPerm('administer CiviCase') &&
+          !CRM.checkPerm('access my cases and activities') &&
+          !CRM.checkPerm('access all cases and activities')
+        ) {
+          $('div.crm-submit-buttons').remove();
+        }
+      }
+
+      /**
+       * Listener for loadActivityForm event
+       *
+       * @param {object} event
+       * @param {object} activity
+       */
+      function loadActivityForm (event, activity) {
+        var context = activity.case_id ? 'case' : 'activity';
+
+        CRM.loadForm(CRM.url('civicrm/activity', {
+          action: 'view',
+          id: activity.id,
+          reset: 1,
+          context: context
+        }), {target: $(element).find('div.civicase__activity-card--details-panel__container')});
+
+        element.find('.crm-submit-buttons a.edit').addClass('btn btn-primary');
+      }
+    }
   });
 
   function caseActivityCardController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi, crmBlocker, crmStatus, DateHelper) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.activityPriorties = CRM.civicase.priority;
+    $scope.allowedActivityStatuses = {};
     $scope.templateExists = templateExists;
     $scope.formatDate = DateHelper.formatDate;
+
+    (function init () {
+      if ($scope.mode === 'details-panel') {
+        $scope.$watch('activity.id', showActivityDetails);
+      }
+    }());
+
+    /**
+     * Close the activity details panel
+     */
+    $scope.closeDetailsPanel = function () {
+      delete $scope.activity.id;
+    };
 
     $scope.isActivityEditable = function (activity) {
       var type = CRM.civicase.activityTypes[activity.activity_type_id].name;
@@ -69,6 +154,30 @@
       activity.is_star = activity.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues
       $scope.refresh([['Activity', 'setvalue', {id: activity.id, field: 'is_star', value: activity.is_star}]], true);
+    };
+
+    /**
+     * Set status of sent activity
+     *
+     * @param {object} activity
+     * @param {object} activityStatusId
+     */
+    $scope.setStatusTo = function (activity, activityStatusId) {
+      activity.status_id = activityStatusId;
+      // Setvalue api avoids messy revisioning issues
+      $scope.refresh([['Activity', 'setvalue', {id: activity.id, field: 'status_id', value: activity.status_id}]], true);
+    };
+
+    /**
+     * Set priority of sent activity
+     *
+     * @param {object} activity
+     * @param {object} priorityId
+     */
+    $scope.setPriorityTo = function (activity, priorityId) {
+      activity.priority_id = priorityId;
+      // Setvalue api avoids messy revisioning issues
+      $scope.refresh([['Activity', 'setvalue', {id: activity.id, field: 'priority_id', value: activity.priority_id}]], true);
     };
 
     /**
@@ -185,14 +294,32 @@
         return crmBlocker(crmStatus({start: $scope.ts('Deleting...'), success: $scope.ts('Deleted')}, p));
       };
     };
-  }
 
-  /**
-   * Activity Card link function
-   *
-   * @param {Object} $scope
-   */
-  function caseActivityCardLink ($scope) {
-    $scope.bootstrapThemeElement = $('#bootstrap-theme');
+    /**
+     * Set Allowed Activity status's
+     */
+    function setAllowedActivityStatuses () {
+      $scope.allowedActivityStatuses = {};
+
+      _.each(CRM.civicase.activityStatuses, function (activityStatus, activityStatusID) {
+        var ifStatusIsInSameCategory = _.intersection($scope.activity.category, activityStatus.grouping.split(',')).length > 0;
+        var ifStatusIsInNoneCategory = $scope.activity.category.length === 0 && activityStatus.grouping.split(',').indexOf('none') !== -1;
+
+        if (ifStatusIsInSameCategory || ifStatusIsInNoneCategory) {
+          $scope.allowedActivityStatuses[activityStatusID] = activityStatus;
+        }
+      });
+    }
+
+    /**
+     * Show activity details in
+     */
+    function showActivityDetails () {
+      if ($scope.activity.id) {
+        setAllowedActivityStatuses();
+
+        $scope.$emit('civicase::activity-card::load-activity-form', $scope.activity);
+      }
+    }
   }
 })(angular, CRM.$, CRM._);
