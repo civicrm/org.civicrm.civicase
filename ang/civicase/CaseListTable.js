@@ -11,6 +11,7 @@
   module.controller('CivicaseCaseListTableController', function ($rootScope, $scope, $window, BulkActions, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
     var firstLoad = true;
     var caseTypes = CRM.civicase.caseTypes;
+    var allCases = [];
 
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activityTypes = CRM.civicase.activityTypes;
@@ -29,10 +30,93 @@
     (function init () {
       bindRouteParamsToScope();
       initiateWatchers();
-
-      $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
+      initSubscribers();
       getCases();
+      $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
     }());
+
+    /**
+     * Initiate subscribers
+     */
+    function initSubscribers () {
+      $scope.$on('bulkSelection', function (event, condition) {
+        if (condition === 'none') {
+          deselectAllCases();
+        } else if (condition === 'visible') {
+          selectDisplayedCases();
+        } else if (condition === 'all') {
+          if ($scope.isSelectAllAvailable) {
+            selectEveryCase();
+          }
+        }
+      });
+
+      $scope.$on('checkboxClicked', function (event, data) {
+        if (data.selected) {
+          $scope.selectedCases.push(data);
+        } else {
+          _.remove($scope.selectedCases, {
+            id: data.id
+          });
+        }
+      });
+    }
+
+    /**
+     * Asynchronously get all cases for the select all bulk
+     * actions functionality
+     */
+    function getAllCasesforSelectAll () {
+      $scope.selectedCases = []; // Resets all selection.
+      $scope.isSelectAllAvailable = false;
+      var params = getCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page);
+      delete params[1];
+      delete params[0][2]['api.Activity.get.1'];
+      params[0][2].return = ['case_type_id', 'status_id', 'is_deleted', 'contacts'];
+      params[0][2].options.limit = 0;
+
+      crmApi(params).then(function (res) {
+        allCases = res[0].values;
+        $scope.isSelectAllAvailable = true;
+      });
+    }
+
+    /**
+     * Select all functionality
+     */
+    function selectEveryCase () {
+      $scope.selectedCases = [];
+      $scope.selectedCases = _.each(allCases, formatCase);
+      selectDisplayedCases(); // Update the UI model with displayed cases selected;
+    }
+
+    /**
+     * Deselection of all cases
+     *
+     * Updates the visible cases and other cases are updated on FE
+     * by cases object watcher see `casesWatcher` function
+     */
+    function deselectAllCases () {
+      _.each($scope.cases, function (item, index) {
+        $scope.cases[index].selected = false;
+      });
+      $scope.selectedCases = [];
+    }
+
+    /**
+     * Select All visible data.
+     */
+    function selectDisplayedCases () {
+      _.each($scope.cases, function (item, index) {
+        $scope.cases[index].selected = true;
+        var isCurrentCaseInSelectedCases = _.find($scope.selectedCases, {
+          id: item.id
+        });
+        if (!isCurrentCaseInSelectedCases) {
+          $scope.selectedCases.push(item);
+        }
+      });
+    }
 
     $scope.applyAdvSearch = function (newFilters) {
       $scope.filters = newFilters;
@@ -69,8 +153,8 @@
      * @param {boolean} backgroundLoading - if loading animation should not be shown
      */
     $scope.refresh = function (apiCalls, backgroundLoading) {
+      backgroundLoading = backgroundLoading || false;
       $scope.isLoading = true && !backgroundLoading;
-
       apiCalls = apiCalls || [];
       apiCalls = apiCalls.concat(getCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page));
 
@@ -79,6 +163,7 @@
           $scope.cases = _.each(result[apiCalls.length - 2].values, formatCase);
           $scope.totalCount = result[apiCalls.length - 1];
           $scope.isLoading = false;
+          deselectAllCases();
         });
     };
 
@@ -208,15 +293,34 @@
           firstLoad = $scope.isLoading = false;
           $($window).scrollTop(0); // Scrolls the window to top once new data loads
         });
+      getAllCasesforSelectAll();
     }
 
+    /**
+     * Initialise watchers
+     */
     function initiateWatchers () {
       $rootScope.$on('civicase::fetchMoreContactsInformation', fetchContactsData);
       $scope.$watchCollection('sort', updateCases);
       $scope.$watchCollection('page', updateCases);
-      $scope.$watch('cases', function (cases) {
-        $scope.selectedCases = _.filter(cases, 'selected');
-      }, true);
+      $scope.$watch('cases', casesWatcher, true);
+    }
+
+    /**
+     * Case Watcher - Updates the checkbox if a case is selected
+     *
+     * @params {array} cases
+     */
+    function casesWatcher (cases) {
+      // if case is in selectedCases array update the UI model (checkbox)
+      _.each(cases, function (item, index) {
+        var isCurrentCaseInSelectedCases = _.find($scope.selectedCases, {
+          id: item.id
+        });
+        if (isCurrentCaseInSelectedCases) {
+          $scope.cases[index].selected = true;
+        }
+      });
     }
 
     /**

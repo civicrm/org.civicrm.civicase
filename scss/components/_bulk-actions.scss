@@ -1,0 +1,49 @@
+.civicase__bulkactions-checkbox {
+  background: $crm-white;
+  border: 1px solid $crm-grayblue-darker;
+  border-radius: 2px;
+  padding: 0 3px;
+  position: relative;
+  top: 2px; 
+}
+
+.civicase__bulkactions-checkbox-toggle {
+  color: $gray-light;
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 3px;
+  transition: 0.3s color cubic-bezier(0, 0, 0, 0.4);
+  vertical-align: middle;
+}
+
+.civicase__bulkactions-checkbox-toggle--show {
+  color: $brand-primary;
+}
+
+.civicase__bulkactions-checkbox-dropdown {
+  background: $crm-white;
+  padding: 4px 5px;
+  vertical-align: middle;
+}
+
+.civicase__bulkactions-actions {
+  margin-left: 10px;
+  position: relative;
+  top: 2px;
+
+  .btn {
+    border: 1px solid $crm-grayblue-darker;
+  }
+}
+
+.civicase__bulkactions-message {
+  .alert {
+    background-color: $gray-lighter;
+    border: 1px solid $crm-grayblue-dark;
+    box-shadow: $box-shadow-block;
+    line-height: 18px;
+    margin-bottom: 0;
+    padding: 15px;
+    text-align: center;
+  }
+}

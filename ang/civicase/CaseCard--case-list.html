@@ -4,7 +4,7 @@
   * use 'civicase__animated-checkbox-card--expanded' class : for enabled checkbox state
   * Update links with activityFeedUrl function activityFeedUrl(caseid, activityType to link, activityStatus to Link)
   -->
-<div class="panel panel-default panel-strip-primary civicase__case-card civicase__animated-checkbox-card" ng-style="{'border-left-color': data.color}" ng-class="{'civicase__case-card--active': $parent.viewingCase === data.id, 'civicase__case-card--closed': data.status === 'Resolved'}" >
+<div class="panel panel-default panel-strip-primary civicase__case-card civicase__animated-checkbox-card" ng-style="{'border-left-color': data.color}" ng-class="{'civicase__case-card--active': $parent.viewingCase === data.id, 'civicase__case-card--closed': data.status === 'Resolved', 'civicase__animated-checkbox-card--expanded': $parent.showCheckboxes && !$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed}" >
   <div class="panel-body">
     <!--
       TODO: To be implemented when implementing bulk actions.
@@ -12,7 +12,7 @@
      <div ng-if="!$parent.bulkAllowed" class="civicase__case-card-lock">
       <div class="civicase__case-card-lock__inner fa fa-lock"></div>
     </div> -->
-    <span class="civicase__checkbox" ng-if="!$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed" role="checkbox" aria-checked="{{activity.is_completed}}" tabindex="0" aria-labelledby="Mark complete/incomplete">
+    <span class="civicase__checkbox" ng-if="!$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed" role="checkbox" aria-checked="{{activity.is_completed}}" tabindex="0" aria-labelledby="Mark complete/incomplete" ng-click="toggleSelected(); $event.stopPropagation();">
       <i ng-if="data.selected" class="civicase__checkbox--checked material-icons">check_box</i>
     </span>
     <div contact-card class="civicase__case-card__contact" contacts="data.client"></div>

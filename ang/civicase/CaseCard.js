@@ -15,6 +15,8 @@
   });
 
   module.controller('CivicaseCaseCardController', function ($scope, getActivityFeedUrl, DateHelper) {
+    $scope.data.selected = $scope.data.selected || false;
+
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.formatDate = DateHelper.formatDate;
     $scope.otherCategories = _.map(_.filter(CRM.civicase.activityCategories, function (category) {
@@ -22,5 +24,10 @@
     }), function (category) {
       return category.name;
     });
+
+    $scope.toggleSelected = function () {
+      $scope.data.selected = !$scope.data.selected;
+      $scope.$emit('checkboxClicked', $scope.data);
+    };
   });
 })(angular, CRM.$, CRM._, CRM);

@@ -1,4 +1,5 @@
 <div class="civicase__case-list">
+  <civicase-bulk-actions-message selected-items="selectedCases.length" total-count="totalCount" is-select-all-available="isSelectAllAvailable" show-checkboxes="showCheckboxes"></civicase-bulk-actions-message>
   <div
     class="panel panel-default civicase__case-list-panel"
     ng-class="{'civicase__case-list-panel--summary': viewingCase, 'civicase__case-list-panel--focused': caseIsFocused}">
@@ -7,12 +8,10 @@
         <thead class="civicase__case-list-table__header">
         <tr>
           <th class="civicase__case-list-column--fixed civicase__case-list-column--first">
-            <span class="case-list-checkbox" ng-if="!viewingCase && selectedCases && bulkAllowed && !item.lock">
-              <input type="checkbox" ng-click="selectAll($event)" id="select-role-{{ $index }}" ng-checked="isSelection('all')" />
-              <label for="select-role-{{ $index }}"></label>
-            </span>
-            <span class="btn-group btn-group-sm" ng-if="!viewingCase && selectedCases && bulkAllowed && !item.lock">
-              <button type="button" class="btn btn-default dropdown-toggle" ng-class="{disabled: !selectedCases.length}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!--  -->
+            <civicase-bulk-actions-checkboxes ng-show="!viewingCase && selectedCases && bulkAllowed && !item.lock" class="pull-left" show-checkboxes="showCheckboxes" is-select-all-available="isSelectAllAvailable" selected-items="selectedCases.length"></civicase-bulk-actions-checkboxes>
+            <span class="civicase__bulkactions-actions btn-group btn-group-sm" ng-if="!viewingCase && selectedCases && bulkAllowed && !item.lock">
+              <button type="button" class="btn btn-default dropdown-toggle" ng-class="{disabled: !selectedCases.length || !showCheckboxes}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ ts('Actions') }}
                 <span class="caret"></span>
               </button>
@@ -49,6 +48,7 @@
         </thead>
         <tbody>
         <tr ng-if="!isLoading" ng-repeat="item in cases" >
+
           <td ng-click="viewCase(item.id, $event)">
             <civicase-case-card mode="case-list" case="item"></civicase-case-card>
           </td>
