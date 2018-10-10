@@ -303,22 +303,6 @@
       });
     });
 
-    describe('refresh callback', function () {
-      describe('when an activity is refreshed', function () {
-        beforeEach(function () {
-          initController();
-
-          $scope.refreshCallback = jasmine.createSpy('refreshCallback');
-
-          $scope.refresh();
-        });
-
-        it('refreshes the case details without using a loading screen', function () {
-          expect($scope.refreshCallback).toHaveBeenCalledWith([], { useLoadingScreen: false });
-        });
-      });
-    });
-
     /**
      * Initializes the activities calendar component. Passes the given activities
      * as a binding. If no activities are provided it passes an empty array.

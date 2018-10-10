@@ -6,7 +6,7 @@
       scope: {
         activities: '=',
         caseId: '=',
-        refreshCallback: '='
+        refresh: '=refreshCallback'
       },
       controller: 'civicaseActivitiesCalendarController',
       templateUrl: '~/civicase/ActivitiesCalendar.html',
@@ -178,14 +178,6 @@
       if ($scope.selectedActivites.length) {
         $scope.$emit('civicaseActivitiesCalendar::openActivitiesPopover');
       }
-    };
-
-    /**
-     * Executes the refresh callback, but does not require the loading screen to be shown while
-     * the case is refreshed.
-     */
-    $scope.refresh = function () {
-      $scope.refreshCallback([], { useLoadingScreen: false });
     };
 
     /**
