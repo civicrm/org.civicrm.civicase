@@ -89,6 +89,7 @@
           });
         }
         $scope.viewingActivity = _.cloneDeep(act);
+        $scope.$emit('civicase::activity-card::load-activity-form', $scope.viewingActivity);
         $scope.aid = act.id;
       }
     };
@@ -170,9 +171,9 @@
         if (!result.count && !pageNum) {
           $scope.remaining = false;
         }
-        if ($scope.aid && $scope.aid !== $scope.viewingActivity.id) {
-          $scope.viewActivity($scope.aid);
-        }
+        // reset viewingActivity to get latest data
+        $scope.viewingActivity = {};
+        $scope.viewActivity($scope.aid);
         $scope.isLoading = false;
       });
     }

@@ -128,6 +128,10 @@
 
 .civicase__case-list-panel--focused {
   width: 0;
+
+  .civicase__pager {
+    display: none;
+  }
 }
 
 .civicase__case-details-panel {

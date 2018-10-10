@@ -63,7 +63,7 @@
             message: ts('Permanently delete this %1 activity?', {1: scope.activity.type})
           })
             .on('crmConfirm:yes', function () {
-              $(element).children('div.act-view-container').block();
+              $(element).children('div.civicase__activity-card--details-panel__container').block();
               CRM.api3('Activity', 'delete', {id: scope.activity.id})
                 .done(scope.close)
                 .done(scope.refresh);

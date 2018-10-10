@@ -73,6 +73,8 @@
 }
 
 .civicase__activity-card--details-panel__container {
+  min-height: 200px;
+
   /* stylelint-disable max-nesting-depth, selector-max-compound-selectors */
   .help {
     display: none;
