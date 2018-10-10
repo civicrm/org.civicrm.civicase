@@ -134,25 +134,6 @@
       $scope.$bindToRoute({expr: 'page.num', param: 'cpn', format: 'int', default: 1});
     }
 
-    function caseIsFocusedWatchHandler () {
-      $timeout(function () {
-        var $actHeader = $('.act-feed-panel .panel-header');
-        var $actControls = $('.act-feed-panel .act-list-controls');
-
-        if ($actHeader.hasClass('affix')) {
-          $actHeader.css('width', $('.act-feed-panel').css('width'));
-        } else {
-          $actHeader.css('width', 'auto');
-        }
-
-        if ($actControls.hasClass('affix')) {
-          $actControls.css('width', $actHeader.css('width'));
-        } else {
-          $actControls.css('width', 'auto');
-        }
-      }, 1500);
-    }
-
     /**
      * Fetch additional information about the contacts
      *
@@ -218,7 +199,6 @@
       $rootScope.$on('civicase::fetchMoreContactsInformation', fetchContactsData);
       $scope.$watchCollection('sort', updateCases);
       $scope.$watchCollection('page', updateCases);
-      $scope.$watch('caseIsFocused', caseIsFocusedWatchHandler);
       $scope.$watch('cases', function (cases) {
         $scope.selectedCases = _.filter(cases, 'selected');
       }, true);
