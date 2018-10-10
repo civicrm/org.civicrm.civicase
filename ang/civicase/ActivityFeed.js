@@ -283,4 +283,40 @@
       }
     }
   }
+
+  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document) {
+    return {
+      link: civicaseActivityDetailsAffix
+    };
+
+    /**
+     * Link function for civicaseActivityDetailsAffix
+     *
+     * @param {Object} scope
+     * @param {Object} $el
+     */
+    function civicaseActivityDetailsAffix (scope, $el) {
+      $timeout(function () {
+        var $filter = $('.civicase__activity-filter');
+        var $feedListContainer = $('.civicase__activity-feed__list-container');
+        var $caseTabs = $('.civicase__case-body_tab');
+        var $toolbarDrawer = $('#toolbar');
+
+        $el.find('.panel').affix({
+          offset: {
+            top: $el.find('.panel').offset().top - ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()),
+            bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
+          }
+        }).on('affixed.bs.affix', function () {
+          $el.find('.panel')
+            .css('top', ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()))
+            .css('padding-top', 32);
+        }).on('affixed-top.bs.affix', function () {
+          $el.find('.panel')
+            .css('top', 'auto')
+            .css('padding-top', 0);
+        });
+      });
+    }
+  });
 })(angular, CRM.$, CRM._);

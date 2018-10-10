@@ -2,6 +2,15 @@
   margin-top: 37px;
   width: 484px;
 
+  .panel {
+    overflow: auto;
+    width: 484px;
+
+    &.affix {
+      position: fixed !important;
+    }
+  }
+
   .panel-body {
     padding: 0;
   }

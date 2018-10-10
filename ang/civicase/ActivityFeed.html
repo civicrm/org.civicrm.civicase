@@ -30,31 +30,30 @@
             </div>
           </div>
         </div>
+        <!-- Pager -->
+        <div class="text-center civicase__activity-feed-pager">
+          <div class="civicase__activity-feed-pager__no-more" ng-if="!remaining">
+            <button class="btn btn-default" disabled>
+              {{ remaining === false ? ts('None Found') : ts('Showing all %1', {1: totalCount}) }}
+            </button>
+          </div>
+          <div ng-if="remaining && remaining !== true">
+            <button
+              class="btn btn-primary" ng-click="nextPage()"
+              title="{{ ts('Click for more') }}">&nbsp; LOAD MORE &nbsp;
+            </button>
+          </div>
+        </div>
+        <!-- End - Pager -->
       </div>
       <!-- activity details -->
-      <div case-activity-card="viewingActivity"
+      <div civicase-activity-details-affix case-activity-card="viewingActivity"
         mode="details-panel"
         refresh-callback="refreshCase"
         ng-if="viewingActivity.id">
       </div>
       <!-- end activity details -->
     </div>
-
-    <!-- Pager -->
-    <div class="text-center civicase__activity-feed-pager">
-      <div class="civicase__activity-feed-pager__no-more" ng-if="!remaining">
-        <button class="btn btn-default" disabled>
-          {{ remaining === false ? ts('None Found') : ts('Showing all %1', {1: totalCount}) }}
-        </button>
-      </div>
-      <div ng-if="remaining && remaining !== true">
-        <button
-          class="btn btn-primary" ng-click="nextPage()"
-          title="{{ ts('Click for more') }}">&nbsp; LOAD MORE &nbsp;
-        </button>
-      </div>
-    </div>
-    <!-- End - Pager -->
 
     <!-- placeholder -->
     <div
