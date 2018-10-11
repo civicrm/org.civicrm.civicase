@@ -8,7 +8,7 @@
     };
   });
 
-  module.controller('CivicaseCaseListTableController', function ($scope, $window, BulkActions, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase) {
+  module.controller('CivicaseCaseListTableController', function ($rootScope, $scope, $window, BulkActions, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
     var firstLoad = true;
     var caseTypes = CRM.civicase.caseTypes;
 
@@ -134,23 +134,42 @@
       $scope.$bindToRoute({expr: 'page.num', param: 'cpn', format: 'int', default: 1});
     }
 
-    function caseIsFocusedWatchHandler () {
-      $timeout(function () {
-        var $actHeader = $('.act-feed-panel .panel-header');
-        var $actControls = $('.act-feed-panel .act-list-controls');
+    /**
+     * Fetch additional information about the contacts
+     *
+     * @param {object} event
+     * @param {array} cases
+     */
+    function fetchContactsData (event, cases) {
+      var contacts = [];
 
-        if ($actHeader.hasClass('affix')) {
-          $actHeader.css('width', $('.act-feed-panel').css('width'));
-        } else {
-          $actHeader.css('width', 'auto');
-        }
+      _.each(cases, function (caseObj) {
+        contacts = contacts.concat(getAllContactIdsForCase(caseObj));
+      });
 
-        if ($actControls.hasClass('affix')) {
-          $actControls.css('width', $actHeader.css('width'));
-        } else {
-          $actControls.css('width', 'auto');
-        }
-      }, 1500);
+      ContactsDataService.add(contacts);
+    }
+
+    /**
+     * Get all the contacts of the given case
+     *
+     * @param {object} caseObj
+     * @return {array}
+     */
+    function getAllContactIdsForCase (caseObj) {
+      var contacts = [];
+
+      _.each(caseObj.contacts, function (currentCase) {
+        contacts.push(currentCase.contact_id);
+      });
+
+      _.each(caseObj.allActivities, function (activity) {
+        contacts = contacts.concat(activity.assignee_contact_id);
+        contacts = contacts.concat(activity.target_contact_id);
+        contacts.push(activity.source_contact_id);
+      });
+
+      return contacts;
     }
 
     /**
@@ -162,6 +181,8 @@
       crmThrottle(makeApiCallToLoadCases)
         .then(function (result) {
           var cases = _.each(result[0].values, formatCase);
+
+          $scope.$emit('civicase::fetchMoreContactsInformation', cases);
 
           if ($scope.viewingCase) {
             if ($scope.viewingCaseDetails) {
@@ -190,9 +211,9 @@
     }
 
     function initiateWatchers () {
+      $rootScope.$on('civicase::fetchMoreContactsInformation', fetchContactsData);
       $scope.$watchCollection('sort', updateCases);
       $scope.$watchCollection('page', updateCases);
-      $scope.$watch('caseIsFocused', caseIsFocusedWatchHandler);
       $scope.$watch('cases', function (cases) {
         $scope.selectedCases = _.filter(cases, 'selected');
       }, true);

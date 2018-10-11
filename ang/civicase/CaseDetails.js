@@ -152,16 +152,8 @@
      * Refreshes the Case Details data
      *
      * @param {Array}   apiCalls extra api calls to load on refresh.
-     * @param {Object}  options aditional options to consider when refreshing the data.
-     * @param {Boolean} options.useLoadingScreen displays the loading screen while refreshing the data.
      */
-    $scope.refresh = function (apiCalls, options) {
-      options = _.extend({}, { useLoadingScreen: true }, options);
-
-      if (options.useLoadingScreen) {
-        $scope.areDetailsLoaded = false;
-      }
-
+    $scope.refresh = function (apiCalls) {
       if (!_.isArray(apiCalls)) {
         apiCalls = [];
       }
@@ -169,7 +161,6 @@
       apiCalls.push(['Case', 'getdetails', caseGetParams()]);
       crmApi(apiCalls, true).then(function (result) {
         $scope.pushCaseData(result[apiCalls.length - 1].values[0]);
-        $scope.areDetailsLoaded = true;
       });
     };
 
@@ -241,6 +232,7 @@
           item.relatedCases.push(formatCase(linkedCase));
         }
       });
+      $scope.$emit('civicase::fetchMoreContactsInformation', item.relatedCases);
       $scope.relatedCasesPager.num = 1;
 
       delete (item['api.Case.getcaselist.1']);

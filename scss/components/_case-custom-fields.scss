@@ -2,6 +2,14 @@
   float: left;
   width: 50%;
 
+  &.civicase__summary-tab-tile {
+    padding-top: 0;
+  }
+
+  .civicase__panel-transparent-header:not(:first-child) {
+    margin-top: 30px;
+  }
+
   .panel-body {
     border-top: 0 !important;
   }

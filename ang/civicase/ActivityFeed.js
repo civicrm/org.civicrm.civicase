@@ -89,6 +89,7 @@
           });
         }
         $scope.viewingActivity = _.cloneDeep(act);
+        $scope.$emit('civicase::activity-card::load-activity-form', $scope.viewingActivity);
         $scope.aid = act.id;
       }
     };
@@ -170,9 +171,9 @@
         if (!result.count && !pageNum) {
           $scope.remaining = false;
         }
-        if ($scope.aid && $scope.aid !== $scope.viewingActivity.id) {
-          $scope.viewActivity($scope.aid);
-        }
+        // reset viewingActivity to get latest data
+        $scope.viewingActivity = {};
+        $scope.viewActivity($scope.aid);
         $scope.isLoading = false;
       });
     }
@@ -185,7 +186,12 @@
     function loadActivities () {
       var returnParams = {
         sequential: 1,
-        return: ['subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name', 'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id', 'is_overdue', 'case_id'],
+        return: [
+          'subject', 'details', 'activity_type_id', 'status_id',
+          'source_contact_name', 'target_contact_name', 'assignee_contact_name',
+          'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description',
+          'tag_id.color', 'file_id', 'is_overdue', 'case_id', 'priority_id'
+        ],
         options: {
           sort: ($scope.displayOptions.overdue_first ? 'is_overdue DESC, ' : '') + 'activity_date_time DESC',
           limit: ITEMS_PER_PAGE,
@@ -278,4 +284,40 @@
       }
     }
   }
+
+  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document) {
+    return {
+      link: civicaseActivityDetailsAffix
+    };
+
+    /**
+     * Link function for civicaseActivityDetailsAffix
+     *
+     * @param {Object} scope
+     * @param {Object} $element
+     */
+    function civicaseActivityDetailsAffix (scope, $element) {
+      $timeout(function () {
+        var $filter = $('.civicase__activity-filter');
+        var $feedListContainer = $('.civicase__activity-feed__list-container');
+        var $caseTabs = $('.civicase__case-body_tab');
+        var $toolbarDrawer = $('#toolbar');
+
+        $element.find('.panel').affix({
+          offset: {
+            top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()),
+            bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
+          }
+        }).on('affixed.bs.affix', function () {
+          $element.find('.panel')
+            .css('top', ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()))
+            .css('padding-top', 32);
+        }).on('affixed-top.bs.affix', function () {
+          $element.find('.panel')
+            .css('top', 'auto')
+            .css('padding-top', 0);
+        });
+      });
+    }
+  });
 })(angular, CRM.$, CRM._);

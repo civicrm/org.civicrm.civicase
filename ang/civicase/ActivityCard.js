@@ -29,7 +29,18 @@
         customClickEvent: '='
       }
     };
+
+    /**
+     * Link function for caseActivityCard
+     *
+     * @param {Object} scope
+     */
+    function caseActivityCardLink (scope) {
+      scope.bootstrapThemeElement = $('#bootstrap-theme');
+    }
   });
+
+  module.controller('caseActivityCardController', caseActivityCardController);
 
   function caseActivityCardController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi, crmBlocker, crmStatus, DateHelper) {
     var ts = $scope.ts = CRM.ts('civicase');
@@ -185,14 +196,5 @@
         return crmBlocker(crmStatus({start: $scope.ts('Deleting...'), success: $scope.ts('Deleted')}, p));
       };
     };
-  }
-
-  /**
-   * Activity Card link function
-   *
-   * @param {Object} $scope
-   */
-  function caseActivityCardLink ($scope) {
-    $scope.bootstrapThemeElement = $('#bootstrap-theme');
   }
 })(angular, CRM.$, CRM._);
