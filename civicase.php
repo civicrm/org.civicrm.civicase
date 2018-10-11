@@ -195,7 +195,6 @@ function civicase_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _civicase_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-
 /**
  * Implements hook_civicrm_buildForm().
  *
