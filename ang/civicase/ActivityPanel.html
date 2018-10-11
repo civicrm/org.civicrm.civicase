@@ -1,9 +1,9 @@
-<div class="civicase__activity-card--details-panel">
+<div class="civicase__activity-panel" ng-controller="caseActivityCardController">
   <div class="panel panel-default panel-w-subheading">
     <div class="panel-heading clearfix">
-      <span class="civicase__activity-card-id">ID-{{activity.id}}</span>
+      <span class="civicase__activity-panel__id">ID-{{activity.id}}</span>
       <div class="pull-right">
-        <div class="btn-group btn-group-md civicase__activity-card__status-dropdown">
+        <div class="btn-group btn-group-md civicase__activity-panel__status-dropdown">
           <button
             type="button"
             class="btn btn-primary-outline"
@@ -20,7 +20,7 @@
             </li>
           </ul>
         </div>
-        <div class="btn-group btn-group-md civicase__activity-card__priority-dropdown">
+        <div class="btn-group btn-group-md civicase__activity-panel__priority-dropdown">
           <button
             type="button"
             class="btn btn-primary-outline"
@@ -37,7 +37,7 @@
             </li>
           </ul>
         </div>
-        <button class="btn btn-lg btn-link civicase__activity-card__close-panel" ng-click="closeDetailsPanel()">
+        <button class="btn btn-lg btn-link civicase__activity-panel__close" ng-click="closeDetailsPanel()">
           <i class="material-icons">clear</i>
         </button>
       </div>
@@ -75,7 +75,7 @@
       </h3>
     </div>
     <div class="panel-body">
-      <div class="civicase__activity-card--details-panel__container"></div>
+      <div class="civicase__activity-panel__core_container"></div>
     </div>
   </div>
 </div>

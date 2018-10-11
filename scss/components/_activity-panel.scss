@@ -1,4 +1,4 @@
-.civicase__activity-card--details-panel {
+.civicase__activity-panel {
   margin-top: 37px;
   width: 484px;
 
@@ -42,13 +42,13 @@
   }
 }
 
-.civicase__activity-card__close-panel {
+.civicase__activity-panel__close {
   color: $gray-darker;
   font-size: 18px;
   padding: 0;
 }
 
-.civicase__activity-card__status-dropdown {
+.civicase__activity-panel__status-dropdown {
   margin-right: 5px;
 
   .list-group-item-info {
@@ -58,7 +58,7 @@
   }
 }
 
-.civicase__activity-card__priority-dropdown {
+.civicase__activity-panel__priority-dropdown {
   margin-right: 15px;
 
   .list-group-item-info {
@@ -68,11 +68,11 @@
   }
 }
 
-.civicase__activity-card-id {
+.civicase__activity-panel__id {
   line-height: 33px;
 }
 
-.civicase__activity-card--details-panel__container {
+.civicase__activity-panel__core_container {
   min-height: 200px;
 
   /* stylelint-disable max-nesting-depth, selector-max-compound-selectors */
