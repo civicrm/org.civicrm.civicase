@@ -294,26 +294,26 @@
      * Link function for civicaseActivityDetailsAffix
      *
      * @param {Object} scope
-     * @param {Object} $el
+     * @param {Object} $element
      */
-    function civicaseActivityDetailsAffix (scope, $el) {
+    function civicaseActivityDetailsAffix (scope, $element) {
       $timeout(function () {
         var $filter = $('.civicase__activity-filter');
         var $feedListContainer = $('.civicase__activity-feed__list-container');
         var $caseTabs = $('.civicase__case-body_tab');
         var $toolbarDrawer = $('#toolbar');
 
-        $el.find('.panel').affix({
+        $element.find('.panel').affix({
           offset: {
-            top: $el.find('.panel').offset().top - ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()),
+            top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()),
             bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
           }
         }).on('affixed.bs.affix', function () {
-          $el.find('.panel')
+          $element.find('.panel')
             .css('top', ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()))
             .css('padding-top', 32);
         }).on('affixed-top.bs.affix', function () {
-          $el.find('.panel')
+          $element.find('.panel')
             .css('top', 'auto')
             .css('padding-top', 0);
         });

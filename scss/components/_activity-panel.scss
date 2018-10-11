@@ -18,15 +18,15 @@
   .panel-subtitle {
     color: $gray-darker;
     display: flex;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: $font-size-h3;
+    font-weight: $font-weight-heading;
     line-height: 25px;
   }
 
   .civicase__activity__right-container {
     .civicase__activity-date {
-      font-size: 13px;
-      font-weight: 400;
+      font-size: $font-size-base;
+      font-weight: $font-weight-content;
       position: relative;
       top: 2px;
     }
@@ -44,7 +44,7 @@
 
 .civicase__activity-panel__close {
   color: $gray-darker;
-  font-size: 18px;
+  font-size: $font-size-h2;
   padding: 0;
 }
 
@@ -117,16 +117,12 @@
       &,
       label {
         color: $crm-gray-matte !important;
-        font-weight: 400 !important;
+        font-weight: $font-weight-content !important;
       }
     }
 
     .section-shown {
       padding: 0;
-    }
-
-    .crm-accordion-body {
-      // padding: 0 !important;
     }
   }
 

@@ -136,7 +136,7 @@
     }
 
     /**
-     * Show activity details in
+     * Show activity details
      */
     function showActivityDetails () {
       if ($scope.activity.id) {
