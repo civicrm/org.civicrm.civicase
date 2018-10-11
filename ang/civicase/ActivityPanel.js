@@ -21,7 +21,6 @@
      */
     function civicaseActivityPanelLink (scope, element, attrs) {
       var ts = CRM.ts('civicase');
-      scope.bootstrapThemeElement = $('#bootstrap-theme');
 
       (function init () {
         $rootScope.$on('civicase::activity-card::load-activity-form', loadActivityForm);
