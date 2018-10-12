@@ -342,6 +342,28 @@ function civicase_civicrm_buildForm($formName, &$form) {
 }
 
 /**
+ * Implements hook_civicrm_alterContent().
+ * Adds extra settings fields to the Civicase Admin Settings form.
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterContent/
+ */
+function civicase_civicrm_alterContent (&$content, $context, $templateName, $form) {
+  $isViewingTheCaseAdminForm = get_class($form) === CRM_Admin_Form_Setting_Case::class;
+
+  if (!$isViewingTheCaseAdminForm) {
+    return;
+  }
+
+  $settingsTemplate = &CRM_Core_Smarty::singleton();
+  $settingsTemplateHtml = $settingsTemplate->fetchWith('CRM/Civicase/Admin/Form/Settings.tpl', []);
+
+  $doc = phpQuery::newDocumentHTML($content);
+  $doc->find('tr:last')->append($settingsTemplateHtml);
+
+  $content = $doc->getDocument();
+}
+
+/**
  * Implements hook_civicrm_validateForm().
  *
  * @param string $formName
