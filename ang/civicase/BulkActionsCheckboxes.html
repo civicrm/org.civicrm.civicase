@@ -1,5 +1,8 @@
 <div class="civicase__bulkactions-checkbox pull-left">
-  <i class="civicase__bulkactions-checkbox-toggle fa fa-check-square" ng-class="{'civicase__bulkactions-checkbox-toggle--show': showCheckboxes}" ng-click="toggleCheckbox()"></i>
+
+  <span class="civicase__checkbox civicase__bulkactions-checkbox-toggle" ng-click="toggleCheckbox()">
+    <i class="civicase__checkbox--checked material-icons" ng-class="{'civicase__checkbox--checked--hide': !showCheckboxes}">{{showCheckboxes ? 'check_box' : 'check'}}</i>
+  </span>
   <button type="button" class="civicase__bulkactions-checkbox-dropdown dropdown-toggle" ng-class="{disabled: !showCheckboxes}" data-toggle="dropdown">
     <i class="fa fa-caret-down"></i>
   </button>

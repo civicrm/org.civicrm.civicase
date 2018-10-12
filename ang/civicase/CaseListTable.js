@@ -32,6 +32,7 @@
       initiateWatchers();
       initSubscribers();
       getCases();
+      getAllCasesforSelectAll();
       $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
     }());
 
@@ -120,6 +121,7 @@
 
     $scope.applyAdvSearch = function (newFilters) {
       $scope.filters = newFilters;
+      getAllCasesforSelectAll();
       getCases();
     };
 
@@ -293,7 +295,6 @@
           firstLoad = $scope.isLoading = false;
           $($window).scrollTop(0); // Scrolls the window to top once new data loads
         });
-      getAllCasesforSelectAll();
     }
 
     /**
