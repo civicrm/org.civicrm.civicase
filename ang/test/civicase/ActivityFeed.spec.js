@@ -16,9 +16,9 @@
           crmThrottle.and.callFake(function (callable) {
             callable();
 
-            return $q.resolve({
+            return $q.resolve([{
               acts: { values: [] }
-            });
+            }]);
           });
 
           return crmThrottle;
@@ -41,6 +41,7 @@
           var expectedActivityTypeIDs = [];
 
           beforeEach(function () {
+            crmApi.and.returnValue($q.resolve({acts: {}}));
             initController();
             $scope.filters.activitySet = CaseTypes.get()['1'].definition.activitySets[0].name;
             $scope.filters.activity_type_id = '5';

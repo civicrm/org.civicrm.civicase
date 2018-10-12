@@ -23,7 +23,7 @@
 
   module.controller('civicaseActivityFeedController', civicaseActivityFeedController);
 
-  function civicaseActivityFeedController ($scope, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
+  function civicaseActivityFeedController ($scope, $q, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, ContactsDataService) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25;
@@ -38,8 +38,7 @@
     $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.remaining = true;
     $scope.viewingActivity = {};
-    $scope.refreshCase = $scope.refreshCase || _.noop;
-    $scope.caseTimelines = _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label');
+    $scope.caseTimelines = $scope.caseTypeId ? _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label') : [];
 
     (function init () {
       bindRouteParamsToScope();
@@ -60,8 +59,18 @@
     /**
      * Refresh Activities
      */
-    $scope.refreshAll = function () {
-      getActivities(false, $scope.refreshCase);
+    $scope.refreshAll = function (apiCalls) {
+      if (_.isFunction($scope.refreshCase)) {
+        $scope.refreshCase(apiCalls);
+      } else {
+        if (!_.isArray(apiCalls)) {
+          apiCalls = [];
+        }
+
+        crmApi(apiCalls, true).then(function (result) {
+          getActivities(false);
+        });
+      }
     };
 
     /**
@@ -144,31 +153,44 @@
     }
 
     /**
+     * Fetch additional information about the contacts
+     *
+     * @param {array} cases
+     */
+    function fetchContactsData (activities) {
+      var contacts = [];
+
+      _.each(activities, function (activity) {
+        contacts = contacts.concat(activity.assignee_contact_id);
+        contacts = contacts.concat(activity.target_contact_id);
+        contacts.push(activity.source_contact_id);
+      });
+
+      return ContactsDataService.add(contacts);
+    }
+
+    /**
      * Get all activities
      *
      * @param {Boolean} nextPage
-     * @param {Function} callback
      */
-    function getActivities (nextPage, callback) {
+    function getActivities (nextPage) {
       if (nextPage !== true) {
         pageNum = 0;
       }
 
       crmThrottle(loadActivities).then(function (result) {
-        if (_.isFunction(callback)) {
-          callback();
-        }
-        var newActivities = _.each(result.acts.values, formatActivity);
+        var newActivities = _.each(result[0].acts.values, formatActivity);
         if (pageNum) {
           $scope.activities = $scope.activities.concat(newActivities);
         } else {
           $scope.activities = newActivities;
         }
         $scope.activityGroups = groupActivities($scope.activities);
-        var remaining = result.count - (ITEMS_PER_PAGE * (pageNum + 1));
-        $scope.totalCount = result.count;
+        var remaining = result[0].count - (ITEMS_PER_PAGE * (pageNum + 1));
+        $scope.totalCount = result[0].count;
         $scope.remaining = remaining > 0 ? remaining : 0;
-        if (!result.count && !pageNum) {
+        if (!result[0].count && !pageNum) {
           $scope.remaining = false;
         }
         // reset viewingActivity to get latest data
@@ -237,6 +259,11 @@
       return crmApi({
         acts: ['Activity', 'get', $.extend(true, returnParams, params)],
         count: ['Activity', 'getcount', params]
+      }).then(function (result) {
+        return $q.all([
+          result,
+          fetchContactsData(result.acts.values)
+        ]);
       });
     }
 
