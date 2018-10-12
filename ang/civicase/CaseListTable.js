@@ -51,7 +51,7 @@
         }
       });
 
-      $scope.$on('checkboxClicked', function (event, data) {
+      $scope.$on('bulkSelectionCheckboxClicked', function (event, data) {
         if (data.selected) {
           $scope.selectedCases.push(data);
         } else {

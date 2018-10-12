@@ -2,16 +2,16 @@
   <i class="civicase__bulkactions-checkbox-toggle fa fa-check-square" ng-class="{'civicase__bulkactions-checkbox-toggle--show': showCheckboxes}" ng-click="toggleCheckbox()"></i>
   <button type="button" class="civicase__bulkactions-checkbox-dropdown dropdown-toggle" ng-class="{disabled: !showCheckboxes}" data-toggle="dropdown">
     <i class="fa fa-caret-down"></i>
-  </button>  
+  </button>
   <ul class="dropdown-menu">
     <li>
       <a href="#" ng-disabled="!isSelectAllAvailable" ng-class="{'civicase__link-disabled disabled': !isSelectAllAvailable}" ng-click="select('all'); $event.stopPropagation(); $event.preventDefault();" ng-attr-title="{{isSelectAllAvailable ? 'Select everything that matches search.' : 'Loading, Please wait! ...'}}">Everything</a>
-    </li>    
+    </li>
     <li>
       <a href="#" ng-click="select('visible'); $event.stopPropagation(); $event.preventDefault();" title="Select all displayed items">Displayed</a>
     </li>
     <li>
       <a href="#" ng-click="select('none'); $event.stopPropagation(); $event.preventDefault();" title="Deselect all items">None</a>
     </li>
-  </ul>  
+  </ul>
 </div>

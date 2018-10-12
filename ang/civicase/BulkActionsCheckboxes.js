@@ -13,8 +13,12 @@
     };
   });
 
-  module.controller('civicaseBulkActionsController', function ($scope) {
+  module.controller('civicaseBulkActionsController', function ($scope, $rootScope) {
     $scope.showCheckboxes = false;
+
+    $scope.$watch('selectedItems', function () {
+      $rootScope.$broadcast('stickyCaseListHeaderReinitiatePos');
+    });
 
     /**
      * Toggle checkbox states

@@ -21,7 +21,7 @@
    * @param {object} $scope
    * @param {object} $timeout
    */
-  module.controller('civicaseSearchController', function ($scope, $timeout) {
+  module.controller('civicaseSearchController', function ($scope, $rootScope, $timeout) {
     // The ts() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -83,22 +83,8 @@
      * Watcher for expanded state and update tableHeader top offset likewise
      */
     function expandedWatcher () {
-      $timeout(function () {
-        var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
-        var $tableHeader = $('.civicase__case-list-table__header');
-        var $caseNavigation = $('.civicase__case-body_tab');
-        var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
-
-        // Reset left case tab header
-        if ($tableHeader.data('bs.affix')) {
-          $tableHeader.data('bs.affix').options.offset.top = $tableHeader.offset().top - bodyPadding;
-        }
-
-        // Resert right case view tab header
-        if ($caseNavigation.data('bs.affix')) {
-          $caseNavigation.data('bs.affix').options.offset.top = $casePanelBody.offset().top - bodyPadding;
-        }
-      });
+      $rootScope.$broadcast('stickyCaseListHeaderReinitiatePos');
+      $rootScope.$broadcast('stickyCaseDetailsHeaderReinitiatePos');
     }
 
     /**

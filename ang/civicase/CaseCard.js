@@ -25,9 +25,12 @@
       return category.name;
     });
 
+    /**
+     * Update the checkbox the case card
+     */
     $scope.toggleSelected = function () {
       $scope.data.selected = !$scope.data.selected;
-      $scope.$emit('checkboxClicked', $scope.data);
+      $scope.$emit('bulkSelectionCheckboxClicked', $scope.data);
     };
   });
 })(angular, CRM.$, CRM._, CRM);
