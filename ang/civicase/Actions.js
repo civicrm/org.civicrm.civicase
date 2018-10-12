@@ -22,7 +22,11 @@
         };
 
         $scope.isActionAllowed = function (action) {
-          return (!action.number || ((multi && action.number > 1) || (!multi && action.number === 1)));
+          var isLockCaseAction = _.startsWith(action.action, 'lockCases');
+          var isCaseLockAllowed = CRM.civicase.allowCaseLocks;
+
+          return (isLockCaseAction && isCaseLockAllowed) ||
+            (!isLockCaseAction && (!action.number || ((multi && action.number > 1) || (!multi && action.number === 1))));
         };
 
         // Perform bulk actions

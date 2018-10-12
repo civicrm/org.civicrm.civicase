@@ -194,8 +194,10 @@ foreach (CRM_Contact_Task::$_tasks as $id => $value) {
     $options['contactTasks'][$id] = $value;
   }
 }
-// Random setting
+// Exposed settings:
 $options['allowMultipleCaseClients'] = (bool) Civi::settings()->get('civicaseAllowMultipleClients');
+$options['allowCaseLocks'] = (bool) Civi::settings()->get('civicaseAllowCaseLocks');
+
 return array(
   'js' => array(
     'assetBuilder://visual-bundle.js', // at the moment, it's safe to include this multiple times -- deduped by resource manager
