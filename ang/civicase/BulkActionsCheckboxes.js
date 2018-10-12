@@ -3,6 +3,7 @@
 
   module.directive('civicaseBulkActionsCheckboxes', function () {
     return {
+      restrict: 'EA',
       controller: 'civicaseBulkActionsController',
       templateUrl: '~/civicase/BulkActionsCheckboxes.html',
       scope: {

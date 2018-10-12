@@ -3,7 +3,7 @@
 
   module.directive('civicaseBulkActionsMessage', function () {
     return {
-      restrict: 'E',
+      restrict: 'EA',
       replace: true,
       controller: 'civicaseBulkActionsController',
       templateUrl: '~/civicase/BulkActionsMessage.html',
