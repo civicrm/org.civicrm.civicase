@@ -28,7 +28,7 @@ describe('BulkActionsMessage', function () {
       $scope.$digest();
     });
     it('do not hide the message box', function () {
-      expect(element.hasClass('ng-hide')).toBe(false);
+      expect(element.find('.civicase__bulkactions-message').hasClass('ng-hide')).toBe(false);
     });
   });
 
@@ -39,7 +39,7 @@ describe('BulkActionsMessage', function () {
       $scope.$digest();
     });
     it('hide the message box', function () {
-      expect(element.hasClass('ng-hide')).toBe(true);
+      expect(element.find('.civicase__bulkactions-message').hasClass('ng-hide')).toBe(true);
     });
   });
 
@@ -50,7 +50,7 @@ describe('BulkActionsMessage', function () {
       $scope.$digest();
     });
     it('hide the message box', function () {
-      expect(element.hasClass('ng-hide')).toBe(true);
+      expect(element.find('.civicase__bulkactions-message').hasClass('ng-hide')).toBe(true);
     });
   });
 
@@ -61,7 +61,7 @@ describe('BulkActionsMessage', function () {
       $scope.$digest();
     });
     it('hide the message box', function () {
-      expect(element.hasClass('ng-hide')).toBe(true);
+      expect(element.find('.civicase__bulkactions-message').hasClass('ng-hide')).toBe(true);
     });
   });
 
