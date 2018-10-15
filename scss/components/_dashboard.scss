@@ -7,3 +7,18 @@
 .civicase__dashboard-activites-feed {
   background: $gray-light;
 }
+
+.civicase__dashboard__add-case {
+  border: 1px solid $crm-white;
+  border-radius: 2px;
+  line-height: 20px;
+  margin-top: 6px;
+  padding: 7px 16px;
+
+  .material-icons {
+    font-size: 16px;
+    margin-right: 5px;
+    position: relative;
+    top: 2px;
+  }
+}

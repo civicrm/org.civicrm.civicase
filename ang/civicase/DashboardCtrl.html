@@ -4,6 +4,7 @@
 
     <div class="dashboard-tab-container clearfix">
       <uib-tabset active="activeTab" type="pills" uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary clearfix" uib-tabset-affix>
+        <!-- Dashboard Tab -->
         <uib-tab index="0" heading="{{ ts('Dashboard') }}" select="navTabs()">
 
           <div class="panel panel-default" ng-include="'~/civicase/DashboardSummary.html'"></div>
@@ -121,19 +122,21 @@
           </div>
 
         </uib-tab>
+        <!-- End - Dashboard Tab -->
+        <!-- Activities Tab -->
         <uib-tab index="1" heading="{{ts('Activities')}}">
-          <!-- Micro-optimization: Only load data when tab is active -->
           <div ng-if="activeTab == 1" civicase-activity-feed="{filters: activityFilters}" class="civicase__dashboard-activites-feed"></div>
         </uib-tab>
-        <div class="btn-group btn-group-md pull-right dashboard-nav">
+        <!-- End - Activities Tab -->
+        <div class="btn-group btn-group-md pull-right">
           <input type="checkbox" id="dashboard-myCasesOnly" ng-model="myCasesOnly" ng-show="checkPerm('access all cases and activities')">
           <label for="dashboard-myCasesOnly" ng-show="checkPerm('access all cases and activities')">{{ts('My cases only')}}</label>
+
           <a ng-if="checkPerm('add cases')"
             ng-href="{{ url('civicrm/case/add', {reset: 1, action: 'add', context: 'standalone'}) }}"
-            class="btn btn-default crm-popup"
+            class="btn btn-primary crm-popup civicase__dashboard__add-case"
             crm-popup-form-success="refresh()">
-            <i class="crm-i fa-plus"></i>
-            {{ ts('Add Case') }}
+            <i class="material-icons">add_circle</i>{{ ts('Add Case') }}
           </a>
         </div>
       </uib-tabset>
