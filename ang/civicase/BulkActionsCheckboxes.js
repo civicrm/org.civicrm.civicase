@@ -57,7 +57,7 @@
      * selectedItems variable watcher
      */
     function selectedItemsWatcher () {
-      $scope.$emit('civicase::case-list::header-position-changed');
+      $scope.$emit('civicase::bulk-actions::bulk-message-toggle');
     }
   });
 })(angular, CRM.$, CRM._);

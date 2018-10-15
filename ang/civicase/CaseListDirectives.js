@@ -47,15 +47,8 @@
        * Initialise all subscribers
        */
       function initSubscribers () {
-        $rootScope.$on('civicase::case-list::header-position-changed', function () {
-          $timeout(function () {
-            var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
-
-            if ($header.data('bs.affix')) {
-              $header.data('bs.affix').options.offset.top = $header.offset().top - bodyPadding;
-            }
-          });
-        });
+        $rootScope.$on('civicase::case-search::dropdown-toggle', reAdjustFixedHeader);
+        $rootScope.$on('civicase::bulk-actions::bulk-message-toggle', reAdjustFixedHeader);
       }
 
       /**
@@ -105,6 +98,19 @@
             $header.scrollLeft($(this).scrollLeft());
           });
         }, 0);
+      }
+
+      /**
+       * Subscriber for fixed header
+       */
+      function reAdjustFixedHeader () {
+        $timeout(function () {
+          var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
+
+          if ($header.data('bs.affix')) {
+            $header.data('bs.affix').options.offset.top = $header.offset().top - bodyPadding;
+          }
+        });
       }
     }
   });

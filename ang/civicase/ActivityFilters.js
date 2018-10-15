@@ -211,7 +211,7 @@
       var $caseTabs = $('.civicase__case-body_tab');
       var $toolbarDrawer = $('#toolbar');
 
-      $rootScope.$on('civicase::case-details::filter-position-changed', function () {
+      $rootScope.$on('civicase::case-search::dropdown-toggle', function () {
         $timeout(function () {
           // Reset right case view tab header
           if ($filter.data('bs.affix')) {
