@@ -47,7 +47,7 @@
        * Initialise all subscribers
        */
       function initSubscribers () {
-        $rootScope.$on('stickyCaseListHeaderReinitiatePos', function () {
+        $rootScope.$on('civicase::case-list::header-position-changed', function () {
           $timeout(function () {
             var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
 

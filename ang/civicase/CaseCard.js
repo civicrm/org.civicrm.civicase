@@ -15,8 +15,6 @@
   });
 
   module.controller('CivicaseCaseCardController', function ($scope, getActivityFeedUrl, DateHelper) {
-    $scope.data.selected = $scope.data.selected || false;
-
     $scope.activityFeedUrl = getActivityFeedUrl;
     $scope.formatDate = DateHelper.formatDate;
     $scope.otherCategories = _.map(_.filter(CRM.civicase.activityCategories, function (category) {
@@ -26,11 +24,11 @@
     });
 
     /**
-     * Update the checkbox the case card
+     * Update Bulk Actions checkbox of the case card
      */
     $scope.toggleSelected = function () {
       $scope.data.selected = !$scope.data.selected;
-      $scope.$emit('bulkSelectionCheckboxClicked', $scope.data);
+      $scope.$emit('civicase::bulk-actions::check-box-toggled', $scope.data);
     };
   });
 })(angular, CRM.$, CRM._, CRM);

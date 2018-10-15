@@ -83,8 +83,8 @@
      * Watcher for expanded state and update tableHeader top offset likewise
      */
     function expandedWatcher () {
-      $rootScope.$broadcast('stickyCaseListHeaderReinitiatePos');
-      $rootScope.$broadcast('stickyCaseDetailsHeaderReinitiatePos');
+      $rootScope.$broadcast('civicase::case-list::header-position-changed');
+      $rootScope.$broadcast('civicase::case-details::header-position-changed');
     }
 
     /**

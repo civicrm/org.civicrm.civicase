@@ -318,7 +318,7 @@
 
       $rootScope.$on('stickyCaseDetailsHeaderReinitiatePos', function () {
         $timeout(function () {
-          // Resert right case view tab header
+          // Reset right case view tab header
           if ($caseNavigation.data('bs.affix')) {
             $caseNavigation.data('bs.affix').options.offset.top = $casePanelBody.offset().top - bodyPadding;
           }

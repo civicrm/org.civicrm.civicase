@@ -1,3 +1,4 @@
+<div crm-ui-debug="selectedCases"></div>
 <div class="civicase__case-list">
   <civicase-bulk-actions-message selected-items="selectedCases.length" total-count="totalCount" is-select-all-available="isSelectAllAvailable" show-checkboxes="showCheckboxes" ng-hide="viewingCase"></civicase-bulk-actions-message>
   <div
@@ -8,8 +9,15 @@
         <thead class="civicase__case-list-table__header">
         <tr>
           <th class="civicase__case-list-column--fixed civicase__case-list-column--first">
-            <!--  -->
-            <civicase-bulk-actions-checkboxes ng-show="!viewingCase && selectedCases && bulkAllowed && !item.lock" class="pull-left" show-checkboxes="showCheckboxes" is-select-all-available="isSelectAllAvailable" selected-items="selectedCases.length"></civicase-bulk-actions-checkboxes>
+            <civicase-bulk-actions-checkboxes 
+              ng-show="!viewingCase && selectedCases && bulkAllowed && !item.lock"
+              class="pull-left" 
+              show-checkboxes="showCheckboxes" 
+              is-select-all-available="isSelectAllAvailable" 
+              selected-items="selectedCases.length" 
+              everything-count="totalCount" 
+              displayed-count="cases.length">
+            </civicase-bulk-actions-checkboxes>
             <span class="civicase__bulkactions-actions btn-group btn-group-sm" ng-if="!viewingCase && selectedCases && bulkAllowed && !item.lock">
               <div class="btn-group">
                 <button type="button" class="btn btn-default" ng-class="{disabled: !selectedCases.length || !showCheckboxes}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ ts('Actions') }}</button>
@@ -17,7 +25,7 @@
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" civicase-actions="selectedCases" multiple="true" refresh-callback="refresh"></ul>
-              </div>         
+              </div>
             </span>
             <span class="btn-group btn-group-sm pull-right" ng-if="sort.sortable">
               <select class="form-control civicase__case-sort-dropdown" ng-model="sort.field" crm-ui-select>

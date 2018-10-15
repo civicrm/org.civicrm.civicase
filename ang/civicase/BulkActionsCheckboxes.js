@@ -9,7 +9,9 @@
       scope: {
         showCheckboxes: '=?',
         selectedItems: '=',
-        isSelectAllAvailable: '='
+        isSelectAllAvailable: '=',
+        everythingCount: '=',
+        displayedCount: '='
       }
     };
   });
@@ -17,9 +19,9 @@
   module.controller('civicaseBulkActionsController', function ($scope, $rootScope) {
     $scope.showCheckboxes = false;
 
-    $scope.$watch('selectedItems', function () {
-      $rootScope.$broadcast('stickyCaseListHeaderReinitiatePos');
-    });
+    (function init () {
+      initWatchers();
+    }());
 
     /**
      * Toggle checkbox states
@@ -37,8 +39,24 @@
      *
      * @params {String} condition
      */
-    $scope.select = function (condition) {
-      $scope.$emit('bulkSelection', condition);
+    $scope.select = function ($event, condition) {
+      $scope.$emit('civicase::bulk-actions::bulk-selections', condition);
+      $event.stopPropagation();
+      $event.preventDefault();
     };
+
+    /**
+     * Intiate watchers for this controller
+     */
+    function initWatchers () {
+      $scope.$watch('selectedItems', selectedItemsWatcher);
+    }
+
+    /**
+     * selectedItems variable watcher
+     */
+    function selectedItemsWatcher () {
+      $rootScope.$broadcast('civicase::case-list::header-position-changed');
+    }
   });
 })(angular, CRM.$, CRM._);
