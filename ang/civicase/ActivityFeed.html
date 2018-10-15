@@ -37,7 +37,7 @@
               {{ remaining === false ? ts('None Found') : ts('Showing all %1', {1: totalCount}) }}
             </button>
           </div>
-          <div ng-if="remaining && remaining !== true">
+          <div class="civicase__activity-feed-pager__more" ng-if="remaining && remaining !== true">
             <button
               class="btn btn-primary" ng-click="nextPage()"
               title="{{ ts('Click for more') }}">&nbsp; LOAD MORE &nbsp;

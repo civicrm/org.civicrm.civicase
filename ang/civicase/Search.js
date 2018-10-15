@@ -172,7 +172,7 @@
     }
 
     /**
-     * Formats search filer as per the API request header format
+     * Formats search filter as per the API request header format
      *
      * @params {object} inp - Object for input option to be formatted
      * @return (object} search - returns formatted key value pair of filters
