@@ -83,22 +83,7 @@
      * Watcher for expanded state and update tableHeader top offset likewise
      */
     function expandedWatcher () {
-      $timeout(function () {
-        var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
-        var $tableHeader = $('.civicase__case-list-table__header');
-        var $caseNavigation = $('.civicase__case-body_tab');
-        var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
-
-        // Reset left case tab header
-        if ($tableHeader.data('bs.affix')) {
-          $tableHeader.data('bs.affix').options.offset.top = $tableHeader.offset().top - bodyPadding;
-        }
-
-        // Resert right case view tab header
-        if ($caseNavigation.data('bs.affix')) {
-          $caseNavigation.data('bs.affix').options.offset.top = $casePanelBody.offset().top - bodyPadding;
-        }
-      });
+      $scope.$emit('civicase::case-search::dropdown-toggle');
     }
 
     /**

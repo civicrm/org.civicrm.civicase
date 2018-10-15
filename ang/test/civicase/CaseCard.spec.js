@@ -22,6 +22,49 @@
       });
     });
 
+    describe('toggleSelected()', function () {
+      var originalEmitFunction;
+
+      beforeEach(function () {
+        originalEmitFunction = element.isolateScope().$emit;
+        element.isolateScope().$emit = jasmine.createSpy('$emit');
+      });
+
+      afterEach(function () {
+        element.isolateScope().$emit = originalEmitFunction;
+      });
+
+      describe('when selection is true', function () {
+        beforeEach(function () {
+          element.isolateScope().data.selected = true;
+          element.isolateScope().toggleSelected();
+        });
+
+        it('sets selection to false', function () {
+          expect(element.isolateScope().data.selected).toBe(false);
+        });
+
+        it('emits civicase::bulk-actions::check-box-toggled event', function () {
+          expect(element.isolateScope().$emit).toHaveBeenCalledWith('civicase::bulk-actions::check-box-toggled', element.isolateScope().data);
+        });
+      });
+
+      describe('when selection is false', function () {
+        beforeEach(function () {
+          element.isolateScope().data.selected = false;
+          element.isolateScope().toggleSelected();
+        });
+
+        it('sets selection to true', function () {
+          expect(element.isolateScope().data.selected).toBe(true);
+        });
+
+        it('emits civicase::bulk-actions::check-box-toggled event', function () {
+          expect(element.isolateScope().$emit).toHaveBeenCalledWith('civicase::bulk-actions::check-box-toggled', element.isolateScope().data);
+        });
+      });
+    });
+
     /**
      * Function responsible for setting up compilation of the directive
      * @param {Object} Case card object

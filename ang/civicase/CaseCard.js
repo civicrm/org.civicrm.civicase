@@ -22,5 +22,13 @@
     }), function (category) {
       return category.name;
     });
+
+    /**
+     * Update Bulk Actions checkbox of the case card
+     */
+    $scope.toggleSelected = function () {
+      $scope.data.selected = !$scope.data.selected;
+      $scope.$emit('civicase::bulk-actions::check-box-toggled', $scope.data);
+    };
   });
 })(angular, CRM.$, CRM._, CRM);

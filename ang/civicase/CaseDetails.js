@@ -297,7 +297,7 @@
     }
   }
 
-  module.directive('civicaseCaseTabAffix', function ($timeout) {
+  module.directive('civicaseCaseTabAffix', function ($rootScope, $timeout) {
     return {
       scope: {},
       link: civicaseCaseTabAffix
@@ -311,12 +311,21 @@
      * @param {Object} attrs
      */
     function civicaseCaseTabAffix (scope, $el, attrs) {
-      $timeout(function () {
-        var $caseNavigation = $('.civicase__case-body_tab');
-        var $toolbarDrawer = $('#toolbar');
-        var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
-        var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
+      var $caseNavigation = $('.civicase__case-body_tab');
+      var $toolbarDrawer = $('#toolbar');
+      var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
+      var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
 
+      $rootScope.$on('civicase::case-search::dropdown-toggle', function () {
+        $timeout(function () {
+          // Reset right case view tab header
+          if ($caseNavigation.data('bs.affix')) {
+            $caseNavigation.data('bs.affix').options.offset.top = $casePanelBody.offset().top - bodyPadding;
+          }
+        });
+      });
+
+      $timeout(function () {
         $caseNavigation.affix({
           offset: {
             top: $casePanelBody.offset().top - bodyPadding

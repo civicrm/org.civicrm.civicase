@@ -20,7 +20,7 @@
   }
 
   .civicase__case-list-column--first {
-    padding: 16px 10px !important;
+    padding: 16px 14px !important;
   }
 
   th:first-child {
@@ -103,6 +103,12 @@
 
 .civicase__case-list {
   margin: 0;
+
+  .civicase__bulkactions-message {
+    .alert {
+      border-bottom: 0;
+    }
+  }
 }
 
 .civicase__case-list-panel {

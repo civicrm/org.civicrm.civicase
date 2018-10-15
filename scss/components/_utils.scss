@@ -10,3 +10,8 @@
 .civicase__text-success {
   color: $brand-success;
 }
+
+.civicase__link-disabled {
+  cursor: no-drop;
+  pointer-events: none;
+}

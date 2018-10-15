@@ -10,7 +10,7 @@
   /**
    * Directive for the sticky table header functionality on case list page
    */
-  module.directive('civicaseStickyTableHeader', function ($timeout) {
+  module.directive('civicaseStickyTableHeader', function ($rootScope, $timeout) {
     return {
       restrict: 'A',
       link: civicaseStickyTableHeaderLink
@@ -31,9 +31,25 @@
       var $header = $el.find('thead');
 
       (function init () {
+        initWatchers();
+        initSubscribers();
+      }());
+
+      /**
+       * Initialise all watchers
+       */
+      function initWatchers () {
         scope.$watch('isLoading', fixPositioningOnLoadingOrFocusChange);
         scope.$watch('caseIsFocused', fixPositioningOnLoadingOrFocusChange);
-      }());
+      }
+
+      /**
+       * Initialise all subscribers
+       */
+      function initSubscribers () {
+        $rootScope.$on('civicase::case-search::dropdown-toggle', reAdjustFixedHeader);
+        $rootScope.$on('civicase::bulk-actions::bulk-message-toggle', reAdjustFixedHeader);
+      }
 
       /**
        * Loads only if loading completes and case is not focused
@@ -82,6 +98,19 @@
             $header.scrollLeft($(this).scrollLeft());
           });
         }, 0);
+      }
+
+      /**
+       * Subscriber for fixed header
+       */
+      function reAdjustFixedHeader () {
+        $timeout(function () {
+          var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
+
+          if ($header.data('bs.affix')) {
+            $header.data('bs.affix').options.offset.top = $header.offset().top - bodyPadding;
+          }
+        });
       }
     }
   });
