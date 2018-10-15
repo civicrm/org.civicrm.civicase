@@ -4,12 +4,14 @@
   module.config(function ($routeProvider) {
     $routeProvider.when('/case', {
       reloadOnSearch: false,
-      controller: 'CivicaseDashboardCtrl',
+      controller: 'civicaseDashboardController',
       templateUrl: '~/civicase/Dashboard.html'
     });
   });
 
-  module.controller('CivicaseDashboardCtrl', function ($scope, crmApi, formatActivity, $timeout) {
+  module.controller('civicaseDashboardController', civicaseDashboardController);
+
+  function civicaseDashboardController ($scope, crmApi, formatActivity, $timeout) {
     var activitiesToShow = 10;
 
     $scope.ts = CRM.ts('civicase');
@@ -142,29 +144,30 @@
       $scope.recentCaseLink = '#/case/list?sf=modified_date&sd=DESC' + (myCasesOnly ? ('&cf=' + JSON.stringify({case_manager: [CRM.config.user_contact_id]})) : '');
       $scope.refresh();
     });
-  });
+  }
 
-  // TODO: Move this to common crm-affix directive
-  angular.module('civicase').directive('uibTabsetAffix', function ($timeout) {
+  module.directive('civicaseDashboardTabsetAffix', function ($timeout) {
     return {
-      link: function (scope, $el, attrs) {
-        $timeout(function () {
-          // $el it self is not ul.nav (consider this when creating common directive)
-          var $tabNavigation = $('ul.nav');
-          var $civicrmMenu = $('#civicrm-menu');
-          var $tabContainer = $('.dashboard-tab-container');
-
-          $tabNavigation.affix({
-            offset: {
-              top: $tabContainer.offset().top - 128
-            }
-          }).on('affixed.bs.affix', function () {
-            $tabNavigation.css('top', $civicrmMenu.height());
-          }).on('affixed-top.bs.affix', function () {
-            $tabNavigation.css('top', 'auto');
-          });
-        });
-      }
+      link: civicaseDashboardTabsetAffixLink
     };
+
+    function civicaseDashboardTabsetAffixLink (scope) {
+      $timeout(function () {
+        var $tabNavigation = $('.civicase__dashboard__tab-container ul.nav');
+        var $civicrmMenu = $('#civicrm-menu');
+        var $toolbarDrawer = $('#toolbar .toolbar-drawer');
+        var $tabContainer = $('.civicase__dashboard__tab-container');
+
+        $tabNavigation.affix({
+          offset: {
+            top: $tabContainer.offset().top - ($toolbarDrawer.height() + $civicrmMenu.height())
+          }
+        }).on('affixed.bs.affix', function () {
+          $tabNavigation.css('top', $civicrmMenu.height() + $toolbarDrawer.height());
+        }).on('affixed-top.bs.affix', function () {
+          $tabNavigation.css('top', 'auto');
+        });
+      });
+    }
   });
 })(angular, CRM.$, CRM._);

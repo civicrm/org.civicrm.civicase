@@ -4,6 +4,13 @@
   }
 }
 
+.civicase__dashboard__tab-container {
+  .nav {
+    width: 100%;
+    z-index: 10;
+  }
+}
+
 .civicase__dashboard-activites-feed {
   background: $gray-light;
 }

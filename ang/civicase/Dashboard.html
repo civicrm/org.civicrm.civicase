@@ -1,9 +1,11 @@
 <div id="bootstrap-theme" class="civicase__container">
   <div class="civicase__dashboard">
-    <h1 crm-page-title crm-document-title="myCasesOnly ? ts('CiviCase Dashboard - My Cases') : ts('CiviCase Dashboard - All Cases')"></h1>
+    <h1 class="hidden" crm-page-title crm-document-title="myCasesOnly ? ts('CiviCase Dashboard - My Cases') : ts('CiviCase Dashboard - All Cases')"></h1>
 
-    <div class="dashboard-tab-container clearfix">
-      <uib-tabset active="activeTab" type="pills" uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary clearfix" uib-tabset-affix>
+    <div class="civicase__dashboard__tab-container clearfix">
+      <uib-tabset
+        civicase-dashboard-tabset-affix active="activeTab" type="pills"
+        uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary clearfix">
         <!-- Dashboard Tab -->
         <uib-tab index="0" heading="{{ ts('Dashboard') }}" select="navTabs()">
 

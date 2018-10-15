@@ -327,17 +327,17 @@
       $timeout(function () {
         var $filter = $('.civicase__activity-filter');
         var $feedListContainer = $('.civicase__activity-feed__list-container');
-        var $caseTabs = $('.civicase__case-body_tab');
+        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
         var $toolbarDrawer = $('#toolbar');
 
         $element.find('.panel').affix({
           offset: {
-            top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()),
+            top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
             bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
           }
         }).on('affixed.bs.affix', function () {
           $element.find('.panel')
-            .css('top', ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()))
+            .css('top', ($toolbarDrawer.height() + $tabs.height() + $filter.height()))
             .css('padding-top', 32);
         }).on('affixed-top.bs.affix', function () {
           $element.find('.panel')
