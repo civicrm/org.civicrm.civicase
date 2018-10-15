@@ -132,12 +132,9 @@
         <!-- End - Activities Tab -->
         <div class="pull-right">
           <input
-            class="form-control civicase__dashboard__relation-filter" ng-list
-            ng-if="caseRelationshipType"
+            class="form-control civicase__dashboard__relation-filter"
             crm-ui-select="{allowClear: false, multiple: false, data: caseRelationshipOptions}"
-            ng-model="caseRelationshipType" />
-          <!-- <input type="checkbox" id="dashboard-myCasesOnly" ng-model="myCasesOnly" ng-show="checkPerm('access all cases and activities')"> -->
-          <!-- <label for="dashboard-myCasesOnly" ng-show="checkPerm('access all cases and activities')">{{ts('My cases only')}}</label> -->
+            ng-model="filters.caseRelationshipType" />
 
           <a ng-if="checkPerm('add cases')"
             ng-href="{{ url('civicrm/case/add', {reset: 1, action: 'add', context: 'standalone'}) }}"

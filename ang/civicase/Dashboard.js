@@ -23,9 +23,14 @@
     $scope.activityPlaceholders = _.range(activitiesToShow);
     $scope.summaryData = [];
     $scope.dashboardActivities = {};
+    $scope.filters = {};
+    $scope.activityFilters = {
+      case_filter: {'case_type_id.is_active': 1, contact_is_deleted: 0}
+    };
 
     (function init () {
-      bindRouteParams();
+      bindRouteParamsToScope();
+      initWatchers();
       prepareCaseFilterOption();
 
       // We hide the breakdown when there's only one case type
@@ -33,25 +38,6 @@
         $scope.showBreakdown = false;
       }
     }());
-
-    function prepareCaseFilterOption () {
-      var options = [
-        { 'text': 'My cases', 'id': 'is_case_manager' },
-        { 'text': 'Cases I am involved', 'id': 'is_involved' }
-      ];
-
-      if (CRM.checkPerm('access all cases and activities')) {
-        options.push({ 'text': 'All Cases', 'id': 'all' });
-      }
-
-      $scope.caseRelationshipOptions = options;
-    }
-
-    function bindRouteParams () {
-      $scope.$bindToRoute({ param: 'dtab', expr: 'activeTab', format: 'int', default: 0 });
-      $scope.$bindToRoute({ param: 'dbd', expr: 'showBreakdown', format: 'bool', default: false });
-      $scope.$bindToRoute({ param: 'drel', expr: 'caseRelationshipType', format: 'raw', default: 'is_involved' });
-    }
 
     $scope.showHideBreakdown = function () {
       $scope.showBreakdown = !$scope.showBreakdown;
@@ -127,23 +113,71 @@
       });
     };
 
+    /**
+     * Bind route paramaters to scope variables
+     */
+    function bindRouteParamsToScope () {
+      $scope.$bindToRoute({ param: 'dtab', expr: 'activeTab', format: 'int', default: 0 });
+      $scope.$bindToRoute({ param: 'dbd', expr: 'showBreakdown', format: 'bool', default: false });
+      $scope.$bindToRoute({ param: 'drel', expr: 'filters.caseRelationshipType', format: 'raw', default: 'is_involved' });
+    }
+
+    /**
+     * Watcher for caseRelationshipType
+     *
+     * @param {String} newValue
+     */
+    function caseRelationshipTypeWatcher (newValue) {
+      newValue === 'is_case_manager'
+        ? $scope.activityFilters.case_filter.case_manager = [CRM.config.user_contact_id]
+        : delete ($scope.activityFilters.case_filter.case_manager);
+
+      newValue === 'is_involved'
+        ? $scope.activityFilters.case_filter.contact_id = [CRM.config.user_contact_id]
+        : delete ($scope.activityFilters.case_filter.contact_id);
+    }
+
+    /**
+     * Prepate case filter options
+     */
+    function prepareCaseFilterOption () {
+      var options = [
+        { 'text': 'My cases', 'id': 'is_case_manager' },
+        { 'text': 'Cases I am involved in', 'id': 'is_involved' }
+      ];
+
+      if (CRM.checkPerm('access all cases and activities')) {
+        options.push({ 'text': 'All Cases', 'id': 'all' });
+      }
+
+      $scope.caseRelationshipOptions = options;
+    }
+
+    /**
+     * Initialise watchers
+     */
+    function initWatchers () {
+      $scope.$watch('filters.caseRelationshipType', caseRelationshipTypeWatcher);
+    }
+
     // Translate between the dashboard's global filter-options and
     // the narrower, per-section filter-options.
-    $scope.$watch('myCasesOnly', function (myCasesOnly) {
-      $scope.activityFilters = {
-        case_filter: {'case_type_id.is_active': 1, contact_is_deleted: 0}
-      };
-      var recentCaseFilter = {
-        'status_id.grouping': 'Opened'
-      };
-      if (myCasesOnly) {
-        $scope.activityFilters.case_filter.case_manager = CRM.config.user_contact_id;
-        recentCaseFilter.case_manager = [CRM.config.user_contact_id];
-      }
-      $scope.recentCaseFilter = recentCaseFilter;
-      $scope.recentCaseLink = '#/case/list?sf=modified_date&sd=DESC' + (myCasesOnly ? ('&cf=' + JSON.stringify({case_manager: [CRM.config.user_contact_id]})) : '');
-      $scope.refresh();
-    });
+
+    // $scope.$watch('myCasesOnly', function (myCasesOnly) {
+    //   $scope.activityFilters = {
+    //     case_filter: {'case_type_id.is_active': 1, contact_is_deleted: 0}
+    //   };
+    //   var recentCaseFilter = {
+    //     'status_id.grouping': 'Opened'
+    //   };
+    //   if (myCasesOnly) {
+    //     $scope.activityFilters.case_filter.case_manager = CRM.config.user_contact_id;
+    //     recentCaseFilter.case_manager = [CRM.config.user_contact_id];
+    //   }
+    //   $scope.recentCaseFilter = recentCaseFilter;
+    //   $scope.recentCaseLink = '#/case/list?sf=modified_date&sd=DESC' + (myCasesOnly ? ('&cf=' + JSON.stringify({case_manager: [CRM.config.user_contact_id]})) : '');
+    //   $scope.refresh();
+    // });
   }
 
   module.directive('civicaseDashboardTabsetAffix', function ($timeout) {

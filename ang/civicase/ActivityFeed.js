@@ -272,8 +272,8 @@
      */
     function initiateWatchersAndEvents () {
       $scope.$watchCollection('filters', getActivities);
-      $scope.$watchCollection('params.filters', getActivities);
       $scope.$watchCollection('displayOptions', getActivities);
+      $scope.$watch('params.filters', getActivities, true);
       $scope.$on('updateCaseData', getActivities);
     }
 
