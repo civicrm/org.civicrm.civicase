@@ -44,8 +44,8 @@
           expect(element.isolateScope().data.selected).toBe(false);
         });
 
-        it('emits bulkSelectionCheckboxClicked event', function () {
-          expect(element.isolateScope().$emit).toHaveBeenCalledWith('bulkSelectionCheckboxClicked', element.isolateScope().data);
+        it('emits civicase::bulk-actions::check-box-toggled event', function () {
+          expect(element.isolateScope().$emit).toHaveBeenCalledWith('civicase::bulk-actions::check-box-toggled', element.isolateScope().data);
         });
       });
 
@@ -59,8 +59,8 @@
           expect(element.isolateScope().data.selected).toBe(true);
         });
 
-        it('emits bulkSelectionCheckboxClicked event', function () {
-          expect(element.isolateScope().$emit).toHaveBeenCalledWith('bulkSelectionCheckboxClicked', element.isolateScope().data);
+        it('emits civicase::bulk-actions::check-box-toggled event', function () {
+          expect(element.isolateScope().$emit).toHaveBeenCalledWith('civicase::bulk-actions::check-box-toggled', element.isolateScope().data);
         });
       });
     });

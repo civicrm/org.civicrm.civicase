@@ -316,7 +316,7 @@
       var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
       var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
 
-      $rootScope.$on('stickyCaseDetailsHeaderReinitiatePos', function () {
+      $rootScope.$on('civicase::case-details::header-position-changed', function () {
         $timeout(function () {
           // Reset right case view tab header
           if ($caseNavigation.data('bs.affix')) {

@@ -16,7 +16,7 @@
     };
   });
 
-  module.controller('civicaseBulkActionsController', function ($scope, $rootScope) {
+  module.controller('civicaseBulkActionsController', function ($scope) {
     $scope.showCheckboxes = false;
 
     (function init () {
@@ -37,6 +37,7 @@
      * - 'visible' :  Selects all visible selections
      * - 'none' : Deselects all
      *
+     * @params {Object} event
      * @params {String} condition
      */
     $scope.select = function ($event, condition) {
@@ -56,7 +57,7 @@
      * selectedItems variable watcher
      */
     function selectedItemsWatcher () {
-      $rootScope.$broadcast('civicase::case-list::header-position-changed');
+      $scope.$emit('civicase::case-list::header-position-changed');
     }
   });
 })(angular, CRM.$, CRM._);

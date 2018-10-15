@@ -21,7 +21,7 @@
    * @param {object} $scope
    * @param {object} $timeout
    */
-  module.controller('civicaseSearchController', function ($scope, $rootScope, $timeout) {
+  module.controller('civicaseSearchController', function ($scope, $timeout) {
     // The ts() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -83,8 +83,9 @@
      * Watcher for expanded state and update tableHeader top offset likewise
      */
     function expandedWatcher () {
-      $rootScope.$broadcast('civicase::case-list::header-position-changed');
-      $rootScope.$broadcast('civicase::case-details::header-position-changed');
+      $scope.$emit('civicase::case-list::header-position-changed');
+      $scope.$emit('civicase::case-details::header-position-changed');
+      $scope.$emit('civicase::case-details::filter-position-changed');
     }
 
     /**

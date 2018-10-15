@@ -194,7 +194,7 @@
     }
   });
 
-  module.directive('civicaseActivityFiltersAffix', function ($timeout) {
+  module.directive('civicaseActivityFiltersAffix', function ($rootScope, $timeout) {
     return {
       link: civicaseActivityFiltersAffix
     };
@@ -206,12 +206,21 @@
      * @param {Object} $el
      */
     function civicaseActivityFiltersAffix (scope, $el) {
-      $timeout(function () {
-        var $filter = $('.civicase__activity-filter');
-        var $feedBodyPanel = $('.civicase__activity-filter + .panel-body');
-        var $caseTabs = $('.civicase__case-body_tab');
-        var $toolbarDrawer = $('#toolbar');
+      var $filter = $('.civicase__activity-filter');
+      var $feedBodyPanel = $('.civicase__activity-filter + .panel-body');
+      var $caseTabs = $('.civicase__case-body_tab');
+      var $toolbarDrawer = $('#toolbar');
 
+      $rootScope.$on('civicase::case-details::filter-position-changed', function () {
+        $timeout(function () {
+          // Reset right case view tab header
+          if ($filter.data('bs.affix')) {
+            $filter.data('bs.affix').options.offset.top = $filter.offset().top - ($toolbarDrawer.height() + $caseTabs.height());
+          }
+        });
+      });
+
+      $timeout(function () {
         $filter.affix({
           offset: {
             top: $filter.offset().top - ($toolbarDrawer.height() + $caseTabs.height())

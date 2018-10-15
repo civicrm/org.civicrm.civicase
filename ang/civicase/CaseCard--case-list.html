@@ -3,7 +3,7 @@
   ng-style="{'border-left-color': data.color}" 
   ng-class="{'civicase__case-card--active': $parent.viewingCase === data.id, 
     'civicase__case-card--closed': data.status === 'Resolved', 
-    'civicase__animated-checkbox-card--expanded': $parent.showCheckboxes && !$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed}"
+    'civicase__animated-checkbox-card--expanded': $parent.showCheckboxes && !$parent.viewingCase && $parent.bulkAllowed}"
   >
   <div class="panel-body">
     <span 

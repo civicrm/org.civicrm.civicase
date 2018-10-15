@@ -18,7 +18,7 @@
               everything-count="totalCount" 
               displayed-count="cases.length">
             </civicase-bulk-actions-checkboxes>
-            <span class="civicase__bulkactions-actions btn-group btn-group-sm" ng-if="!viewingCase && selectedCases && bulkAllowed && !item.lock">
+            <span class="civicase__bulkactions-actions-dropdown btn-group btn-group-sm" ng-if="!viewingCase && selectedCases && bulkAllowed && !item.lock">
               <div class="btn-group">
                 <button type="button" class="btn btn-default" ng-class="{disabled: !selectedCases.length || !showCheckboxes}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ ts('Actions') }}</button>
                 <button type="button" class="btn btn-default dropdown-toggle" ng-class="{disabled: !selectedCases.length || !showCheckboxes}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
