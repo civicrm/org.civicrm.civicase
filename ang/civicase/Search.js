@@ -17,9 +17,6 @@
 
   /**
    * Controller Function for civicase-search directive
-   *
-   * @param {object} $scope
-   * @param {object} $timeout
    */
   module.controller('civicaseSearchController', function ($scope, $timeout) {
     // The ts() functions help load strings for this module.
@@ -175,7 +172,7 @@
     }
 
     /**
-     * Formats search fitler as per the API request header format
+     * Formats search filter as per the API request header format
      *
      * @params {object} inp - Object for input option to be formatted
      * @return (object} search - returns formatted key value pair of filters

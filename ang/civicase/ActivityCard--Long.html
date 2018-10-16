@@ -130,5 +130,23 @@
         </div>
       </div>
     </div>
+    <!-- Case information -->
+    <div class="panel-footer" ng-if="activity.case">
+      <div class="civicase__activity-card-row civicase__activity-card-row--case-info" >
+        <span>
+          <span class="civicase__activity-card__case-id__label">Case ID:</span>
+          <span class="civicase__activity-card__case-id__value">{{activity.case_id}}</span>
+        </span>
+        <span class="civicase__pipe"> | </span>
+        <span class="civicase__activity-card__case-type">{{ activity.case.type.title }}</span>
+        <div class="civicase__activity__right-container">
+          <div>
+            <span contact-card contacts="activity.case.client"></span>
+          </div>
+          <span class="crm_notification-badge" style="background-color: {{ activity.case.status.color }};">{{ activity.case.status.label }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- End - Case information -->
   </div>
 </div>

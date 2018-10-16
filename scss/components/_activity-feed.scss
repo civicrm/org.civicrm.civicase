@@ -92,12 +92,18 @@
   }
 }
 
+.civicase__activity-feed-pager__no-more,
+.civicase__activity-feed-pager__more {
+  > .btn {
+    margin-top: 40px;
+  }
+}
+
 .civicase__activity-feed-pager__no-more {
   > .btn {
     background: transparent;
     border: 0;
     font-weight: $font-weight-heading;
-    margin-top: 70px;
   }
 }
 

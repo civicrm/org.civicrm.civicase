@@ -19,6 +19,7 @@
     <span class="pull-right">
       <select
         class="form-control civicase__activity-filter__timeline"
+        ng-if="caseTimelines.length > 0"
         ng-model="filters.activitySet" crm-ui-select>
         <option value="">{{ ts('Select timeline') }}</option>
         <option ng-repeat="item in ::caseTimelines" value="{{ item.name }}">
@@ -88,7 +89,9 @@
       </span>
     </div>
 
-    <span ng-repeat="field in availableFilters" ng-if="exposedFilters[field.name]" data-activity-filter="{{ field.name }}" ng-switch="field.html_type">
+    <span
+      ng-repeat="field in availableFilters" ng-if="exposedFilters[field.name]" class="civicase__activity-filter__others"
+      data-activity-filter="{{ field.name }}" ng-switch="field.html_type">
       <span ng-switch-when="Autocomplete-Select">
         <input
           placeholder="{{ field.label }}"

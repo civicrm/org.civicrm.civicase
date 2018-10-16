@@ -23,7 +23,7 @@
 
   module.controller('civicaseActivityFeedController', civicaseActivityFeedController);
 
-  function civicaseActivityFeedController ($scope, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService) {
+  function civicaseActivityFeedController ($scope, $q, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, ContactsDataService) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25;
@@ -38,8 +38,7 @@
     $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.remaining = true;
     $scope.viewingActivity = {};
-    $scope.refreshCase = $scope.refreshCase || _.noop;
-    $scope.caseTimelines = _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label');
+    $scope.caseTimelines = $scope.caseTypeId ? _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label') : [];
 
     (function init () {
       bindRouteParamsToScope();
@@ -59,9 +58,21 @@
 
     /**
      * Refresh Activities
+     * If: refreshCase callback is passed to the directive, calls the same
+     * Else: Calls crmApi directly
      */
-    $scope.refreshAll = function () {
-      getActivities(false, $scope.refreshCase);
+    $scope.refreshAll = function (apiCalls) {
+      if (_.isFunction($scope.refreshCase)) {
+        $scope.refreshCase(apiCalls);
+      } else {
+        if (!_.isArray(apiCalls)) {
+          apiCalls = [];
+        }
+
+        crmApi(apiCalls, true).then(function (result) {
+          getActivities(false);
+        });
+      }
     };
 
     /**
@@ -144,31 +155,45 @@
     }
 
     /**
+     * Fetch additional information about the contacts
+     *
+     * @param {array} cases
+     */
+    function fetchContactsData (activities) {
+      var contacts = [];
+
+      _.each(activities, function (activity) {
+        contacts = contacts.concat(activity.assignee_contact_id);
+        contacts = contacts.concat(activity.target_contact_id);
+        contacts.push(activity.source_contact_id);
+      });
+
+      return ContactsDataService.add(contacts);
+    }
+
+    /**
      * Get all activities
      *
      * @param {Boolean} nextPage
-     * @param {Function} callback
      */
-    function getActivities (nextPage, callback) {
+    function getActivities (nextPage) {
       if (nextPage !== true) {
         pageNum = 0;
       }
 
       crmThrottle(loadActivities).then(function (result) {
-        if (_.isFunction(callback)) {
-          callback();
-        }
-        var newActivities = _.each(result.acts.values, formatActivity);
+        var newActivities = _.each(result[0].acts.values, formatActivity);
+        var remaining = result[0].count - (ITEMS_PER_PAGE * (pageNum + 1));
+
         if (pageNum) {
           $scope.activities = $scope.activities.concat(newActivities);
         } else {
           $scope.activities = newActivities;
         }
         $scope.activityGroups = groupActivities($scope.activities);
-        var remaining = result.count - (ITEMS_PER_PAGE * (pageNum + 1));
-        $scope.totalCount = result.count;
+        $scope.totalCount = result[0].count;
         $scope.remaining = remaining > 0 ? remaining : 0;
-        if (!result.count && !pageNum) {
+        if (!result[0].count && !pageNum) {
           $scope.remaining = false;
         }
         // reset viewingActivity to get latest data
@@ -237,6 +262,11 @@
       return crmApi({
         acts: ['Activity', 'get', $.extend(true, returnParams, params)],
         count: ['Activity', 'getcount', params]
+      }).then(function (result) {
+        return $q.all([
+          result,
+          fetchContactsData(result.acts.values)
+        ]);
       });
     }
 
@@ -245,8 +275,8 @@
      */
     function initiateWatchersAndEvents () {
       $scope.$watchCollection('filters', getActivities);
-      $scope.$watchCollection('params.filters', getActivities);
       $scope.$watchCollection('displayOptions', getActivities);
+      $scope.$watch('params.filters', getActivities, true);
       $scope.$on('updateCaseData', getActivities);
     }
 
@@ -285,7 +315,7 @@
     }
   }
 
-  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document) {
+  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document, $rootScope) {
     return {
       link: civicaseActivityDetailsAffix
     };
@@ -297,27 +327,52 @@
      * @param {Object} $element
      */
     function civicaseActivityDetailsAffix (scope, $element) {
-      $timeout(function () {
-        var $filter = $('.civicase__activity-filter');
-        var $feedListContainer = $('.civicase__activity-feed__list-container');
-        var $caseTabs = $('.civicase__case-body_tab');
-        var $toolbarDrawer = $('#toolbar');
+      var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
 
-        $element.find('.panel').affix({
-          offset: {
-            top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()),
-            bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
-          }
-        }).on('affixed.bs.affix', function () {
-          $element.find('.panel')
-            .css('top', ($toolbarDrawer.height() + $caseTabs.height() + $filter.height()))
-            .css('padding-top', 32);
-        }).on('affixed-top.bs.affix', function () {
-          $element.find('.panel')
-            .css('top', 'auto')
-            .css('padding-top', 0);
+      (function init () {
+        affixActivityDetailsPanel();
+        $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
+      }());
+
+      /**
+       * Sets Activity Details Panel affix offsets
+       */
+      function affixActivityDetailsPanel () {
+        $timeout(function () {
+          $activityDetailsPanel = $element.find('.panel');
+          $filter = $('.civicase__activity-filter');
+          $feedListContainer = $('.civicase__activity-feed__list-container');
+          $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
+          $toolbarDrawer = $('#toolbar');
+
+          $activityDetailsPanel.affix({
+            offset: {
+              top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
+              bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
+            }
+          }).on('affixed.bs.affix', function () {
+            $activityDetailsPanel
+              .css('top', ($toolbarDrawer.height() + $tabs.height() + $filter.height()))
+              .css('padding-top', 32);
+          }).on('affixed-top.bs.affix', function () {
+            $activityDetailsPanel
+              .css('top', 'auto')
+              .css('padding-top', 0);
+          });
         });
-      });
+      }
+
+      /**
+       * Resets Activity Details Panel affix offsets
+       */
+      function resetAffix () {
+        $timeout(function () {
+          if ($activityDetailsPanel.data('bs.affix')) {
+            $activityDetailsPanel.data('bs.affix').options.offset.top = $activityDetailsPanel.offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height());
+            $activityDetailsPanel.data('bs.affix').options.offset.bottom = $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height());
+          }
+        });
+      }
     }
   });
 })(angular, CRM.$, CRM._);

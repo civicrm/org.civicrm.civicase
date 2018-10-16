@@ -2,6 +2,11 @@
   box-shadow: $box-shadow-block;
   position: relative;
 
+  .panel-footer {
+    background: transparent;
+    padding: 5px 16px;
+  }
+
   .civicase__activity-icon-container {
     .civicase__activity-icon-ribbon {
       border-bottom-width: 10px;
@@ -14,6 +19,28 @@
       font-size: 22px;
       left: 12px;
       top: 0;
+    }
+  }
+
+  .civicase__activity-card__case-id__label,
+  .civicase__activity-card__case-id__value,
+  .civicase__activity-card__case-type {
+    color: $crm-gray-matte;
+  }
+
+  .civicase__activity-card__case-id__value {
+    font-weight: $font-weight-heading;
+  }
+
+  .civicase__activity-card-row--case-info {
+    line-height: 2em;
+
+    .civicase__contact-card {
+      margin-right: 5px;
+    }
+
+    .civicase__pipe {
+      margin: 0 5px;
     }
   }
 
@@ -82,6 +109,10 @@
   &.civicase__activity-card--ribbon {
     min-height: 75px;
 
+    .panel-body {
+      min-height: 70px;
+    }
+
     .civicase__activity-subject {
       margin-left: 52px;
     }
@@ -96,6 +127,10 @@
   &.civicase__activity-card--draft {
     background: transparent;
     box-shadow: none;
+
+    .panel-footer {
+      border-top: 1px dashed $crm-grayblue-darker;
+    }
   }
 
   .civicase__activity-icon-arrow {
