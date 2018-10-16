@@ -315,7 +315,7 @@
     }
   }
 
-  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document) {
+  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document, $rootScope) {
     return {
       link: civicaseActivityDetailsAffix
     };
@@ -327,27 +327,52 @@
      * @param {Object} $element
      */
     function civicaseActivityDetailsAffix (scope, $element) {
-      $timeout(function () {
-        var $filter = $('.civicase__activity-filter');
-        var $feedListContainer = $('.civicase__activity-feed__list-container');
-        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-        var $toolbarDrawer = $('#toolbar');
+      var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
 
-        $element.find('.panel').affix({
-          offset: {
-            top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
-            bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
-          }
-        }).on('affixed.bs.affix', function () {
-          $element.find('.panel')
-            .css('top', ($toolbarDrawer.height() + $tabs.height() + $filter.height()))
-            .css('padding-top', 32);
-        }).on('affixed-top.bs.affix', function () {
-          $element.find('.panel')
-            .css('top', 'auto')
-            .css('padding-top', 0);
+      (function init () {
+        affixActivityDetailsPanel();
+        $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
+      }());
+
+      /**
+       * Sets Activity Details Panel affix offsets
+       */
+      function affixActivityDetailsPanel () {
+        $timeout(function () {
+          $activityDetailsPanel = $element.find('.panel');
+          $filter = $('.civicase__activity-filter');
+          $feedListContainer = $('.civicase__activity-feed__list-container');
+          $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
+          $toolbarDrawer = $('#toolbar');
+
+          $activityDetailsPanel.affix({
+            offset: {
+              top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
+              bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
+            }
+          }).on('affixed.bs.affix', function () {
+            $activityDetailsPanel
+              .css('top', ($toolbarDrawer.height() + $tabs.height() + $filter.height()))
+              .css('padding-top', 32);
+          }).on('affixed-top.bs.affix', function () {
+            $activityDetailsPanel
+              .css('top', 'auto')
+              .css('padding-top', 0);
+          });
         });
-      });
+      }
+
+      /**
+       * Resets Activity Details Panel affix offsets
+       */
+      function resetAffix () {
+        $timeout(function () {
+          if ($activityDetailsPanel.data('bs.affix')) {
+            $activityDetailsPanel.data('bs.affix').options.offset.top = $activityDetailsPanel.offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height());
+            $activityDetailsPanel.data('bs.affix').options.offset.bottom = $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height());
+          }
+        });
+      }
     }
   });
 })(angular, CRM.$, CRM._);
