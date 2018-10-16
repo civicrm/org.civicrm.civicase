@@ -1,12 +1,14 @@
 .civicase__case-custom-fields__container {
-  float: left;
-  width: 50%;
-
   &.civicase__summary-tab-tile {
     padding-top: 0;
   }
 
-  .civicase__panel-transparent-header:not(:first-child) {
+  .col-lg-6:nth-child(2n+1) {
+    clear: left;
+  }
+
+  // Adds a margin top to headings from the 3rd element onwards:
+  .civicase__panel-transparent-header:nth-child(1n+3) {
     margin-top: 30px;
   }
 
@@ -93,6 +95,12 @@
         }
         /* stylelint-enable max-nesting-depth, selector-max-compound-selectors */
       }
+    }
+  }
+
+  @media (max-width: $screen-md-max) {
+    .civicase__panel-transparent-header:nth-child(1n+2) {
+      margin-top: 30px;
     }
   }
 }
