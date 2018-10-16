@@ -138,7 +138,7 @@
     }
 
     /**
-     * Prepate case filter options
+     * Prepare case filter options for crmUiSelect
      */
     function prepareCaseFilterOption () {
       var options = [
@@ -160,6 +160,7 @@
       $scope.$watch('filters.caseRelationshipType', caseRelationshipTypeWatcher);
     }
 
+    // TODO: commented as it might be required in the dashboard tab, should be removed once dashboard tab is developed
     // Translate between the dashboard's global filter-options and
     // the narrower, per-section filter-options.
 

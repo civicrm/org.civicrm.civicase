@@ -8,9 +8,7 @@
         uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary clearfix">
         <!-- Dashboard Tab -->
         <uib-tab index="0" heading="{{ ts('Dashboard') }}" select="navTabs()">
-
           <div class="panel panel-default" ng-include="'~/civicase/DashboardSummary.html'"></div>
-
           <div class="row case-stats-wrapper">
             <!-- Mockup proscribes different coloring for these panels, but don't see a suitable class in the style guide -->
             <div class="col-md-4">
@@ -39,7 +37,6 @@
             </div>
           </div>
           </div>
-
           <div class="row dashboard-case-wrapper">
             <div class="col-md-4">
               <div class="panel panel-default">
@@ -122,7 +119,6 @@
               </div>
             </div>
           </div>
-
         </uib-tab>
         <!-- End - Dashboard Tab -->
         <!-- Activities Tab -->
@@ -135,7 +131,6 @@
             class="form-control civicase__dashboard__relation-filter"
             crm-ui-select="{allowClear: false, multiple: false, data: caseRelationshipOptions}"
             ng-model="filters.caseRelationshipType" />
-
           <a ng-if="checkPerm('add cases')"
             ng-href="{{ url('civicrm/case/add', {reset: 1, action: 'add', context: 'standalone'}) }}"
             class="btn btn-primary crm-popup civicase__dashboard__add-case"

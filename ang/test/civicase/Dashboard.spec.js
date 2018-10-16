@@ -23,7 +23,7 @@
           initController();
         });
 
-        it('shows the All Cases filter option', function () {
+        it('shows the `All Cases` filter option', function () {
           expect($scope.caseRelationshipOptions).toEqual([
             { 'text': 'My cases', 'id': 'is_case_manager' },
             { 'text': 'Cases I am involved in', 'id': 'is_involved' },
@@ -38,7 +38,7 @@
           initController();
         });
 
-        it('shows the All Cases filter option', function () {
+        it('does not show the `All Cases` filter option', function () {
           expect($scope.caseRelationshipOptions).toEqual([
             { 'text': 'My cases', 'id': 'is_case_manager' },
             { 'text': 'Cases I am involved in', 'id': 'is_involved' }

@@ -58,6 +58,8 @@
 
     /**
      * Refresh Activities
+     * If: refreshCase callback is passed to the directive, calls the same
+     * Else: Calls crmApi directly
      */
     $scope.refreshAll = function (apiCalls) {
       if (_.isFunction($scope.refreshCase)) {
@@ -181,13 +183,14 @@
 
       crmThrottle(loadActivities).then(function (result) {
         var newActivities = _.each(result[0].acts.values, formatActivity);
+        var remaining = result[0].count - (ITEMS_PER_PAGE * (pageNum + 1));
+
         if (pageNum) {
           $scope.activities = $scope.activities.concat(newActivities);
         } else {
           $scope.activities = newActivities;
         }
         $scope.activityGroups = groupActivities($scope.activities);
-        var remaining = result[0].count - (ITEMS_PER_PAGE * (pageNum + 1));
         $scope.totalCount = result[0].count;
         $scope.remaining = remaining > 0 ? remaining : 0;
         if (!result[0].count && !pageNum) {
