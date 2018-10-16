@@ -127,6 +127,10 @@
   &.civicase__activity-card--draft {
     background: transparent;
     box-shadow: none;
+
+    .panel-footer {
+      border-top: 1px dashed $crm-grayblue-darker;
+    }
   }
 
   .civicase__activity-icon-arrow {
