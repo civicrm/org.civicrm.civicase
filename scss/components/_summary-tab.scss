@@ -76,6 +76,12 @@
   }
 }
 
+.civicase__summary-tab-tile--padded {
+  >.panel-body {
+    padding: 24px;
+  }
+}
+
 .civicase__summary-tab-tile-container {
   display: flex;
   padding: 0 15px;
@@ -89,6 +95,10 @@
 .civicase__summary-tab-tile--responsive {
   flex-basis: calc(50% - 150px);
   flex-grow: 1;
+}
+
+.civicase__summary-tab-tile__inner-title {
+  margin-top: 0;
 }
 
 .civicase__summary-tab__activity-list {
