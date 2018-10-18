@@ -9,8 +9,7 @@
       templateUrl: '~/civicase/ContactCaseList.html',
       scope: {
         'caseType': '=',
-        'pagerSize': '=',
-        'viewingCase': '='
+        'pagerSize': '='
       }
     };
   });
@@ -24,14 +23,9 @@
     ];
     var defaultPageSize = 2;
 
-    $scope.cases = [];
-    $scope.loaded = false;
-    $scope.isLoadMoreAvailable = true;
-    $scope.page = {size: $scope.pagerSize || defaultPageSize, num: 1};
     $scope.formatDate = DateHelper.formatDate;
     $scope.userId = getSelectedUserId();
     $scope.loadMore = loadCases;
-    $scope.loadingPlaceholders = _.range($scope.page.size || defaultPageSize);
 
     (function init () {
       resetGlobals();
@@ -54,7 +48,7 @@
         return: caseReturnParams,
         options: {
           sort: 'modified_date ASC',
-          limit: page.size + 1, // getting one extra to see if can load more
+          limit: page.size,
           offset: page.size * (page.num - 1)
         }
       };
@@ -67,16 +61,16 @@
         params['case_manager'] = $scope.userId;
       }
 
-      return [
-        ['Case', 'getcaselist', $.extend(true, returnCaseParams, params)]
-      ];
+      return {
+        cases: ['Case', 'getcaselist', $.extend(true, returnCaseParams, params)],
+        count: ['Case', 'getcount', $.extend(true, returnCaseParams, params)]
+      };
     }
 
     /**
      * Returns contact role
      *
      * @params {Object} cases
-     *
      * @return {String} role
      */
     function getContactRole (caseObj) {
@@ -113,23 +107,18 @@
      */
     function loadCases () {
       $scope.loaded = false;
-      // getting one item extra to see if there is a change to load more
+
       crmApi(getCaseApiParams($scope.page)).then(function (res) {
-        var items = res[0].values;
+        var items = res.cases.values;
 
         _.each(items, function (item, ind) {
           if ($scope.caseType === 'Related') {
             item.contact_role = getContactRole(item);
           }
-
-          // carefully don't push the extra items (since they are fetched in the api call)
-          if (ind < $scope.page.size) {
-            $scope.cases.push(formatCase(item));
-          }
+          $scope.cases.push(formatCase(item));
         });
 
-        // Load more is not available when list is less than the size
-        if (items.length <= $scope.page.size) {
+        if ($scope.cases.length === res.count) {
           $scope.isLoadMoreAvailable = false;
         }
 
@@ -147,6 +136,7 @@
       $scope.cases = [];
       $scope.loaded = false;
       $scope.isLoadMoreAvailable = true;
+      $scope.loadingPlaceholders = _.range($scope.page.size || defaultPageSize);
     }
   }
 })(angular, CRM.$, CRM._);
