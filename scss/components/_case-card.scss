@@ -149,6 +149,53 @@
   margin-right: 8px;
 }
 
+.civicase__case-card--long {
+  background: $crm-white;
+  border-radius: 2px !important;
+  box-shadow: $box-shadow-block;
+  color: $crm-gray-matte;
+  margin-bottom: 10px;
+
+  .civicase__case-card__date {
+    color: $gray-dark;
+  }
+
+  &.civicase__case-card--closed {
+    background: $gray-lighter;
+    min-height: auto;
+
+    .civicase__case-card-role,
+    .civicase__case-card-title {
+      color: inherit;
+    }
+
+    .civicase__case-card-title {
+      text-decoration: line-through;
+    }
+  }
+}
+
+.civicase__case-card-role,
+.civicase__case-card-title {
+  color: $gray-dark;
+  line-height: 18px;
+}
+
+.civicase__case-card-role-container {
+  border-top: 1px solid $gray-light;
+  clear: both;
+  margin: 15px -20px 0;
+  padding: 10px 20px 0;
+
+  > * {
+    vertical-align: middle;
+  }
+
+  > i {
+    margin-right: 5px;
+  }
+}
+
 // Todo to be removed once bulk actions has been discussed properly.
 // .civicase__case-card-lock {
 //   color: $crm-white;

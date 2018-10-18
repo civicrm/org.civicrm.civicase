@@ -1,0 +1,23 @@
+<div>
+  <civicase-case-card mode="long" case="case" ng-repeat="case in cases"></civicase-case-card>
+  <div 
+    class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--long" 
+    ng-repeat="placeholder in loadingPlaceholders"
+    ng-if="!loaded">
+    <div class="panel-body">
+      <div class="clearfix">
+        <div class="pull-left civicase__case-card-title">
+          <div class="civicase__loading-placeholder__oneline" style="width: 8em;  margin-bottom: 10px;"></div>
+        </div>
+        <div class="pull-right">
+          <div class="civicase__loading-placeholder__oneline" style="width: 12em;  margin-bottom: 10px;"></div>
+        </div>      
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" ng-if="isLoadMoreAvailable && loaded" ng-click="loadMore()">Load More Cases</button>
+  <div ng-if="!isLoadMoreAvailable">
+    <span ng-if="cases.length > 0"> Showing all {{ cases.length }}</span>
+    <p ng-if="cases.length == 0" class="text-left"> None Found </p>
+  </div>
+</div>

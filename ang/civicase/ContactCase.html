@@ -1,0 +1,58 @@
+
+<div id="bootstrap-theme" class="clearfix civicase__container">
+  <h1 crm-page-title class="element-invisible">Related cases to the user</h1>  <!-- Added for SEO purpose (This will be hidden through css) -->
+  <div class="civicase__contact-cases clearfix">
+    <a ng-if="checkPerm('add cases')"
+      class="btn-primary btn civicase__contact-cases-add"
+      ng-href="{{ 'civicrm/case/add' | civicaseCrmUrl:{reset: 1, action: 'add', context: 'standalone'} }}"
+      crm-popup-form-success="refresh()">
+      <i class="material-icons">add_circle</i>
+      {{ ts('Add case') }}
+    </a>
+    <div class="clearfix" ng-if="totalResults > 0">
+      <div class="civicase__contact-cases-container pull-left col-md-6">
+        <!-- Open Cases -->
+        <div class="panel panel-default civicase__contact-cases-list">
+          <div class="panel-heading">
+            <h3 class="panel-title">Open Cases</h3>
+          </div>
+          <div class="panel-body panel-body-extra nopadding">
+            <civicase-contact-case-list case-type="'Opened'" pager-size="3" viewing-case="selectedCase.id"></civicase-contact-case-list>
+          </div>
+        </div>
+        <!-- End Open Cases -->
+        <!-- Closed Cases -->
+        <div class="panel panel-default civicase__contact-cases-list">
+          <div class="panel-heading">
+            <h3 class="panel-title">Resolved Cases</h3>
+          </div>
+          <div class="panel-body panel-body-extra nopadding">
+            <civicase-contact-case-list case-type="'Closed'" pager-size="3" viewing-case="selectedCase.id"></civicase-contact-case-list>
+          </div>
+        </div>
+        <!-- End Closed Cases -->
+        <!-- Other related Cases -->
+        <div class="panel panel-default civicase__contact-cases-list">
+          <div class="panel-heading">
+            <h3 class="panel-title">Other Cases for this contact</h3>
+          </div>
+          <div class="panel-body panel-body-extra nopadding">
+            <civicase-contact-case-list case-type="'Related'" pager-size="5" viewing-case="selectedCase.id"></civicase-contact-case-list>
+          </div>
+        </div>
+        <!-- End Other related cases -->
+      </div>
+    </div>      
+  </div>
+  <div  ng-if="totalResults == 0" class="civicase__contact-cases-empty">
+    <div class="civicase__activity-no-result-icon civicase__contact-cases-empty-icon"></div>
+    <div class="civicase__activity-card--big--empty-title"> This contact has no cases </div>
+    <div class="civicase__activity-card--big--empty-description"> Click the button below to create a new case for this contact </div>
+    <a ng-if="checkPerm('add cases')"
+      class="civicase__activity-card--big--empty-button btn"
+      ng-href="{{ 'civicrm/case/add' | civicaseCrmUrl:{reset: 1, action: 'add', context: 'standalone'} }}"
+      crm-popup-form-success="refresh()">
+      {{ ts('Add new case') }}
+    </a>
+  </div>
+</div>

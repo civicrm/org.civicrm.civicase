@@ -497,7 +497,7 @@ function civicase_civicrm_pageRun(&$page) {
     }
   }
   // Adds Moment.js file to Civicase Angular Page.
-  if ($page instanceof CRM_Civicase_Page_CaseAngular) {
+  if ($page instanceof CRM_Civicase_Page_CaseAngular || $page instanceof CRM_Contact_Page_View_Summary) {
     CRM_Core_Resources::singleton()->addScriptFile('uk.co.compucorp.civicase', 'packages/moment.min.js');
   }
 }
