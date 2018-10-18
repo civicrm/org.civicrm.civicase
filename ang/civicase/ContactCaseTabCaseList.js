@@ -8,7 +8,8 @@
       controller: CivicaseContactCaseTabCaseListController,
       templateUrl: '~/civicase/ContactCaseTabCaseList.html',
       scope: {
-        'caseObj': '='
+        'caseObj': '=',
+        'viewingCaseId': '='
       }
     };
   });
@@ -23,7 +24,14 @@
      * Emits loadmore event
      */
     $scope.loadMore = function () {
-      $scope.$emit('civicase::contact-record-list::loadmore', $scope.caseObj.name);
+      $scope.$emit('civicase::contact-record-list::load-more', $scope.caseObj.name);
+    };
+
+    /**
+     * Emits view-case event
+     */
+    $scope.viewCase = function (caseObj) {
+      $scope.$emit('civicase::contact-record-list::view-case', caseObj);
     };
   }
 })(angular, CRM.$, CRM._);

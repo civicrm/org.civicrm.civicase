@@ -1,8 +1,7 @@
 /* eslint-env jasmine */
-
 (function (_) {
   describe('civicaseCaseDetails', function () {
-    var $provide, element, $compile, $rootScope, $scope, CasesData, crmApiMock;
+    var $provide, element, $compile, $rootScope, $scope, crmApi, $q, formatCase, CasesData;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
       $provide = _$provide_;
@@ -20,12 +19,18 @@
       $provide.value('formatCase', formatCaseMock);
     }));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_, _crmApi_, _$q_, _formatCase_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       CasesData = _CasesData_.get();
       $scope = $rootScope.$new();
+      $q = _$q_;
+      crmApi = _crmApi_;
+      formatCase = _formatCase_;
+
+      crmApi.and.returnValue($q.resolve(_.cloneDeep(formatCase(CasesData))));
     }));
+
 
     describe('basic tests', function () {
       beforeEach(function () {

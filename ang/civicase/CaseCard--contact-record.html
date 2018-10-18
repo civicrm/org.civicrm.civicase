@@ -1,8 +1,10 @@
 <div
   class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--detached"
   ng-style="{'border-left-color': data.color}"
-  ng-class="{'civicase__case-card--closed': data.status === 'Resolved'}
-  ">
+  ng-class="{
+    'civicase__case-card--closed': data.status === 'Resolved',
+    'civicase__case-card--active': $parent.viewingCaseId === data.id
+  }">
   <div class="panel-body">
     <div class="civicase__case-card__row civicase__case-card__row--primary clearfix">
       <div class="pull-left civicase__case-card-title">{{ data.subject }}</div>
@@ -12,8 +14,8 @@
         <span class="civicase__pipe" ng-if="data.status !== 'Resolved'"> | </span>
         <span ng-if="data.status !== 'Resolved'">
           <span>Next Milestone: </span>
-          <span
-            class="civicase__case-card__date civicase__overdue-activity-icon"
+          <span 
+            class="civicase__case-card__date"
             ng-class="{'civicase__overdue-activity-icon': data.activity_summary.milestone[0].is_overdue}"
             >
           {{ formatDate(data.activity_summary.milestone[0].activity_date_time, 'DD/MM/YYYY') }}

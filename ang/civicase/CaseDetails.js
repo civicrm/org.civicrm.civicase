@@ -30,7 +30,7 @@
     $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;
-    $scope.item = null;
+    $scope.item = $scope.item || null;
     $scope.tabs = [
       {name: 'summary', label: ts('Summary')},
       {name: 'activities', label: ts('Activities')},

@@ -5,7 +5,7 @@
 
     beforeEach(module('civicase', 'civicase.templates', 'civicase.data'));
 
-    beforeEach(inject(function (_$q_, _$compile_, _$rootScope_, _crmApi_, _CasesData_, _formatCase_) {
+    beforeEach(inject(function (_$q_, _$compile_, _$rootScope_, _crmApi_, _CasesData_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
@@ -66,7 +66,7 @@
      * Listener for `civicase::contact-record-case::loadmore` event
      */
     function listenForContactCasesListLoadMoreEvent () {
-      $rootScope.$on('civicase::contact-record-list::loadmore', function (event, type) {
+      $rootScope.$on('civicase::contact-record-list::load-more', function (event, type) {
         eventResponse = type;
       });
     }

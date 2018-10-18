@@ -188,6 +188,13 @@
     vertical-align: unset;
   }
 
+  .civicase__case-card-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: calc(100% - 300px);
+  }
+
   &.civicase__case-card--closed {
     background: $gray-lighter;
     min-height: auto;
@@ -196,6 +203,10 @@
     .civicase__case-card-title {
       color: inherit;
     }
+  }
+
+  &.civicase__case-card--active {
+    box-shadow: 0 0 0 5px $activity-feed-active-bg;
   }
 }
 

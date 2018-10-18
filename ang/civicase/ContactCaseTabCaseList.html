@@ -1,7 +1,12 @@
 <div>
-  <civicase-case-card mode="contact-record" case="case" ng-repeat="case in caseObj.cases"></civicase-case-card>
-  <div
-    class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--detached" 
+  <civicase-case-card 
+    mode="contact-record"
+    case="case"
+    ng-click="viewCase(case)"
+    ng-repeat="case in caseObj.cases">
+    </civicase-case-card>
+  <div 
+    class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--detached"
     ng-repeat="placeholder in loadingPlaceholders"
     ng-if="!caseObj.isLoaded">
     <div class="panel-body">

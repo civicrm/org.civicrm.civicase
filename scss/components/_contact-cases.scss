@@ -2,13 +2,32 @@
   margin-left: -5px;
 }
 
-.civicase__contact-cases-tab-details,
 .civicase__contact-cases-tab-container {
   padding-left: 15px;
   padding-right: 15px;
 }
 
 .civicase__contact-cases-tab-list {
+  box-shadow: none;
+
+  > .panel-heading {
+    background: transparent;
+    padding: 15px 0;
+  }
+
+  > .panel-body {
+    background: transparent;
+    padding: 0;
+  }
+
+  .civicase__case-list {
+    >.panel {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.civicase__contact-cases-panel {
   box-shadow: none;
 
   > .panel-heading {
@@ -60,6 +79,86 @@
     position: relative;
     top: 2px;    
   }
+}
+
+.civicase__contact-cases-details {
+  box-shadow: $box-shadow-block;
+
+  > .panel-body {
+    padding: 0;
+  }
+
+  .btn-group {
+    margin-right: 5px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .civicase__pipe {
+    color: $gray-light;
+    margin: 0 8px;
+  }
+
+  .civicase__activity-card {
+    width: 100%;
+  }
+
+  .civicase__summary-tab__subject {
+    margin-bottom: 3px;
+    margin-left: -2px;
+    margin-top: 5px;
+  }
+
+  .civicase__contact-name-container {
+    span {
+      line-height: 0;
+    }
+
+    .material-icons {
+      vertical-align: middle;
+    }
+  }
+}
+
+.civicase__contact-cases-details__title {
+  margin: 6.5px 0;
+}
+
+.civicase__contact-cases__panel-row {
+  border-bottom: 1px solid $gray-light;
+  padding: 15px 24px;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.civicase__contact-cases__panel-actions {
+  padding: 20px;
+}
+
+.civicase__contact-cases__panel-row--dark {
+  background-color: $gray-lighter;
+}
+
+.civicase__contact-cases__panel-fields {
+  padding-bottom: 15px;
+}
+
+.civicase__contact-cases__panel-fields--inline {
+  align-items: center;
+  display: flex;
+}
+
+.civicase__contact-cases__panel-field-emphasis {
+  color: $crm-gray-matte;
+}
+
+.civicase__contact-cases__panel-field-title {
+  color: $crm-gray-matte;
+  margin-bottom: 5px;
 }
 
 .___outside-namespace {
