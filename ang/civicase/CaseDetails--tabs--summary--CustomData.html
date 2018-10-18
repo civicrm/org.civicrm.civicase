@@ -1,16 +1,17 @@
-<div class="clearfix civicase__summary-tab-tile-container">
-  <div class="civicase__summary-tab-tile civicase__case-custom-fields__container row">
-    <div
-      class="panel panel-default civicase__panel-transparent-header col-lg-6"
-      ng-repeat="(index, customGroup) in item.customData">
-      <div class="panel-heading">
-        <h3 class="panel-title">{{ ::customGroup.title }}</h3>
-      </div>
-      <div class="panel-body" civicase-edit-custom-data>
-        <div ng-repeat="field in customGroup.fields" class="civicase__case-custom-fields">
-          <div class="civicase__case-custom-field__label">{{ field.label }}</div>
-          <div class="civicase__case-custom-field__value">{{ field.value.display || 'Click to set value' }}</div>
-        </div>
+<div class="clearfix civicase__summary-tab-tile-container civicase__case-custom-fields__container"
+  civicase-masonry-grid>
+  <div
+    class="panel panel-default civicase__panel-transparent-header"
+    civicase-masonry-grid-item
+    ng-if="!customGroup.isHidden"
+    ng-repeat="(index, customGroup) in item.customData">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ ::customGroup.title }}</h3>
+    </div>
+    <div class="panel-body" civicase-edit-custom-data>
+      <div ng-repeat="field in customGroup.fields" class="civicase__case-custom-fields">
+        <div class="civicase__case-custom-field__label">{{ field.label }}</div>
+        <div class="civicase__case-custom-field__value">{{ field.value.display || 'Click to set value' }}</div>
       </div>
     </div>
   </div>

@@ -3,12 +3,7 @@
     padding-top: 0;
   }
 
-  .col-lg-6:nth-child(2n+1) {
-    clear: left;
-  }
-
-  // Adds a margin top to headings from the 3rd element onwards:
-  .civicase__panel-transparent-header:nth-child(1n+3) {
+  [civicase-masonry-grid-item]:nth-child(1n+2) {
     margin-top: 30px;
   }
 
@@ -95,12 +90,6 @@
         }
         /* stylelint-enable max-nesting-depth, selector-max-compound-selectors */
       }
-    }
-  }
-
-  @media (max-width: $screen-md-max) {
-    .civicase__panel-transparent-header:nth-child(1n+2) {
-      margin-top: 30px;
     }
   }
 }
