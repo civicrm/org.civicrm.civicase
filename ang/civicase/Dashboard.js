@@ -1,4 +1,4 @@
-(function (angular) {
+(function (angular, $) {
   var module = angular.module('civicase');
 
   module.config(function ($routeProvider) {
@@ -25,6 +25,20 @@
       initWatchers();
       prepareCaseFilterOption();
     }());
+
+    $scope.caseListLink = function (type, status) {
+      var cf = {};
+      if (type) {
+        cf.case_type_id = [type];
+      }
+      if (status) {
+        cf.status_id = [status];
+      }
+      if ($scope.myCasesOnly) {
+        cf.case_manager = [CRM.config.user_contact_id];
+      }
+      return '#/case/list?' + $.param({cf: JSON.stringify(cf)});
+    };
 
     /**
      * Bind route paramaters to scope variables
@@ -72,4 +86,4 @@
       $scope.caseRelationshipOptions = options;
     }
   }
-})(angular);
+})(angular, CRM.$);
