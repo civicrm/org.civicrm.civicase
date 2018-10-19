@@ -46,3 +46,30 @@
     }
   }
 }
+
+.civicase__dashboard__tab {
+  background: $gray-light;
+
+  > .civicase__dashboard__tab__top {
+    margin-bottom: $case-gutter-width;
+  }
+}
+
+.civicase__dashboard__tab__main {
+  display: flex;
+  margin: auto;
+  max-width: $case-max-width;
+}
+
+.civicase__dashboard__tab__main__left {
+  flex-basis: 300px + $case-gutter-width;
+  flex-grow: 0;
+  margin-left: -#{$case-gutter-width/2};
+  padding: 0 $case-gutter-width/2;
+}
+
+.civicase__dashboard__tab__main__right {
+  flex-grow: 1;
+  margin-right: -#{$case-gutter-width/2};
+  padding: 0 $case-gutter-width/2;
+}
