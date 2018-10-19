@@ -1,4 +1,4 @@
-(function (angular, $, _) {
+(function (angular) {
   var module = angular.module('civicase');
 
   module.config(function ($routeProvider) {
@@ -50,6 +50,13 @@
     }
 
     /**
+     * Initialise watchers
+     */
+    function initWatchers () {
+      $scope.$watch('filters.caseRelationshipType', caseRelationshipTypeWatcher);
+    }
+
+    /**
      * Prepare case filter options for crmUiSelect
      */
     function prepareCaseFilterOption () {
@@ -64,12 +71,5 @@
 
       $scope.caseRelationshipOptions = options;
     }
-
-    /**
-     * Initialise watchers
-     */
-    function initWatchers () {
-      $scope.$watch('filters.caseRelationshipType', caseRelationshipTypeWatcher);
-    }
   }
-})(angular, CRM.$, CRM._);
+})(angular);
