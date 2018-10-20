@@ -14,12 +14,14 @@
      * @param {Object} $scope the directive's scope.
      * @param {Object} $element a reference to the directive's element.
      * @param {Object} attrs a map of attributes associated to the element.
-     * @param {Object} masonryGrid a reference to the directive's controller.
+     * @param {Object} ctrl a reference to the directive's controller.
      */
-    function civicaseMasonryGridLink ($scope, $element, attrs, masonryGrid) {
+    function civicaseMasonryGridLink ($scope, $element, attrs, ctrl) {
+      var NO_OF_COLUMNS = 2;
+
       (function init () {
         $timeout(function () {
-          appendMasonryContainers();
+          appendMasonryColumns();
           arrangeGridItems();
           $scope.$on('civicaseMasonryGrid::updated', arrangeGridItems);
         });
@@ -28,11 +30,10 @@
       /**
        * Appends the masonry containers used for splitting the grid items.
        */
-      function appendMasonryContainers () {
-        _.times(2).forEach(function () {
+      function appendMasonryColumns () {
+        _.times(NO_OF_COLUMNS).forEach(function () {
           $('<div></div>')
-            .addClass('civicase__summary-tab-tile')
-            .addClass('civicase__masonry-grid__container')
+            .addClass('civicase__summary-tab-tile civicase__masonry-grid__column')
             .appendTo($element);
         });
       }
@@ -43,9 +44,9 @@
       function arrangeGridItems () {
         $element.find('civicase-masonry-grid-item').detach();
 
-        masonryGrid.$gridItems.forEach(function ($gridItem, index) {
+        ctrl.$gridItems.forEach(function ($gridItem, index) {
           var columnIndex = index % 2;
-          var $column = $element.find('.civicase__masonry-grid__container').eq(columnIndex);
+          var $column = $element.find('.civicase__masonry-grid__column').eq(columnIndex);
 
           $gridItem.appendTo($column);
         });

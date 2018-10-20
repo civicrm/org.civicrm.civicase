@@ -78,7 +78,7 @@
        * @return {String}
        */
       function getGridItemsTextsForColumn (columnIndex) {
-        return $masonryGrid.find('.civicase__masonry-grid__container')
+        return $masonryGrid.find('.civicase__masonry-grid__column')
           .eq(columnIndex)
           .find('civicase-masonry-grid-item')
           .map(function () {
