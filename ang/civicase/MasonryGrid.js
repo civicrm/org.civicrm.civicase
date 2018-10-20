@@ -3,6 +3,7 @@
 
   module.directive('civicaseMasonryGrid', function ($timeout) {
     return {
+      restrict: 'E',
       controller: 'civicaseMasonryGridController',
       link: civicaseMasonryGridLink
     };
@@ -40,15 +41,13 @@
        * Sorts the grid items into one of the two grid containers.
        */
       function arrangeGridItems () {
-        $timeout(function () {
-          $element.find('[civicase-masonry-grid-item]').detach();
+        $element.find('civicase-masonry-grid-item').detach();
 
-          masonryGrid.$gridItems.forEach(function ($gridItem, index) {
-            var columnIndex = index % 2;
-            var $column = $element.find('.civicase__masonry-grid__container').eq(columnIndex);
+        masonryGrid.$gridItems.forEach(function ($gridItem, index) {
+          var columnIndex = index % 2;
+          var $column = $element.find('.civicase__masonry-grid__container').eq(columnIndex);
 
-            $gridItem.appendTo($column);
-          });
+          $gridItem.appendTo($column);
         });
       }
     }
@@ -93,6 +92,7 @@
 
   module.directive('civicaseMasonryGridItem', function () {
     return {
+      restrict: 'E',
       require: '^civicaseMasonryGrid',
       link: civicaseMasonryGridItemLink
     };
@@ -107,7 +107,11 @@
      */
     function civicaseMasonryGridItemLink ($scope, $element, attrs, masonryGrid) {
       (function init () {
-        masonryGrid.addGridItem($element);
+        if (attrs.position) {
+          masonryGrid.addGridItemAt($element, attrs.position);
+        } else {
+          masonryGrid.addGridItem($element);
+        }
 
         $scope.$on('$destroy', function () {
           masonryGrid.removeGridItem($element);

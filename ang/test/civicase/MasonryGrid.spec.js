@@ -4,20 +4,7 @@
   describe('Masonry Grid', function () {
     var $compile, $masonryGrid, $rootScope, $scope, $timeout;
 
-    beforeEach(module('civicase', function ($compileProvider) {
-      $compileProvider.directive('specialGridItem', function () {
-        return {
-          require: '^civicaseMasonryGrid',
-          link: specialGridItemLink
-        };
-
-        function specialGridItemLink ($scope, $element, attrs, civicaseMasonryGrid) {
-          $element.on('click', function () {
-            civicaseMasonryGrid.addGridItemAt($element, $scope.specialPosition);
-          });
-        }
-      });
-    }));
+    beforeEach(module('civicase'));
 
     beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
       $compile = _$compile_;
@@ -52,7 +39,6 @@
           $scope.showSpecial = false;
 
           $rootScope.$digest();
-          $timeout.flush();
 
           leftColumnItems = getGridItemsTextsForColumn(0);
           rightColumnItems = getGridItemsTextsForColumn(1);
@@ -69,13 +55,7 @@
 
       describe('when the Special item requests to be moved to the 4th position', function () {
         beforeEach(function () {
-          initDirective();
-
-          $scope.specialPosition = 3; // zero based
-          $masonryGrid.find('[special-grid-item]').click();
-
-          $rootScope.$digest();
-          $timeout.flush();
+          initDirective({ specialPosition: 3 });
 
           leftColumnItems = getGridItemsTextsForColumn(0);
           rightColumnItems = getGridItemsTextsForColumn(1);
@@ -100,7 +80,7 @@
       function getGridItemsTextsForColumn (columnIndex) {
         return $masonryGrid.find('.civicase__masonry-grid__container')
           .eq(columnIndex)
-          .find('[civicase-masonry-grid-item]')
+          .find('civicase-masonry-grid-item')
           .map(function () {
             return $(this).text().trim();
           })
@@ -112,21 +92,23 @@
     /**
      * Initialzes the masonry grid directive.
      */
-    function initDirective () {
-      var html = `<div civicase-masonry-grid>
-        <div civicase-masonry-grid-item
-          special-grid-item
+    function initDirective (scopeValues) {
+      var defaultScopeValues = {
+        showSpecial: true,
+        specialPosition: 0
+      };
+      var html = `<civicase-masonry-grid>
+        <civicase-masonry-grid-item ng-repeat="i in [1,2,3,4,5]">
+          {{i}}
+        </civicase-masonry-grid-item>
+        <civicase-masonry-grid-item
+          position="{{specialPosition}}"
           ng-if="showSpecial">
           Special
-        </div>
-        <div ng-repeat="i in [1,2,3,4,5]"
-          civicase-masonry-grid-item>
-          {{i}}
-        </div>
-
-      </div>`;
+        </civicase-masonry-grid-item>
+      </civicase-masonry-grid>`;
       $scope = $rootScope.$new();
-      $scope.showSpecial = true;
+      $scope = _.assign($scope, defaultScopeValues, scopeValues);
       $masonryGrid = $compile(html)($scope);
 
       $rootScope.$digest();

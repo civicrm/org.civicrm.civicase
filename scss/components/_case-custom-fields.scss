@@ -3,7 +3,7 @@
     padding-top: 0;
   }
 
-  [civicase-masonry-grid-item]:nth-child(1n+2) {
+  civicase-masonry-grid-item:not(:first-child) {
     margin-top: 30px;
   }
 
