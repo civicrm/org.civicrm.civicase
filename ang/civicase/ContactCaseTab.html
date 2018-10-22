@@ -9,42 +9,20 @@
       <i class="material-icons">add_circle</i>
       {{ ts('Add case') }}
     </a>
-    <div class="clearfix" ng-if="totalResults > 0">
+    <div class="clearfix" ng-if="totalCount > 0">
       <div class="civicase__contact-cases-container pull-left col-md-6">
-        <!-- Open Cases -->
-        <div class="panel panel-default civicase__contact-cases-list">
+        <div  ng-repeat="case in cases" class="panel panel-default civicase__contact-cases-list">
           <div class="panel-heading">
-            <h3 class="panel-title">Open Cases</h3>
+            <h3 class="panel-title"> {{ case.title }}</h3>
           </div>
           <div class="panel-body panel-body-extra nopadding">
-            <civicase-contact-case-list case-type="'Opened'" pager-size="3"></civicase-contact-case-list>
+            <civicase-contact-case-tab-list case-obj="case"></civicase-contact-case-tab-list>
           </div>
         </div>
-        <!-- End Open Cases -->
-        <!-- Closed Cases -->
-        <div class="panel panel-default civicase__contact-cases-list">
-          <div class="panel-heading">
-            <h3 class="panel-title">Resolved Cases</h3>
-          </div>
-          <div class="panel-body panel-body-extra nopadding">
-            <civicase-contact-case-list case-type="'Closed'" pager-size="3"></civicase-contact-case-list>
-          </div>
-        </div>
-        <!-- End Closed Cases -->
-        <!-- Other related Cases -->
-        <div class="panel panel-default civicase__contact-cases-list">
-          <div class="panel-heading">
-            <h3 class="panel-title">Other Cases for this contact</h3>
-          </div>
-          <div class="panel-body panel-body-extra nopadding">
-            <civicase-contact-case-list case-type="'Related'" pager-size="5"></civicase-contact-case-list>
-          </div>
-        </div>
-        <!-- End Other related cases -->
       </div>
     </div>      
   </div>
-  <div  ng-if="totalResults == 0" class="civicase__contact-cases-empty">
+  <div  ng-if="totalCount == 0" class="civicase__contact-cases-empty">
     <div class="civicase__activity-no-result-icon civicase__contact-cases-empty-icon"></div>
     <div class="civicase__activity-card--big--empty-title"> This contact has no cases </div>
     <div class="civicase__activity-card--big--empty-description"> Click the button below to create a new case for this contact </div>

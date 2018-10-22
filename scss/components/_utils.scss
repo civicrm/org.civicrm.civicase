@@ -15,3 +15,12 @@
   cursor: no-drop;
   pointer-events: none;
 }
+
+.civicase__spinner {
+  animation: spin 1.5s linear infinite;
+  background: url('../resources/icons/spinner.svg') no-repeat center center !important;
+  display: block;
+  height: 32px;
+  margin: auto;
+  width: 32px;
+}

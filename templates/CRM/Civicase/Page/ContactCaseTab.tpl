@@ -8,7 +8,7 @@
       angular.module('civicaseContactTab').config(function($routeProvider) {
         $routeProvider.when('/', {
           reloadOnSearch: false,
-          template: '<civicase-contact-case></civicase-contact-case>'
+          template: '<civicase-contact-case-tab></civicase-contact-case-tab>'
         });
       });
     })(angular, CRM.$, CRM._);

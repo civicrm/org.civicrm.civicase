@@ -28,6 +28,14 @@
   }
 }
 
+.civicase__contact-cases-list-footer {
+  margin-top: 24px;
+
+  .btn {
+    box-shadow: $box-shadow-block;
+  }  
+}
+
 .civicase__contact-cases-empty {
   align-items: center;
   display: flex;

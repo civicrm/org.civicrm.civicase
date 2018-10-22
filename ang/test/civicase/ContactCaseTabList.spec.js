@@ -1,0 +1,74 @@
+/* eslint-env jasmine */
+(function ($, _) {
+  describe('ContactCaseTabList', function () {
+    var $compile, $scope, $rootScope, element, eventResponse, CasesData;
+
+    beforeEach(module('civicase', 'civicase.templates', 'civicase.data'));
+
+    beforeEach(inject(function (_$q_, _$compile_, _$rootScope_, _crmApi_, _CasesData_, _formatCase_) {
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+      $scope = $rootScope.$new();
+      CasesData = {
+        'name': 'opened',
+        'title': 'Open Cases',
+        'filterParams': {
+          'status_id.grouping': 'Opened',
+          'contact_id': jasmine.any(Number)
+        },
+        'isLoaded': false,
+        'showSpinner': false,
+        'cases': _CasesData_.get(),
+        'isLoadMoreAvailable': true,
+        'page': {
+          'size': 3,
+          'num': 1
+        }
+      };
+    }));
+
+    beforeEach(function () {
+      spyOn($scope, '$emit').and.callThrough();
+    });
+
+    describe('basic tests', function () {
+      beforeEach(function () {
+        compileDirective();
+      });
+
+      it('complies the ContactCaseTabList directive', function () {
+        expect(element.html()).toContain('<!-- ngRepeat: case in caseObj.cases -->');
+      });
+    });
+
+    describe('loadMore()', function () {
+      beforeEach(function () {
+        listenForContactCasesListLoadMoreEvent();
+        compileDirective();
+        element.isolateScope().loadMore();
+      });
+
+      it('emits event', function () {
+        expect(eventResponse).toBe('opened');
+      });
+    });
+
+    /**
+     * Compiles the directive
+     */
+    function compileDirective () {
+      $scope.caseObj = CasesData;
+      element = $compile('<civicase-contact-case-tab-list case-obj="caseObj" ></civicase-contact-case-tab-list>')($scope);
+      $scope.$digest();
+    }
+
+    /**
+     * Listener for `civicase::contact-record-case::cases-loaded` event
+     */
+    function listenForContactCasesListLoadMoreEvent () {
+      $rootScope.$on('civicase::contact-record-list::loadmore', function (event, type) {
+        eventResponse = type;
+      });
+    }
+  });
+}(CRM.$, CRM._));
