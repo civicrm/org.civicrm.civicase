@@ -47,6 +47,10 @@
   &.active {
     background: $activity-feed-active-bg;
   }
+
+  &.civicase__animated-checkbox-card--expanded {
+    padding-left: 50px;
+  }
 }
 
 .civicase__activity-feed__list__vertical_bar {
