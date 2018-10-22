@@ -42,6 +42,7 @@
   min-height: 149px;
 
   .civicase__contact-name,
+  .civicase__case-card-title,
   .civicase__contact-additional__container,
   .civicase__case-card__type {
     text-decoration: line-through;
@@ -155,6 +156,10 @@
   box-shadow: $box-shadow-block;
   color: $crm-gray-matte;
   margin-bottom: 10px;
+  
+  >.panel-body {
+    padding: 0;
+  }
 
   .civicase__case-card__date {
     color: $gray-dark;
@@ -168,10 +173,16 @@
     .civicase__case-card-title {
       color: inherit;
     }
+  }
+}
 
-    .civicase__case-card-title {
-      text-decoration: line-through;
-    }
+.civicase__case-card-role-container {
+  > * {
+    vertical-align: middle;
+  }
+
+  .material-icons {
+    margin-right: 5px;
   }
 }
 
@@ -181,38 +192,19 @@
   line-height: 18px;
 }
 
-.civicase__case-card-role-container {
-  border-top: 1px solid $gray-light;
+.civicase__case-card__row {
+  border-bottom: 1px solid $gray-light;
   clear: both;
-  margin: 15px -20px 0;
-  padding: 10px 20px 0;
 
-  > * {
-    vertical-align: middle;
-  }
-
-  > i {
-    margin-right: 5px;
+  &:last-child {
+    border-bottom: 0;
   }
 }
 
-// Todo to be removed once bulk actions has been discussed properly.
-// .civicase__case-card-lock {
-//   color: $crm-white;
-//   font-size: 38px;
-//   height: 100%;
-//   left: 0;
-//   position: absolute;
-//   top: 0;
-//   width: 100%;
+.civicase__case-card__row--primary {
+  padding: 15px;
+}
 
-//   &:hover {
-//     color: inherit;
-//   }
-// }
-
-// .civicase__case-card-lock__inner {
-//   position: absolute;
-//   right: 20px;
-//   top: 57px;
-// }
+.civicase__case-card__row--secondary {
+  padding: 10px 15px;
+}

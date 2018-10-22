@@ -11,7 +11,7 @@
   });
 
   function CivicaseContactCaseTabController ($scope, crmApi, formatCase) {
-    $scope.cases = [
+    $scope.casesList = [
       {
         'name': 'opened',
         'title': 'Open Cases',
@@ -23,6 +23,7 @@
         'showSpinner': false,
         'cases': [],
         'isLoadMoreAvailable': false,
+        'showContactRole': false,
         'page': {
           'size': 3,
           'num': 1
@@ -38,6 +39,7 @@
         'showSpinner': false,
         'cases': [],
         'isLoadMoreAvailable': false,
+        'showContactRole': false,
         'page': {
           'size': 3,
           'num': 1
@@ -52,6 +54,7 @@
         'showSpinner': false,
         'cases': [],
         'isLoadMoreAvailable': false,
+        'showContactRole': true,
         'page': {
           'size': 3,
           'num': 1
@@ -81,12 +84,12 @@
      * @params {String} name of the list
      */
     function contactRecordListLoadmoreWatcher (event, name) {
-      var ind = _.findIndex($scope.cases, function (caseObj) {
+      var ind = _.findIndex($scope.casesList, function (caseObj) {
         return caseObj.name === name;
       });
-      var params = getCaseApiParams($scope.cases[ind].filterParams, $scope.cases[ind].page);
+      var params = getCaseApiParams($scope.casesList[ind].filterParams, $scope.casesList[ind].page);
 
-      $scope.cases[ind].showSpinner = true;
+      $scope.casesList[ind].showSpinner = true;
       updateCase(ind, params);
     }
 
@@ -96,7 +99,7 @@
     function getCases () {
       var totalCountApi = [];
 
-      _.each($scope.cases, function (item, ind) {
+      _.each($scope.casesList, function (item, ind) {
         var params = getCaseApiParams(item.filterParams, item.page);
 
         updateCase(ind, params);
@@ -195,17 +198,17 @@
     function updateCase (ind, params) {
       crmApi(params).then(function (response) {
         _.each(response.cases.values, function (item) {
-          if ($scope.cases[ind].isRelated) {
+          if ($scope.casesList[ind].showContactRole) {
             item.contact_role = getContactRole(item);
           }
 
-          $scope.cases[ind].cases.push(formatCase(item));
+          $scope.casesList[ind].cases.push(formatCase(item));
         });
 
-        $scope.cases[ind].isLoaded = true;
-        $scope.cases[ind].showSpinner = false;
-        $scope.cases[ind].page.num += 1;
-        $scope.cases[ind].isLoadMoreAvailable = $scope.cases[ind].cases.length < response.count;
+        $scope.casesList[ind].isLoaded = true;
+        $scope.casesList[ind].showSpinner = false;
+        $scope.casesList[ind].page.num += 1;
+        $scope.casesList[ind].isLoadMoreAvailable = $scope.casesList[ind].cases.length < response.count;
       });
     }
   }

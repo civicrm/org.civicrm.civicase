@@ -8,7 +8,7 @@
           case 'other-case':
             return '~/civicase/CaseCard--other-cases.html';
           case 'long':
-            return '~/civicase/CaseCard--Long.html';
+            return '~/civicase/CaseCard--long.html';
           default:
             return '~/civicase/CaseCard--case-list.html';
         }

@@ -11,7 +11,9 @@
     </a>
     <div class="clearfix" ng-if="totalCount > 0">
       <div class="civicase__contact-cases-container pull-left col-md-6">
-        <div  ng-repeat="case in cases" class="panel panel-default civicase__contact-cases-list">
+        <div  
+          ng-repeat="case in casesList" 
+          class="panel panel-default civicase__contact-cases-list">
           <div class="panel-heading">
             <h3 class="panel-title"> {{ case.title }}</h3>
           </div>
