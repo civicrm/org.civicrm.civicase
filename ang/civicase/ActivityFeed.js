@@ -37,6 +37,7 @@
     $scope.activityGroups = [];
     $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.remaining = true;
+    $scope.selectedActivities = [];
     $scope.viewingActivity = {};
     $scope.caseTimelines = $scope.caseTypeId ? _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label') : [];
 
@@ -47,6 +48,19 @@
         $scope.viewActivity(activity.id, $event);
       });
     }());
+
+    /**
+     * Toggle Bulk Actions checkbox of the given activity
+     */
+    $scope.toggleSelected = function (activity) {
+      activity.selected = !activity.selected;
+
+      if (activity.selected) {
+        $scope.selectedActivities.push(activity);
+      } else {
+        _.remove($scope.selectedActivities, { id: activity.id });
+      }
+    };
 
     /**
      * Load next set of activities
@@ -119,6 +133,64 @@
           overdue_first: true,
           include_case: true
         }, $scope.params.displayOptions || {})
+      });
+    }
+
+    /**
+     * Bulk Selection Event Listener
+     *
+     * @params {Object} event
+     * @params {String} condition
+     */
+    function bulkSelectionsListener (event, condition) {
+      if (condition === 'none') {
+        deselectAllActivities();
+      } else if (condition === 'visible') {
+        selectDisplayedActivities();
+      } else if (condition === 'all') {
+        selectEveryActivity();
+      }
+    }
+
+    /**
+     * Deselection of all activities
+     *
+     * Updates the visible activities and other activities are updated on FE
+     * by activities object watcher see `casesWatcher` function
+     */
+    function deselectAllActivities () {
+      $scope.allActivitiesSelected = false;
+      _.each($scope.activities, function (activity) {
+        activity.selected = false;
+      });
+      $scope.selectedActivities = [];
+    }
+
+    /**
+     * Select all Activity
+     */
+    function selectEveryActivity () {
+      $scope.selectedActivities = [];
+      selectDisplayedActivities(); // Update the UI model with displayed cases selected;
+      $scope.allActivitiesSelected = true;
+    }
+
+    /**
+     * Select All visible data.
+     */
+    function selectDisplayedActivities () {
+      var isCurrentActivityInSelectedCases;
+
+      $scope.allActivitiesSelected = false;
+
+      _.each($scope.activities, function (activity) {
+        activity.selected = true;
+        isCurrentActivityInSelectedCases = _.find($scope.selectedActivities, {
+          id: activity.id
+        });
+        if (!isCurrentActivityInSelectedCases) {
+          $scope.selectedActivities.push(activity);
+        }
       });
     }
 
@@ -278,6 +350,7 @@
       $scope.$watchCollection('displayOptions', getActivities);
       $scope.$watch('params.filters', getActivities, true);
       $scope.$on('updateCaseData', getActivities);
+      $scope.$on('civicase::bulk-actions::bulk-selections', bulkSelectionsListener);
     }
 
     /**

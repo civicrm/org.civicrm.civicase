@@ -7,6 +7,8 @@
       scope: {
         showCheckboxes: '=?',
         caseTimelines: '=',
+        displayedCount: '=',
+        totalCount: '=',
         filters: '=civicaseActivityFilters',
         displayOptions: '=displayOptions'
       },

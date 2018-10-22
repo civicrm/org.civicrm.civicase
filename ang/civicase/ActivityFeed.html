@@ -1,7 +1,8 @@
 <div class="panel panel-default civicase__activity-feed">
   <div
     civicase-activity-filters="filters" case-timelines="caseTimelines"
-    display-options="displayOptions" show-checkboxes="showCheckboxes">
+    display-options="displayOptions" show-checkboxes="showCheckboxes"
+    displayed-count="activities.length" total-count="totalCount">
   </div>
 
   <div class="panel-body clearfix">
@@ -28,8 +29,9 @@
                 class="civicase__checkbox civicase__checkbox--bulk-action"
                 role="checkbox"
                 tabindex="0"
-                aria-labelledby="Select/Unselect">
-                <i ng-if="activity.selected" class="civicase__checkbox--checked material-icons">check_box</i>
+                aria-labelledby="Select/Unselect"
+                ng-click="toggleSelected(activity); $event.stopPropagation();">
+                <i ng-if="activity.selected || allActivitiesSelected" class="civicase__checkbox--checked material-icons">check_box</i>
               </span>
               <div
                 ng-class="{'civicase__activity-feed__list__vertical_bar': $index< activityGroups.length- 1 }"
