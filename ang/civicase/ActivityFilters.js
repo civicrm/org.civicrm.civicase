@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityFilters', function ($timeout, crmUiHelp) {
+  module.directive('civicaseActivityFilters', function ($timeout, crmUiHelp, BulkActions) {
     return {
       restrict: 'A',
       scope: {
@@ -10,7 +10,8 @@
         displayedCount: '=',
         totalCount: '=',
         filters: '=civicaseActivityFilters',
-        displayOptions: '=displayOptions'
+        displayOptions: '=displayOptions',
+        selectedActivitiesCount: '='
       },
       replace: true,
       templateUrl: '~/civicase/ActivityFilters.html',
@@ -29,6 +30,7 @@
 
       $scope.activityCategories = prepareActivityCategories();
       $scope.availableFilters = prepareAvailableFilters();
+      $scope.bulkAllowed = BulkActions.isAllowed();
       // Default exposed filters
       $scope.exposedFilters = {
         activity_type_id: true,

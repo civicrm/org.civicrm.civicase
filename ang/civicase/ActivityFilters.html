@@ -22,17 +22,20 @@
       displayed-count="displayedCount"
       is-select-all-available="true"
       show-checkboxes="showCheckboxes"
-      ng-show="$parent.bulkAllowed"/>
+      ng-show="bulkAllowed"/>
     <span
+      ng-if="bulkAllowed"
       class="civicase__bulkactions-actions-dropdown btn-group btn-group-sm">
       <div class="btn-group">
         <button
           type="button" class="btn btn-default"
+          ng-class="{disabled: !selectedActivitiesCount || !showCheckboxes}"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{ ts('Actions') }}
         </button>
         <button
           type="button" class="btn btn-default dropdown-toggle"
+          ng-class="{disabled: !selectedActivitiesCount || !showCheckboxes}"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="caret"></span>
         </button>
