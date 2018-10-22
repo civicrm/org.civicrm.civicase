@@ -39,7 +39,7 @@
                 <i ng-if="activity.selected || allActivitiesSelected" class="civicase__checkbox--checked material-icons">check_box</i>
               </span>
               <div
-                ng-class="{'civicase__activity-feed__list__vertical_bar': $index< activityGroups.length- 1 }"
+                ng-class="{'civicase__activity-feed__list__vertical_bar': $index< activityGroup.activities.length - 1 }"
                 class="civicase__activity-feed__list__activity-item">
                 <span ng-if="activity.source_contact_id" contact-card avatar="true" contacts="activity.source_contact_id"></span>
                 <div class="civicase__activity-feed__activity-container">
