@@ -1,14 +1,14 @@
-.civicase__contact-cases {
+.civicase__contact-cases-tab {
   margin-left: -5px;
 }
 
-.civicase__contact-cases-details,
-.civicase__contact-cases-container {
+.civicase__contact-cases-tab-details,
+.civicase__contact-cases-tab-container {
   padding-left: 15px;
   padding-right: 15px;
 }
 
-.civicase__contact-cases-list {
+.civicase__contact-cases-tab-list {
   box-shadow: none;
 
   > .panel-heading {
@@ -28,7 +28,7 @@
   }
 }
 
-.civicase__contact-cases-list-footer {
+.civicase__contact-case-tab__case-list__footer {
   margin-top: 24px;
 
   .btn {
@@ -36,7 +36,7 @@
   }  
 }
 
-.civicase__contact-cases-empty {
+.civicase__contact-cases-tab-empty {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -47,11 +47,11 @@
   }
 }
 
-.civicase__contact-cases-empty-icon {
+.civicase__contact-cases-tab-empty-icon {
   background-image: url('../resources/icons/cases.svg');
 }
 
-.civicase__contact-cases-add {
+.civicase__contact-cases-tab-add {
   background: $gray-dark;
   margin-bottom: 10px;
 
@@ -61,8 +61,6 @@
     top: 2px;    
   }
 }
-
-
 
 .___outside-namespace {
   .crm-contact-page {

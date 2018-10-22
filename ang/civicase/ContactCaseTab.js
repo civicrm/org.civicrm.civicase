@@ -10,55 +10,41 @@
     };
   });
 
-  function CivicaseContactCaseTabController ($scope, crmApi, formatCase) {
-    $scope.casesList = [
+  function CivicaseContactCaseTabController ($scope, crmApi, formatCase, Contact) {
+    var commonConfigs = {
+      'isLoaded': false,
+      'showSpinner': false,
+      'isLoadMoreAvailable': false,
+      'page': {
+        'size': 3,
+        'num': 1
+      }
+    };
+
+    $scope.casesListConfig = [
       {
         'name': 'opened',
         'title': 'Open Cases',
         'filterParams': {
           'status_id.grouping': 'Opened',
-          'contact_id': getSelectedContactId()
+          'contact_id': Contact.getContactIDFromUrl()
         },
-        'isLoaded': false,
-        'showSpinner': false,
-        'cases': [],
-        'isLoadMoreAvailable': false,
-        'showContactRole': false,
-        'page': {
-          'size': 3,
-          'num': 1
-        }
+        'showContactRole': false
       }, {
         'name': 'closed',
         'title': 'Closed Case',
         'filterParams': {
           'status_id.grouping': 'Closed',
-          'contact_id': getSelectedContactId()
+          'contact_id': Contact.getContactIDFromUrl()
         },
-        'isLoaded': false,
-        'showSpinner': false,
-        'cases': [],
-        'isLoadMoreAvailable': false,
-        'showContactRole': false,
-        'page': {
-          'size': 3,
-          'num': 1
-        }
+        'showContactRole': false
       }, {
         'name': 'related',
         'title': 'Other cases for this contact',
         'filterParams': {
-          'case_manager': getSelectedContactId()
+          'case_manager': Contact.getContactIDFromUrl()
         },
-        'isLoaded': false,
-        'showSpinner': false,
-        'cases': [],
-        'isLoadMoreAvailable': false,
-        'showContactRole': true,
-        'page': {
-          'size': 3,
-          'num': 1
-        }
+        'showContactRole': true
       }
     ];
 
@@ -66,6 +52,7 @@
     $scope.ts = CRM.ts('civicase');
 
     (function init () {
+      initCasesConfig();
       initSubscribers();
       getCases();
     }());
@@ -74,32 +61,33 @@
      * refresh function to set refresh cases
      */
     $scope.refresh = function () {
-      $scope.$emit('civicase::contact-record-case::refresh-cases');
+      initCasesConfig();
+      getCases();
     };
 
     /**
      * Watcher for civicase::contact-record-list::loadmore event
      *
-     * @params {Object} event
-     * @params {String} name of the list
+     * @param {Object} event
+     * @param {String} name of the list
      */
     function contactRecordListLoadmoreWatcher (event, name) {
-      var ind = _.findIndex($scope.casesList, function (caseObj) {
+      var caseListIndex = _.findIndex($scope.casesListConfig, function (caseObj) {
         return caseObj.name === name;
       });
-      var params = getCaseApiParams($scope.casesList[ind].filterParams, $scope.casesList[ind].page);
+      var params = getCaseApiParams($scope.casesListConfig[caseListIndex].filterParams, $scope.casesListConfig[caseListIndex].page);
 
-      $scope.casesList[ind].showSpinner = true;
-      updateCase(ind, params);
+      $scope.casesListConfig[caseListIndex].showSpinner = true;
+      updateCase(caseListIndex, params);
     }
 
     /**
-     * Initiate cases
+     * Fetch cases for each type of list and count total number of cases
      */
     function getCases () {
       var totalCountApi = [];
 
-      _.each($scope.casesList, function (item, ind) {
+      _.each($scope.casesListConfig, function (item, ind) {
         var params = getCaseApiParams(item.filterParams, item.page);
 
         updateCase(ind, params);
@@ -115,7 +103,6 @@
      * @param {object} filters
      * @param {object} sort
      * @param {object} page
-     *
      * @return {array}
      */
     function getCaseApiParams (filter, page) {
@@ -143,14 +130,14 @@
     }
 
     /**
-     * Returns contact role
+     * Returns contact role for the currently viewing contact
      *
-     * @params {Object} cases
+     * @param {Object} caseObj
      * @return {String} role
      */
     function getContactRole (caseObj) {
       var contact = _.find(caseObj.contacts, {
-        contact_id: getSelectedContactId()
+        contact_id: Contact.getContactIDFromUrl()
       });
 
       return contact ? contact.role : 'No Role Associated';
@@ -158,6 +145,8 @@
 
     /**
      * Fetches count of all the cases a contact have
+     *
+     * @param {Array} apiCall
      */
     function getTotalCasesCount (apiCall) {
       var count = 0;
@@ -172,17 +161,6 @@
     }
 
     /**
-     * Gets user id of the contact's page visited
-     *
-     * @return {String} user id if user is not selected then current logged in user id
-     */
-    function getSelectedContactId () {
-      var url = new URL(window.location.href);
-
-      return url.searchParams.get('cid') !== null ? url.searchParams.get('cid') : CRM.config.user_contact_id;
-    }
-
-    /**
      * Subscribers for events
      */
     function initSubscribers () {
@@ -190,25 +168,35 @@
     }
 
     /**
+     * Extends casesListConfig
+     */
+    function initCasesConfig () {
+      _.each($scope.casesListConfig, function (item, ind) {
+        $scope.casesListConfig[ind].cases = [];
+        $scope.casesListConfig[ind] = $.extend(true, $scope.casesListConfig[ind], commonConfigs);
+      });
+    }
+
+    /**
      * Updates the list with new entries
      *
-     * @params {String} ind
-     * @params {Array} params
+     * @param {String} caseListIndex
+     * @param {Array} params
      */
-    function updateCase (ind, params) {
+    function updateCase (caseListIndex, params) {
       crmApi(params).then(function (response) {
         _.each(response.cases.values, function (item) {
-          if ($scope.casesList[ind].showContactRole) {
+          if ($scope.casesListConfig[caseListIndex].showContactRole) {
             item.contact_role = getContactRole(item);
           }
 
-          $scope.casesList[ind].cases.push(formatCase(item));
+          $scope.casesListConfig[caseListIndex].cases.push(formatCase(item));
         });
 
-        $scope.casesList[ind].isLoaded = true;
-        $scope.casesList[ind].showSpinner = false;
-        $scope.casesList[ind].page.num += 1;
-        $scope.casesList[ind].isLoadMoreAvailable = $scope.casesList[ind].cases.length < response.count;
+        $scope.casesListConfig[caseListIndex].isLoaded = true;
+        $scope.casesListConfig[caseListIndex].showSpinner = false;
+        $scope.casesListConfig[caseListIndex].page.num += 1;
+        $scope.casesListConfig[caseListIndex].isLoadMoreAvailable = $scope.casesListConfig[caseListIndex].cases.length < response.count;
       });
     }
   }

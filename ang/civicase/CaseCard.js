@@ -7,8 +7,8 @@
         switch (attrs.mode) {
           case 'other-case':
             return '~/civicase/CaseCard--other-cases.html';
-          case 'long':
-            return '~/civicase/CaseCard--long.html';
+          case 'contact-record':
+            return '~/civicase/CaseCard--contact-record.html';
           default:
             return '~/civicase/CaseCard--case-list.html';
         }

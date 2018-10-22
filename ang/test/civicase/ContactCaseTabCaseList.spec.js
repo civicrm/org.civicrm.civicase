@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 (function ($, _) {
-  describe('ContactCaseTabList', function () {
+  describe('ContactCaseTabCaseList', function () {
     var $compile, $scope, $rootScope, element, eventResponse, CasesData;
 
     beforeEach(module('civicase', 'civicase.templates', 'civicase.data'));
@@ -36,7 +36,7 @@
         compileDirective();
       });
 
-      it('complies the ContactCaseTabList directive', function () {
+      it('complies the ContactCaseTabCaseList directive', function () {
         expect(element.html()).toContain('<!-- ngRepeat: case in caseObj.cases -->');
       });
     });
@@ -58,12 +58,12 @@
      */
     function compileDirective () {
       $scope.caseObj = CasesData;
-      element = $compile('<civicase-contact-case-tab-list case-obj="caseObj" ></civicase-contact-case-tab-list>')($scope);
+      element = $compile('<civicase-contact-case-tab-case-list case-obj="caseObj" ></civicase-contact-case-tab-case-list>')($scope);
       $scope.$digest();
     }
 
     /**
-     * Listener for `civicase::contact-record-case::cases-loaded` event
+     * Listener for `civicase::contact-record-case::loadmore` event
      */
     function listenForContactCasesListLoadMoreEvent () {
       $rootScope.$on('civicase::contact-record-list::loadmore', function (event, type) {

@@ -1,7 +1,7 @@
 <div>
-  <civicase-case-card mode="long" case="case" ng-repeat="case in caseObj.cases"></civicase-case-card>
+  <civicase-case-card mode="contact-record" case="case" ng-repeat="case in caseObj.cases"></civicase-case-card>
   <div 
-    class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--long" 
+    class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--contact-record" 
     ng-repeat="placeholder in loadingPlaceholders"
     ng-if="!caseObj.isLoaded">
     <div class="panel-body">
@@ -15,7 +15,7 @@
       </div>
     </div>
   </div>
-  <div class="text-center civicase__contact-cases-list-footer">
+  <div class="text-center civicase__contact-case-tab__case-list__footer">
     <div ng-if="caseObj.showSpinner" class="civicase__spinner"></div>
     <button 
       class="btn btn-default" 

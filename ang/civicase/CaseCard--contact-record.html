@@ -1,5 +1,5 @@
 <div
-  class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--long"
+  class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--contact-record"
   ng-style="{'border-left-color': data.color}"
   ng-class="{'civicase__case-card--closed': data.status === 'Resolved'}
   ">
@@ -10,8 +10,7 @@
         <span>Case ID : </span>
         <strong> {{ data.id }} </strong>
         <span class="civicase__pipe" ng-if="data.status !== 'Resolved'"> | </span>
-        <span
-          ng-if="data.status !== 'Resolved'">
+        <span ng-if="data.status !== 'Resolved'">
           <span>Next Milestone: </span>
           <span 
             class="civicase__case-card__date civicase__overdue-activity-icon"
