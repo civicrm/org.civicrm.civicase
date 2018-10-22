@@ -5,6 +5,11 @@
     displayed-count="activities.length" total-count="totalCount">
   </div>
 
+  <civicase-bulk-actions-message
+    selected-items="allActivitiesSelected ? totalCount : selectedActivities.length" total-count="totalCount"
+    is-select-all-available="true" show-checkboxes="showCheckboxes">
+  </civicase-bulk-actions-message>
+
   <div class="panel-body clearfix">
     <div crm-ui-debug="activities"></div>
     <div class="civicase__activity-feed__list-container">

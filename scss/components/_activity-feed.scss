@@ -31,6 +31,15 @@
       }
     }
   }
+
+  .civicase__bulkactions-message {
+    margin: 0 85px;
+
+    .alert {
+      border-bottom: 1px solid $crm-grayblue-dark;
+      box-shadow: none;
+    }
+  }
 }
 
 .civicase__activity-feed__activity-container {
