@@ -16,15 +16,24 @@
               class="civicase__activity-feed__list"
               ng-class="{'active': activity.id === viewingActivity.id}"
               ng-repeat="activity in activityGroup.activities">
-              <span ng-if="activity.source_contact_id" contact-card avatar="true" contacts="activity.source_contact_id"></span>
-              <div class="civicase__activity-feed__activity-container">
-                <div
-                  case-activity-card="activity"
-                  mode="long"
-                  refresh-on-checkbox-toggle="true"
-                  bulk-allowed="bulkAllowed"
-                  custom-click-event="true"
-                  refresh-callback="refreshCase">
+              <span
+                class="civicase__checkbox civicase__activity-feed__list__bulk-checkbox"
+                role="checkbox"
+                tabindex="0"
+                aria-labelledby="Select/Unselect">
+                <i class="civicase__checkbox--checked material-icons">check_box</i>
+              </span>
+              <div ng-class="{'civicase__activity-feed__list__vertical_bar': $index< activityGroups.length- 1 }"class="civicase__activity-feed__list__activity-item">
+                <span ng-if="activity.source_contact_id" contact-card avatar="true" contacts="activity.source_contact_id"></span>
+                <div class="civicase__activity-feed__activity-container">
+                  <div
+                    case-activity-card="activity"
+                    mode="long"
+                    refresh-on-checkbox-toggle="true"
+                    bulk-allowed="bulkAllowed"
+                    custom-click-event="true"
+                    refresh-callback="refreshCase">
+                  </div>
                 </div>
               </div>
             </div>
@@ -64,16 +73,18 @@
       </div>
       <div class="panel-body">
         <div class="civicase__activity-feed__list">
-          <div class="civicase__activity-feed__activity-container">
-            <div class="civicase__activity-card civicase__activity-card--long" ng-repeat="i in [0,1,2,3,4]">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <div class="civicase__activity-card-row" style="margin-bottom: 8px;">
-                    <div class="civicase__loading-placeholder__oneline" style="width: 0.8em; font-size: 24px; margin-right: 10px;"></div>
-                    <div class="civicase__loading-placeholder__oneline" style="width: 8em; font-size: 18px;"></div>
-                    <div class="civicase__activity__right-container civicase__loading-placeholder__oneline" style="width: 7em;"></div>
+          <div class="civicase__activity-feed__list__activity-item">
+            <div class="civicase__activity-feed__activity-container">
+              <div class="civicase__activity-card civicase__activity-card--long" ng-repeat="i in [0,1,2,3,4]">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <div class="civicase__activity-card-row" style="margin-bottom: 8px;">
+                      <div class="civicase__loading-placeholder__oneline" style="width: 0.8em; font-size: 24px; margin-right: 10px;"></div>
+                      <div class="civicase__loading-placeholder__oneline" style="width: 8em; font-size: 18px;"></div>
+                      <div class="civicase__activity__right-container civicase__loading-placeholder__oneline" style="width: 7em;"></div>
+                    </div>
+                    <div class="civicase__activity-card-row--file civicase__loading-placeholder__oneline" style="width: 8em; margin-bottom: 10px;"></div>
                   </div>
-                  <div class="civicase__activity-card-row--file civicase__loading-placeholder__oneline" style="width: 8em; margin-bottom: 10px;"></div>
                 </div>
               </div>
             </div>

@@ -8,7 +8,7 @@
 
   .civicase__panel-transparent-header {
     margin: auto;
-    width: 830px;
+    width: 870px;
 
     > .panel-body {
       background: transparent;
@@ -47,19 +47,24 @@
   &.active {
     background: $activity-feed-active-bg;
   }
+}
 
-  &:not(:last-child) {
-    &::before {
-      background-color: $crm-grayblue-darker;
-      bottom: 1px;
-      content: '';
-      left: 26px;
-      position: absolute;
-      top: 55px;
-      width: 8px;
-      z-index: 1;
-    }
+.civicase__activity-feed__list__vertical_bar {
+  &::before {
+    background-color: $crm-grayblue-darker;
+    bottom: 1px;
+    content: '';
+    left: 17px;
+    position: absolute;
+    top: 50px;
+    width: 8px;
+    z-index: 1;
   }
+}
+
+.civicase__activity-feed__list__activity-item {
+  display: inline-block;
+  position: relative;
 
   > .civicase__contact-card {
     display: inline-block;
@@ -92,6 +97,13 @@
   }
 }
 
+.civicase__activity-feed__list__bulk-checkbox {
+  display: inline-block;
+  margin-right: 20px;
+  top: 13px;
+  vertical-align: top;
+}
+
 .civicase__activity-feed-pager__no-more,
 .civicase__activity-feed-pager__more {
   > .btn {
@@ -110,4 +122,12 @@
 .civicase__activity-feed__list-container {
   display: flex;
   justify-content: center;
+}
+
+.civicase__activity-feed__placeholder {
+  .civicase__activity-feed__list__activity-item {
+    &::before {
+      display: none;
+    }
+  }
 }

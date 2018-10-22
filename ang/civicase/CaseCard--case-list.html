@@ -1,18 +1,17 @@
-<div 
-  class="panel panel-default panel-strip-primary civicase__case-card civicase__animated-checkbox-card" 
-  ng-style="{'border-left-color': data.color}" 
-  ng-class="{'civicase__case-card--active': $parent.viewingCase === data.id, 
-    'civicase__case-card--closed': data.status === 'Resolved', 
+<div
+  class="panel panel-default panel-strip-primary civicase__case-card civicase__animated-checkbox-card"
+  ng-style="{'border-left-color': data.color}"
+  ng-class="{'civicase__case-card--active': $parent.viewingCase === data.id,
+    'civicase__case-card--closed': data.status === 'Resolved',
     'civicase__animated-checkbox-card--expanded': $parent.showCheckboxes && !$parent.viewingCase && $parent.bulkAllowed}"
   >
   <div class="panel-body">
-    <span 
-      class="civicase__checkbox" 
-      ng-if="!$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed" 
-      role="checkbox" 
-      aria-checked="{{activity.is_completed}}" 
-      tabindex="0" 
-      aria-labelledby="Mark checked/unchecked" 
+    <span
+      class="civicase__checkbox"
+      ng-if="!$parent.viewingCase && $parent.selectedCases && $parent.bulkAllowed"
+      role="checkbox"
+      tabindex="0"
+      aria-labelledby="Select/Unselect"
       ng-click="toggleSelected(); $event.stopPropagation();">
       <i ng-if="data.selected" class="civicase__checkbox--checked material-icons">check_box</i>
     </span>
