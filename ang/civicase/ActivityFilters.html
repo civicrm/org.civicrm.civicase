@@ -17,7 +17,9 @@
     </div>
 
     <!-- Bulk Actions -->
-    <civicase-bulk-actions-checkboxes></civicase-bulk-actions-checkboxes>
+    <civicase-bulk-actions-checkboxes
+      show-checkboxes="showCheckboxes"
+      ng-show="$parent.bulkAllowed"/>
     <span
       class="civicase__bulkactions-actions-dropdown btn-group btn-group-sm">
       <div class="btn-group">

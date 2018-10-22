@@ -1,5 +1,8 @@
 <div class="panel panel-default civicase__activity-feed">
-  <div civicase-activity-filters="filters" case-timelines="caseTimelines" display-options="displayOptions"></div>
+  <div
+    civicase-activity-filters="filters" case-timelines="caseTimelines"
+    display-options="displayOptions" show-checkboxes="showCheckboxes">
+  </div>
 
   <div class="panel-body clearfix">
     <div crm-ui-debug="activities"></div>
@@ -15,15 +18,18 @@
           </div>
           <div class="panel-body">
             <div
-              class="civicase__activity-feed__list civicase__animated-checkbox-card civicase__animated-checkbox-card--expanded"
-              ng-class="{'active': activity.id === viewingActivity.id}"
+              class="civicase__activity-feed__list civicase__animated-checkbox-card"
+              ng-class="{
+                'active': activity.id === viewingActivity.id,
+                'civicase__animated-checkbox-card--expanded': showCheckboxes && bulkAllowed
+              }"
               ng-repeat="activity in activityGroup.activities">
               <span
                 class="civicase__checkbox civicase__checkbox--bulk-action"
                 role="checkbox"
                 tabindex="0"
                 aria-labelledby="Select/Unselect">
-                <i class="civicase__checkbox--checked material-icons">check_box</i>
+                <i ng-if="activity.selected" class="civicase__checkbox--checked material-icons">check_box</i>
               </span>
               <div
                 ng-class="{'civicase__activity-feed__list__vertical_bar': $index< activityGroups.length- 1 }"

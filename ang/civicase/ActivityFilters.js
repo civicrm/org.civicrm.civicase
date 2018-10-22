@@ -5,6 +5,7 @@
     return {
       restrict: 'A',
       scope: {
+        showCheckboxes: '=?',
         caseTimelines: '=',
         filters: '=civicaseActivityFilters',
         displayOptions: '=displayOptions'
