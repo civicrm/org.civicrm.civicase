@@ -2,9 +2,9 @@
   background: $crm-white;
   border: 1px solid $crm-grayblue-darker;
   border-radius: 2px;
+  display: inline-block;
   padding: 0 3px;
   position: relative;
-  top: 2px;
 }
 
 .civicase__bulkactions-checkbox-toggle {
@@ -41,7 +41,6 @@
 .civicase__bulkactions-actions-dropdown {
   margin-left: 10px;
   position: relative;
-  top: 2px;
 
   .btn {
     border: 1px solid $crm-grayblue-darker;
