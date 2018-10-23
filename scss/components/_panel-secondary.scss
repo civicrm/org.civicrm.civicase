@@ -46,7 +46,7 @@
   }
 
   a.panel-heading-control { /* stylelint-disable-line selector-no-qualifying-type */
-    line-height: 30px;
+    line-height: $input-height-base;
   }
 
   .panel-title {
