@@ -11,7 +11,6 @@ $material-icon-font-url: '../resources/fonts/material-design-icons/';
 $box-shadow-activity-card: 0 1px 4px 0 rgba(49, 40, 40, 0.2);
 $box-shadow-checkbox: 0 6px 20px 0 rgba(49, 40, 40, 0.03);
 $box-shadow-block: 0 3px 8px 0 rgba(49, 40, 40, 0.15);
-$box-shadow-pane: 0 3px 8px 0 rgba(49, 40, 40, 0.25);
 
 $activities-calendar-active-day-background: #cde1ed;
 $activity-feed-active-bg: #b3d5ec;
@@ -21,7 +20,9 @@ $calendar-due-text-color: #a9a9b7;
 $placeholder-grey: #edf3f5;
 $upload-icon-color: #bfcfd9;
 
-
+// Panel secondary
+$case-panel-secondary-padding: 24px;
+$case-panel-secondary-padding-small: 16px;
 
 // Font weights
 $font-weight-heading:   600 !default;

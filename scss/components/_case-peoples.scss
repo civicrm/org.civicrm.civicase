@@ -12,7 +12,7 @@
       background: $gray-lighter;
       cursor: no-drop;
       opacity: 0.8;
-    }  
+    }
   }
 
   .select2-choice {
@@ -59,8 +59,8 @@
   .civicase__people-tab__table-header {
     .civicase__people-tab__table-column {
       line-height: 18px;
-      padding: 16px 24px;     
-    } 
+      padding: 16px 24px;
+    }
   }
 
   .civicase__people-tab__table-body {
@@ -73,8 +73,8 @@
 .civicase__people-tab {
   background: $crm-white;
   border-radius: 2px;
-  box-shadow: $box-shadow-pane;
-  margin: 0 24px;  
+  box-shadow: $box-shadow-block;
+  margin: 0 24px;
 }
 
 .civicase__people-tab__sub-tab {
@@ -180,7 +180,7 @@
   .dropdown-menu {
     left: auto !important;
     right: 20px;
-    top: 100% !important;    
+    top: 100% !important;
   }
 
   .btn {
@@ -192,13 +192,13 @@
 
     .dropdown-toggle {
       background: none !important;
-      box-shadow: none;    
+      box-shadow: none;
     }
   }
 
   .material-icons {
     font-size: 18px;
-    padding: 0;    
+    padding: 0;
   }
 }
 
