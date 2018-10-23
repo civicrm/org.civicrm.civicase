@@ -17,7 +17,8 @@
             callable();
 
             return $q.resolve([{
-              acts: { values: [] }
+              acts: { values: [] },
+              all: { values: [] }
             }]);
           });
 

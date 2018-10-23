@@ -15,6 +15,7 @@
       controller: civicaseActivityFeedController,
       scope: {
         params: '=civicaseActivityFeed',
+        showBulkActions: '=',
         caseTypeId: '=',
         refreshCase: '=?refreshCallback'
       }
@@ -29,14 +30,16 @@
     var ITEMS_PER_PAGE = 25;
     var caseId = $scope.params ? $scope.params.case_id : null;
     var pageNum = 0;
+    var allActivities = [];
 
     $scope.isLoading = true;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityStatuses = CRM.civicase.activityStatuses;
     $scope.activities = {};
     $scope.activityGroups = [];
-    $scope.bulkAllowed = BulkActions.isAllowed();
+    $scope.bulkAllowed = $scope.showBulkActions && BulkActions.isAllowed();
     $scope.remaining = true;
+    $scope.selectedActivities = [];
     $scope.viewingActivity = {};
     $scope.caseTimelines = $scope.caseTypeId ? _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label') : [];
 
@@ -47,6 +50,19 @@
         $scope.viewActivity(activity.id, $event);
       });
     }());
+
+    /**
+     * Toggle Bulk Actions checkbox of the given activity
+     */
+    $scope.toggleSelected = function (activity) {
+      if ($scope.selectedActivities.indexOf(activity.id) === -1) {
+        $scope.selectedActivities.push(activity.id);
+      } else {
+        _.remove($scope.selectedActivities, function (activityID) {
+          return activityID === activity.id;
+        });
+      }
+    };
 
     /**
      * Load next set of activities
@@ -123,6 +139,57 @@
     }
 
     /**
+     * Bulk Selection Event Listener
+     *
+     * @params {Object} event
+     * @params {String} condition
+     */
+    function bulkSelectionsListener (event, condition) {
+      if (condition === 'none') {
+        deselectAllActivities();
+      } else if (condition === 'visible') {
+        selectDisplayedActivities();
+      } else if (condition === 'all') {
+        selectEveryActivity();
+      }
+    }
+
+    /**
+     * Deselection of all activities
+     */
+    function deselectAllActivities () {
+      $scope.selectedActivities = [];
+    }
+
+    /**
+     * Select all Activity
+     */
+    function selectEveryActivity () {
+      $scope.selectedActivities = [];
+      $scope.selectedActivities = allActivities.map(function (activity) {
+        return activity.id;
+      });
+      selectDisplayedActivities(); // Update the UI model with displayed cases selected;
+    }
+
+    /**
+     * Select All visible data.
+     */
+    function selectDisplayedActivities () {
+      var isCurrentActivityInSelectedCases;
+
+      _.each($scope.activities, function (activity) {
+        isCurrentActivityInSelectedCases = _.find($scope.selectedActivities, function (activityID) {
+          return activityID === activity.id;
+        });
+
+        if (!isCurrentActivityInSelectedCases) {
+          $scope.selectedActivities.push(activity.id);
+        }
+      });
+    }
+
+    /**
      * Groups the activities into Overdue/Future/Past
      *
      * @param {Array} activities
@@ -178,12 +245,14 @@
      */
     function getActivities (nextPage) {
       if (nextPage !== true) {
+        deselectAllActivities();
         pageNum = 0;
       }
 
       crmThrottle(loadActivities).then(function (result) {
         var newActivities = _.each(result[0].acts.values, formatActivity);
-        var remaining = result[0].count - (ITEMS_PER_PAGE * (pageNum + 1));
+        allActivities = result[0].all.values;
+        var remaining = allActivities.length - (ITEMS_PER_PAGE * (pageNum + 1));
 
         if (pageNum) {
           $scope.activities = $scope.activities.concat(newActivities);
@@ -191,9 +260,9 @@
           $scope.activities = newActivities;
         }
         $scope.activityGroups = groupActivities($scope.activities);
-        $scope.totalCount = result[0].count;
+        $scope.totalCount = allActivities.length;
         $scope.remaining = remaining > 0 ? remaining : 0;
-        if (!result[0].count && !pageNum) {
+        if (!allActivities.length && !pageNum) {
           $scope.remaining = false;
         }
         // reset viewingActivity to get latest data
@@ -259,9 +328,13 @@
       if ($scope.params && $scope.params.filters) {
         angular.extend(params, $scope.params.filters);
       }
+
       return crmApi({
         acts: ['Activity', 'get', $.extend(true, returnParams, params)],
-        count: ['Activity', 'getcount', params]
+        all: ['Activity', 'get', $.extend(true, {
+          sequential: 1,
+          return: ['id'],
+          options: { limit: 0 }}, params)] // all activities, also used to get count
       }).then(function (result) {
         return $q.all([
           result,
@@ -278,6 +351,7 @@
       $scope.$watchCollection('displayOptions', getActivities);
       $scope.$watch('params.filters', getActivities, true);
       $scope.$on('updateCaseData', getActivities);
+      $scope.$on('civicase::bulk-actions::bulk-selections', bulkSelectionsListener);
     }
 
     /**

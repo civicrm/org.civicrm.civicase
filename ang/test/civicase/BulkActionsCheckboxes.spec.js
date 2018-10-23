@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 (function ($) {
   describe('BulkActionsCheckboxes', function () {
-    var $compile, $rootScope, $scope, element, clickEvent;
+    var $compile, $rootScope, $scope, element;
 
     beforeEach(module('civicase', 'civicase.templates'));
 
@@ -95,7 +95,6 @@
 
       beforeEach(function () {
         originalEmitFunction = element.isolateScope().$emit;
-        clickEvent = $.Event('click');
         element.isolateScope().$emit = jasmine.createSpy('$emit');
       });
 
@@ -105,7 +104,7 @@
 
       describe('when called for all selection', function () {
         beforeEach(function () {
-          element.isolateScope().select(clickEvent, 'all');
+          element.isolateScope().select('all');
         });
 
         it('emits civicase::bulk-actions::bulk-selections event with "all" parameter', function () {
@@ -115,7 +114,7 @@
 
       describe('called for visible selection', function () {
         beforeEach(function () {
-          element.isolateScope().select(clickEvent, 'visible');
+          element.isolateScope().select('visible');
         });
 
         it('emits civicase::bulk-actions::bulk-selections event with "visible" parameter', function () {
@@ -125,7 +124,7 @@
 
       describe('called for deselect all', function () {
         beforeEach(function () {
-          element.isolateScope().select(clickEvent, 'none');
+          element.isolateScope().select('none');
         });
 
         it('emits civicase::bulk-actions::bulk-selections event with "none" parameter', function () {

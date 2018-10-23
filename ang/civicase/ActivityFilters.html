@@ -16,6 +16,43 @@
       </ul>
     </div>
 
+    <!-- Bulk Actions -->
+    <civicase-bulk-actions-checkboxes
+      everything-count="totalCount"
+      displayed-count="displayedCount"
+      is-select-all-available="true"
+      show-checkboxes="showCheckboxes"
+      ng-show="bulkAllowed"/>
+    <span
+      ng-if="bulkAllowed"
+      class="civicase__bulkactions-actions-dropdown btn-group btn-group-sm">
+      <div class="btn-group">
+        <button
+          type="button" class="btn btn-default"
+          ng-class="{disabled: !selectedActivitiesCount || !showCheckboxes}"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ ts('Actions') }}
+        </button>
+        <button
+          type="button" class="btn btn-default dropdown-toggle"
+          ng-class="{disabled: !selectedActivitiesCount || !showCheckboxes}"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" refresh-callback="refresh">
+          <li>
+            <a href="">Delete</a>
+            <a href="">Move to Case</a>
+            <a href="">Copy to Case</a>
+            <a href="">Export Activities</a>
+            <a href="">Tag - add to activitiies</a>
+            <a href="">Tag - remove to activitiies</a>
+            <a href="">Case Report</a>
+          </li>
+        </ul>
+      </div>
+    </span>
+    <!-- End - Bulk Actions -->
     <span class="pull-right">
       <select
         class="form-control civicase__activity-filter__timeline"
