@@ -1,0 +1,34 @@
+.panel-secondary {
+  box-shadow: $box-shadow;
+
+  .panel-body {
+    padding: $case-panel-secondary-padding;
+  }
+
+  .panel-footer {
+    padding: $case-panel-secondary-padding-small $case-panel-secondary-padding;
+  }
+
+  .panel-heading {
+    background: $crm-white;
+    padding: $case-panel-secondary-padding;
+    position: relative;
+
+    &::after {
+      $border-margin-right: $case-panel-secondary-padding + ($case-panel-secondary-padding - $case-panel-secondary-padding-small);
+
+      border-bottom: 1px solid $gray-light;
+      bottom: 0;
+      content: '';
+      display: block;
+      height: 0;
+      left: $case-panel-secondary-padding-small;
+      position: absolute;
+      width: calc(100% - #{$border-margin-right});
+    }
+  }
+
+  .panel-title {
+    font-size: $font-size-h3;
+  }
+}
