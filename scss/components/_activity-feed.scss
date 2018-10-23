@@ -75,7 +75,7 @@
   }
 }
 
-.civicase__activity-feed__list__activity-item {
+.civicase__activity-feed__list-item {
   display: inline-block;
   position: relative;
 
@@ -138,7 +138,7 @@
 }
 
 .civicase__activity-feed__placeholder {
-  .civicase__activity-feed__list__activity-item {
+  .civicase__activity-feed__list-item {
     &::before {
       display: none;
     }
