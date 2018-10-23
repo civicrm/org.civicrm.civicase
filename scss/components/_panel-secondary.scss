@@ -1,4 +1,6 @@
 .panel-secondary {
+  $panel-control-margin: 10px;
+
   box-shadow: $box-shadow-block;
 
   .panel-body {
@@ -11,6 +13,7 @@
 
   .panel-heading {
     background: $crm-white;
+    line-height: 1;
     padding: $case-panel-secondary-padding;
     position: relative;
 
@@ -28,7 +31,29 @@
     }
   }
 
+  // Vertically aligns a control (select, btn-group, link)
+  // inside the heading
+  .panel-heading-control {
+    display: block;
+    margin-left: 0;
+    margin-top: -13px;
+    position: relative;
+    top: 6px;
+
+    + & {
+      margin-left: $panel-control-margin;
+    }
+  }
+
+  a.panel-heading-control { /* stylelint-disable-line selector-no-qualifying-type */
+    line-height: 30px;
+  }
+
   .panel-title {
     font-size: $font-size-h3;
+
+    + .panel-heading-control {
+      margin-left: $panel-control-margin;
+    }
   }
 }
