@@ -9,7 +9,7 @@
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
 function _civicrm_api3_case_getwebforms_spec(&$spec) {
-  _civicrm_api3_contact_get_spec($spec);
+  //_civicrm_api3_contact_get_spec($spec);
 }
 
 /**
@@ -23,6 +23,10 @@ function _civicrm_api3_case_getwebforms_spec(&$spec) {
  */
 function civicrm_api3_case_getwebforms($params) {
   $webforms = array();
+  $sysInfo = civicrm_api3('System', 'get')['values'][0];
+  if (!isset($sysInfo['uf']) || $sysInfo['uf'] != 'Drupal') {
+    return civicrm_api3_create_error('Only Drupal CMS is supported!');
+  }
   $query = "SELECT a.nid, a.data, n.title
           FROM webform_civicrm_forms a
           INNER JOIN node n ON a.nid = n.nid";

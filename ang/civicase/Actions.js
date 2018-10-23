@@ -270,8 +270,10 @@
               win.focus();
             },
 
-            gotoWebform: function(path) {
-              var url = CRM.url(path);
+            gotoWebform: function(case1, path) {
+              var url = CRM.url(path, {
+                case1: case1.id,
+              });
               var win = window.open(url, '_blank');
               win.focus();
             },
