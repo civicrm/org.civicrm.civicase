@@ -289,6 +289,7 @@
       var returnActivityParams = {
         case_id: '$value.id',
         options: {
+          limit: '0',
           sort: 'activity_date_time ASC'
         },
         return: [

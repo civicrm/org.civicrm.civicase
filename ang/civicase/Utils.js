@@ -283,6 +283,7 @@
       var allActivitiesParams = {
         case_id: caseId,
         options: {
+          limit: '0',
           sort: 'activity_date_time ASC'
         },
         return: activityReturnParams
