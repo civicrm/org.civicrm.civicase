@@ -1,0 +1,32 @@
+<div
+  class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--contact-record"
+  ng-style="{'border-left-color': data.color}"
+  ng-class="{'civicase__case-card--closed': data.status === 'Resolved'}
+  ">
+  <div class="panel-body">
+    <div class="civicase__case-card__row civicase__case-card__row--primary clearfix">
+      <div class="pull-left civicase__case-card-title">{{ data.subject }}</div>
+      <div class="pull-right">
+        <span>Case ID : </span>
+        <strong> {{ data.id }} </strong>
+        <span class="civicase__pipe" ng-if="data.status !== 'Resolved'"> | </span>
+        <span ng-if="data.status !== 'Resolved'">
+          <span>Next Milestone: </span>
+          <span 
+            class="civicase__case-card__date civicase__overdue-activity-icon"
+            ng-class="{'civicase__overdue-activity-icon': data.activity_summary.milestone[0].is_overdue}"
+            >
+          {{ formatDate(data.activity_summary.milestone[0].activity_date_time, 'DD/MM/YYYY') }}
+          </span>
+        </span>
+      </div>      
+    </div>
+    <div class="civicase__case-card__row civicase__case-card__row--secondary clearfix" ng-if="data.contact_role">
+      <div class="pull-left civicase__case-card-role-container">
+        <i class="material-icons">link</i>
+        <span> Contact Role: </span>
+        <span class="civicase__case-card-role"> {{ data.contact_role }}</span>
+      </div>
+    </div>
+  </div>
+</div>

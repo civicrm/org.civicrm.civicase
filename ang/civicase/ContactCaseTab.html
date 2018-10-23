@@ -1,0 +1,37 @@
+<div id="bootstrap-theme" class="clearfix civicase__container">
+  <h1 crm-page-title class="element-invisible">Related cases to the user</h1>  <!-- Added for SEO purpose (This will be hidden through css) -->
+  <div class="civicase__contact-cases-tab clearfix">
+    <a ng-if="checkPerm('add cases')"
+      class="btn-primary btn civicase__contact-cases-tab-add"
+      ng-href="{{ 'civicrm/case/add' | civicaseCrmUrl:{reset: 1, action: 'add', context: 'standalone'} }}"
+      crm-popup-form-success="refresh()">
+      <i class="material-icons">add_circle</i>
+      {{ ts('Add case') }}
+    </a>
+    <div class="clearfix" ng-if="totalCount > 0">
+      <div class="civicase__contact-cases-tab-container pull-left col-md-6">
+        <div  
+          ng-repeat="case in casesListConfig" 
+          class="panel panel-default civicase__contact-cases-tab-list">
+          <div class="panel-heading">
+            <h3 class="panel-title"> {{ case.title }}</h3>
+          </div>
+          <div class="panel-body">
+            <civicase-contact-case-tab-case-list case-obj="case"></civicase-contact-case-tab-case-list>
+          </div>
+        </div>
+      </div>
+    </div>      
+  </div>
+  <div  ng-if="totalCount == 0" class="civicase__contact-cases-tab-empty">
+    <div class="civicase__activity-no-result-icon civicase__contact-cases-tab-empty-icon"></div>
+    <div class="civicase__activity-card--big--empty-title"> This contact has no cases </div>
+    <div class="civicase__activity-card--big--empty-description"> Click the button below to create a new case for this contact </div>
+    <a ng-if="checkPerm('add cases')"
+      class="civicase__activity-card--big--empty-button btn"
+      ng-href="{{ 'civicrm/case/add' | civicaseCrmUrl:{reset: 1, action: 'add', context: 'standalone'} }}"
+      crm-popup-form-success="refresh()">
+      {{ ts('Add new case') }}
+    </a>
+  </div>
+</div>

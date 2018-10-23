@@ -4,7 +4,14 @@
   module.directive('civicaseCaseCard', function () {
     return {
       templateUrl: function (elem, attrs) {
-        return attrs.mode === 'other-case' ? '~/civicase/CaseCard--other-cases.html' : '~/civicase/CaseCard--case-list.html';
+        switch (attrs.mode) {
+          case 'other-case':
+            return '~/civicase/CaseCard--other-cases.html';
+          case 'contact-record':
+            return '~/civicase/CaseCard--contact-record.html';
+          default:
+            return '~/civicase/CaseCard--case-list.html';
+        }
       },
       replace: true,
       scope: {

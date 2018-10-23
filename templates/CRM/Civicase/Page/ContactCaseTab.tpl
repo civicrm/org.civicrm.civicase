@@ -8,15 +8,7 @@
       angular.module('civicaseContactTab').config(function($routeProvider) {
         $routeProvider.when('/', {
           reloadOnSearch: false,
-          resolve: {
-            hiddenFilters: function() {
-              return {
-                "contact_id": [{/literal}{$cid|json}{literal}]
-              };
-            }
-          },
-          controller: 'CivicaseCaseList',
-          templateUrl: '~/civicase/CaseList.html'
+          template: '<civicase-contact-case-tab></civicase-contact-case-tab>'
         });
       });
     })(angular, CRM.$, CRM._);
