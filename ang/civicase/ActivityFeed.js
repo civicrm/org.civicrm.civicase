@@ -15,6 +15,7 @@
       controller: civicaseActivityFeedController,
       scope: {
         params: '=civicaseActivityFeed',
+        showBulkActions: '=',
         caseTypeId: '=',
         refreshCase: '=?refreshCallback'
       }
@@ -35,7 +36,7 @@
     $scope.activityStatuses = CRM.civicase.activityStatuses;
     $scope.activities = {};
     $scope.activityGroups = [];
-    $scope.bulkAllowed = BulkActions.isAllowed();
+    $scope.bulkAllowed = $scope.showBulkActions && BulkActions.isAllowed();
     $scope.remaining = true;
     $scope.selectedActivities = [];
     $scope.viewingActivity = {};
@@ -154,9 +155,6 @@
 
     /**
      * Deselection of all activities
-     *
-     * Updates the visible activities and other activities are updated on FE
-     * by activities object watcher see `casesWatcher` function
      */
     function deselectAllActivities () {
       $scope.allActivitiesSelected = false;

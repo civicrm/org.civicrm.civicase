@@ -1,11 +1,12 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityFilters', function ($timeout, crmUiHelp, BulkActions) {
+  module.directive('civicaseActivityFilters', function ($timeout, crmUiHelp) {
     return {
       restrict: 'A',
       scope: {
         showCheckboxes: '=?',
+        bulkAllowed: '=',
         caseTimelines: '=',
         displayedCount: '=',
         totalCount: '=',
@@ -30,7 +31,6 @@
 
       $scope.activityCategories = prepareActivityCategories();
       $scope.availableFilters = prepareAvailableFilters();
-      $scope.bulkAllowed = BulkActions.isAllowed();
       // Default exposed filters
       $scope.exposedFilters = {
         activity_type_id: true,
