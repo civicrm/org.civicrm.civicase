@@ -3,11 +3,11 @@
     civicase-activity-filters="filters" case-timelines="caseTimelines"
     display-options="displayOptions" show-checkboxes="showCheckboxes"
     displayed-count="activities.length" total-count="totalCount" bulk-allowed="bulkAllowed"
-    selected-activities-count="allActivitiesSelected ? totalCount : selectedActivities.length">
+    selected-activities-count="selectedActivities.length">
   </div>
 
   <civicase-bulk-actions-message
-    selected-items="allActivitiesSelected ? totalCount : selectedActivities.length" total-count="totalCount"
+    selected-items="selectedActivities.length" total-count="totalCount"
     is-select-all-available="true" show-checkboxes="showCheckboxes">
   </civicase-bulk-actions-message>
 
@@ -40,7 +40,7 @@
                 aria-labelledby="Select/Unselect"
                 ng-click="toggleSelected(activity); $event.stopPropagation();">
                 <i
-                  ng-if="activity.selected || allActivitiesSelected"
+                  ng-if="selectedActivities.indexOf(activity.id) !== -1"
                   class="civicase__checkbox--checked material-icons">
                   check_box
                 </i>

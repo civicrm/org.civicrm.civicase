@@ -30,6 +30,7 @@
     var ITEMS_PER_PAGE = 25;
     var caseId = $scope.params ? $scope.params.case_id : null;
     var pageNum = 0;
+    var allActivities = [];
 
     $scope.isLoading = true;
     $scope.activityTypes = CRM.civicase.activityTypes;
@@ -54,12 +55,12 @@
      * Toggle Bulk Actions checkbox of the given activity
      */
     $scope.toggleSelected = function (activity) {
-      activity.selected = !activity.selected;
-
-      if (activity.selected) {
-        $scope.selectedActivities.push(activity);
+      if ($scope.selectedActivities.indexOf(activity.id) === -1) {
+        $scope.selectedActivities.push(activity.id);
       } else {
-        _.remove($scope.selectedActivities, { id: activity.id });
+        _.remove($scope.selectedActivities, function (activityID) {
+          return activityID === activity.id;
+        });
       }
     };
 
@@ -157,10 +158,6 @@
      * Deselection of all activities
      */
     function deselectAllActivities () {
-      $scope.allActivitiesSelected = false;
-      _.each($scope.activities, function (activity) {
-        activity.selected = false;
-      });
       $scope.selectedActivities = [];
     }
 
@@ -169,8 +166,10 @@
      */
     function selectEveryActivity () {
       $scope.selectedActivities = [];
+      $scope.selectedActivities = allActivities.map(function (activity) {
+        return activity.id;
+      });
       selectDisplayedActivities(); // Update the UI model with displayed cases selected;
-      $scope.allActivitiesSelected = true;
     }
 
     /**
@@ -179,15 +178,13 @@
     function selectDisplayedActivities () {
       var isCurrentActivityInSelectedCases;
 
-      $scope.allActivitiesSelected = false;
-
       _.each($scope.activities, function (activity) {
-        activity.selected = true;
-        isCurrentActivityInSelectedCases = _.find($scope.selectedActivities, {
-          id: activity.id
+        isCurrentActivityInSelectedCases = _.find($scope.selectedActivities, function (activityID) {
+          return activityID === activity.id;
         });
+
         if (!isCurrentActivityInSelectedCases) {
-          $scope.selectedActivities.push(activity);
+          $scope.selectedActivities.push(activity.id);
         }
       });
     }
@@ -254,7 +251,8 @@
 
       crmThrottle(loadActivities).then(function (result) {
         var newActivities = _.each(result[0].acts.values, formatActivity);
-        var remaining = result[0].count - (ITEMS_PER_PAGE * (pageNum + 1));
+        allActivities = result[0].all.values;
+        var remaining = allActivities.length - (ITEMS_PER_PAGE * (pageNum + 1));
 
         if (pageNum) {
           $scope.activities = $scope.activities.concat(newActivities);
@@ -262,9 +260,9 @@
           $scope.activities = newActivities;
         }
         $scope.activityGroups = groupActivities($scope.activities);
-        $scope.totalCount = result[0].count;
+        $scope.totalCount = allActivities.length;
         $scope.remaining = remaining > 0 ? remaining : 0;
-        if (!result[0].count && !pageNum) {
+        if (!allActivities.length && !pageNum) {
           $scope.remaining = false;
         }
         // reset viewingActivity to get latest data
@@ -330,9 +328,13 @@
       if ($scope.params && $scope.params.filters) {
         angular.extend(params, $scope.params.filters);
       }
+
       return crmApi({
         acts: ['Activity', 'get', $.extend(true, returnParams, params)],
-        count: ['Activity', 'getcount', params]
+        all: ['Activity', 'get', $.extend(true, {
+          sequential: 1,
+          return: ['id'],
+          options: { limit: 0 }}, params)] // all activities, also used to get count
       }).then(function (result) {
         return $q.all([
           result,
