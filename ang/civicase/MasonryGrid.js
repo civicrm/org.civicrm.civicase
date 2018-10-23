@@ -64,7 +64,7 @@
      * @param {Object} $gridItem a reference to the item element to be added.
      */
     vm.addGridItem = function ($gridItem) {
-      _.remove(vm.$gridItems, $gridItem);
+      removeDuplicatedGridItem($gridItem);
       vm.$gridItems.push($gridItem);
       $scope.$emit('civicaseMasonryGrid::updated');
     };
@@ -75,7 +75,7 @@
      * @param {Object} $gridItem a reference to the item element to be added.
      */
     vm.addGridItemAt = function ($gridItem, atIndex) {
-      _.remove(vm.$gridItems, $gridItem);
+      removeDuplicatedGridItem($gridItem);
       vm.$gridItems.splice(atIndex, 0, $gridItem);
       $scope.$emit('civicaseMasonryGrid::updated');
     };
@@ -89,6 +89,17 @@
       _.remove(vm.$gridItems, $gridItem);
       $scope.$emit('civicaseMasonryGrid::updated');
     };
+
+    /**
+     * Removes any reference to the given grid item to avoid duplication.
+     * This is done in case the grid item needs to be moved from one position to
+     * another.
+     *
+     * @param {Object} $gridItem a reference to the item element to be removed.
+     */
+    function removeDuplicatedGridItem ($gridItem) {
+      _.remove(vm.$gridItems, $gridItem);
+    }
   });
 
   module.directive('civicaseMasonryGridItem', function () {
