@@ -1,12 +1,9 @@
 .civicase__case-custom-fields__container {
-  float: left;
-  width: 50%;
-
   &.civicase__summary-tab-tile {
     padding-top: 0;
   }
 
-  .civicase__panel-transparent-header:not(:first-child) {
+  civicase-masonry-grid-item:not(:first-child) {
     margin-top: 30px;
   }
 
