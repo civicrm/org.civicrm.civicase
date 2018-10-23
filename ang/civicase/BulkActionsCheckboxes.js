@@ -37,13 +37,10 @@
      * - 'visible' :  Selects all visible selections
      * - 'none' : Deselects all
      *
-     * @params {Object} event
      * @params {String} condition
      */
-    $scope.select = function ($event, condition) {
+    $scope.select = function (condition) {
       $scope.$emit('civicase::bulk-actions::bulk-selections', condition);
-      $event.stopPropagation();
-      $event.preventDefault();
     };
 
     /**

@@ -2,6 +2,10 @@
   padding: 16px 32px;
 
   .civicase__activity-feed__list {
+    margin-left: auto;
+    margin-right: auto;
+    width: 685px;
+
     &::before {
       content: none;
     }

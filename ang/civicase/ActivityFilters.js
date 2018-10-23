@@ -5,9 +5,14 @@
     return {
       restrict: 'A',
       scope: {
+        showCheckboxes: '=?',
+        bulkAllowed: '=',
         caseTimelines: '=',
+        displayedCount: '=',
+        totalCount: '=',
         filters: '=civicaseActivityFilters',
-        displayOptions: '=displayOptions'
+        displayOptions: '=displayOptions',
+        selectedActivitiesCount: '='
       },
       replace: true,
       templateUrl: '~/civicase/ActivityFilters.html',
