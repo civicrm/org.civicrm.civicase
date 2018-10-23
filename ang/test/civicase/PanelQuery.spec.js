@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 (function ($) {
-  describe('panelQuery', function () {
+  fdescribe('panelQuery', function () {
     var element, $compile, $rootScope, $scope;
 
     beforeEach(module('civicase.templates', 'civicase'));
@@ -11,32 +11,74 @@
       $scope = $rootScope.$new();
     }));
 
-    describe('attributes', function () {
+    describe('[query-data] attribute', function () {
       var isolatedScope;
 
       beforeEach(function () {
-        $scope.mockQueryData = { foo: 'foo', bar: 'bar' };
-        compileDirective('query-data="mockQueryData"', { results: '<div></div>' });
+        $scope.queryData = { query: { entity: 'Foo', params: { foo: 'foo' } } };
+        compileDirective();
         isolatedScope = element.isolateScope();
       });
 
-      it('supports a [query-data] attribute and store its value in its scope', function () {
+      it('store its value in its scope', function () {
         expect(isolatedScope.queryData).toBeDefined();
-        expect(isolatedScope.queryData).toEqual($scope.mockQueryData);
+        expect(isolatedScope.queryData).toEqual($scope.queryData);
       });
 
       describe('one-way binding', function () {
         var originalSource;
 
         beforeEach(function () {
-          originalSource = $scope.mockQueryData;
+          originalSource = $scope.queryData;
           isolatedScope.queryData = { baz: 'baz' };
 
           $scope.$digest();
         });
 
         it('has a one-way binding on the [query-data] value', function () {
-          expect($scope.mockQueryData).toEqual(originalSource);
+          expect($scope.queryData).toEqual(originalSource);
+        });
+      });
+
+      describe('`query` object', function () {
+        var $log;
+
+        beforeEach(inject(function (_$log_) {
+          $log = _$log_;
+        }));
+
+        beforeEach(function () {
+          spyOn($log, 'error');
+        });
+
+        describe('when it is not present', function () {
+          beforeEach(function () {
+            $scope.queryData = {};
+          });
+
+          it('throws', function () {
+            expect(compileDirective).toThrowError(/query/);
+          });
+        });
+
+        describe('when it doesn\'t have the `entity` property', function () {
+          beforeEach(function () {
+            $scope.queryData = { query: { params: {} } };
+          });
+
+          it('sends an error message', function () {
+            expect(compileDirective).toThrowError(/entity/);
+          });
+        });
+
+        describe('when the `entity` property is an empty string', function () {
+          beforeEach(function () {
+            $scope.queryData = { query: { entity: '', params: {} } };
+          });
+
+          it('sends an error message', function () {
+            expect(compileDirective).toThrowError(/entity/);
+          });
         });
       });
     });
@@ -44,33 +86,33 @@
     describe('transclude slots', function () {
       it('requires the <panel-query-results> slot to be present', function () {
         expect(function () {
-          compileDirective(null);
+          compileDirective({});
         }).toThrow();
       });
 
       it('is optional to pass the <panel-query-actions> slot', function () {
         expect(function () {
-          compileDirective(null, { results: '<div></div>' });
+          compileDirective({ results: '<div></div>' });
         }).not.toThrow();
       });
 
       describe('scope compile', function () {
         beforeEach(function () {
-          $scope.queryData = { foo: 'outer-foo', bar: 'outer-bar' };
-          $scope.passedData = { foo: 'isolated-foo', bar: 'isolated-bar' };
+          $scope.queryData = { query: { entity: 'OuterEntity', params: { foo: 'outerParam' } } };
+          $scope.passedData = { query: { entity: 'IsolatedEntity', params: { foo: 'isolatedParam' } } };
 
-          compileDirective('query-data="passedData"', {
-            actions: '<div>{{queryData.foo}}</div>',
-            results: '<div>{{queryData.bar}}</div>'
-          });
+          compileDirective({
+            actions: '<div>{{queryData.query.entity}}</div>',
+            results: '<div>{{queryData.query.params.foo}}</div>'
+          }, 'passedData');
         });
 
         it('compiles the slot on its own isolated scope', function () {
           var actionsHtml = element.find('[ng-transclude="actions"]').html();
           var resultsHtml = element.find('[ng-transclude="results"]').html();
 
-          expect(actionsHtml).toContain($scope.passedData.foo);
-          expect(resultsHtml).toContain($scope.passedData.bar);
+          expect(actionsHtml).toContain($scope.passedData.query.entity);
+          expect(resultsHtml).toContain($scope.passedData.query.params.foo);
         });
       });
     });
@@ -78,20 +120,23 @@
     /**
      * Function responsible for setting up compilation of the directive
      *
-     * @param {String} attributes the attributes to add to the directive tag
      * @param {Object} slot the transclude slots with their markup
      */
-    function compileDirective (attributes, slot) {
+    function compileDirective (slots, dataProperty) {
       var content = '';
-      var html = '<civicase-panel-query %{attributes}>%{content}</civicase-panel-query>';
+      var html = '<civicase-panel-query query-data="%{dataProperty}">%{content}</civicase-panel-query>';
 
-      attributes = attributes || '';
-      slot = slot || {};
+      dataProperty = dataProperty || 'queryData';
+      slots = slots || { results: '<div></div>' };
 
-      content += slot.actions ? '<panel-query-actions>' + slot.actions + '</panel-query-actions>' : '';
-      content += slot.results ? '<panel-query-results>' + slot.results + '</panel-query-results>' : '';
+      $scope[dataProperty] = $scope[dataProperty] || {
+        query: { entity: 'FooBar', params: [] }
+      };
 
-      html = html.replace('%{attributes}', attributes);
+      content += slots.actions ? '<panel-query-actions>' + slots.actions + '</panel-query-actions>' : '';
+      content += slots.results ? '<panel-query-results>' + slots.results + '</panel-query-results>' : '';
+
+      html = html.replace('%{dataProperty}', dataProperty);
       html = html.replace('%{content}', content);
 
       element = $compile(html)($scope);
