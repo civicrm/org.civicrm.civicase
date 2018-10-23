@@ -1,0 +1,21 @@
+<div class="panel panel-secondary">
+  <header class="panel-heading">
+    <div class="clearfix">
+      <h2 class="panel-title pull-left">{{title}}</h2>
+      <div class="panel-heading-control crm_custom-select pull-left">
+        <select>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+        </select>
+        <span class="crm_custom-select__arrow"></span>
+      </div>
+      <div class="pull-right" ng-transclude="actions"></div>
+    </div>
+  </header>
+  <div class="panel-body">
+    <div ng-transclude="results"></div>
+  </div>
+  <footer class="panel-footer">
+    <!-- the pagination directive -->
+  </footer>
+</div>
