@@ -73,11 +73,11 @@ describe('BulkActionsMessage', function () {
     });
 
     it('does not hides clear All button', function () {
-      expect(element.find('a[ng-click*="select($event, \'none\')"]').hasClass('ng-hide')).toBe(false);
+      expect(element.find('a[ng-click*="select(\'none\')"]').hasClass('ng-hide')).toBe(false);
     });
 
     it('hides Mark All selection button', function () {
-      expect(element.find('a[ng-click*="select($event, \'all\')"]').hasClass('ng-hide')).toBe(true);
+      expect(element.find('a[ng-click*="select(\'all\')"]').hasClass('ng-hide')).toBe(true);
     });
   });
 
@@ -89,11 +89,11 @@ describe('BulkActionsMessage', function () {
     });
 
     it('hides clear All button', function () {
-      expect(element.find('a[ng-click*="select($event, \'none\')"]').hasClass('ng-hide')).toBe(true);
+      expect(element.find('a[ng-click*="select(\'none\')"]').hasClass('ng-hide')).toBe(true);
     });
 
     it('show Mark All selection button', function () {
-      expect(element.find('a[ng-click*="select($event, \'all\')"]').hasClass('ng-hide')).toBe(false);
+      expect(element.find('a[ng-click*="select(\'all\')"]').hasClass('ng-hide')).toBe(false);
     });
   });
 
@@ -105,11 +105,11 @@ describe('BulkActionsMessage', function () {
       });
 
       it('doesn\'t add class civicase__link-disabled to buttons', function () {
-        expect(element.find('a[ng-click*="select($event, \'all\')"]').hasClass('civicase__link-disabled')).toBe(false);
+        expect(element.find('a[ng-click*="select(\'all\')"]').hasClass('civicase__link-disabled')).toBe(false);
       });
 
       it('doesn\'t add class civicase__link-disabled to buttons', function () {
-        expect(element.find('a[ng-click*="select($event, \'none\')"]').hasClass('civicase__link-disabled')).toBe(false);
+        expect(element.find('a[ng-click*="select(\'none\')"]').hasClass('civicase__link-disabled')).toBe(false);
       });
     });
 
@@ -120,11 +120,11 @@ describe('BulkActionsMessage', function () {
       });
 
       it('adds class civicase__link-disabled to buttons', function () {
-        expect(element.find('a[ng-click*="select($event, \'all\')"]').hasClass('civicase__link-disabled')).toBe(true);
+        expect(element.find('a[ng-click*="select(\'all\')"]').hasClass('civicase__link-disabled')).toBe(true);
       });
 
       it('adds class civicase__link-disabled to buttons', function () {
-        expect(element.find('a[ng-click*="select($event, \'none\')"]').hasClass('civicase__link-disabled')).toBe(true);
+        expect(element.find('a[ng-click*="select(\'none\')"]').hasClass('civicase__link-disabled')).toBe(true);
       });
     });
   });
