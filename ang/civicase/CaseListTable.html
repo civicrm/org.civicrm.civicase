@@ -1,6 +1,10 @@
 <div crm-ui-debug="selectedCases"></div>
 <div class="civicase__case-list">
-  <civicase-bulk-actions-message selected-items="selectedCases.length" total-count="totalCount" is-select-all-available="isSelectAllAvailable" show-checkboxes="showCheckboxes" ng-hide="viewingCase"></civicase-bulk-actions-message>
+  <civicase-bulk-actions-message
+    selected-items="selectedCases.length" total-count="totalCount"
+    is-select-all-available="isSelectAllAvailable" show-checkboxes="showCheckboxes"
+    ng-hide="viewingCase">
+  </civicase-bulk-actions-message>
   <div
     class="panel panel-default civicase__case-list-panel"
     ng-class="{'civicase__case-list-panel--summary': viewingCase, 'civicase__case-list-panel--focused': caseIsFocused}">
