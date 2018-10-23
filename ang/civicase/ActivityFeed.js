@@ -248,6 +248,7 @@
      */
     function getActivities (nextPage) {
       if (nextPage !== true) {
+        deselectAllActivities();
         pageNum = 0;
       }
 
