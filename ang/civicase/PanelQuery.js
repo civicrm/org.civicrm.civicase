@@ -109,19 +109,7 @@
       // Triggers a new request and a recalculation of the pagination range
       // when the current page changes
       $scope.$watch('pagination.page', function (newPage, oldPage) {
-        if (newPage === oldPage) {
-          return;
-        }
-
-        loadData(true)
-          .then(function () {
-            $scope.pagination.range.from = calculatePageOffset() + 1;
-            $scope.pagination.range.to = ($scope.pagination.page * $scope.pagination.size);
-
-            if ($scope.pagination.range.to > $scope.total) {
-              $scope.pagination.range.to = $scope.total;
-            }
-          });
+        (newPage !== oldPage) && loadData(true);
       });
     }
 
@@ -133,6 +121,7 @@
      */
     function loadData (skipCount) {
       return fetchDataViaApi(skipCount)
+        .then(updatePaginationRange)
         .then(function () {
           if (!skipCount && $scope.handlers.title) {
             $scope.title = $scope.handlers.title($scope.total);
@@ -164,6 +153,18 @@
      */
     function processResults (results) {
       return $scope.handlers.results ? results.map($scope.handlers.results) : results;
+    }
+
+    /**
+     * Updates the from..to range displayed in the pagination
+     */
+    function updatePaginationRange () {
+      $scope.pagination.range.from = calculatePageOffset() + 1;
+      $scope.pagination.range.to = ($scope.pagination.page * $scope.pagination.size);
+
+      if ($scope.pagination.range.to > $scope.total) {
+        $scope.pagination.range.to = $scope.total;
+      }
     }
 
     /**
