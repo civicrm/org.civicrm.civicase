@@ -5,6 +5,7 @@
     return {
       restrict: 'A',
       scope: {
+        params: '=feedParams',
         showCheckboxes: '=?',
         bulkAllowed: '=',
         caseTimelines: '=',

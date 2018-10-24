@@ -1,6 +1,6 @@
 /* stylelint-disable selector-max-id */
-.page-civicrm-case-a { 
-  #page { 
+.page-civicrm-case-a {
+  #page {
     margin: 0;
     padding-top: 0;
   }
@@ -22,5 +22,17 @@
         left: 0;
       }
     }
-  }  
+  }
+}
+
+#{$outside-namespace-marker} {
+  #civicaseActivitiesTab {
+    .civicase__activity-filter {
+      padding: 16px 0;
+
+      &.affix {
+        width: calc(100% - 240px);
+      }
+    }
+  }
 }
