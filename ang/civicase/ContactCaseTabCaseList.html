@@ -3,12 +3,12 @@
     mode="contact-record"
     case="case"
     ng-click="viewCase(case)"
-    ng-repeat="case in caseObj.cases">
+    ng-repeat="case in casesList.cases">
     </civicase-case-card>
   <div 
     class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--detached"
     ng-repeat="placeholder in loadingPlaceholders"
-    ng-if="!caseObj.isLoaded">
+    ng-if="!casesList.isLoaded">
     <div class="panel-body">
       <div class="civicase__case-card__row civicase__case-card__row--primary clearfix">
         <div class="pull-left civicase__case-card-title">
@@ -21,14 +21,14 @@
     </div>
   </div>
   <div class="text-center civicase__contact-case-tab__case-list__footer">
-    <div ng-if="caseObj.showSpinner" class="civicase__spinner"></div>
-    <button
-      class="btn btn-default"
-      ng-if="caseObj.isLoadMoreAvailable && caseObj.isLoaded && !caseObj.showSpinner"
+    <div ng-if="casesList.showSpinner" class="civicase__spinner"></div>
+    <button 
+      class="btn btn-default" 
+      ng-if="casesList.isLoadMoreAvailable && casesList.isLoaded && !casesList.showSpinner"
       ng-click="loadMore()">Load More Cases</button>
-    <div ng-if="!caseObj.isLoadMoreAvailable">
-      <span ng-if="caseObj.cases.length > 0"> Showing all {{ caseObj.cases.length }}</span>
-      <p ng-if="caseObj.cases.length == 0 && caseObj.isLoaded" class="text-left"> None Found </p>
+    <div ng-if="!casesList.isLoadMoreAvailable">
+      <span ng-if="casesList.cases.length > 0"> Showing all {{ casesList.cases.length }}</span>
+      <p ng-if="casesList.cases.length == 0 && casesList.isLoaded" class="text-left"> None Found </p>
     </div>
   </div>
 </div>

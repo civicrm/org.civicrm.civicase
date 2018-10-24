@@ -3,9 +3,8 @@
   ng-class="{
     'civicase__activity-card--draft': activity.status==='Draft',
     'civicase__activity-card--empty': !activity
-  }"
-  ng-click="viewInPopup($event, activity)">
-  <div ng-if="activity" class="panel panel-default">
+  }">
+  <div ng-if="activity" class="panel panel-default" ng-click="viewInPopup($event, activity)">
     <div class="panel-body">
       <div class="civicase__activity-card-row civicase__activity-card-row--first">
 

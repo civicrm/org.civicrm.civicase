@@ -115,6 +115,12 @@
       vertical-align: middle;
     }
   }
+
+  .list-group-item-info {
+    color: $crm-gray-matte;
+    display: block;
+    padding: $crm-dropdown-item-padding;
+  }  
 }
 
 .civicase__contact-cases-details__title {

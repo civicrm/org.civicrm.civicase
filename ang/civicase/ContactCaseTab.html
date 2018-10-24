@@ -12,13 +12,13 @@
     <div class="clearfix" ng-if="totalCount > 0">
       <div class="civicase__contact-cases-tab-container pull-left col-md-6">
         <div  
-          ng-repeat="case in casesListConfig" 
+          ng-repeat="casesList in casesListConfig"
           class="panel panel-default civicase__contact-cases-tab-list">
           <div class="panel-heading">
-            <h3 class="panel-title"> {{ case.title }}</h3>
+            <h3 class="panel-title"> {{ casesList.title }}</h3>
           </div>
-          <div class="panel-body">
-            <civicase-contact-case-tab-case-list case-obj="case" viewing-case-id="selectedCase.id"></civicase-contact-case-tab-case-list>
+          <div class="panel-body panel-body-extra">
+            <civicase-contact-case-tab-case-list cases-list="casesList" viewing-case-id="selectedCase.id"></civicase-contact-case-tab-case-list>
           </div>
         </div>
       </div>

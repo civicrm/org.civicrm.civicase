@@ -122,7 +122,7 @@
         contacts.push(currentCase.contact_id);
       });
 
-      _.each(caseObj.allActivities, function (activity) {
+      _.each(caseObj.activity_summary.next, function (activity) {
         contacts = contacts.concat(activity.assignee_contact_id);
         contacts = contacts.concat(activity.target_contact_id);
         contacts.push(activity.source_contact_id);
@@ -166,7 +166,7 @@
         sequential: 1,
         return: caseReturnParams,
         options: {
-          sort: 'modified_date ASC',
+          sort: 'modified_date DESC',
           limit: page.size,
           offset: page.size * (page.num - 1)
         }

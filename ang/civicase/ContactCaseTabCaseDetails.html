@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-  <div class="panel-body" ng-controller="civicaseCaseDetailsController" ng-if="item">
+  <div class="panel-body panel-body-extra" ng-controller="civicaseCaseDetailsController" ng-if="item">
     <div class="civicase__contact-cases__panel-row civicase__contact-cases__panel-row--dark  clearfix">
       <div class="pull-left civicase__contact-cases__panel-field-emphasis civicase__contact-cases-details__title">
         <span>Case ID: <strong> {{item.id}} </strong></span>
@@ -92,10 +92,11 @@
           Next Activity
         </div>
         <div
-          case-activity-card="item.next_activity"
+          case-activity-card="item.activity_summary.next[0]"
           refresh-callback="refresh"
           case="item"
-          crm-popup-form-success="refresh()"
+          edit-activity-url="editActivityUrl"
+          crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
         >
         </div>
       </div>
