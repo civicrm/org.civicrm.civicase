@@ -150,14 +150,18 @@
   margin-right: 8px;
 }
 
-.civicase__case-card--contact-record {
+.civicase__case-card--contact-record,
+.civicase__case-card--dashboard {
   background: $crm-white;
   border-radius: 2px !important;
   box-shadow: $box-shadow-block;
   color: $crm-gray-matte;
-  margin-bottom: 10px;
-  
-  >.panel-body {
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  > .panel-body {
     padding: 0;
   }
 
@@ -173,6 +177,19 @@
     .civicase__case-card-title {
       color: inherit;
     }
+  }
+}
+
+.civicase__case-card--dashboard {
+  box-shadow: $box-shadow-case-card-dashboard;
+
+  .civicase__contact-icon {
+    font-size: $font-size-h2;
+    vertical-align: middle;
+  }
+
+  .crm_notification-badge {
+    vertical-align: unset;
   }
 }
 
