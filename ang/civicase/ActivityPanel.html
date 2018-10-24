@@ -25,7 +25,7 @@
             type="button"
             class="btn btn-primary-outline"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ ts('Change activity priority') }}">
-            {{ activityPriorties[activity.priority_id].label }}
+            {{ activityPriorties[activity.priority_id].label || 'Set Priority' }}
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu dropdown-menu-right">

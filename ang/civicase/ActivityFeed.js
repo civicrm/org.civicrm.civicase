@@ -46,9 +46,6 @@
     (function init () {
       bindRouteParamsToScope();
       initiateWatchersAndEvents();
-      $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
-        $scope.viewActivity(activity.id, $event);
-      });
     }());
 
     /**
@@ -352,6 +349,9 @@
       $scope.$watch('params.filters', getActivities, true);
       $scope.$on('updateCaseData', getActivities);
       $scope.$on('civicase::bulk-actions::bulk-selections', bulkSelectionsListener);
+      $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
+        $scope.viewActivity(activity.id, $event);
+      });
     }
 
     /**

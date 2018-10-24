@@ -26,13 +26,15 @@
 }
 
 .civicase__case-details-panel--summary {
-  .civicase__case-body_tab.affix {
+  .civicase__case-body_tab.affix,
+  .civicase__activity-filter.affix {
     width: calc(100% - #{$case-card-width});
   }
 }
 
 .civicase__case-details-panel--focused {
-  .civicase__case-body_tab.affix {
+  .civicase__case-body_tab.affix,
+  .civicase__activity-filter.affix {
     width: 100%;
   }
 }
