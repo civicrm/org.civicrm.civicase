@@ -254,10 +254,34 @@
           expect(entity).toBe($scope.queryData.entity);
         });
 
-        it('is for fetching the data', function () {
-          var action = request[1];
+        describe('action', function () {
+          describe('when none is specified', function () {
+            it('is "get"', function () {
+              var action = request[1];
 
-          expect(action).toBe('get');
+              expect(action).toBe('get');
+            });
+          });
+
+          describe('when it is specified', function () {
+            var requests, request;
+
+            beforeEach(function () {
+              $scope.queryData.action = 'customaction';
+
+              crmApi.calls.reset();
+              compileDirective();
+
+              requests = crmApi.calls.argsFor(0)[0];
+              request = requests[Object.keys(requests)[0]];
+            });
+
+            it('is the given action', function () {
+              var action = request[1];
+
+              expect(action).toBe($scope.queryData.action);
+            });
+          });
         });
 
         describe('params', function () {

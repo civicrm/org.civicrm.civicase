@@ -77,7 +77,7 @@
      */
     function fetchDataViaApi (skipCount) {
       var apiCalls = {
-        get: [ $scope.query.entity, 'get', prepareRequestParams() ],
+        get: [ $scope.query.entity, $scope.query.action || 'get', prepareRequestParams() ],
         count: [ $scope.query.entity, 'getcount', $scope.query.params ]
       };
 
