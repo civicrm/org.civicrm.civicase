@@ -104,32 +104,6 @@
         });
       });
 
-      describe('title handler', function () {
-        var titleHandler = jasmine.createSpy().and.callFake(function (total) {
-          return 'The total number of items is' + total;
-        });
-
-        beforeEach(function () {
-          $scope.handlersData = { title: titleHandler };
-
-          compileDirective();
-        });
-
-        it('is called', function () {
-          expect(titleHandler).toHaveBeenCalled();
-        });
-
-        it('receives the total count as an argument', function () {
-          var arg = titleHandler.calls.argsFor(0)[0];
-
-          expect(arg).toBe(NO_OF_RESULTS);
-        });
-
-        it('allows to modify the title of the panel', function () {
-          expect(isolatedScope.title).toBe('The total number of items is' + NO_OF_RESULTS);
-        });
-      });
-
       describe('range handler', function () {
         var rangeHandler;
 
@@ -196,7 +170,7 @@
         }).toThrow();
       });
 
-      it('is optional to pass the <panel-query-actions> slot', function () {
+      it('is optional to pass the <panel-query-actions> and/or <panel-query-title> slots', function () {
         expect(function () {
           compileDirective({ results: '<div></div>' });
         }).not.toThrow();
@@ -204,21 +178,24 @@
 
       describe('scope compile', function () {
         beforeEach(function () {
-          $scope.query = { entity: 'OuterEntity', params: { foo: 'outerParam' } };
-          $scope.queryData = { entity: 'IsolatedEntity', params: { foo: 'isolatedParam' } };
+          $scope.query = { entity: 'OuterEntity', params: { foo: 'outerFoo', bar: 'outerBar' } };
+          $scope.queryData = { entity: 'IsolatedEntity', params: { foo: 'isolatedFoo', bar: 'isolatedBar' } };
 
           compileDirective({
             actions: '<div>{{query.entity}}</div>',
-            results: '<div>{{query.params.foo}}</div>'
+            results: '<div>{{query.params.foo}}</div>',
+            title: '<div>{{query.params.bar}}</div>'
           });
         });
 
         it('compiles the slot on its own isolated scope', function () {
           var actionsHtml = element.find('[ng-transclude="actions"]').html();
           var resultsHtml = element.find('[ng-transclude="results"]').html();
+          var titleHtml = element.find('[ng-transclude="title"]').html();
 
           expect(actionsHtml).toContain($scope.queryData.entity);
           expect(resultsHtml).toContain($scope.queryData.params.foo);
+          expect(titleHtml).toContain($scope.queryData.params.bar);
         });
       });
     });
@@ -347,14 +324,10 @@
 
     describe('new api request triggers', function () {
       var getRequest, countRequest;
-      var titleHandler = jasmine.createSpy();
 
       beforeEach(function () {
-        $scope.handlersData = { title: titleHandler };
-
         compileDirective();
         crmApi.calls.reset();
-        titleHandler.calls.reset();
       });
 
       describe('when the query params change', function () {
@@ -374,10 +347,6 @@
         it('passes the new params to the api', function () {
           expect(getRequest[2]).toEqual(jasmine.objectContaining({ baz: 'baz' }));
           expect(countRequest[2]).toEqual(jasmine.objectContaining({ baz: 'baz' }));
-        });
-
-        it('calls the title handler again', function () {
-          expect(titleHandler).toHaveBeenCalled();
         });
 
         it('resets the pagination', function () {
@@ -408,10 +377,6 @@
 
         it('does not trigger the api request to get the total count', function () {
           expect(countRequest).not.toBeDefined();
-        });
-
-        it('does not call the title handler again', function () {
-          expect(titleHandler).not.toHaveBeenCalled();
         });
       });
     });
@@ -500,6 +465,7 @@
 
       content += slots.actions ? '<panel-query-actions>' + slots.actions + '</panel-query-actions>' : '';
       content += slots.results ? '<panel-query-results>' + slots.results + '</panel-query-results>' : '';
+      content += slots.title ? '<panel-query-title>' + slots.title + '</panel-query-title>' : '';
 
       html = html.replace('%{attributes}', attributes);
       html = html.replace('%{content}', content);

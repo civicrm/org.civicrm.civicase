@@ -14,7 +14,8 @@
       },
       transclude: {
         actions: '?panelQueryActions',
-        results: 'panelQueryResults'
+        results: 'panelQueryResults',
+        title: '?panelQueryTitle'
       }
     };
 
@@ -26,6 +27,10 @@
       $transclude($scope, function (clone, scope) {
         $element.find('[ng-transclude="results"]').html(clone);
       }, false, 'results');
+
+      $transclude($scope, function (clone, scope) {
+        $element.find('[ng-transclude="title"]').html(clone);
+      }, false, 'title');
     }
   });
 
@@ -40,7 +45,6 @@
     $scope.handlers = $scope.handlers || {};
     $scope.loading = false;
     $scope.results = [];
-    $scope.title = '---';
     $scope.total = 0;
     $scope.ts = ts;
     $scope.selectedRange = 'week';
@@ -135,7 +139,6 @@
         .then(updatePaginationRange)
         .then(function () {
           if (!skipCount) {
-            $scope.title = $scope.handlers.title ? $scope.handlers.title($scope.total) : $scope.title;
             $scope.loading = false;
           }
         });

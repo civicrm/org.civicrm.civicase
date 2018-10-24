@@ -1,7 +1,11 @@
 <div class="panel panel-secondary">
   <header class="panel-heading">
     <div class="clearfix">
-      <h2 class="panel-title pull-left">{{title}}</h2>
+      <h2 class="panel-title pull-left">
+        <div ng-transclude="title">
+          {{loading ? '-' : total}} {{customData.itemName || 'items'}}
+        </div>
+      </h2>
       <div class="panel-heading-control crm_custom-select pull-left">
         <select ng-options="range.value as range.label for range in periodRange" ng-model="selectedRange"></select>
         <span class="crm_custom-select__arrow"></span>
