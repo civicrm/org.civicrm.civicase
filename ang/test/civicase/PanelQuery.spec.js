@@ -74,13 +74,13 @@
 
     describe('[handlers] attribute', function () {
       describe('results handler', function () {
-        var resultsHandler = jasmine.createSpy().and.callFake(function (item) {
-          item.baz = 'baz';
-
-          return item;
-        });
+        var resultsHandler;
+        var newResults = ['foo', 'bar', 'baz'];
 
         beforeEach(function () {
+          resultsHandler = jasmine.createSpy().and.callFake(function (results) {
+            return newResults;
+          });
           $scope.handlersData = { results: resultsHandler };
 
           compileDirective();
@@ -90,16 +90,17 @@
           expect(resultsHandler).toHaveBeenCalled();
         });
 
-        it('receives a result item as an argument', function () {
+        it('receives the full results list as an argument', function () {
           var arg = resultsHandler.calls.argsFor(0)[0];
 
-          expect(arg.id).toBeDefined();
+          expect(arg.length).toBe(NO_OF_RESULTS);
+          expect(arg.every(function (item) {
+            return typeof item.id !== 'undefined';
+          })).toBe(true);
         });
 
-        it('allows to modify the items before they are stored', function () {
-          expect(isolatedScope.results.every(function (item) {
-            return typeof item.baz !== 'undefined';
-          })).toBe(true);
+        it('allows to modify the list before it is stored', function () {
+          expect(isolatedScope.results).toBe(newResults);
         });
       });
 

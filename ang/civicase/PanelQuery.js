@@ -31,9 +31,9 @@
 
   module.controller('panelQueryCtrl', panelQueryCtrl);
 
-  panelQueryCtrl.$inject = ['$log', '$scope', 'crmApi'];
+  panelQueryCtrl.$inject = ['$log', '$q', '$scope', 'crmApi'];
 
-  function panelQueryCtrl ($log, $scope, crmApi) {
+  function panelQueryCtrl ($log, $q, $scope, crmApi) {
     var PAGE_SIZE = 5;
 
     $scope.customData = $scope.customData || {};
@@ -85,8 +85,12 @@
 
       return crmApi(apiCalls)
         .then(function (result) {
-          $scope.results = processResults(result.get.values);
           !skipCount && ($scope.total = result.count);
+
+          return processResults(result.get.values);
+        })
+        .then(function (processed) {
+          $scope.results = processed;
         });
     }
 
@@ -149,10 +153,10 @@
      * before storing it
      *
      * @param {Array} results
-     * @return {Array}
+     * @return {Promise}
      */
     function processResults (results) {
-      return $scope.handlers.results ? results.map($scope.handlers.results) : results;
+      return $q.resolve($scope.handlers.results ? $scope.handlers.results(results) : results);
     }
 
     /**
