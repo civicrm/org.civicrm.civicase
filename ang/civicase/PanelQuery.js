@@ -72,16 +72,21 @@
     /**
      * Fetches the data via the Civi API and stores the response
      *
+     * @param {Boolean} skipCount if true then the "getcount" request won't be sent
      * @return {Promise}
      */
-    function fetchDataViaApi () {
-      return crmApi({
+    function fetchDataViaApi (skipCount) {
+      var apiCalls = {
         get: [ $scope.query.entity, 'get', prepareRequestParams() ],
         count: [ $scope.query.entity, 'getcount', $scope.query.params ]
-      })
+      };
+
+      skipCount && (delete apiCalls.count);
+
+      return crmApi(apiCalls)
         .then(function (result) {
           $scope.results = processResults(result.get.values);
-          $scope.total = result.count;
+          !skipCount && ($scope.total = result.count);
         });
     }
 
@@ -101,26 +106,37 @@
         }
       });
 
-      // Triggers a recalculation of the pagination range when the current page changes
+      // Triggers a new request and a recalculation of the pagination range
+      // when the current page changes
       $scope.$watch('pagination.page', function (newPage, oldPage) {
-        if (newPage !== oldPage) {
-          $scope.pagination.range.from = calculatePageOffset() + 1;
-          $scope.pagination.range.to = ($scope.pagination.page * $scope.pagination.size);
-
-          if ($scope.pagination.range.to > $scope.total) {
-            $scope.pagination.range.to = $scope.total;
-          }
+        if (newPage === oldPage) {
+          return;
         }
+
+        loadData(true)
+          .then(function () {
+            $scope.pagination.range.from = calculatePageOffset() + 1;
+            $scope.pagination.range.to = ($scope.pagination.page * $scope.pagination.size);
+
+            if ($scope.pagination.range.to > $scope.total) {
+              $scope.pagination.range.to = $scope.total;
+            }
+          });
       });
     }
 
     /**
      * Loads the data and triggers any subsequent logic
+     *
+     * @param {Boolean} skipCount sets whether the directive needs to recalculate the total
+     * @return {Promise}
      */
-    function loadData () {
-      fetchDataViaApi()
+    function loadData (skipCount) {
+      return fetchDataViaApi(skipCount)
         .then(function () {
-          $scope.title = $scope.handlers.title ? $scope.handlers.title($scope.total) : $scope.title;
+          if (!skipCount && $scope.handlers.title) {
+            $scope.title = $scope.handlers.title($scope.total);
+          }
         });
     }
 

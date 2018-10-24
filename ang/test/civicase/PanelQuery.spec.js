@@ -338,7 +338,8 @@
       });
     });
 
-    describe('watchers', function () {
+    describe('new api request triggers', function () {
+      var getRequest, countRequest;
       var titleHandler = jasmine.createSpy();
 
       beforeEach(function () {
@@ -350,8 +351,6 @@
       });
 
       describe('when the query params change', function () {
-        var getRequest, countRequest;
-
         beforeEach(function () {
           $scope.queryData.params.baz = 'baz';
           $scope.$digest();
@@ -371,6 +370,39 @@
 
         it('calls the title handler again', function () {
           expect(titleHandler).toHaveBeenCalled();
+        });
+      });
+
+      describe('when the current page change', function () {
+        var isolatedScope;
+
+        beforeEach(function () {
+          isolatedScope = element.isolateScope();
+          isolatedScope.pagination.page = 2;
+          isolatedScope.$digest();
+
+          getRequest = crmApi.calls.argsFor(0)[0].get;
+          countRequest = crmApi.calls.argsFor(0)[0].count;
+        });
+
+        it('triggers an api request', function () {
+          expect(crmApi).toHaveBeenCalled();
+        });
+
+        it('triggers the api request to fetch the data', function () {
+          expect(getRequest).toBeDefined();
+        });
+
+        it('passes the new pagination offset to the request', function () {
+          expect(getRequest[2].options.offset).toEqual(5);
+        });
+
+        it('does not trigger the api request to get the total count', function () {
+          expect(countRequest).not.toBeDefined();
+        });
+
+        it('does not call the title handler again', function () {
+          expect(titleHandler).not.toHaveBeenCalled();
         });
       });
     });
