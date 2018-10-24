@@ -20,17 +20,11 @@
     };
 
     function linkFn ($scope, $element, $attrs, $controller, $transclude) {
-      $transclude($scope, function (clone, scope) {
-        $element.find('[ng-transclude="actions"]').html(clone);
-      }, false, 'actions');
-
-      $transclude($scope, function (clone, scope) {
-        $element.find('[ng-transclude="results"]').html(clone);
-      }, false, 'results');
-
-      $transclude($scope, function (clone, scope) {
-        $element.find('[ng-transclude="title"]').html(clone);
-      }, false, 'title');
+      ['actions', 'results', 'title'].forEach(function (slot) {
+        $transclude($scope, function (clone, scope) {
+          $element.find('[ng-transclude="' + slot + '"]').html(clone);
+        }, false, slot);
+      });
     }
   });
 
