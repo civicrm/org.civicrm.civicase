@@ -135,6 +135,50 @@
           expect(isolatedScope.title).toBe('The total number of items is' + NO_OF_RESULTS);
         });
       });
+
+      describe('range handler', function () {
+        var rangeHandler;
+
+        beforeEach(function () {
+          rangeHandler = jasmine.createSpy().and.callFake(function (selectedRange) {});
+          $scope.handlersData = { range: rangeHandler };
+
+          compileDirective();
+        });
+
+        it('is not called on init', function () {
+          expect(rangeHandler).not.toHaveBeenCalled();
+        });
+
+        describe('when the selected range changes', function () {
+          var isolatedScope;
+          var newRange = 'month';
+
+          beforeEach(function () {
+            rangeHandler.calls.reset();
+            isolatedScope = element.isolateScope();
+
+            isolatedScope.selectedRange = newRange;
+            isolatedScope.$digest();
+          });
+
+          it('is called when the selected range changes', function () {
+            expect(rangeHandler).toHaveBeenCalled();
+          });
+
+          it('receives the new selected range as an argument', function () {
+            var arg = rangeHandler.calls.argsFor(0)[0];
+
+            expect(arg).toBe(newRange);
+          });
+
+          it('receives the query params as an argument', function () {
+            var arg = rangeHandler.calls.argsFor(0)[1];
+
+            expect(arg).toEqual($scope.queryData.params);
+          });
+        });
+      });
     });
 
     describe('transclude slots', function () {

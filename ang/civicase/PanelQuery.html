@@ -3,10 +3,7 @@
     <div class="clearfix">
       <h2 class="panel-title pull-left">{{title}}</h2>
       <div class="panel-heading-control crm_custom-select pull-left">
-        <select>
-          <option value="week">This Week</option>
-          <option value="month">This Month</option>
-        </select>
+        <select ng-options="range.value as range.label for range in periodRange" ng-model="selectedRange"></select>
         <span class="crm_custom-select__arrow"></span>
       </div>
       <div class="pull-right" ng-transclude="actions"></div>

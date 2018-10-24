@@ -74,6 +74,12 @@
       $scope.$watchCollection('query.params', function (newParams, oldParams) {
         (newParams !== oldParams) && loadData();
       }, true);
+
+      $scope.$watch('selectedRange', function (newRange, oldRange) {
+        if (newRange !== oldRange && $scope.handlers.range) {
+          $scope.handlers.range($scope.selectedRange, $scope.query.params);
+        }
+      });
     }
 
     /**
