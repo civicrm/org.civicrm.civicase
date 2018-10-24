@@ -286,6 +286,20 @@
           it('automatically adds `sequential` to the params', function () {
             expect(requestParams).toEqual(jasmine.objectContaining({ sequential: 1 }));
           });
+
+          describe('pagination', function () {
+            var isolatedScope;
+
+            beforeEach(function () {
+              isolatedScope = element.isolateScope();
+            });
+
+            it('adds the pagination params', function () {
+              expect(requestParams.options).toBeDefined();
+              expect(requestParams.options.limit).toBe(isolatedScope.pagination.size);
+              expect(requestParams.options.offset).toBeDefined(isolatedScope.pagination.page + isolatedScope.pagination.size);
+            });
+          });
         });
 
         describe('results', function () {
@@ -357,6 +371,56 @@
 
         it('calls the title handler again', function () {
           expect(titleHandler).toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('pagination', function () {
+      var isolatedScope;
+
+      beforeEach(function () {
+        compileDirective();
+        isolatedScope = element.isolateScope();
+      });
+
+      it('starts from page 1', function () {
+        expect(isolatedScope.pagination.page).toBe(1);
+      });
+
+      it('has a default page size of 5', function () {
+        expect(isolatedScope.pagination.size).toBe(5);
+      });
+
+      describe('range calculation', function () {
+        describe('from', function () {
+          it('calculated from: current page and page size', function () {
+            expect(isolatedScope.pagination.range.from).toBe(1);
+
+            isolatedScope.pagination.page = 3;
+            isolatedScope.$digest();
+
+            expect(isolatedScope.pagination.range.from).toBe(11);
+          });
+        });
+
+        describe('to', function () {
+          beforeEach(function () {
+            isolatedScope.total = 19;
+          });
+
+          it('calculated from: current page, page size, total count', function () {
+            expect(isolatedScope.pagination.range.to).toBe(5);
+
+            isolatedScope.pagination.page = 3;
+            isolatedScope.$digest();
+
+            expect(isolatedScope.pagination.range.to).toBe(15);
+
+            isolatedScope.pagination.page = 4;
+            isolatedScope.$digest();
+
+            expect(isolatedScope.pagination.range.to).toBe(19);
+          });
         });
       });
     });

@@ -13,6 +13,22 @@
     <div ng-transclude="results"></div>
   </div>
   <footer class="panel-footer">
-    <!-- the pagination directive -->
+    {{pagination}}
+    <paging
+      class="pull-right"
+      ng-show="results.length > 1"
+      page="pagination.page"
+      page-size="pagination.size"
+      total="total"
+      adjacent="1"
+      dots="..."
+      show-prev-next="true"
+      show-first-last="true"
+      text-first="{{ ts('First') }}"
+      text-last="{{ ts('Last') }}"
+      text-next="{{ ts('Next') }}"
+      text-prev="{{ ts('Prev') }}"
+    ></paging>
+    <div>Showing {{pagination.range.from}} to {{pagination.range.to}} of {{total}} items</div>
   </footer>
 </div>

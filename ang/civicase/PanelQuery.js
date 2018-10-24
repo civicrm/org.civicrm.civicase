@@ -34,6 +34,8 @@
   panelQueryCtrl.$inject = ['$log', '$scope', 'crmApi'];
 
   function panelQueryCtrl ($log, $scope, crmApi) {
+    var PAGE_SIZE = 5;
+
     $scope.customData = $scope.customData || {};
     $scope.handlers = $scope.handlers || {};
     $scope.results = [];
@@ -44,6 +46,11 @@
       { label: 'This Week', value: 'week' },
       { label: 'This Month', value: 'month' }
     ];
+    $scope.pagination = {
+      page: 1,
+      size: PAGE_SIZE,
+      range: { from: 1, to: PAGE_SIZE }
+    };
 
     (function init () {
       initWatchers();
@@ -82,6 +89,17 @@
           $scope.handlers.range($scope.selectedRange, $scope.query.params);
         }
       });
+
+      $scope.$watch('pagination.page', function (newPage, oldPage) {
+        if (newPage !== oldPage) {
+          $scope.pagination.range.from = (($scope.pagination.page - 1) * $scope.pagination.size) + 1;
+          $scope.pagination.range.to = ($scope.pagination.page * $scope.pagination.size);
+
+          if ($scope.pagination.range.to > $scope.total) {
+            $scope.pagination.range.to = $scope.total;
+          }
+        }
+      });
     }
 
     /**
@@ -101,7 +119,11 @@
      */
     function prepareRequestParams () {
       return _.assign({}, $scope.query.params, {
-        sequential: 1
+        sequential: 1,
+        options: {
+          limit: $scope.pagination.size,
+          offset: $scope.pagination.page + $scope.pagination.size
+        }
       });
     }
 
