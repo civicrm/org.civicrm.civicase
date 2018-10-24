@@ -359,6 +359,7 @@
 
       describe('when the query params change', function () {
         beforeEach(function () {
+          isolatedScope.pagination.page = 2;
           $scope.queryData.params.baz = 'baz';
           $scope.$digest();
 
@@ -377,6 +378,10 @@
 
         it('calls the title handler again', function () {
           expect(titleHandler).toHaveBeenCalled();
+        });
+
+        it('resets the pagination', function () {
+          expect(isolatedScope.pagination.page).toBe(1);
         });
       });
 

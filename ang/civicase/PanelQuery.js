@@ -125,7 +125,10 @@
      * @return {Promise}
      */
     function loadData (skipCount) {
-      (!skipCount) && ($scope.loading = true);
+      if (!skipCount) {
+        $scope.pagination.page = 1;
+        $scope.loading = true;
+      }
 
       return fetchDataViaApi(skipCount)
         .then(updatePaginationRange)
