@@ -9,6 +9,7 @@
       controller: 'panelQueryCtrl',
       scope: {
         query: '<',
+        customData: '<?',
         handlers: '<?'
       },
       transclude: {
@@ -33,6 +34,7 @@
   panelQueryCtrl.$inject = ['$log', '$scope', 'crmApi'];
 
   function panelQueryCtrl ($log, $scope, crmApi) {
+    $scope.customData = $scope.customData || {};
     $scope.handlers = $scope.handlers || {};
     $scope.results = [];
     $scope.title = '---';

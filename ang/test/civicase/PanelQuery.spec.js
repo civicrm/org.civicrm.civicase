@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 (function ($, _) {
-  fdescribe('panelQuery', function () {
+  describe('panelQuery', function () {
     var element, $compile, $q, $rootScope, $scope, crmApi, mockedResults;
     var NO_OF_RESULTS = 10;
 
@@ -178,6 +178,24 @@
             expect(arg).toEqual($scope.queryData.params);
           });
         });
+      });
+    });
+
+    describe('[custom-data] attribute', function () {
+      var isolatedScope;
+      beforeEach(function () {
+        $scope.customData = {
+          customProp: 'foobarbaz',
+          customFn: function () {}
+        };
+
+        compileDirective();
+        isolatedScope = element.isolateScope();
+      });
+
+      it('is stored in the isolated scope', function () {
+        expect(_.isEmpty(isolatedScope.customData)).toBe(false);
+        expect(isolatedScope.customData).toEqual(jasmine.objectContaining($scope.customData));
       });
     });
 
@@ -378,9 +396,8 @@
         entity: 'FooBar', params: { foo: 'foo', bar: 'bar' }
       };
 
-      if ($scope.handlersData) {
-        attributes += ' handlers="handlersData"';
-      }
+      attributes += $scope.handlersData ? ' handlers="handlersData"' : '';
+      attributes += $scope.customData ? ' custom-data="customData"' : '';
 
       content += slots.actions ? '<panel-query-actions>' + slots.actions + '</panel-query-actions>' : '';
       content += slots.results ? '<panel-query-results>' + slots.results + '</panel-query-results>' : '';
