@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 (function (_) {
   describe('civicaseCaseDetails', function () {
-    var $provide, element, $compile, $rootScope, $scope, crmApi, $q, formatCase, CasesData;
+    var element, $compile, $rootScope, $scope, crmApi, $q, formatCase, CasesData;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
       $provide = _$provide_;
@@ -17,6 +17,8 @@
 
       $provide.value('crmApi', crmApiMock);
       $provide.value('formatCase', formatCaseMock);
+
+      killDirective('civicaseActivitiesCalendar');
     }));
 
     beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_, _crmApi_, _$q_, _formatCase_) {
@@ -28,7 +30,7 @@
       crmApi = _crmApi_;
       formatCase = _formatCase_;
 
-      crmApi.and.returnValue($q.resolve(_.cloneDeep(formatCase(CasesData))));
+      crmApi.and.returnValue($q.resolve(_.cloneDeep(CasesData)));
     }));
 
 
@@ -71,8 +73,6 @@
       beforeEach(function () {
         compileDirective();
         element.isolateScope().item = CasesData.values[0];
-        element.isolateScope().item.allActivities = CasesData.values[0]['api.Activity.get.1'].values;
-
         element.isolateScope().pushCaseData(CasesData.values[0]);
       });
 
@@ -129,7 +129,7 @@
     });
 
     function compileDirective () {
-      $scope.viewingCaseDetails = CasesData.values[0];
+      $scope.viewingCaseDetails = formatCase(CasesData.values[0]);
       element = $compile('<div civicase-case-details="viewingCaseDetails"></div>')($scope);
       $scope.$digest();
     }
@@ -153,54 +153,71 @@
         overdue: overdueActivities.length
       };
     }
-  });
 
-  describe('civicaseCaseDetailsController', function () {
-    var $controller, $provide, $rootScope, $route, $scope, CasesData, crmApiMock;
-
-    beforeEach(module('civicase', 'civicase.data', function (_$provide_) {
-      $provide = _$provide_;
-    }));
-
-    beforeEach(inject(function (_$controller_, $q, _$rootScope_, _$route_, _CasesData_) {
-      $controller = _$controller_;
-      $rootScope = _$rootScope_;
-      $route = _$route_;
-      CasesData = _CasesData_;
-      crmApiMock = jasmine.createSpy('crmApi').and
-        .returnValue($q.defer().promise);
-
-      $provide.value('crmApi', crmApiMock);
-    }));
-
-    describe('viewing the case', function () {
-      describe('when requesting to view a case that is missing its details', function () {
-        beforeEach(function () {
-          initController();
-        });
-
-        it('requests the missing case details', function () {
-          expect(crmApiMock).toHaveBeenCalledWith(
-            'Case', 'getdetails', jasmine.any(Object)
-          );
+    /**
+     * Removes the call for the directive mentioned
+     * TODO: Have a more generic usage - Maybe create a service/factory
+     *
+     * @param {String} directiveName
+     */
+    function killDirective (directiveName) {
+      angular.mock.module(function ($compileProvider) {
+        $compileProvider.directive(directiveName, function () {
+          return {
+            priority: 9999999,
+            terminal: true
+          };
         });
       });
+    }  
 
-      describe('when the case is locked for the current user', function () {
-        beforeEach(function () {
-          var caseItem = _.cloneDeep(CasesData.get().values[0]);
-          caseItem.lock = 1;
 
-          spyOn($route, 'updateParams');
-          initController(caseItem);
+    describe('civicaseCaseDetailsController', function () {
+      var $controller, $provide, $rootScope, $route, $scope, CasesData, crmApiMock;
+
+      beforeEach(module('civicase', 'civicase.data', function (_$provide_) {
+        $provide = _$provide_;
+      }));
+
+      beforeEach(inject(function (_$controller_, $q, _$rootScope_, _$route_, _CasesData_) {
+        $controller = _$controller_;
+        $rootScope = _$rootScope_;
+        $route = _$route_;
+        CasesData = _CasesData_;
+        crmApiMock = jasmine.createSpy('crmApi').and
+          .returnValue($q.defer().promise);
+
+        $provide.value('crmApi', crmApiMock);
+      }));
+
+      describe('viewing the case', function () {
+        describe('when requesting to view a case that is missing its details', function () {
+          beforeEach(function () {
+            initController();
+          });
+
+          it('requests the missing case details', function () {
+            expect(crmApiMock).toHaveBeenCalledWith(
+              'Case', 'getdetails', jasmine.any(Object)
+            );
+          });
         });
 
-        it('redirects the user to the case list', function () {
-          expect($route.updateParams).toHaveBeenCalledWith({ caseId: null });
+        describe('when the case is locked for the current user', function () {
+          beforeEach(function () {
+            var caseItem = _.cloneDeep(CasesData.get().values[0]);
+            caseItem.lock = 1;
+
+            spyOn($route, 'updateParams');
+            initController(caseItem);
+          });
+
+          it('redirects the user to the case list', function () {
+            expect($route.updateParams).toHaveBeenCalledWith({ caseId: null });
+          });
         });
       });
     });
-
     /**
      * Initializes the case details controller.
      *
