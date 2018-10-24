@@ -38,6 +38,7 @@
 
     $scope.customData = $scope.customData || {};
     $scope.handlers = $scope.handlers || {};
+    $scope.loading = false;
     $scope.results = [];
     $scope.title = '---';
     $scope.total = 0;
@@ -124,11 +125,14 @@
      * @return {Promise}
      */
     function loadData (skipCount) {
+      (!skipCount) && ($scope.loading = true);
+
       return fetchDataViaApi(skipCount)
         .then(updatePaginationRange)
         .then(function () {
-          if (!skipCount && $scope.handlers.title) {
-            $scope.title = $scope.handlers.title($scope.total);
+          if (!skipCount) {
+            $scope.title = $scope.handlers.title ? $scope.handlers.title($scope.total) : $scope.title;
+            $scope.loading = false;
           }
         });
     }
