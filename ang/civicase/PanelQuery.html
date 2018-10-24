@@ -50,7 +50,7 @@
         text-prev="{{ ts('Previous') }}"
       ></paging>
       <div>
-        Showing {{pagination.range.from}} to {{pagination.range.to}} of {{total}} {{customData.itemName || 'items'}}
+        Showing {{loading ? '-' : pagination.range.from}} to {{loading ? '-' : pagination.range.to}} of {{loading ? '-' : total}} {{customData.itemName || 'items'}}
       </div>
     </div>
   </footer>
