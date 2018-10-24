@@ -66,15 +66,13 @@
      */
     function initWatchers () {
       // Trigger a refresh when the query params change
-      $scope.$watch('query.params', function (newParams, oldParams) {
-        _.isObject(newParams) && loadData();
+      $scope.$watchCollection('query.params', function (newParams, oldParams) {
+        (newParams !== oldParams) && loadData();
       }, true);
     }
 
     /**
-     * Loads the data and triggers any triggers any subsequent logic
-     *
-     * @return {Promise}
+     * Loads the data and triggers any subsequent logic
      */
     function loadData () {
       fetchDataViaApi()
