@@ -23,18 +23,18 @@
       }));
     }));
 
-    describe('[query-data] attribute', function () {
+    describe('[query] attribute', function () {
       var isolatedScope;
 
       beforeEach(function () {
-        $scope.queryData = { query: { entity: 'Foo', params: { foo: 'foo' } } };
+        $scope.queryData = { entity: 'Foo', params: { foo: 'foo' } };
         compileDirective();
         isolatedScope = element.isolateScope();
       });
 
       it('store its value in its scope', function () {
-        expect(isolatedScope.queryData).toBeDefined();
-        expect(isolatedScope.queryData).toEqual($scope.queryData);
+        expect(isolatedScope.query).toBeDefined();
+        expect(isolatedScope.query).toEqual($scope.queryData);
       });
 
       describe('one-way binding', function () {
@@ -42,7 +42,7 @@
 
         beforeEach(function () {
           originalSource = $scope.queryData;
-          isolatedScope.queryData = { baz: 'baz' };
+          isolatedScope.query = { baz: 'baz' };
 
           $scope.$digest();
         });
@@ -53,19 +53,9 @@
       });
 
       describe('`query` object', function () {
-        describe('when it is not present', function () {
-          beforeEach(function () {
-            $scope.queryData = {};
-          });
-
-          it('throws', function () {
-            expect(compileDirective).toThrowError(/query/);
-          });
-        });
-
         describe('when it doesn\'t have the `entity` property', function () {
           beforeEach(function () {
-            $scope.queryData = { query: { params: {} } };
+            $scope.queryData = { params: {} };
           });
 
           it('sends an error message', function () {
@@ -75,7 +65,7 @@
 
         describe('when the `entity` property is an empty string', function () {
           beforeEach(function () {
-            $scope.queryData = { query: { entity: '', params: {} } };
+            $scope.queryData = { entity: '', params: {} };
           });
 
           it('sends an error message', function () {
@@ -100,12 +90,12 @@
 
       describe('scope compile', function () {
         beforeEach(function () {
-          $scope.queryData = { query: { entity: 'OuterEntity', params: { foo: 'outerParam' } } };
-          $scope.passedData = { query: { entity: 'IsolatedEntity', params: { foo: 'isolatedParam' } } };
+          $scope.query = { entity: 'OuterEntity', params: { foo: 'outerParam' } };
+          $scope.passedData = { entity: 'IsolatedEntity', params: { foo: 'isolatedParam' } };
 
           compileDirective({
-            actions: '<div>{{queryData.query.entity}}</div>',
-            results: '<div>{{queryData.query.params.foo}}</div>'
+            actions: '<div>{{query.entity}}</div>',
+            results: '<div>{{query.params.foo}}</div>'
           }, 'passedData');
         });
 
@@ -113,8 +103,8 @@
           var actionsHtml = element.find('[ng-transclude="actions"]').html();
           var resultsHtml = element.find('[ng-transclude="results"]').html();
 
-          expect(actionsHtml).toContain($scope.passedData.query.entity);
-          expect(resultsHtml).toContain($scope.passedData.query.params.foo);
+          expect(actionsHtml).toContain($scope.passedData.entity);
+          expect(resultsHtml).toContain($scope.passedData.params.foo);
         });
       });
     });
@@ -124,10 +114,8 @@
 
       beforeEach(function () {
         $scope.queryData = {
-          query: {
-            entity: 'SomeEntity',
-            params: { foo: 'foo', bar: 'bar' }
-          }
+          entity: 'SomeEntity',
+          params: { foo: 'foo', bar: 'bar' }
         };
         compileDirective();
 
@@ -151,7 +139,7 @@
         it('is for the given entity', function () {
           var entity = request[0];
 
-          expect(entity).toBe($scope.queryData.query.entity);
+          expect(entity).toBe($scope.queryData.entity);
         });
 
         it('is for fetching the data', function () {
@@ -168,7 +156,7 @@
           });
 
           it('passes to the api the params in the `query` object', function () {
-            expect(requestParams).toEqual(jasmine.objectContaining($scope.queryData.query.params));
+            expect(requestParams).toEqual(jasmine.objectContaining($scope.queryData.params));
           });
 
           it('automatically adds `sequential` to the params', function () {
@@ -193,7 +181,7 @@
         it('is for the given entity', function () {
           var entity = request[0];
 
-          expect(entity).toBe($scope.queryData.query.entity);
+          expect(entity).toBe($scope.queryData.entity);
         });
 
         it('is for getting the total count', function () {
@@ -203,7 +191,7 @@
         });
 
         it('passes to the api the params in the `query` object', function () {
-          expect(request[2]).toEqual($scope.queryData.query.params);
+          expect(request[2]).toEqual($scope.queryData.params);
         });
 
         it('stores the count', function () {
@@ -215,10 +203,8 @@
     describe('watchers', function () {
       beforeEach(function () {
         $scope.queryData = {
-          query: {
-            entity: 'SomeEntity',
-            params: { foo: 'foo', bar: 'bar' }
-          }
+          entity: 'SomeEntity',
+          params: { foo: 'foo', bar: 'bar' }
         };
         compileDirective();
         crmApi.calls.reset();
@@ -228,7 +214,7 @@
         var getRequest, countRequest;
 
         beforeEach(function () {
-          $scope.queryData.query.params.baz = 'baz';
+          $scope.queryData.params.baz = 'baz';
           $scope.$digest();
 
           getRequest = crmApi.calls.argsFor(0)[0].get;
@@ -250,21 +236,21 @@
      *
      * @param {Object} slot the transclude slots with their markup
      */
-    function compileDirective (slots, dataProperty) {
+    function compileDirective (slots, queryProperty) {
       var content = '';
-      var html = '<civicase-panel-query query-data="%{dataProperty}">%{content}</civicase-panel-query>';
+      var html = '<civicase-panel-query query="%{queryProperty}">%{content}</civicase-panel-query>';
 
-      dataProperty = dataProperty || 'queryData';
+      queryProperty = queryProperty || 'queryData';
       slots = slots || { results: '<div></div>' };
 
-      $scope[dataProperty] = $scope[dataProperty] || {
-        query: { entity: 'FooBar', params: [] }
+      $scope[queryProperty] = $scope[queryProperty] || {
+        entity: 'FooBar', params: []
       };
 
       content += slots.actions ? '<panel-query-actions>' + slots.actions + '</panel-query-actions>' : '';
       content += slots.results ? '<panel-query-results>' + slots.results + '</panel-query-results>' : '';
 
-      html = html.replace('%{dataProperty}', dataProperty);
+      html = html.replace('%{queryProperty}', queryProperty);
       html = html.replace('%{content}', content);
 
       element = $compile(html)($scope);

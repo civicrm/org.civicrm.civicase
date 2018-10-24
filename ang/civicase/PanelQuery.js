@@ -8,7 +8,7 @@
       link: linkFn,
       controller: 'panelQueryCtrl',
       scope: {
-        queryData: '<'
+        query: '<'
       },
       transclude: {
         actions: '?panelQueryActions',
@@ -46,7 +46,7 @@
      */
     function initWatchers () {
       // Trigger a refresh when the query params change
-      $scope.$watch('queryData.query.params', function (newParams, oldParams) {
+      $scope.$watch('query.params', function (newParams, oldParams) {
         _.isObject(newParams) && loadData();
       }, true);
     }
@@ -56,8 +56,8 @@
      */
     function loadData () {
       crmApi({
-        get: [ $scope.queryData.query.entity, 'get', prepareRequestParams() ],
-        count: [ $scope.queryData.query.entity, 'getcount', $scope.queryData.query.params ]
+        get: [ $scope.query.entity, 'get', prepareRequestParams() ],
+        count: [ $scope.query.entity, 'getcount', $scope.query.params ]
       })
         .then(function (result) {
           $scope.results = result.get.values;
@@ -71,7 +71,7 @@
      * @return {String}
      */
     function prepareRequestParams () {
-      return _.assign({}, $scope.queryData.query.params, {
+      return _.assign({}, $scope.query.params, {
         sequential: 1
       });
     }
@@ -82,11 +82,11 @@
      * @throws Error
      */
     function verifyData () {
-      if (!$scope.queryData.query) {
+      if (!$scope.query) {
         throw new Error('You need to provide a `query` object');
       }
 
-      if (!$scope.queryData.query.entity) {
+      if (!$scope.query.entity) {
         throw new Error('The `query` object needs to have a `entity` value');
       }
     }
