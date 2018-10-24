@@ -1,14 +1,26 @@
 /* eslint-env jasmine */
-(function ($) {
-  fdescribe('panelQuery', function () {
-    var element, $compile, $rootScope, $scope;
+(function ($, _) {
+  describe('panelQuery', function () {
+    var element, $compile, $q, $rootScope, $scope, crmApi, mockedResults;
+    var NO_OF_RESULTS = 10;
 
-    beforeEach(module('civicase.templates', 'civicase'));
+    beforeEach(module('civicase.templates', 'civicase', 'crmUtil'));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_) {
+    beforeEach(inject(function (_$compile_, _$q_, _$rootScope_, _crmApi_) {
       $compile = _$compile_;
+      $q = _$q_;
       $rootScope = _$rootScope_;
+      crmApi = _crmApi_;
+
       $scope = $rootScope.$new();
+      mockedResults = _.times(NO_OF_RESULTS, function () {
+        return jasmine.any(Object);
+      });
+
+      crmApi.and.returnValue($q.resolve({
+        get: { values: mockedResults },
+        count: NO_OF_RESULTS
+      }));
     }));
 
     describe('[query-data] attribute', function () {
@@ -41,16 +53,6 @@
       });
 
       describe('`query` object', function () {
-        var $log;
-
-        beforeEach(inject(function (_$log_) {
-          $log = _$log_;
-        }));
-
-        beforeEach(function () {
-          spyOn($log, 'error');
-        });
-
         describe('when it is not present', function () {
           beforeEach(function () {
             $scope.queryData = {};
@@ -117,6 +119,132 @@
       });
     });
 
+    describe('api requests', function () {
+      var isolatedScope, requests;
+
+      beforeEach(function () {
+        $scope.queryData = {
+          query: {
+            entity: 'SomeEntity',
+            params: { foo: 'foo', bar: 'bar' }
+          }
+        };
+        compileDirective();
+
+        isolatedScope = element.isolateScope();
+        requests = crmApi.calls.argsFor(0)[0];
+      });
+
+      it('sends two api requests on init', function () {
+        expect(crmApi).toHaveBeenCalled();
+        expect(_.isObject(requests)).toEqual(true);
+        expect(Object.keys(requests).length).toBe(2);
+      });
+
+      describe('first request', function () {
+        var request;
+
+        beforeEach(function () {
+          request = requests[Object.keys(requests)[0]];
+        });
+
+        it('is for the given entity', function () {
+          var entity = request[0];
+
+          expect(entity).toBe($scope.queryData.query.entity);
+        });
+
+        it('is for fetching the data', function () {
+          var action = request[1];
+
+          expect(action).toBe('get');
+        });
+
+        describe('params', function () {
+          var requestParams;
+
+          beforeEach(function () {
+            requestParams = request[2];
+          });
+
+          it('passes to the api the params in the `query` object', function () {
+            expect(requestParams).toEqual(jasmine.objectContaining($scope.queryData.query.params));
+          });
+
+          it('automatically adds `sequential` to the params', function () {
+            expect(requestParams).toEqual(jasmine.objectContaining({ sequential: 1 }));
+          });
+        });
+
+        describe('results', function () {
+          it('stores the list of results', function () {
+            expect(isolatedScope.results).toEqual(mockedResults);
+          });
+        });
+      });
+
+      describe('second request', function () {
+        var request;
+
+        beforeEach(function () {
+          request = requests[Object.keys(requests)[1]];
+        });
+
+        it('is for the given entity', function () {
+          var entity = request[0];
+
+          expect(entity).toBe($scope.queryData.query.entity);
+        });
+
+        it('is for getting the total count', function () {
+          var action = request[1];
+
+          expect(action).toBe('getcount');
+        });
+
+        it('passes to the api the params in the `query` object', function () {
+          expect(request[2]).toEqual($scope.queryData.query.params);
+        });
+
+        it('stores the count', function () {
+          expect(isolatedScope.total).toEqual(NO_OF_RESULTS);
+        });
+      });
+    });
+
+    describe('watchers', function () {
+      beforeEach(function () {
+        $scope.queryData = {
+          query: {
+            entity: 'SomeEntity',
+            params: { foo: 'foo', bar: 'bar' }
+          }
+        };
+        compileDirective();
+        crmApi.calls.reset();
+      });
+
+      describe('when the query params change', function () {
+        var getRequest, countRequest;
+
+        beforeEach(function () {
+          $scope.queryData.query.params.baz = 'baz';
+          $scope.$digest();
+
+          getRequest = crmApi.calls.argsFor(0)[0].get;
+          countRequest = crmApi.calls.argsFor(0)[0].count;
+        });
+
+        it('triggers the api requests again', function () {
+          expect(crmApi).toHaveBeenCalled();
+        });
+
+        it('passes the new params to the api', function () {
+          expect(getRequest[2]).toEqual(jasmine.objectContaining({ baz: 'baz' }));
+          expect(countRequest[2]).toEqual(jasmine.objectContaining({ baz: 'baz' }));
+        });
+      });
+    });
     /**
      * Function responsible for setting up compilation of the directive
      *
@@ -144,4 +272,4 @@
       $scope.$digest();
     }
   });
-}(CRM.$));
+}(CRM.$, CRM._));
