@@ -91,20 +91,20 @@
       describe('scope compile', function () {
         beforeEach(function () {
           $scope.query = { entity: 'OuterEntity', params: { foo: 'outerParam' } };
-          $scope.passedData = { entity: 'IsolatedEntity', params: { foo: 'isolatedParam' } };
+          $scope.queryData = { entity: 'IsolatedEntity', params: { foo: 'isolatedParam' } };
 
           compileDirective({
             actions: '<div>{{query.entity}}</div>',
             results: '<div>{{query.params.foo}}</div>'
-          }, 'passedData');
+          });
         });
 
         it('compiles the slot on its own isolated scope', function () {
           var actionsHtml = element.find('[ng-transclude="actions"]').html();
           var resultsHtml = element.find('[ng-transclude="results"]').html();
 
-          expect(actionsHtml).toContain($scope.passedData.entity);
-          expect(resultsHtml).toContain($scope.passedData.params.foo);
+          expect(actionsHtml).toContain($scope.queryData.entity);
+          expect(resultsHtml).toContain($scope.queryData.params.foo);
         });
       });
     });
@@ -234,23 +234,22 @@
     /**
      * Function responsible for setting up compilation of the directive
      *
-     * @param {Object} slot the transclude slots with their markup
+     * @param {Object} slots the transclude slots with their markup
      */
-    function compileDirective (slots, queryProperty) {
+    function compileDirective (slots) {
       var content = '';
       var html = '<civicase-panel-query query="%{queryProperty}">%{content}</civicase-panel-query>';
 
-      queryProperty = queryProperty || 'queryData';
       slots = slots || { results: '<div></div>' };
 
-      $scope[queryProperty] = $scope[queryProperty] || {
+      $scope.queryData = $scope.queryData || {
         entity: 'FooBar', params: []
       };
 
       content += slots.actions ? '<panel-query-actions>' + slots.actions + '</panel-query-actions>' : '';
       content += slots.results ? '<panel-query-results>' + slots.results + '</panel-query-results>' : '';
 
-      html = html.replace('%{queryProperty}', queryProperty);
+      html = html.replace('%{queryProperty}', 'queryData');
       html = html.replace('%{content}', content);
 
       element = $compile(html)($scope);
