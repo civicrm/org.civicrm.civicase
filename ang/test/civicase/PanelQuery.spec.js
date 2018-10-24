@@ -299,6 +299,25 @@
       });
     });
 
+    describe('period range', function () {
+      var isolatedScope;
+
+      beforeEach(function () {
+        compileDirective();
+        isolatedScope = element.isolateScope();
+      });
+
+      it('has a list of available ranges to select from', function () {
+        expect(isolatedScope.periodRange.map(function (range) {
+          return range.value;
+        })).toEqual(['week', 'month']);
+      });
+
+      it('has the week range selected by default', function () {
+        expect(isolatedScope.selectedRange).toBe('week');
+      });
+    });
+
     /**
      * Function responsible for setting up compilation of the directive
      *

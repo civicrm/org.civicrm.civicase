@@ -37,6 +37,11 @@
     $scope.results = [];
     $scope.title = '---';
     $scope.total = 0;
+    $scope.selectedRange = 'week';
+    $scope.periodRange = [
+      { label: 'This Week', value: 'week' },
+      { label: 'This Month', value: 'month' }
+    ];
 
     (function init () {
       initWatchers();
