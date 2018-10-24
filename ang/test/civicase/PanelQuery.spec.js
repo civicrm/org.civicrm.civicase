@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 (function ($, _) {
   describe('panelQuery', function () {
-    var element, $compile, $q, $rootScope, $scope, crmApi, mockedResults;
+    var element, $compile, $q, $rootScope, $scope, crmApi, isolatedScope, mockedResults;
     var NO_OF_RESULTS = 10;
 
     beforeEach(module('civicase.templates', 'civicase', 'crmUtil'));
@@ -24,12 +24,9 @@
     }));
 
     describe('[query] attribute', function () {
-      var isolatedScope;
-
       beforeEach(function () {
         $scope.queryData = { entity: 'Foo', params: { foo: 'foo' } };
         compileDirective();
-        isolatedScope = element.isolateScope();
       });
 
       it('store its value in its scope', function () {
@@ -77,7 +74,6 @@
 
     describe('[handlers] attribute', function () {
       describe('results handler', function () {
-        var isolatedScope;
         var resultsHandler = jasmine.createSpy().and.callFake(function (item) {
           item.baz = 'baz';
 
@@ -88,7 +84,6 @@
           $scope.handlersData = { results: resultsHandler };
 
           compileDirective();
-          isolatedScope = element.isolateScope();
         });
 
         it('is called', function () {
@@ -109,7 +104,6 @@
       });
 
       describe('title handler', function () {
-        var isolatedScope;
         var titleHandler = jasmine.createSpy().and.callFake(function (total) {
           return 'The total number of items is' + total;
         });
@@ -118,7 +112,6 @@
           $scope.handlersData = { title: titleHandler };
 
           compileDirective();
-          isolatedScope = element.isolateScope();
         });
 
         it('is called', function () {
@@ -151,12 +144,10 @@
         });
 
         describe('when the selected range changes', function () {
-          var isolatedScope;
           var newRange = 'month';
 
           beforeEach(function () {
             rangeHandler.calls.reset();
-            isolatedScope = element.isolateScope();
 
             isolatedScope.selectedRange = newRange;
             isolatedScope.$digest();
@@ -182,7 +173,6 @@
     });
 
     describe('[custom-data] attribute', function () {
-      var isolatedScope;
       beforeEach(function () {
         $scope.customData = {
           customProp: 'foobarbaz',
@@ -190,7 +180,6 @@
         };
 
         compileDirective();
-        isolatedScope = element.isolateScope();
       });
 
       it('is stored in the isolated scope', function () {
@@ -234,7 +223,7 @@
     });
 
     describe('api requests', function () {
-      var isolatedScope, requests;
+      var requests;
 
       beforeEach(function () {
         $scope.queryData = {
@@ -243,7 +232,6 @@
         };
         compileDirective();
 
-        isolatedScope = element.isolateScope();
         requests = crmApi.calls.argsFor(0)[0];
       });
 
@@ -288,12 +276,6 @@
           });
 
           describe('pagination', function () {
-            var isolatedScope;
-
-            beforeEach(function () {
-              isolatedScope = element.isolateScope();
-            });
-
             it('adds the pagination params', function () {
               expect(requestParams.options).toBeDefined();
               expect(requestParams.options.limit).toBe(isolatedScope.pagination.size);
@@ -374,10 +356,7 @@
       });
 
       describe('when the current page change', function () {
-        var isolatedScope;
-
         beforeEach(function () {
-          isolatedScope = element.isolateScope();
           isolatedScope.pagination.page = 2;
           isolatedScope.$digest();
 
@@ -408,11 +387,8 @@
     });
 
     describe('pagination', function () {
-      var isolatedScope;
-
       beforeEach(function () {
         compileDirective();
-        isolatedScope = element.isolateScope();
       });
 
       it('starts from page 1', function () {
@@ -458,11 +434,8 @@
     });
 
     describe('period range', function () {
-      var isolatedScope;
-
       beforeEach(function () {
         compileDirective();
-        isolatedScope = element.isolateScope();
       });
 
       it('has a list of available ranges to select from', function () {
@@ -502,8 +475,8 @@
       html = html.replace('%{content}', content);
 
       element = $compile(html)($scope);
-
       $scope.$digest();
+      isolatedScope = element.isolateScope();
     }
   });
 }(CRM.$, CRM._));
