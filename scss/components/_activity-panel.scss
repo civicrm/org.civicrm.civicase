@@ -131,12 +131,19 @@
   }
 
   .crm-submit-buttons {
+    border-bottom: 0 !important;
+    height: auto !important;
+    margin: 0;
+    padding: 20px !important;
+
     .edit {
       @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
     }
 
     .delete {
       @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
+
+      background-color: $brand-danger !important;
     }
   }
   /* stylelint-enable max-nesting-depth */

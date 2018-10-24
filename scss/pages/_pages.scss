@@ -35,4 +35,12 @@
       }
     }
   }
+
+  .page-civicrm-contact-view:not([class*='page-civicrm-contact-view-']) #crm-container {
+    .civicase__activity-panel__core_container {
+      .crm-submit-buttons {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
 }
