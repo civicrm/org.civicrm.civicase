@@ -28,6 +28,6 @@
       text-next="{{ ts('Next') }}"
       text-prev="{{ ts('Prev') }}"
     ></paging>
-    <div>Showing {{pagination.range.from}} to {{pagination.range.to}} of {{total}} items</div>
+    <div>Showing {{pagination.range.from}} to {{pagination.range.to}} of {{total}} {{customData.itemName || 'items'}}</div>
   </footer>
 </div>
