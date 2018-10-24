@@ -8,7 +8,8 @@
       link: linkFn,
       controller: 'panelQueryCtrl',
       scope: {
-        query: '<'
+        query: '<',
+        handlers: '<?'
       },
       transclude: {
         actions: '?panelQueryActions',
@@ -32,13 +33,19 @@
   panelQueryCtrl.$inject = ['$log', '$scope', 'crmApi'];
 
   function panelQueryCtrl ($log, $scope, crmApi) {
+    $scope.handlers = $scope.handlers || {};
     $scope.results = [];
+    $scope.title = '---';
     $scope.total = 0;
 
     (function init () {
       initWatchers();
       verifyData();
-      loadData();
+
+      loadData()
+        .then(function () {
+          $scope.title = $scope.handlers.title ? $scope.handlers.title($scope.total) : $scope.title;
+        });
     }());
 
     /**
@@ -53,14 +60,16 @@
 
     /**
      * Loads the data via the api
+     *
+     * @return {Promise}
      */
     function loadData () {
-      crmApi({
+      return crmApi({
         get: [ $scope.query.entity, 'get', prepareRequestParams() ],
         count: [ $scope.query.entity, 'getcount', $scope.query.params ]
       })
         .then(function (result) {
-          $scope.results = result.get.values;
+          $scope.results = processResults(result.get.values);
           $scope.total = result.count;
         });
     }
@@ -74,6 +83,17 @@
       return _.assign({}, $scope.query.params, {
         sequential: 1
       });
+    }
+
+    /**
+     * Process the list of results via the "results" handler (if provided)
+     * before storing it
+     *
+     * @param {Array} results
+     * @return {Array}
+     */
+    function processResults (results) {
+      return $scope.handlers.results ? results.map($scope.handlers.results) : results;
     }
 
     /**

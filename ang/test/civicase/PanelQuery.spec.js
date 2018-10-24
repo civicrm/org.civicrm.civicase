@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 (function ($, _) {
-  describe('panelQuery', function () {
+  fdescribe('panelQuery', function () {
     var element, $compile, $q, $rootScope, $scope, crmApi, mockedResults;
     var NO_OF_RESULTS = 10;
 
@@ -14,7 +14,7 @@
 
       $scope = $rootScope.$new();
       mockedResults = _.times(NO_OF_RESULTS, function () {
-        return jasmine.any(Object);
+        return { id: _.random(1, 10) };
       });
 
       crmApi.and.returnValue($q.resolve({
@@ -71,6 +71,68 @@
           it('sends an error message', function () {
             expect(compileDirective).toThrowError(/entity/);
           });
+        });
+      });
+    });
+
+    describe('[handlers] attribute', function () {
+      describe('results handler', function () {
+        var isolatedScope;
+        var resultsHandler = jasmine.createSpy().and.callFake(function (item) {
+          item.baz = 'baz';
+
+          return item;
+        });
+
+        beforeEach(function () {
+          $scope.handlersData = { results: resultsHandler };
+
+          compileDirective();
+          isolatedScope = element.isolateScope();
+        });
+
+        it('is called', function () {
+          expect(resultsHandler).toHaveBeenCalled();
+        });
+
+        it('receives a result item as an argument', function () {
+          var arg = resultsHandler.calls.argsFor(0)[0];
+
+          expect(arg.id).toBeDefined();
+        });
+
+        it('allows to modify the items before they are stored', function () {
+          expect(isolatedScope.results.every(function (item) {
+            return typeof item.baz !== 'undefined';
+          })).toBe(true);
+        });
+      });
+
+      describe('title handler', function () {
+        var isolatedScope;
+        var titleHandler = jasmine.createSpy().and.callFake(function (total) {
+          return 'The total number of items is' + total;
+        });
+
+        beforeEach(function () {
+          $scope.handlersData = { title: titleHandler };
+
+          compileDirective();
+          isolatedScope = element.isolateScope();
+        });
+
+        it('is called', function () {
+          expect(titleHandler).toHaveBeenCalled();
+        });
+
+        it('receives the total count as an argument', function () {
+          var arg = titleHandler.calls.argsFor(0)[0];
+
+          expect(arg).toBe(NO_OF_RESULTS);
+        });
+
+        it('allows to modify the title of the panel', function () {
+          expect(isolatedScope.title).toBe('The total number of items is' + NO_OF_RESULTS);
         });
       });
     });
@@ -202,10 +264,6 @@
 
     describe('watchers', function () {
       beforeEach(function () {
-        $scope.queryData = {
-          entity: 'SomeEntity',
-          params: { foo: 'foo', bar: 'bar' }
-        };
         compileDirective();
         crmApi.calls.reset();
       });
@@ -231,25 +289,31 @@
         });
       });
     });
+
     /**
      * Function responsible for setting up compilation of the directive
      *
      * @param {Object} slots the transclude slots with their markup
      */
     function compileDirective (slots) {
+      var attributes = 'query="queryData"';
       var content = '';
-      var html = '<civicase-panel-query query="%{queryProperty}">%{content}</civicase-panel-query>';
+      var html = '<civicase-panel-query %{attributes}>%{content}</civicase-panel-query>';
 
       slots = slots || { results: '<div></div>' };
 
       $scope.queryData = $scope.queryData || {
-        entity: 'FooBar', params: []
+        entity: 'FooBar', params: { foo: 'foo', bar: 'bar' }
       };
+
+      if ($scope.handlersData) {
+        attributes += ' handlers="handlersData"';
+      }
 
       content += slots.actions ? '<panel-query-actions>' + slots.actions + '</panel-query-actions>' : '';
       content += slots.results ? '<panel-query-results>' + slots.results + '</panel-query-results>' : '';
 
-      html = html.replace('%{queryProperty}', 'queryData');
+      html = html.replace('%{attributes}', attributes);
       html = html.replace('%{content}', content);
 
       element = $compile(html)($scope);
