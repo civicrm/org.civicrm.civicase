@@ -1,4 +1,4 @@
-(function (angular, _) {
+(function (angular, _, ts) {
   var module = angular.module('civicase');
 
   module.directive('civicasePanelQuery', function () {
@@ -42,6 +42,7 @@
     $scope.results = [];
     $scope.title = '---';
     $scope.total = 0;
+    $scope.ts = ts;
     $scope.selectedRange = 'week';
     $scope.periodRange = [
       { label: 'This Week', value: 'week' },
@@ -193,4 +194,4 @@
       }
     }
   }
-}(angular, CRM._));
+}(angular, CRM._, CRM.ts('civicase')));
