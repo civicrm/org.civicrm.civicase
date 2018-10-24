@@ -263,9 +263,14 @@
     });
 
     describe('watchers', function () {
+      var titleHandler = jasmine.createSpy();
+
       beforeEach(function () {
+        $scope.handlersData = { title: titleHandler };
+
         compileDirective();
         crmApi.calls.reset();
+        titleHandler.calls.reset();
       });
 
       describe('when the query params change', function () {
@@ -286,6 +291,10 @@
         it('passes the new params to the api', function () {
           expect(getRequest[2]).toEqual(jasmine.objectContaining({ baz: 'baz' }));
           expect(countRequest[2]).toEqual(jasmine.objectContaining({ baz: 'baz' }));
+        });
+
+        it('calls the title handler again', function () {
+          expect(titleHandler).toHaveBeenCalled();
         });
       });
     });

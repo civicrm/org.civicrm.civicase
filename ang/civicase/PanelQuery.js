@@ -42,11 +42,24 @@
       initWatchers();
       verifyData();
 
-      loadData()
-        .then(function () {
-          $scope.title = $scope.handlers.title ? $scope.handlers.title($scope.total) : $scope.title;
-        });
+      loadData();
     }());
+
+    /**
+     * Fetches the data via the Civi API and stores the response
+     *
+     * @return {Promise}
+     */
+    function fetchDataViaApi () {
+      return crmApi({
+        get: [ $scope.query.entity, 'get', prepareRequestParams() ],
+        count: [ $scope.query.entity, 'getcount', $scope.query.params ]
+      })
+        .then(function (result) {
+          $scope.results = processResults(result.get.values);
+          $scope.total = result.count;
+        });
+    }
 
     /**
      * Initializes the directive's watchers
@@ -59,18 +72,14 @@
     }
 
     /**
-     * Loads the data via the api
+     * Loads the data and triggers any triggers any subsequent logic
      *
      * @return {Promise}
      */
     function loadData () {
-      return crmApi({
-        get: [ $scope.query.entity, 'get', prepareRequestParams() ],
-        count: [ $scope.query.entity, 'getcount', $scope.query.params ]
-      })
-        .then(function (result) {
-          $scope.results = processResults(result.get.values);
-          $scope.total = result.count;
+      fetchDataViaApi()
+        .then(function () {
+          $scope.title = $scope.handlers.title ? $scope.handlers.title($scope.total) : $scope.title;
         });
     }
 
