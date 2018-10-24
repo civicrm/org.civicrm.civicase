@@ -96,11 +96,6 @@
     }
   }
 
-  .civicase__pipe {
-    color: $gray-light;
-    margin: 0 8px;
-  }
-
   .civicase__activity-card {
     width: 100%;
   }
@@ -141,6 +136,11 @@
 
 .civicase__contact-cases__panel-row--dark {
   background-color: $gray-lighter;
+
+  .civicase__pipe {
+    color: $gray-light;
+    margin: 0 8px;
+  }  
 }
 
 .civicase__contact-cases__panel-fields {
