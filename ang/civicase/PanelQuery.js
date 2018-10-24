@@ -60,6 +60,16 @@
     }());
 
     /**
+     * Calculates the offset of the results list based
+     * on the current page number and page size
+     *
+     * @return {String}
+     */
+    function calculatePageOffset () {
+      return ($scope.pagination.page - 1) * $scope.pagination.size;
+    }
+
+    /**
      * Fetches the data via the Civi API and stores the response
      *
      * @return {Promise}
@@ -79,20 +89,22 @@
      * Initializes the directive's watchers
      */
     function initWatchers () {
-      // Trigger a refresh when the query params change
+      // Triggers a refresh when the query params change
       $scope.$watchCollection('query.params', function (newParams, oldParams) {
         (newParams !== oldParams) && loadData();
       }, true);
 
+      // Triggers the range handler (if present) when the selected range changes
       $scope.$watch('selectedRange', function (newRange, oldRange) {
         if (newRange !== oldRange && $scope.handlers.range) {
           $scope.handlers.range($scope.selectedRange, $scope.query.params);
         }
       });
 
+      // Triggers a recalculation of the pagination range when the current page changes
       $scope.$watch('pagination.page', function (newPage, oldPage) {
         if (newPage !== oldPage) {
-          $scope.pagination.range.from = (($scope.pagination.page - 1) * $scope.pagination.size) + 1;
+          $scope.pagination.range.from = calculatePageOffset() + 1;
           $scope.pagination.range.to = ($scope.pagination.page * $scope.pagination.size);
 
           if ($scope.pagination.range.to > $scope.total) {
@@ -122,7 +134,7 @@
         sequential: 1,
         options: {
           limit: $scope.pagination.size,
-          offset: $scope.pagination.page + $scope.pagination.size
+          offset: calculatePageOffset()
         }
       });
     }

@@ -13,10 +13,9 @@
     <div ng-transclude="results"></div>
   </div>
   <footer class="panel-footer">
-    {{pagination}}
     <paging
       class="pull-right"
-      ng-show="results.length > 1"
+      ng-show="total > 1"
       page="pagination.page"
       page-size="pagination.size"
       total="total"
