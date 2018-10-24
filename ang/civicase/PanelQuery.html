@@ -49,6 +49,8 @@
       text-next="{{ ts('Next') }}"
       text-prev="{{ ts('Prev') }}"
     ></paging>
-    <div>Showing {{pagination.range.from}} to {{pagination.range.to}} of {{total}} {{customData.itemName || 'items'}}</div>
+    <div ng-show="total > 0">
+      Showing {{pagination.range.from}} to {{pagination.range.to}} of {{total}} {{customData.itemName || 'items'}}
+    </div>
   </footer>
 </div>
