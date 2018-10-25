@@ -1,11 +1,12 @@
 /* eslint-env jasmine */
-
 (function (_) {
   describe('civicaseCaseDetails', function () {
-    var $provide, element, $compile, $rootScope, $scope, CasesData, crmApiMock;
+    var element, $compile, $rootScope, $scope, $provide, crmApi, crmApiMock, $q, formatCase, CasesData;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
       $provide = _$provide_;
+
+      killDirective('civicaseActivitiesCalendar');
     }));
 
     beforeEach(inject(function ($q) {
@@ -20,11 +21,16 @@
       $provide.value('formatCase', formatCaseMock);
     }));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_, _crmApi_, _$q_, _formatCase_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       CasesData = _CasesData_.get();
       $scope = $rootScope.$new();
+      $q = _$q_;
+      crmApi = _crmApi_;
+      formatCase = _formatCase_;
+
+      crmApi.and.returnValue($q.resolve(_.cloneDeep(CasesData)));
     }));
 
     describe('basic tests', function () {
@@ -66,8 +72,6 @@
       beforeEach(function () {
         compileDirective();
         element.isolateScope().item = CasesData.values[0];
-        element.isolateScope().item.allActivities = CasesData.values[0]['api.Activity.get.1'].values;
-
         element.isolateScope().pushCaseData(CasesData.values[0]);
       });
 
@@ -124,7 +128,7 @@
     });
 
     function compileDirective () {
-      $scope.viewingCaseDetails = CasesData.values[0];
+      $scope.viewingCaseDetails = formatCase(CasesData.values[0]);
       element = $compile('<div civicase-case-details="viewingCaseDetails"></div>')($scope);
       $scope.$digest();
     }
@@ -147,6 +151,23 @@
         count: scheduledActivities.length,
         overdue: overdueActivities.length
       };
+    }
+
+    /**
+     * Mocks a directive
+     * TODO: Have a more generic usage - Maybe create a service/factory
+     *
+     * @param {String} directiveName
+     */
+    function killDirective (directiveName) {
+      angular.mock.module(function ($compileProvider) {
+        $compileProvider.directive(directiveName, function () {
+          return {
+            priority: 9999999,
+            terminal: true
+          };
+        });
+      });
     }
   });
 

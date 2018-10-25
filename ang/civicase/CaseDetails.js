@@ -18,6 +18,7 @@
 
   function civicaseCaseDetailsController ($location, $scope, BulkActions, crmApi, formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route, $timeout) {
     // The ts() and hs() functions help load strings for this module.
+    // TODO: Move the common logic into a common controller (based on the usage of ContactCaseTabCaseDetails)
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
     var caseStatuses = $scope.caseStatuses = CRM.civicase.caseStatuses;
@@ -30,7 +31,6 @@
     $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;
-    $scope.item = null;
     $scope.tabs = [
       {name: 'summary', label: ts('Summary')},
       {name: 'activities', label: ts('Activities')},

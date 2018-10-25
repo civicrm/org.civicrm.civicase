@@ -10,7 +10,7 @@
     };
   });
 
-  function CivicaseContactCaseTabController ($scope, crmApi, formatCase, Contact) {
+  function CivicaseContactCaseTabController ($scope, crmApi, formatCase, Contact, ContactsDataService) {
     var commonConfigs = {
       'isLoaded': false,
       'showSpinner': false,
@@ -21,6 +21,7 @@
       }
     };
 
+    $scope.caseDetailsLoaded = false;
     $scope.casesListConfig = [
       {
         'name': 'opened',
@@ -81,6 +82,54 @@
       updateCase(caseListIndex, params);
     }
 
+    /*
+     * Watcher for civicase::contact-record-list::view-case event
+     *
+     * @params {Object} event
+     * @params {Object} caseObj case object of the list
+     */
+    function contactRecordListViewCaseWatcher (event, caseObj) {
+      setCaseAsSelected(caseObj);
+    }
+
+    /**
+     * Fetch additional information about the contacts
+     *
+     * @param {object} event
+     * @param {array} cases
+     */
+    function fetchContactsData (cases) {
+      var contacts = [];
+
+      _.each(cases, function (caseObj) {
+        contacts = contacts.concat(getAllContactIdsForCase(caseObj));
+      });
+
+      ContactsDataService.add(contacts);
+    }
+
+    /**
+     * Get all the contacts of the given case
+     *
+     * @param {object} caseObj
+     * @return {array}
+     */
+    function getAllContactIdsForCase (caseObj) {
+      var contacts = [];
+
+      _.each(caseObj.contacts, function (currentCase) {
+        contacts.push(currentCase.contact_id);
+      });
+
+      _.each(caseObj.activity_summary.next, function (activity) {
+        contacts = contacts.concat(activity.assignee_contact_id);
+        contacts = contacts.concat(activity.target_contact_id);
+        contacts.push(activity.source_contact_id);
+      });
+
+      return contacts;
+    }
+
     /**
      * Fetch cases for each type of list and count total number of cases
      */
@@ -116,7 +165,7 @@
         sequential: 1,
         return: caseReturnParams,
         options: {
-          sort: 'modified_date ASC',
+          sort: 'modified_date DESC',
           limit: page.size,
           offset: page.size * (page.num - 1)
         }
@@ -161,13 +210,6 @@
     }
 
     /**
-     * Subscribers for events
-     */
-    function initSubscribers () {
-      $scope.$on('civicase::contact-record-list::loadmore', contactRecordListLoadmoreWatcher);
-    }
-
-    /**
      * Extends casesListConfig
      */
     function initCasesConfig () {
@@ -175,6 +217,50 @@
         $scope.casesListConfig[ind].cases = [];
         $scope.casesListConfig[ind] = $.extend(true, $scope.casesListConfig[ind], commonConfigs);
       });
+    }
+
+    /**
+     * Subscribers for events
+     */
+    function initSubscribers () {
+      $scope.$on('civicase::contact-record-list::load-more', contactRecordListLoadmoreWatcher);
+      $scope.$on('civicase::contact-record-list::view-case', contactRecordListViewCaseWatcher);
+    }
+
+    /**
+     * Loads additional data for contacts and set the first case as selected
+     */
+    function loadAdditionalDataWhenAllCasesLoaded () {
+      if (isAllCasesLoaded()) {
+        var allCases = _.reduce($scope.casesListConfig, function (memoriser, caseObj) {
+          return memoriser.concat(caseObj.cases);
+        }, []);
+
+        fetchContactsData(allCases);
+
+        if (!$scope.selectedCase) {
+          setCaseAsSelected(allCases[0]);
+          $scope.caseDetailsLoaded = true;
+        }
+      }
+    }
+
+    /**
+     * Sets passed case object as selected case
+     *
+     * @params {Object} caseObj
+     */
+    function setCaseAsSelected (caseObj) {
+      $scope.selectedCase = caseObj;
+    }
+
+    /**
+     * Watcher function for cases collections
+     */
+    function isAllCasesLoaded () {
+      return _.reduce($scope.casesListConfig, function (memoriser, data) {
+        return memoriser && data.isLoaded;
+      }, true);
     }
 
     /**
@@ -186,17 +272,19 @@
     function updateCase (caseListIndex, params) {
       crmApi(params).then(function (response) {
         _.each(response.cases.values, function (item) {
-          if ($scope.casesListConfig[caseListIndex].showContactRole) {
-            item.contact_role = getContactRole(item);
-          }
-
+          item.contact_role = getContactRole(item);
           $scope.casesListConfig[caseListIndex].cases.push(formatCase(item));
         });
 
         $scope.casesListConfig[caseListIndex].isLoaded = true;
         $scope.casesListConfig[caseListIndex].showSpinner = false;
-        $scope.casesListConfig[caseListIndex].page.num += 1;
         $scope.casesListConfig[caseListIndex].isLoadMoreAvailable = $scope.casesListConfig[caseListIndex].cases.length < response.count;
+
+        if ($scope.casesListConfig[caseListIndex].page.num === 1) {
+          loadAdditionalDataWhenAllCasesLoaded();
+        }
+
+        $scope.casesListConfig[caseListIndex].page.num += 1;
       });
     }
   }

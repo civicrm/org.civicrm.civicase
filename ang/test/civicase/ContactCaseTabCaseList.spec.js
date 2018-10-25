@@ -5,7 +5,7 @@
 
     beforeEach(module('civicase', 'civicase.templates', 'civicase.data'));
 
-    beforeEach(inject(function (_$q_, _$compile_, _$rootScope_, _crmApi_, _CasesData_, _formatCase_) {
+    beforeEach(inject(function (_$q_, _$compile_, _$rootScope_, _crmApi_, _CasesData_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
@@ -37,7 +37,7 @@
       });
 
       it('complies the ContactCaseTabCaseList directive', function () {
-        expect(element.html()).toContain('<!-- ngRepeat: case in caseObj.cases -->');
+        expect(element.html()).toContain('<!-- ngRepeat: case in casesList.cases -->');
       });
     });
 
@@ -57,8 +57,8 @@
      * Compiles the directive
      */
     function compileDirective () {
-      $scope.caseObj = CasesData;
-      element = $compile('<civicase-contact-case-tab-case-list case-obj="caseObj" ></civicase-contact-case-tab-case-list>')($scope);
+      $scope.casesList = CasesData;
+      element = $compile('<civicase-contact-case-tab-case-list cases-list="casesList" ></civicase-contact-case-tab-case-list>')($scope);
       $scope.$digest();
     }
 
@@ -66,7 +66,7 @@
      * Listener for `civicase::contact-record-case::loadmore` event
      */
     function listenForContactCasesListLoadMoreEvent () {
-      $rootScope.$on('civicase::contact-record-list::loadmore', function (event, type) {
+      $rootScope.$on('civicase::contact-record-list::load-more', function (event, type) {
         eventResponse = type;
       });
     }

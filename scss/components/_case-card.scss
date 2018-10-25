@@ -42,7 +42,7 @@
   min-height: 149px;
 
   .civicase__contact-name,
-  .civicase__case-card-title,
+  .civicase__case-card-subject,
   .civicase__contact-additional__container,
   .civicase__case-card__type {
     text-decoration: line-through;
@@ -188,14 +188,25 @@
     vertical-align: unset;
   }
 
+  .civicase__case-card-subject {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: calc(100% - 300px);
+  }
+
   &.civicase__case-card--closed {
     background: $gray-lighter;
     min-height: auto;
 
     .civicase__case-card-role,
-    .civicase__case-card-title {
+    .civicase__case-card-subject {
       color: inherit;
     }
+  }
+
+  &.civicase__case-card--active {
+    box-shadow: 0 0 0 5px $activity-feed-active-bg;
   }
 }
 
@@ -210,7 +221,7 @@
 }
 
 .civicase__case-card-role,
-.civicase__case-card-title {
+.civicase__case-card-subject {
   color: $gray-dark;
   line-height: 18px;
 }
