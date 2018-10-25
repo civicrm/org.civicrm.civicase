@@ -13,7 +13,7 @@
       <div class="civicase__contact-cases-tab-container pull-left col-md-6">
         <div  
           ng-repeat="casesList in casesListConfig"
-          class="panel panel-default civicase__contact-cases-tab__panel">
+          class="panel panel-default civicase__panel-transparent-header">
           <div class="panel-heading">
             <h3 class="panel-title"> {{ casesList.title }}</h3>
           </div>
@@ -23,10 +23,7 @@
         </div>
       </div>
       <div class="civicase__contact-cases-tab-container pull-left col-md-6">
-        <div class="panel panel-default civicase__contact-cases-tab__panel ">
-          <div class="panel-heading">
-            <h3 class="panel-title">&nbsp;</h3>
-          </div>
+        <div class="panel panel-default civicase__panel-transparent-header">
           <div class="panel-body panel-body-extra">
             <civicase-contact-case-tab-case-details 
               class="civicase__contact-cases-tab-details" 

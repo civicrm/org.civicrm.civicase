@@ -5,24 +5,18 @@
 .civicase__contact-cases-tab-container {
   padding-left: 15px;
   padding-right: 15px;
-}
 
-.civicase__contact-cases-tab__panel {
-  box-shadow: none;
+  .civicase__panel-transparent-header {
+    >.panel-heading .panel-title { /* stylelint-disable selector-max-compound-selectors */
+      font-size: $font-size-h2;
+      margin: 0;
+      padding: 15px 0;
+    }
 
-  > .panel-heading {
-    background: transparent;
-    padding: 15px 0;
-  }
-
-  > .panel-body {
-    background: transparent;
-    padding: 0;
-  }
-
-  .civicase__case-list {
-    >.panel {
-      margin-bottom: 0;
+    > .panel-body {
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
     }
   }
 }
@@ -62,7 +56,10 @@
 }
 
 .civicase__contact-cases-tab-details {
+  $panel-header-top-margin: calc((#{$headings-line-height} * #{$font-size-h2}) + 2 * 15px);
+
   box-shadow: $box-shadow-block;
+  margin-top: #{$panel-header-top-margin};
 
   > .panel-body {
     padding: 0;

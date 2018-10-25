@@ -1,10 +1,12 @@
 /* eslint-env jasmine */
 (function (_) {
   describe('civicaseCaseDetails', function () {
-    var element, $compile, $rootScope, $scope, crmApi, $q, formatCase, CasesData;
+    var element, $compile, $rootScope, $scope, $provide, crmApi, crmApiMock, $q, formatCase, CasesData;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
       $provide = _$provide_;
+
+      killDirective('civicaseActivitiesCalendar');
     }));
 
     beforeEach(inject(function ($q) {
@@ -17,8 +19,6 @@
 
       $provide.value('crmApi', crmApiMock);
       $provide.value('formatCase', formatCaseMock);
-
-      killDirective('civicaseActivitiesCalendar');
     }));
 
     beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_, _crmApi_, _$q_, _formatCase_) {
@@ -32,7 +32,6 @@
 
       crmApi.and.returnValue($q.resolve(_.cloneDeep(CasesData)));
     }));
-
 
     describe('basic tests', function () {
       beforeEach(function () {
@@ -169,55 +168,55 @@
           };
         });
       });
-    }  
+    }
+  });
 
+  describe('civicaseCaseDetailsController', function () {
+    var $controller, $provide, $rootScope, $route, $scope, CasesData, crmApiMock;
 
-    describe('civicaseCaseDetailsController', function () {
-      var $controller, $provide, $rootScope, $route, $scope, CasesData, crmApiMock;
+    beforeEach(module('civicase', 'civicase.data', function (_$provide_) {
+      $provide = _$provide_;
+    }));
 
-      beforeEach(module('civicase', 'civicase.data', function (_$provide_) {
-        $provide = _$provide_;
-      }));
+    beforeEach(inject(function (_$controller_, $q, _$rootScope_, _$route_, _CasesData_) {
+      $controller = _$controller_;
+      $rootScope = _$rootScope_;
+      $route = _$route_;
+      CasesData = _CasesData_;
+      crmApiMock = jasmine.createSpy('crmApi').and
+        .returnValue($q.defer().promise);
 
-      beforeEach(inject(function (_$controller_, $q, _$rootScope_, _$route_, _CasesData_) {
-        $controller = _$controller_;
-        $rootScope = _$rootScope_;
-        $route = _$route_;
-        CasesData = _CasesData_;
-        crmApiMock = jasmine.createSpy('crmApi').and
-          .returnValue($q.defer().promise);
+      $provide.value('crmApi', crmApiMock);
+    }));
 
-        $provide.value('crmApi', crmApiMock);
-      }));
-
-      describe('viewing the case', function () {
-        describe('when requesting to view a case that is missing its details', function () {
-          beforeEach(function () {
-            initController();
-          });
-
-          it('requests the missing case details', function () {
-            expect(crmApiMock).toHaveBeenCalledWith(
-              'Case', 'getdetails', jasmine.any(Object)
-            );
-          });
+    describe('viewing the case', function () {
+      describe('when requesting to view a case that is missing its details', function () {
+        beforeEach(function () {
+          initController();
         });
 
-        describe('when the case is locked for the current user', function () {
-          beforeEach(function () {
-            var caseItem = _.cloneDeep(CasesData.get().values[0]);
-            caseItem.lock = 1;
+        it('requests the missing case details', function () {
+          expect(crmApiMock).toHaveBeenCalledWith(
+            'Case', 'getdetails', jasmine.any(Object)
+          );
+        });
+      });
 
-            spyOn($route, 'updateParams');
-            initController(caseItem);
-          });
+      describe('when the case is locked for the current user', function () {
+        beforeEach(function () {
+          var caseItem = _.cloneDeep(CasesData.get().values[0]);
+          caseItem.lock = 1;
 
-          it('redirects the user to the case list', function () {
-            expect($route.updateParams).toHaveBeenCalledWith({ caseId: null });
-          });
+          spyOn($route, 'updateParams');
+          initController(caseItem);
+        });
+
+        it('redirects the user to the case list', function () {
+          expect($route.updateParams).toHaveBeenCalledWith({ caseId: null });
         });
       });
     });
+
     /**
      * Initializes the case details controller.
      *

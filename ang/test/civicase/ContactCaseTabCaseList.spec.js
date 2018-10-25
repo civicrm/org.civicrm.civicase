@@ -37,7 +37,7 @@
       });
 
       it('complies the ContactCaseTabCaseList directive', function () {
-        expect(element.html()).toContain('<!-- ngRepeat: case in caseObj.cases -->');
+        expect(element.html()).toContain('<!-- ngRepeat: case in casesList.cases -->');
       });
     });
 
@@ -57,8 +57,8 @@
      * Compiles the directive
      */
     function compileDirective () {
-      $scope.caseObj = CasesData;
-      element = $compile('<civicase-contact-case-tab-case-list case-obj="caseObj" ></civicase-contact-case-tab-case-list>')($scope);
+      $scope.casesList = CasesData;
+      element = $compile('<civicase-contact-case-tab-case-list cases-list="casesList" ></civicase-contact-case-tab-case-list>')($scope);
       $scope.$digest();
     }
 

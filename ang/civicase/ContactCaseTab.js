@@ -230,7 +230,6 @@
     /**
      * Loads additional data for contacts and set the first case as selected
      */
-
     function loadAdditionalDataWhenAllCasesLoaded () {
       if (isAllCasesLoaded()) {
         var allCases = _.reduce($scope.casesListConfig, function (memoriser, caseObj) {
