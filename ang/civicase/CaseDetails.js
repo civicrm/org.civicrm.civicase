@@ -16,7 +16,7 @@
 
   module.controller('civicaseCaseDetailsController', civicaseCaseDetailsController);
 
-  function civicaseCaseDetailsController ($scope, BulkActions, crmApi, formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route, $timeout) {
+  function civicaseCaseDetailsController ($location, $scope, BulkActions, crmApi, formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route, $timeout) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -266,7 +266,18 @@
       return ret;
     }
 
+    /**
+     * Watches for case changes. When the case is locked it redirects the user
+     * to the case list. Also, If the case is loaded without its definition, it
+     * will make a request to get the missing information.
+     */
     function itemWatcher () {
+      var isCaseLocked = $scope.item && $scope.item.lock;
+
+      if (isCaseLocked) {
+        return redirectToCaseList();
+      }
+
       // Fetch extra info about the case
       if ($scope.item && $scope.item.id && !$scope.item.definition) {
         $scope.areDetailsLoaded = false;
@@ -294,6 +305,13 @@
           $actControls.css('width', 'auto');
         }
       }, 1500);
+    }
+
+    /**
+     * Changes the current route and goes to the list of cases.
+     */
+    function redirectToCaseList () {
+      return $route.updateParams({ caseId: null });
     }
   }
 
