@@ -55,7 +55,6 @@
     (function init () {
       initWatchers();
       verifyData();
-
       loadData();
     }());
 

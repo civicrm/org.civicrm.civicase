@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 (function ($, _) {
   describe('panelQuery', function () {
-    var element, $compile, $q, $rootScope, $scope, crmApi, isolatedScope, mockedResults;
+    var element, $compile, $q, $rootScope, $scope, crmApi, panelQueryScope, mockedResults;
     var NO_OF_RESULTS = 10;
 
     beforeEach(module('civicase.templates', 'civicase', 'crmUtil'));
@@ -30,8 +30,8 @@
       });
 
       it('store its value in its scope', function () {
-        expect(isolatedScope.query).toBeDefined();
-        expect(isolatedScope.query).toEqual($scope.queryData);
+        expect(panelQueryScope.query).toBeDefined();
+        expect(panelQueryScope.query).toEqual($scope.queryData);
       });
 
       describe('one-way binding', function () {
@@ -39,7 +39,7 @@
 
         beforeEach(function () {
           originalSource = $scope.queryData;
-          isolatedScope.query = { baz: 'baz' };
+          panelQueryScope.query = { baz: 'baz' };
 
           $scope.$digest();
         });
@@ -100,7 +100,7 @@
         });
 
         it('allows to modify the list before it is stored', function () {
-          expect(isolatedScope.results).toBe(newResults);
+          expect(panelQueryScope.results).toBe(newResults);
         });
       });
 
@@ -124,8 +124,8 @@
           beforeEach(function () {
             rangeHandler.calls.reset();
 
-            isolatedScope.selectedRange = newRange;
-            isolatedScope.$digest();
+            panelQueryScope.selectedRange = newRange;
+            panelQueryScope.$digest();
           });
 
           it('is called when the selected range changes', function () {
@@ -158,8 +158,8 @@
       });
 
       it('is stored in the isolated scope', function () {
-        expect(_.isEmpty(isolatedScope.customData)).toBe(false);
-        expect(isolatedScope.customData).toEqual(jasmine.objectContaining($scope.customData));
+        expect(_.isEmpty(panelQueryScope.customData)).toBe(false);
+        expect(panelQueryScope.customData).toEqual(jasmine.objectContaining($scope.customData));
       });
     });
 
@@ -280,15 +280,15 @@
           describe('pagination', function () {
             it('adds the pagination params', function () {
               expect(requestParams.options).toBeDefined();
-              expect(requestParams.options.limit).toBe(isolatedScope.pagination.size);
-              expect(requestParams.options.offset).toBeDefined(isolatedScope.pagination.page + isolatedScope.pagination.size);
+              expect(requestParams.options.limit).toBe(panelQueryScope.pagination.size);
+              expect(requestParams.options.offset).toBeDefined(panelQueryScope.pagination.page + panelQueryScope.pagination.size);
             });
           });
         });
 
         describe('results', function () {
           it('stores the list of results', function () {
-            expect(isolatedScope.results).toEqual(mockedResults);
+            expect(panelQueryScope.results).toEqual(mockedResults);
           });
         });
       });
@@ -317,7 +317,7 @@
         });
 
         it('stores the count', function () {
-          expect(isolatedScope.total).toEqual(NO_OF_RESULTS);
+          expect(panelQueryScope.total).toEqual(NO_OF_RESULTS);
         });
       });
     });
@@ -332,7 +332,7 @@
 
       describe('when the query params change', function () {
         beforeEach(function () {
-          isolatedScope.pagination.page = 2;
+          panelQueryScope.pagination.page = 2;
           $scope.queryData.params.baz = 'baz';
           $scope.$digest();
 
@@ -350,14 +350,14 @@
         });
 
         it('resets the pagination', function () {
-          expect(isolatedScope.pagination.page).toBe(1);
+          expect(panelQueryScope.pagination.page).toBe(1);
         });
       });
 
-      describe('when the current page change', function () {
+      describe('when the current page changes', function () {
         beforeEach(function () {
-          isolatedScope.pagination.page = 2;
-          isolatedScope.$digest();
+          panelQueryScope.pagination.page = 2;
+          panelQueryScope.$digest();
 
           getRequest = crmApi.calls.argsFor(0)[0].get;
           countRequest = crmApi.calls.argsFor(0)[0].count;
@@ -387,42 +387,42 @@
       });
 
       it('starts from page 1', function () {
-        expect(isolatedScope.pagination.page).toBe(1);
+        expect(panelQueryScope.pagination.page).toBe(1);
       });
 
       it('has a default page size of 5', function () {
-        expect(isolatedScope.pagination.size).toBe(5);
+        expect(panelQueryScope.pagination.size).toBe(5);
       });
 
       describe('range calculation', function () {
         describe('from', function () {
           it('calculated from: current page and page size', function () {
-            expect(isolatedScope.pagination.range.from).toBe(1);
+            expect(panelQueryScope.pagination.range.from).toBe(1);
 
-            isolatedScope.pagination.page = 3;
-            isolatedScope.$digest();
+            panelQueryScope.pagination.page = 3;
+            panelQueryScope.$digest();
 
-            expect(isolatedScope.pagination.range.from).toBe(11);
+            expect(panelQueryScope.pagination.range.from).toBe(11);
           });
         });
 
         describe('to', function () {
           beforeEach(function () {
-            isolatedScope.total = 19;
+            panelQueryScope.total = 19;
           });
 
           it('calculated from: current page, page size, total count', function () {
-            expect(isolatedScope.pagination.range.to).toBe(5);
+            expect(panelQueryScope.pagination.range.to).toBe(5);
 
-            isolatedScope.pagination.page = 3;
-            isolatedScope.$digest();
+            panelQueryScope.pagination.page = 3;
+            panelQueryScope.$digest();
 
-            expect(isolatedScope.pagination.range.to).toBe(15);
+            expect(panelQueryScope.pagination.range.to).toBe(15);
 
-            isolatedScope.pagination.page = 4;
-            isolatedScope.$digest();
+            panelQueryScope.pagination.page = 4;
+            panelQueryScope.$digest();
 
-            expect(isolatedScope.pagination.range.to).toBe(19);
+            expect(panelQueryScope.pagination.range.to).toBe(19);
           });
         });
       });
@@ -434,13 +434,13 @@
       });
 
       it('has a list of available ranges to select from', function () {
-        expect(isolatedScope.periodRange.map(function (range) {
+        expect(panelQueryScope.periodRange.map(function (range) {
           return range.value;
         })).toEqual(['week', 'month']);
       });
 
       it('has the week range selected by default', function () {
-        expect(isolatedScope.selectedRange).toBe('week');
+        expect(panelQueryScope.selectedRange).toBe('week');
       });
     });
 
@@ -472,7 +472,7 @@
 
       element = $compile(html)($scope);
       $scope.$digest();
-      isolatedScope = element.isolateScope();
+      panelQueryScope = element.isolateScope();
     }
   });
 }(CRM.$, CRM._));
