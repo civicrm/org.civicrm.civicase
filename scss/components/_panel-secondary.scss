@@ -58,4 +58,8 @@
       margin-left: $panel-control-margin;
     }
   }
+
+  .civicase__case-card--detached {
+    box-shadow: $box-shadow-panel-secondary-card;
+  }
 }
