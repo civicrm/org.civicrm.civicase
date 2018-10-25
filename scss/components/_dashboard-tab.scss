@@ -55,3 +55,139 @@
     padding: 0;
   }
 }
+
+.civicase__dashboard__overview {
+  .panel-body {
+    background-color: $crm-gray-lightest;
+    padding: 0 !important;
+  }
+}
+
+.civicase__dashboard__overview-container {
+  margin-left: 200px;
+  overflow: auto;
+}
+
+.civicase__dashboard__overview__body,
+.civicase__dashboard__overview__title {
+  white-space: nowrap;
+}
+
+.civicase__dashboard__overview__title-field,
+.civicase__dashboard__overview__body-field {
+  display: inline-flex;
+  width: 200px;
+
+  &:first-child {
+    align-items: flex-start;
+    flex-direction: column;
+    left: 0;
+    position: absolute;
+    top: auto;
+    z-index: 5;    
+  }
+}
+
+.civicase__dashboard__overview__title-field {
+  align-items: flex-start;
+  background-color: $crm-white;
+  flex-direction: column;
+  height: 80px;
+  justify-content: center;
+  position: relative;
+
+  &::after {
+    background-color: $crm-white;
+    border-bottom-right-radius: 5px;
+    box-shadow: 1px 1px 0 0 $gray-light;
+    content: '';
+    height: 57px;
+    position: absolute;
+    right: -27px;
+    top: 12px;
+    transform: rotateZ(-45deg);
+    transform-origin: 50% 50%;
+    width: 57px;
+    z-index: 1;
+  }
+
+  &:first-child {
+    font-size: 16px;
+    font-weight: $crm-font-weight-h3;
+    line-height: 22px;
+    padding-left: 24px;
+  }
+
+  &:last-child {
+    &::after {
+      content: none;
+    }
+  }
+}
+
+.civicase__dashboard__overview__title-field-border {
+  bottom: 0;
+  height: 4px;
+  position: absolute;
+  transform: skewx(-45deg);
+  width: 100%;
+  z-index: 2;
+}
+
+
+.civicase__dashboard__overview__title-field-count {
+  color: $gray-darker;
+  font-size: 24px;
+  font-weight: $crm-font-weight-h3;
+  line-height: 33px;
+  text-align: center;
+  width: 100%;
+}
+
+.civicase__dashboard__overview__title-field-description {
+  color: $crm-gray-matte;
+  margin: 0 30px;
+  overflow: hidden;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  width: 140px;
+}
+
+.civicase__dashboard__overview__body {
+  &:last-child {
+    .civicase__dashboard__overview__body-field {
+      border: 0;
+    }
+  }  
+}
+
+.civicase__dashboard__overview__body-field {
+  align-items: center;
+  border-bottom: 1px solid $gray-light;
+  justify-content: center;
+  padding: 16px 24px;
+  position: relative;
+
+  &:not(:first-child) {
+    color: $crm-gray-matte;
+  }
+
+  &:first-child {
+    background-color: $crm-gray-lightest;
+    display: block;
+    font-weight: $crm-font-weight-h3;
+    margin-left: 24px;
+    overflow: hidden;
+    padding-left: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 176px;
+  }
+
+  &:last-child {
+    margin-right: 24px;
+    padding-right: 0;
+    width: 176px;    
+  }
+}
