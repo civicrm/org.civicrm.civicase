@@ -114,8 +114,8 @@
           compileDirective();
         });
 
-        it('is not called on init', function () {
-          expect(rangeHandler).not.toHaveBeenCalled();
+        it('is called', function () {
+          expect(rangeHandler).toHaveBeenCalled();
         });
 
         describe('when the selected range changes', function () {

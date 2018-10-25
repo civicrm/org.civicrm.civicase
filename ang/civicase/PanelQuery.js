@@ -53,9 +53,11 @@
     };
 
     (function init () {
-      initWatchers();
       verifyData();
-      loadData();
+      // the range handler must be invoked immediately on init to
+      // include the selected period range in the first api request
+      invokeRangeHandler();
+      loadData().then(initWatchers);
     }());
 
     /**
@@ -102,11 +104,9 @@
         (newParams !== oldParams) && loadData();
       }, true);
 
-      // Triggers the range handler (if present) when the selected range changes
+      // Triggers the range handler when the selected range changes
       $scope.$watch('selectedRange', function (newRange, oldRange) {
-        if (newRange !== oldRange && $scope.handlers.range) {
-          $scope.handlers.range($scope.selectedRange, $scope.query.params);
-        }
+        (newRange !== oldRange) && invokeRangeHandler();
       });
 
       // Triggers a new request and a recalculation of the pagination range
@@ -114,6 +114,14 @@
       $scope.$watch('pagination.page', function (newPage, oldPage) {
         (newPage !== oldPage) && loadData(true);
       });
+    }
+
+    /**
+     * Invokes the period range handler, if present
+     */
+    function invokeRangeHandler () {
+      $scope.handlers.range &&
+      $scope.handlers.range($scope.selectedRange, $scope.query.params);
     }
 
     /**
