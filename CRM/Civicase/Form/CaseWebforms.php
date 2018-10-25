@@ -31,17 +31,19 @@ class CRM_Civicase_Form_CaseWebforms extends CRM_Admin_Form {
     $this->assign('nids', $webformids);
     $this->assign('error', $errorMsg);
 
-    $this->addButtons([
-      [
-        'type' => 'cancel',
-        'name' => ts('Cancel'),
-      ],
-      [
-        'type' => 'submit',
-        'name' => ts('Save'),
-        'isDefault' => TRUE,
-      ],
-    ]);
+    $this->addButtons(
+      array(
+        array(
+          'type' => 'cancel',
+          'name' => ts('Cancel'),
+        ),
+        array(
+          'type' => 'submit',
+          'name' => ts('Save'),
+          'isDefault' => TRUE,
+        ),
+      )
+    );
   }
 
   /**

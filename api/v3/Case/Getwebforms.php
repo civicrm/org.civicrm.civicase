@@ -18,7 +18,9 @@ function _civicrm_api3_case_getwebforms_spec(&$spec) {
  * Search for webforms that have a atleast 1 case attached to it.
  *
  * @param array $params
+ *
  * @return array API result
+ *
  * @throws API_Exception
  */
 function civicrm_api3_case_getwebforms($params) {
@@ -35,7 +37,11 @@ function civicrm_api3_case_getwebforms($params) {
   while ($dao->fetch()) {
     $data = unserialize($dao->data);
     if ($data['case']['number_of_case'] >= 0) {
-      $webforms[] = array('nid' => $dao->nid, 'title' => $dao->title, 'path' => drupal_get_path_alias('node/'.$dao->nid));
+      $webforms[] = array(
+        'nid' => $dao->nid,
+        'title' => $dao->title,
+        'path' => drupal_get_path_alias('node/'.$dao->nid)
+      );
     }
   }
 
