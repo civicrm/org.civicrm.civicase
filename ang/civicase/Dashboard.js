@@ -75,7 +75,8 @@
      */
     function prepareCaseFilterOption () {
       var options = [
-        { 'text': 'My cases', 'id': 'is_case_manager' },
+        // @NOTE Disabled, see C51-277
+        // { 'text': 'My cases', 'id': 'is_case_manager' },
         { 'text': 'Cases I am involved in', 'id': 'is_involved' }
       ];
 
