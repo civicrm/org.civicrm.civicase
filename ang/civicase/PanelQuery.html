@@ -3,7 +3,7 @@
     <div class="clearfix">
       <h2 class="panel-title pull-left">
         <div ng-transclude="title">
-          {{loading ? '-' : total}} {{customData.itemName || 'items'}}
+          {{loading.full ? '-' : total}} {{customData.itemName || 'items'}}
         </div>
       </h2>
       <div class="panel-heading-control crm_custom-select pull-left">
@@ -13,9 +13,9 @@
       <div class="pull-right" ng-transclude="actions"></div>
     </div>
   </header>
-  <div class="panel-body">
-    <div ng-hide="loading" ng-transclude="results"></div>
-    <div ng-if="loading">
+  <div class="panel-body" style="transition: opacity 0.2s linear;" ng-style="loading.partial && { 'opacity': 0.7 }">
+    <div ng-hide="loading.full" ng-transclude="results"></div>
+    <div ng-if="loading.full">
       <div class="panel panel-default" ng-repeat="i in [0,1]">
         <div class="panel-body" style="border-top: 0;">
           <div class="civicase__activity-card-row" style="margin-bottom: 8px;">
@@ -53,10 +53,10 @@
         text-next="{{ ts('Next') }}"
         text-prev="{{ ts('Previous') }}"
       ></paging>
-      <div ng-if="loading">
+      <div ng-if="loading.full">
         Showing - to - of - {{customData.itemName || 'items'}}
       </div>
-      <div ng-if="!loading">
+      <div ng-if="!loading.full">
         Showing {{pagination.range.from}} to {{pagination.range.to}} of {{total}} {{customData.itemName || 'items'}}
       </div>
     </div>

@@ -7,7 +7,7 @@
         <!-- New Cases -->
         <civicase-panel-query query="newCasesPanel.query" handlers="newCasesPanel.handlers" custom-data="newCasesPanel.custom">
           <panel-query-title>
-            You have {{loading ? '-' : total}} new cases
+            You have {{loading.full ? '-' : total}} new cases
           </panel-query-title>
           <panel-query-results>
             <civicase-case-card ng-repeat="case in results" ng-click="customData.caseClick(case)" mode="dashboard" case="case"></civicase-case-card>

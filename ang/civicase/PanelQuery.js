@@ -37,7 +37,7 @@
 
     $scope.customData = $scope.customData || {};
     $scope.handlers = $scope.handlers || {};
-    $scope.loading = false;
+    $scope.loading = { full: false, partial: false };
     $scope.results = [];
     $scope.total = 0;
     $scope.ts = ts;
@@ -129,17 +129,21 @@
      * @return {Promise}
      */
     function loadData (skipCount) {
+      // Prevents accidental additional call by watchers
+      if ($scope.loading.full || $scope.loading.partial) {
+        return;
+      }
+
       if (!skipCount) {
         $scope.pagination.page = 1;
-        $scope.loading = true;
       }
+
+      toggleLoadingState(skipCount);
 
       return fetchDataViaApi(skipCount)
         .then(updatePaginationRange)
         .then(function () {
-          if (!skipCount) {
-            $scope.loading = false;
-          }
+          toggleLoadingState(skipCount);
         });
     }
 
@@ -172,6 +176,15 @@
      */
     function processResults (results) {
       return $q.resolve($scope.handlers.results ? $scope.handlers.results(results) : results);
+    }
+
+    /**
+     * Activates / Deactivates the loading state of the directive
+     */
+    function toggleLoadingState (partial) {
+      var mode = partial ? 'partial' : 'full';
+
+      $scope.loading[mode] = !$scope.loading[mode];
     }
 
     /**

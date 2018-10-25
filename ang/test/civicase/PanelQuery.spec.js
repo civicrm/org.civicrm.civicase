@@ -408,6 +408,18 @@
           expect(countRequest).not.toBeDefined();
         });
       });
+
+      describe('when a watcher is triggered while already loading', function () {
+        beforeEach(function () {
+          panelQueryScope.loading.full = true;
+          panelQueryScope.pagination.page = 2;
+          $scope.$digest();
+        });
+
+        it('does not make an additional api call', function () {
+          expect(crmApi.calls.count()).toBe(0);
+        });
+      });
     });
 
     describe('pagination', function () {
