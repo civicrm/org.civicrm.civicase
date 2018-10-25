@@ -270,9 +270,10 @@
               win.focus();
             },
 
-            gotoWebform: function(case1, path) {
+            gotoWebform: function(selectedCase, path) {
               var url = CRM.url(path, {
-                case1: case1.id,
+                case1: selectedCase.id,
+                cid1: selectedCase.client[0].contact_id
               });
               var win = window.open(url, '_blank');
               win.focus();

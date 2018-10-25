@@ -29,6 +29,9 @@ function civicrm_api3_case_getwebforms($params) {
   if (!isset($sysInfo['uf']) || $sysInfo['uf'] != 'Drupal') {
     return civicrm_api3_create_error('Only Drupal CMS is supported!');
   }
+  if (!module_exists('webform_civicrm')) {
+    return civicrm_api3_create_error('webform_civicrm module is required!');
+  }
   $query = "SELECT a.nid, a.data, n.title
           FROM webform_civicrm_forms a
           INNER JOIN node n ON a.nid = n.nid";
