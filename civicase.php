@@ -358,7 +358,7 @@ function civicase_civicrm_alterContent (&$content, $context, $templateName, $for
   $settingsTemplateHtml = $settingsTemplate->fetchWith('CRM/Civicase/Admin/Form/Settings.tpl', []);
 
   $doc = phpQuery::newDocumentHTML($content);
-  $doc->find('tr:last')->append($settingsTemplateHtml);
+  $doc->find('table.form-layout tr:last')->append($settingsTemplateHtml);
 
   $content = $doc->getDocument();
 }
