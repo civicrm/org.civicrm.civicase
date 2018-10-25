@@ -34,6 +34,7 @@
 
   function panelQueryCtrl ($log, $q, $scope, crmApi) {
     var PAGE_SIZE = 5;
+    var cacheByPage = [];
 
     $scope.customData = $scope.customData || {};
     $scope.handlers = $scope.handlers || {};
@@ -66,6 +67,35 @@
      */
     function calculatePageOffset () {
       return ($scope.pagination.page - 1) * $scope.pagination.size;
+    }
+
+    /**
+     * Resets both the cache and the pagination
+     */
+    function dataReset () {
+      cacheByPage = [];
+      $scope.pagination.page = 1;
+    }
+
+    /**
+     * Fetches the data, either via the cache or the api
+     *
+     * @param {Boolean} skipCount
+     * @return {Promise}
+     */
+    function fetchData (skipCount) {
+      var cachedPage = cacheByPage[$scope.pagination.page];
+
+      if (cachedPage && cachedPage.length) {
+        $scope.results = cachedPage;
+
+        return $q.resolve();
+      }
+
+      return fetchDataViaApi(skipCount)
+        .then(function () {
+          cacheByPage[$scope.pagination.page] = $scope.results;
+        });
     }
 
     /**
@@ -134,13 +164,10 @@
         return;
       }
 
-      if (!skipCount) {
-        $scope.pagination.page = 1;
-      }
-
+      !skipCount && dataReset();
       toggleLoadingState(skipCount);
 
-      return fetchDataViaApi(skipCount)
+      return fetchData(skipCount)
         .then(updatePaginationRange)
         .then(function () {
           toggleLoadingState(skipCount);

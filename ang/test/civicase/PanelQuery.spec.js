@@ -381,6 +381,19 @@
         it('resets the pagination', function () {
           expect(panelQueryScope.pagination.page).toBe(1);
         });
+
+        describe('cache', function () {
+          beforeEach(function () {
+            crmApi.calls.reset();
+
+            panelQueryScope.pagination.page = 2;
+            $scope.$digest();
+          });
+
+          it('clears the cache', function () {
+            expect(crmApi).toHaveBeenCalled();
+          });
+        });
       });
 
       describe('when the current page changes', function () {
@@ -406,6 +419,35 @@
 
         it('does not trigger the api request to get the total count', function () {
           expect(countRequest).not.toBeDefined();
+        });
+
+        describe('when the page was not visited already', function () {
+          beforeEach(function () {
+            panelQueryScope.pagination.page = 2;
+            panelQueryScope.$digest();
+          });
+
+          it('makes an api request', function () {
+            expect(crmApi).toHaveBeenCalled();
+          });
+        });
+
+        describe('when the page was already visited', function () {
+          beforeEach(function () {
+            panelQueryScope.pagination.page = 2;
+            panelQueryScope.$digest();
+            panelQueryScope.pagination.page = 3;
+            panelQueryScope.$digest();
+
+            crmApi.calls.reset();
+
+            panelQueryScope.pagination.page = 2;
+            panelQueryScope.$digest();
+          });
+
+          it('does not make an api request', function () {
+            expect(crmApi).not.toHaveBeenCalled();
+          });
         });
       });
 
