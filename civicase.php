@@ -610,3 +610,16 @@ function civicase_civicrm_permission_check($permission, &$granted) {
   $permissionsChecker = new CRM_Civicase_Hook_Permissions_Check();
   $granted = $permissionsChecker->validatePermission($permission, $granted);
 }
+
+/**
+ * Implements hook_civicrm_preProcess().
+ */
+function civicase_civicrm_preProcess($formName, &$form) {
+  if ($formName == 'CRM_Admin_Form_Setting_Case') {
+    $civicaseSettings = require(__DIR__ . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'Civicase.setting.php');
+    $settings = $form->getVar('_settings');
+    $settings['civicaseAllowCaseLocks'] = $civicaseSettings['civicaseAllowCaseLocks'];
+
+    $form->setVar('_settings', $settings);
+  }
+}
