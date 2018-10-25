@@ -35,14 +35,6 @@
     left: 20px;
     top: 15px;
   }
-
-  .civicase__case-lock {
-    color: $crm-grayblue-darker;
-    font-size: 24px;
-    line-height: 0;
-    position: relative;
-    top: 5px;
-  }
 }
 
 .civicase__case-card--closed {
@@ -84,6 +76,14 @@
   .civicase__case-card__next-milestone {
     margin-right: 30px;
   }
+}
+
+.civicase__case-card__lock {
+  color: $crm-grayblue-darker;
+  font-size: 24px;
+  line-height: 0;
+  position: relative;
+  top: 5px;
 }
 
 .civicase__case-card__right_container {
