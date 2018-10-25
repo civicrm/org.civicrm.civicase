@@ -341,6 +341,8 @@
      * Refresh Activities
      * If: refreshCase callback is passed to the directive, calls the same
      * Else: Calls crmApi directly
+     *
+     * @param {Array} apiCalls
      */
     function refreshAll (apiCalls) {
       if (_.isFunction($scope.refreshCase)) {

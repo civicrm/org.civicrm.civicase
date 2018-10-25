@@ -25,13 +25,13 @@
           title: ts('Delete Activity'),
           message: ts('Permanently delete %1 activit%2?', {1: activities.length, 2: activities.length > 1 ? 'ies' : 'y'})
         }).on('crmConfirm:yes', function () {
-          var calls = [];
+          var apiCalls = [];
 
           _.each(activities, function (activityID) {
-            calls.push(['Activity', 'delete', {id: activityID}]);
+            apiCalls.push(['Activity', 'delete', {id: activityID}]);
           });
 
-          crmApi(calls)
+          crmApi(apiCalls)
             .then(function () {
               $scope.$emit('civicase::activity::updated');
             });
