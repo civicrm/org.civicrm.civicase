@@ -13,7 +13,7 @@
         totalCount: '=',
         filters: '=civicaseActivityFilters',
         displayOptions: '=displayOptions',
-        selectedActivitiesCount: '='
+        selectedActivities: '='
       },
       replace: true,
       templateUrl: '~/civicase/ActivityFilters.html',

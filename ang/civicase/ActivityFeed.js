@@ -42,6 +42,7 @@
     $scope.selectedActivities = [];
     $scope.viewingActivity = {};
     $scope.caseTimelines = $scope.caseTypeId ? _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label') : [];
+    $scope.refreshAll = refreshAll;
 
     (function init () {
       bindRouteParamsToScope();
@@ -67,25 +68,6 @@
     $scope.nextPage = function () {
       ++pageNum;
       getActivities(true);
-    };
-
-    /**
-     * Refresh Activities
-     * If: refreshCase callback is passed to the directive, calls the same
-     * Else: Calls crmApi directly
-     */
-    $scope.refreshAll = function (apiCalls) {
-      if (_.isFunction($scope.refreshCase)) {
-        $scope.refreshCase(apiCalls);
-      } else {
-        if (!_.isArray(apiCalls)) {
-          apiCalls = [];
-        }
-
-        crmApi(apiCalls, true).then(function (result) {
-          getActivities(false);
-        });
-      }
     };
 
     /**
@@ -348,10 +330,30 @@
       $scope.$watchCollection('displayOptions', getActivities);
       $scope.$watch('params.filters', getActivities, true);
       $scope.$on('updateCaseData', getActivities);
+      $rootScope.$on('civicase::activity::updated', refreshAll);
       $scope.$on('civicase::bulk-actions::bulk-selections', bulkSelectionsListener);
       $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
         $scope.viewActivity(activity.id, $event);
       });
+    }
+
+    /**
+     * Refresh Activities
+     * If: refreshCase callback is passed to the directive, calls the same
+     * Else: Calls crmApi directly
+     */
+    function refreshAll (apiCalls) {
+      if (_.isFunction($scope.refreshCase)) {
+        $scope.refreshCase(apiCalls);
+      } else {
+        if (!_.isArray(apiCalls)) {
+          apiCalls = [];
+        }
+
+        crmApi(apiCalls, true).then(function (result) {
+          getActivities(false);
+        });
+      }
     }
 
     /**
