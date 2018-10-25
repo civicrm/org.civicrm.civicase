@@ -616,9 +616,8 @@ function civicase_civicrm_permission_check($permission, &$granted) {
  */
 function civicase_civicrm_preProcess($formName, &$form) {
   if ($formName == 'CRM_Admin_Form_Setting_Case') {
-    $civicaseSettings = require(__DIR__ . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'Civicase.setting.php');
     $settings = $form->getVar('_settings');
-    $settings['civicaseAllowCaseLocks'] = $civicaseSettings['civicaseAllowCaseLocks'];
+    $settings['civicaseAllowCaseLocks'] = CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME;
 
     $form->setVar('_settings', $settings);
   }
