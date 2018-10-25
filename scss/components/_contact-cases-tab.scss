@@ -7,27 +7,7 @@
   padding-right: 15px;
 }
 
-.civicase__contact-cases-tab-list {
-  box-shadow: none;
-
-  > .panel-heading {
-    background: transparent;
-    padding: 15px 0;
-  }
-
-  > .panel-body {
-    background: transparent;
-    padding: 0;
-  }
-
-  .civicase__case-list {
-    >.panel {
-      margin-bottom: 0;
-    }
-  }
-}
-
-.civicase__contact-cases-panel {
+.civicase__contact-cases-tab__panel {
   box-shadow: none;
 
   > .panel-heading {
@@ -81,7 +61,7 @@
   }
 }
 
-.civicase__contact-cases-details {
+.civicase__contact-cases-tab-details {
   box-shadow: $box-shadow-block;
 
   > .panel-body {
@@ -123,11 +103,11 @@
   }  
 }
 
-.civicase__contact-cases-details__title {
+.civicase__contact-cases-tab-details__title {
   margin: 6.5px 0;
 }
 
-.civicase__contact-cases__panel-row {
+.civicase__contact-cases-tab__panel-row {
   border-bottom: 1px solid $gray-light;
   padding: 15px 24px;
 
@@ -136,11 +116,11 @@
   }
 }
 
-.civicase__contact-cases__panel-actions {
+.civicase__contact-cases-tab__panel-actions {
   padding: 20px;
 }
 
-.civicase__contact-cases__panel-row--dark {
+.civicase__contact-cases-tab__panel-row--dark {
   background-color: $gray-lighter;
 
   .civicase__pipe {
@@ -149,20 +129,20 @@
   }  
 }
 
-.civicase__contact-cases__panel-fields {
+.civicase__contact-cases-tab__panel-fields {
   padding-bottom: 15px;
 }
 
-.civicase__contact-cases__panel-fields--inline {
+.civicase__contact-cases-tab__panel-fields--inline {
   align-items: center;
   display: flex;
 }
 
-.civicase__contact-cases__panel-field-emphasis {
+.civicase__contact-cases-tab__panel-field-emphasis {
   color: $crm-gray-matte;
 }
 
-.civicase__contact-cases__panel-field-title {
+.civicase__contact-cases-tab__panel-field-title {
   color: $crm-gray-matte;
   margin-bottom: 5px;
 }

@@ -1,7 +1,7 @@
 <div class="panel panel-default">
   <div class="panel-body panel-body-extra" ng-controller="civicaseCaseDetailsController" ng-if="item">
-    <div class="civicase__contact-cases__panel-row civicase__contact-cases__panel-row--dark  clearfix">
-      <div class="pull-left civicase__contact-cases__panel-field-emphasis civicase__contact-cases-details__title">
+    <div class="civicase__contact-cases-tab__panel-row civicase__contact-cases-tab__panel-row--dark  clearfix">
+      <div class="pull-left civicase__contact-cases-tab__panel-field-emphasis civicase__contact-cases-tab-details__title">
         <span>Case ID: <strong> {{item.id}} </strong></span>
       </div>
       <div class="pull-right">
@@ -18,18 +18,34 @@
             <li>
               <span class="list-group-item-info">{{ ts("Change status to:") }}</span>
             </li>
-            <li ng-repeat="(id, status) in allowedCaseStatuses" ng-if="id != item.status_id">
+            <li ng-repeat="(id, status) in allowedCaseStatuses" ng-if="id !== item.status_id">
               <a
                 crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
                 class="crm-popup"
-                ng-href="{{ 'civicrm/case/activity' | civicaseCrmUrl:{ action: 'add', reset: 1, cid: item.client[0].contact_id, caseid: item.id, atype: getActivityType('Change Case Status'), case_status_id: id, civicase_reload: caseGetParams() } }}">
+                ng-href="{{ 
+                  'civicrm/case/activity' | civicaseCrmUrl:
+                    { 
+                      action: 'add', 
+                      reset: 1, 
+                      cid: item.client[0].contact_id, 
+                      caseid: item.id, 
+                      atype: getActivityType('Change Case Status'), 
+                      case_status_id: id, 
+                      civicase_reload: caseGetParams() 
+                    } 
+                  }}">
                 {{ status.label }}
               </a>
             </li>
           </ul>
         </div>
         <div class="btn-group btn-group-md">
-          <button type="button" class="civicase__case-header__action-icon btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button 
+            type="button" 
+            class="civicase__case-header__action-icon btn btn-primary" 
+            data-toggle="dropdown" 
+            aria-haspopup="true" 
+            aria-expanded="false">
             <i class="material-icons">menu</i>
           </button>
           <ul
@@ -41,11 +57,17 @@
         </div>
       </div>
     </div>
-    <div class="civicase__contact-cases__panel-row civicase__contact-cases__panel-row--dark  clearfix">
+    <div class="civicase__contact-cases-tab__panel-row civicase__contact-cases-tab__panel-row--dark  clearfix">
       <div class="pull-left">
         <div class="civicase__contact-card--client" contact-card contacts="item.contacts"></div>
         <div class="civicase__summary-tab__subject">
-          <p crm-editable="item" data-field="subject" data-type="textarea" data-placeholder="Click to add subject" crm-form-success="onChangeSubject($data)"></p>
+          <p 
+            crm-editable="item" 
+            data-field="subject" 
+            data-type="textarea" 
+            data-placeholder="Click to add subject" 
+            crm-form-success="onChangeSubject($data)">
+          </p>
         </div>
         <span class="civicase__case-header__case-type">
           <a
@@ -53,7 +75,18 @@
             title="{{ ts('Change Case Type') }}"
             class="crm-popup crm-editable-enabled"
             crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
-            ng-href="{{ 'civicrm/case/activity' | civicaseCrmUrl:{ action: 'add', reset: 1, cid: item.client[0].contact_id, caseid: item.id, atype: getActivityType('Change Case Type'), case_status_id: id, civicase_reload: caseGetParams() } }}">
+            ng-href="{{ 
+              'civicrm/case/activity' | civicaseCrmUrl:
+                {
+                  action: 'add',
+                  reset: 1,
+                  cid: item.client[0].contact_id,
+                  caseid: item.id,
+                  atype: getActivityType('Change Case Type'),
+                  case_status_id: id,
+                  civicase_reload: caseGetParams()
+                }
+              }}">
             {{ item.case_type }}
           </a>
           <span ng-if="caseTypesLength < 2">
@@ -62,8 +95,8 @@
         </span>
       </div>
     </div>
-    <div class="civicase__contact-cases__panel-row civicase__contact-cases__panel-row--dark  clearfix">
-      <div class="pull-left civicase__contact-cases__panel-fields--inline">
+    <div class="civicase__contact-cases-tab__panel-row civicase__contact-cases-tab__panel-row--dark  clearfix">
+      <div class="pull-left civicase__contact-cases-tab__panel-fields--inline">
         <div class="civicase__case-header__dates">
           <span>{{ CRM.utils.formatDate(item.start_date) || '. . .' }}</span> -
           <span ng-if="item.end_date">{{ CRM.utils.formatDate(item.end_date) }}</span>
@@ -78,17 +111,20 @@
           {{ tag['tag_id.name'] }}
         </div>
       </div>
-      <span class="pull-right civicase__contact-cases__panel-fields--inline">
-        <span class="civicase__contact-cases__panel-field-emphasis">Case Manager:</span>
+      <span class="pull-right civicase__contact-cases-tab__panel-fields--inline">
+        <span class="civicase__contact-cases-tab__panel-field-emphasis">Case Manager:</span>
         <span>
-          <span class="civicase__contact-card civicase__contact-card--manager" contact-card contacts="[item.manager]"></span>
+          <span 
+            class="civicase__contact-card civicase__contact-card--manager" 
+            contact-card contacts="[item.manager]">
+          </span>
         </span>
       </span>
     </div>
-    <div class="civicase__contact-cases__panel-row clearfix">
+    <div class="civicase__contact-cases-tab__panel-row clearfix">
       <!-- Next Activity -->
-      <div class="civicase__contact-cases__panel-fields">
-        <div class="civicase__contact-cases__panel-field-title">
+      <div class="civicase__contact-cases-tab__panel-fields">
+        <div class="civicase__contact-cases-tab__panel-field-title">
           Next Activity
         </div>
         <div
@@ -102,8 +138,8 @@
       </div>
       <!-- End Next Activity -->
       <!-- Upcoming Tasks Counts -->
-      <div class="civicase__contact-cases__panel-fields">
-        <div class="civicase__contact-cases__panel-field-title">
+      <div class="civicase__contact-cases-tab__panel-fields">
+        <div class="civicase__contact-cases-tab__panel-field-title">
           Upcoming
         </div>
         <div class="civicase__case-card__activity-info">
@@ -111,41 +147,70 @@
             <span>Tasks: </span>
             <a class="civicase__case-card__activity-count"
                ng-if="item.category_count.incomplete.task"
-            > {{ item.category_count.incomplete.task }} </a>
-            <span ng-if="item.category_count.incomplete.task && item.category_count.overdue.task" class="civicase__pipe"> | </span>
-            <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
-               ng-if="item.category_count.overdue.task"
+              > 
+              {{ item.category_count.incomplete.task }}
+            </a>
+            <span 
+              ng-if="item.category_count.incomplete.task && item.category_count.overdue.task" 
+              class="civicase__pipe">
+               | 
+            </span>
+            <a 
+              class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
+              ng-if="item.category_count.overdue.task"
             > {{ item.category_count.overdue.task }} </a>
-            <span ng-if="!item.category_count.incomplete.task && !item.category_count.overdue.task" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
+            <span 
+              ng-if="!item.category_count.incomplete.task && !item.category_count.overdue.task" 
+              class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">
+              0
+            </span>
           </div>
           <div class="civicase__case-card__activity-count-container">
             <span>Comms: </span>
             <a class="civicase__case-card__activity-count"
                ng-if="item.category_count.incomplete.communication"
             > {{ item.category_count.incomplete.communication }} </a>
-            <span ng-if="item.category_count.incomplete.communication && item.category_count.overdue.communication" class="civicase__pipe"> | </span>
-            <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
-               ng-if="item.category_count.overdue.communication"
-            > {{ item.category_count.overdue.communication }} </a>
-            <span ng-if="!item.category_count.incomplete.communication && !item.category_count.overdue.communication" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
+            <span 
+              ng-if="item.category_count.incomplete.communication && item.category_count.overdue.communication"
+              class="civicase__pipe"> | </span>
+            <a 
+              class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
+              ng-if="item.category_count.overdue.communication">
+             {{ item.category_count.overdue.communication }} 
+            </a>
+            <span 
+              ng-if="!item.category_count.incomplete.communication && !item.category_count.overdue.communication" 
+              class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">
+              0
+            </span>
           </div>
           <div class="civicase__case-card__activity-count-container">
             <span>Other: </span>
             <a class="civicase__case-card__activity-count"
                ng-if="item.category_count.incomplete.other"
             > {{ item.category_count.incomplete.other }} </a>
-            <span ng-if="item.category_count.incomplete.other && item.category_count.overdue.other" class="civicase__pipe"> | </span>
-            <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
-               ng-if="item.category_count.overdue.other"
-            > {{ item.category_count.overdue.other }} </a>
-            <span ng-if="!item.category_count.incomplete.other && !item.category_count.overdue.other" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
+            <span 
+              ng-if="item.category_count.incomplete.other && item.category_count.overdue.other"
+              class="civicase__pipe">
+               | 
+             </span>
+            <a 
+              class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
+              ng-if="item.category_count.overdue.other">
+              {{ item.category_count.overdue.other }}
+            </a>
+            <span 
+              ng-if="!item.category_count.incomplete.other && !item.category_count.overdue.other" 
+              class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">
+              0
+            </span>
           </div>
         </div>
       </div>
       <!-- End Upcoming Tasks Counts -->
       <!-- Case Status -->
-      <div class="civicase__contact-cases__panel-fields">
-        <div class="civicase__contact-cases__panel-field-title">
+      <div class="civicase__contact-cases-tab__panel-fields">
+        <div class="civicase__contact-cases-tab__panel-field-title">
           Case Status
         </div>
         <span 
@@ -156,8 +221,8 @@
       </div>
       <!-- End Case Status -->
       <!-- Case Summary -->
-      <div class="civicase__contact-cases__panel-fields">
-        <div class="civicase__contact-cases__panel-field-title">
+      <div class="civicase__contact-cases-tab__panel-fields">
+        <div class="civicase__contact-cases-tab__panel-field-title">
           Summary
         </div>
         <div>
@@ -166,25 +231,25 @@
       </div>
       <!--End Case Summary -->
       <!-- Contact Role -->
-      <div class="civicase__contact-cases__panel-fields">
-        <div class="civicase__contact-cases__panel-field-title">
+      <div class="civicase__contact-cases-tab__panel-fields" ng-if="item.contact_role">
+        <div class="civicase__contact-cases-tab__panel-field-title">
           Contact Role
         </div>
         <div>
-          {{ getContactRole(item) }}  
+          {{ item.contact_role }}  
         </div>
       </div>
       <!-- End Contact Role -->
       <!-- Last Modified -->
-      <div class="civicase__contact-cases__panel-fields">
-        <div class="civicase__contact-cases__panel-field-title">
+      <div class="civicase__contact-cases-tab__panel-fields">
+        <div class="civicase__contact-cases-tab__panel-field-title">
           Last Modified
         </div>
         <span>{{ CRM.utils.formatDate(item.modified_date) }}</span>
       </div>
       <!-- End Last Modified -->
     </div>
-    <div class="civicase__contact-cases__panel-row civicase__contact-cases__panel-actions">
+    <div class="civicase__contact-cases-tab__panel-row civicase__contact-cases-tab__panel-actions">
       <a ng-href="/civicrm/case/a/#/case/list?caseId={{item.id}}" class="btn btn-primary">
         Go To Case
       </a>

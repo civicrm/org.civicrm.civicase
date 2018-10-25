@@ -17,7 +17,8 @@
       },
       replace: true,
       scope: {
-        data: '=case'
+        data: '=case',
+        showContactRole: '='
       },
       controller: 'CivicaseCaseCardController'
     };

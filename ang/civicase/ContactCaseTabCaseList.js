@@ -29,6 +29,8 @@
 
     /**
      * Emits view-case event
+     *
+     * @param {Object} caseObj
      */
     $scope.viewCase = function (caseObj) {
       $scope.$emit('civicase::contact-record-list::view-case', caseObj);

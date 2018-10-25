@@ -2,6 +2,7 @@
   <civicase-case-card 
     mode="contact-record"
     case="case"
+    show-contact-role="casesList.showContactRole"
     ng-click="viewCase(case)"
     ng-repeat="case in casesList.cases">
     </civicase-case-card>
@@ -11,7 +12,7 @@
     ng-if="!casesList.isLoaded">
     <div class="panel-body">
       <div class="civicase__case-card__row civicase__case-card__row--primary clearfix">
-        <div class="pull-left civicase__case-card-title">
+        <div class="pull-left civicase__case-card-subject">
           <div class="civicase__loading-placeholder__oneline" style="width: 16em; font-size: 18px;"></div>
         </div>
         <div class="pull-right">

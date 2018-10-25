@@ -7,7 +7,7 @@
   }">
   <div class="panel-body">
     <div class="civicase__case-card__row civicase__case-card__row--primary clearfix">
-      <div class="pull-left civicase__case-card-title">{{ data.subject }}</div>
+      <div class="pull-left civicase__case-card-subject">{{ data.subject }}</div>
       <div class="pull-right">
         <span>Case ID : </span>
         <strong> {{ data.id }} </strong>
@@ -23,7 +23,7 @@
         </span>
       </div>
     </div>
-    <div class="civicase__case-card__row civicase__case-card__row--secondary clearfix" ng-if="data.contact_role">
+    <div class="civicase__case-card__row civicase__case-card__row--secondary clearfix" ng-if="showContactRole">
       <div class="pull-left civicase__case-card-role-container">
         <i class="material-icons">link</i>
         <span> Contact Role: </span>

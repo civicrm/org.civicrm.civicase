@@ -13,7 +13,7 @@
       <div class="civicase__contact-cases-tab-container pull-left col-md-6">
         <div  
           ng-repeat="casesList in casesListConfig"
-          class="panel panel-default civicase__contact-cases-tab-list">
+          class="panel panel-default civicase__contact-cases-tab__panel">
           <div class="panel-heading">
             <h3 class="panel-title"> {{ casesList.title }}</h3>
           </div>
@@ -22,92 +22,94 @@
           </div>
         </div>
       </div>
-      <div class="panel panel-default civicase__contact-cases-panel civicase__contact-cases-container pull-left col-md-6">
-        <div class="panel-heading">
-          <h3 class="panel-title">&nbsp;</h3>
-        </div>
-        <div class="panel-body panel-body-extra nopadding">
-          <civicase-contact-case-tab-case-details 
-            class="civicase__contact-cases-details" 
-            selected-case="selectedCase"
-            ng-if="caseDetailsLoaded">
-          </civicase-contact-case-tab-case-details>
-          <!-- Loading placeholder -->
-          <div ng-if="!caseDetailsLoaded" class="panel panel-default civicase__contact-cases-details">
-            <div class="panel-body">
-              <div class="civicase__contact-cases__panel-row civicase__contact-cases__panel-row--dark  clearfix">
-                <div class="pull-left">
-                  <div class="civicase__loading-placeholder__oneline civicase__contact-cases-details__title" style="width: 2em; font-size: 12px;"></div>
+      <div class="civicase__contact-cases-tab-container pull-left col-md-6">
+        <div class="panel panel-default civicase__contact-cases-tab__panel ">
+          <div class="panel-heading">
+            <h3 class="panel-title">&nbsp;</h3>
+          </div>
+          <div class="panel-body panel-body-extra">
+            <civicase-contact-case-tab-case-details 
+              class="civicase__contact-cases-tab-details" 
+              selected-case="selectedCase"
+              ng-if="caseDetailsLoaded">
+            </civicase-contact-case-tab-case-details>
+            <!-- Loading placeholder -->
+            <div ng-if="!caseDetailsLoaded" class="panel panel-default civicase__contact-cases-tab-details">
+              <div class="panel-body">
+                <div class="civicase__contact-cases-tab__panel-row civicase__contact-cases-tab__panel-row--dark  clearfix">
+                  <div class="pull-left">
+                    <div class="civicase__loading-placeholder__oneline civicase__contact-cases-tab-details__title" style="width: 2em; font-size: 12px;"></div>
+                  </div>
+                  <div class="pull-right">
+                  <div class="civicase__loading-placeholder__oneline btn-group" style="width: 4em; font-size: 33px;"></div>
+                  <div class="civicase__loading-placeholder__oneline btn-group" style="width: 2em; font-size: 33px;"></div>
+                  </div>
                 </div>
-                <div class="pull-right">
-                <div class="civicase__loading-placeholder__oneline btn-group" style="width: 4em; font-size: 33px;"></div>
-                <div class="civicase__loading-placeholder__oneline btn-group" style="width: 2em; font-size: 33px;"></div>
+                <div class="civicase__contact-cases-tab__panel-row civicase__contact-cases-tab__panel-row--dark  clearfix">
+                  <div class="civicase__loading-placeholder__oneline" style="width: 10em; margin-bottom: 10px;"></div>
+                  <div class="civicase__loading-placeholder__oneline" style="width: 12em; font-size: 18px; margin-bottom: 10px;"></div>
+                  <div class="civicase__loading-placeholder__oneline" style="width: 10em; margin-bottom: 10px;"></div>
                 </div>
-              </div>
-              <div class="civicase__contact-cases__panel-row civicase__contact-cases__panel-row--dark  clearfix">
-                <div class="civicase__loading-placeholder__oneline" style="width: 10em; margin-bottom: 10px;"></div>
-                <div class="civicase__loading-placeholder__oneline" style="width: 12em; font-size: 18px; margin-bottom: 10px;"></div>
-                <div class="civicase__loading-placeholder__oneline" style="width: 10em; margin-bottom: 10px;"></div>
-              </div>
-              <div class="civicase__contact-cases__panel-row civicase__contact-cases__panel-row--dark  clearfix">
-                <div class="pull-left">
-                  <div class="civicase__loading-placeholder__oneline" style="width: 10em; margin-bottom: 10px; "></div>
+                <div class="civicase__contact-cases-tab__panel-row civicase__contact-cases-tab__panel-row--dark  clearfix">
+                  <div class="pull-left">
+                    <div class="civicase__loading-placeholder__oneline" style="width: 10em; margin-bottom: 10px; "></div>
+                  </div>
+                  <div class="pull-right">
+                    <div class="civicase__loading-placeholder__oneline" style="width: 8em; margin-bottom: 10px; "></div>
+                  </div>
                 </div>
-                <div class="pull-right">
-                  <div class="civicase__loading-placeholder__oneline" style="width: 8em; margin-bottom: 10px; "></div>
-                </div>
-              </div>
-              <div class="civicase__contact-cases__panel-row">
-                <div class="civicase__contact-cases__panel-fields" style="margin-bottom: 10px;">
-                  <div class="civicase__loading-placeholder__oneline civicase__contact-cases__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
-                  <div class="civicase__activity-card civicase__activity-card--short">
-                     <div class="panel panel-default">
-                      <div class="panel-body">
-                        <div class="civicase__activity-card-row" style="margin-bottom: 8px;">
-                          <div class="civicase__loading-placeholder__oneline" style="width: 0.8em; font-size: 24px; margin-right: 10px;"></div>
-                          <div class="civicase__loading-placeholder__oneline" style="width: 8em; font-size: 18px;"></div>
-                          <div class="civicase__activity__right-container civicase__loading-placeholder__oneline" style="width: 7em;"></div>
+                <div class="civicase__contact-cases-tab__panel-row">
+                  <div class="civicase__contact-cases-tab__panel-fields" style="margin-bottom: 10px;">
+                    <div class="civicase__loading-placeholder__oneline civicase__contact-cases-tab__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
+                    <div class="civicase__activity-card civicase__activity-card--short">
+                       <div class="panel panel-default">
+                        <div class="panel-body">
+                          <div class="civicase__activity-card-row" style="margin-bottom: 8px;">
+                            <div class="civicase__loading-placeholder__oneline" style="width: 0.8em; font-size: 24px; margin-right: 10px;"></div>
+                            <div class="civicase__loading-placeholder__oneline" style="width: 8em; font-size: 18px;"></div>
+                            <div class="civicase__activity__right-container civicase__loading-placeholder__oneline" style="width: 7em;"></div>
+                          </div>
+                          <div class="civicase__activity-card-row--file civicase__loading-placeholder__oneline" style="width: 8em; margin-bottom: 10px;"></div>
                         </div>
-                        <div class="civicase__activity-card-row--file civicase__loading-placeholder__oneline" style="width: 8em; margin-bottom: 10px;"></div>
                       </div>
                     </div>
                   </div>
+                  <div class="civicase__contact-cases-tab__panel-fields" style="margin-bottom: 10px;">
+                    <div class="civicase__loading-placeholder__oneline civicase__contact-cases-tab__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
+                    <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
+                  </div>
+                  <div class="civicase__contact-cases-tab__panel-fields" style="margin-bottom: 10px;">
+                    <div class="civicase__loading-placeholder__oneline civicase__contact-cases-tab__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
+                    <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
+                  </div>
+                  <div class="civicase__contact-cases-tab__panel-fields" style="margin-bottom: 10px;">
+                    <div class="civicase__loading-placeholder__oneline civicase__contact-cases-tab__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
+                    <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
+                  </div>
+                  <div class="civicase__contact-cases-tab__panel-fields" style="margin-bottom: 10px;">
+                    <div class="civicase__loading-placeholder__oneline civicase__contact-cases-tab__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
+                    <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
+                  </div>
+                  <div class="civicase__contact-cases-tab__panel-fields" style="margin-bottom: 10px;">
+                    <div class="civicase__loading-placeholder__oneline civicase__contact-cases-tab__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
+                    <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
+                  </div>
+                  <div class="civicase__contact-cases-tab__panel-fields" style="margin-bottom: 10px;">
+                    <div class="civicase__loading-placeholder__oneline civicase__contact-cases-tab__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
+                    <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
+                  </div>
+                  <div class="civicase__contact-cases-tab__panel-fields">
+                    <div class="civicase__loading-placeholder__oneline civicase__contact-cases-tab__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
+                    <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
+                  </div>
                 </div>
-                <div class="civicase__contact-cases__panel-fields" style="margin-bottom: 10px;">
-                  <div class="civicase__loading-placeholder__oneline civicase__contact-cases__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
-                  <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
+                <div class="civicase__contact-cases-tab__panel-row civicase__contact-cases-tab__panel-actions">
+                  <div class="civicase__loading-placeholder__oneline btn-group" style="width: 4em; font-size: 33px;"></div>
                 </div>
-                <div class="civicase__contact-cases__panel-fields" style="margin-bottom: 10px;">
-                  <div class="civicase__loading-placeholder__oneline civicase__contact-cases__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
-                  <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
-                </div>
-                <div class="civicase__contact-cases__panel-fields" style="margin-bottom: 10px;">
-                  <div class="civicase__loading-placeholder__oneline civicase__contact-cases__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
-                  <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
-                </div>
-                <div class="civicase__contact-cases__panel-fields" style="margin-bottom: 10px;">
-                  <div class="civicase__loading-placeholder__oneline civicase__contact-cases__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
-                  <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
-                </div>
-                <div class="civicase__contact-cases__panel-fields" style="margin-bottom: 10px;">
-                  <div class="civicase__loading-placeholder__oneline civicase__contact-cases__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
-                  <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
-                </div>
-                <div class="civicase__contact-cases__panel-fields" style="margin-bottom: 10px;">
-                  <div class="civicase__loading-placeholder__oneline civicase__contact-cases__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
-                  <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
-                </div>
-                <div class="civicase__contact-cases__panel-fields">
-                  <div class="civicase__loading-placeholder__oneline civicase__contact-cases__panel-field-title" style="width: 8em; margin-bottom: 10px;"></div>
-                  <div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div>
-                </div>
-              </div>
-              <div class="civicase__contact-cases__panel-row civicase__contact-cases__panel-actions">
-                <div class="civicase__loading-placeholder__oneline btn-group" style="width: 4em; font-size: 33px;"></div>
               </div>
             </div>
+            <!-- End of loading placeholder -->
           </div>
-          <!-- End of loading placeholder -->
         </div>
       </div>
     </div>

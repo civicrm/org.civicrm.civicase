@@ -155,7 +155,7 @@
     }
 
     /**
-     * Removes the call for the directive mentioned
+     * Mocks a directive
      * TODO: Have a more generic usage - Maybe create a service/factory
      *
      * @param {String} directiveName

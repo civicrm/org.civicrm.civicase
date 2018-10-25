@@ -21,6 +21,7 @@
       }
     };
 
+    $scope.caseDetailsLoaded = false;
     $scope.casesListConfig = [
       {
         'name': 'opened',
@@ -47,8 +48,6 @@
         'showContactRole': true
       }
     ];
-
-    $scope.caseDetailsLoaded = false;
 
     $scope.checkPerm = CRM.checkPerm;
     $scope.ts = CRM.ts('civicase');
@@ -87,7 +86,7 @@
      * Watcher for civicase::contact-record-list::view-case event
      *
      * @params {Object} event
-     * @params {Object} cases of the list
+     * @params {Object} caseObj case object of the list
      */
     function contactRecordListViewCaseWatcher (event, caseObj) {
       setCaseAsSelected(caseObj);
@@ -228,6 +227,30 @@
       $scope.$on('civicase::contact-record-list::view-case', contactRecordListViewCaseWatcher);
     }
 
+    /**
+     * Loads additional data for contacts and set the first case as selected
+     */
+
+    function loadAdditionalDataWhenAllCasesLoaded () {
+      if (isAllCasesLoaded()) {
+        var allCases = _.reduce($scope.casesListConfig, function (memoriser, caseObj) {
+          return memoriser.concat(caseObj.cases);
+        }, []);
+
+        fetchContactsData(allCases);
+
+        if (!$scope.selectedCase) {
+          setCaseAsSelected(allCases[0]);
+          $scope.caseDetailsLoaded = true;
+        }
+      }
+    }
+
+    /**
+     * Sets passed case object as selected case
+     *
+     * @params {Object} caseObj
+     */
     function setCaseAsSelected (caseObj) {
       $scope.selectedCase = caseObj;
     }
@@ -250,10 +273,7 @@
     function updateCase (caseListIndex, params) {
       crmApi(params).then(function (response) {
         _.each(response.cases.values, function (item) {
-          if ($scope.casesListConfig[caseListIndex].showContactRole) {
-            item.contact_role = getContactRole(item);
-          }
-
+          item.contact_role = getContactRole(item);
           $scope.casesListConfig[caseListIndex].cases.push(formatCase(item));
         });
 
@@ -261,17 +281,8 @@
         $scope.casesListConfig[caseListIndex].showSpinner = false;
         $scope.casesListConfig[caseListIndex].isLoadMoreAvailable = $scope.casesListConfig[caseListIndex].cases.length < response.count;
 
-        if ($scope.casesListConfig[caseListIndex].page.num === 1 && isAllCasesLoaded()) {
-          var allCases = _.reduce($scope.casesListConfig, function (memoriser, caseObj) {
-            return memoriser.concat(caseObj.cases);
-          }, []);
-
-          fetchContactsData(allCases);
-
-          if (!$scope.selectedCase) {
-            setCaseAsSelected(allCases[0]);
-            $scope.caseDetailsLoaded = true;
-          }
+        if ($scope.casesListConfig[caseListIndex].page.num === 1) {
+          loadAdditionalDataWhenAllCasesLoaded();
         }
 
         $scope.casesListConfig[caseListIndex].page.num += 1;
