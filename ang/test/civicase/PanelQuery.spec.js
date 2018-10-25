@@ -283,6 +283,35 @@
               expect(requestParams.options.limit).toBe(panelQueryScope.pagination.size);
               expect(requestParams.options.offset).toBeDefined(panelQueryScope.pagination.page + panelQueryScope.pagination.size);
             });
+
+            describe('when the given params already have an `option` property', function () {
+              var requests, request, requestParams;
+
+              beforeEach(function () {
+                $scope.queryData.params.options = {
+                  limit: 10,
+                  offset: 20,
+                  sort: 'some_field ASC'
+                };
+
+                crmApi.calls.reset();
+                compileDirective();
+
+                requests = crmApi.calls.argsFor(0)[0];
+                request = requests[Object.keys(requests)[0]];
+                requestParams = request[2];
+              });
+
+              it('overrides the `limit` and `offset` property, enforcing its own', function () {
+                expect(requestParams.options.limit).toBe(panelQueryScope.pagination.size);
+                expect(requestParams.options.offset).toBeDefined(panelQueryScope.pagination.page + panelQueryScope.pagination.size);
+              });
+
+              it('leaves the other properties unchanged', function () {
+                expect(requestParams.options.sort).toBeDefined();
+                expect(requestParams.options.sort).toBe($scope.queryData.params.options.sort);
+              });
+            });
           });
         });
 

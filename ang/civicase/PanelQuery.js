@@ -140,16 +140,21 @@
     /**
      * Prepare the parameters of the request before passing them to the API
      *
+     * @NOTE: The cumbersome implementation was necessary because the current
+     * version of lodash in Civi does not have the _.defaultsDeep() method
+     *
      * @return {String}
      */
     function prepareRequestParams () {
-      return _.assign({}, $scope.query.params, {
-        sequential: 1,
-        options: {
-          limit: $scope.pagination.size,
-          offset: calculatePageOffset()
-        }
-      });
+      var requestParams = _.assign({}, $scope.query.params);
+
+      requestParams.sequential = 1;
+      requestParams.options = _.defaults({}, {
+        limit: $scope.pagination.size,
+        offset: calculatePageOffset()
+      }, requestParams.options);
+
+      return requestParams;
     }
 
     /**
