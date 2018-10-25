@@ -9,6 +9,8 @@
             return '~/civicase/CaseCard--other-cases.html';
           case 'contact-record':
             return '~/civicase/CaseCard--contact-record.html';
+          case 'dashboard':
+            return '~/civicase/CaseCard--dashboard.html';
           default:
             return '~/civicase/CaseCard--case-list.html';
         }

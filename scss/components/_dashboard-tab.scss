@@ -34,6 +34,7 @@
   .civicase__dashboard__tab__col--left {
     flex-basis: 300px + $case-gutter-width;
     flex-grow: 0;
+    flex-shrink: 0;
   }
 
   .civicase__dashboard__tab__col--right {
