@@ -53,11 +53,9 @@
     };
 
     (function init () {
+      initWatchers();
       verifyData();
-      // the range handler must be invoked immediately on init to
-      // include the selected period range in the first api request
-      invokeRangeHandler();
-      loadData().then(initWatchers);
+      loadData();
     }());
 
     /**
@@ -72,14 +70,22 @@
 
     /**
      * Fetches the data via the Civi API and stores the response
+     * It uses a deep copy of the original query parameters in order to modify
+     * them without triggering their watcher
      *
      * @param {Boolean} skipCount if true then the "getcount" request won't be sent
      * @return {Promise}
      */
     function fetchDataViaApi (skipCount) {
+      var paramsCopy = _.cloneDeep($scope.query.params);
+
+      if ($scope.handlers.range) {
+        $scope.handlers.range($scope.selectedRange, paramsCopy);
+      }
+
       var apiCalls = {
-        get: [ $scope.query.entity, $scope.query.action || 'get', prepareRequestParams() ],
-        count: [ $scope.query.entity, 'getcount', $scope.query.params ]
+        get: [ $scope.query.entity, ($scope.query.action || 'get'), prepareGetParams(paramsCopy) ],
+        count: [ $scope.query.entity, 'getcount', paramsCopy ]
       };
 
       skipCount && (delete apiCalls.count);
@@ -104,9 +110,9 @@
         (newParams !== oldParams) && loadData();
       }, true);
 
-      // Triggers the range handler when the selected range changes
+      // Triggers a refresh when the selected range changes
       $scope.$watch('selectedRange', function (newRange, oldRange) {
-        (newRange !== oldRange) && invokeRangeHandler();
+        (newRange !== oldRange) && loadData();
       });
 
       // Triggers a new request and a recalculation of the pagination range
@@ -114,14 +120,6 @@
       $scope.$watch('pagination.page', function (newPage, oldPage) {
         (newPage !== oldPage) && loadData(true);
       });
-    }
-
-    /**
-     * Invokes the period range handler, if present
-     */
-    function invokeRangeHandler () {
-      $scope.handlers.range &&
-      $scope.handlers.range($scope.selectedRange, $scope.query.params);
     }
 
     /**
@@ -146,15 +144,15 @@
     }
 
     /**
-     * Prepare the parameters of the request before passing them to the API
+     * Prepare the parameters for the "get" request before passing them to the API
      *
      * @NOTE: The cumbersome implementation was necessary because the current
      * version of lodash in Civi does not have the _.defaultsDeep() method
      *
      * @return {String}
      */
-    function prepareRequestParams () {
-      var requestParams = _.assign({}, $scope.query.params);
+    function prepareGetParams (queryParams) {
+      var requestParams = _.cloneDeep(queryParams) || {};
 
       requestParams.sequential = 1;
       requestParams.options = _.defaults({}, {
