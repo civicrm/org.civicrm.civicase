@@ -211,6 +211,13 @@
       _.each(activities, function (activity) {
         contacts = contacts.concat(activity.assignee_contact_id);
         contacts = contacts.concat(activity.target_contact_id);
+
+        if (activity['case_id.contacts']) {
+          contacts = contacts.concat(activity['case_id.contacts'].map(function (contact) {
+            return contact.contact_id;
+          }));
+        }
+
         contacts.push(activity.source_contact_id);
       });
 
