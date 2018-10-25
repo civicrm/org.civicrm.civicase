@@ -272,8 +272,10 @@
      * will make a request to get the missing information.
      */
     function itemWatcher () {
-      if ($scope.item && $scope.item.lock) {
-        return $route.updateParams({ caseId: null });
+      var isCaseLocked = $scope.item && $scope.item.lock;
+
+      if (isCaseLocked) {
+        return redirectToCaseList();
       }
 
       // Fetch extra info about the case
@@ -303,6 +305,13 @@
           $actControls.css('width', 'auto');
         }
       }, 1500);
+    }
+
+    /**
+     * Changes the current route and goes to the list of cases.
+     */
+    function redirectToCaseList () {
+      return $route.updateParams({ caseId: null });
     }
   }
 
