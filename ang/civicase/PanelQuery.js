@@ -137,7 +137,7 @@
      */
     function initWatchers () {
       // Triggers a refresh when the query params change
-      $scope.$watchCollection('query.params', function (newParams, oldParams) {
+      $scope.$watch('query.params', function (newParams, oldParams) {
         (newParams !== oldParams) && loadData();
       }, true);
 
