@@ -415,12 +415,14 @@
      */
     function civicaseActivityDetailsAffix (scope, $element, attr) {
       var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
+      // TODO Check if the attribute can be passed via scope variable
       var affixDisabled = (attr.affixDisabled === 'true');
 
       (function init () {
         if (affixDisabled) {
           return;
         }
+
         affixActivityDetailsPanel();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());

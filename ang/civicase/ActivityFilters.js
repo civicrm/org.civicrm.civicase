@@ -31,7 +31,6 @@
     function activityFiltersLink ($scope, element) {
       var ts = $scope.ts = CRM.ts('civicase');
 
-      console.log($scope.affixDisabled);
       $scope.activityCategories = prepareActivityCategories();
       $scope.availableFilters = prepareAvailableFilters();
       // Default exposed filters
@@ -216,12 +215,14 @@
      */
     function civicaseActivityFiltersAffix (scope, $el, attr) {
       var $filter, $feedBodyPanel, $tabs, $toolbarDrawer;
+      // TODO Check if the attribute can be passed via scope variable
       var affixDisabled = (attr.affixDisabled === 'true');
 
       (function init () {
         if (affixDisabled) {
           return;
         }
+
         affixActivityFilters();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
