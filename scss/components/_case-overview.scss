@@ -1,4 +1,4 @@
-.civicase__case-overview-body {
+.civicase__case-overview {
   .panel-body {
     background-color: $crm-gray-lightest;
     padding: 0 !important;
@@ -8,25 +8,43 @@
 .civicase__case-overview-container {
   margin-left: 200px;
   overflow: auto;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 .civicase__case-overview__breakdown,
 .civicase__case-overview__flow {
-  white-space: nowrap;
+  display: flex;
 }
 
 .civicase__case-overview__flow-status,
 .civicase__case-overview__breakdown-field {
   display: inline-flex;
-  width: 200px;
+  flex-basis: 200px;
+  flex-grow: 1;
+  flex-shrink: 0;
 
   &:first-child {
     align-items: flex-start;
-    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
     left: 0;
     position: absolute;
     top: auto;
-    z-index: 5;    
+    width: 200px;
+    z-index: 5;
+
+    .material-icons {
+      color: $brand-primary;
+      cursor: pointer;
+      margin-left: 8px;
+      position: relative;
+      top: 1px;
+    }
   }
 }
 
@@ -45,7 +63,7 @@
     content: '';
     height: 57px;
     position: absolute;
-    right: -27px;
+    right: -25px;
     top: 12px;
     transform: rotateZ(-45deg);
     transform-origin: 50% 50%;
@@ -61,6 +79,8 @@
   }
 
   &:last-child {
+    overflow: hidden;
+
     &::after {
       content: none;
     }
@@ -72,7 +92,7 @@
   height: 4px;
   position: absolute;
   transform: skewx(-45deg);
-  width: 100%;
+  width: calc(100% - 1px);
   z-index: 2;
 }
 
@@ -88,12 +108,17 @@
 
 .civicase__case-overview__flow-status__description {
   color: $crm-gray-matte;
-  margin: 0 30px;
+  margin: 0 auto;
   overflow: hidden;
   overflow: hidden;
   text-align: center;
   text-overflow: ellipsis;
+  white-space: nowrap;
   width: 140px;
+
+  span {
+    text-overflow: ellipsis;
+  }
 }
 
 .civicase__case-overview__breakdown {
@@ -131,5 +156,32 @@
     margin-right: 24px;
     padding-right: 0;
     width: 176px;    
+  }
+}
+
+.civicase__case-overview__flow-status--hoverable,
+.civicase__case-overview__breakdown-field--hoverable {
+  &:hover {
+    background-color: $gray-lighter;
+
+    &::after {
+      background-color: $gray-lighter;
+    }
+  }
+}
+
+.civicase__case-overview__popup {
+  border: 1px solid $gray-light;
+  border-radius: 2px;
+  box-shadow: $box-shadow-tooltip;
+  color: $gray-darker;
+  padding: 8px 12px;
+
+  .popover-content {
+    padding: 0;
+  }
+
+  .arrow {
+    border-bottom-color: $gray-light;
   }
 }
