@@ -1,0 +1,135 @@
+.civicase__case-overview-body {
+  .panel-body {
+    background-color: $crm-gray-lightest;
+    padding: 0 !important;
+  }
+}
+
+.civicase__case-overview-container {
+  margin-left: 200px;
+  overflow: auto;
+}
+
+.civicase__case-overview__breakdown,
+.civicase__case-overview__flow {
+  white-space: nowrap;
+}
+
+.civicase__case-overview__flow-status,
+.civicase__case-overview__breakdown-field {
+  display: inline-flex;
+  width: 200px;
+
+  &:first-child {
+    align-items: flex-start;
+    flex-direction: column;
+    left: 0;
+    position: absolute;
+    top: auto;
+    z-index: 5;    
+  }
+}
+
+.civicase__case-overview__flow-status {
+  align-items: flex-start;
+  background-color: $crm-white;
+  flex-direction: column;
+  height: 80px;
+  justify-content: center;
+  position: relative;
+
+  &::after {
+    background-color: $crm-white;
+    border-bottom-right-radius: 5px;
+    box-shadow: 1px 1px 0 0 $gray-light;
+    content: '';
+    height: 57px;
+    position: absolute;
+    right: -27px;
+    top: 12px;
+    transform: rotateZ(-45deg);
+    transform-origin: 50% 50%;
+    width: 57px;
+    z-index: 1;
+  }
+
+  &:first-child {
+    font-size: 16px;
+    font-weight: $crm-font-weight-h3;
+    line-height: 22px;
+    padding-left: 24px;
+  }
+
+  &:last-child {
+    &::after {
+      content: none;
+    }
+  }
+}
+
+.civicase__case-overview__flow-status__border {
+  bottom: 0;
+  height: 4px;
+  position: absolute;
+  transform: skewx(-45deg);
+  width: 100%;
+  z-index: 2;
+}
+
+
+.civicase__case-overview__flow-status__count {
+  color: $gray-darker;
+  font-size: 24px;
+  font-weight: $crm-font-weight-h3;
+  line-height: 33px;
+  text-align: center;
+  width: 100%;
+}
+
+.civicase__case-overview__flow-status__description {
+  color: $crm-gray-matte;
+  margin: 0 30px;
+  overflow: hidden;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  width: 140px;
+}
+
+.civicase__case-overview__breakdown {
+  &:last-child {
+    .civicase__case-overview__breakdown-field {
+      border: 0;
+    }
+  }  
+}
+
+.civicase__case-overview__breakdown-field {
+  align-items: center;
+  border-bottom: 1px solid $gray-light;
+  justify-content: center;
+  padding: 16px 24px;
+  position: relative;
+
+  &:not(:first-child) {
+    color: $crm-gray-matte;
+  }
+
+  &:first-child {
+    background-color: $crm-gray-lightest;
+    display: block;
+    font-weight: $crm-font-weight-h3;
+    margin-left: 24px;
+    overflow: hidden;
+    padding-left: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 176px;
+  }
+
+  &:last-child {
+    margin-right: 24px;
+    padding-right: 0;
+    width: 176px;    
+  }
+}
