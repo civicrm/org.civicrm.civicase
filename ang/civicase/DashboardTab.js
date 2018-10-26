@@ -36,16 +36,11 @@
       ]
     };
 
-    var defaultsMap = {
-      cases: CASES_QUERY_PARAMS_DEFAULTS,
-      milestones: MILESTONES_QUERY_PARAMS_DEFAULTS
-    };
-
-    $scope.newMilestonesPanel = {
-      query: { entity: 'Activity', params: getQueryParams('milestones') },
-      custom: {
-        itemName: 'milestones',
-        involvementFilter: { '@involvingContact': 'myActivities' }
+    $scope.newCasesPanel = {
+      query: {
+        entity: 'Case',
+        action: 'getcaselist',
+        params: casesQueryParams()
       },
       handlers: {
         range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(true),
@@ -63,57 +58,8 @@
     };
 
     (function init () {
-      // We hide the breakdown when there's only one case type
-      if ($scope.caseTypesLength < 2) {
-        $scope.showBreakdown = false;
-      }
-
       initWatchers();
     }());
-
-    /**
-     * Loads Stats data
-     */
-    $scope.loadStatsData = function () {
-      var apiCalls = [];
-
-      apiCalls.push(['Case', 'getstats', {}]);
-      crmApi(apiCalls).then(function (response) {
-        $scope.summaryData = response[0].values;
-      });
-    };
-
-    /**
-     * Creates link to the filtered cases list
-     *
-     * @param {String} type
-     * @param {String} status
-     * @return {String} link to the filtered list of cases
-     */
-    $scope.caseListLink = function (type, status) {
-      var cf = {};
-
-      if (type) {
-        cf.case_type_id = [type];
-      }
-
-      if (status) {
-        cf.status_id = [status];
-      }
-
-      if ($scope.myCasesOnly) {
-        cf.case_manager = [CRM.config.user_contact_id];
-      }
-
-      return '#/case/list?' + $.param({cf: JSON.stringify(cf)});
-    };
-
-    /**
-     * Toggle show breakdown dropdown
-     */
-    $scope.showHideBreakdown = function () {
-      $scope.showBreakdown = !$scope.showBreakdown;
-    };
 
     /**
      * Click handler that redirects the browser to the given case's details page
