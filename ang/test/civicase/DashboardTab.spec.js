@@ -222,6 +222,12 @@
           expect($scope.newMilestonesPanel.query.params.is_deleted).toBe(0);
         });
 
+        it('fetches only the incomplete milestones', function () {
+          expect($scope.newMilestonesPanel.query.params.status_id).toEqual({
+            'IN': CRM.civicase.activityStatusTypes.incomplete
+          });
+        });
+
         it('sorts by is_overdue (descending order) and activity_date_time (ascending order)', function () {
           expect($scope.newMilestonesPanel.query.params.options.sort).toBe('is_overdue DESC, activity_date_time ASC');
         });
