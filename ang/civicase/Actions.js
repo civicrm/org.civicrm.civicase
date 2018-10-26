@@ -353,11 +353,11 @@
         /**
          * Aligns the dialog box center to the screen
          *
-         * @params {jQuery} dialog box to be aligned center
+         * @param {jQuery} dialog box to be aligned center
          */
         function alignDialogBoxCenter (dialog) {
-          if (dialog && $(dialog).data('uiDialog')) {
-            $(dialog).parent().position({ 'my': 'center', 'at': 'center', 'of': window });
+          if (dialog && dialog.data('uiDialog')) {
+            dialog.parent().position({ 'my': 'center', 'at': 'center', 'of': window });
           }
         }
       }
