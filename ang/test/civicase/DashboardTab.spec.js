@@ -312,6 +312,43 @@
         it('sets the custom name of the items to "milestones"', function () {
           expect($scope.newMilestonesPanel.custom.itemName).toBe('milestones');
         });
+
+        describe('custom click handler', function () {
+          it('is defined', function () {
+            expect($scope.newMilestonesPanel.custom.activityClick).toBeDefined();
+          });
+
+          describe('event-based invocation', function () {
+            beforeEach(function () {
+              spyOn($scope.newMilestonesPanel.custom, 'activityClick');
+              $scope.$emit('civicaseAcitivityClicked');
+            });
+
+            it('is invoked by an event', function () {
+              expect($scope.newMilestonesPanel.custom.activityClick).toHaveBeenCalled();
+            });
+          });
+
+          describe('when invoked', function () {
+            var $route, mockActivity;
+
+            beforeEach(inject(function (_$route_) {
+              $route = _$route_;
+              mockActivity = { id: _.random(1, 10) };
+
+              spyOn($route, 'updateParams');
+
+              $scope.newMilestonesPanel.custom.activityClick(mockActivity);
+            }));
+
+            it('redirects to the Activities feed tab, with the activity details open', function () {
+              expect($route.updateParams).toHaveBeenCalledWith({
+                aid: mockActivity.id,
+                dtab: 1
+              });
+            });
+          });
+        });
       });
 
       describe('when the relationship type changes', function () {

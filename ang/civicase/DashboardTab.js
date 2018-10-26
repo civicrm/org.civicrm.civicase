@@ -11,7 +11,7 @@
 
   module.controller('dashboardTabController', dashboardTabController);
 
-  function dashboardTabController ($location, $scope, ContactsDataService, formatCase,
+  function dashboardTabController ($location, $route, $scope, ContactsDataService, formatCase,
     formatActivity) {
     var CASES_QUERY_PARAMS_DEFAULTS = {
       'status_id.grouping': 'Opened',
@@ -38,7 +38,7 @@
     };
 
     $scope.newMilestonesPanel = {
-      custom: { itemName: 'milestones' },
+      custom: { itemName: 'milestones', activityClick: activityCustomClick },
       query: { entity: 'Activity', params: getQueryParams('milestones') },
       handlers: {
         range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss'),
@@ -57,7 +57,21 @@
 
     (function init () {
       initWatchers();
+      initListeners();
     }());
+
+    /**
+     * Updates the route to go directly to the details of the given activity
+     * on the "Activities" tab
+     *
+     * @param {Object} activity
+     */
+    function activityCustomClick (activity) {
+      $route.updateParams({
+        dtab: 1,
+        aid: activity.id
+      });
+    }
 
     /**
      * Click handler that redirects the browser to the given case's details page
@@ -83,6 +97,17 @@
         ? activityFiltersCopy.case_filter
         : activityFiltersCopy
       ));
+    }
+
+    /**
+     * Initializes the controller watchers
+     */
+    function initListeners () {
+      // The custom click handler can't be applied with [ng-click], we need to
+      // rely on the "clicked" event emitted by the activity card component
+      $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
+        $scope.newMilestonesPanel.custom.activityClick(activity);
+      });
     }
 
     /**
