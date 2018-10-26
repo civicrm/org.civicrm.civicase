@@ -204,9 +204,9 @@
           <panel-query-empty>
             <div class="civicase__activity-card--empty">
               <div class="civicase__activity-no-result-icon civicase__activity-no-result-icon--case"></div>
-              <div class="civicase__activity-card--big--empty-title">No new {{customData.itemName || 'items'}}</div>
+              <div class="civicase__activity-card--big--empty-title">No new {{customData.itemName}}</div>
               <div class="civicase__activity-card--big--empty-description">
-                You have no new cases this {{selectedRange}}
+                You have no new {{customData.itemName}} this {{selectedRange}}
               </div>
             </div>
           </panel-query-empty>
@@ -225,6 +225,15 @@
               bulk-allowed="false">
             </div>
           </panel-query-results>
+          <panel-query-empty>
+            <div class="civicase__activity-card--empty">
+              <div class="civicase__activity-no-result-icon civicase__activity-no-result-icon--milestone"></div>
+              <div class="civicase__activity-card--big--empty-title">No upcoming {{customData.itemName}}</div>
+              <div class="civicase__activity-card--big--empty-description">
+                You have no {{customData.itemName}} due this {{selectedRange}}
+              </div>
+            </div>
+          </panel-query-empty>
         </civicase-panel-query>
       </div>
     </div>
