@@ -280,10 +280,10 @@
                 $scope.newMilestonesPanel.handlers.range('week', $scope.newMilestonesPanel.query.params);
               });
 
-              it('filters by `activity_date_time` between start and end of the current week', function () {
+              it('filters by `activity_date_time` between today and end of the current week', function () {
                 expect($scope.newMilestonesPanel.query.params.activity_date_time).toBeDefined();
                 expect($scope.newMilestonesPanel.query.params.activity_date_time).toEqual({
-                  'BETWEEN': getStartEndOfRange('week', 'YYYY-MM-DD HH:mm:ss')
+                  'BETWEEN': getStartEndOfRange('week', 'YYYY-MM-DD HH:mm:ss', true)
                 });
               });
             });
@@ -293,10 +293,10 @@
                 $scope.newMilestonesPanel.handlers.range('month', $scope.newMilestonesPanel.query.params);
               });
 
-              it('filters by `activity_date_time` between start and end of the current month', function () {
+              it('filters by `activity_date_time` between today and end of the current month', function () {
                 expect($scope.newMilestonesPanel.query.params.activity_date_time).toBeDefined();
                 expect($scope.newMilestonesPanel.query.params.activity_date_time).toEqual({
-                  'BETWEEN': getStartEndOfRange('month', 'YYYY-MM-DD HH:mm:ss')
+                  'BETWEEN': getStartEndOfRange('month', 'YYYY-MM-DD HH:mm:ss', true)
                 });
               });
             });
@@ -414,9 +414,11 @@
      * @param {String} format
      * @return {Array}
      */
-    function getStartEndOfRange (range, format) {
+    function getStartEndOfRange (range, format, useNowAsStart) {
+      var now = moment();
+
       return [
-        moment().startOf(range).format(format),
+        (useNowAsStart ? now : now.startOf(range)).format(format),
         moment().endOf(range).format(format)
       ];
     }

@@ -41,7 +41,7 @@
       custom: { itemName: 'milestones', activityClick: activityCustomClick },
       query: { entity: 'Activity', params: getQueryParams('milestones') },
       handlers: {
-        range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss'),
+        range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(true),
         results: _.curry(resultsHandler)(formatActivity)('case_id.contacts')
       }
     };
@@ -50,7 +50,7 @@
       custom: { itemName: 'cases', caseClick: casesCustomClick },
       query: { entity: 'Case', action: 'getcaselist', params: getQueryParams('cases') },
       handlers: {
-        range: _.curry(rangeHandler)('start_date')('YYYY-MM-DD'),
+        range: _.curry(rangeHandler)('start_date')('YYYY-MM-DD')(false),
         results: _.curry(resultsHandler)(formatCase)('contacts')
       }
     };
@@ -127,13 +127,14 @@
      *
      * @param {String} property the property where the information about the date is stored
      * @param {String} format the date format
+     * @param {Boolean} useNowAsStart whether the starting point should be the current datetime
      * @param {String} selectedRange the currently selected period range
      * @param {Object} queryParams
      */
-    function rangeHandler (property, format, selectedRange, queryParams) {
+    function rangeHandler (property, format, useNowAsStart, selectedRange, queryParams) {
       var now = moment();
+      var start = (useNowAsStart ? now : now.startOf(selectedRange)).format(format);
       var end = now.endOf(selectedRange).format(format);
-      var start = now.startOf(selectedRange).format(format);
 
       queryParams[property] = { 'BETWEEN': [start, end] };
     }
