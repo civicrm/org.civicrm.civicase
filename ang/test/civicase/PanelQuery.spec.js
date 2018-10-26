@@ -170,7 +170,7 @@
         }).toThrow();
       });
 
-      it('is optional to pass the <panel-query-actions> and/or <panel-query-title> slots', function () {
+      it('is optional to pass the following slots: <panel-query-actions>, <panel-query-title>, <panel-query-empty>', function () {
         expect(function () {
           compileDirective({ results: '<div></div>' });
         }).not.toThrow();
@@ -178,24 +178,33 @@
 
       describe('scope compile', function () {
         beforeEach(function () {
-          $scope.query = { entity: 'OuterEntity', params: { foo: 'outerFoo', bar: 'outerBar' } };
-          $scope.queryData = { entity: 'IsolatedEntity', params: { foo: 'isolatedFoo', bar: 'isolatedBar' } };
+          $scope.query = {
+            entity: 'OuterEntity',
+            params: { foo: 'outerFoo', bar: 'outerBar', baz: 'outerBaz' }
+          };
+          $scope.queryData = {
+            entity: 'IsolatedEntity',
+            params: { foo: 'isolatedFoo', bar: 'isolatedBar', baz: 'isolatedBaz' }
+          };
 
           compileDirective({
             actions: '<div>{{query.entity}}</div>',
-            results: '<div>{{query.params.foo}}</div>',
-            title: '<div>{{query.params.bar}}</div>'
+            empty: '<div>{{query.params.foo}}</div>',
+            results: '<div>{{query.params.bar}}</div>',
+            title: '<div>{{query.params.baz}}</div>'
           });
         });
 
         it('compiles the slot on its own isolated scope', function () {
           var actionsHtml = element.find('[ng-transclude="actions"]').html();
+          var emptyHtml = element.find('[ng-transclude="empty"]').html();
           var resultsHtml = element.find('[ng-transclude="results"]').html();
           var titleHtml = element.find('[ng-transclude="title"]').html();
 
           expect(actionsHtml).toContain($scope.queryData.entity);
-          expect(resultsHtml).toContain($scope.queryData.params.foo);
-          expect(titleHtml).toContain($scope.queryData.params.bar);
+          expect(emptyHtml).toContain($scope.queryData.params.foo);
+          expect(resultsHtml).toContain($scope.queryData.params.bar);
+          expect(titleHtml).toContain($scope.queryData.params.baz);
         });
       });
     });
@@ -547,6 +556,7 @@
       attributes += $scope.customData ? ' custom-data="customData"' : '';
 
       content += slots.actions ? '<panel-query-actions>' + slots.actions + '</panel-query-actions>' : '';
+      content += slots.empty ? '<panel-query-empty>' + slots.empty + '</panel-query-empty>' : '';
       content += slots.results ? '<panel-query-results>' + slots.results + '</panel-query-results>' : '';
       content += slots.title ? '<panel-query-title>' + slots.title + '</panel-query-title>' : '';
 

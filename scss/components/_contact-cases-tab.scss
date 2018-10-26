@@ -26,7 +26,7 @@
 
   .btn {
     box-shadow: $box-shadow-block;
-  }  
+  }
 }
 
 .civicase__contact-cases-tab-empty {
@@ -40,10 +40,6 @@
   }
 }
 
-.civicase__contact-cases-tab-empty-icon {
-  background-image: url('../resources/icons/cases.svg');
-}
-
 .civicase__contact-cases-tab-add {
   background: $gray-dark;
   margin-bottom: 10px;
@@ -51,7 +47,7 @@
   .material-icons {
     margin-right: 5px;
     position: relative;
-    top: 2px;    
+    top: 2px;
   }
 }
 
@@ -97,7 +93,7 @@
     color: $crm-gray-matte;
     display: block;
     padding: $crm-dropdown-item-padding;
-  }  
+  }
 }
 
 .civicase__contact-cases-tab-details__title {
@@ -123,7 +119,7 @@
   .civicase__pipe {
     color: $gray-light;
     margin: 0 8px;
-  }  
+  }
 }
 
 .civicase__contact-cases-tab__panel-fields {
