@@ -28,7 +28,8 @@
             <civicase-contact-case-tab-case-details
               class="civicase__contact-cases-tab-details"
               selected-case="selectedCase"
-              ng-if="caseDetailsLoaded">
+              ng-if="caseDetailsLoaded",
+              refresh-callback="refresh">
             </civicase-contact-case-tab-case-details>
             <!-- Loading placeholder -->
             <div ng-if="!caseDetailsLoaded" class="panel panel-default civicase__contact-cases-tab-details">

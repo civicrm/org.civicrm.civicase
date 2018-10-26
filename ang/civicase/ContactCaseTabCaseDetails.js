@@ -7,7 +7,8 @@
       replace: true,
       templateUrl: '~/civicase/ContactCaseTabCaseDetails.html',
       scope: {
-        item: '=selectedCase'
+        item: '=selectedCase',
+        refreshCases: '=refreshCallback'
       }
     };
   });

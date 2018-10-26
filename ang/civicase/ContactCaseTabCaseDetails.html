@@ -20,7 +20,7 @@
             </li>
             <li ng-repeat="(id, status) in allowedCaseStatuses" ng-if="id !== item.status_id">
               <a
-                crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+                crm-popup-form-success="pushCaseData($data.civicase_reload[0]); refreshCases()"
                 class="crm-popup"
                 ng-href="{{ 
                   'civicrm/case/activity' | civicaseCrmUrl:
