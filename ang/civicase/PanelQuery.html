@@ -1,4 +1,4 @@
-<div class="panel panel-secondary">
+<div class="panel panel-secondary panel-query" ng-class="{ 'is-loading-page': loading.partial }">
   <header class="panel-heading">
     <div class="clearfix">
       <h2 class="panel-title pull-left">
@@ -13,8 +13,8 @@
       <div class="pull-right" ng-transclude="actions"></div>
     </div>
   </header>
-  <div class="panel-body" style="transition: opacity 0.2s linear;" ng-style="loading.partial && { 'opacity': 0.7 }">
-    <div ng-hide="loading.full" ng-transclude="results"></div>
+  <div class="panel-body">
+    <div ng-show="!loading.full && total > 0" ng-transclude="results"></div>
     <div ng-if="loading.full">
       <div class="panel panel-default" ng-repeat="i in [0,1]">
         <div class="panel-body" style="border-top: 0;">

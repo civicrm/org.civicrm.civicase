@@ -1,0 +1,11 @@
+.panel-query {
+  > .panel-body {
+    transition: opacity 0.2s linear;
+  }
+
+  &.is-loading-page {
+    > .panel-body {
+      opacity: 0.7;
+    }
+  }
+}
