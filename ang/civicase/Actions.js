@@ -177,12 +177,14 @@
                 }
               });
 
-              CRM.confirm({
+              var dialog = CRM.confirm({
                 title: action.title,
                 message: msg,
                 open: function () {
                   $('input[name=change_case_status]', this).crmSelect2({data: statuses});
-                  CRM.wysiwyg.create('#change_case_status_details');
+                  CRM.wysiwyg.create('#change_case_status_details').then(function () {
+                    alignDialogBoxCenter(dialog);
+                  });
                 }
               })
                 .on('crmConfirm:yes', function () {
@@ -347,6 +349,17 @@
             }
           }
         });
+
+        /**
+         * Aligns the dialog box center to the screen
+         *
+         * @param {jQuery} dialog box to be aligned center
+         */
+        function alignDialogBoxCenter (dialog) {
+          if (dialog && dialog.data('uiDialog')) {
+            dialog.parent().position({ 'my': 'center', 'at': 'center', 'of': window });
+          }
+        }
       }
     };
   });
