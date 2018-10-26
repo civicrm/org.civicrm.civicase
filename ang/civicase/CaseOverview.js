@@ -1,16 +1,16 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
-
-  module.directive('civicaseDashboardTabOverview', function () {
+  // Todo: To write unit tests
+  module.directive('civicaseCaseOverview', function () {
     return {
       restrict: 'EA',
       replace: true,
-      templateUrl: '~/civicase/DashboardTabOverview.html',
-      controller: civicaseDashboardTabOverviewController,
+      templateUrl: '~/civicase/CaseOverview.html',
+      controller: civicaseCaseOverviewController,
       scope: {}
     };
 
-    function civicaseDashboardTabOverviewController ($scope, crmApi) {
+    function civicaseCaseOverviewController ($scope, crmApi) {
       $scope.caseStatuses = CRM.civicase.caseStatuses;
       $scope.caseTypes = CRM.civicase.caseTypes;
       $scope.caseTypesLength = _.size(CRM.civicase.caseTypes);
