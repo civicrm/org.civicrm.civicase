@@ -43,9 +43,13 @@
         'name': 'related',
         'title': 'Other cases for this contact',
         'filterParams': {
-          'case_manager': Contact.getContactIDFromUrl()
+          'case_manager': Contact.getContactIDFromUrl(),
+          'options': {
+            'limit': 0
+          }
         },
-        'showContactRole': true
+        'showContactRole': true,
+        'disableLoadMore': true // Todo: Should be removed after Fixing count API response for case list.
       }
     ];
 
