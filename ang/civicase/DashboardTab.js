@@ -72,9 +72,9 @@
     }());
 
     /**
-     * Loads cases data
+     * Loads Stats data
      */
-    $scope.refresh = function () {
+    $scope.loadStatsData = function () {
       var apiCalls = [];
 
       apiCalls.push(['Case', 'getstats', {}]);
