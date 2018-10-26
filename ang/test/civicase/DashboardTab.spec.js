@@ -222,8 +222,8 @@
           expect($scope.newMilestonesPanel.query.params.is_deleted).toBe(0);
         });
 
-        it('sorts by is_overdue (descending order) and activity_date_time (descending order)', function () {
-          expect($scope.newMilestonesPanel.query.params.options.sort).toBe('is_overdue DESC, activity_date_time DESC');
+        it('sorts by is_overdue (descending order) and activity_date_time (ascending order)', function () {
+          expect($scope.newMilestonesPanel.query.params.options.sort).toBe('is_overdue DESC, activity_date_time ASC');
         });
 
         it('asks the api to return only a specific set of fields', function () {

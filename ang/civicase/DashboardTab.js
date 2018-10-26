@@ -24,7 +24,7 @@
       'is_deleted': 0,
       'is_test': 0,
       'activity_type_id.grouping': { 'LIKE': '%milestone%' },
-      'options': { 'sort': 'is_overdue DESC, activity_date_time DESC' },
+      'options': { 'sort': 'is_overdue DESC, activity_date_time ASC' },
       'return': [
         'subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
         'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
