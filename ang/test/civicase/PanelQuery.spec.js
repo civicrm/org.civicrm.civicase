@@ -114,8 +114,8 @@
           compileDirective();
         });
 
-        it('is not called on init', function () {
-          expect(rangeHandler).not.toHaveBeenCalled();
+        it('is called', function () {
+          expect(rangeHandler).toHaveBeenCalled();
         });
 
         describe('when the selected range changes', function () {
@@ -283,6 +283,35 @@
               expect(requestParams.options.limit).toBe(panelQueryScope.pagination.size);
               expect(requestParams.options.offset).toBeDefined(panelQueryScope.pagination.page + panelQueryScope.pagination.size);
             });
+
+            describe('when the given params already have an `option` property', function () {
+              var requests, request, requestParams;
+
+              beforeEach(function () {
+                $scope.queryData.params.options = {
+                  limit: 10,
+                  offset: 20,
+                  sort: 'some_field ASC'
+                };
+
+                crmApi.calls.reset();
+                compileDirective();
+
+                requests = crmApi.calls.argsFor(0)[0];
+                request = requests[Object.keys(requests)[0]];
+                requestParams = request[2];
+              });
+
+              it('overrides the `limit` and `offset` property, enforcing its own', function () {
+                expect(requestParams.options.limit).toBe(panelQueryScope.pagination.size);
+                expect(requestParams.options.offset).toBeDefined(panelQueryScope.pagination.page + panelQueryScope.pagination.size);
+              });
+
+              it('leaves the other properties unchanged', function () {
+                expect(requestParams.options.sort).toBeDefined();
+                expect(requestParams.options.sort).toBe($scope.queryData.params.options.sort);
+              });
+            });
           });
         });
 
@@ -352,6 +381,19 @@
         it('resets the pagination', function () {
           expect(panelQueryScope.pagination.page).toBe(1);
         });
+
+        describe('cache', function () {
+          beforeEach(function () {
+            crmApi.calls.reset();
+
+            panelQueryScope.pagination.page = 2;
+            $scope.$digest();
+          });
+
+          it('clears the cache', function () {
+            expect(crmApi).toHaveBeenCalled();
+          });
+        });
       });
 
       describe('when the current page changes', function () {
@@ -377,6 +419,47 @@
 
         it('does not trigger the api request to get the total count', function () {
           expect(countRequest).not.toBeDefined();
+        });
+
+        describe('when the page was not visited already', function () {
+          beforeEach(function () {
+            panelQueryScope.pagination.page = 2;
+            panelQueryScope.$digest();
+          });
+
+          it('makes an api request', function () {
+            expect(crmApi).toHaveBeenCalled();
+          });
+        });
+
+        describe('when the page was already visited', function () {
+          beforeEach(function () {
+            panelQueryScope.pagination.page = 2;
+            panelQueryScope.$digest();
+            panelQueryScope.pagination.page = 3;
+            panelQueryScope.$digest();
+
+            crmApi.calls.reset();
+
+            panelQueryScope.pagination.page = 2;
+            panelQueryScope.$digest();
+          });
+
+          it('does not make an api request', function () {
+            expect(crmApi).not.toHaveBeenCalled();
+          });
+        });
+      });
+
+      describe('when a watcher is triggered while already loading', function () {
+        beforeEach(function () {
+          panelQueryScope.loading.full = true;
+          panelQueryScope.pagination.page = 2;
+          $scope.$digest();
+        });
+
+        it('does not make an additional api call', function () {
+          expect(crmApi.calls.count()).toBe(0);
         });
       });
     });

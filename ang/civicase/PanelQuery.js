@@ -34,10 +34,11 @@
 
   function panelQueryCtrl ($log, $q, $scope, crmApi) {
     var PAGE_SIZE = 5;
+    var cacheByPage = [];
 
     $scope.customData = $scope.customData || {};
     $scope.handlers = $scope.handlers || {};
-    $scope.loading = false;
+    $scope.loading = { full: false, partial: false };
     $scope.results = [];
     $scope.total = 0;
     $scope.ts = ts;
@@ -69,15 +70,52 @@
     }
 
     /**
+     * Resets both the cache and the pagination
+     */
+    function dataReset () {
+      cacheByPage = [];
+      $scope.pagination.page = 1;
+    }
+
+    /**
+     * Fetches the data, either via the cache or the api
+     *
+     * @param {Boolean} skipCount
+     * @return {Promise}
+     */
+    function fetchData (skipCount) {
+      var cachedPage = cacheByPage[$scope.pagination.page];
+
+      if (cachedPage && cachedPage.length) {
+        $scope.results = cachedPage;
+
+        return $q.resolve();
+      }
+
+      return fetchDataViaApi(skipCount)
+        .then(function () {
+          cacheByPage[$scope.pagination.page] = $scope.results;
+        });
+    }
+
+    /**
      * Fetches the data via the Civi API and stores the response
+     * It uses a deep copy of the original query parameters in order to modify
+     * them without triggering their watcher
      *
      * @param {Boolean} skipCount if true then the "getcount" request won't be sent
      * @return {Promise}
      */
     function fetchDataViaApi (skipCount) {
+      var paramsCopy = _.cloneDeep($scope.query.params);
+
+      if ($scope.handlers.range) {
+        $scope.handlers.range($scope.selectedRange, paramsCopy);
+      }
+
       var apiCalls = {
-        get: [ $scope.query.entity, $scope.query.action || 'get', prepareRequestParams() ],
-        count: [ $scope.query.entity, 'getcount', $scope.query.params ]
+        get: [ $scope.query.entity, ($scope.query.action || 'get'), prepareGetParams(paramsCopy) ],
+        count: [ $scope.query.entity, 'getcount', paramsCopy ]
       };
 
       skipCount && (delete apiCalls.count);
@@ -102,11 +140,9 @@
         (newParams !== oldParams) && loadData();
       }, true);
 
-      // Triggers the range handler (if present) when the selected range changes
+      // Triggers a refresh when the selected range changes
       $scope.$watch('selectedRange', function (newRange, oldRange) {
-        if (newRange !== oldRange && $scope.handlers.range) {
-          $scope.handlers.range($scope.selectedRange, $scope.query.params);
-        }
+        (newRange !== oldRange) && loadData();
       });
 
       // Triggers a new request and a recalculation of the pagination range
@@ -123,33 +159,40 @@
      * @return {Promise}
      */
     function loadData (skipCount) {
-      if (!skipCount) {
-        $scope.pagination.page = 1;
-        $scope.loading = true;
+      // Prevents accidental additional call by watchers
+      if ($scope.loading.full || $scope.loading.partial) {
+        return;
       }
 
-      return fetchDataViaApi(skipCount)
+      !skipCount && dataReset();
+      toggleLoadingState(skipCount);
+
+      return fetchData(skipCount)
         .then(updatePaginationRange)
         .then(function () {
-          if (!skipCount) {
-            $scope.loading = false;
-          }
+          toggleLoadingState(skipCount);
         });
     }
 
     /**
-     * Prepare the parameters of the request before passing them to the API
+     * Prepare the parameters for the "get" request before passing them to the API
      *
+     * @NOTE: The cumbersome implementation was necessary because the current
+     * version of lodash in Civi does not have the _.defaultsDeep() method
+     *
+     * @param {Object} queryParams
      * @return {String}
      */
-    function prepareRequestParams () {
-      return _.assign({}, $scope.query.params, {
-        sequential: 1,
-        options: {
-          limit: $scope.pagination.size,
-          offset: calculatePageOffset()
-        }
-      });
+    function prepareGetParams (queryParams) {
+      var requestParams = _.cloneDeep(queryParams) || {};
+
+      requestParams.sequential = 1;
+      requestParams.options = _.defaults({}, {
+        limit: $scope.pagination.size,
+        offset: calculatePageOffset()
+      }, requestParams.options);
+
+      return requestParams;
     }
 
     /**
@@ -161,6 +204,17 @@
      */
     function processResults (results) {
       return $q.resolve($scope.handlers.results ? $scope.handlers.results(results) : results);
+    }
+
+    /**
+     * Activates / Deactivates the loading state of the directive
+     *
+     * @param {Boolean} partial whether the loading mode is "partial" instead of "full"
+     */
+    function toggleLoadingState (partial) {
+      var mode = partial ? 'partial' : 'full';
+
+      $scope.loading[mode] = !$scope.loading[mode];
     }
 
     /**
