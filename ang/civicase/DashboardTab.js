@@ -43,7 +43,6 @@
     $scope.newMilestonesPanel = {
       query: { entity: 'Activity', params: getQueryParams('milestones') },
       custom: {
-        activityClick: activityCustomClick,
         itemName: 'milestones',
         involvementFilter: { '@involvingContact': 'myActivities' }
       },
@@ -64,21 +63,7 @@
 
     (function init () {
       initWatchers();
-      initListeners();
     }());
-
-    /**
-     * Updates the route to go directly to the details of the given activity
-     * on the "Activities" tab
-     *
-     * @param {Object} activity
-     */
-    function activityCustomClick (activity) {
-      $route.updateParams({
-        dtab: 1,
-        aid: activity.id
-      });
-    }
 
     /**
      * Click handler that redirects the browser to the given case's details page
@@ -104,17 +89,6 @@
         ? activityFiltersCopy.case_filter
         : activityFiltersCopy
       ));
-    }
-
-    /**
-     * Initializes the controller watchers
-     */
-    function initListeners () {
-      // The custom click handler can't be applied with [ng-click], we need to
-      // rely on the "clicked" event emitted by the activity card component
-      $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
-        $scope.newMilestonesPanel.custom.activityClick(activity);
-      });
     }
 
     /**
