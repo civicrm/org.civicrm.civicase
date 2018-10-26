@@ -14,7 +14,6 @@
   function dashboardTabController ($location, $rootScope, $route, $scope,
     ContactsDataService, formatCase,
     formatActivity) {
-
     var CASES_QUERY_PARAMS_DEFAULTS = {
       'status_id.grouping': 'Opened',
       'options': { 'sort': 'start_date DESC' }
@@ -36,11 +35,16 @@
       ]
     };
 
-    $scope.newCasesPanel = {
-      query: {
-        entity: 'Case',
-        action: 'getcaselist',
-        params: casesQueryParams()
+    var defaultsMap = {
+      cases: CASES_QUERY_PARAMS_DEFAULTS,
+      milestones: MILESTONES_QUERY_PARAMS_DEFAULTS
+    };
+
+    $scope.newMilestonesPanel = {
+      query: { entity: 'Activity', params: getQueryParams('milestones') },
+      custom: {
+        itemName: 'milestones',
+        involvementFilter: { '@involvingContact': 'myActivities' }
       },
       handlers: {
         range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(true),
