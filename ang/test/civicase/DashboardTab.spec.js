@@ -419,11 +419,10 @@
      */
     function getStartEndOfRange (range, format, useNowAsStart) {
       var now = moment();
+      var start = (useNowAsStart ? now : now.startOf(range)).format(format);
+      var end = now.endOf(range).format(format);
 
-      return [
-        (useNowAsStart ? now : now.startOf(range)).format(format),
-        moment().endOf(range).format(format)
-      ];
+      return [start, end];
     }
 
     /**
