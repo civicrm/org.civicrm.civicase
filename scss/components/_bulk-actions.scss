@@ -69,3 +69,9 @@
     text-align: center;
   }
 }
+
+.civicase__checkbox--bulk-action {
+  .civicase__checkbox--checked {
+    color: $brand-primary;
+  }
+}
