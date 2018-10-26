@@ -17,7 +17,8 @@
         params: '=civicaseActivityFeed',
         showBulkActions: '=',
         caseTypeId: '=',
-        refreshCase: '=?refreshCallback'
+        refreshCase: '=?refreshCallback',
+        affixDisabled: '@'
       }
     };
   });
@@ -410,11 +411,16 @@
      *
      * @param {Object} scope
      * @param {Object} $element
+     * @param {Object} attr
      */
-    function civicaseActivityDetailsAffix (scope, $element) {
+    function civicaseActivityDetailsAffix (scope, $element, attr) {
       var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
+      var affixDisabled = (attr.affixDisabled === 'true');
 
       (function init () {
+        if (affixDisabled) {
+          return;
+        }
         affixActivityDetailsPanel();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
