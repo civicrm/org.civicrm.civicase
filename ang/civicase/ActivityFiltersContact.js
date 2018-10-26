@@ -41,8 +41,15 @@
        * @param {Object} event
        * @param {Object} filters
        * @param {Object} params
+       * @param {Boolean} reset if it's necessary to delete the previously-set properties
        */
-      function feedQueryListener (event, filters, params) {
+      function feedQueryListener (event, filters, params, reset) {
+        if (reset) {
+          delete params.contact_id;
+          delete params.assignee_contact_id;
+          delete params.source_contact_id;
+        }
+
         switch (filters['@involvingContact']) {
           case 'myActivities':
             params.contact_id = 'user_contact_id';
