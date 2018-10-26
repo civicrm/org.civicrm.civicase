@@ -211,6 +211,20 @@
             </div>
           </panel-query-empty>
         </civicase-panel-query>
+        <!-- New Milestones -->
+        <civicase-panel-query query="newMilestonesPanel.query" handlers="newMilestonesPanel.handlers" custom-data="newMilestonesPanel.custom">
+          <panel-query-title>
+            You have {{loading.full ? '-' : total}} new milestones
+          </panel-query-title>
+          <panel-query-results>
+            <div ng-repeat="activity in results"
+              case-activity-card="activity"
+              mode="long"
+              refresh-on-checkbox-toggle="false"
+              bulk-allowed="false">
+            </div>
+          </panel-query-results>
+        </civicase-panel-query>
       </div>
     </div>
   </div>
