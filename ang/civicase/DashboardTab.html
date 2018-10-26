@@ -201,6 +201,15 @@
           <panel-query-results>
             <civicase-case-card ng-repeat="case in results" ng-click="customData.caseClick(case)" mode="dashboard" case="case"></civicase-case-card>
           </panel-query-results>
+          <panel-query-empty>
+            <div class="civicase__activity-card--empty">
+              <div class="civicase__activity-no-result-icon civicase__activity-no-result-icon--case"></div>
+              <div class="civicase__activity-card--big--empty-title">No new {{customData.itemName || 'items'}}</div>
+              <div class="civicase__activity-card--big--empty-description">
+                You have no new cases this {{selectedRange}}
+              </div>
+            </div>
+          </panel-query-empty>
         </civicase-panel-query>
       </div>
     </div>
