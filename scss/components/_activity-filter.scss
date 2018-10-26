@@ -52,7 +52,8 @@
   min-width: 150px;
 
   .select2-container {
-    width: 100% !important;
+    max-width: 170px;
+    min-width: 170px;
   }
 }
 

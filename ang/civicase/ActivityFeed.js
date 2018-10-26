@@ -17,7 +17,8 @@
         params: '=civicaseActivityFeed',
         showBulkActions: '=',
         caseTypeId: '=',
-        refreshCase: '=?refreshCallback'
+        refreshCase: '=?refreshCallback',
+        affixDisabled: '@'
       }
     };
   });
@@ -211,6 +212,13 @@
       _.each(activities, function (activity) {
         contacts = contacts.concat(activity.assignee_contact_id);
         contacts = contacts.concat(activity.target_contact_id);
+
+        if (activity['case_id.contacts']) {
+          contacts = contacts.concat(activity['case_id.contacts'].map(function (contact) {
+            return contact.contact_id;
+          }));
+        }
+
         contacts.push(activity.source_contact_id);
       });
 
@@ -403,11 +411,18 @@
      *
      * @param {Object} scope
      * @param {Object} $element
+     * @param {Object} attr
      */
-    function civicaseActivityDetailsAffix (scope, $element) {
+    function civicaseActivityDetailsAffix (scope, $element, attr) {
       var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
+      // TODO Check if the attribute can be passed via scope variable
+      var affixDisabled = (attr.affixDisabled === 'true');
 
       (function init () {
+        if (affixDisabled) {
+          return;
+        }
+
         affixActivityDetailsPanel();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
