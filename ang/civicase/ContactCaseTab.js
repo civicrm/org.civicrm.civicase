@@ -44,12 +44,12 @@
         'title': 'Other cases for this contact',
         'filterParams': {
           'case_manager': Contact.getContactIDFromUrl(),
-          'options': {
+          'options': { // Todo: Should be removed after Fixing count API response for case list. C51-277
             'limit': 0
           }
         },
         'showContactRole': true,
-        'disableLoadMore': true // Todo: Should be removed after Fixing count API response for case list.
+        'disableLoadMore': true // Todo: Should be removed after Fixing count API response for case list. C51-277
       }
     ];
 
@@ -147,7 +147,7 @@
         totalCountApi.push(params.count);
       });
 
-      getTotalCasesCount(totalCountApi);
+      // getTotalCasesCount(totalCountApi); // Todo: Uncommented after Fixing count API response for case list. C51-277
     }
 
     /**
@@ -241,6 +241,7 @@
         }, []);
 
         fetchContactsData(allCases);
+        $scope.totalCount = allCases.length; // Todo: Should be removed after Fixing count API response for case list. C51-277
 
         if (!$scope.selectedCase) {
           setCaseAsSelected(allCases[0]);

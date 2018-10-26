@@ -29,7 +29,7 @@
       ng-click="loadMore()">Load More Cases</button>
     <div ng-if="!casesList.isLoadMoreAvailable">
       <span ng-if="casesList.cases.length > 0"> Showing all {{ casesList.cases.length }}</span>
-      <p ng-if="casesList.cases.length == 0 && casesList.isLoaded" class="text-left"> None Found </p>
     </div>
+    <p ng-if="casesList.cases.length == 0 && casesList.isLoaded" class="text-left"> None Found </p>
   </div>
 </div>
