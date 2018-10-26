@@ -33,7 +33,7 @@
         'showContactRole': false
       }, {
         'name': 'closed',
-        'title': 'Closed Case',
+        'title': 'Resolved cases',
         'filterParams': {
           'status_id.grouping': 'Closed',
           'contact_id': Contact.getContactIDFromUrl()
