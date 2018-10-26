@@ -1,6 +1,6 @@
 <div id="bootstrap-theme" class="clearfix civicase__container">
   <!-- Added for SEO purpose (This will be hidden through css) -->
-  <h1 crm-page-title class="element-invisible">Related cases to the user</h1>  
+  <h1 crm-page-title class="element-invisible">Related cases to the user</h1>
   <div class="civicase__contact-cases-tab clearfix">
     <a ng-if="checkPerm('add cases')"
       class="btn-primary btn civicase__contact-cases-tab-add"
@@ -11,7 +11,7 @@
     </a>
     <div class="clearfix" ng-if="totalCount > 0">
       <div class="civicase__contact-cases-tab-container pull-left col-md-6">
-        <div  
+        <div
           ng-repeat="casesList in casesListConfig"
           class="panel panel-default civicase__panel-transparent-header">
           <div class="panel-heading">
@@ -25,8 +25,8 @@
       <div class="civicase__contact-cases-tab-container pull-left col-md-6">
         <div class="panel panel-default civicase__panel-transparent-header">
           <div class="panel-body panel-body-extra">
-            <civicase-contact-case-tab-case-details 
-              class="civicase__contact-cases-tab-details" 
+            <civicase-contact-case-tab-case-details
+              class="civicase__contact-cases-tab-details"
               selected-case="selectedCase"
               ng-if="caseDetailsLoaded">
             </civicase-contact-case-tab-case-details>
@@ -112,7 +112,7 @@
     </div>
   </div>
   <div  ng-if="totalCount == 0" class="civicase__contact-cases-tab-empty">
-    <div class="civicase__activity-no-result-icon civicase__contact-cases-tab-empty-icon"></div>
+    <div class="civicase__activity-no-result-icon civicase__activity-no-result-icon--case"></div>
     <div class="civicase__activity-card--big--empty-title"> This contact has no cases </div>
     <div class="civicase__activity-card--big--empty-description"> Click the button below to create a new case for this contact </div>
     <a ng-if="checkPerm('add cases')"
