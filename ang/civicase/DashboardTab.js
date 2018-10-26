@@ -11,7 +11,8 @@
 
   module.controller('dashboardTabController', dashboardTabController);
 
-  function dashboardTabController ($location, $route, $scope, ContactsDataService, formatCase,
+  function dashboardTabController ($location, $rootScope, $route, $scope,
+    ContactsDataService, formatCase,
     formatActivity) {
     var CASES_QUERY_PARAMS_DEFAULTS = {
       'status_id.grouping': 'Opened',
@@ -38,8 +39,12 @@
     };
 
     $scope.newMilestonesPanel = {
-      custom: { itemName: 'milestones', activityClick: activityCustomClick },
       query: { entity: 'Activity', params: getQueryParams('milestones') },
+      custom: {
+        activityClick: activityCustomClick,
+        itemName: 'milestones',
+        involvementFilter: {}
+      },
       handlers: {
         range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(true),
         results: _.curry(resultsHandler)(formatActivity)('case_id.contacts')
@@ -120,6 +125,22 @@
           $scope.newMilestonesPanel.query.params = getQueryParams('milestones');
         }
       });
+
+      // When the involvement filters change, broadcast the event that will be
+      // caught by the activity-filters-contact directive which will add the
+      // correct query params to match the filter value
+      $scope.$watch('newMilestonesPanel.custom.involvementFilter', function (newValue, oldValue) {
+        if (newValue === oldValue) {
+          return;
+        }
+
+        $rootScope.$broadcast(
+          'civicaseActivityFeed.query',
+          $scope.newMilestonesPanel.custom.involvementFilter,
+          $scope.newMilestonesPanel.query.params,
+          true
+        );
+      }, true);
     }
 
     /**

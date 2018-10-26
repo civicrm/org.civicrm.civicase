@@ -349,6 +349,34 @@
             });
           });
         });
+
+        describe('activity involvement filter', function () {
+          it('is defined', function () {
+            expect($scope.newMilestonesPanel.custom.involvementFilter).toBeDefined();
+          });
+
+          it('is set to "all" by default', function () {
+            expect($scope.newMilestonesPanel.custom.involvementFilter).toEqual({});
+          });
+
+          describe('when it changes', function () {
+            beforeEach(function () {
+              spyOn($rootScope, '$broadcast');
+
+              $scope.newMilestonesPanel.custom.involvementFilter = { '@involvingContact': '' };
+              $scope.$digest();
+            });
+
+            it('broadcasts a "civicaseActivityFeed.query" event', function () {
+              expect($rootScope.$broadcast).toHaveBeenCalledWith(
+                'civicaseActivityFeed.query',
+                $scope.newMilestonesPanel.custom.involvementFilter,
+                $scope.newMilestonesPanel.query.params,
+                true
+              );
+            });
+          });
+        });
       });
 
       describe('when the relationship type changes', function () {

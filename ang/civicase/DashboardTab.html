@@ -216,6 +216,9 @@
           <panel-query-title>
             You have {{loading.full ? '-' : total}} milestones due
           </panel-query-title>
+          <panel-query-actions>
+            <div ng-if="customData.involvementFilter" civicase-activity-filters-contact="customData.involvementFilter" class="panel-heading-control"></div>
+          </panel-query-actions>
           <panel-query-results>
             <div ng-repeat="activity in results"
               case-activity-card="activity"
