@@ -8,12 +8,12 @@
         uib-tabset-class="nav-pills-horizontal nav-pills-horizontal-primary clearfix">
         <!-- Dashboard Tab -->
         <uib-tab index="0" heading="{{ ts('Dashboard') }}" select="navTabs()">
-          <civicase-dashboard-tab ng-if="activeTab == 0"></civicase-dashboard-tab>
+          <civicase-dashboard-tab ng-if="activeTab === 0"></civicase-dashboard-tab>
         </uib-tab>
         <!-- End - Dashboard Tab -->
         <!-- Activities Tab -->
         <uib-tab index="1" heading="{{ts('Activities')}}">
-          <div ng-if="activeTab == 1" civicase-activity-feed="{filters: activityFilters}" class="civicase__dashboard-activites-feed"></div>
+          <div ng-if="activeTab === 1" civicase-activity-feed="{filters: activityFilters}" class="civicase__dashboard-activites-feed"></div>
         </uib-tab>
         <!-- End - Activities Tab -->
         <div class="pull-right">

@@ -4,16 +4,14 @@
   module.directive('civicaseDashboardTab', function () {
     return {
       restrict: 'E',
-      controller: 'dashboardTabCtrl',
+      controller: 'dashboardTabController',
       templateUrl: '~/civicase/DashboardTab.html'
     };
   });
 
-  module.controller('dashboardTabCtrl', dashboardTabCtrl);
+  module.controller('dashboardTabController', dashboardTabController);
 
-  dashboardTabCtrl.$inject = ['$location', '$scope', 'ContactsDataService', 'formatCase'];
-
-  function dashboardTabCtrl ($location, $scope, ContactsDataService, formatCase) {
+  function dashboardTabController ($location, $scope, ContactsDataService, formatCase) {
     var CASES_QUERY_PARAMS_DEFAULTS = {
       'status_id.grouping': 'Opened',
       'options': { 'sort': 'start_date DESC' }
@@ -42,10 +40,10 @@
     /**
      * Click handler that redirects the browser to the given case's details page
      *
-     * @param {Object} theCase
+     * @param {Object} caseObj
      */
-    function casesCustomClick (theCase) {
-      $location.path('case/list').search('caseId', theCase.id);
+    function casesCustomClick (caseObj) {
+      $location.path('case/list').search('caseId', caseObj.id);
     }
 
     /**

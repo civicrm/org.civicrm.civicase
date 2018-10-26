@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 (function ($, _, moment) {
-  describe('dashboardTabCtrl', function () {
+  describe('dashboardTabController', function () {
     var $controller, $rootScope, $scope, formatCaseMock;
 
     beforeEach(module('civicase.templates', 'civicase', 'crmUtil'));
@@ -209,7 +209,7 @@
     });
 
     function initController () {
-      $controller('dashboardTabCtrl', {
+      $controller('dashboardTabController', {
         $scope: $scope,
         formatCase: formatCaseMock
       });

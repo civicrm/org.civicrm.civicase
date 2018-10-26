@@ -180,6 +180,7 @@
      * @NOTE: The cumbersome implementation was necessary because the current
      * version of lodash in Civi does not have the _.defaultsDeep() method
      *
+     * @param {Object} queryParams
      * @return {String}
      */
     function prepareGetParams (queryParams) {
@@ -207,6 +208,8 @@
 
     /**
      * Activates / Deactivates the loading state of the directive
+     *
+     * @param {Boolean} partial whether the loading mode is "partial" instead of "full"
      */
     function toggleLoadingState (partial) {
       var mode = partial ? 'partial' : 'full';
