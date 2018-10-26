@@ -166,10 +166,7 @@
   border-radius: 2px !important;
   box-shadow: $box-shadow-block;
   color: $crm-gray-matte;
-
-  &:not(:last-child) {
-    margin-bottom: 10px;
-  }
+  margin-bottom: 10px;
 
   > .panel-body {
     padding: 0;

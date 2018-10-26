@@ -59,7 +59,13 @@
     }
   }
 
+  .civicase__activity-card--long,
   .civicase__case-card--detached {
     box-shadow: $box-shadow-panel-secondary-card;
+    margin-bottom: 0;
+
+    &:not(:last-child) {
+      margin-bottom: $case-gutter-width / 2;
+    }
   }
 }
