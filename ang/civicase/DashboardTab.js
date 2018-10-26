@@ -19,6 +19,7 @@
       'options': { 'sort': 'start_date DESC' }
     };
     var MILESTONES_QUERY_PARAMS_DEFAULTS = {
+      'contact_id': 'user_contact_id',
       'is_current_revision': 1,
       'is_deleted': 0,
       'is_test': 0,
@@ -43,7 +44,7 @@
       custom: {
         activityClick: activityCustomClick,
         itemName: 'milestones',
-        involvementFilter: {}
+        involvementFilter: { '@involvingContact': 'myActivities' }
       },
       handlers: {
         range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(true),

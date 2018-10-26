@@ -209,6 +209,10 @@
           });
         });
 
+        it('fetches only the user\'s milestones', function () {
+          expect($scope.newMilestonesPanel.query.params.contact_id).toBe('user_contact_id');
+        });
+
         it('fetches only the milestones on the current revision', function () {
           expect($scope.newMilestonesPanel.query.params.is_current_revision).toBe(1);
         });
@@ -355,8 +359,10 @@
             expect($scope.newMilestonesPanel.custom.involvementFilter).toBeDefined();
           });
 
-          it('is set to "all" by default', function () {
-            expect($scope.newMilestonesPanel.custom.involvementFilter).toEqual({});
+          it('is set to "myActivities" by default', function () {
+            expect($scope.newMilestonesPanel.custom.involvementFilter).toEqual({
+              '@involvingContact': 'myActivities'
+            });
           });
 
           describe('when it changes', function () {
