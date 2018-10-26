@@ -14,13 +14,14 @@
       },
       transclude: {
         actions: '?panelQueryActions',
+        empty: '?panelQueryEmpty',
         results: 'panelQueryResults',
         title: '?panelQueryTitle'
       }
     };
 
     function linkFn ($scope, $element, $attrs, $controller, $transclude) {
-      ['actions', 'results', 'title'].forEach(function (slot) {
+      ['actions', 'empty', 'results', 'title'].forEach(function (slot) {
         $transclude($scope, function (clone, scope) {
           $element.find('[ng-transclude="' + slot + '"]').html(clone);
         }, false, slot);
