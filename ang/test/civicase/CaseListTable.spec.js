@@ -2,7 +2,7 @@
 
 (function (_) {
   describe('CaseListTable', function () {
-    var $controller, $q, $scope, CasesData, crmApi, formatCase;
+    var $controller, $q, $scope, CasesData, crmApi;
 
     beforeEach(module('civicase', 'civicase.data', 'crmUtil'));
 
@@ -13,15 +13,14 @@
       $scope = $rootScope.$new();
       CasesData = _CasesData_.get();
       crmApi = _crmApi_;
-      formatCase = _formatCase_;
       // custom function added by civicrm:
       $scope.$bindToRoute = jasmine.createSpy('$bindToRoute');
       $scope.filters = {
         id: _.uniqueId()
       };
     }));
-    describe('on init', function () {
-      var expectedApiCallParams, expectedCases;
+    describe('on calling applyAdvSearch()', function () {
+      var expectedApiCallParams;
 
       beforeEach(function () {
         expectedApiCallParams = [
@@ -58,17 +57,12 @@
         ];
 
         crmApi.and.returnValue($q.resolve([_.cloneDeep(CasesData)]));
-        expectedCases = _.chain(CasesData.values).cloneDeep().map(formatCase).value();
         initController();
-        $scope.$digest();
+        $scope.applyAdvSearch($scope.filters);
       });
 
       it('requests the cases data', function () {
         expect(crmApi).toHaveBeenCalledWith(expectedApiCallParams);
-      });
-
-      it('stores the cases after formatting them', function () {
-        expect($scope.cases).toEqual(expectedCases);
       });
     });
 
