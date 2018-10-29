@@ -4,6 +4,7 @@
   module.service('ContactsDataService', ContactsDataService);
 
   function ContactsDataService (crmApi, $q) {
+    var defer;
     var savedContacts = [];
     var savedContactDetails = {};
     var requiredContactFields = [
@@ -19,7 +20,6 @@
       'street_address',
       'tag'
     ];
-    var defer;
 
     /**
      * Add data to the ContactsData service and fetches Profile Pic and Contact Type
@@ -39,6 +39,7 @@
       }
 
       defer = $q.defer();
+
       return crmApi('Contact', 'get', {
         'sequential': 1,
         'id': { 'IN': newContacts },
