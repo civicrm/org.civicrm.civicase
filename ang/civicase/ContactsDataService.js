@@ -3,7 +3,8 @@
 
   module.service('ContactsDataService', ContactsDataService);
 
-  function ContactsDataService (crmApi) {
+  function ContactsDataService (crmApi, $q) {
+    var defer;
     var savedContacts = [];
     var savedContactDetails = {};
     var requiredContactFields = [
@@ -33,8 +34,11 @@
       savedContacts = savedContacts.concat(newContacts);
 
       if (newContacts.length === 0) {
-        return;
+        // if a previous API call is in progress wait for it to finish;
+        return defer ? defer.promise : $q.resolve();
       }
+
+      defer = $q.defer();
 
       return crmApi('Contact', 'get', {
         'sequential': 1,
@@ -57,6 +61,7 @@
         }
       }).then(function (data) {
         savedContactDetails = _.extend(savedContactDetails, _.indexBy(data.values, 'contact_id'));
+        defer.resolve();
       });
     };
 

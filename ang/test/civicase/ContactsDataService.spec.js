@@ -20,7 +20,8 @@
         expect(ContactsDataService).toEqual(jasmine.objectContaining({
           add: jasmine.any(Function),
           getImageUrlOf: jasmine.any(Function),
-          getContactIconOf: jasmine.any(Function)
+          getContactIconOf: jasmine.any(Function),
+          getCachedContact: jasmine.any(Function)
         }));
       });
     });
@@ -29,6 +30,9 @@
       var expectedApiParams;
 
       beforeEach(function () {
+        crmApi.and.returnValue($q.resolve({
+          values: []
+        }));
         expectedApiParams = {
           'sequential': 1,
           'options': { 'limit': 0 },
@@ -88,6 +92,21 @@
 
         it('gets the details of new contacts only', function () {
           expect(crmApi.calls.mostRecent().args).toEqual(['Contact', 'get', expectedApiParams]);
+        });
+      });
+
+      describe('when called again before first calls data is not returned', function () {
+        var contactsForTheFirstCall;
+        var promise1, promise2;
+
+        beforeEach(function () {
+          contactsForTheFirstCall = [ContactsData.values[0]];
+          promise1 = ContactsDataService.add(contactsForTheFirstCall);
+          promise2 = ContactsDataService.add(contactsForTheFirstCall);
+        });
+
+        it('second call waits for the first one to finish', function () {
+          expect(promise1).toEqual(promise2);
         });
       });
     });
