@@ -222,6 +222,7 @@
           <panel-query-results>
             <div ng-repeat="activity in results"
               case-activity-card="activity"
+              refresh-callback="loadData"
               mode="long"
               refresh-on-checkbox-toggle="false"
               bulk-allowed="false">
@@ -248,6 +249,7 @@
           <panel-query-results>
             <div ng-repeat="activity in results"
               case-activity-card="activity"
+              refresh-callback="loadData"
               mode="long"
               refresh-on-checkbox-toggle="false"
               bulk-allowed="false">
