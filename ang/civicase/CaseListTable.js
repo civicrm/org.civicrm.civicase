@@ -10,30 +10,29 @@
 
   module.controller('CivicaseCaseListTableController', function ($rootScope, $scope, $window, BulkActions, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
     var firstLoad = true;
-    var caseTypes = CRM.civicase.caseTypes;
     var allCases;
 
     $scope.activityCategories = CRM.civicase.activityCategories;
     $scope.activityTypes = CRM.civicase.activityTypes;
+    $scope.page = {total: 0};
     $scope.cases = [];
     $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.CRM = CRM;
     $scope.isLoading = true;
-    $scope.page = {total: 0};
-    $scope.pageTitle = '';
     $scope.selectedCases = [];
     $scope.sort = {sortable: true};
     $scope.ts = CRM.ts('civicase');
     $scope.viewingCaseDetails = null;
+
     $scope.bulkAllowed = BulkActions.isAllowed();
 
     (function init () {
       bindRouteParamsToScope();
+      // calculate after page size is calculated from Route Params;
+      $scope.casePlaceholders = _.range($scope.page.size);
       initiateWatchers();
       initSubscribers();
-      getCases();
       getAllCasesforSelectAll();
-      $scope.casePlaceholders = $scope.filters.id ? [0] : _.range($scope.page.size);
     }());
 
     $scope.applyAdvSearch = function (newFilters) {
@@ -49,6 +48,12 @@
       $scope.sort.dir = ($scope.sort.dir === 'ASC' ? 'DESC' : 'ASC');
     };
 
+    /**
+     * Checks if selection is active on based of
+     * the passed params.
+     *
+     * @param {String} condition
+     */
     $scope.isSelection = function (condition) {
       if (!$scope.cases) {
         return false;
@@ -127,11 +132,9 @@
      * Binds all route parameters to scope
      */
     function bindRouteParamsToScope () {
-      $scope.$bindToRoute({expr: 'searchIsOpen', param: 'sx', format: 'bool', default: false});
       $scope.$bindToRoute({expr: 'sort.field', param: 'sf', format: 'raw', default: 'contact_id.sort_name'});
       $scope.$bindToRoute({expr: 'sort.dir', param: 'sd', format: 'raw', default: 'ASC'});
       $scope.$bindToRoute({expr: 'caseIsFocused', param: 'focus', format: 'bool', default: false});
-      $scope.$bindToRoute({expr: 'filters', param: 'cf', default: {}});
       $scope.$bindToRoute({expr: 'viewingCase', param: 'caseId', format: 'raw'});
       $scope.$bindToRoute({expr: 'viewingCaseTab', param: 'tab', format: 'raw', default: 'summary'});
       $scope.$bindToRoute({expr: 'page.size', param: 'cps', format: 'int', default: 15});
@@ -387,6 +390,9 @@
     function initSubscribers () {
       $scope.$on('civicase::bulk-actions::bulk-selections', bulkSelectionsListener);
       $scope.$on('civicase::bulk-actions::check-box-toggled', bulkSelectionCheckboxClickedListener);
+      $scope.$on('civicase::case-search::filters-updated', function (event, filters) {
+        $scope.applyAdvSearch(filters.selectedFilters);
+      });
     }
 
     /**
@@ -434,43 +440,10 @@
     }
 
     /**
-     * Set the title of the page
+     * Emits event for page title
      */
     function setPageTitle () {
-      var viewingCase = $scope.viewingCase;
-      var cases = $scope.cases;
-      var filters = $scope.filters;
-      // Hide page title when case is selected
-      $('h1.crm-page-title').toggle(!viewingCase);
-      if (viewingCase) {
-        var item = _.findWhere(cases, {id: viewingCase});
-        if (item) {
-          $scope.pageTitle = item.client[0].display_name + ' - ' + item.case_type;
-        }
-        return;
-      }
-      if (_.size(_.omit(filters, ['status_id', 'case_type_id']))) {
-        $scope.pageTitle = $scope.ts('Case Search Results');
-      } else {
-        var status = [];
-        if (filters.status_id && filters.status_id.length) {
-          _.each(filters.status_id, function (s) {
-            status.push(_.findWhere($scope.caseStatuses, {name: s}).label);
-          });
-        } else {
-          status = [$scope.ts('All Open')];
-        }
-        var type = [];
-        if (filters.case_type_id && filters.case_type_id.length) {
-          _.each(filters.case_type_id, function (t) {
-            type.push(_.findWhere(caseTypes, {name: t}).title);
-          });
-        }
-        $scope.pageTitle = status.join(' & ') + ' ' + type.join(' & ') + ' ' + $scope.ts('Cases');
-      }
-      if (typeof $scope.totalCount === 'number') {
-        $scope.pageTitle += ' (' + $scope.totalCount + ')';
-      }
+      $scope.$emit('civicase::case-search::page-title-updated', getDisplayNameOfSelectedItem(), $scope.totalCount);
     }
 
     /**
@@ -483,6 +456,28 @@
       if (newValue !== oldValue) {
         getCases();
       }
+    }
+
+    /**
+     * Returns the display name of a selected case
+     *
+     * @return {String} display name to be used in page title
+     */
+    function getDisplayNameOfSelectedItem () {
+      var viewingCase = $scope.viewingCase;
+      var cases = $scope.cases;
+
+      if (!viewingCase) {
+        return;
+      }
+
+      var selectedCase = _.findWhere(cases, {id: viewingCase});
+
+      if (!selectedCase) {
+        return false;
+      }
+
+      return selectedCase.client[0].display_name + ' - ' + selectedCase.case_type;
     }
   });
 })(angular, CRM.$, CRM._);

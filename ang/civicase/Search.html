@@ -1,7 +1,7 @@
 <div class="panel panel-default civicase__case-filter-panel clearfix" ng-class="{'case-is-focused': $parent.caseIsFocused}">
   <div crm-ui-debug="filters"></div>
   <div class="panel-header">
-    <h3 class="civicase__case-filter-panel__title"> {{ $parent.pageTitle }} </h3>
+    <h3 class="civicase__case-filter-panel__title"> {{ pageTitle }} </h3>
     <form class="form-inline civicase__case-filters-container">
       <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Case Type: Any'), data: caseTypeOptions}" ng-model="filters.case_type_id" />
       <input class="form-control civicase__case-filter__input" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />

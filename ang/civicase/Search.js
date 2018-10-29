@@ -18,7 +18,7 @@
   /**
    * Controller Function for civicase-search directive
    */
-  module.controller('civicaseSearchController', function ($scope, $timeout) {
+  module.controller('civicaseSearchController', function ($scope, $rootScope, $timeout) {
     // The ts() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -63,6 +63,7 @@
       }
     ];
 
+    $scope.pageTitle = '';
     $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
     $scope.caseStatusOptions = _.map(caseStatuses, mapSelectOptions);
     $scope.customGroups = CRM.civicase.customSearchFields;
@@ -72,39 +73,11 @@
     $scope.filters = angular.extend({}, $scope.defaults);
 
     (function init () {
+      bindRouteParamsToScope();
+      initiateWatchers();
+      initSubscribers();
       setCustomSearchFieldsAsSearchFilters();
-
-      $scope.$watch('expanded', expandedWatcher);
-      $scope.$watch('relationshipType', relationshipTypeWatcher);
-      $scope.$watchCollection('filters', filtersWatcher);
     }());
-
-    /**
-     * Watcher for expanded state and update tableHeader top offset likewise
-     */
-    function expandedWatcher () {
-      $scope.$emit('civicase::case-search::dropdown-toggle');
-    }
-
-    /**
-     * Watcher for relationshipType filter
-     */
-    function relationshipTypeWatcher () {
-      if ($scope.relationshipType) {
-        $scope.relationshipType[0] === 'is_case_manager' ? $scope.filters.case_manager = [CRM.config.user_contact_id] : delete ($scope.filters.case_manager);
-        $scope.relationshipType[0] === 'is_involved' ? $scope.filters.contact_id = [CRM.config.user_contact_id] : delete ($scope.filters.contact_id);
-      }
-    }
-
-    /**
-     * Watcher for filter collection to update the search
-     * Only works when dropdown is unexpanded
-     */
-    function filtersWatcher () {
-      if (!$scope.expanded) {
-        $scope.doSearch();
-      }
-    }
 
     /**
      * Check/Uncheck `Show deleted` filters
@@ -145,7 +118,7 @@
     $scope.doSearch = function () {
       $scope.filterDescription = buildDescription();
       $scope.expanded = false;
-      $scope.$parent.$eval($scope.onSearch, {
+      $rootScope.$broadcast('civicase::case-search::filters-updated', {
         selectedFilters: formatSearchFilters($scope.filters)
       });
     };
@@ -159,35 +132,11 @@
     };
 
     /**
-     * Map the option parameter from API
-     * to show up correctly on the UI.
-     *
-     * @param {object} opt object for caseTypes
-     * @return {object} mapped value to be used in UI
+     * Binds all route parameters to scope
      */
-    function mapSelectOptions (opt) {
-      return {
-        id: opt.value || opt.name,
-        text: opt.label || opt.title,
-        color: opt.color,
-        icon: opt.icon
-      };
-    }
-
-    /**
-     * Formats search filter as per the API request header format
-     *
-     * @params {object} inp - Object for input option to be formatted
-     * @return (object} search - returns formatted key value pair of filters
-     */
-    function formatSearchFilters (inp) {
-      var search = {};
-      _.each(inp, function (val, key) {
-        if (!_.isEmpty(val) || ((typeof val === 'number') && val) || ((typeof val === 'boolean') && val)) {
-          search[key] = val;
-        }
-      });
-      return search;
+    function bindRouteParamsToScope () {
+      $scope.$bindToRoute({expr: 'expanded', param: 'sx', format: 'bool', default: false});
+      $scope.$bindToRoute({expr: 'filters', param: 'cf', default: {}});
     }
 
     /**
@@ -234,6 +183,81 @@
     }
 
     /**
+     * Watcher for expanded state and update tableHeader top offset likewise
+     */
+    function expandedWatcher () {
+      $scope.$emit('civicase::case-search::dropdown-toggle');
+    }
+
+    /**
+     * Formats search filter as per the API request header format
+     *
+     * @params {object} inp - Object for input option to be formatted
+     * @return (object} search - returns formatted key value pair of filters
+     */
+    function formatSearchFilters (inp) {
+      var search = {};
+      _.each(inp, function (val, key) {
+        if (!_.isEmpty(val) || ((typeof val === 'number') && val) || ((typeof val === 'boolean') && val)) {
+          search[key] = val;
+        }
+      });
+      return search;
+    }
+
+    /**
+     * Watcher for filter collection to update the search
+     * Only works when dropdown is unexpanded
+     */
+    function filtersWatcher () {
+      if (!$scope.expanded) {
+        $scope.doSearch();
+      }
+    }
+
+    /**
+     * All subscribers are initiated here
+     */
+    function initSubscribers () {
+      $rootScope.$on('civicase::case-search::page-title-updated', setPageTitle);
+    }
+
+    /**
+     * All watchers are initiated here
+     */
+    function initiateWatchers () {
+      $scope.$watch('expanded', expandedWatcher);
+      $scope.$watch('relationshipType', relationshipTypeWatcher);
+      $scope.$watchCollection('filters', filtersWatcher);
+    }
+
+    /**
+     * Map the option parameter from API
+     * to show up correctly on the UI.
+     *
+     * @param {object} opt object for caseTypes
+     * @return {object} mapped value to be used in UI
+     */
+    function mapSelectOptions (opt) {
+      return {
+        id: opt.value || opt.name,
+        text: opt.label || opt.title,
+        color: opt.color,
+        icon: opt.icon
+      };
+    }
+
+    /**
+     * Watcher for relationshipType filter
+     */
+    function relationshipTypeWatcher () {
+      if ($scope.relationshipType) {
+        $scope.relationshipType[0] === 'is_case_manager' ? $scope.filters.case_manager = [CRM.config.user_contact_id] : delete ($scope.filters.case_manager);
+        $scope.relationshipType[0] === 'is_involved' ? $scope.filters.contact_id = [CRM.config.user_contact_id] : delete ($scope.filters.contact_id);
+      }
+    }
+
+    /**
      * Set custom search fields to search filter fields object
      */
     function setCustomSearchFieldsAsSearchFilters () {
@@ -242,6 +266,45 @@
           allSearchFields['custom_' + field.id] = field;
         });
       });
+    }
+
+    /**
+     * Set the title of the page
+     *
+     * @params {Object} event
+     * @params {String} displayNameOfSelectedItem
+     * @params {String} totalCount
+     */
+    function setPageTitle (event, displayNameOfSelectedItem, totalCount) {
+      var filters = $scope.filters;
+
+      if (displayNameOfSelectedItem) {
+        $scope.pageTitle = displayNameOfSelectedItem;
+        return;
+      }
+
+      if (_.size(_.omit(filters, ['status_id', 'case_type_id']))) {
+        $scope.pageTitle = $scope.ts('Case Search Results');
+      } else {
+        var status = [];
+        if (filters.status_id && filters.status_id.length) {
+          _.each(filters.status_id, function (s) {
+            status.push(_.findWhere(caseStatuses, {name: s}).label);
+          });
+        } else {
+          status = [$scope.ts('All Open')];
+        }
+        var type = [];
+        if (filters.case_type_id && filters.case_type_id.length) {
+          _.each(filters.case_type_id, function (t) {
+            type.push(_.findWhere(caseTypes, {name: t}).title);
+          });
+        }
+        $scope.pageTitle = status.join(' & ') + ' ' + type.join(' & ') + ' ' + $scope.ts('Cases');
+      }
+      if (typeof totalCount === 'number') {
+        $scope.pageTitle += ' (' + totalCount + ')';
+      }
     }
   });
 })(angular, CRM.$, CRM._);
