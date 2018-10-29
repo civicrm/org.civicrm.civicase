@@ -25,6 +25,7 @@
     $scope.viewingCaseDetails = null;
 
     $scope.bulkAllowed = BulkActions.isAllowed();
+
     (function init () {
       bindRouteParamsToScope();
       // calculate after page size is calculated from Route Params;
@@ -123,7 +124,7 @@
           $scope.viewingCaseTab = 'summary';
         }
       }
-      $rootScope.$broadcast('civicase::case-search::page-title-updated', getDisplayNameOfSelectedItem(), $scope.totalCount);
+      setPageTitle();
       $($window).scrollTop(0); // Scrolls the window to top once new data loads
     };
 
@@ -245,7 +246,7 @@
      */
     function getCases () {
       $scope.isLoading = true;
-      $rootScope.$broadcast('civicase::case-search::page-title-updated', getDisplayNameOfSelectedItem(), $scope.totalCount);
+      setPageTitle();
       crmThrottle(makeApiCallToLoadCases)
         .then(function (result) {
           var cases = _.each(result[0].values, formatCase);
@@ -272,7 +273,7 @@
           $scope.page.num = result[0].page || $scope.page.num;
           $scope.totalCount = result[1];
           $scope.page.total = Math.ceil(result[1] / $scope.page.size);
-          $rootScope.$broadcast('civicase::case-search::page-title-updated', getDisplayNameOfSelectedItem(), $scope.totalCount);
+          setPageTitle();
           firstLoad = $scope.isLoading = false;
           $($window).scrollTop(0); // Scrolls the window to top once new data loads
         });
@@ -436,6 +437,13 @@
       $scope.selectedCases = [];
       $scope.selectedCases = _.each(allCases, formatCase);
       selectDisplayedCases(); // Update the UI model with displayed cases selected;
+    }
+
+    /**
+     * Emits event for page title
+     */
+    function setPageTitle () {
+      $scope.$emit('civicase::case-search::page-title-updated', getDisplayNameOfSelectedItem(), $scope.totalCount);
     }
 
     /**

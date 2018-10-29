@@ -135,6 +135,7 @@
      * Binds all route parameters to scope
      */
     function bindRouteParamsToScope () {
+      $scope.$bindToRoute({expr: 'expanded', param: 'sx', format: 'bool', default: false});
       $scope.$bindToRoute({expr: 'filters', param: 'cf', default: {}});
     }
 
