@@ -1,0 +1,42 @@
+<div class="panel-heading clearfix">
+  <h3 class="panel-title pull-left">
+    <span class="panel-title-inner">{{ ts('Tasks') }}</span>
+    <span class="civicase__case-card__activity-count"> {{item.category_count.incomplete.task || 0}} </span>
+    <span class="civicase__pipe" ng-if="item.category_count.overdue.task"> | </span>
+    <span class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before" ng-if="item.category_count.overdue.task">{{item.category_count.overdue.task}} </span>
+  </h3>
+  <a class="pull-right"
+     ng-href="#{{ activityFeedUrl(item.id, 'task', 'completed') }}"
+     ng-if="item.category_count.incomplete.task"
+     title="{{ ts('View All') }}"
+  >{{ ts('View All') }}</a>
+</div>
+<div class="panel-body">
+  <div
+    ng-repeat="activity in item.tasks"
+    ng-if="item.tasks.length"
+    case-activity-card="activity"
+    crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+    refresh-callback="refresh"
+    bulk-allowed="bulkAllowed"
+    mode="long"
+    type="'activity'"
+    edit-activity-url="editActivityUrl">
+  </div>
+  <div ng-if="item.tasks.length === 0" class="civicase__activity-card--big--empty civicase__activity-card--big--empty--list-view">
+    <div class="civicase__activity-no-result-icon civicase__activity-no-result-icon--tasks"></div>
+    <div class="civicase__activity-card--big--empty-title"> No new tasks </div>
+    <div class="civicase__activity-card--big--empty-description"> Click on the button below to add a task to this case </div>
+    <span civicase-dropdown>
+      <div class="civicase__activity-card--big--empty-button btn"
+        civicase-dropdown-toggle>
+        <i class="material-icons">add_circle</i>Create new tasks <i class="fa fa-caret-down"></i>
+      </div>
+      <civicase-add-activity-menu
+        case="item"
+        filter-activities-by="task"
+        crm-popup-form-success="pushCaseData($data.civicase_reload[0])">
+      </civicase-add-activity-menu>
+    </span>
+  </div>
+</div>

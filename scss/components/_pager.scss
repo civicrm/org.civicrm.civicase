@@ -1,0 +1,65 @@
+/**
+ * @file
+ * This file contains scss code for civicase pager styles
+ */
+
+.civicase__pager {
+  background: $crm-gray-lightest;
+  border-radius: 0 0 3px 3px;
+  border-top: 1px solid $gray-light;
+  padding: 18px 15px;
+  position: relative;
+  z-index: 10;
+
+  .disabled {
+    display: none;
+  }
+
+  [title='Previous Page'],
+  [title='First Page'],
+  [title='Last Page'],
+  [title='Next Page'] {
+    a {
+      font-weight: bold;
+    }
+  }
+
+  [title='Previous Page'] {
+    a::before {
+      content: '\00ab';  //laquo
+      font-weight: $font-weight-content;
+      margin-right: 5px;
+    }
+  }
+
+  [title='First Page'] {
+    a::before {
+      content: '\2039';  //lsaquo
+      font-weight: $font-weight-content;
+      margin-right: 5px;
+    }    
+  }
+
+  [title='Last Page'] {
+    a::after {
+      content: '\00bb';  //raquo
+      font-weight: $font-weight-content;
+      margin-left: 5px;
+    }    
+  }
+
+  [title='Next Page'] {
+    a::after {
+      content: '\203A';  //rsaquo
+      font-weight: $font-weight-content;
+      margin-left: 5px;
+    }
+  }  
+}
+
+.civicase__pager--fixed {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+}

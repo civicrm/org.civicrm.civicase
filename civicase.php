@@ -195,7 +195,6 @@ function civicase_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _civicase_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-
 /**
  * Implements hook_civicrm_buildForm().
  *
@@ -340,6 +339,28 @@ function civicase_civicrm_buildForm($formName, &$form) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_civicrm_alterContent().
+ * Adds extra settings fields to the Civicase Admin Settings form.
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterContent/
+ */
+function civicase_civicrm_alterContent (&$content, $context, $templateName, $form) {
+  $isViewingTheCaseAdminForm = get_class($form) === CRM_Admin_Form_Setting_Case::class;
+
+  if (!$isViewingTheCaseAdminForm) {
+    return;
+  }
+
+  $settingsTemplate = &CRM_Core_Smarty::singleton();
+  $settingsTemplateHtml = $settingsTemplate->fetchWith('CRM/Civicase/Admin/Form/Settings.tpl', []);
+
+  $doc = phpQuery::newDocumentHTML($content);
+  $doc->find('table.form-layout tr:last')->append($settingsTemplateHtml);
+
+  $content = $doc->getDocument();
 }
 
 /**
@@ -492,8 +513,13 @@ function civicase_civicrm_pageRun(&$page) {
       $url = CRM_Utils_System::url('civicrm/case/a/', NULL, TRUE,
         "/case/list?sf=id&sd=DESC&caseId={$caseId}&cf=%7B%22status_id%22:%5B%22{$case['status_id.name']}%22%5D,%22case_type_id%22:%5B%22{$case['case_type_id.name']}%22%5D%7D",
         FALSE);
+
       CRM_Utils_System::redirect($url);
     }
+  }
+  // Adds Moment.js file to Civicase Angular Page.
+  if ($page instanceof CRM_Civicase_Page_CaseAngular || $page instanceof CRM_Contact_Page_View_Summary) {
+    CRM_Core_Resources::singleton()->addScriptFile('uk.co.compucorp.civicase', 'packages/moment.min.js');
   }
 }
 
@@ -549,10 +575,50 @@ function _civicase_menu_walk(&$menu, $callback) {
 }
 
 /**
- * Implements hook_civicrm_selectWhereClause
+ * Implements hook_civicrm_selectWhereClause().
  */
 function civicase_civicrm_selectWhereClause($entity, &$clauses) {
   if ($entity === 'Case' && CRM_Core_Permission::check('basic case information')) {
     unset($clauses['id']);
+  }
+}
+
+/**
+ * Implements hook_civicrm_entityTypes().
+ */
+function civicase_civicrm_entityTypes(&$entityTypes) {
+  $entityTypes[] = array(
+    'name'  => 'CaseContactLock',
+    'class' => 'CRM_Civicase_DAO_CaseContactLock',
+    'table' => 'civicase_contactlock',
+  );
+}
+
+/**
+ * Implements hook_civicrm_queryObjects().
+ */
+function civicase_civicrm_queryObjects(&$queryObjects, $type) {
+  if ($type == 'Contact') {
+    $queryObjects[] = new CRM_Civicase_BAO_Query();
+  }
+}
+
+/**
+ * Implements hook_civicrm_permission_check().
+ */
+function civicase_civicrm_permission_check($permission, &$granted) {
+  $permissionsChecker = new CRM_Civicase_Hook_Permissions_Check();
+  $granted = $permissionsChecker->validatePermission($permission, $granted);
+}
+
+/**
+ * Implements hook_civicrm_preProcess().
+ */
+function civicase_civicrm_preProcess($formName, &$form) {
+  if ($formName == 'CRM_Admin_Form_Setting_Case') {
+    $settings = $form->getVar('_settings');
+    $settings['civicaseAllowCaseLocks'] = CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME;
+
+    $form->setVar('_settings', $settings);
   }
 }

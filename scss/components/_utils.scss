@@ -1,0 +1,26 @@
+.civicase__pipe {
+  position: relative;
+  top: -1px;
+}
+
+.civicase__text-warning {
+  color: $brand-warning;
+}
+
+.civicase__text-success {
+  color: $brand-success;
+}
+
+.civicase__link-disabled {
+  cursor: no-drop;
+  pointer-events: none;
+}
+
+.civicase__spinner {
+  animation: spin 1.5s linear infinite;
+  background: url('../resources/icons/spinner.svg') no-repeat center center !important;
+  display: block;
+  height: 32px;
+  margin: auto;
+  width: 32px;
+}
