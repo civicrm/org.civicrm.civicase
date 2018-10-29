@@ -373,6 +373,199 @@
       });
     });
 
+    describe('panel-query panel: activities', function () {
+      it('is defined', function () {
+        expect($scope.activitiesPanel).toBeDefined();
+      });
+
+      describe('query', function () {
+        it('is defined', function () {
+          expect($scope.activitiesPanel.query).toBeDefined();
+        });
+
+        it('is for the Activity entity', function () {
+          expect($scope.activitiesPanel.query.entity).toBe('Activity');
+        });
+
+        it('does not call a custom endpoint', function () {
+          expect($scope.activitiesPanel.query.action).not.toBeDefined();
+        });
+
+        it('adds the params defined in the relationship filter', function () {
+          expect($scope.activitiesPanel.query.params)
+            .toEqual(jasmine.objectContaining($scope.activityFilters));
+        });
+
+        it('fetches everything expect milestones', function () {
+          expect($scope.activitiesPanel.query.params['activity_type_id.grouping']).toEqual({
+            'NOT LIKE': '%milestone%'
+          });
+        });
+
+        it('fetches only the user\'s activities', function () {
+          expect($scope.activitiesPanel.query.params.contact_id).toBe('user_contact_id');
+        });
+
+        it('fetches only the activities on the current revision', function () {
+          expect($scope.activitiesPanel.query.params.is_current_revision).toBe(1);
+        });
+
+        it('fetches only the non-test, non-deleted activities', function () {
+          expect($scope.activitiesPanel.query.params.is_test).toBe(0);
+          expect($scope.activitiesPanel.query.params.is_deleted).toBe(0);
+        });
+
+        it('fetches only the incomplete activities', function () {
+          expect($scope.activitiesPanel.query.params.status_id).toEqual({
+            'IN': CRM.civicase.activityStatusTypes.incomplete
+          });
+        });
+
+        it('sorts by is_overdue (descending order) and activity_date_time (ascending order)', function () {
+          expect($scope.activitiesPanel.query.params.options.sort).toBe('is_overdue DESC, activity_date_time ASC');
+        });
+
+        it('asks the api to return only a specific set of fields', function () {
+          expect($scope.activitiesPanel.query.params.return).toEqual([
+            'subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
+            'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
+            'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
+            'is_overdue', 'case_id', 'priority_id', 'case_id.case_type_id', 'case_id.status_id',
+            'case_id.contacts'
+          ]);
+        });
+      });
+
+      describe('handlers', function () {
+        describe('results handler', function () {
+          var mockedResults = mockResults('case_id.contacts');
+
+          it('is defined', function () {
+            expect($scope.activitiesPanel.handlers.results).toBeDefined();
+          });
+
+          describe('when invoked', function () {
+            var contactsCount, ContactsDataService;
+
+            beforeEach(inject(function (_ContactsDataService_) {
+              ContactsDataService = _ContactsDataService_;
+            }));
+
+            beforeEach(function () {
+              spyOn(ContactsDataService, 'add');
+
+              contactsCount = countTotalAndUniqueContactIds(mockedResults, 'case_id.contacts');
+              $scope.activitiesPanel.handlers.results(mockedResults);
+            });
+
+            it('calls the formatCase service on each result item', function () {
+              expect(formatActivityMock.calls.count()).toBe(mockedResults.length);
+            });
+
+            it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
+              var contactIds = ContactsDataService.add.calls.argsFor(0)[0];
+
+              expect(ContactsDataService.add).toHaveBeenCalled();
+              expect(contactIds).not.toEqual(contactsCount.total);
+              expect(contactIds).toEqual(contactsCount.uniq);
+            });
+          });
+        });
+
+        describe('range handler', function () {
+          it('is defined', function () {
+            expect($scope.activitiesPanel.handlers.range).toBeDefined();
+          });
+
+          describe('when invoked', function () {
+            describe('when the week range is selected', function () {
+              beforeEach(function () {
+                $scope.activitiesPanel.handlers.range('week', $scope.activitiesPanel.query.params);
+              });
+
+              it('filters by `activity_date_time` between start and end of the current week', function () {
+                expect($scope.activitiesPanel.query.params.activity_date_time).toBeDefined();
+                expect($scope.activitiesPanel.query.params.activity_date_time).toEqual({
+                  'BETWEEN': getStartEndOfRange('week', 'YYYY-MM-DD HH:mm:ss')
+                });
+              });
+            });
+
+            describe('when the month range is selected', function () {
+              beforeEach(function () {
+                $scope.activitiesPanel.handlers.range('month', $scope.activitiesPanel.query.params);
+              });
+
+              it('filters by `activity_date_time` between start and end of the current month', function () {
+                expect($scope.activitiesPanel.query.params.activity_date_time).toBeDefined();
+                expect($scope.activitiesPanel.query.params.activity_date_time).toEqual({
+                  'BETWEEN': getStartEndOfRange('month', 'YYYY-MM-DD HH:mm:ss')
+                });
+              });
+            });
+          });
+        });
+      });
+
+      describe('custom data', function () {
+        it('is defined', function () {
+          expect($scope.activitiesPanel.custom).toBeDefined();
+        });
+
+        it('sets the custom name of the items to "milestones"', function () {
+          expect($scope.activitiesPanel.custom.itemName).toBe('activities');
+        });
+
+        describe('activity involvement filter', function () {
+          it('is defined', function () {
+            expect($scope.activitiesPanel.custom.involvementFilter).toBeDefined();
+          });
+
+          it('is set to "myActivities" by default', function () {
+            expect($scope.activitiesPanel.custom.involvementFilter).toEqual({
+              '@involvingContact': 'myActivities'
+            });
+          });
+
+          describe('when it changes', function () {
+            beforeEach(function () {
+              spyOn($rootScope, '$broadcast');
+
+              $scope.activitiesPanel.custom.involvementFilter = { '@involvingContact': '' };
+              $scope.$digest();
+            });
+
+            it('broadcasts a "civicaseActivityFeed.query" event', function () {
+              expect($rootScope.$broadcast).toHaveBeenCalledWith(
+                'civicaseActivityFeed.query',
+                $scope.activitiesPanel.custom.involvementFilter,
+                $scope.activitiesPanel.query.params,
+                true
+              );
+            });
+          });
+        });
+      });
+
+      describe('when the relationship type changes', function () {
+        var newFilterValue, newType;
+
+        beforeEach(function () {
+          newType = 'is_involed';
+          newFilterValue = 'bar';
+
+          $scope.filters.caseRelationshipType = newType;
+          $scope.activityFilters.case_filter.foo = newFilterValue;
+
+          $scope.$digest();
+        });
+
+        it('adds the properties of the `case_filter` object to the query params', function () {
+          expect($scope.activitiesPanel.query.params.case_filter.foo).toEqual(newFilterValue);
+        });
+      });
+    });
+
     /**
      * Initializes the controller and digests the scope
      */

@@ -14,6 +14,22 @@
   function dashboardTabController ($location, $rootScope, $route, $scope,
     ContactsDataService, formatCase,
     formatActivity) {
+    var ACTIVITIES_QUERY_PARAMS_DEFAULTS = {
+      'contact_id': 'user_contact_id',
+      'is_current_revision': 1,
+      'is_deleted': 0,
+      'is_test': 0,
+      'activity_type_id.grouping': { 'NOT LIKE': '%milestone%' },
+      'status_id': { 'IN': CRM.civicase.activityStatusTypes.incomplete },
+      'options': { 'sort': 'is_overdue DESC, activity_date_time ASC' },
+      'return': [
+        'subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
+        'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
+        'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
+        'is_overdue', 'case_id', 'priority_id', 'case_id.case_type_id', 'case_id.status_id',
+        'case_id.contacts'
+      ]
+    };
     var CASES_QUERY_PARAMS_DEFAULTS = {
       'status_id.grouping': 'Opened',
       'options': { 'sort': 'start_date DESC' }
@@ -36,8 +52,21 @@
     };
 
     var defaultsMap = {
+      activities: ACTIVITIES_QUERY_PARAMS_DEFAULTS,
       cases: CASES_QUERY_PARAMS_DEFAULTS,
       milestones: MILESTONES_QUERY_PARAMS_DEFAULTS
+    };
+
+    $scope.activitiesPanel = {
+      query: { entity: 'Activity', params: getQueryParams('activities') },
+      custom: {
+        itemName: 'activities',
+        involvementFilter: { '@involvingContact': 'myActivities' }
+      },
+      handlers: {
+        range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(false),
+        results: _.curry(resultsHandler)(formatActivity)('case_id.contacts')
+      }
     };
 
     $scope.newMilestonesPanel = {
@@ -97,6 +126,7 @@
     function initWatchers () {
       $scope.$watchCollection('filters.caseRelationshipType', function (newType, oldType) {
         if (newType !== oldType) {
+          $scope.activitiesPanel.query.params = getQueryParams('activities');
           $scope.newCasesPanel.query.params = getQueryParams('cases');
           $scope.newMilestonesPanel.query.params = getQueryParams('milestones');
         }
@@ -114,6 +144,19 @@
           'civicaseActivityFeed.query',
           $scope.newMilestonesPanel.custom.involvementFilter,
           $scope.newMilestonesPanel.query.params,
+          true
+        );
+      }, true);
+
+      $scope.$watch('activitiesPanel.custom.involvementFilter', function (newValue, oldValue) {
+        if (newValue === oldValue) {
+          return;
+        }
+
+        $rootScope.$broadcast(
+          'civicaseActivityFeed.query',
+          $scope.activitiesPanel.custom.involvementFilter,
+          $scope.activitiesPanel.query.params,
           true
         );
       }, true);
