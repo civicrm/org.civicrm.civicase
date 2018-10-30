@@ -2,12 +2,13 @@
   <span ng-if="!isAvatar" class="civicase__contact-name-container">
     <!-- Contact Icons -->
     <span ng-if="!noIcon">
-      <span uib-popover-template="'contact-popover.html'"
+      <span
+        uib-popover-template="'contact-popover.html'"
+        popover-placement="auto bottom"
+        popover-trigger="'outsideClick'"
         popover-class="contact-popover-container"
         popover-append-to-body="true"
-        popover-placement="auto bottom"
-        popover-trigger="'mouseenter'"
-        ng-mouseover="initMainContact()">
+        ng-click="initMainContact($event)">
         <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
         <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
         <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
@@ -39,7 +40,7 @@
     uib-popover-template="'additional-contacts.html'"
     popover-placement="bottom"
     popover-trigger="'outsideClick'"
-    popover-class="civicase__contact-additional__popover"
+    popover-class="civicase__tooltip-popup-list civicase__tooltip-popup-list--additional-contacts"
     civicase-popover-append-to-element="#bootstrap-theme"
     ng-click="$event.stopPropagation()"
     ng-if="contacts.length > 1"

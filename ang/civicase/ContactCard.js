@@ -29,8 +29,9 @@
       /**
        * Initializes the main contact that is featured on the contact card's popover.
        */
-      scope.initMainContact = function () {
+      scope.initMainContact = function ($event) {
         scope.mainContact = ContactsDataService.getCachedContact(scope.contacts[0].contact_id);
+        $event.stopPropagation();
       };
 
       /**
