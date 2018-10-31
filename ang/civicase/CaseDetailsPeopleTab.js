@@ -79,9 +79,22 @@
       if (onlyChecked || $scope[tab + 'SelectionMode'] === 'checked') {
         return _.collect(_.filter($scope[tab], {checked: true}), idField);
       } else if ($scope[tab + 'SelectionMode'] === 'all') {
-        return _.collect($scope[tab], idField);
+        return _.collect(_.filter($scope[tab], function (el) {
+          return el.contact_id;
+        }), idField);
       }
       return [];
+    };
+
+    /**
+     * Filter the records on basis of contact_role key
+     *
+     * @param {Array} records
+     */
+    $scope.getRecordCountWithContacts = function (records) {
+      return _.filter(records, function (record) {
+        return record.contact_id;
+      }).length;
     };
 
     /**

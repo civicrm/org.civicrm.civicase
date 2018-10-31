@@ -22,11 +22,11 @@
           </li>
         </ul>
       </div>
-      <h3>{{ ts('%1 Contacts', {1: roles.length}) }}</h3>
+      <h3>{{ ts('%1 Contacts', {1: getRecordCountWithContacts(roles)}) }}</h3>
       <div class="civicase__people-tab__selection">
         <span> {{ ts('Select Records:') }} </span>
         <input type="radio" value="all" ng-model="rolesSelectionMode" id="rolesSelectionMode-all" />
-        <label for="rolesSelectionMode-all" class="people-selection-radio">{{ ts('All %1 records', {1: roles.length}) }}</label>
+        <label for="rolesSelectionMode-all" class="people-selection-radio">{{ ts('All %1 records', {1: getRecordCountWithContacts(roles)}) }}</label>
         <input type="radio" value="checked" ng-model="rolesSelectionMode" id="rolesSelectionMode-checked"/>
         <label for="rolesSelectionMode-checked" class="people-selection-radio">Selected records only</label>
       </div>
