@@ -245,11 +245,10 @@
       <tbody class="civicase__people-tab__table-body">
         <tr ng-repeat="contact in relations" ng-if="!isRelationshipLoading">
           <td class="civicase__people-tab__table-column civicase__people-tab__table-column--first">
-            <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
-            <label for="select-relation-{{ $index }}"></label>
-            <span ng-if="role.contact_id" class="civicase__checkbox">
-              <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
+            <span class="civicase__checkbox">
+              <input type="checkbox" id="select-relation-{{ $index }}" class="civicase__people-tab__table-checkbox" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
               <i ng-if="contact.checked" class="civicase__checkbox--checked material-icons">check_box</i>
+              <label for="select-relation-{{ $index }}"></label>
             </span>
             <label for="select-role-{{ $index }}">
               <a ng-href="{{ 'civicrm/contact/view' | civicaseCrmUrl:{ cid: contact.contact_id } }}">{{ contact.display_name }}</a>
