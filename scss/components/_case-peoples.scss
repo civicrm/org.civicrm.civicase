@@ -17,12 +17,17 @@
 
   .select2-choice {
     height: 30px;
-    padding: 2px 0 2px 10px;
+    padding: 5px 0 5px 10px;
 
     .select2-arrow {
       right: 0;
       top: 0;
       width: 24px;
+    }
+
+    b {
+      position: relative;
+      top: 2px;
     }
 
     .select2-chosen {
