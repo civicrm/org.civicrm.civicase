@@ -7,7 +7,7 @@
         popover-placement="auto bottom"
         popover-trigger="'outsideClick'"
         popover-class="contact-popover-container"
-        popover-append-to-body="true"
+        civicase-popover-append-to-element="#bootstrap-theme"
         ng-click="initMainContact($event)">
         <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
         <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
@@ -127,4 +127,5 @@
       </div>
     </div>
   </script>
+
 </span>

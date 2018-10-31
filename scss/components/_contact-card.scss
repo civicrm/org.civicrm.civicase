@@ -37,6 +37,8 @@
 .civicase__tooltip-popup-list--additional-contacts {
   color: $brand-primary;
   cursor: pointer;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 
   a {
     display: flex !important;
