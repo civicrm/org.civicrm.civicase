@@ -87,13 +87,14 @@
     };
 
     /**
-     * Filter the records on basis of contact_role key
+     * On the contact tab all the records don't have some contact assigned
+     * This filters the list with roles assigned to a contact.
      *
      * @param {Array} records
      */
-    $scope.getRecordCountWithContacts = function (records) {
-      return _.filter(records, function (record) {
-        return record.contact_id;
+    $scope.getCountOfRolesWithContacts = function (roles) {
+      return _.filter(roles, function (role) {
+        return role.contact_id;
       }).length;
     };
 
