@@ -3,9 +3,28 @@
     <div class="civicase__case-overview-container" civicase-custom-scrollbar scrollbar-config="{autoHide: false}">
       <div class="civicase__case-overview__flow">
         <div class="civicase__case-overview__flow-status">
+          <div class="civicase__case-overview__flow-status-settings">
+            <button class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <i class="material-icons civicase__case-overview__flow-status__icon civicase__case-overview__flow-status__icon--settings">settings</i>
+              <i class="fa fa-caret-down civicase__case-overview__flow-status__icon civicase__case-overview__flow-status__icon--settings"></i>
+            </button>
+            <ul class="dropdown-menu bottom civicase__case-overview__popup popover fade in" role="menu">
+              <span class="arrow left"></span>
+              <li ng-repeat="(sid, status) in caseStatuses">
+                <a>
+                  <span class="civicase__checkbox" ng-click="toggleStatusView($event, $index)">
+                    <i ng-if="!status.disabled" class="civicase__checkbox--checked material-icons">check_box</i>
+                  </span>
+                  <span>
+                    {{ status.label }}
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
           Overview
           <i
-            class="material-icons"
+            class="material-icons civicase__case-overview__flow-status__icon"
             ng-click="showHideBreakdown()"
             ng-if="caseTypesLength > 1">
             {{showBreakdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
@@ -13,6 +32,7 @@
         </div>
         <div
           class="civicase__case-overview__flow-status civicase__case-overview__flow-status--hoverable"
+          ng-if="!status.disabled"
           ng-repeat="(sid, status) in caseStatuses"
           uib-popover="{{ status.label }}"
           popover-trigger="'mouseenter'"
@@ -31,6 +51,7 @@
           </div>
           <span class="civicase__case-overview__flow-status__border"  ng-style="{'background-color': status.color}"></span>
         </div>
+        <div class="civicase__case-overview__flow-status" ng-if="isAllStatusesDisbabled()"> - </div>
       </div>
       <div
         class="civicase__case-overview__breakdown"
@@ -48,11 +69,13 @@
         </div>
         <div
           class="civicase__case-overview__breakdown-field"
+          ng-if="!status.disabled"
           ng-repeat="(sid, status) in caseStatuses">
           <a ng-href="{{ caseListLink(caseType.name, status.name) }}">
             {{ summaryData[ctid][sid] || '0' }}
           </a>
         </div>
+        <div class="civicase__case-overview__breakdown-field" ng-if="isAllStatusesDisbabled()"> - </div>
       </div>
     </div>
   </div>

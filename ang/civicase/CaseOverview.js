@@ -81,6 +81,33 @@
     };
 
     /**
+     * checks if all statuses are disabled
+     */
+    $scope.isAllStatusesDisbabled = function () {
+      return _.filter($scope.caseStatuses, function (status) {
+        return !status.disabled;
+      }).length === 0;
+    };
+
+    /**
+     * Toggle show breakdown dropdown
+     */
+    $scope.showHideBreakdown = function () {
+      $scope.showBreakdown = !$scope.showBreakdown;
+    };
+
+    /**
+     * Toggle status view
+     *
+     * @param {event} event object
+     * @param {Number} index of the case status
+     */
+    $scope.toggleStatusView = function ($event, index) {
+      $scope.caseStatuses[index + 1].disabled = !$scope.caseStatuses[index + 1].disabled;
+      $event.stopPropagation();
+    };
+
+    /**
      * Toggle show breakdown dropdown
      */
     $scope.showHideBreakdown = function () {
