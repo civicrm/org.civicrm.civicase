@@ -34,7 +34,7 @@
         <label>{{ ts('Case Start Date') }}</label>
         <civicase-ui-date-range date-range="filters.start_date"></civicase-ui-date-range>
       </div>
-      <div  ng-if="isEnabled('end_date') && filters.status_id.indexOf('Closed') > -1" class="civicase__case-filter-form-elements">
+      <div  ng-if="isEnabled('end_date')" class="civicase__case-filter-form-elements">
         <label> {{ ts('Case End Date') }} </label>
         <civicase-ui-date-range date-range="filters.end_date"></civicase-ui-date-range>
       </div>
