@@ -17,6 +17,7 @@
           uib-popover="{{ status.label }}"
           popover-trigger="'mouseenter'"
           popover-placement="bottom"
+          popover-append-to-body="true"
           popover-class="civicase__case-overview__popup">
           <div class="civicase__case-overview__flow-status__count">
             <a ng-href="{{ caseListLink(null, status.name) }}">
@@ -39,6 +40,7 @@
           uib-popover="{{ caseType.title }}"
           popover-trigger="'mouseenter'"
           popover-placement="bottom"
+          popover-append-to-body="true"
           popover-class="civicase__case-overview__popup">
           <a ng-href="{{ caseListLink(caseType.name) }}">
             {{ caseType.title }}

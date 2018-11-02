@@ -521,6 +521,12 @@ function civicase_civicrm_pageRun(&$page) {
   if ($page instanceof CRM_Civicase_Page_CaseAngular || $page instanceof CRM_Contact_Page_View_Summary) {
     CRM_Core_Resources::singleton()->addScriptFile('uk.co.compucorp.civicase', 'packages/moment.min.js');
   }
+
+  // Adds simplescrollbarjs
+  if ($page instanceof CRM_Civicase_Page_CaseAngular ) {
+    CRM_Core_Resources::singleton()->addScriptFile('uk.co.compucorp.civicase', 'packages/simplebar.min.js');
+    CRM_Core_Resources::singleton()->addStyleFile('uk.co.compucorp.civicase', 'packages/simplebar.min.css', 1000, 'html-header');
+  }
 }
 
 /**

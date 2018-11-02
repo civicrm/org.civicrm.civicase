@@ -1,0 +1,9 @@
+.simplebar-track {
+  overflow: hidden;
+}
+
+.simplebar-scrollbar {
+  &::before {
+    opacity: 0.5;
+  }
+}

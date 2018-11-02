@@ -7,7 +7,8 @@
       replace: true,
       templateUrl: '~/civicase/CaseOverview.html',
       controller: civicaseCaseOverviewController,
-      scope: {}
+      scope: {},
+      link: civicaseCaseOverviewLink
     };
 
     function civicaseCaseOverviewController ($scope, crmApi) {
@@ -67,6 +68,23 @@
         crmApi(apiCalls).then(function (response) {
           $scope.summaryData = response[0].values;
         });
+      }
+    }
+
+    function civicaseCaseOverviewLink ($scope, element, attrs) {
+      var scrollElement = new SimpleBar(element.find('.civicase__case-overview-container')[0], { autoHide: false });
+
+      (function init () {
+        $scope.$watch('showBreakdown', showBreakdownWatcher);
+      }());
+
+      /**
+       * Watchers for showBreakdown variable
+       */
+      function showBreakdownWatcher () {
+        setTimeout(function () {
+          scrollElement.recalculate();
+        }, 0);
       }
     }
   });

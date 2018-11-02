@@ -26,7 +26,8 @@
       "CRM",
       "angular",
       "inject",
-      "moment"
+      "moment",
+      "SimpleBar"
     ]
   },
   "stylelint": {
