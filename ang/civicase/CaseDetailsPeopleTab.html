@@ -22,11 +22,11 @@
           </li>
         </ul>
       </div>
-      <h3>{{ ts('%1 Contacts', {1: roles.length}) }}</h3>
+      <h3>{{ ts('%1 Contacts', {1: getCountOfRolesWithContacts(roles)}) }}</h3>
       <div class="civicase__people-tab__selection">
         <span> {{ ts('Select Records:') }} </span>
         <input type="radio" value="all" ng-model="rolesSelectionMode" id="rolesSelectionMode-all" />
-        <label for="rolesSelectionMode-all" class="people-selection-radio">{{ ts('All %1 records', {1: roles.length}) }}</label>
+        <label for="rolesSelectionMode-all" class="people-selection-radio">{{ ts('All %1 records', {1: getCountOfRolesWithContacts(roles)}) }}</label>
         <input type="radio" value="checked" ng-model="rolesSelectionMode" id="rolesSelectionMode-checked"/>
         <label for="rolesSelectionMode-checked" class="people-selection-radio">Selected records only</label>
       </div>
@@ -245,11 +245,10 @@
       <tbody class="civicase__people-tab__table-body">
         <tr ng-repeat="contact in relations" ng-if="!isRelationshipLoading">
           <td class="civicase__people-tab__table-column civicase__people-tab__table-column--first">
-            <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
-            <label for="select-relation-{{ $index }}"></label>
-            <span ng-if="role.contact_id" class="civicase__checkbox">
-              <input type="checkbox" id="select-relation-{{ $index }}" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
+            <span class="civicase__checkbox">
+              <input type="checkbox" id="select-relation-{{ $index }}" class="civicase__people-tab__table-checkbox" ng-model="contact.checked" ng-click="setSelectionMode('checked', 'relations')" />
               <i ng-if="contact.checked" class="civicase__checkbox--checked material-icons">check_box</i>
+              <label for="select-relation-{{ $index }}"></label>
             </span>
             <label for="select-role-{{ $index }}">
               <a ng-href="{{ 'civicrm/contact/view' | civicaseCrmUrl:{ cid: contact.contact_id } }}">{{ contact.display_name }}</a>
