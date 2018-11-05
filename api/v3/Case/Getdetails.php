@@ -17,6 +17,12 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
     'type' => CRM_Utils_Type::T_INT,
   );
 
+  $spec['contact_involved'] = array(
+    'title' => 'Contact Involved',
+    'description' => 'Contact id of the contact involved as case roles',
+    'type' => CRM_Utils_Type::T_INT,
+  );
+
   $spec['contact_is_deleted'] = array(
     'title' => 'Contact Is Deleted',
     'description' => 'Set FALSE to filter out cases for deleted contacts, TRUE to return only cases of deleted contacts',
@@ -52,8 +58,19 @@ function civicrm_api3_case_getdetails($params) {
     if (!is_array($params['case_manager'])) {
       $params['case_manager'] = array('=' => $params['case_manager']);
     }
-    \Civi\CCase\Utils::joinOnManager($sql);
+    \Civi\CCase\Utils::joinOnRelationship($sql, 'manager');
     $sql->where(CRM_Core_DAO::createSQLFilter('manager.id', $params['case_manager']));
+  }
+
+  // Add clause to search by non manager role and non client
+  if (!empty($params['contact_involved'])) {
+    if (!is_array($params['contact_involved'])) {
+      $params['contact_involved'] = array('=' => $params['contact_involved']);
+    }
+    \Civi\CCase\Utils::joinOnRelationship($sql, 'all');
+    $caseClient = CRM_Core_DAO::createSQLFilter('contact_id', $params['contact_involved']);
+    $nonCaseClient = CRM_Core_DAO::createSQLFilter('manager.id', $params['contact_involved']);
+    $sql->where("a.id IN (SELECT case_id FROM civicrm_case_contact WHERE ($nonCaseClient OR $caseClient))");
   }
 
   // Filter deleted contacts from results
@@ -232,7 +249,7 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
         if (!array_key_exists($sortField, CRM_Contact_DAO_Contact::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
           throw new API_Exception("Unknown field specified for sort. Cannot order by '$sortString'");
         }
-        \Civi\CCase\Utils::joinOnManager($sql);
+        \Civi\CCase\Utils::joinOnRelationship($sql, 'manager');
         $sql->orderBy("manager.$sortField $dir", NULL, $index);
         $sortString = '(1)';
       }
