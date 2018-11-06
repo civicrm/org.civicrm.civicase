@@ -11,6 +11,12 @@
       link: civicaseCaseOverviewLink
     };
 
+    /**
+     * Controller for civicaseCaseOverview
+     *
+     * @param {Object} $scope
+     * @param {crmApi} Object
+     */
     function civicaseCaseOverviewController ($scope, crmApi) {
       $scope.caseStatuses = CRM.civicase.caseStatuses;
       $scope.caseTypes = CRM.civicase.caseTypes;
@@ -71,9 +77,14 @@
       }
     }
 
+    /**
+     * Link function for civicaseCaseOverview
+     *
+     * @param {Object} $scope
+     * @param {jQuery} element
+     * @param {Object} attrs
+     */
     function civicaseCaseOverviewLink ($scope, element, attrs) {
-      var scrollElement = new SimpleBar(element.find('.civicase__case-overview-container')[0], { autoHide: false });
-
       (function init () {
         $scope.$watch('showBreakdown', showBreakdownWatcher);
       }());
@@ -82,9 +93,7 @@
        * Watchers for showBreakdown variable
        */
       function showBreakdownWatcher () {
-        setTimeout(function () {
-          scrollElement.recalculate();
-        }, 0);
+        $scope.$emit('civicase::custom-scrollbar::recalculate', element.find('[civicase-custom-scrollbar]')[0]);
       }
     }
   });
