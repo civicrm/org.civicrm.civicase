@@ -42,10 +42,16 @@
   }
 }
 
-.civicase__activity-panel__close {
+.civicase__activity-panel__close,
+.civicase__activity-panel__maximise {
   color: $gray-darker;
   font-size: $font-size-h2;
   padding: 0;
+}
+
+.civicase__activity-panel__maximise {
+  margin-right: 5px;
+  transform: rotate(45deg);
 }
 
 .civicase__activity-panel__status-dropdown {
