@@ -37,7 +37,14 @@
             </li>
           </ul>
         </div>
-        <button class="btn btn-lg btn-link civicase__activity-panel__close" ng-click="closeDetailsPanel()">
+        <button
+          class="btn btn-lg btn-link civicase__activity-panel__maximise"
+          title="View in Popup" ng-click="viewInPopup(null, activity)">
+          <i class="material-icons">unfold_more</i>
+        </button>
+        <button
+          class="btn btn-lg btn-link civicase__activity-panel__close"
+          title="Close" ng-click="closeDetailsPanel()">
           <i class="material-icons">clear</i>
         </button>
       </div>
