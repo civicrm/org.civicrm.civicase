@@ -44,7 +44,7 @@
 .civicase__activity-feed__activity-container {
   display: inline-block;
   margin-left: 5px;
-  width: calc(100% - 50px);
+  width: calc(100% - 50px); // 50px = width of contact icon + gap
 }
 
 .civicase__activity-feed__list {
@@ -103,7 +103,7 @@
     margin-bottom: 5px;
     margin-left: auto;
     margin-right: auto;
-    width: calc(100% - 50px);
+    width: calc(100% - 80px); // 80px = difference in size between activity card with ribbon
   }
 
   .civicase__activity-card--ribbon {

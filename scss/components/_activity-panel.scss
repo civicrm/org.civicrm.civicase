@@ -6,7 +6,7 @@
 
     &.affix {
       position: fixed !important;
-      width: calc(30% - 12px);
+      width: calc(30% - 12px); // 12px = padding outside civicase__activity-feed__list-container * 30%
     }
   }
 
