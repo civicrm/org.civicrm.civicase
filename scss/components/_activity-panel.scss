@@ -1,13 +1,12 @@
 .civicase__activity-panel {
   margin-top: 37px;
-  width: 484px;
 
   .panel {
     overflow: auto;
-    width: 484px;
 
     &.affix {
       position: fixed !important;
+      width: calc(30% - 12px);
     }
   }
 
@@ -38,6 +37,16 @@
 
     .civicase__contact-additional__container--avatar {
       margin-top: 0;
+    }
+  }
+}
+
+@media screen and (max-width: $activity-feed-breakpoint) {
+  .civicase__activity-panel {
+    .panel {
+      &.affix {
+        width: calc(40% - 16px);
+      }
     }
   }
 }
