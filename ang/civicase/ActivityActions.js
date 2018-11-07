@@ -27,8 +27,8 @@
         }).on('crmConfirm:yes', function () {
           var apiCalls = [];
 
-          _.each(activities, function (activityID) {
-            apiCalls.push(['Activity', 'delete', {id: activityID}]);
+          _.each(activities, function (activity) {
+            apiCalls.push(['Activity', 'delete', {id: activity.id}]);
           });
 
           crmApi(apiCalls)

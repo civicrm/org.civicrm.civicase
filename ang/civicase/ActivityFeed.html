@@ -40,7 +40,7 @@
                 aria-labelledby="Select/Unselect"
                 ng-click="toggleSelected(activity); $event.stopPropagation();">
                 <i
-                  ng-if="selectedActivities.indexOf(activity.id) !== -1"
+                  ng-if="findActivityById(selectedActivities, activity.id)"
                   class="civicase__checkbox--checked material-icons">
                   check_box
                 </i>

@@ -49,16 +49,18 @@
       initiateWatchersAndEvents();
     }());
 
+    $scope.findActivityById = function (searchIn, activityID) {
+      return _.find(searchIn, { id: activityID });
+    };
+
     /**
      * Toggle Bulk Actions checkbox of the given activity
      */
     $scope.toggleSelected = function (activity) {
-      if ($scope.selectedActivities.indexOf(activity.id) === -1) {
-        $scope.selectedActivities.push(activity.id);
+      if (!$scope.findActivityById($scope.selectedActivities, activity.id)) {
+        $scope.selectedActivities.push($scope.findActivityById(allActivities, activity.id));
       } else {
-        _.remove($scope.selectedActivities, function (activityID) {
-          return activityID === activity.id;
-        });
+        _.remove($scope.selectedActivities, { id: activity.id });
       }
     };
 
@@ -145,9 +147,7 @@
      */
     function selectEveryActivity () {
       $scope.selectedActivities = [];
-      $scope.selectedActivities = allActivities.map(function (activity) {
-        return activity.id;
-      });
+      $scope.selectedActivities = allActivities;
       selectDisplayedActivities(); // Update the UI model with displayed cases selected;
     }
 
@@ -158,12 +158,10 @@
       var isCurrentActivityInSelectedCases;
 
       _.each($scope.activities, function (activity) {
-        isCurrentActivityInSelectedCases = _.find($scope.selectedActivities, function (activityID) {
-          return activityID === activity.id;
-        });
+        isCurrentActivityInSelectedCases = $scope.findActivityById($scope.selectedActivities, activity.id);
 
         if (!isCurrentActivityInSelectedCases) {
-          $scope.selectedActivities.push(activity.id);
+          $scope.selectedActivities.push($scope.findActivityById(allActivities, activity.id));
         }
       });
     }
