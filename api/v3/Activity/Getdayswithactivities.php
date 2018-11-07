@@ -4,6 +4,7 @@
  * Activity.getdayswithactivities API specification
  *
  * @param array $spec description of fields supported by this API call
+ *
  * @return void
  */
 function _civicrm_api3_activity_getdayswithactivities_spec(&$spec) {
@@ -18,8 +19,7 @@ function _civicrm_api3_activity_getdayswithactivities_spec(&$spec) {
 /**
  * Returns list of unique YYYY-MM-DD dates with at least an activity
  *
- * @param array $params
- *   Prameters to be passed to API call to obtain activities list
+ * @param array $params parameters to be passed to API call to obtain activities list
  *
  * @return array
  *   API result with the list of days
@@ -55,7 +55,7 @@ function civicrm_api3_activity_getdayswithactivities($params) {
 
 
 /**
- * Creates a WHERE clause with th given API parameter and column name
+ * Creates a WHERE clause with the given API parameter and column name
  *
  * @param array $param
  * @param string $param
