@@ -2,18 +2,14 @@
 
 (function ($, _, moment) {
   describe('civicaseActivitiesCalendarController', function () {
-    var $controller, $scope, $rootScope, activitiesMockData,
-      dates, formatActivity, mockCaseId;
+    var $controller, $scope, $rootScope, dates, mockCaseId;
 
     beforeEach(module('civicase', 'civicase.data', 'ui.bootstrap'));
 
-    beforeEach(inject(function (_$controller_, _$rootScope_,
-      _activitiesMockData_, datesMockData, _formatActivity_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, datesMockData) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
-      activitiesMockData = _activitiesMockData_.get();
       dates = datesMockData;
-      formatActivity = _formatActivity_;
     }));
 
     describe('calendar options', function () {
@@ -67,69 +63,9 @@
         });
       });
 
-      describe('when all the activities for the current date are completed', function () {
-        beforeEach(function () {
-          var activities = [
-            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) }
-          ];
-
-          initController(activities);
-
-          customClass = getDayCustomClass(dates.today);
-        });
-
-        it('marks the day as having completed all of its activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed');
-        });
-      });
-
-      describe('when all the activities for a given date in the past are completed', function () {
-        beforeEach(function () {
-          var activities = [
-            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) }
-          ];
-
-          initController(activities);
-
-          customClass = getDayCustomClass(dates.yesterday);
-        });
-
-        it('marks the day as having completed all of its activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed');
-        });
-      });
-
-      describe('when all the activities for a given date in the future are completed', function () {
-        beforeEach(function () {
-          var activities = [
-            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) }
-          ];
-
-          initController(activities);
-
-          customClass = getDayCustomClass(dates.tomorrow);
-        });
-
-        it('marks the day as having completed all of its activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed');
-        });
-      });
-
       describe('when there are no activities for the given date', function () {
         beforeEach(function () {
-          var activities = [
-            { activity_date_time: dates.tomorrow },
-            { activity_date_time: dates.tomorrow },
-            { activity_date_time: dates.tomorrow }
-          ];
-
-          initController(activities);
+          initController();
 
           customClass = getDayCustomClass(dates.today);
         });
@@ -139,69 +75,9 @@
         });
       });
 
-      describe('when there is at least one activity that is overdue for a given date in the past', function () {
-        beforeEach(function () {
-          var activities = [
-            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed), is_overdue: false },
-            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.completed), is_overdue: false },
-            { activity_date_time: dates.yesterday, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete), is_overdue: true }
-          ];
-
-          initController(activities);
-
-          customClass = getDayCustomClass(dates.yesterday);
-        });
-
-        it('marks the day as having overdue activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--overdue');
-        });
-      });
-
-      describe('when there is at least one activity that is overdue for a given date in the future', function () {
-        beforeEach(function () {
-          var activities = [
-            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete) }
-          ];
-
-          initController(activities);
-
-          customClass = getDayCustomClass(dates.tomorrow);
-        });
-
-        it('marks the day as having scheduled activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled');
-        });
-      });
-
-      describe('when there is at least one activity that is overdue for the current date', function () {
-        beforeEach(function () {
-          var activities = [
-            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.today, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete) }
-          ];
-
-          initController(activities);
-
-          customClass = getDayCustomClass(dates.today);
-        });
-
-        it('marks the day as having scheduled activities', function () {
-          expect(customClass).toBe('civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled');
-        });
-      });
-
       describe('when the date is outside this month', function () {
         beforeEach(function () {
-          var activities = [
-            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.completed) },
-            { activity_date_time: dates.tomorrow, status_id: _.sample(CRM.civicase.activityStatusTypes.incomplete) }
-          ];
-
-          initController(activities);
+          initController();
 
           customClass = getDayCustomClass(moment(dates.today).add(1, 'month').toDate());
         });
@@ -240,33 +116,6 @@
         initController();
       });
 
-      describe('when selecting a date with activities included', function () {
-        var expectedSelectedActivities;
-
-        beforeEach(function () {
-          spyOn($scope, '$emit').and.callThrough();
-
-          expectedSelectedActivities = activitiesMockData
-            .filter(function (activity) {
-              return moment(activity.activity_date_time).isSame(dates.today, 'day');
-            })
-            .map(function (activity) {
-              return formatActivity(activity, mockCaseId);
-            });
-
-          $scope.selectedDate = dates.today;
-          $scope.onDateSelected();
-        });
-
-        it('only provides the activities for the given date', function () {
-          expect($scope.selectedActivites).toEqual(expectedSelectedActivities);
-        });
-
-        it('opens the activities popover', function () {
-          expect($scope.$emit).toHaveBeenCalledWith('civicaseActivitiesCalendar::openActivitiesPopover');
-        });
-      });
-
       describe('when selecting a date with no activities included', function () {
         beforeEach(function () {
           spyOn($scope, '$emit').and.callThrough();
@@ -283,38 +132,15 @@
           expect($scope.$emit).not.toHaveBeenCalledWith('civicaseActivitiesCalendar::openActivitiesPopover');
         });
       });
-
-      describe('when the activities object is updated', function () {
-        beforeEach(function () {
-          var mockActivity = _.chain(activitiesMockData).first().clone().value();
-          mockActivity.activity_date_time = dates.nextWeek;
-          $scope.selectedDate = dates.nextWeek;
-
-          $scope.onDateSelected();
-
-          $scope.activities = [mockActivity];
-
-          $scope.$digest();
-        });
-
-        it('updates the selected activities', function () {
-          expect($scope.selectedActivites).toEqual($scope.activities);
-        });
-      });
     });
 
     /**
-     * Initializes the activities calendar component. Passes the given activities
-     * as a binding. If no activities are provided it passes an empty array.
-     *
-     * @param {Array} activities.
+     * Initializes the activities calendar component
      */
-    function initController (activities) {
+    function initController () {
       $scope = $rootScope.$new();
-      activities = activities || activitiesMockData;
       mockCaseId = _.uniqueId();
 
-      $scope.activities = activities;
       $scope.caseId = mockCaseId;
 
       $controller('civicaseActivitiesCalendarController', { $scope: $scope });
@@ -322,7 +148,7 @@
   });
 
   describe('Activities Calendar DOM Events', function () {
-    var $compile, $rootScope, $scope, $timeout, $uibPosition, activitiesMockData, activitiesCalendar, datepickerMock;
+    var $compile, $rootScope, $scope, $timeout, $uibPosition, activitiesCalendar, datepickerMock;
 
     beforeEach(module('civicase', 'civicase.data', 'civicase.templates', function ($compileProvider, $provide) {
       $uibPosition = jasmine.createSpyObj('$uibPosition', ['positionElements']);
@@ -341,11 +167,10 @@
       });
     }));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_, _activitiesMockData_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $timeout = _$timeout_;
-      activitiesMockData = _activitiesMockData_.get();
 
       $('<div id="bootstrap-theme"></div>').appendTo('body');
     }));
@@ -453,25 +278,6 @@
       });
     });
 
-    describe('when the activities are updated', function () {
-      beforeEach(inject(function (datesMockData) {
-        var activities = [
-          { activity_date_time: datesMockData.today, status_id: _.sample(CRM.civicase.activityStatusTypes.scheduled) }
-        ];
-
-        initDirective(activities);
-        datepickerMock.refreshView.calls.reset();
-
-        $scope.activities[0].status_id = _.sample(CRM.civicase.activityStatusTypes.completed);
-
-        $scope.$digest();
-      }));
-
-      it('refreshes the datepicker so it displays the new activity statuses', function () {
-        expect(datepickerMock.refreshView).toHaveBeenCalledWith();
-      });
-    });
-
     /**
      * Appends a mock calendar table element inside the uib-datepicker element.
      */
@@ -532,11 +338,9 @@
      */
     function initDirective (activities) {
       var html = `<civicase-activities-calendar
-        activities="activities"
         refresh-callback="refresh">
       </civicase-activities-calendar>`;
       $scope = $rootScope.$new();
-      $scope.activities = activities || activitiesMockData;
       $scope.refresh = _.noop;
       activitiesCalendar = $compile(html)($scope);
 

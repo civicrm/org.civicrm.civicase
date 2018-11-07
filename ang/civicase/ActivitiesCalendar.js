@@ -4,7 +4,6 @@
   module.directive('civicaseActivitiesCalendar', function ($timeout, $uibPosition) {
     return {
       scope: {
-        activities: '=',
         caseId: '=',
         refresh: '=refreshCallback'
       },
@@ -161,11 +160,6 @@
     };
 
     (function init () {
-      $scope.$watch('activities', function () {
-        $scope.selectedActivites = getSelectedActivities();
-
-        $scope.$broadcast('civicaseActivitiesCalendar::refreshDatepicker');
-      }, true);
     })();
 
     /**
@@ -173,23 +167,7 @@
      * selected date. Triggers when the calendar date changes.
      */
     $scope.onDateSelected = function () {
-      $scope.selectedActivites = getSelectedActivities();
-
-      if ($scope.selectedActivites.length) {
-        $scope.$emit('civicaseActivitiesCalendar::openActivitiesPopover');
-      }
     };
-
-    /**
-     * Returns the activities that belong to the given date.
-     *
-     * @param {Date} date
-     */
-    function getActivitiesForDate (date) {
-      return $scope.activities.filter(function (activity) {
-        return moment(activity.activity_date_time).isSame(date, 'day');
-      });
-    }
 
     /**
      * Returns the class that the given date should have depending on the status
@@ -201,60 +179,11 @@
      *   can be "day", "month", or "year".
      */
     function getDayCustomClass (params) {
-      var activities = getActivitiesForDate(params.date);
       var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
 
       if (!isInCurrentMonth && params.mode === 'day') {
         return 'invisible';
       }
-
-      if (activities.length === 0 || params.mode !== 'day') {
-        return;
-      }
-
-      if (haveAllActivitiesBeenCompleted(activities)) {
-        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed';
-      } else if (isAnyActivityOverdue(activities)) {
-        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--overdue';
-      } else {
-        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled';
-      }
-    }
-
-    /**
-     * Returns a list of selected activities for the currently selected date.
-     *
-     * @return {Array} a list of formatted activities.
-     */
-    function getSelectedActivities () {
-      return getActivitiesForDate($scope.selectedDate)
-        .map(function (activity) {
-          return formatActivity(activity, $scope.caseId);
-        });
-    }
-
-    /**
-     * Determines if all the given activities have been completed.
-     *
-     * @param {Array} activities
-     * @return {Boolean}
-     */
-    function haveAllActivitiesBeenCompleted (activities) {
-      return _.every(activities, function (activity) {
-        return _.includes(CRM.civicase.activityStatusTypes.completed, +activity.status_id);
-      });
-    }
-
-    /**
-     * Determines if at least one of the given activities is overdue.
-     *
-     * @param {Array} activities
-     * @return {Boolean}
-     */
-    function isAnyActivityOverdue (activities) {
-      return _.some(activities, function (activity) {
-        return activity.is_overdue;
-      });
     }
   }
 })(CRM.$, CRM._, angular);
