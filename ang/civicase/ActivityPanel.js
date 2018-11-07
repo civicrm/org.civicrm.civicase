@@ -103,7 +103,7 @@
     }
   });
 
-  function civicaseActivityPanelController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi, crmBlocker, crmStatus, DateHelper) {
+  function civicaseActivityPanelController ($scope, dialogService, templateExists, crmApi, crmBlocker, crmStatus, DateHelper) {
     $scope.activityPriorties = CRM.civicase.priority;
     $scope.allowedActivityStatuses = {};
 

@@ -42,17 +42,10 @@
 
   module.controller('caseActivityCardController', caseActivityCardController);
 
-  function caseActivityCardController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi, crmBlocker, crmStatus, DateHelper) {
-    var ts = $scope.ts = CRM.ts('civicase');
-    $scope.activityFeedUrl = getActivityFeedUrl;
+  function caseActivityCardController ($scope, dialogService, templateExists, crmApi, crmBlocker, crmStatus, DateHelper) {
+    $scope.ts = CRM.ts('civicase');
     $scope.templateExists = templateExists;
     $scope.formatDate = DateHelper.formatDate;
-
-    $scope.isActivityEditable = function (activity) {
-      var type = CRM.civicase.activityTypes[activity.activity_type_id].name;
-
-      return (type !== 'Email' && type !== 'Print PDF Letter') && $scope.editActivityUrl;
-    };
 
     /**
      * Mark an activity as complete
@@ -80,25 +73,6 @@
       activity.is_star = activity.is_star === '1' ? '0' : '1';
       // Setvalue api avoids messy revisioning issues
       $scope.refresh([['Activity', 'setvalue', {id: activity.id, field: 'is_star', value: activity.is_star}]], true);
-    };
-
-    /**
-     * Delete an activity
-     *
-     * @param {object} activity
-     * @param {jQuery} dialog - the dialog which should be closed once deletion is over
-     */
-    $scope.deleteActivity = function (activity, dialog) {
-      CRM.confirm({
-        title: ts('Delete Activity'),
-        message: ts('Permanently delete this %1 activity?', {1: activity.type})
-      })
-        .on('crmConfirm:yes', function () {
-          $scope.refresh([['Activity', 'delete', {id: activity.id}]]);
-          if (dialog && $(dialog).data('uiDialog')) {
-            $(dialog).dialog('close');
-          }
-        });
     };
 
     /**
@@ -136,32 +110,6 @@
             });
           });
       }
-    };
-
-    $scope.moveCopyActivity = function (act, op) {
-      var model = {
-        ts: ts,
-        activity: _.cloneDeep(act)
-      };
-      dialogService.open('MoveCopyActCard', '~/civicase/ActivityMoveCopy.html', model, {
-        autoOpen: false,
-        height: 'auto',
-        width: '40%',
-        title: op === 'move' ? ts('Move %1 Activity', {1: act.type}) : ts('Copy %1 Activity', {1: act.type}),
-        buttons: [{
-          text: ts('Save'),
-          icons: {primary: 'fa-check'},
-          click: function () {
-            if (op === 'copy') {
-              delete model.activity.id;
-            }
-            if (model.activity.case_id && model.activity.case_id !== act.case_id) {
-              $scope.refresh([['Activity', 'create', model.activity]]);
-            }
-            $(this).dialog('close');
-          }
-        }]
-      });
     };
 
     /**
