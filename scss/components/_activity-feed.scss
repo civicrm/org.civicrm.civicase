@@ -139,10 +139,12 @@
 }
 
 .civicase__activity-feed__list-container__left {
+  overflow: auto;
   width: 50%;
 }
 
 .civicase__activity-feed__list-container__right {
+  overflow: auto;
   width: 30%;
 }
 

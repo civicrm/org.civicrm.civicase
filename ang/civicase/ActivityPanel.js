@@ -23,6 +23,7 @@
       var ts = CRM.ts('civicase');
 
       (function init () {
+        setScroll();
         $rootScope.$on('civicase::activity-card::load-activity-form', loadActivityForm);
         element.on('crmFormSuccess', scope.refresh);
         element.on('crmLoad', crmLoadListener);
@@ -60,6 +61,16 @@
         element.find('.crm-submit-buttons a.edit').addClass('btn btn-primary');
       }
 
+      function setScroll () {
+        var $filter = $('.civicase__activity-filter');
+        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
+        var $toolbarDrawer = $('#toolbar');
+        var $rightPanel = $('.civicase__activity-feed__list-container__right');
+        var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
+
+        $rightPanel.height('calc(100vh - ' + topOffset + 'px)');
+      }
+
       /**
        * Listener for click event of delete button
        */
@@ -92,6 +103,7 @@
      */
     $scope.closeDetailsPanel = function () {
       delete $scope.activity.id;
+      $scope.$emit('civicase::activity-card::close-activity-form');
     };
 
     /**

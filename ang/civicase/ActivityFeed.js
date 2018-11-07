@@ -8,19 +8,42 @@
     });
   });
 
-  module.directive('civicaseActivityFeed', function () {
+  module.directive('civicaseActivityFeed', function ($rootScope) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityFeed.html',
       controller: civicaseActivityFeedController,
+      link: civicaseActivityFeedLink,
       scope: {
         params: '=civicaseActivityFeed',
         showBulkActions: '=',
         caseTypeId: '=',
-        refreshCase: '=?refreshCallback',
-        affixDisabled: '@'
+        refreshCase: '=?refreshCallback'
       }
     };
+
+    function civicaseActivityFeedLink () {
+      (function init () {
+        $rootScope.$on('civicase::activity-card::load-activity-form', setScrollBar);
+        $rootScope.$on('civicase::activity-card::close-activity-form', removeScrollBar);
+      }());
+
+      function setScrollBar () {
+        var $filter = $('.civicase__activity-filter');
+        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
+        var $toolbarDrawer = $('#toolbar');
+        var $leftPanel = $('.civicase__activity-feed__list-container__left');
+        var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
+
+        $leftPanel.height('calc(100vh - ' + topOffset + 'px)');
+      }
+
+      function removeScrollBar () {
+        var $leftPanel = $('.civicase__activity-feed__list-container__left');
+
+        $leftPanel.height('auto');
+      }
+    }
   });
 
   module.controller('civicaseActivityFeedController', civicaseActivityFeedController);
@@ -86,6 +109,7 @@
       if (($scope.viewingActivity && $scope.viewingActivity.id === id) || !act) {
         $scope.viewingActivity = {};
         $scope.aid = 0;
+        $scope.$emit('civicase::activity-card::close-activity-form');
       } else {
         // Mark email read
         if (act.status === 'Unread') {
@@ -400,72 +424,4 @@
       }
     }
   }
-
-  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document, $rootScope) {
-    return {
-      link: civicaseActivityDetailsAffix
-    };
-
-    /**
-     * Link function for civicaseActivityDetailsAffix
-     *
-     * @param {Object} scope
-     * @param {Object} $element
-     * @param {Object} attr
-     */
-    function civicaseActivityDetailsAffix (scope, $element, attr) {
-      var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
-      // TODO Check if the attribute can be passed via scope variable
-      var affixDisabled = (attr.affixDisabled === 'true');
-
-      (function init () {
-        if (affixDisabled) {
-          return;
-        }
-
-        affixActivityDetailsPanel();
-        $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
-      }());
-
-      /**
-       * Sets Activity Details Panel affix offsets
-       */
-      function affixActivityDetailsPanel () {
-        $timeout(function () {
-          $activityDetailsPanel = $element.find('.panel');
-          $filter = $('.civicase__activity-filter');
-          $feedListContainer = $('.civicase__activity-feed__list-container');
-          $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-          $toolbarDrawer = $('#toolbar');
-
-          $activityDetailsPanel.affix({
-            offset: {
-              top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
-              bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
-            }
-          }).on('affixed.bs.affix', function () {
-            $activityDetailsPanel
-              .css('top', ($toolbarDrawer.height() + $tabs.height() + $filter.height()))
-              .css('padding-top', 32);
-          }).on('affixed-top.bs.affix', function () {
-            $activityDetailsPanel
-              .css('top', 'auto')
-              .css('padding-top', 0);
-          });
-        });
-      }
-
-      /**
-       * Resets Activity Details Panel affix offsets
-       */
-      function resetAffix () {
-        $timeout(function () {
-          if ($activityDetailsPanel.data('bs.affix')) {
-            $activityDetailsPanel.data('bs.affix').options.offset.top = $activityDetailsPanel.offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height());
-            $activityDetailsPanel.data('bs.affix').options.offset.bottom = $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height());
-          }
-        });
-      }
-    }
-  });
 })(angular, CRM.$, CRM._);

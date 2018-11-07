@@ -8,7 +8,6 @@
         params: '=feedParams',
         showCheckboxes: '=?',
         bulkAllowed: '=',
-        affixDisabled: '@',
         caseTimelines: '=',
         displayedCount: '=',
         totalCount: '=',
@@ -216,13 +215,8 @@
     function civicaseActivityFiltersAffix (scope, $el, attr) {
       var $filter, $feedBodyPanel, $tabs, $toolbarDrawer;
       // TODO Check if the attribute can be passed via scope variable
-      var affixDisabled = (attr.affixDisabled === 'true');
 
       (function init () {
-        if (affixDisabled) {
-          return;
-        }
-
         affixActivityFilters();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
@@ -232,7 +226,7 @@
        */
       function affixActivityFilters () {
         $filter = $('.civicase__activity-filter');
-        $feedBodyPanel = $('.civicase__activity-filter + .panel-body');
+        $feedBodyPanel = $('.civicase__activity-filter ~ .panel-body');
         $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
         $toolbarDrawer = $('#toolbar');
 
