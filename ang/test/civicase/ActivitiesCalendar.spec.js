@@ -19,16 +19,6 @@
       crmApi.and.returnValue($q.resolve({ values: [] }));
     }));
 
-    describe('on init', function () {
-      beforeEach(function () {
-        initController();
-      });
-
-      it('turns on the loading state', function () {
-        expect($scope.loading).toBe(true);
-      });
-    });
-
     describe('when uib-datepicker signals that it is ready', function () {
       beforeEach(function () {
         spyOn($scope, '$emit').and.callThrough();
@@ -52,10 +42,6 @@
         beforeEach(function () {
           crmApi.calls.reset();
           $scope.$digest();
-        });
-
-        it('turn off the loading state', function () {
-          expect($scope.loading).toBe(false);
         });
 
         it('loads the days with complete activities', function () {

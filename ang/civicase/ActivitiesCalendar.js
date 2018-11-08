@@ -153,7 +153,6 @@
   function civicaseActivitiesCalendarController ($rootScope, $scope, crmApi) {
     var daysWithActivities = {};
 
-    $scope.loading = false;
     $scope.selectedActivites = [];
     $scope.selectedDate = null;
     $scope.calendarOptions = {
@@ -167,13 +166,10 @@
     };
 
     (function init () {
-      $scope.loading = true;
-
       $rootScope.$on('uibDaypicker::compiled', function () {
         loadDaysWithActivitiesIncomplete()
           .then(function () {
             $scope.$emit('civicaseActivitiesCalendar::refreshDatepicker');
-            $scope.loading = false;
           })
           .then(loadDaysWithActivitiesCompleted)
           .then(function () {
