@@ -2,15 +2,59 @@
 
 (function ($, _, moment) {
   describe('civicaseActivitiesCalendarController', function () {
-    var $controller, $scope, $rootScope, dates, mockCaseId;
+    var $controller, $q, $scope, $rootScope, crmApi, dates, mockCaseId;
 
-    beforeEach(module('civicase', 'civicase.data', 'ui.bootstrap'));
+    beforeEach(module('civicase', 'crmUtil', 'civicase.data', 'ui.bootstrap'));
 
-    beforeEach(inject(function (_$controller_, _$rootScope_, datesMockData) {
+    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _crmApi_,
+      datesMockData) {
       $controller = _$controller_;
+      $q = _$q_;
       $rootScope = _$rootScope_;
       dates = datesMockData;
+      crmApi = _crmApi_;
+
+      crmApi.and.returnValue($q.resolve({ values: [] }));
     }));
+
+    describe('on init', function () {
+      beforeEach(function () {
+        initController();
+      });
+
+      it('turns on the loading state', function () {
+        expect($scope.loading).toBe(true);
+      });
+
+      it('starts loading the days with incomplete activities', function () {
+        expect(crmApi).toHaveBeenCalledWith('Activity', 'getdayswithactivities', {
+          case_id: $scope.caseId,
+          status_id: { 'IN': CRM.civicase.activityStatusTypes.incomplete }
+        });
+      });
+
+      it('does not load the days with complete activities right away', function () {
+        expect(crmApi.calls.count()).toBe(1);
+      });
+
+      describe('when loading is complete', function () {
+        beforeEach(function () {
+          crmApi.calls.reset();
+          $scope.$digest();
+        });
+
+        it('turn off the loading state', function () {
+          expect($scope.loading).toBe(false);
+        });
+
+        it('loads the days with complete activities', function () {
+          expect(crmApi).toHaveBeenCalledWith('Activity', 'getdayswithactivities', {
+            case_id: $scope.caseId,
+            status_id: CRM.civicase.activityStatusTypes.completed[0]
+          });
+        });
+      });
+    });
 
     describe('calendar options', function () {
       beforeEach(function () {
@@ -38,6 +82,7 @@
 
     describe('calendar days status', function () {
       var customClass;
+      var classNameBase = 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--';
 
       describe('when the given calendar mode is for months', function () {
         beforeEach(function () {
@@ -86,6 +131,87 @@
           expect(customClass).toBe('invisible');
         });
       });
+
+      describe('when the given date has all completed activities', function () {
+        beforeEach(function () {
+          returnDateForStatus(dates.today, 'completed');
+          initController();
+          $scope.$digest();
+
+          customClass = getDayCustomClass(dates.today);
+        });
+
+        it('marks the day as having completed all of its activities', function () {
+          expect(customClass).toBe(classNameBase + 'completed');
+        });
+      });
+
+      describe('when the given date has incompleted activities', function () {
+        describe('when the date is not in the past yet', function () {
+          beforeEach(function () {
+            returnDateForStatus(dates.tomorrow, 'incomplete');
+            initController();
+            $scope.$digest();
+
+            customClass = getDayCustomClass(dates.tomorrow);
+          });
+
+          it('marks the day as having scheduled activities', function () {
+            expect(customClass).toBe(classNameBase + 'scheduled');
+          });
+        });
+
+        describe('when the date is already in the past', function () {
+          beforeEach(function () {
+            returnDateForStatus(dates.yesterday, 'incomplete');
+            initController();
+            $scope.$digest();
+
+            customClass = getDayCustomClass(dates.yesterday);
+          });
+
+          it('marks the day as having scheduled activities', function () {
+            expect(customClass).toBe(classNameBase + 'overdue');
+          });
+        });
+
+        describe('when the given date has both completed and incompleted activities', function () {
+          beforeEach(function () {
+            returnDateForStatus(dates.today, 'any');
+            initController();
+            $scope.$digest();
+
+            customClass = getDayCustomClass(dates.today);
+          });
+
+          it('does not mark the day as having completed all of its activities', function () {
+            expect(customClass).toBe(classNameBase + 'overdue');
+          });
+        });
+      });
+
+      /**
+       * It returns the given date as part of the response of
+       * the Activity.getdayswithactivities endpoint call for the given status type
+       *
+       * @param {String} date formatted in local time
+       * @param {String} status any|completed|incomplete
+       */
+      function returnDateForStatus (date, status) {
+        crmApi.and.callFake(function (entity, action, params) {
+          var dates = [];
+          var isCompleteActivitiesApiCall = params.status_id === CRM.civicase.activityStatusTypes.completed[0];
+          var isIncompleteActivitiesApiCall = _.isEqual(params.status_id.IN, CRM.civicase.activityStatusTypes.incomplete);
+
+          if (status === 'any' ||
+            (status === 'completed' && isCompleteActivitiesApiCall) ||
+            (status === 'incomplete' && isIncompleteActivitiesApiCall)) {
+            dates = [ moment(date).format('YYYY-MM-DD') ];
+          }
+
+          return $q.resolve({ values: dates });
+        });
+      }
 
       /**
        * Simulates a call from the date picker to the `customClass` method.
@@ -148,7 +274,8 @@
   });
 
   describe('Activities Calendar DOM Events', function () {
-    var $compile, $rootScope, $scope, $timeout, $uibPosition, activitiesCalendar, datepickerMock;
+    var $compile, $q, $rootScope, $scope, $timeout, $uibPosition, activitiesCalendar,
+      crmApi, datepickerMock;
 
     beforeEach(module('civicase', 'civicase.data', 'civicase.templates', function ($compileProvider, $provide) {
       $uibPosition = jasmine.createSpyObj('$uibPosition', ['positionElements']);
@@ -167,10 +294,14 @@
       });
     }));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
+    beforeEach(inject(function (_$compile_, _$q_, _$rootScope_, _$timeout_, _crmApi_) {
       $compile = _$compile_;
+      $q = _$q_;
       $rootScope = _$rootScope_;
       $timeout = _$timeout_;
+      crmApi = _crmApi_;
+
+      crmApi.and.returnValue($q.resolve({ values: [] }));
 
       $('<div id="bootstrap-theme"></div>').appendTo('body');
     }));

@@ -149,7 +149,10 @@
 
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
-  function civicaseActivitiesCalendarController ($scope, formatActivity) {
+  function civicaseActivitiesCalendarController ($scope, crmApi) {
+    var daysWithActivities = {};
+
+    $scope.loading = false;
     $scope.selectedActivites = [];
     $scope.selectedDate = null;
     $scope.calendarOptions = {
@@ -159,15 +162,37 @@
       startingDay: 1
     };
 
-    (function init () {
-    })();
-
-    /**
-     * Stores the activities that are on the same date as the calendar's
-     * selected date. Triggers when the calendar date changes.
-     */
     $scope.onDateSelected = function () {
     };
+
+    (function init () {
+      $scope.loading = true;
+
+      loadDaysWithActivitiesIncomplete()
+        .then(function () {
+          $scope.loading = false;
+        })
+        .then(loadDaysWithActivitiesCompleted);
+    }());
+
+    /**
+     * Adds the given days to the internal list of days with activities, assigning
+     * the given status to each of them.
+     *
+     * A day won't be added to the list, if already exists a day marked with 'incomplete'
+     *
+     * @param {Object} days api response
+     * @param {String} status
+     */
+    function addDays (days, status) {
+      days.values.reduce(function (acc, val) {
+        acc[val] = acc[val] && acc[val].status === 'incomplete'
+          ? acc[val]
+          : { status: status };
+
+        return acc;
+      }, daysWithActivities);
+    }
 
     /**
      * Returns the class that the given date should have depending on the status
@@ -179,11 +204,62 @@
      *   can be "day", "month", or "year".
      */
     function getDayCustomClass (params) {
+      var classSuffix = '';
+      var day = daysWithActivities[moment(params.date).format('YYYY-MM-DD')];
       var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
 
       if (!isInCurrentMonth && params.mode === 'day') {
         return 'invisible';
       }
+
+      if (!day || params.mode !== 'day') {
+        return;
+      }
+
+      if (day.status === 'completed') {
+        classSuffix = 'completed';
+      } else if (moment(params.date).isSameOrAfter(moment.now())) {
+        classSuffix = 'scheduled';
+      } else {
+        classSuffix = 'overdue';
+      }
+
+      return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--' + classSuffix;
+    }
+
+    /**
+     * Loads the dates with at least an activity with the given status(es)
+     *
+     * @param {*} statusParam
+     * @return {Promise}
+     */
+    function loadDaysWithActivities (statusParam) {
+      return crmApi('Activity', 'getdayswithactivities', {
+        case_id: $scope.caseId,
+        status_id: statusParam
+      });
+    }
+
+    /**
+     * Loads the days with at least a completed activity
+     *
+     * @return {Promise}
+     */
+    function loadDaysWithActivitiesCompleted () {
+      return loadDaysWithActivities(CRM.civicase.activityStatusTypes.completed[0])
+        .then(_.curryRight(addDays)('completed'));
+    }
+
+    /**
+     * Loads the days with at least an incomplete activity
+     *
+     * @return {Promise}
+     */
+    function loadDaysWithActivitiesIncomplete () {
+      return loadDaysWithActivities({
+        'IN': CRM.civicase.activityStatusTypes.incomplete
+      })
+        .then(_.curryRight(addDays)('incomplete'));
     }
   }
 })(CRM.$, CRM._, angular);
