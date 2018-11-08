@@ -28,7 +28,7 @@ class Utils {
     foreach ($caseTypes['values'] as $caseType) {
       $caseTypeToCaseRolesList = array();
       foreach ($caseType['definition']['caseRoles'] as $role) {
-        if ($roleName == 'all') {
+        if ($roleName == 'involved') {
           $caseTypeToCaseRolesList[] =  $relationshipTypes[$role['name']]['id'];
         } else {
           if (!empty($role[$roleName])) {
@@ -56,17 +56,17 @@ class Utils {
 
     foreach ($caseTypeToRelationshipList as $caseTypeId => $relationshipTypeIds) {
       foreach ($relationshipTypeIds as $index => $relationshipTypeId) {
-        $relationshipTypeClause[] = "(a.case_type_id = {$caseTypeId} AND manager_relationship.relationship_type_id = {$relationshipTypeId})";
+        $relationshipTypeClause[] = "(a.case_type_id = {$caseTypeId} AND {$relationship}_relationship.relationship_type_id = {$relationshipTypeId})";
       }
     }
     // Creates  OR relationship string with the casetype <-> relationship list.
     $relationshipTypeClause = implode(' OR ', $relationshipTypeClause);
     // Selects uniques cases<->contact link/relationship for each case
-    $sql->join('ccc', 'LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id');
+    $sql->join("ccc", "LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id");
     // Joins (get records) where the relationship type clause (case-type <-> relationship type)  lies in relation a to b)
-    $sql->join('manager_relationship', "LEFT JOIN civicrm_relationship AS manager_relationship ON ccc.contact_id = manager_relationship.contact_id_a AND manager_relationship.is_active AND ({$relationshipTypeClause}) AND manager_relationship.case_id = a.id");
+    $sql->join("{$relationship}_relationship", "LEFT JOIN civicrm_relationship AS {$relationship}_relationship ON ccc.contact_id = {$relationship}_relationship.contact_id_a AND {$relationship}_relationship.is_active AND ({$relationshipTypeClause}) AND {$relationship}_relationship.case_id = a.id");
     // Join where selected contact lie in relationship b to a  (case_manager)
-    $sql->join('manager', 'LEFT JOIN civicrm_contact AS manager ON manager_relationship.contact_id_b = manager.id AND manager.is_deleted <> 1');
+    $sql->join("{$relationship}", "LEFT JOIN civicrm_contact AS {$relationship} ON {$relationship}_relationship.contact_id_b = {$relationship}.id AND {$relationship}.is_deleted <> 1");
   }
 
   /**

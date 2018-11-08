@@ -40,7 +40,7 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
  */
 function _civicrm_api3_case_add_contact_involved_clause($params, &$sql) {
   $caseClient = CRM_Core_DAO::createSQLFilter('contact_id', $params['contact_involved']);
-  $nonCaseClient = CRM_Core_DAO::createSQLFilter('manager.id', $params['contact_involved']);
+  $nonCaseClient = CRM_Core_DAO::createSQLFilter('involved.id', $params['contact_involved']);
   $sql->where("a.id IN (SELECT case_id FROM civicrm_case_contact WHERE ($nonCaseClient OR $caseClient))");
 }
 
@@ -80,7 +80,7 @@ function civicrm_api3_case_getdetails($params) {
     if (!is_array($params['contact_involved'])) {
       $params['contact_involved'] = array('=' => $params['contact_involved']);
     }
-    \Civi\CCase\Utils::joinOnRelationship($sql, 'all');
+    \Civi\CCase\Utils::joinOnRelationship($sql, 'involved');
     _civicrm_api3_case_add_contact_involved_clause($params, $sql);
   }
 
