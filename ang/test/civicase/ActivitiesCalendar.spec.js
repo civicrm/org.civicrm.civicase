@@ -2,7 +2,7 @@
 
 (function ($, _, moment) {
   describe('civicaseActivitiesCalendarController', function () {
-    var $controller, $q, $scope, $rootScope, crmApi, dates, mockCaseId;
+    var $controller, $q, $scope, $rootScope, crmApi, dates;
 
     beforeEach(module('civicase', 'crmUtil', 'civicase.data', 'ui.bootstrap'));
 
@@ -11,8 +11,10 @@
       $controller = _$controller_;
       $q = _$q_;
       $rootScope = _$rootScope_;
-      dates = datesMockData;
       crmApi = _crmApi_;
+
+      $scope = $rootScope.$new();
+      dates = datesMockData;
 
       crmApi.and.returnValue($q.resolve({ values: [] }));
     }));
@@ -24,6 +26,15 @@
 
       it('turns on the loading state', function () {
         expect($scope.loading).toBe(true);
+      });
+    });
+
+    describe('when uib-datepicker signals that it is ready', function () {
+      beforeEach(function () {
+        spyOn($scope, '$emit').and.callThrough();
+
+        initController();
+        $rootScope.$emit('uibDaypicker::compiled');
       });
 
       it('starts loading the days with incomplete activities', function () {
@@ -51,6 +62,12 @@
           expect(crmApi).toHaveBeenCalledWith('Activity', 'getdayswithactivities', {
             case_id: $scope.caseId,
             status_id: CRM.civicase.activityStatusTypes.completed[0]
+          });
+        });
+
+        it('has triggered the datepicker refresh twice, one for each request', function () {
+          _.times(2, function (i) {
+            expect($scope.$emit.calls.argsFor(i)[0]).toBe('civicaseActivitiesCalendar::refreshDatepicker');
           });
         });
       });
@@ -135,8 +152,7 @@
       describe('when the given date has all completed activities', function () {
         beforeEach(function () {
           returnDateForStatus(dates.today, 'completed');
-          initController();
-          $scope.$digest();
+          initControllerAndEmitDatepickerReadyEvent();
 
           customClass = getDayCustomClass(dates.today);
         });
@@ -150,8 +166,7 @@
         describe('when the date is not in the past yet', function () {
           beforeEach(function () {
             returnDateForStatus(dates.tomorrow, 'incomplete');
-            initController();
-            $scope.$digest();
+            initControllerAndEmitDatepickerReadyEvent();
 
             customClass = getDayCustomClass(dates.tomorrow);
           });
@@ -164,8 +179,7 @@
         describe('when the date is already in the past', function () {
           beforeEach(function () {
             returnDateForStatus(dates.yesterday, 'incomplete');
-            initController();
-            $scope.$digest();
+            initControllerAndEmitDatepickerReadyEvent();
 
             customClass = getDayCustomClass(dates.yesterday);
           });
@@ -178,8 +192,7 @@
         describe('when the given date has both completed and incompleted activities', function () {
           beforeEach(function () {
             returnDateForStatus(dates.today, 'any');
-            initController();
-            $scope.$digest();
+            initControllerAndEmitDatepickerReadyEvent();
 
             customClass = getDayCustomClass(dates.today);
           });
@@ -189,6 +202,16 @@
           });
         });
       });
+
+      /**
+       * initializes the controller and simulates the event that the
+       * decorated uib-datepicker sends when it's compiled and attached to the DOM
+       */
+      function initControllerAndEmitDatepickerReadyEvent () {
+        initController();
+        $rootScope.$emit('uibDaypicker::compiled');
+        $scope.$digest();
+      }
 
       /**
        * It returns the given date as part of the response of
@@ -264,10 +287,7 @@
      * Initializes the activities calendar component
      */
     function initController () {
-      $scope = $rootScope.$new();
-      mockCaseId = _.uniqueId();
-
-      $scope.caseId = mockCaseId;
+      $scope.caseId = _.uniqueId();
 
       $controller('civicaseActivitiesCalendarController', { $scope: $scope });
     }

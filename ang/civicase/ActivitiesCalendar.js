@@ -20,6 +20,7 @@
      * @param {Object} element
      */
     function civicaseActivitiesCalendarLink ($scope, element) {
+      var datepickerScope;
       var bootstrapThemeContainer = $('#bootstrap-theme');
       var popover = element.find('.activities-calendar-popover');
       var popoverArrow = popover.find('.arrow');
@@ -27,7 +28,7 @@
       (function init () {
         $scope.$on('civicaseActivitiesCalendar::openActivitiesPopover', openActivitiesPopover);
         $scope.$on('civicaseActivitiesCalendar::refreshDatepicker', function () {
-          var datepickerScope = element.find('[uib-datepicker]').isolateScope();
+          datepickerScope = datepickerScope || element.find('[uib-datepicker]').isolateScope();
 
           datepickerScope.datepicker.refreshView();
         });
@@ -149,7 +150,7 @@
 
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
-  function civicaseActivitiesCalendarController ($scope, crmApi) {
+  function civicaseActivitiesCalendarController ($rootScope, $scope, crmApi) {
     var daysWithActivities = {};
 
     $scope.loading = false;
@@ -168,11 +169,17 @@
     (function init () {
       $scope.loading = true;
 
-      loadDaysWithActivitiesIncomplete()
-        .then(function () {
-          $scope.loading = false;
-        })
-        .then(loadDaysWithActivitiesCompleted);
+      $rootScope.$on('uibDaypicker::compiled', function () {
+        loadDaysWithActivitiesIncomplete()
+          .then(function () {
+            $scope.$emit('civicaseActivitiesCalendar::refreshDatepicker');
+            $scope.loading = false;
+          })
+          .then(loadDaysWithActivitiesCompleted)
+          .then(function () {
+            $scope.$emit('civicaseActivitiesCalendar::refreshDatepicker');
+          });
+      });
     }());
 
     /**
