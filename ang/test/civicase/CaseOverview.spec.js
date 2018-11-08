@@ -1,5 +1,4 @@
 /* eslint-env jasmine */
-
 (function (_) {
   describe('CaseOverview', function () {
     var element, $q, $scope, $rootScope, $compile, CasesOverviewStats, crmApi, elResponse;
@@ -45,6 +44,7 @@
       beforeEach(function () {
         element.isolateScope().showBreakdown = false;
       });
+
       describe('when showHideBreakdown is called', function () {
         beforeEach(function () {
           element.isolateScope().showHideBreakdown();
@@ -60,6 +60,7 @@
       beforeEach(function () {
         element.isolateScope().showBreakdown = true;
       });
+
       describe('when showHideBreakdown is called', function () {
         beforeEach(function () {
           element.isolateScope().showHideBreakdown();

@@ -1,5 +1,6 @@
 /* eslint-env jasmine */
-
+/* global SimpleBar */
+/* eslint-disable no-global-assign */
 (function (_) {
   describe('civicaseCustomScrollbar', function () {
     var element, $compile, $rootScope, $scope, SimpleBarOriginalFunction, originalRootScopeOn;
@@ -57,7 +58,7 @@
       $scope.options = {
         'autoHide': false
       };
-      element = $compile('<div civicase-custom-scrollbar="{{options}}"></div')($scope);
+      element = $compile('<div civicase-custom-scrollbar scrollbar-config="{{options}}"></div')($scope);
       $scope.$digest();
     }
   });

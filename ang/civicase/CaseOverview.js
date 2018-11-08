@@ -20,13 +20,13 @@
      */
     function civicaseCaseOverviewLink ($scope, element, attrs) {
       (function init () {
-        $scope.$watch('showBreakdown', showBreakdownWatcher);
+        $scope.$watch('showBreakdown', recalculateScrollbarPosition);
       }());
 
       /**
        * Watchers for showBreakdown variable
        */
-      function showBreakdownWatcher () {
+      function recalculateScrollbarPosition () {
         $scope.$emit('civicase::custom-scrollbar::recalculate', element.find('[civicase-custom-scrollbar]')[0]);
       }
     }

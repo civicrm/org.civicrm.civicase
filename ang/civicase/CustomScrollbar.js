@@ -1,3 +1,5 @@
+/* global SimpleBar */
+/* eslint-disable no-new */
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
@@ -20,20 +22,18 @@
       };
 
       if (attrs.civicaseCustomScrollbar) {
-        options = $parse(attrs.civicaseCustomScrollbar)();
+        options = $parse(attrs.scrollbarConfig)();
       }
 
       (function init () {
-        initScrollbar(options);
+        initScrollbar();
         initSubscribers();
       }());
 
       /**
        * Initiate scrollbar plugin
-       *
-       * @param {Object} options for the simplebar
        */
-      function initScrollbar (options) {
+      function initScrollbar () {
         new SimpleBar(element[0], options);
       }
 
