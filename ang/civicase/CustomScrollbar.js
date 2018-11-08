@@ -17,12 +17,13 @@
      * @param {Object} attrs
      */
     function civicaseCustomScrollbarLink ($scope, element, attrs) {
-      var options = {
+      var simplebarScroller, options;
+      var defaultOptions = {
         autoHide: false
       };
 
-      if (attrs.civicaseCustomScrollbar) {
-        options = $parse(attrs.scrollbarConfig)();
+      if (attrs.scrollbarConfig) {
+        options = _.defaults(_.cloneDeep($parse(attrs.scrollbarConfig)()), defaultOptions);
       }
 
       (function init () {
@@ -34,7 +35,7 @@
        * Initiate scrollbar plugin
        */
       function initScrollbar () {
-        new SimpleBar(element[0], options);
+        simplebarScroller = new SimpleBar(element[0], options);
       }
 
       /**
@@ -46,16 +47,12 @@
 
       /**
        * Subscriber for 'civicase::custom-scrollbar::recalculate' event
-       *
-       * @param {Event} event
-       * @param {DOMElement} element
+       * Recalculate the positioning.
        */
-      function recalculateSubscriber (event, element) {
-        if (element.SimpleBar) {
-          $timeout(function () {
-            element.SimpleBar.recalculate();
-          });
-        }
+      function recalculateSubscriber () {
+        $timeout(function () {
+          simplebarScroller.recalculate();
+        });
       }
     }
   });

@@ -27,7 +27,7 @@
        * Watchers for showBreakdown variable
        */
       function recalculateScrollbarPosition () {
-        $scope.$emit('civicase::custom-scrollbar::recalculate', element.find('[civicase-custom-scrollbar]')[0]);
+        $scope.$emit('civicase::custom-scrollbar::recalculate');
       }
     }
   });

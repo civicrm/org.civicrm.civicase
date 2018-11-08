@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 (function (_) {
   describe('CaseOverview', function () {
-    var element, $q, $scope, $rootScope, $compile, CasesOverviewStats, crmApi, elResponse;
+    var element, $q, $scope, $rootScope, $compile, CasesOverviewStats, crmApi, targetElementScope;
 
     beforeEach(module('civicase', 'civicase.data', 'civicase.templates'));
 
@@ -73,8 +73,8 @@
     });
 
     describe('showBreakdown watcher', function () {
-      it('emit called and elResponse to be defined', function () {
-        expect(elResponse).toEqual(element.find('[civicase-custom-scrollbar]')[0]);
+      it('emit called and targetElementScope to be defined', function () {
+        expect(targetElementScope).toEqual(element.isolateScope());
       });
     });
 
@@ -90,8 +90,8 @@
     * Listen for `civicase::custom-scrollbar::recalculate` event
     */
     function listenForCaseOverviewRecalculate () {
-      $rootScope.$on('civicase::custom-scrollbar::recalculate', function (event, el) {
-        elResponse = el;
+      $rootScope.$on('civicase::custom-scrollbar::recalculate', function (event) {
+        targetElementScope = event.targetScope;
       });
     }
   });
