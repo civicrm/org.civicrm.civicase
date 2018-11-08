@@ -19,7 +19,7 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
 
   $spec['contact_involved'] = array(
     'title' => 'Contact Involved',
-    'description' => 'Contact id of the contact involved as case roles',
+    'description' => 'Id of the contact involved as case roles',
     'type' => CRM_Utils_Type::T_INT,
   );
 
@@ -31,8 +31,21 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
 }
 
 /**
- * Case.getdetails API
+ * Adds contacts involved param clause
  *
+ * @param array $params
+ * @param object $sql
+ * @throws API_Exception
+ * @return void
+ */
+function _civicrm_api3_case_add_contact_involved_clause($params, &$sql) {
+  $caseClient = CRM_Core_DAO::createSQLFilter('contact_id', $params['contact_involved']);
+  $nonCaseClient = CRM_Core_DAO::createSQLFilter('manager.id', $params['contact_involved']);
+  $sql->where("a.id IN (SELECT case_id FROM civicrm_case_contact WHERE ($nonCaseClient OR $caseClient))");
+}
+
+/**
+ * Case.getdetails API
  * This is provided by the CiviCase extension. It gives more robust output than the regular get action.
  *
  * @param array $params
@@ -68,9 +81,7 @@ function civicrm_api3_case_getdetails($params) {
       $params['contact_involved'] = array('=' => $params['contact_involved']);
     }
     \Civi\CCase\Utils::joinOnRelationship($sql, 'all');
-    $caseClient = CRM_Core_DAO::createSQLFilter('contact_id', $params['contact_involved']);
-    $nonCaseClient = CRM_Core_DAO::createSQLFilter('manager.id', $params['contact_involved']);
-    $sql->where("a.id IN (SELECT case_id FROM civicrm_case_contact WHERE ($nonCaseClient OR $caseClient))");
+    _civicrm_api3_case_add_contact_involved_clause($params, $sql);
   }
 
   // Filter deleted contacts from results

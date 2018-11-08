@@ -16,7 +16,7 @@ function _civicrm_api3_case_getcaselist_spec(&$spec) {
 
   $spec['contact_involved'] = array(
     'title' => 'Contact Involved',
-    'description' => 'Contact id of the contact involved as case roles',
+    'description' => 'Id of the contact involved as case roles',
     'type' => CRM_Utils_Type::T_INT,
   );
 
