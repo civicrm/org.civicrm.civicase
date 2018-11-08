@@ -23,7 +23,7 @@
       };
 
       if (attrs.scrollbarConfig) {
-        options = _.defaults(_.cloneDeep($parse(attrs.scrollbarConfig)()), defaultOptions);
+        options = _.defaults($parse(attrs.scrollbarConfig)(), defaultOptions);
       }
 
       (function init () {

@@ -11,6 +11,9 @@
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
+      $scope.options = {
+        'autoHide': true
+      };
     }));
 
     describe('initiate SimpleBar', function () {
@@ -23,12 +26,37 @@
         SimpleBar = SimpleBarOriginalFunction;
       });
 
-      beforeEach(function () {
-        compileDirective();
+      describe('called with default options overrided', function () {
+        beforeEach(function () {
+          $scope.options = {
+            'autoHide': true,
+            'otherOptions': 'otherValue'
+          };
+          compileDirective();
+        });
+
+        it('should call SimpleBar()', function () {
+          expect(SimpleBar).toHaveBeenCalledWith(element[0], {
+            'autoHide': true,
+            'otherOptions': 'otherValue'
+          });
+        });
       });
 
-      it('should call SimpleBar()', function () {
-        expect(SimpleBar).toHaveBeenCalledWith(element[0], $scope.options);
+      describe('called with default options not overrided', function () {
+        beforeEach(function () {
+          $scope.options = {
+            'otherOptions': 'otherValue'
+          };
+          compileDirective();
+        });
+
+        it('should call SimpleBar()', function () {
+          expect(SimpleBar).toHaveBeenCalledWith(element[0], {
+            'autoHide': false,
+            'otherOptions': 'otherValue'
+          });
+        });
       });
     });
 
@@ -55,9 +83,6 @@
      * Initialise directive
      */
     function compileDirective () {
-      $scope.options = {
-        'autoHide': false
-      };
       element = $compile('<div civicase-custom-scrollbar scrollbar-config="{{options}}"></div')($scope);
       $scope.$digest();
     }
