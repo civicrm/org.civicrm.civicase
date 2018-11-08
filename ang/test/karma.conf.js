@@ -26,6 +26,7 @@ module.exports = function (config) {
 
       shoreditch + '/base/js/affix.js',
       extPath + '/packages/moment.min.js',
+      extPath + '/packages/simplebar.min.js',
 
       // Global variables that need to be accessible in the test environment
       extPath + '/ang/test/global.js',

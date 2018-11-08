@@ -1,3 +1,5 @@
+$overview-grid-cell-width: 200px;
+
 .civicase__case-overview {
   .panel-body {
     background-color: $crm-gray-lightest;
@@ -6,24 +8,31 @@
 }
 
 .civicase__case-overview-container {
-  margin-left: 200px;
-  overflow: auto;
-
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  .civicase__case-overview__flow,
+  .simplebar-content {
+    position: static;
+  }
+
+  .simplebar-content {
+    padding-right: 0 !important;
   }
 }
 
 .civicase__case-overview__breakdown,
 .civicase__case-overview__flow {
   display: flex;
+  margin-left: $overview-grid-cell-width;
 }
 
 .civicase__case-overview__flow-status,
 .civicase__case-overview__breakdown-field {
   display: inline-flex;
-  flex-basis: 200px;
+  flex-basis: $overview-grid-cell-width;
   flex-grow: 1;
   flex-shrink: 0;
 
@@ -35,7 +44,7 @@
     left: 0;
     position: absolute;
     top: auto;
-    width: 200px;
+    width: $overview-grid-cell-width;
     z-index: 5;
 
     .material-icons {
@@ -140,22 +149,39 @@
     color: $crm-gray-matte;
   }
 
+  &:first-child,
+  &:last-child {
+    &::after {
+      background-color: $crm-gray-lightest;
+      bottom: -1px;
+      content: '';
+      height: 1px;
+      position: absolute;
+      width: 24px;
+    }
+  }
+
   &:first-child {
     background-color: $crm-gray-lightest;
-    display: block;
     font-weight: $crm-font-weight-h3;
-    margin-left: 24px;
-    overflow: hidden;
-    padding-left: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 176px;
+
+    a {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;    
+    }
+
+    &::after {
+      left: 0;  
+    }
   }
 
   &:last-child {
-    margin-right: 24px;
-    padding-right: 0;
-    width: 176px;    
+    &::after {
+      right: 0;  
+    }
   }
 }
 
@@ -170,18 +196,20 @@
   }
 }
 
-.civicase__case-overview__popup {
-  border: 1px solid $gray-light;
-  border-radius: 2px;
-  box-shadow: $box-shadow-tooltip;
-  color: $gray-darker;
-  padding: 8px 12px;
+.___outside-namespace {
+  .civicase__case-overview__popup {
+    border: 1px solid $gray-light;
+    border-radius: 2px;
+    box-shadow: $box-shadow-tooltip;
+    color: $gray-darker;
+    padding: 8px 12px;
 
-  .popover-content {
-    padding: 0;
-  }
+    .popover-content {
+      padding: 0;
+    }
 
-  .arrow {
-    border-bottom-color: $gray-light;
+    .arrow {
+      border-bottom-color: $gray-light !important;
+    }
   }
 }
