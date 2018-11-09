@@ -191,16 +191,6 @@
       });
 
       /**
-       * initializes the controller and simulates the event that the
-       * decorated uib-datepicker sends when it's compiled and attached to the DOM
-       */
-      function initControllerAndEmitDatepickerReadyEvent () {
-        initController();
-        $rootScope.$emit('civicase::uibDaypicker::compiled');
-        $scope.$digest();
-      }
-
-      /**
        * Simulates a call from the date picker to the `customClass` method.
        * Even if the method is passed from a particular instance, the method
        * gets bound to the date picker, which allows access to some of its internal
@@ -383,6 +373,19 @@
       }
     });
 
+    describe('refresh listener', function () {
+      beforeEach(function () {
+        initControllerAndEmitDatepickerReadyEvent();
+        crmApi.calls.reset();
+        $rootScope.$emit('civicase::ActivitiesCalendar::reload');
+        $scope.$digest();
+      });
+
+      it('triggers a full reload', function () {
+        expect(crmApi.calls.count()).toBe(2);
+      });
+    });
+
     /**
      * It returns the given date as part of the response of
      * the Activity.getdayswithactivities endpoint call for the given status type
@@ -413,6 +416,16 @@
       $scope.caseId = _.uniqueId();
 
       $controller('civicaseActivitiesCalendarController', { $scope: $scope });
+    }
+
+    /**
+     * initializes the controller and simulates the event that the
+     * decorated uib-datepicker sends when it's compiled and attached to the DOM
+     */
+    function initControllerAndEmitDatepickerReadyEvent () {
+      initController();
+      $rootScope.$emit('civicase::uibDaypicker::compiled');
+      $scope.$digest();
     }
   });
 

@@ -193,35 +193,47 @@
     };
 
     (function init () {
-      $rootScope.$on('civicase::uibDaypicker::compiled', function () {
-        loadDaysWithActivitiesIncomplete()
-          .then(function () {
-            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
-          })
-          .then(loadDaysWithActivitiesCompleted)
-          .then(function () {
-            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
-          });
-      });
+      $rootScope.$on('civicase::uibDaypicker::compiled', load);
+      $rootScope.$on('civicase::ActivitiesCalendar::reload', reload);
     }());
 
     /**
      * Adds the given days to the internal list of days with activities, assigning
      * the given status to each of them.
      *
-     * A day won't be added to the list, if already exists a day marked with 'incomplete'
+     * A 'completed' day won't be added to the list, if already exists a day marked
+     * with 'incomplete'. The only exception is if the 'completed' day is marked
+     * to be deleted.
      *
      * @param {Object} days api response
      * @param {String} status
      */
     function addDays (days, status) {
-      days.values.reduce(function (acc, val) {
-        acc[val] = acc[val] && acc[val].status === 'incomplete'
-          ? acc[val]
-          : { status: status, activities: [] };
+      days.values.reduce(function (acc, date) {
+        var keepDay = acc[date] && acc[date].status === 'incomplete' && !acc[date].toFlush;
+
+        acc[date] = keepDay ? acc[date] : {
+          status: status,
+          activities: [] // Will be used as cache
+        };
+        // If this function is ran during a refresh, this ensures that the day
+        // won't be deleted by the "flush" phase, given that it still has activities
+        acc[date].toFlush = false;
 
         return acc;
       }, daysWithActivities);
+    }
+
+    /**
+     * Deletes the days with the given status that have not been updated
+     * in the last refresh (ie they had activites initially, but now they haven't anymore)
+     *
+     * @param {String} status
+     */
+    function flushDays (status) {
+      _.forEach(daysWithActivities, function (day, date) {
+        day.status === status && day.toFlush && (delete daysWithActivities[date]);
+      });
     }
 
     /**
@@ -255,6 +267,20 @@
       }
 
       return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--' + classSuffix;
+    }
+
+    /**
+     * Entry point of the load logic
+     */
+    function load () {
+      loadDaysWithActivitiesIncomplete()
+        .then(function () {
+          $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+        })
+        .then(loadDaysWithActivitiesCompleted)
+        .then(function () {
+          $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+        });
     }
 
     /**
@@ -347,7 +373,7 @@
      */
     function loadDaysWithActivitiesCompleted () {
       return loadDaysWithActivities(CRM.civicase.activityStatusTypes.completed[0])
-        .then(_.curryRight(addDays)('completed'));
+        .then(_.curryRight(updateDaysList)('completed'));
     }
 
     /**
@@ -359,7 +385,35 @@
       return loadDaysWithActivities({
         'IN': CRM.civicase.activityStatusTypes.incomplete
       })
-        .then(_.curryRight(addDays)('incomplete'));
+        .then(_.curryRight(updateDaysList)('incomplete'));
+    }
+
+    /**
+     * It marks all the days currently in the internal list to be deleted, before
+     * triggering the main load logic
+     *
+     * This ensures that if some days won't be returned again from any of the
+     * API calls, they will be deleted
+     */
+    function reload () {
+      _.each(daysWithActivities, function (day) {
+        day.toFlush = true;
+      });
+
+      load();
+    }
+
+    /**
+     * Update the internal list of days with activities with the specified status
+     *
+     * It adds the given days and deletes those that are marked for deletion
+     *
+     * @param {Object} days api response
+     * @param {String} status
+     */
+    function updateDaysList (days, status) {
+      addDays(days, status);
+      flushDays(status);
     }
   }
 })(CRM.$, CRM._, angular);
