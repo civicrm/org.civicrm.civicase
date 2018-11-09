@@ -2,16 +2,17 @@
 
 (function ($, _, moment) {
   describe('civicaseActivitiesCalendarController', function () {
-    var $controller, $q, $scope, $rootScope, crmApi, dates;
+    var $controller, $q, $scope, $rootScope, crmApi, formatActivity, dates;
 
     beforeEach(module('civicase', 'crmUtil', 'civicase.data', 'ui.bootstrap'));
 
     beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _crmApi_,
-      datesMockData) {
+      _formatActivity_, datesMockData) {
       $controller = _$controller_;
       $q = _$q_;
       $rootScope = _$rootScope_;
       crmApi = _crmApi_;
+      formatActivity = _formatActivity_;
 
       $scope = $rootScope.$new();
       dates = datesMockData;
@@ -200,29 +201,6 @@
       }
 
       /**
-       * It returns the given date as part of the response of
-       * the Activity.getdayswithactivities endpoint call for the given status type
-       *
-       * @param {String} date formatted in local time
-       * @param {String} status any|completed|incomplete
-       */
-      function returnDateForStatus (date, status) {
-        crmApi.and.callFake(function (entity, action, params) {
-          var dates = [];
-          var isCompleteActivitiesApiCall = params.status_id === CRM.civicase.activityStatusTypes.completed[0];
-          var isIncompleteActivitiesApiCall = _.isEqual(params.status_id.IN, CRM.civicase.activityStatusTypes.incomplete);
-
-          if (status === 'any' ||
-            (status === 'completed' && isCompleteActivitiesApiCall) ||
-            (status === 'incomplete' && isIncompleteActivitiesApiCall)) {
-            dates = [ moment(date).format('YYYY-MM-DD') ];
-          }
-
-          return $q.resolve({ values: dates });
-        });
-      }
-
-      /**
        * Simulates a call from the date picker to the `customClass` method.
        * Even if the method is passed from a particular instance, the method
        * gets bound to the date picker, which allows access to some of its internal
@@ -247,15 +225,15 @@
     });
 
     describe('selected activities', function () {
+      var mockedActivities;
+
       beforeEach(function () {
-        initController();
+        spyOn($scope, '$emit').and.callThrough();
       });
 
       describe('when selecting a date with no activities included', function () {
         beforeEach(function () {
-          spyOn($scope, '$emit').and.callThrough();
-
-          $scope.selectedDate = dates.nextWeek;
+          initializeForDateSelect();
           $scope.onDateSelected();
         });
 
@@ -267,7 +245,166 @@
           expect($scope.$emit).not.toHaveBeenCalledWith('civicase::ActivitiesCalendar::openActivitiesPopover');
         });
       });
+
+      describe('when selecting a date with activities', function () {
+        beforeEach(function () {
+          initializeForDateSelect(true);
+          $scope.onDateSelected();
+        });
+
+        it('turns on the loading state', function () {
+          expect($scope.loadingActivities).toBe(true);
+        });
+
+        it('opens the activities popover', function () {
+          expect($scope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::openActivitiesPopover');
+        });
+
+        it('makes an api request to fetch all the activities for that date', function () {
+          var formattedDay = moment(dates.today).format('YYYY-MM-DD');
+
+          expect(crmApi).toHaveBeenCalledWith('Activity', 'get', jasmine.objectContaining({
+            activity_date_time: {
+              BETWEEN: [ formattedDay + ' 00:00:00', formattedDay + ' 23:59:59' ]
+            },
+            'case_id.id': $scope.caseId,
+            options: { limit: 0 }
+          }));
+        });
+
+        describe('when the activities are loaded', function () {
+          var ContactsDataService;
+
+          beforeEach(inject(function (_ContactsDataService_) {
+            ContactsDataService = _ContactsDataService_;
+          }));
+
+          beforeEach(function () {
+            spyOn(ContactsDataService, 'add').and.callThrough();
+            $scope.$digest();
+          });
+
+          it('formats all the activities', function () {
+            expect(formatActivity.calls.count()).toBe(mockedActivities.length);
+          });
+
+          it('fetches the data of all the contacts assigned to the activities', function () {
+            var activitiesContacts = _(mockedActivities)
+              .pluck('case_id.contacts').flatten()
+              .pluck('contact_id').value();
+
+            expect(ContactsDataService.add).toHaveBeenCalledWith(activitiesContacts);
+          });
+
+          it('turns off the loading state', function () {
+            expect($scope.loadingActivities).toBe(false);
+          });
+
+          it('stores the activities', function () {
+            var mockedIds = _.pluck(mockedActivities, 'id');
+            var selectedIds = _.pluck($scope.selectedActivites, 'id');
+
+            expect(selectedIds).toEqual(mockedIds);
+          });
+        });
+      });
+
+      describe('when a date was already selected', function () {
+        beforeEach(function () {
+          initializeForDateSelect(true);
+          $scope.selectedActivites = [jasmine.any(Object), jasmine.any(Object)];
+          $scope.onDateSelected();
+        });
+
+        it('removes the previously selected activities from the scope', function () {
+          expect($scope.selectedActivites.length).toBe(0);
+        });
+      });
+
+      describe('when the same day is selected again', function () {
+        beforeEach(function () {
+          initializeForDateSelect(true);
+
+          $scope.onDateSelected();
+          $scope.$digest();
+          crmApi.calls.reset();
+          $scope.onDateSelected();
+          $scope.$digest();
+        });
+
+        it('uses the cache instead of making an api request', function () {
+          expect(crmApi).not.toHaveBeenCalled();
+          expect($scope.selectedActivites.length).not.toBe(0);
+        });
+      });
+
+      /**
+       * Generates some mock activities, each with an id and some contact ids
+       */
+      function generateMockActivities () {
+        mockedActivities = _.times(5, function () {
+          var obj = {};
+
+          obj['id'] = _.uniqueId();
+          obj['case_id.contacts'] = _.times(2, function () {
+            return { contact_id: _.random(1, 5) };
+          });
+
+          return obj;
+        });
+      }
+
+      /**
+       * Initializes the controller so that it's ready to execute the
+       * onDateSelected() scope method
+       *
+       * @param {Boolean} returnDateFromApi
+       *   whether the selected date should be returned as a date with activities
+       */
+      function initializeForDateSelect (returnDateFromApi) {
+        initController();
+
+        $scope.selectedDate = dates.today;
+
+        if (returnDateFromApi) {
+          generateMockActivities();
+          returnDateForStatus(dates.today, 'any');
+        }
+
+        $rootScope.$emit('civicase::uibDaypicker::compiled');
+        $scope.$digest();
+
+        crmApi.calls.reset();
+        crmApi.and.returnValue((function () {
+          return $q.resolve({
+            values: returnDateFromApi ? mockedActivities : []
+          });
+        }()));
+      }
     });
+
+    /**
+     * It returns the given date as part of the response of
+     * the Activity.getdayswithactivities endpoint call for the given status type
+     *
+     * @param {String} date formatted in local time
+     * @param {String} status any|completed|incomplete
+     */
+    function returnDateForStatus (date, status) {
+      crmApi.and.callFake(function (entity, action, params) {
+        var dates = [];
+        var isCompleteActivitiesApiCall = params.status_id === CRM.civicase.activityStatusTypes.completed[0];
+        var isIncompleteActivitiesApiCall = _.isEqual(params.status_id.IN, CRM.civicase.activityStatusTypes.incomplete);
+
+        if (status === 'any' ||
+          (status === 'completed' && isCompleteActivitiesApiCall) ||
+          (status === 'incomplete' && isIncompleteActivitiesApiCall)) {
+          dates = [ moment(date).format('YYYY-MM-DD') ];
+        }
+
+        return $q.resolve({ values: dates });
+      });
+    }
 
     /**
      * Initializes the activities calendar component

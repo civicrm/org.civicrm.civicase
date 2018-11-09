@@ -150,9 +150,11 @@
 
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
-  function civicaseActivitiesCalendarController ($rootScope, $scope, crmApi) {
+  function civicaseActivitiesCalendarController ($q, $rootScope, $scope, crmApi,
+    formatActivity, ContactsDataService) {
     var daysWithActivities = {};
 
+    $scope.loadingActivities = false;
     $scope.selectedActivites = [];
     $scope.selectedDate = null;
     $scope.calendarOptions = {
@@ -162,7 +164,102 @@
       startingDay: 1
     };
 
+    /**
+     * Loads via the api all the activities of the current case, filtered by
+     * the given query params
+     *
+     * @param {Object} params
+     * @return {Promise} resolves to {Array}
+     */
+    function loadActivities (params) {
+      return crmApi('Activity', 'get', _.defaults(params, {
+        'return': [
+          'subject', 'details', 'activity_type_id', 'status_id',
+          'source_contact_name', 'target_contact_name', 'assignee_contact_name',
+          'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description',
+          'tag_id.color', 'file_id', 'is_overdue', 'case_id', 'priority_id',
+          'case_id.case_type_id', 'case_id.status_id', 'case_id.contacts'
+        ],
+        'case_id.id': $scope.caseId,
+        sequential: 1,
+        options: {
+          limit: 0
+        }
+      }))
+        .then(function (result) {
+          return result.values;
+        });
+    }
+
+    /**
+     * Loads the activities of the given date. It checks if the activities are
+     * already cached before making an API request
+     *
+     * @param {String} date YYYY-MM-DD
+     * @return {Promise} resolves to {Array}
+     */
+    function loadActivitiesOfDate (date) {
+      var day = daysWithActivities[date];
+
+      if (day.activities.length) {
+        return $q.resolve(day.activities);
+      }
+
+      return loadActivities({
+        activity_date_time: {
+          BETWEEN: [ date + ' 00:00:00', date + ' 23:59:59' ]
+        }
+      })
+        .then(function (activities) {
+          day.activities = activities.map(formatActivity);
+
+          return day.activities;
+        });
+    }
+
+    /**
+     * Load the data of all the contacts referenced by the given activities
+     *
+     * @param {Array} activities
+     */
+    function loadContactsOfActivities (activities) {
+      var contactIds = _(activities).pluck('case_id.contacts').flatten().pluck('contact_id').value();
+
+      // The try/catch block is necessary because the service does not
+      // return a Promise if it doesn't find any new contacts to fetch
+      try {
+        return ContactsDataService.add(contactIds);
+      } catch (e) {
+        return $q.resolve();
+      }
+    }
+
+    /**
+     * Called when the user clicks on a day on the datepicker directive
+     *
+     * If the day has any activities on it, it loads the activities and display
+     * them in a popover
+     */
     $scope.onDateSelected = function () {
+      var date = moment($scope.selectedDate).format('YYYY-MM-DD');
+
+      if (typeof daysWithActivities[date] === 'undefined') {
+        return;
+      }
+
+      $scope.loadingActivities = true;
+      $scope.selectedActivites = [];
+
+      $scope.$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
+
+      loadActivitiesOfDate(date)
+        .then(function (activities) {
+          loadContactsOfActivities(activities)
+            .then(function () {
+              $scope.selectedActivites = activities;
+              $scope.loadingActivities = false;
+            });
+        });
     };
 
     (function init () {
@@ -191,7 +288,7 @@
       days.values.reduce(function (acc, val) {
         acc[val] = acc[val] && acc[val].status === 'incomplete'
           ? acc[val]
-          : { status: status };
+          : { status: status, activities: [] };
 
         return acc;
       }, daysWithActivities);
