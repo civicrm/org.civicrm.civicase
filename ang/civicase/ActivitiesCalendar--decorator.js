@@ -5,6 +5,17 @@
     $provide.decorator('uibDaypickerDirective', function ($controller, $delegate) {
       var datepicker = $delegate[0];
 
+      /**
+       * After the link function is executed, emits an event that signals
+       * that the directive is compiled and attached to the DOM
+       */
+      datepicker.compile = function () {
+        return function ($rootScope) {
+          datepicker.link.apply(this, arguments);
+          $rootScope.$emit('civicase::uibDaypicker::compiled');
+        };
+      };
+
       datepicker.controller = function ($scope, $element, dateFilter) {
         var vm = this;
 

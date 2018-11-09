@@ -81,7 +81,6 @@
     </div>
     <div class="civicase__summary-tab-tile  panel civicase__panel-transparent-header civicase__summary-tab-tile--fixed">
       <civicase-activities-calendar
-        activities="item.allActivities"
         case-id="item.id"
         refresh-callback="refresh">
       </civicase-activities-calendar>
@@ -91,7 +90,7 @@
   <div class="clearfix civicase__summary-tab-tile-container">
     <div class="civicase__summary-tab-tile civicase__summary-tab__activity-list col-lg-6 col-md-12 panel civicase__panel-transparent-header" ng-include="'~/civicase/CaseDetails--tabs--summary--RecentCommunications.html'"></div>
     <div class="civicase__summary-tab-tile civicase__summary-tab__activity-list col-lg-6 col-md-12 panel civicase__panel-transparent-header" ng-include="'~/civicase/CaseDetails--tabs--summary--Tasks.html'"></div>
-  </div>  
+  </div>
   <!-- Other Cases -->
   <div ng-if="item && item.relatedCases.length" ng-include="'~/civicase/CaseDetails--other-cases.html'"></div>
   <!-- End - Other Cases -->

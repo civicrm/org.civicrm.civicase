@@ -4,7 +4,6 @@
   module.directive('civicaseActivitiesCalendar', function ($timeout, $uibPosition) {
     return {
       scope: {
-        activities: '=',
         caseId: '=',
         refresh: '=refreshCallback'
       },
@@ -21,14 +20,15 @@
      * @param {Object} element
      */
     function civicaseActivitiesCalendarLink ($scope, element) {
+      var datepickerScope;
       var bootstrapThemeContainer = $('#bootstrap-theme');
       var popover = element.find('.activities-calendar-popover');
       var popoverArrow = popover.find('.arrow');
 
       (function init () {
-        $scope.$on('civicaseActivitiesCalendar::openActivitiesPopover', openActivitiesPopover);
-        $scope.$on('civicaseActivitiesCalendar::refreshDatepicker', function () {
-          var datepickerScope = element.find('[uib-datepicker]').isolateScope();
+        $scope.$on('civicase::ActivitiesCalendar::openActivitiesPopover', openActivitiesPopover);
+        $scope.$on('civicase::ActivitiesCalendar::refreshDatepicker', function () {
+          datepickerScope = datepickerScope || element.find('[uib-datepicker]').isolateScope();
 
           datepickerScope.datepicker.refreshView();
         });
@@ -150,7 +150,9 @@
 
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
-  function civicaseActivitiesCalendarController ($scope, formatActivity) {
+  function civicaseActivitiesCalendarController ($rootScope, $scope, crmApi) {
+    var daysWithActivities = {};
+
     $scope.selectedActivites = [];
     $scope.selectedDate = null;
     $scope.calendarOptions = {
@@ -160,35 +162,39 @@
       startingDay: 1
     };
 
-    (function init () {
-      $scope.$watch('activities', function () {
-        $scope.selectedActivites = getSelectedActivities();
-
-        $scope.$broadcast('civicaseActivitiesCalendar::refreshDatepicker');
-      }, true);
-    })();
-
-    /**
-     * Stores the activities that are on the same date as the calendar's
-     * selected date. Triggers when the calendar date changes.
-     */
     $scope.onDateSelected = function () {
-      $scope.selectedActivites = getSelectedActivities();
-
-      if ($scope.selectedActivites.length) {
-        $scope.$emit('civicaseActivitiesCalendar::openActivitiesPopover');
-      }
     };
 
-    /**
-     * Returns the activities that belong to the given date.
-     *
-     * @param {Date} date
-     */
-    function getActivitiesForDate (date) {
-      return $scope.activities.filter(function (activity) {
-        return moment(activity.activity_date_time).isSame(date, 'day');
+    (function init () {
+      $rootScope.$on('civicase::uibDaypicker::compiled', function () {
+        loadDaysWithActivitiesIncomplete()
+          .then(function () {
+            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+          })
+          .then(loadDaysWithActivitiesCompleted)
+          .then(function () {
+            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+          });
       });
+    }());
+
+    /**
+     * Adds the given days to the internal list of days with activities, assigning
+     * the given status to each of them.
+     *
+     * A day won't be added to the list, if already exists a day marked with 'incomplete'
+     *
+     * @param {Object} days api response
+     * @param {String} status
+     */
+    function addDays (days, status) {
+      days.values.reduce(function (acc, val) {
+        acc[val] = acc[val] && acc[val].status === 'incomplete'
+          ? acc[val]
+          : { status: status };
+
+        return acc;
+      }, daysWithActivities);
     }
 
     /**
@@ -201,60 +207,62 @@
      *   can be "day", "month", or "year".
      */
     function getDayCustomClass (params) {
-      var activities = getActivitiesForDate(params.date);
+      var classSuffix = '';
+      var day = daysWithActivities[moment(params.date).format('YYYY-MM-DD')];
       var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
 
       if (!isInCurrentMonth && params.mode === 'day') {
         return 'invisible';
       }
 
-      if (activities.length === 0 || params.mode !== 'day') {
+      if (!day || params.mode !== 'day') {
         return;
       }
 
-      if (haveAllActivitiesBeenCompleted(activities)) {
-        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed';
-      } else if (isAnyActivityOverdue(activities)) {
-        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--overdue';
+      if (day.status === 'completed') {
+        classSuffix = 'completed';
+      } else if (moment(params.date).isSameOrAfter(moment.now())) {
+        classSuffix = 'scheduled';
       } else {
-        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled';
+        classSuffix = 'overdue';
       }
+
+      return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--' + classSuffix;
     }
 
     /**
-     * Returns a list of selected activities for the currently selected date.
+     * Loads the dates with at least an activity with the given status(es)
      *
-     * @return {Array} a list of formatted activities.
+     * @param {*} statusParam
+     * @return {Promise}
      */
-    function getSelectedActivities () {
-      return getActivitiesForDate($scope.selectedDate)
-        .map(function (activity) {
-          return formatActivity(activity, $scope.caseId);
-        });
-    }
-
-    /**
-     * Determines if all the given activities have been completed.
-     *
-     * @param {Array} activities
-     * @return {Boolean}
-     */
-    function haveAllActivitiesBeenCompleted (activities) {
-      return _.every(activities, function (activity) {
-        return _.includes(CRM.civicase.activityStatusTypes.completed, +activity.status_id);
+    function loadDaysWithActivities (statusParam) {
+      return crmApi('Activity', 'getdayswithactivities', {
+        case_id: $scope.caseId,
+        status_id: statusParam
       });
     }
 
     /**
-     * Determines if at least one of the given activities is overdue.
+     * Loads the days with at least a completed activity
      *
-     * @param {Array} activities
-     * @return {Boolean}
+     * @return {Promise}
      */
-    function isAnyActivityOverdue (activities) {
-      return _.some(activities, function (activity) {
-        return activity.is_overdue;
-      });
+    function loadDaysWithActivitiesCompleted () {
+      return loadDaysWithActivities(CRM.civicase.activityStatusTypes.completed[0])
+        .then(_.curryRight(addDays)('completed'));
+    }
+
+    /**
+     * Loads the days with at least an incomplete activity
+     *
+     * @return {Promise}
+     */
+    function loadDaysWithActivitiesIncomplete () {
+      return loadDaysWithActivities({
+        'IN': CRM.civicase.activityStatusTypes.incomplete
+      })
+        .then(_.curryRight(addDays)('incomplete'));
     }
   }
 })(CRM.$, CRM._, angular);
