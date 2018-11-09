@@ -1,8 +1,7 @@
 /* eslint-env jasmine */
 (function ($, _, moment) {
   describe('dashboardTabController', function () {
-    var $controller, $rootScope, $scope, formatActivity, formatActivityMock,
-      formatCase, formatCaseMock;
+    var $controller, $rootScope, $scope, formatActivity, formatCase;
 
     beforeEach(module('civicase.templates', 'civicase', 'crmUtil'));
     beforeEach(inject(function (_$controller_, _$rootScope_, _formatActivity_, _formatCase_) {
@@ -17,7 +16,6 @@
         case_filter: { foo: 'foo' }
       };
 
-      mockFormatFunctions();
       initController();
     }));
 
@@ -76,7 +74,7 @@
             });
 
             it('calls the formatCase service on each result item', function () {
-              expect(formatCaseMock.calls.count()).toBe(mockedResults.length);
+              expect(formatCase.calls.count()).toBe(mockedResults.length);
             });
 
             it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
@@ -266,7 +264,7 @@
             });
 
             it('calls the formatCase service on each result item', function () {
-              expect(formatActivityMock.calls.count()).toBe(mockedResults.length);
+              expect(formatActivity.calls.count()).toBe(mockedResults.length);
             });
 
             it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
@@ -459,7 +457,7 @@
             });
 
             it('calls the formatCase service on each result item', function () {
-              expect(formatActivityMock.calls.count()).toBe(mockedResults.length);
+              expect(formatActivity.calls.count()).toBe(mockedResults.length);
             });
 
             it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
@@ -571,9 +569,7 @@
      */
     function initController () {
       $controller('dashboardTabController', {
-        $scope: $scope,
-        formatActivity: formatActivityMock,
-        formatCase: formatCaseMock
+        $scope: $scope
       });
       $scope.$digest();
     }
@@ -616,21 +612,6 @@
       var end = now.endOf(range).format(format);
 
       return [start, end];
-    }
-
-    /**
-     * Mocks the formatActivity and formatCase functions
-     */
-    function mockFormatFunctions () {
-      formatActivityMock = jasmine.createSpy(formatActivity)
-        .and.callFake(function (activity) {
-          return activity;
-        });
-
-      formatCaseMock = jasmine.createSpy(formatCase)
-        .and.callFake(function (caseObj) {
-          return caseObj;
-        });
     }
 
     /**
