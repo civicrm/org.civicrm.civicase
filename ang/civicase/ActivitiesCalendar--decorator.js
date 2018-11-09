@@ -12,7 +12,7 @@
       datepicker.compile = function () {
         return function ($rootScope) {
           datepicker.link.apply(this, arguments);
-          $rootScope.$emit('uibDaypicker::compiled');
+          $rootScope.$emit('civicase::uibDaypicker::compiled');
         };
       };
 

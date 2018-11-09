@@ -26,8 +26,8 @@
       var popoverArrow = popover.find('.arrow');
 
       (function init () {
-        $scope.$on('civicaseActivitiesCalendar::openActivitiesPopover', openActivitiesPopover);
-        $scope.$on('civicaseActivitiesCalendar::refreshDatepicker', function () {
+        $scope.$on('civicase::ActivitiesCalendar::openActivitiesPopover', openActivitiesPopover);
+        $scope.$on('civicase::ActivitiesCalendar::refreshDatepicker', function () {
           datepickerScope = datepickerScope || element.find('[uib-datepicker]').isolateScope();
 
           datepickerScope.datepicker.refreshView();
@@ -166,14 +166,14 @@
     };
 
     (function init () {
-      $rootScope.$on('uibDaypicker::compiled', function () {
+      $rootScope.$on('civicase::uibDaypicker::compiled', function () {
         loadDaysWithActivitiesIncomplete()
           .then(function () {
-            $scope.$emit('civicaseActivitiesCalendar::refreshDatepicker');
+            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
           })
           .then(loadDaysWithActivitiesCompleted)
           .then(function () {
-            $scope.$emit('civicaseActivitiesCalendar::refreshDatepicker');
+            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
           });
       });
     }());

@@ -24,7 +24,7 @@
         spyOn($scope, '$emit').and.callThrough();
 
         initController();
-        $rootScope.$emit('uibDaypicker::compiled');
+        $rootScope.$emit('civicase::uibDaypicker::compiled');
       });
 
       it('starts loading the days with incomplete activities', function () {
@@ -53,7 +53,7 @@
 
         it('has triggered the datepicker refresh twice, one for each request', function () {
           _.times(2, function (i) {
-            expect($scope.$emit.calls.argsFor(i)[0]).toBe('civicaseActivitiesCalendar::refreshDatepicker');
+            expect($scope.$emit.calls.argsFor(i)[0]).toBe('civicase::ActivitiesCalendar::refreshDatepicker');
           });
         });
       });
@@ -195,7 +195,7 @@
        */
       function initControllerAndEmitDatepickerReadyEvent () {
         initController();
-        $rootScope.$emit('uibDaypicker::compiled');
+        $rootScope.$emit('civicase::uibDaypicker::compiled');
         $scope.$digest();
       }
 
@@ -264,7 +264,7 @@
         });
 
         it('does not open the activities popover', function () {
-          expect($scope.$emit).not.toHaveBeenCalledWith('civicaseActivitiesCalendar::openActivitiesPopover');
+          expect($scope.$emit).not.toHaveBeenCalledWith('civicase::ActivitiesCalendar::openActivitiesPopover');
         });
       });
     });
@@ -325,7 +325,7 @@
 
       describe('when the "open activities popover" event is emitted', function () {
         beforeEach(function () {
-          activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
+          activitiesCalendar.isolateScope().$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
           $timeout.flush();
         });
 
@@ -342,7 +342,7 @@
 
       describe('closing the popover', function () {
         beforeEach(function () {
-          activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
+          activitiesCalendar.isolateScope().$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
           $timeout.flush();
         });
 
@@ -388,7 +388,7 @@
 
             popover.width(100);
             $uibPosition.positionElements.and.returnValue(mockBodyOffset);
-            activitiesCalendar.isolateScope().$emit('civicaseActivitiesCalendar::openActivitiesPopover');
+            activitiesCalendar.isolateScope().$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
             $timeout.flush();
           });
 
