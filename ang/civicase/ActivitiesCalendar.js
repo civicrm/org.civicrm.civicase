@@ -173,7 +173,7 @@
     $scope.onDateSelected = function () {
       var date = moment($scope.selectedDate).format('YYYY-MM-DD');
 
-      if (typeof daysWithActivities[date] === 'undefined') {
+      if (!daysWithActivities[date]) {
         return;
       }
 
@@ -201,9 +201,9 @@
      * Adds the given days to the internal list of days with activities, assigning
      * the given status to each of them.
      *
-     * A 'completed' day won't be added to the list, if already exists a day marked
-     * with 'incomplete'. The only exception is if the 'completed' day is marked
-     * to be deleted.
+     * A 'completed' day won't be added to the list, if a day marked with
+     * 'incomplete' already exists. The only exception is if the 'completed' day
+     * is marked to be flushed.
      *
      * @param {Object} days api response
      * @param {String} status
@@ -214,10 +214,10 @@
 
         acc[date] = keepDay ? acc[date] : {
           status: status,
-          activities: [] // Will be used as cache
+          activitiesCache: []
         };
         // If this function is ran during a refresh, this ensures that the day
-        // won't be deleted by the "flush" phase, given that it still has activities
+        // won't be removed by the "flush" phase, given that it still has activities
         acc[date].toFlush = false;
 
         return acc;
@@ -320,8 +320,8 @@
     function loadActivitiesOfDate (date) {
       var day = daysWithActivities[date];
 
-      if (day.activities.length) {
-        return $q.resolve(day.activities);
+      if (day.activitiesCache.length) {
+        return $q.resolve(day.activitiesCache);
       }
 
       return loadActivities({
@@ -330,9 +330,9 @@
         }
       })
         .then(function (activities) {
-          day.activities = activities.map(formatActivity);
+          day.activitiesCache = activities.map(formatActivity);
 
-          return day.activities;
+          return day.activitiesCache;
         });
     }
 
@@ -340,17 +340,12 @@
      * Load the data of all the contacts referenced by the given activities
      *
      * @param {Array} activities
+     * @return {Promise}
      */
     function loadContactsOfActivities (activities) {
       var contactIds = _(activities).pluck('case_id.contacts').flatten().pluck('contact_id').value();
 
-      // The try/catch block is necessary because the service does not
-      // return a Promise if it doesn't find any new contacts to fetch
-      try {
-        return ContactsDataService.add(contactIds);
-      } catch (e) {
-        return $q.resolve();
-      }
+      return ContactsDataService.add(contactIds);
     }
 
     /**
