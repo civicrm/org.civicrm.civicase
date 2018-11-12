@@ -117,7 +117,6 @@
      */
     $scope.closeDetailsPanel = function () {
       delete $scope.activity.id;
-      $scope.$emit('civicase::activity-card::close-activity-form');
     };
 
     /**

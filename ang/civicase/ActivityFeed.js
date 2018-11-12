@@ -13,7 +13,6 @@
       restrict: 'A',
       templateUrl: '~/civicase/ActivityFeed.html',
       controller: civicaseActivityFeedController,
-      link: civicaseActivityFeedLink,
       scope: {
         params: '=civicaseActivityFeed',
         showBulkActions: '=',
@@ -21,29 +20,6 @@
         refreshCase: '=?refreshCallback'
       }
     };
-
-    function civicaseActivityFeedLink () {
-      (function init () {
-        $rootScope.$on('civicase::activity-card::load-activity-form', setScrollBar);
-        $rootScope.$on('civicase::activity-card::close-activity-form', removeScrollBar);
-      }());
-
-      function setScrollBar () {
-        var $filter = $('.civicase__activity-filter');
-        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-        var $toolbarDrawer = $('#toolbar');
-        var $leftPanel = $('.civicase__activity-feed__list-container__left');
-        var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
-
-        $leftPanel.height('calc(100vh - ' + topOffset + 'px)');
-      }
-
-      function removeScrollBar () {
-        var $leftPanel = $('.civicase__activity-feed__list-container__left');
-
-        $leftPanel.height('auto');
-      }
-    }
   });
 
   module.controller('civicaseActivityFeedController', civicaseActivityFeedController);
@@ -109,7 +85,6 @@
       if (($scope.viewingActivity && $scope.viewingActivity.id === id) || !act) {
         $scope.viewingActivity = {};
         $scope.aid = 0;
-        $scope.$emit('civicase::activity-card::close-activity-form');
       } else {
         // Mark email read
         if (act.status === 'Unread') {
