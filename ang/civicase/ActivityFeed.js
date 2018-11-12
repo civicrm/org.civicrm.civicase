@@ -8,7 +8,7 @@
     });
   });
 
-  module.directive('civicaseActivityFeed', function ($rootScope) {
+  module.directive('civicaseActivityFeed', function () {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityFeed.html',
@@ -399,4 +399,74 @@
       }
     }
   }
+
+  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document, $rootScope) {
+    return {
+      link: civicaseActivityDetailsAffix
+    };
+
+    /**
+     * Link function for civicaseActivityDetailsAffix
+     *
+     * @param {Object} scope
+     * @param {Object} $element
+     * @param {Object} attr
+     */
+    function civicaseActivityDetailsAffix (scope, $element, attr) {
+      var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
+      // TODO Check if the attribute can be passed via scope variable
+      var affixDisabled = (attr.affixDisabled === 'true');
+
+      (function init () {
+        if (affixDisabled) {
+          return;
+        }
+
+        affixActivityDetailsPanel();
+        $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
+      }());
+
+      /**
+       * Sets Activity Details Panel affix offsets
+       */
+      function affixActivityDetailsPanel () {
+        $timeout(function () {
+          $activityDetailsPanel = $element.find('.civicase__activity-panel');
+          $filter = $('.civicase__activity-filter');
+          $feedListContainer = $('.civicase__activity-feed__list-container');
+          $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
+          $toolbarDrawer = $('#toolbar');
+
+          $activityDetailsPanel.affix({
+            offset: {
+              top: $element.find('.civicase__activity-panel').offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
+              bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
+            }
+          }).on('affixed.bs.affix', function () {
+            $activityDetailsPanel
+              .css('top', ($toolbarDrawer.height() + $tabs.height() + $filter.height()))
+              .css('padding-top', 32)
+              .width($element.width());
+          }).on('affixed-top.bs.affix', function () {
+            $activityDetailsPanel
+              .css('top', 'auto')
+              .css('padding-top', 0)
+              .css('width', 'auto');
+          });
+        });
+      }
+
+      /**
+       * Resets Activity Details Panel affix offsets
+       */
+      function resetAffix () {
+        $timeout(function () {
+          if ($activityDetailsPanel.data('bs.affix')) {
+            $activityDetailsPanel.data('bs.affix').options.offset.top = $activityDetailsPanel.offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height());
+            $activityDetailsPanel.data('bs.affix').options.offset.bottom = $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height());
+          }
+        });
+      }
+    }
+  });
 })(angular, CRM.$, CRM._);

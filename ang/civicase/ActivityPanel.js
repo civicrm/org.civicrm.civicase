@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityPanel', function ($rootScope, $timeout, BulkActions) {
+  module.directive('civicaseActivityPanel', function ($rootScope, BulkActions) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityPanel.html',
@@ -23,7 +23,7 @@
       var ts = CRM.ts('civicase');
 
       (function init () {
-        setScroll();
+        setPanelBodyScrollbar();
         $rootScope.$on('civicase::activity-card::load-activity-form', loadActivityForm);
         element.on('crmFormSuccess', scope.refresh);
         element.on('crmLoad', crmLoadListener);
@@ -33,7 +33,7 @@
        * Listener for crmLoad event
        */
       function crmLoadListener () {
-        setBodyHeight();
+        setPanelBodyHeight();
         // Workaround bug where href="#" changes the angular route
         $('a.crm-clear-link', this).removeAttr('href');
         $('a.delete.button', this).click(onDeleteClickEvent);
@@ -62,7 +62,10 @@
         element.find('.crm-submit-buttons a.edit').addClass('btn btn-primary');
       }
 
-      function setScroll () {
+      /**
+       * Set scrollbar for activity panel body
+       */
+      function setPanelBodyScrollbar () {
         var $filter = $('.civicase__activity-filter');
         var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
         var $toolbarDrawer = $('#toolbar');
@@ -71,7 +74,10 @@
         element.height('calc(100vh - ' + topOffset + 'px)');
       }
 
-      function setBodyHeight () {
+      /**
+       * Set height for activity panel body
+       */
+      function setPanelBodyHeight () {
         var $filter = $('.civicase__activity-filter');
         var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
         var $toolbarDrawer = $('#toolbar');

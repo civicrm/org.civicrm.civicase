@@ -1,4 +1,8 @@
 .civicase__activity-panel {
+  &.affix {
+    position: fixed !important;
+  }
+
   .panel {
     overflow: auto;
     position: relative;
@@ -48,16 +52,6 @@
   }
 }
 
-@media screen and (max-width: $activity-feed-breakpoint) {
-  .civicase__activity-panel {
-    .panel {
-      &.affix {
-        width: calc(40% - 16px);
-      }
-    }
-  }
-}
-
 .civicase__activity-panel__close,
 .civicase__activity-panel__maximise {
   color: $gray-darker;
@@ -81,7 +75,7 @@
 }
 
 .civicase__activity-panel__priority-dropdown {
-  margin-right: 15px;
+  margin-right: 10px;
 
   .list-group-item-info {
     color: $crm-gray-matte;
@@ -96,6 +90,7 @@
 
 .civicase__activity-panel__core_container {
   min-height: 200px;
+  position: static !important;
 
   /* stylelint-disable max-nesting-depth, selector-max-compound-selectors */
   .help {
