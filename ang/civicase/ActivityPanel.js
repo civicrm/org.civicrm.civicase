@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityPanel', function ($rootScope, BulkActions) {
+  module.directive('civicaseActivityPanel', function ($rootScope, $timeout, BulkActions) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityPanel.html',
@@ -33,6 +33,7 @@
        * Listener for crmLoad event
        */
       function crmLoadListener () {
+        setBodyHeight();
         // Workaround bug where href="#" changes the angular route
         $('a.crm-clear-link', this).removeAttr('href');
         $('a.delete.button', this).click(onDeleteClickEvent);
@@ -65,10 +66,23 @@
         var $filter = $('.civicase__activity-filter');
         var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
         var $toolbarDrawer = $('#toolbar');
-        var $rightPanel = $('.civicase__activity-feed__list-container__right');
         var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
 
-        $rightPanel.height('calc(100vh - ' + topOffset + 'px)');
+        element.height('calc(100vh - ' + topOffset + 'px)');
+      }
+
+      function setBodyHeight () {
+        var $filter = $('.civicase__activity-filter');
+        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
+        var $toolbarDrawer = $('#toolbar');
+        var $body = element.find('.panel-body');
+        var $header = element.find('.panel-heading');
+        var $subheader = element.find('.panel-subheading');
+        var $actionBar = element.find('.crm-submit-buttons');
+        var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
+        var bodyTopOffset = topOffset + $header.outerHeight() + $subheader.outerHeight() + $actionBar.outerHeight();
+
+        $body.height('calc(100vh - ' + bodyTopOffset + 'px)');
       }
 
       /**

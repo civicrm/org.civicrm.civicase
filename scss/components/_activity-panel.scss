@@ -1,14 +1,23 @@
 .civicase__activity-panel {
   .panel {
     overflow: auto;
+    position: relative;
+  }
 
-    &.affix {
-      position: fixed !important;
-      width: calc(30% - 12px); // 12px = padding outside civicase__activity-feed__list-container * 30%
-    }
+  .panel-heading,
+  .panel-subheading {
+    position: absolute;
+    width: 100%;
+  }
+
+  .panel-subheading {
+    top: 63px;
   }
 
   .panel-body {
+    margin-bottom: 76px;
+    margin-top: 120px;
+    overflow: auto;
     padding: 0;
   }
 
@@ -145,9 +154,11 @@
 
   .crm-submit-buttons {
     border-bottom: 0 !important;
+    bottom: 0;
     height: auto !important;
     margin: 0;
     padding: 20px !important;
+    position: absolute;
 
     .edit {
       @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
