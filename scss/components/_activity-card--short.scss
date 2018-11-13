@@ -17,4 +17,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  .civicase__activity-card__case-type {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
