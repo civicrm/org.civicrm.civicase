@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityPanel', function ($rootScope, BulkActions) {
+  module.directive('civicaseActivityPanel', function ($rootScope, $timeout, BulkActions) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityPanel.html',
@@ -23,7 +23,7 @@
       var ts = CRM.ts('civicase');
 
       (function init () {
-        setPanelBodyScrollbar();
+        setPanelHeight();
         $rootScope.$on('civicase::activity-card::load-activity-form', loadActivityForm);
         element.on('crmFormSuccess', scope.refresh);
         element.on('crmLoad', crmLoadListener);
@@ -63,15 +63,17 @@
       }
 
       /**
-       * Set scrollbar for activity panel body
+       * Set height for activity panel
        */
-      function setPanelBodyScrollbar () {
-        var $filter = $('.civicase__activity-filter');
-        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-        var $toolbarDrawer = $('#toolbar');
-        var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
+      function setPanelHeight () {
+        $timeout(function () {
+          var $filter = $('.civicase__activity-filter');
+          var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
+          var $toolbarDrawer = $('#toolbar');
+          var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
 
-        element.height('calc(100vh - ' + topOffset + 'px)');
+          element.height('calc(100vh - ' + topOffset + 'px)');
+        });
       }
 
       /**
