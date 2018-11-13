@@ -144,7 +144,9 @@
         _.assign($scope.item, formatCaseDetails(data));
         countScheduledActivities();
         $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
+
         $scope.$broadcast('updateCaseData');
+        $scope.$emit('civicase::ActivitiesCalendar::reload');
       }
     };
 
