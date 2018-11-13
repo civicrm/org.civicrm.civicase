@@ -237,6 +237,15 @@
     }
 
     /**
+     * Prepares the value of the case_id api param based on the $scope.caseId property
+     *
+     * @return {Number/Object}
+     */
+    function getCaseIdApiParam () {
+      return _.isArray($scope.caseId) ? { 'IN': $scope.caseId } : $scope.caseId;
+    }
+
+    /**
      * Returns the class that the given date should have depending on the status
      * of all the activities for the date.
      *
@@ -291,7 +300,13 @@
      * @return {Promise} resolves to {Array}
      */
     function loadActivities (params) {
-      return crmApi('Activity', 'get', _.defaults(params, {
+      params = params || {};
+
+      if ($scope.caseId) {
+        params['case_id.id'] = getCaseIdApiParam();
+      }
+
+      return crmApi('Activity', 'get', _.assign(params, {
         'return': [
           'subject', 'details', 'activity_type_id', 'status_id',
           'source_contact_name', 'target_contact_name', 'assignee_contact_name',
@@ -299,7 +314,6 @@
           'tag_id.color', 'file_id', 'is_overdue', 'case_id', 'priority_id',
           'case_id.case_type_id', 'case_id.status_id', 'case_id.contacts'
         ],
-        'case_id.id': $scope.caseId,
         sequential: 1,
         options: {
           limit: 0
@@ -355,10 +369,15 @@
      * @return {Promise}
      */
     function loadDaysWithActivities (statusParam) {
-      return crmApi('Activity', 'getdayswithactivities', {
-        case_id: $scope.caseId,
-        status_id: statusParam
-      });
+      var params = {};
+
+      params.status_id = statusParam;
+
+      if ($scope.caseId) {
+        params.case_id = getCaseIdApiParam();
+      }
+
+      return crmApi('Activity', 'getdayswithactivities', params);
     }
 
     /**
