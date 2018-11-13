@@ -4,7 +4,6 @@
   module.directive('civicaseActivitiesCalendar', function ($timeout, $uibPosition) {
     return {
       scope: {
-        activities: '=',
         caseId: '=',
         refresh: '=refreshCallback'
       },
@@ -21,14 +20,15 @@
      * @param {Object} element
      */
     function civicaseActivitiesCalendarLink ($scope, element) {
+      var datepickerScope;
       var bootstrapThemeContainer = $('#bootstrap-theme');
       var popover = element.find('.activities-calendar-popover');
       var popoverArrow = popover.find('.arrow');
 
       (function init () {
-        $scope.$on('civicaseActivitiesCalendar::openActivitiesPopover', openActivitiesPopover);
-        $scope.$on('civicaseActivitiesCalendar::refreshDatepicker', function () {
-          var datepickerScope = element.find('[uib-datepicker]').isolateScope();
+        $scope.$on('civicase::ActivitiesCalendar::openActivitiesPopover', openActivitiesPopover);
+        $scope.$on('civicase::ActivitiesCalendar::refreshDatepicker', function () {
+          datepickerScope = datepickerScope || element.find('[uib-datepicker]').isolateScope();
 
           datepickerScope.datepicker.refreshView();
         });
@@ -150,7 +150,11 @@
 
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
-  function civicaseActivitiesCalendarController ($scope, formatActivity) {
+  function civicaseActivitiesCalendarController ($q, $rootScope, $scope, crmApi,
+    formatActivity, ContactsDataService) {
+    var daysWithActivities = {};
+
+    $scope.loadingActivities = false;
     $scope.selectedActivites = [];
     $scope.selectedDate = null;
     $scope.calendarOptions = {
@@ -160,34 +164,75 @@
       startingDay: 1
     };
 
-    (function init () {
-      $scope.$watch('activities', function () {
-        $scope.selectedActivites = getSelectedActivities();
-
-        $scope.$broadcast('civicaseActivitiesCalendar::refreshDatepicker');
-      }, true);
-    })();
-
     /**
-     * Stores the activities that are on the same date as the calendar's
-     * selected date. Triggers when the calendar date changes.
+     * Called when the user clicks on a day on the datepicker directive
+     *
+     * If the day has any activities on it, it loads the activities and display
+     * them in a popover
      */
     $scope.onDateSelected = function () {
-      $scope.selectedActivites = getSelectedActivities();
+      var date = moment($scope.selectedDate).format('YYYY-MM-DD');
 
-      if ($scope.selectedActivites.length) {
-        $scope.$emit('civicaseActivitiesCalendar::openActivitiesPopover');
+      if (!daysWithActivities[date]) {
+        return;
       }
+
+      $scope.loadingActivities = true;
+      $scope.selectedActivites = [];
+
+      $scope.$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
+
+      loadActivitiesOfDate(date)
+        .then(function (activities) {
+          loadContactsOfActivities(activities)
+            .then(function () {
+              $scope.selectedActivites = activities;
+              $scope.loadingActivities = false;
+            });
+        });
     };
 
+    (function init () {
+      $rootScope.$on('civicase::uibDaypicker::compiled', load);
+      $rootScope.$on('civicase::ActivitiesCalendar::reload', reload);
+    }());
+
     /**
-     * Returns the activities that belong to the given date.
+     * Adds the given days to the internal list of days with activities, assigning
+     * the given status to each of them.
      *
-     * @param {Date} date
+     * A 'completed' day won't be added to the list, if a day marked with
+     * 'incomplete' already exists. The only exception is if the 'completed' day
+     * is marked to be flushed.
+     *
+     * @param {Object} days api response
+     * @param {String} status
      */
-    function getActivitiesForDate (date) {
-      return $scope.activities.filter(function (activity) {
-        return moment(activity.activity_date_time).isSame(date, 'day');
+    function addDays (days, status) {
+      days.values.reduce(function (acc, date) {
+        var keepDay = acc[date] && acc[date].status === 'incomplete' && !acc[date].toFlush;
+
+        acc[date] = keepDay ? acc[date] : {
+          status: status,
+          activitiesCache: []
+        };
+        // If this function is ran during a refresh, this ensures that the day
+        // won't be removed by the "flush" phase, given that it still has activities
+        acc[date].toFlush = false;
+
+        return acc;
+      }, daysWithActivities);
+    }
+
+    /**
+     * Deletes the days with the given status that have not been updated
+     * in the last refresh (ie they had activites initially, but now they haven't anymore)
+     *
+     * @param {String} status
+     */
+    function flushDays (status) {
+      _.forEach(daysWithActivities, function (day, date) {
+        day.status === status && day.toFlush && (delete daysWithActivities[date]);
       });
     }
 
@@ -201,60 +246,169 @@
      *   can be "day", "month", or "year".
      */
     function getDayCustomClass (params) {
-      var activities = getActivitiesForDate(params.date);
+      var classSuffix = '';
+      var day = daysWithActivities[moment(params.date).format('YYYY-MM-DD')];
       var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
 
       if (!isInCurrentMonth && params.mode === 'day') {
         return 'invisible';
       }
 
-      if (activities.length === 0 || params.mode !== 'day') {
+      if (!day || params.mode !== 'day') {
         return;
       }
 
-      if (haveAllActivitiesBeenCompleted(activities)) {
-        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--completed';
-      } else if (isAnyActivityOverdue(activities)) {
-        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--overdue';
+      if (day.status === 'completed') {
+        classSuffix = 'completed';
+      } else if (moment(params.date).isSameOrAfter(moment.now())) {
+        classSuffix = 'scheduled';
       } else {
-        return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--scheduled';
+        classSuffix = 'overdue';
       }
+
+      return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--' + classSuffix;
     }
 
     /**
-     * Returns a list of selected activities for the currently selected date.
-     *
-     * @return {Array} a list of formatted activities.
+     * Entry point of the load logic
      */
-    function getSelectedActivities () {
-      return getActivitiesForDate($scope.selectedDate)
-        .map(function (activity) {
-          return formatActivity(activity, $scope.caseId);
+    function load () {
+      loadDaysWithActivitiesIncomplete()
+        .then(function () {
+          $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+        })
+        .then(loadDaysWithActivitiesCompleted)
+        .then(function () {
+          $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
         });
     }
 
     /**
-     * Determines if all the given activities have been completed.
+     * Loads via the api all the activities of the current case, filtered by
+     * the given query params
+     *
+     * @param {Object} params
+     * @return {Promise} resolves to {Array}
+     */
+    function loadActivities (params) {
+      return crmApi('Activity', 'get', _.defaults(params, {
+        'return': [
+          'subject', 'details', 'activity_type_id', 'status_id',
+          'source_contact_name', 'target_contact_name', 'assignee_contact_name',
+          'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description',
+          'tag_id.color', 'file_id', 'is_overdue', 'case_id', 'priority_id',
+          'case_id.case_type_id', 'case_id.status_id', 'case_id.contacts'
+        ],
+        'case_id.id': $scope.caseId,
+        sequential: 1,
+        options: {
+          limit: 0
+        }
+      }))
+        .then(function (result) {
+          return result.values;
+        });
+    }
+
+    /**
+     * Loads the activities of the given date. It checks if the activities are
+     * already cached before making an API request
+     *
+     * @param {String} date YYYY-MM-DD
+     * @return {Promise} resolves to {Array}
+     */
+    function loadActivitiesOfDate (date) {
+      var day = daysWithActivities[date];
+
+      if (day.activitiesCache.length) {
+        return $q.resolve(day.activitiesCache);
+      }
+
+      return loadActivities({
+        activity_date_time: {
+          BETWEEN: [ date + ' 00:00:00', date + ' 23:59:59' ]
+        }
+      })
+        .then(function (activities) {
+          day.activitiesCache = activities.map(formatActivity);
+
+          return day.activitiesCache;
+        });
+    }
+
+    /**
+     * Load the data of all the contacts referenced by the given activities
      *
      * @param {Array} activities
-     * @return {Boolean}
+     * @return {Promise}
      */
-    function haveAllActivitiesBeenCompleted (activities) {
-      return _.every(activities, function (activity) {
-        return _.includes(CRM.civicase.activityStatusTypes.completed, +activity.status_id);
+    function loadContactsOfActivities (activities) {
+      var contactIds = _(activities).pluck('case_id.contacts').flatten().pluck('contact_id').value();
+
+      return ContactsDataService.add(contactIds);
+    }
+
+    /**
+     * Loads the dates with at least an activity with the given status(es)
+     *
+     * @param {*} statusParam
+     * @return {Promise}
+     */
+    function loadDaysWithActivities (statusParam) {
+      return crmApi('Activity', 'getdayswithactivities', {
+        case_id: $scope.caseId,
+        status_id: statusParam
       });
     }
 
     /**
-     * Determines if at least one of the given activities is overdue.
+     * Loads the days with at least a completed activity
      *
-     * @param {Array} activities
-     * @return {Boolean}
+     * @return {Promise}
      */
-    function isAnyActivityOverdue (activities) {
-      return _.some(activities, function (activity) {
-        return activity.is_overdue;
+    function loadDaysWithActivitiesCompleted () {
+      return loadDaysWithActivities(CRM.civicase.activityStatusTypes.completed[0])
+        .then(_.curryRight(updateDaysList)('completed'));
+    }
+
+    /**
+     * Loads the days with at least an incomplete activity
+     *
+     * @return {Promise}
+     */
+    function loadDaysWithActivitiesIncomplete () {
+      return loadDaysWithActivities({
+        'IN': CRM.civicase.activityStatusTypes.incomplete
+      })
+        .then(_.curryRight(updateDaysList)('incomplete'));
+    }
+
+    /**
+     * It marks all the days currently in the internal list to be deleted, before
+     * triggering the main load logic
+     *
+     * This ensures that if some days won't be returned again from any of the
+     * API calls, they will be deleted
+     */
+    function reload () {
+      _.each(daysWithActivities, function (day) {
+        day.toFlush = true;
       });
+
+      load();
+    }
+
+    /**
+     * Update the internal list of days with activities with the specified status
+     *
+     * It adds the given days and deletes those that are marked for deletion
+     *
+     * @param {Object} days api response
+     * @param {String} status
+     */
+    function updateDaysList (days, status) {
+      addDays(days, status);
+      flushDays(status);
     }
   }
 })(CRM.$, CRM._, angular);
