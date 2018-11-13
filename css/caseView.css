@@ -1,23 +1,11 @@
-/* CSS rules for Angular civicase view */
-#bootstrap-theme .civicase-view-with-search {
-  width: 75%;
-  padding-left: 10px;
-}
-#bootstrap-theme .civicase-view-with-search.case-is-focused {
-  width: 100%;
-  padding-left: 40px;
-}
-#bootstrap-theme .civicase-view-with-search.case-is-focused > .panel > .panel-header {
-  border-radius: 2px 2px 0 0;
-}
-#bootstrap-theme .btn {
+/*#bootstrap-theme .btn {
   font-weight: 600;
 }
 #bootstrap-theme .fa.fa-plus {
   padding-right: 5px;
 }
 #bootstrap-theme .civicase-view-header {
-  background-color: #F3F6F7; 
+  background-color: #F3F6F7;
   border-radius: 2px 2px 0 0;
 }
 #bootstrap-theme .civicase-view-header h2 {
@@ -119,7 +107,7 @@
 }
 #bootstrap-theme .civicase-view-summary .row {
   border-bottom: 1px solid #e8eef0;
-  margin: 0;  
+  margin: 0;
 }
 #bootstrap-theme nav.civicase-view-tab-bar {
   background-color: #42AFCB;
@@ -138,7 +126,7 @@
 #bootstrap-theme .navbar.civicase-view-tab-bar .btn {
   background-color: transparent;
   border: 1px solid white;
-  color: white;  
+  color: white;
 }
 #bootstrap-theme .navbar.civicase-view-tab-bar .open .btn {
   border: 0 none;
@@ -223,7 +211,7 @@
 }
 #bootstrap-theme .select2-container,
 #bootstrap-theme .form-control.select2-container {
-  height: 30px 
+  height: 30px
 }
 #bootstrap-theme .select2-container .select2-choice {
   background-image: none;
@@ -270,7 +258,7 @@
 }
 
 #bootstrap-theme .select2-container.select2-dropdown-open,
-#bootstrap-theme .select2-container.select2-container-active .select2-choice, 
+#bootstrap-theme .select2-container.select2-container-active .select2-choice,
 #bootstrap-theme .select2-container.select2-container-active .select2-choices {
   box-shadow: none;
 }
@@ -405,15 +393,6 @@
   margin-right: 20px;
   margin-left: 10px;
 }
-#bootstrap-theme .civicase-view-tasks .act-feed-item {
-  border-left: 5px solid;
-}
-#bootstrap-theme .civicase-view-tasks .act-feed-item.activity-overdue {
-  border-left-color: #e6807f !important;
-}
-#bootstrap-theme .civicase-view-tasks .act-feed-item.activity-overdue .cb-dot {
-  background-color: #e6807f !important;
-}
 #bootstrap-theme .case-tab-files .act-feed-panel {
   box-shadow: none;
 }
@@ -486,7 +465,7 @@
   float: left;
   margin: 2px 5px 0px;
 }
-#bootstrap-theme.civicase-main .collapsible-title {
+#bootstrap-theme.civicase__container .collapsible-title {
   background: none;
   border: none;
   color: #727E8A;
@@ -498,7 +477,7 @@
   position: relative;
   text-transform: uppercase;
 }
-#bootstrap-theme.civicase-main .crm-collapsible .collapsible-title::before {
+#bootstrap-theme.civicase__container .crm-collapsible .collapsible-title::before {
   color: #727E8A;
   content: "\f107";
   display: inline-block;
@@ -509,13 +488,13 @@
   left: 2px;
   position: absolute;
 }
-#bootstrap-theme.civicase-main .crm-collapsible.collapsed .collapsible-title::before {
+#bootstrap-theme.civicase__container .crm-collapsible.collapsed .collapsible-title::before {
   content: "\f105";
 }
 #bootstrap-theme .civicase-view-tasks li.list-group-item{
   margin-bottom: 17px;
 }
-#bootstrap-theme.civicase-main .crm-collapsible.collapsed .collapsible-title + * {
+#bootstrap-theme.civicase__container .crm-collapsible.collapsed .collapsible-title + * {
   display: none;
 }
 #bootstrap-theme .civicase-view-other-cases .civicase-view-other-case .other-case-type-manager a {
@@ -541,20 +520,4 @@
 }
 #bootstrap-theme .civicase-view-with-search.case-is-focused .civicase-view-tab-bar.affix {
   width: 1160px;
-}
-
-/* Caseview menu dropdown */
-#bootstrap-theme .dropdown-menu>li {
-  position: relative;
-}
-#bootstrap-theme ul.dropdown-menu li > ul.dropdown-menu.sub-menu {
-  width: 100%;
-  left: -100%;
-  margin-top: -40px;
-  position: absolute;
-}
-#bootstrap-theme ul.dropdown-menu li:hover > ul.dropdown-menu.sub-menu {
-  visibility: visible;
-  opacity: 1;
-  display: block;
-}
+} */

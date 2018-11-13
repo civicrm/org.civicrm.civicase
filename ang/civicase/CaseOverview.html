@@ -1,0 +1,57 @@
+<div class="panel panel-secondary civicase__case-overview">
+  <div class="panel-body" ng-init="loadStatsData()">
+    <div class="civicase__case-overview-container">
+      <div class="civicase__case-overview__flow">
+        <div class="civicase__case-overview__flow-status">
+          Overview
+          <i
+            class="material-icons"
+            ng-click="showHideBreakdown()"
+            ng-if="caseTypesLength > 1">
+            {{showBreakdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+          </i>
+        </div>
+        <div
+          class="civicase__case-overview__flow-status civicase__case-overview__flow-status--hoverable"
+          ng-repeat="(sid, status) in caseStatuses"
+          uib-popover="{{ status.label }}"
+          popover-trigger="'mouseenter'"
+          popover-placement="bottom"
+          popover-class="civicase__case-overview__popup">
+          <div class="civicase__case-overview__flow-status__count">
+            <a ng-href="{{ caseListLink(null, status.name) }}">
+              {{ summaryData.all[sid] || '0' }}
+            </a>
+          </div>
+          <div class="civicase__case-overview__flow-status__description">
+            <span>
+              {{ status.label }}
+            </span>
+          </div>
+          <span class="civicase__case-overview__flow-status__border"  ng-style="{'background-color': status.color}"></span>
+        </div>
+      </div>
+      <div
+        class="civicase__case-overview__breakdown"
+        ng-repeat="(ctid, caseType) in caseTypes"
+        ng-if="showBreakdown">
+        <div class="civicase__case-overview__breakdown-field  civicase__case-overview__breakdown-field--hoverable"
+          uib-popover="{{ caseType.title }}"
+          popover-trigger="'mouseenter'"
+          popover-placement="bottom"
+          popover-class="civicase__case-overview__popup">
+          <a ng-href="{{ caseListLink(caseType.name) }}">
+            {{ caseType.title }}
+          </a>
+        </div>
+        <div
+          class="civicase__case-overview__breakdown-field"
+          ng-repeat="(sid, status) in caseStatuses">             
+          <a ng-href="{{ caseListLink(caseType.name, status.name) }}">
+            {{ summaryData[ctid][sid] || '0' }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

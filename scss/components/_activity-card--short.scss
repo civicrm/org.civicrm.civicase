@@ -1,0 +1,20 @@
+.civicase__activity-card--short {
+  box-shadow: $box-shadow-activity-card;
+  min-height: 100px;
+  position: relative;
+  width: $activity-card-short-width;
+
+  .panel-body {
+    min-height: 100px;
+  }
+
+  .civicase__contact-avatar {
+    margin-top: -10px;
+  }
+
+  .civicase__activity-subject {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

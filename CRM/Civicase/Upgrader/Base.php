@@ -45,7 +45,7 @@ class CRM_Civicase_Upgrader_Base {
     if (!self::$instance) {
       // FIXME auto-generate
       self::$instance = new CRM_Civicase_Upgrader(
-        'org.civicrm.civicase',
+        'uk.co.compucorp.civicase',
         realpath(__DIR__ . '/../../../')
       );
     }
