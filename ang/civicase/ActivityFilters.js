@@ -214,7 +214,6 @@
      */
     function civicaseActivityFiltersAffix (scope, $el, attr) {
       var $filter, $feedBodyPanel, $tabs, $toolbarDrawer;
-      // TODO Check if the attribute can be passed via scope variable
 
       (function init () {
         affixActivityFilters();

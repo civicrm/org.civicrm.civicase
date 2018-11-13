@@ -414,14 +414,8 @@
      */
     function civicaseActivityDetailsAffix (scope, $element, attr) {
       var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
-      // TODO Check if the attribute can be passed via scope variable
-      var affixDisabled = (attr.affixDisabled === 'true');
 
       (function init () {
-        if (affixDisabled) {
-          return;
-        }
-
         affixActivityDetailsPanel();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
@@ -439,10 +433,12 @@
 
           $activityDetailsPanel.affix({
             offset: {
-              top: $element.find('.civicase__activity-panel').offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
+              top: $activityDetailsPanel.offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
               bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
             }
-          }).on('affixed.bs.affix', function () {
+          });
+
+          $activityDetailsPanel.on('affixed.bs.affix', function () {
             $activityDetailsPanel
               .css('top', ($toolbarDrawer.height() + $tabs.height() + $filter.height()))
               .css('padding-top', 32)
