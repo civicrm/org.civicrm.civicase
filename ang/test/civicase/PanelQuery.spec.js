@@ -23,6 +23,42 @@
       }));
     }));
 
+    describe('[name] attribute', function () {
+      beforeEach(function () {
+        spyOn(_, 'uniqueId');
+      });
+
+      describe('when not provided', function () {
+        var randomName;
+
+        beforeEach(function () {
+          randomName = 'panel-query-20';
+
+          _.uniqueId.and.returnValue(randomName);
+          compileDirective();
+        });
+
+        it('generates its own name', function () {
+          expect(_.uniqueId).toHaveBeenCalledWith('panel-query-');
+          expect(panelQueryScope.name).toBe(randomName);
+        });
+      });
+
+      describe('when provided', function () {
+        var givenName = 'foo-bar-baz';
+
+        beforeEach(function () {
+          $scope.panelName = givenName;
+          compileDirective();
+        });
+
+        it('generates its own name', function () {
+          expect(_.uniqueId).not.toHaveBeenCalled();
+          expect(panelQueryScope.name).toBe(givenName);
+        });
+      });
+    });
+
     describe('[query] attribute', function () {
       beforeEach(function () {
         $scope.queryData = { entity: 'Foo', params: { foo: 'foo' } };
@@ -552,6 +588,7 @@
         entity: 'FooBar', params: { foo: 'foo', bar: 'bar' }
       };
 
+      attributes += $scope.panelName ? ' name="' + $scope.panelName + '"' : '';
       attributes += $scope.handlersData ? ' handlers="handlersData"' : '';
       attributes += $scope.customData ? ' custom-data="customData"' : '';
 

@@ -9,6 +9,7 @@
       controller: 'panelQueryCtrl',
       scope: {
         query: '<',
+        name: '@?',
         customData: '<?',
         handlers: '<?'
       },
@@ -57,6 +58,8 @@
     $scope.loadData = loadData;
 
     (function init () {
+      $scope.name = $scope.name || _.uniqueId('panel-query-');
+
       initWatchers();
       verifyData();
       loadData();
