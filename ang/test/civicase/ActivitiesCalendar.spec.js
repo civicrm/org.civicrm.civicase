@@ -80,7 +80,7 @@
           it('loads activities from all cases when selecting a day', function () {
             var apiParams = crmApi.calls.argsFor(0)[2];
 
-            expect(apiParams['case_id.id']).toBeUndefined();
+            expect(apiParams.case_id).toBeUndefined();
           });
 
           describe('case info footer on activity card', function () {
@@ -114,7 +114,7 @@
           it('loads activities from that single cases when selecting a day', function () {
             var apiParams = crmApi.calls.argsFor(0)[2];
 
-            expect(apiParams['case_id.id']).toEqual($scope.caseId);
+            expect(apiParams.case_id).toEqual($scope.caseId);
           });
 
           describe('case info footer on activity card', function () {
@@ -152,7 +152,7 @@
           it('loads activities from all the given cases when selecting a day', function () {
             var apiParams = crmApi.calls.argsFor(0)[2];
 
-            expect(apiParams['case_id.id']).toEqual({ 'IN': [
+            expect(apiParams.case_id).toEqual({ 'IN': [
               $scope.caseId[0], $scope.caseId[1], $scope.caseId[2]
             ]});
           });
@@ -394,7 +394,7 @@
             activity_date_time: {
               BETWEEN: [ formattedDay + ' 00:00:00', formattedDay + ' 23:59:59' ]
             },
-            'case_id.id': $scope.caseId,
+            case_id: $scope.caseId,
             options: { limit: 0 }
           }));
         });

@@ -323,7 +323,7 @@
       params = params || {};
 
       if ($scope.caseId) {
-        params['case_id.id'] = getCaseIdApiParam();
+        params['case_id'] = getCaseIdApiParam();
       }
 
       return crmApi('Activity', 'get', _.assign(params, {
