@@ -1,6 +1,7 @@
 .civicase__activity-panel {
   &.affix {
     position: fixed !important;
+    width: calc(30% - 12px);
   }
 
   .panel {

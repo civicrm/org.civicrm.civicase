@@ -438,13 +438,9 @@
         });
 
         $activityDetailsPanel.on('affixed.bs.affix', function () {
-          $activityDetailsPanel
-            .css('top', getDistanceFromTop())
-            .width($element.width());
+          $activityDetailsPanel.css('top', getDistanceFromTop());
         }).on('affixed-top.bs.affix', function () {
-          $activityDetailsPanel
-            .css('top', 'auto')
-            .css('width', 'auto');
+          $activityDetailsPanel.css('top', 'auto');
         });
       }
 
