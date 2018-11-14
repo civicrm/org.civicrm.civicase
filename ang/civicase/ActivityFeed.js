@@ -446,6 +446,8 @@
 
       /**
        * Returns the Distance of Activity Panel from top of the screen
+       *
+       * @return {Number}
        */
       function getDistanceFromTop () {
         return $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
@@ -453,6 +455,8 @@
 
       /**
        * Returns the offset from bottom for the affix functionality
+       *
+       * @return {Number}
        */
       function getBottomOffset () {
         return $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height());
@@ -460,6 +464,8 @@
 
       /**
        * Returns the offset from top for the affix functionality
+       *
+       * @return {Number}
        */
       function getTopOffset () {
         return $activityDetailsPanel.offset().top - getDistanceFromTop();
