@@ -2,7 +2,7 @@
 
 (function ($, _, moment) {
   describe('civicaseActivitiesCalendarController', function () {
-    var $controller, $q, $scope, $rootScope, crmApi, formatActivity, dates;
+    var $controller, $q, $scope, $rootScope, crmApi, formatActivity, dates, mockedActivities;
 
     beforeEach(module('civicase', 'crmUtil', 'civicase.data', 'ui.bootstrap'));
 
@@ -29,10 +29,9 @@
       });
 
       it('starts loading the days with incomplete activities', function () {
-        expect(crmApi).toHaveBeenCalledWith('Activity', 'getdayswithactivities', {
-          case_id: $scope.caseId,
+        expect(crmApi).toHaveBeenCalledWith('Activity', 'getdayswithactivities', jasmine.objectContaining({
           status_id: { 'IN': CRM.civicase.activityStatusTypes.incomplete }
-        });
+        }));
       });
 
       it('does not load the days with complete activities right away', function () {
@@ -46,10 +45,9 @@
         });
 
         it('loads the days with complete activities', function () {
-          expect(crmApi).toHaveBeenCalledWith('Activity', 'getdayswithactivities', {
-            case_id: $scope.caseId,
+          expect(crmApi).toHaveBeenCalledWith('Activity', 'getdayswithactivities', jasmine.objectContaining({
             status_id: CRM.civicase.activityStatusTypes.completed[0]
-          });
+          }));
         });
 
         it('has triggered the datepicker refresh twice, one for each request', function () {
@@ -58,6 +56,147 @@
           });
         });
       });
+    });
+
+    describe('case id', function () {
+      describe('when none is passed', function () {
+        beforeEach(function () {
+          commonControllerSetup(null);
+        });
+
+        it('loads the days with activities from all cases', function () {
+          var apiParams1 = crmApi.calls.argsFor(0)[2];
+          var apiParams2 = crmApi.calls.argsFor(1)[2];
+
+          expect(apiParams1.case_id).toBeUndefined();
+          expect(apiParams2.case_id).toBeUndefined();
+        });
+
+        describe('when selecting a date with activities', function () {
+          beforeEach(function () {
+            commonDateSelectSetup();
+          });
+
+          it('loads activities from all cases when selecting a day', function () {
+            var apiParams = crmApi.calls.argsFor(0)[2];
+
+            expect(apiParams.case_id).toBeUndefined();
+          });
+
+          describe('case info footer on activity card', function () {
+            it('keeps the `case` property on the activities to display the footer', function () {
+              expect($scope.selectedActivites.every(function (activity) {
+                return typeof activity.case !== 'undefined';
+              })).toBe(true);
+            });
+          });
+        });
+      });
+
+      describe('when one is passed', function () {
+        beforeEach(function () {
+          commonControllerSetup();
+        });
+
+        it('loads the days with activities from that single cases', function () {
+          var apiParams1 = crmApi.calls.argsFor(0)[2];
+          var apiParams2 = crmApi.calls.argsFor(1)[2];
+
+          expect(apiParams1.case_id).toEqual($scope.caseId);
+          expect(apiParams2.case_id).toEqual($scope.caseId);
+        });
+
+        describe('when selecting a date with activities', function () {
+          beforeEach(function () {
+            commonDateSelectSetup();
+          });
+
+          it('loads activities from that single cases when selecting a day', function () {
+            var apiParams = crmApi.calls.argsFor(0)[2];
+
+            expect(apiParams.case_id).toEqual($scope.caseId);
+          });
+
+          describe('case info footer on activity card', function () {
+            it('removes the `case` property on the activities to hide the footer', function () {
+              expect($scope.selectedActivites.every(function (activity) {
+                return typeof activity.case === 'undefined';
+              })).toBe(true);
+            });
+          });
+        });
+      });
+
+      describe('when multiple ids are passed', function () {
+        beforeEach(function () {
+          commonControllerSetup([_.uniqueId(), _.uniqueId(), _.uniqueId()]);
+        });
+
+        it('loads the days with activities from all the given cases', function () {
+          var apiParams1 = crmApi.calls.argsFor(0)[2];
+          var apiParams2 = crmApi.calls.argsFor(1)[2];
+
+          expect(apiParams1.case_id).toEqual({ 'IN': [
+            $scope.caseId[0], $scope.caseId[1], $scope.caseId[2]
+          ]});
+          expect(apiParams2.case_id).toEqual({ 'IN': [
+            $scope.caseId[0], $scope.caseId[1], $scope.caseId[2]
+          ]});
+        });
+
+        describe('when selecting a date with activities', function () {
+          beforeEach(function () {
+            commonDateSelectSetup();
+          });
+
+          it('loads activities from all the given cases when selecting a day', function () {
+            var apiParams = crmApi.calls.argsFor(0)[2];
+
+            expect(apiParams.case_id).toEqual({ 'IN': [
+              $scope.caseId[0], $scope.caseId[1], $scope.caseId[2]
+            ]});
+          });
+
+          describe('case info footer on activity card', function () {
+            it('keeps the `case` property on the activities to display the footer', function () {
+              expect($scope.selectedActivites.every(function (activity) {
+                return typeof activity.case !== 'undefined';
+              })).toBe(true);
+            });
+          });
+        });
+      });
+
+      /**
+       * Common controller setup logic for the "case id" tests
+       *
+       * @param {*} caseIds The case ids to set on the $scope.caseId property
+       */
+      function commonControllerSetup (caseIds) {
+        var caseIdsParam = typeof caseIds !== 'undefined' ? { caseId: caseIds } : null;
+
+        initController(caseIdsParam);
+        returnDateForStatus(dates.today, 'any');
+
+        $rootScope.$emit('civicase::uibDaypicker::compiled');
+        $scope.$digest();
+      }
+
+      /**
+       * Common "onDateSelected" setup logic for the "case id" tests
+       */
+      function commonDateSelectSetup () {
+        generateMockActivities();
+        crmApi.calls.reset();
+        crmApi.and.returnValue($q.resolve({
+          values: mockedActivities
+        }));
+
+        $scope.selectedDate = dates.today;
+
+        $scope.onDateSelected();
+        $scope.$digest();
+      }
     });
 
     describe('calendar options', function () {
@@ -215,8 +354,6 @@
     });
 
     describe('selected activities', function () {
-      var mockedActivities;
-
       beforeEach(function () {
         spyOn($scope, '$emit').and.callThrough();
       });
@@ -257,7 +394,7 @@
             activity_date_time: {
               BETWEEN: [ formattedDay + ' 00:00:00', formattedDay + ' 23:59:59' ]
             },
-            'case_id.id': $scope.caseId,
+            case_id: $scope.caseId,
             options: { limit: 0 }
           }));
         });
@@ -329,22 +466,6 @@
       });
 
       /**
-       * Generates some mock activities, each with an id and some contact ids
-       */
-      function generateMockActivities () {
-        mockedActivities = _.times(5, function () {
-          var obj = {};
-
-          obj['id'] = _.uniqueId();
-          obj['case_id.contacts'] = _.times(2, function () {
-            return { contact_id: _.random(1, 5) };
-          });
-
-          return obj;
-        });
-      }
-
-      /**
        * Initializes the controller so that it's ready to execute the
        * onDateSelected() scope method
        *
@@ -387,6 +508,22 @@
     });
 
     /**
+     * Generates some mock activities, each with an id and some contact ids
+     */
+    function generateMockActivities () {
+      mockedActivities = _.times(5, function () {
+        var obj = {};
+
+        obj['id'] = _.uniqueId();
+        obj['case_id.contacts'] = _.times(2, function () {
+          return { contact_id: _.random(1, 5) };
+        });
+
+        return obj;
+      });
+    }
+
+    /**
      * It returns the given date as part of the response of
      * the Activity.getdayswithactivities endpoint call for the given status type
      *
@@ -412,10 +549,10 @@
     /**
      * Initializes the activities calendar component
      */
-    function initController () {
-      $scope.caseId = _.uniqueId();
-
-      $controller('civicaseActivitiesCalendarController', { $scope: $scope });
+    function initController ($params) {
+      $controller('civicaseActivitiesCalendarController', {
+        $scope: _.assign($scope, { caseId: _.uniqueId() }, $params)
+      });
     }
 
     /**

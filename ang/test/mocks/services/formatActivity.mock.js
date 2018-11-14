@@ -7,6 +7,7 @@
     return jasmine.createSpy('formatActivity')
       .and.callFake(function (activity) {
         activity.category = [];
+        activity.case = {};
 
         return activity;
       });
