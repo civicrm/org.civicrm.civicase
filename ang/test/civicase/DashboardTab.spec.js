@@ -1,12 +1,21 @@
 /* eslint-env jasmine */
 (function ($, _, moment) {
-  describe('dashboardTabController', function () {
-    var $controller, $rootScope, $scope, formatActivity, formatCase;
+  fdescribe('dashboardTabController', function () {
+    var $controller, $rootScope, $scope, crmApi, formatActivity, formatCase,
+      mockedCases;
+
+    function generateMockedCases () {
+      mockedCases = _.times(5, function () {
+        return { id: _.uniqueId() };
+      });
+    }
 
     beforeEach(module('civicase.templates', 'civicase', 'crmUtil'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _formatActivity_, _formatCase_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _crmApi_,
+      _formatActivity_, _formatCase_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      crmApi = _crmApi_;
       formatActivity = _formatActivity_;
       formatCase = _formatCase_;
       $scope = $rootScope.$new();
@@ -16,6 +25,56 @@
         case_filter: { foo: 'foo' }
       };
     }));
+
+    beforeEach(inject(function ($q) {
+      generateMockedCases();
+      crmApi.and.returnValue($q.resolve({
+        values: mockedCases
+      }));
+    }));
+
+    describe('case ids', function () {
+      beforeEach(function () {
+        initController();
+      });
+
+      it('queries the API for the ids of all the cases that match the relationship filter', function () {
+        expect(crmApi).toHaveBeenCalledWith('Case', 'getcaselist', jasmine.objectContaining(_.assign({
+          'status_id.grouping': 'Opened',
+          'return': 'id',
+          sequential: 1,
+          options: {
+            limit: 0
+          }
+        }, $scope.activityFilters.case_filter)));
+      });
+
+      it('stores the list of ids', function () {
+        expect($scope.caseIds).toEqual(mockedCases.map(function (caseObj) {
+          return caseObj.id;
+        }));
+      });
+
+      describe('when the relationship type changes', function () {
+        var newFilterValue;
+
+        beforeEach(function () {
+          newFilterValue = 'bar';
+
+          $scope.filters.caseRelationshipType = 'is_involved';
+          $scope.activityFilters.case_filter.foo = newFilterValue;
+
+          crmApi.calls.reset();
+          $scope.$digest();
+        });
+
+        it('adds the properties of the `case_filter` object to the query params', function () {
+          expect(crmApi).toHaveBeenCalledWith('Case', 'getcaselist', jasmine.objectContaining({
+            foo: newFilterValue
+          }));
+        });
+      });
+    });
 
     describe('panel-query panel: new cases', function () {
       beforeEach(function () {

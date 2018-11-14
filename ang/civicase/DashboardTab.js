@@ -12,8 +12,7 @@
   module.controller('dashboardTabController', dashboardTabController);
 
   function dashboardTabController ($location, $rootScope, $route, $scope,
-    ContactsDataService, formatCase,
-    formatActivity) {
+    ContactsDataService, crmApi, formatCase, formatActivity) {
     var ACTIVITIES_QUERY_PARAMS_DEFAULTS = {
       'contact_id': 'user_contact_id',
       'is_current_revision': 1,
@@ -57,6 +56,7 @@
       milestones: MILESTONES_QUERY_PARAMS_DEFAULTS
     };
 
+    $scope.caseIds = null;
     $scope.activitiesPanel = {
       query: { entity: 'Activity', params: getQueryParams('activities') },
       custom: {
@@ -68,7 +68,6 @@
         results: _.curry(resultsHandler)(formatActivity)('case_id.contacts')
       }
     };
-
     $scope.newMilestonesPanel = {
       query: { entity: 'Activity', params: getQueryParams('milestones') },
       custom: {
@@ -80,7 +79,6 @@
         results: _.curry(resultsHandler)(formatActivity)('case_id.contacts')
       }
     };
-
     $scope.newCasesPanel = {
       custom: { itemName: 'cases', caseClick: casesCustomClick },
       query: { entity: 'Case', action: 'getcaselist', params: getQueryParams('cases') },
@@ -92,6 +90,7 @@
 
     (function init () {
       initWatchers();
+      loadCaseIds();
     }());
 
     /**
@@ -125,11 +124,15 @@
      */
     function initWatchers () {
       $scope.$watchCollection('filters.caseRelationshipType', function (newType, oldType) {
-        if (newType !== oldType) {
-          $scope.activitiesPanel.query.params = getQueryParams('activities');
-          $scope.newCasesPanel.query.params = getQueryParams('cases');
-          $scope.newMilestonesPanel.query.params = getQueryParams('milestones');
+        if (newType === oldType) {
+          return;
         }
+
+        $scope.activitiesPanel.query.params = getQueryParams('activities');
+        $scope.newCasesPanel.query.params = getQueryParams('cases');
+        $scope.newMilestonesPanel.query.params = getQueryParams('milestones');
+
+        loadCaseIds();
       });
 
       // When the involvement filters change, broadcast the event that will be
@@ -160,6 +163,26 @@
           true
         );
       }, true);
+    }
+
+    /**
+     * It fetches and stores the ids of all the open cases that match the
+     * current relationship filter's value.
+     *
+     * The ids are used for the activities calendar
+     */
+    function loadCaseIds () {
+      crmApi('Case', 'getcaselist', _.assign({
+        'status_id.grouping': 'Opened',
+        'return': 'id',
+        sequential: 1,
+        options: { limit: 0 }
+      }, $scope.activityFilters.case_filter))
+        .then(function (result) {
+          $scope.caseIds = result.values.map(function (caseObj) {
+            return caseObj.id;
+          });
+        });
     }
 
     /**
