@@ -2,7 +2,7 @@
 
 (function ($, _, moment) {
   describe('civicaseActivitiesCalendarController', function () {
-    var $controller, $q, $scope, $rootScope, crmApi, formatActivity, dates;
+    var $controller, $q, $scope, $rootScope, crmApi, formatActivity, dates, mockedActivities;
 
     beforeEach(module('civicase', 'crmUtil', 'civicase.data', 'ui.bootstrap'));
 
@@ -82,6 +82,14 @@
 
             expect(apiParams['case_id.id']).toBeUndefined();
           });
+
+          describe('case info footer on activity card', function () {
+            it('keeps the `case` property on the activities to display the footer', function () {
+              expect($scope.selectedActivites.every(function (activity) {
+                return typeof activity.case !== 'undefined';
+              })).toBe(true);
+            });
+          });
         });
       });
 
@@ -107,6 +115,14 @@
             var apiParams = crmApi.calls.argsFor(0)[2];
 
             expect(apiParams['case_id.id']).toEqual($scope.caseId);
+          });
+
+          describe('case info footer on activity card', function () {
+            it('removes the `case` property on the activities to hide the footer', function () {
+              expect($scope.selectedActivites.every(function (activity) {
+                return typeof activity.case === 'undefined';
+              })).toBe(true);
+            });
           });
         });
       });
@@ -140,6 +156,14 @@
               $scope.caseId[0], $scope.caseId[1], $scope.caseId[2]
             ]});
           });
+
+          describe('case info footer on activity card', function () {
+            it('keeps the `case` property on the activities to display the footer', function () {
+              expect($scope.selectedActivites.every(function (activity) {
+                return typeof activity.case !== 'undefined';
+              })).toBe(true);
+            });
+          });
         });
       });
 
@@ -162,11 +186,16 @@
        * Common "onDateSelected" setup logic for the "case id" tests
        */
       function commonDateSelectSetup () {
+        generateMockActivities();
         crmApi.calls.reset();
-        crmApi.and.returnValue($q.resolve());
+        crmApi.and.returnValue($q.resolve({
+          values: mockedActivities
+        }));
+
         $scope.selectedDate = dates.today;
 
         $scope.onDateSelected();
+        $scope.$digest();
       }
     });
 
@@ -325,8 +354,6 @@
     });
 
     describe('selected activities', function () {
-      var mockedActivities;
-
       beforeEach(function () {
         spyOn($scope, '$emit').and.callThrough();
       });
@@ -439,22 +466,6 @@
       });
 
       /**
-       * Generates some mock activities, each with an id and some contact ids
-       */
-      function generateMockActivities () {
-        mockedActivities = _.times(5, function () {
-          var obj = {};
-
-          obj['id'] = _.uniqueId();
-          obj['case_id.contacts'] = _.times(2, function () {
-            return { contact_id: _.random(1, 5) };
-          });
-
-          return obj;
-        });
-      }
-
-      /**
        * Initializes the controller so that it's ready to execute the
        * onDateSelected() scope method
        *
@@ -495,6 +506,22 @@
         expect(crmApi.calls.count()).toBe(2);
       });
     });
+
+    /**
+     * Generates some mock activities, each with an id and some contact ids
+     */
+    function generateMockActivities () {
+      mockedActivities = _.times(5, function () {
+        var obj = {};
+
+        obj['id'] = _.uniqueId();
+        obj['case_id.contacts'] = _.times(2, function () {
+          return { contact_id: _.random(1, 5) };
+        });
+
+        return obj;
+      });
+    }
 
     /**
      * It returns the given date as part of the response of

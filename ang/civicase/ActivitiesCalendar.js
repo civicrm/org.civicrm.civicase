@@ -237,6 +237,26 @@
     }
 
     /**
+     * Formats the given activity to be displayed on an activity card
+     *
+     * If the calendar is set to display the activities of only one case, then
+     * the `case` property is removed from each activity object, so that the footer
+     * with the case info won't be displayed on the card
+     *
+     * @param {Object} activity
+     * @return {Object}
+     */
+    function formatActivityCardData (activity) {
+      activity = formatActivity(activity);
+
+      if ($scope.caseId && (!_.isArray($scope.caseId) || $scope.caseId.length === 1)) {
+        delete activity.case;
+      }
+
+      return activity;
+    }
+
+    /**
      * Prepares the value of the case_id api param based on the $scope.caseId property
      *
      * @return {Number/Object}
@@ -344,7 +364,7 @@
         }
       })
         .then(function (activities) {
-          day.activitiesCache = activities.map(formatActivity);
+          day.activitiesCache = activities.map(formatActivityCardData);
 
           return day.activitiesCache;
         });
