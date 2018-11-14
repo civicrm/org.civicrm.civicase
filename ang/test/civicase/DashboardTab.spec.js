@@ -76,6 +76,20 @@
       });
     });
 
+    describe('activityCardRefresh callback', function () {
+      beforeEach(function () {
+        spyOn($rootScope, '$emit');
+        initController();
+
+        $scope.activityCardRefresh();
+        $scope.$digest();
+      });
+
+      it('emits the calendar refresh event', function () {
+        expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+      });
+    });
+
     describe('panel-query panel: new cases', function () {
       beforeEach(function () {
         initController();

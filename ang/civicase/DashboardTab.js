@@ -88,10 +88,30 @@
       }
     };
 
+    $scope.activityCardRefresh = activityCardRefresh;
+
     (function init () {
       initWatchers();
       loadCaseIds();
     }());
+
+    /**
+     * The refresh callback passed to the activity cards
+     *
+     * Unfortunately the activity card expects the callback to handle api calls
+     * for it, hence the `apiCalls` param and the usage of `crmApi`
+     *
+     * @see {@link https://github.com/compucorp/uk.co.compucorp.civicase/blob/develop/ang/civicase/ActivityCard.js#L97}
+     */
+    function activityCardRefresh (apiCalls) {
+      if (!_.isArray(apiCalls)) {
+        apiCalls = [];
+      }
+
+      crmApi(apiCalls).then(function (result) {
+        $rootScope.$emit('civicase::ActivitiesCalendar::reload');
+      });
+    }
 
     /**
      * Click handler that redirects the browser to the given case's details page
