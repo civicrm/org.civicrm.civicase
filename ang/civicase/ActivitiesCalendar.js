@@ -418,6 +418,9 @@
       return crmApi('Activity', 'getdayswithactivities', params)
         .then(function (result) {
           return result.values;
+        })
+        .catch(function () {
+          return [];
         });
     }
 
