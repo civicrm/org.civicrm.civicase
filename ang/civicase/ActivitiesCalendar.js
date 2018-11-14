@@ -209,7 +209,7 @@
      * @param {String} status
      */
     function addDays (days, status) {
-      days.values.reduce(function (acc, date) {
+      days.reduce(function (acc, date) {
         var keepDay = acc[date] && acc[date].status === 'incomplete' && !acc[date].toFlush;
 
         acc[date] = keepDay ? acc[date] : {
@@ -415,7 +415,10 @@
         params.case_id = getCaseIdApiParam();
       }
 
-      return crmApi('Activity', 'getdayswithactivities', params);
+      return crmApi('Activity', 'getdayswithactivities', params)
+        .then(function (result) {
+          return result.values;
+        });
     }
 
     /**
