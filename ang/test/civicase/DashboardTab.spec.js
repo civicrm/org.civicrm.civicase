@@ -15,11 +15,13 @@
       $scope.activityFilters = {
         case_filter: { foo: 'foo' }
       };
-
-      initController();
     }));
 
     describe('panel-query panel: new cases', function () {
+      beforeEach(function () {
+        initController();
+      });
+
       it('is defined', function () {
         expect($scope.newCasesPanel).toBeDefined();
       });
@@ -179,6 +181,10 @@
     });
 
     describe('panel-query panel: new milestones', function () {
+      beforeEach(function () {
+        initController();
+      });
+
       it('is defined', function () {
         expect($scope.newMilestonesPanel).toBeDefined();
       });
@@ -372,6 +378,10 @@
     });
 
     describe('panel-query panel: activities', function () {
+      beforeEach(function () {
+        initController();
+      });
+
       it('is defined', function () {
         expect($scope.activitiesPanel).toBeDefined();
       });
