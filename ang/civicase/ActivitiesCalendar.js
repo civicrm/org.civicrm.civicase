@@ -193,8 +193,8 @@
     };
 
     (function init () {
-      $rootScope.$on('civicase::uibDaypicker::compiled', load);
-      $rootScope.$on('civicase::ActivitiesCalendar::reload', reload);
+      initListeners();
+      initWatchers();
     }());
 
     /**
@@ -296,6 +296,24 @@
       }
 
       return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--' + classSuffix;
+    }
+
+    /**
+     * Initializes the controller's listeners
+     */
+    function initListeners () {
+      $rootScope.$on('civicase::uibDaypicker::compiled', load);
+      $rootScope.$on('civicase::ActivitiesCalendar::reload', reload);
+    }
+
+    /**
+     * Initializes the controller's watchers
+     */
+    function initWatchers () {
+      // Trigger a full reload if the value of the given case id(s) changes
+      $scope.$watch('caseId', function (newValue, oldValue) {
+        newValue !== oldValue && reload();
+      });
     }
 
     /**

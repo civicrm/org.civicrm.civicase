@@ -167,6 +167,32 @@
         });
       });
 
+      describe('when the case id value changes afterwards', function () {
+        var oldCaseId, newCaseId;
+
+        beforeEach(function () {
+          oldCaseId = 20;
+          newCaseId = 30;
+
+          commonControllerSetup(oldCaseId);
+          crmApi.calls.reset();
+
+          $scope.caseId = newCaseId;
+          $scope.$digest();
+        });
+
+        it('triggers a full reload', function () {
+          expect(crmApi.calls.count()).toBe(2);
+
+          _.times(2, function (i) {
+            expect(crmApi.calls.argsFor(i)).toEqual([
+              'Activity', 'getdayswithactivities', jasmine.objectContaining({
+                case_id: newCaseId
+              })
+            ]);
+          });
+        });
+      });
       /**
        * Common controller setup logic for the "case id" tests
        *

@@ -4,7 +4,10 @@
   </div>
   <div class="civicase__dashboard__tab__main">
     <div class="civicase__dashboard__tab__col-wrapper">
-      <div class="civicase__dashboard__tab__col civicase__dashboard__tab__col--left"></div>
+      <div class="civicase__dashboard__tab__col civicase__dashboard__tab__col--left">
+        <civicase-activities-calendar ng-if="caseIds" case-id="caseIds"></civicase-activities-calendar>
+        <civicase-activities-calendar-placeholder ng-if="!caseIds" style="padding-top: 0;"></civicase-activities-calendar-placeholder>
+      </div>
       <div class="civicase__dashboard__tab__col civicase__dashboard__tab__col--right">
         <!-- New Cases -->
         <civicase-panel-query query="newCasesPanel.query" handlers="newCasesPanel.handlers" custom-data="newCasesPanel.custom">

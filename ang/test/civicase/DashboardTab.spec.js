@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 (function ($, _, moment) {
-  fdescribe('dashboardTabController', function () {
+  describe('dashboardTabController', function () {
     var $controller, $rootScope, $scope, crmApi, formatActivity, formatCase,
       mockedCases;
 
