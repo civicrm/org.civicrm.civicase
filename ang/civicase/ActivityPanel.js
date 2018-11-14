@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityPanel', function ($rootScope, $timeout, BulkActions) {
+  module.directive('civicaseActivityPanel', function ($rootScope, BulkActions) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityPanel.html',
@@ -66,14 +66,12 @@
        * Set height for activity panel
        */
       function setPanelHeight () {
-        $timeout(function () {
-          var $filter = $('.civicase__activity-filter');
-          var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-          var $toolbarDrawer = $('#toolbar');
-          var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
+        var $filter = $('.civicase__activity-filter');
+        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
+        var $toolbarDrawer = $('#toolbar');
+        var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
 
-          element.height('calc(100vh - ' + topOffset + 'px)');
-        });
+        element.height('calc(100vh - ' + topOffset + 'px)');
       }
 
       /**
