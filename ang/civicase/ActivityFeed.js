@@ -400,7 +400,7 @@
     }
   }
 
-  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document, $rootScope) {
+  module.directive('civicaseActivityDetailsAffix', function ($timeout, $rootScope, ActivityPanelMeasurements) {
     return {
       link: civicaseActivityDetailsAffix
     };
@@ -413,9 +413,12 @@
      * @param {Object} attr
      */
     function civicaseActivityDetailsAffix (scope, $element, attr) {
-      var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
+      var $activityDetailsPanel, activityPanelMeasurements;
 
       (function init () {
+        $activityDetailsPanel = $element.find('.civicase__activity-panel');
+        activityPanelMeasurements = ActivityPanelMeasurements($activityDetailsPanel);
+
         affixActivityDetailsPanel();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
@@ -424,51 +427,18 @@
        * Sets Activity Details Panel affix offsets
        */
       function affixActivityDetailsPanel () {
-        $activityDetailsPanel = $element.find('.civicase__activity-panel');
-        $filter = $('.civicase__activity-filter');
-        $feedListContainer = $('.civicase__activity-feed__list-container');
-        $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-        $toolbarDrawer = $('#toolbar');
-
         $activityDetailsPanel.affix({
           offset: {
-            top: getTopOffset(),
-            bottom: getBottomOffset()
+            top: activityPanelMeasurements.getTopOffset(),
+            bottom: activityPanelMeasurements.getBottomOffset()
           }
         });
 
         $activityDetailsPanel.on('affixed.bs.affix', function () {
-          $activityDetailsPanel.css('top', getDistanceFromTop());
+          $activityDetailsPanel.css('top', activityPanelMeasurements.getDistanceFromTop());
         }).on('affixed-top.bs.affix', function () {
           $activityDetailsPanel.css('top', 'auto');
         });
-      }
-
-      /**
-       * Returns the Distance of Activity Panel from top of the screen
-       *
-       * @return {Number}
-       */
-      function getDistanceFromTop () {
-        return $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
-      }
-
-      /**
-       * Returns the offset from bottom for the affix functionality
-       *
-       * @return {Number}
-       */
-      function getBottomOffset () {
-        return $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height());
-      }
-
-      /**
-       * Returns the offset from top for the affix functionality
-       *
-       * @return {Number}
-       */
-      function getTopOffset () {
-        return $activityDetailsPanel.offset().top - getDistanceFromTop();
       }
 
       /**
@@ -477,8 +447,8 @@
       function resetAffix () {
         $timeout(function () {
           if ($activityDetailsPanel.data('bs.affix')) {
-            $activityDetailsPanel.data('bs.affix').options.offset.top = getTopOffset();
-            $activityDetailsPanel.data('bs.affix').options.offset.bottom = getBottomOffset();
+            $activityDetailsPanel.data('bs.affix').options.offset.top = activityPanelMeasurements.getTopOffset();
+            $activityDetailsPanel.data('bs.affix').options.offset.bottom = activityPanelMeasurements.getBottomOffset();
           }
         });
       }

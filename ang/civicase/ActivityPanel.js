@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityPanel', function ($rootScope, BulkActions) {
+  module.directive('civicaseActivityPanel', function ($rootScope, ActivityPanelMeasurements, BulkActions) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityPanel.html',
@@ -20,9 +20,12 @@
      * @param {Object} element
      */
     function civicaseActivityPanelLink (scope, element, attrs) {
+      var activityPanelMeasurements;
       var ts = CRM.ts('civicase');
 
       (function init () {
+        activityPanelMeasurements = ActivityPanelMeasurements(element);
+
         setPanelHeight();
         $rootScope.$on('civicase::activity-card::load-activity-form', loadActivityForm);
         element.on('crmFormSuccess', scope.refresh);
@@ -66,10 +69,7 @@
        * Set height for activity panel
        */
       function setPanelHeight () {
-        var $filter = $('.civicase__activity-filter');
-        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-        var $toolbarDrawer = $('#toolbar');
-        var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
+        var topOffset = activityPanelMeasurements.getDistanceFromTop();
 
         element.height('calc(100vh - ' + topOffset + 'px)');
       }
@@ -78,17 +78,10 @@
        * Set height for activity panel body
        */
       function setPanelBodyHeight () {
-        var $filter = $('.civicase__activity-filter');
-        var $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-        var $toolbarDrawer = $('#toolbar');
-        var $body = element.find('.panel-body');
-        var $header = element.find('.panel-heading');
-        var $subheader = element.find('.panel-subheading');
-        var $actionBar = element.find('.crm-submit-buttons');
-        var topOffset = $toolbarDrawer.height() + $tabs.height() + $filter.outerHeight();
-        var bodyTopOffset = topOffset + $header.outerHeight() + $subheader.outerHeight() + $actionBar.outerHeight();
+        var $panelBody = element.find('.panel-body');
+        var bodyTopOffset = activityPanelMeasurements.getPanelBodyTopOffset();
 
-        $body.height('calc(100vh - ' + bodyTopOffset + 'px)');
+        $panelBody.height('calc(100vh - ' + bodyTopOffset + 'px)');
       }
 
       /**

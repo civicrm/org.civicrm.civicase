@@ -107,6 +107,8 @@
 
     afterEach(function () {
       CRM.$.fn.affix = affixOriginalFunction;
+
+      removeTestDomElements();
     });
 
     describe('when initialised', function () {
@@ -120,6 +122,10 @@
         $toolbarDrawer = CRM.$('#toolbar');
 
         compileDirective();
+      });
+
+      afterEach(function () {
+        removeTestDomElements();
       });
 
       it('applies static positioning to the activity details', function () {
@@ -171,11 +177,23 @@
       });
     });
 
+    /**
+     * Compiles the directive and appends test DOM elements to the body.
+     */
     function compileDirective () {
       CRM.$('<div class="civicase__activity-feed__list-container"></div>').appendTo('body');
       CRM.$('<div class="civicase__activity-filter"></div>').appendTo('body');
       CRM.$('<div id="toolbar"></div>').appendTo('body');
       element = $compile(angular.element('<div civicase-activity-details-affix><div class="civicase__activity-panel"></div></div>'))(scope);
+    }
+
+    /**
+     * Removes DOM elements added for testing purposes.
+     */
+    function removeTestDomElements () {
+      CRM.$('.civicase__activity-feed__list-container').remove();
+      CRM.$('.civicase__activity-filter').remove();
+      CRM.$('#toolbar').remove();
     }
   });
 })(CRM._);
