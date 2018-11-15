@@ -12,8 +12,7 @@
   module.controller('dashboardTabController', dashboardTabController);
 
   function dashboardTabController ($location, $rootScope, $route, $scope,
-    ContactsDataService, formatCase,
-    formatActivity) {
+    ContactsDataService, crmApi, formatCase, formatActivity) {
     var ACTIVITIES_QUERY_PARAMS_DEFAULTS = {
       'contact_id': 'user_contact_id',
       'is_current_revision': 1,
@@ -57,30 +56,33 @@
       milestones: MILESTONES_QUERY_PARAMS_DEFAULTS
     };
 
+    $scope.caseIds = null;
     $scope.activitiesPanel = {
+      name: 'activities',
       query: { entity: 'Activity', params: getQueryParams('activities') },
       custom: {
         itemName: 'activities',
-        involvementFilter: { '@involvingContact': 'myActivities' }
+        involvementFilter: { '@involvingContact': 'myActivities' },
+        cardRefresh: activityCardRefreshActivities
       },
       handlers: {
         range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(false),
         results: _.curry(resultsHandler)(formatActivity)('case_id.contacts')
       }
     };
-
     $scope.newMilestonesPanel = {
+      name: 'milestones',
       query: { entity: 'Activity', params: getQueryParams('milestones') },
       custom: {
         itemName: 'milestones',
-        involvementFilter: { '@involvingContact': 'myActivities' }
+        involvementFilter: { '@involvingContact': 'myActivities' },
+        cardRefresh: activityCardRefreshMilestones
       },
       handlers: {
         range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(true),
         results: _.curry(resultsHandler)(formatActivity)('case_id.contacts')
       }
     };
-
     $scope.newCasesPanel = {
       custom: { itemName: 'cases', caseClick: casesCustomClick },
       query: { entity: 'Case', action: 'getcaselist', params: getQueryParams('cases') },
@@ -90,9 +92,65 @@
       }
     };
 
+    $scope.activityCardRefreshCalendar = activityCardRefreshCalendar;
+
     (function init () {
       initWatchers();
+      loadCaseIds();
     }());
+
+    /**
+     * Refresh callback triggered by activity cards in the activities panel
+     *
+     * @param {Array} [apiCalls]
+     */
+    function activityCardRefreshActivities (apiCalls) {
+      activityCardRefresh($scope.activitiesPanel.name, apiCalls);
+    }
+
+    /**
+     * Refresh callback triggered by activity cards in the calendar
+     *
+     * @param {Array} [apiCalls]
+     */
+    function activityCardRefreshCalendar (apiCalls) {
+      activityCardRefresh([
+        $scope.activitiesPanel.name,
+        $scope.newMilestonesPanel.name
+      ], apiCalls);
+    }
+
+    /**
+     * Refresh callback triggered by activity cards in the milestones panel
+     *
+     * @param {Array} [apiCalls]
+     */
+    function activityCardRefreshMilestones (apiCalls) {
+      activityCardRefresh($scope.newMilestonesPanel.name, apiCalls);
+    }
+
+    /**
+     * The common refresh callback logic triggered by the activity cards in the dashboard
+     * It reloads of the calendar and the panel(s) with the given name(s)
+     *
+     * Unfortunately the activity card expects the callback to handle api calls
+     * for it, hence the `apiCalls` param and the usage of `crmApi`
+     *
+     * @see {@link https://github.com/compucorp/uk.co.compucorp.civicase/blob/develop/ang/civicase/ActivityCard.js#L97}
+     *
+     * @param {Array/String} panelName the name of the panel to refresh
+     * @param {Array} [apiCalls]
+     */
+    function activityCardRefresh (panelName, apiCalls) {
+      if (!_.isArray(apiCalls)) {
+        apiCalls = [];
+      }
+
+      crmApi(apiCalls).then(function (result) {
+        $rootScope.$emit('civicase::ActivitiesCalendar::reload');
+        $rootScope.$emit('civicase::PanelQuery::reload', panelName);
+      });
+    }
 
     /**
      * Click handler that redirects the browser to the given case's details page
@@ -125,11 +183,15 @@
      */
     function initWatchers () {
       $scope.$watchCollection('filters.caseRelationshipType', function (newType, oldType) {
-        if (newType !== oldType) {
-          $scope.activitiesPanel.query.params = getQueryParams('activities');
-          $scope.newCasesPanel.query.params = getQueryParams('cases');
-          $scope.newMilestonesPanel.query.params = getQueryParams('milestones');
+        if (newType === oldType) {
+          return;
         }
+
+        $scope.activitiesPanel.query.params = getQueryParams('activities');
+        $scope.newCasesPanel.query.params = getQueryParams('cases');
+        $scope.newMilestonesPanel.query.params = getQueryParams('milestones');
+
+        loadCaseIds();
       });
 
       // When the involvement filters change, broadcast the event that will be
@@ -160,6 +222,26 @@
           true
         );
       }, true);
+    }
+
+    /**
+     * It fetches and stores the ids of all the open cases that match the
+     * current relationship filter's value.
+     *
+     * The ids are used for the activities calendar
+     */
+    function loadCaseIds () {
+      crmApi('Case', 'getcaselist', _.assign({
+        'status_id.grouping': 'Opened',
+        'return': 'id',
+        sequential: 1,
+        options: { limit: 0 }
+      }, $scope.activityFilters.case_filter))
+        .then(function (result) {
+          $scope.caseIds = result.values.map(function (caseObj) {
+            return caseObj.id;
+          });
+        });
     }
 
     /**

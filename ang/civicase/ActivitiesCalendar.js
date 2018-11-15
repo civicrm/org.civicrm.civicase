@@ -154,6 +154,7 @@
     formatActivity, ContactsDataService) {
     var daysWithActivities = {};
 
+    $scope.loadingDays = false;
     $scope.loadingActivities = false;
     $scope.selectedActivites = [];
     $scope.selectedDate = null;
@@ -193,8 +194,8 @@
     };
 
     (function init () {
-      $rootScope.$on('civicase::uibDaypicker::compiled', load);
-      $rootScope.$on('civicase::ActivitiesCalendar::reload', reload);
+      initListeners();
+      initWatchers();
     }());
 
     /**
@@ -209,7 +210,7 @@
      * @param {String} status
      */
     function addDays (days, status) {
-      days.values.reduce(function (acc, date) {
+      days.reduce(function (acc, date) {
         var keepDay = acc[date] && acc[date].status === 'incomplete' && !acc[date].toFlush;
 
         acc[date] = keepDay ? acc[date] : {
@@ -299,9 +300,29 @@
     }
 
     /**
+     * Initializes the controller's listeners
+     */
+    function initListeners () {
+      $rootScope.$on('civicase::uibDaypicker::compiled', load);
+      $rootScope.$on('civicase::ActivitiesCalendar::reload', reload);
+    }
+
+    /**
+     * Initializes the controller's watchers
+     */
+    function initWatchers () {
+      // Trigger a full reload if the value of the given case id(s) changes
+      $scope.$watch('caseId', function (newValue, oldValue) {
+        newValue !== oldValue && reload();
+      });
+    }
+
+    /**
      * Entry point of the load logic
      */
     function load () {
+      $scope.loadingDays = true;
+
       loadDaysWithActivitiesIncomplete()
         .then(function () {
           $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
@@ -309,6 +330,9 @@
         .then(loadDaysWithActivitiesCompleted)
         .then(function () {
           $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+        })
+        .then(function () {
+          $scope.loadingDays = false;
         });
     }
 
@@ -397,7 +421,13 @@
         params.case_id = getCaseIdApiParam();
       }
 
-      return crmApi('Activity', 'getdayswithactivities', params);
+      return crmApi('Activity', 'getdayswithactivities', params)
+        .then(function (result) {
+          return result.values;
+        })
+        .catch(function () {
+          return [];
+        });
     }
 
     /**

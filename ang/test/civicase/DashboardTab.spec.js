@@ -1,12 +1,21 @@
 /* eslint-env jasmine */
 (function ($, _, moment) {
   describe('dashboardTabController', function () {
-    var $controller, $rootScope, $scope, formatActivity, formatCase;
+    var $controller, $rootScope, $scope, crmApi, formatActivity, formatCase,
+      mockedCases;
+
+    function generateMockedCases () {
+      mockedCases = _.times(5, function () {
+        return { id: _.uniqueId() };
+      });
+    }
 
     beforeEach(module('civicase.templates', 'civicase', 'crmUtil'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _formatActivity_, _formatCase_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _crmApi_,
+      _formatActivity_, _formatCase_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      crmApi = _crmApi_;
       formatActivity = _formatActivity_;
       formatCase = _formatCase_;
       $scope = $rootScope.$new();
@@ -15,11 +24,84 @@
       $scope.activityFilters = {
         case_filter: { foo: 'foo' }
       };
-
-      initController();
     }));
 
+    beforeEach(inject(function ($q) {
+      generateMockedCases();
+      crmApi.and.returnValue($q.resolve({
+        values: mockedCases
+      }));
+    }));
+
+    describe('case ids', function () {
+      beforeEach(function () {
+        initController();
+      });
+
+      it('queries the API for the ids of all the cases that match the relationship filter', function () {
+        expect(crmApi).toHaveBeenCalledWith('Case', 'getcaselist', jasmine.objectContaining(_.assign({
+          'status_id.grouping': 'Opened',
+          'return': 'id',
+          sequential: 1,
+          options: {
+            limit: 0
+          }
+        }, $scope.activityFilters.case_filter)));
+      });
+
+      it('stores the list of ids', function () {
+        expect($scope.caseIds).toEqual(mockedCases.map(function (caseObj) {
+          return caseObj.id;
+        }));
+      });
+
+      describe('when the relationship type changes', function () {
+        var newFilterValue;
+
+        beforeEach(function () {
+          newFilterValue = 'bar';
+
+          $scope.filters.caseRelationshipType = 'is_involved';
+          $scope.activityFilters.case_filter.foo = newFilterValue;
+
+          crmApi.calls.reset();
+          $scope.$digest();
+        });
+
+        it('adds the properties of the `case_filter` object to the query params', function () {
+          expect(crmApi).toHaveBeenCalledWith('Case', 'getcaselist', jasmine.objectContaining({
+            foo: newFilterValue
+          }));
+        });
+      });
+    });
+
+    describe('refresh callback for activity cards in the calendar', function () {
+      beforeEach(function () {
+        spyOn($rootScope, '$emit');
+        initController();
+
+        $scope.activityCardRefreshCalendar();
+        $scope.$digest();
+      });
+
+      it('emits the calendar reload event', function () {
+        expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+      });
+
+      it('reload both the activities and milestone panels', function () {
+        expect($rootScope.$emit).toHaveBeenCalledWith('civicase::PanelQuery::reload', [
+          'activities',
+          'milestones'
+        ]);
+      });
+    });
+
     describe('panel-query panel: new cases', function () {
+      beforeEach(function () {
+        initController();
+      });
+
       it('is defined', function () {
         expect($scope.newCasesPanel).toBeDefined();
       });
@@ -179,8 +261,16 @@
     });
 
     describe('panel-query panel: new milestones', function () {
+      beforeEach(function () {
+        initController();
+      });
+
       it('is defined', function () {
         expect($scope.newMilestonesPanel).toBeDefined();
+      });
+
+      it('has a name defined', function () {
+        expect($scope.newMilestonesPanel.name).toBe('milestones');
       });
 
       describe('query', function () {
@@ -350,6 +440,32 @@
             });
           });
         });
+
+        describe('refresh callback for activity cards', function () {
+          it('is defined', function () {
+            expect($scope.newMilestonesPanel.custom.cardRefresh).toBeDefined();
+          });
+
+          describe('when called', function () {
+            beforeEach(function () {
+              spyOn($rootScope, '$emit');
+
+              $scope.newMilestonesPanel.custom.cardRefresh();
+              $scope.$digest();
+            });
+
+            it('emits the calendar reload event', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+            });
+
+            it('reloads its own panel', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith(
+                'civicase::PanelQuery::reload',
+                $scope.newMilestonesPanel.name
+              );
+            });
+          });
+        });
       });
 
       describe('when the relationship type changes', function () {
@@ -372,8 +488,16 @@
     });
 
     describe('panel-query panel: activities', function () {
+      beforeEach(function () {
+        initController();
+      });
+
       it('is defined', function () {
         expect($scope.activitiesPanel).toBeDefined();
+      });
+
+      it('has a name defined', function () {
+        expect($scope.activitiesPanel.name).toBe('activities');
       });
 
       describe('query', function () {
@@ -539,6 +663,32 @@
                 $scope.activitiesPanel.custom.involvementFilter,
                 $scope.activitiesPanel.query.params,
                 true
+              );
+            });
+          });
+        });
+
+        describe('refresh callback for activity cards', function () {
+          it('is defined', function () {
+            expect($scope.activitiesPanel.custom.cardRefresh).toBeDefined();
+          });
+
+          describe('when called', function () {
+            beforeEach(function () {
+              spyOn($rootScope, '$emit');
+
+              $scope.activitiesPanel.custom.cardRefresh();
+              $scope.$digest();
+            });
+
+            it('emits the calendar reload event', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+            });
+
+            it('reloads its own panel', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith(
+                'civicase::PanelQuery::reload',
+                $scope.activitiesPanel.name
               );
             });
           });
