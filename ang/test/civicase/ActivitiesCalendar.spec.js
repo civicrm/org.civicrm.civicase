@@ -22,6 +22,7 @@
 
     describe('when uib-datepicker signals that it is ready', function () {
       var endOfMonth, startOfMonth;
+
       beforeEach(function () {
         startOfMonth = moment(dates.today).startOf('month').format('YYYY-MM-DD');
         endOfMonth = moment(dates.today).endOf('month').format('YYYY-MM-DD');
@@ -540,6 +541,54 @@
 
       it('triggers a full reload', function () {
         expect(crmApi.calls.count()).toBe(2);
+      });
+    });
+
+    describe('when the date picker selects a month', function () {
+      var allArgs, endOfMonth, selectedMoment, startOfMonth;
+
+      beforeEach(function () {
+        selectedMoment = moment();
+        startOfMonth = selectedMoment.startOf('month').format('YYYY-MM-DD');
+        endOfMonth = selectedMoment.endOf('month').format('YYYY-MM-DD');
+
+        initControllerAndEmitDatepickerReadyEvent();
+        crmApi.calls.reset();
+        $rootScope.$emit('civicase::uibDaypicker::monthSelected', selectedMoment.toDate());
+        $scope.$digest();
+
+        allArgs = crmApi.calls.allArgs();
+      });
+
+      // @NOTE: the function that loads the data when a new month is selected
+      // is debounced to avoid flooding, and as such can't be tested normally
+      // The use of `done` and `setTimeout` is necessary for jasmine to
+      // wait the next tick loop before testing the assertions
+
+      it('does not invoke the load function before 300ms', function (done) {
+        setTimeout(function () {
+          expect(crmApi).not.toHaveBeenCalled();
+          done();
+        }, 290);
+      });
+
+      it('invokes the load function after 300ms', function (done) {
+        setTimeout(function () {
+          expect(crmApi).toHaveBeenCalled();
+          done();
+        }, 300);
+      });
+
+      it('loads the days with activities of the month of the selected date', function (done) {
+        setTimeout(function () {
+          expect(crmApi.calls.count()).toBe(2);
+          allArgs.forEach(function (args) {
+            expect(args[2].activity_date_time).toEqual({
+              'BETWEEN': [startOfMonth + ' 00:00:00', endOfMonth + ' 23:59:59']
+            });
+          });
+          done();
+        }, 300);
       });
     });
 

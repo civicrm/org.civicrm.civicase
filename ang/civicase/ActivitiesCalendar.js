@@ -152,6 +152,9 @@
 
   function civicaseActivitiesCalendarController ($q, $rootScope, $scope, crmApi,
     formatActivity, ContactsDataService) {
+    var DEBOUNCE_WAIT = 300;
+
+    var debouncedLoad;
     var daysWithActivities = {};
     var selectedMoment = null;
 
@@ -195,6 +198,10 @@
     };
 
     (function init () {
+      debouncedLoad = _.debounce(function () {
+        $scope.$apply(load);
+      }, DEBOUNCE_WAIT);
+
       initListeners();
       initWatchers();
     }());
@@ -304,11 +311,13 @@
      * Initializes the controller's listeners
      */
     function initListeners () {
-      $rootScope.$on('civicase::uibDaypicker::compiled', function (__, selectDate) {
-        selectedMoment = moment(selectDate);
-        load();
-      });
       $rootScope.$on('civicase::ActivitiesCalendar::reload', reload);
+      $rootScope.$on('civicase::uibDaypicker::monthSelected', function (__, selectedDate) {
+        setSelectedDateAndLoad(selectedDate, true);
+      });
+      $rootScope.$on('civicase::uibDaypicker::compiled', function (__, selectedDate) {
+        setSelectedDateAndLoad(selectedDate);
+      });
     }
 
     /**
@@ -479,6 +488,19 @@
       });
 
       load();
+    }
+
+    /**
+     * Stores the selected date on the datepicker (as a moment) and triggers
+     * the load logic (debounced, if specified)
+     *
+     * @param {Date} selectedDate
+     * @param {Boolean} debounce whether the load logic should be debounced to
+     *   avoid flooding the API
+     */
+    function setSelectedDateAndLoad (selectedDate, debounce) {
+      selectedMoment = moment(selectedDate);
+      debounce === true ? debouncedLoad() : load();
     }
 
     /**
