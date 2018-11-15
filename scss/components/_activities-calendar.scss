@@ -1,4 +1,10 @@
 .civicase__activities-calendar {
+  transition: opacity 0.2s linear;
+
+  &.is-loading-days {
+    opacity: 0.7;
+  }
+
   table,
   th,
   .btn-default {

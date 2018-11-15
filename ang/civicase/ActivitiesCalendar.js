@@ -154,6 +154,7 @@
     formatActivity, ContactsDataService) {
     var daysWithActivities = {};
 
+    $scope.loadingDays = false;
     $scope.loadingActivities = false;
     $scope.selectedActivites = [];
     $scope.selectedDate = null;
@@ -320,6 +321,8 @@
      * Entry point of the load logic
      */
     function load () {
+      $scope.loadingDays = true;
+
       loadDaysWithActivitiesIncomplete()
         .then(function () {
           $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
@@ -327,6 +330,9 @@
         .then(loadDaysWithActivitiesCompleted)
         .then(function () {
           $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+        })
+        .then(function () {
+          $scope.loadingDays = false;
         });
     }
 
