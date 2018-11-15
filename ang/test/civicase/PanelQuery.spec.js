@@ -572,6 +572,50 @@
       });
     });
 
+    describe('reload event', function () {
+      var panelName;
+
+      beforeEach(function () {
+        panelName = 'foo-bar';
+        $scope.panelName = panelName;
+
+        compileDirective();
+        crmApi.calls.reset();
+      });
+
+      describe('when the event passes the panel name', function () {
+        describe('when the name is standalone', function () {
+          beforeEach(function () {
+            $rootScope.$emit('civicase::PanelQuery::reload', panelName);
+          });
+
+          it('triggers the api requests again', function () {
+            expect(crmApi).toHaveBeenCalled();
+          });
+        });
+
+        describe('when the name is in a list', function () {
+          beforeEach(function () {
+            $rootScope.$emit('civicase::PanelQuery::reload', ['other-name', panelName]);
+          });
+
+          it('triggers the api requests again', function () {
+            expect(crmApi).toHaveBeenCalled();
+          });
+        });
+      });
+
+      describe('when the event does not pass the panel name', function () {
+        beforeEach(function () {
+          $rootScope.$emit('civicase::PanelQuery::reload', 'other-name');
+        });
+
+        it('does not trigger the api requests again', function () {
+          expect(crmApi).not.toHaveBeenCalled();
+        });
+      });
+    });
+
     /**
      * Function responsible for setting up compilation of the directive
      *
