@@ -29,32 +29,28 @@ function _civicrm_api3_activity_Getmonthswithactivities_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_activity_Getmonthswithactivities($params) {
-  try {
-      $dao = CRM_Utils_SQL_Select::from('civicrm_activity a');
-      $dao->select(['YEAR(a.activity_date_time) AS year, MONTH(a.activity_date_time) AS month']);
+  $dao = CRM_Utils_SQL_Select::from('civicrm_activity a');
+  $dao->select(['YEAR(a.activity_date_time) AS year, MONTH(a.activity_date_time) AS month']);
 
-      if (array_key_exists('activity_date_time', $params)) {
-          _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($params['activity_date_time'], 'a.activity_date_time', $dao);
-      }
-
-      if (array_key_exists('activity_status_id', $params)) {
-          _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($params['activity_status_id'], 'a.status_id', $dao);
-      }
-
-      if (array_key_exists('case_id', $params)) {
-          $dao->join('ca', 'INNER JOIN civicrm_case_activity AS ca ON a.id = ca.activity_id');
-          _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($params['case_id'], 'ca.case_id', $dao);
-      }
-
-      $dao->groupBy('YEAR(a.activity_date_time), MONTH(a.activity_date_time) ASC');
-      $result = $dao->execute()->fetchAll();
-
-      $params['sequential'] = 1;
-
-      return civicrm_api3_create_success($result, $params, 'Activity', 'getmonthswithactivities');
-  } catch (Exception $exception) {
-    throw new API_Exception($exception->getMessage(), $exception->getCode());
+  if (array_key_exists('activity_date_time', $params)) {
+      _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($params['activity_date_time'], 'a.activity_date_time', $dao);
   }
+
+  if (array_key_exists('activity_status_id', $params)) {
+      _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($params['activity_status_id'], 'a.status_id', $dao);
+  }
+
+  if (array_key_exists('case_id', $params)) {
+      $dao->join('ca', 'INNER JOIN civicrm_case_activity AS ca ON a.id = ca.activity_id');
+      _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($params['case_id'], 'ca.case_id', $dao);
+  }
+
+  $dao->groupBy('YEAR(a.activity_date_time), MONTH(a.activity_date_time) ASC');
+  $result = $dao->execute()->fetchAll();
+
+  $params['sequential'] = 1;
+
+  return civicrm_api3_create_success($result, $params, 'Activity', 'getmonthswithactivities');
 }
 
 /**
