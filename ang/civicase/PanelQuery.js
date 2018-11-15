@@ -55,8 +55,6 @@
       range: { from: 1, to: PAGE_SIZE }
     };
 
-    $scope.loadData = loadData;
-
     (function init () {
       $scope.name = $scope.name || _.uniqueId('panel-query-');
 

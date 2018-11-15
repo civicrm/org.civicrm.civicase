@@ -52,7 +52,7 @@
           compileDirective();
         });
 
-        it('generates its own name', function () {
+        it('uses the given name', function () {
           expect(_.uniqueId).not.toHaveBeenCalled();
           expect(panelQueryScope.name).toBe(givenName);
         });
