@@ -21,16 +21,23 @@
     }));
 
     describe('when uib-datepicker signals that it is ready', function () {
+      var endOfMonth, startOfMonth;
       beforeEach(function () {
+        startOfMonth = moment(dates.today).startOf('month').format('YYYY-MM-DD');
+        endOfMonth = moment(dates.today).endOf('month').format('YYYY-MM-DD');
+
         spyOn($scope, '$emit').and.callThrough();
 
         initController();
-        $rootScope.$emit('civicase::uibDaypicker::compiled');
+        $rootScope.$emit('civicase::uibDaypicker::compiled', dates.today);
       });
 
-      it('starts loading the days with incomplete activities', function () {
+      it('loads the days with incomplete activities of the currently selected month', function () {
         expect(crmApi).toHaveBeenCalledWith('Activity', 'getdayswithactivities', jasmine.objectContaining({
-          status_id: { 'IN': CRM.civicase.activityStatusTypes.incomplete }
+          status_id: { 'IN': CRM.civicase.activityStatusTypes.incomplete },
+          activity_date_time: {
+            'BETWEEN': [startOfMonth + ' 00:00:00', endOfMonth + ' 23:59:59']
+          }
         }));
       });
 
@@ -44,9 +51,12 @@
           $scope.$digest();
         });
 
-        it('loads the days with complete activities', function () {
+        it('loads the days with complete activities of the currently selected month', function () {
           expect(crmApi).toHaveBeenCalledWith('Activity', 'getdayswithactivities', jasmine.objectContaining({
-            status_id: CRM.civicase.activityStatusTypes.completed[0]
+            status_id: CRM.civicase.activityStatusTypes.completed[0],
+            activity_date_time: {
+              'BETWEEN': [startOfMonth + ' 00:00:00', endOfMonth + ' 23:59:59']
+            }
           }));
         });
 

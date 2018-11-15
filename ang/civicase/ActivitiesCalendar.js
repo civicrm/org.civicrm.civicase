@@ -153,6 +153,7 @@
   function civicaseActivitiesCalendarController ($q, $rootScope, $scope, crmApi,
     formatActivity, ContactsDataService) {
     var daysWithActivities = {};
+    var selectedMoment = null;
 
     $scope.loadingDays = false;
     $scope.loadingActivities = false;
@@ -303,7 +304,10 @@
      * Initializes the controller's listeners
      */
     function initListeners () {
-      $rootScope.$on('civicase::uibDaypicker::compiled', load);
+      $rootScope.$on('civicase::uibDaypicker::compiled', function (__, selectDate) {
+        selectedMoment = moment(selectDate);
+        load();
+      });
       $rootScope.$on('civicase::ActivitiesCalendar::reload', reload);
     }
 
@@ -407,7 +411,8 @@
     }
 
     /**
-     * Loads the dates with at least an activity with the given status(es)
+     * Loads the dates within the currently selected month (if any is selected)
+     * with at least an activity with the given status(es)
      *
      * @param {*} statusParam
      * @return {Promise}
@@ -416,6 +421,15 @@
       var params = {};
 
       params.status_id = statusParam;
+
+      if (selectedMoment) {
+        params.activity_date_time = {
+          BETWEEN: [
+            selectedMoment.startOf('month').format('YYYY-MM-DD') + ' 00:00:00',
+            selectedMoment.endOf('month').format('YYYY-MM-DD') + ' 23:59:59'
+          ]
+        };
+      }
 
       if ($scope.caseId) {
         params.case_id = getCaseIdApiParam();
