@@ -61,7 +61,8 @@
       query: { entity: 'Activity', params: getQueryParams('activities') },
       custom: {
         itemName: 'activities',
-        involvementFilter: { '@involvingContact': 'myActivities' }
+        involvementFilter: { '@involvingContact': 'myActivities' },
+        cardRefresh: activityCardRefreshActivities
       },
       handlers: {
         range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(false),
@@ -72,7 +73,8 @@
       query: { entity: 'Activity', params: getQueryParams('milestones') },
       custom: {
         itemName: 'milestones',
-        involvementFilter: { '@involvingContact': 'myActivities' }
+        involvementFilter: { '@involvingContact': 'myActivities' },
+        cardRefresh: activityCardRefreshMilestones
       },
       handlers: {
         range: _.curry(rangeHandler)('activity_date_time')('YYYY-MM-DD HH:mm:ss')(true),
@@ -88,7 +90,7 @@
       }
     };
 
-    $scope.activityCardRefresh = activityCardRefresh;
+    $scope.activityCardRefreshCalendar = activityCardRefreshCalendar;
 
     (function init () {
       initWatchers();
@@ -96,20 +98,52 @@
     }());
 
     /**
-     * The refresh callback passed to the activity cards
+     * Refresh callback triggered by activity cards in the activities panel
+     *
+     * @param {Array} [apiCalls]
+     */
+    function activityCardRefreshActivities (apiCalls) {
+      activityCardRefresh('activities', apiCalls);
+    }
+
+    /**
+     * Refresh callback triggered by activity cards in the calendar
+     *
+     * @param {Array} [apiCalls]
+     */
+    function activityCardRefreshCalendar (apiCalls) {
+      activityCardRefresh(['activities', 'milestones'], apiCalls);
+    }
+
+    /**
+     * Refresh callback triggered by activity cards in the milestones panel
+     *
+     * @param {Array} [apiCalls]
+     */
+    function activityCardRefreshMilestones (apiCalls) {
+      activityCardRefresh('milestones', apiCalls);
+    }
+
+    /**
+     * The common refresh callback logic triggered by the activity cards in the dashboard
+     * It reloads of the calendar and the panel(s) with the given name(s)
      *
      * Unfortunately the activity card expects the callback to handle api calls
      * for it, hence the `apiCalls` param and the usage of `crmApi`
      *
      * @see {@link https://github.com/compucorp/uk.co.compucorp.civicase/blob/develop/ang/civicase/ActivityCard.js#L97}
+     *
+     * @param {Array/String} panelName the name of the panel to refresh
+     * @param {Array} [apiCalls]
      */
-    function activityCardRefresh (apiCalls) {
+    function activityCardRefresh (panelName, apiCalls) {
       if (!_.isArray(apiCalls)) {
         apiCalls = [];
       }
 
       crmApi(apiCalls).then(function (result) {
         $rootScope.$emit('civicase::ActivitiesCalendar::reload');
+        $rootScope.$emit('civicase::PanelQuery::reload', panelName);
       });
     }
 

@@ -76,17 +76,24 @@
       });
     });
 
-    describe('activityCardRefresh callback', function () {
+    describe('refresh callback for activity cards in the calendar', function () {
       beforeEach(function () {
         spyOn($rootScope, '$emit');
         initController();
 
-        $scope.activityCardRefresh();
+        $scope.activityCardRefreshCalendar();
         $scope.$digest();
       });
 
-      it('emits the calendar refresh event', function () {
+      it('emits the calendar reload event', function () {
         expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+      });
+
+      it('reload both the activities and milestone panels', function () {
+        expect($rootScope.$emit).toHaveBeenCalledWith('civicase::PanelQuery::reload', [
+          'activities',
+          'milestones'
+        ]);
       });
     });
 
@@ -429,6 +436,29 @@
             });
           });
         });
+
+        describe('refresh callback for activity cards', function () {
+          it('is defined', function () {
+            expect($scope.newMilestonesPanel.custom.cardRefresh).toBeDefined();
+          });
+
+          describe('when called', function () {
+            beforeEach(function () {
+              spyOn($rootScope, '$emit');
+
+              $scope.newMilestonesPanel.custom.cardRefresh();
+              $scope.$digest();
+            });
+
+            it('emits the calendar reload event', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+            });
+
+            it('reloads its own panel', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::PanelQuery::reload', 'milestones');
+            });
+          });
+        });
       });
 
       describe('when the relationship type changes', function () {
@@ -623,6 +653,29 @@
                 $scope.activitiesPanel.query.params,
                 true
               );
+            });
+          });
+        });
+
+        describe('refresh callback for activity cards', function () {
+          it('is defined', function () {
+            expect($scope.activitiesPanel.custom.cardRefresh).toBeDefined();
+          });
+
+          describe('when called', function () {
+            beforeEach(function () {
+              spyOn($rootScope, '$emit');
+
+              $scope.activitiesPanel.custom.cardRefresh();
+              $scope.$digest();
+            });
+
+            it('emits the calendar reload event', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+            });
+
+            it('reloads its own panel', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::PanelQuery::reload', 'activities');
             });
           });
         });

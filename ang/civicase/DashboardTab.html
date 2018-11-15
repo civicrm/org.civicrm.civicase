@@ -5,19 +5,12 @@
   <div class="civicase__dashboard__tab__main">
     <div class="civicase__dashboard__tab__col-wrapper">
       <div class="civicase__dashboard__tab__col civicase__dashboard__tab__col--left">
-        <civicase-activities-calendar
-          case-id="caseIds"
-          refresh-callback="activityCardRefresh"
-          ng-if="caseIds">
-        </civicase-activities-calendar>
-        <civicase-activities-calendar-placeholder
-          ng-if="!caseIds"
-          style="padding-top: 0;">
-        </civicase-activities-calendar-placeholder>
+        <civicase-activities-calendar case-id="caseIds" refresh-callback="activityCardRefreshCalendar" ng-if="caseIds"></civicase-activities-calendar>
+        <civicase-activities-calendar-placeholder ng-if="!caseIds" style="padding-top: 0;"></civicase-activities-calendar-placeholder>
       </div>
       <div class="civicase__dashboard__tab__col civicase__dashboard__tab__col--right">
         <!-- New Cases -->
-        <civicase-panel-query query="newCasesPanel.query" handlers="newCasesPanel.handlers" custom-data="newCasesPanel.custom">
+        <civicase-panel-query name="cases" query="newCasesPanel.query" handlers="newCasesPanel.handlers" custom-data="newCasesPanel.custom">
           <panel-query-title>
             You have {{loading.full ? '-' : total}} new cases
           </panel-query-title>
@@ -35,7 +28,7 @@
           </panel-query-empty>
         </civicase-panel-query>
         <!-- New Milestones -->
-        <civicase-panel-query query="newMilestonesPanel.query" handlers="newMilestonesPanel.handlers" custom-data="newMilestonesPanel.custom">
+        <civicase-panel-query name="milestones" query="newMilestonesPanel.query" handlers="newMilestonesPanel.handlers" custom-data="newMilestonesPanel.custom">
           <panel-query-title>
             You have {{loading.full ? '-' : total}} milestones due
           </panel-query-title>
@@ -45,7 +38,7 @@
           <panel-query-results>
             <div ng-repeat="activity in results"
               case-activity-card="activity"
-              refresh-callback="loadData"
+              refresh-callback="customData.cardRefresh"
               mode="long"
               refresh-on-checkbox-toggle="false"
               bulk-allowed="false">
@@ -62,7 +55,7 @@
           </panel-query-empty>
         </civicase-panel-query>
         <!-- Activities -->
-        <civicase-panel-query query="activitiesPanel.query" handlers="activitiesPanel.handlers" custom-data="activitiesPanel.custom">
+        <civicase-panel-query name="activities" query="activitiesPanel.query" handlers="activitiesPanel.handlers" custom-data="activitiesPanel.custom">
           <panel-query-title>
             You have {{loading.full ? '-' : total}} {{customData.itemName}} due
           </panel-query-title>
@@ -72,9 +65,9 @@
           <panel-query-results>
             <div ng-repeat="activity in results"
               case-activity-card="activity"
-              refresh-callback="loadData"
+              refresh-callback="customData.cardRefresh"
               mode="long"
-              refresh-on-checkbox-toggle="false"
+              refresh-on-checkbox-toggle="true"
               bulk-allowed="false">
             </div>
           </panel-query-results>
