@@ -58,6 +58,7 @@
 
     $scope.caseIds = null;
     $scope.activitiesPanel = {
+      name: 'activities',
       query: { entity: 'Activity', params: getQueryParams('activities') },
       custom: {
         itemName: 'activities',
@@ -70,6 +71,7 @@
       }
     };
     $scope.newMilestonesPanel = {
+      name: 'milestones',
       query: { entity: 'Activity', params: getQueryParams('milestones') },
       custom: {
         itemName: 'milestones',
@@ -103,7 +105,7 @@
      * @param {Array} [apiCalls]
      */
     function activityCardRefreshActivities (apiCalls) {
-      activityCardRefresh('activities', apiCalls);
+      activityCardRefresh($scope.activitiesPanel.name, apiCalls);
     }
 
     /**
@@ -112,7 +114,10 @@
      * @param {Array} [apiCalls]
      */
     function activityCardRefreshCalendar (apiCalls) {
-      activityCardRefresh(['activities', 'milestones'], apiCalls);
+      activityCardRefresh([
+        $scope.activitiesPanel.name,
+        $scope.newMilestonesPanel.name
+      ], apiCalls);
     }
 
     /**
@@ -121,7 +126,7 @@
      * @param {Array} [apiCalls]
      */
     function activityCardRefreshMilestones (apiCalls) {
-      activityCardRefresh('milestones', apiCalls);
+      activityCardRefresh($scope.newMilestonesPanel.name, apiCalls);
     }
 
     /**

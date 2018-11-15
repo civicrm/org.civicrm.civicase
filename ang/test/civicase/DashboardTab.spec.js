@@ -269,6 +269,10 @@
         expect($scope.newMilestonesPanel).toBeDefined();
       });
 
+      it('has a name defined', function () {
+        expect($scope.newMilestonesPanel.name).toBe('milestones');
+      });
+
       describe('query', function () {
         it('is defined', function () {
           expect($scope.newMilestonesPanel.query).toBeDefined();
@@ -455,7 +459,10 @@
             });
 
             it('reloads its own panel', function () {
-              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::PanelQuery::reload', 'milestones');
+              expect($rootScope.$emit).toHaveBeenCalledWith(
+                'civicase::PanelQuery::reload',
+                $scope.newMilestonesPanel.name
+              );
             });
           });
         });
@@ -487,6 +494,10 @@
 
       it('is defined', function () {
         expect($scope.activitiesPanel).toBeDefined();
+      });
+
+      it('has a name defined', function () {
+        expect($scope.activitiesPanel.name).toBe('activities');
       });
 
       describe('query', function () {
@@ -675,7 +686,10 @@
             });
 
             it('reloads its own panel', function () {
-              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::PanelQuery::reload', 'activities');
+              expect($rootScope.$emit).toHaveBeenCalledWith(
+                'civicase::PanelQuery::reload',
+                $scope.activitiesPanel.name
+              );
             });
           });
         });

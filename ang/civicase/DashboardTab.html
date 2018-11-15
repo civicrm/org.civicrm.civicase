@@ -10,7 +10,7 @@
       </div>
       <div class="civicase__dashboard__tab__col civicase__dashboard__tab__col--right">
         <!-- New Cases -->
-        <civicase-panel-query name="cases" query="newCasesPanel.query" handlers="newCasesPanel.handlers" custom-data="newCasesPanel.custom">
+        <civicase-panel-query query="newCasesPanel.query" handlers="newCasesPanel.handlers" custom-data="newCasesPanel.custom">
           <panel-query-title>
             You have {{loading.full ? '-' : total}} new cases
           </panel-query-title>
@@ -28,7 +28,7 @@
           </panel-query-empty>
         </civicase-panel-query>
         <!-- New Milestones -->
-        <civicase-panel-query name="milestones" query="newMilestonesPanel.query" handlers="newMilestonesPanel.handlers" custom-data="newMilestonesPanel.custom">
+        <civicase-panel-query name="{{newMilestonesPanel.name}}" query="newMilestonesPanel.query" handlers="newMilestonesPanel.handlers" custom-data="newMilestonesPanel.custom">
           <panel-query-title>
             You have {{loading.full ? '-' : total}} milestones due
           </panel-query-title>
@@ -55,7 +55,7 @@
           </panel-query-empty>
         </civicase-panel-query>
         <!-- Activities -->
-        <civicase-panel-query name="activities" query="activitiesPanel.query" handlers="activitiesPanel.handlers" custom-data="activitiesPanel.custom">
+        <civicase-panel-query name="{{activitiesPanel.name}}" query="activitiesPanel.query" handlers="activitiesPanel.handlers" custom-data="activitiesPanel.custom">
           <panel-query-title>
             You have {{loading.full ? '-' : total}} {{customData.itemName}} due
           </panel-query-title>
