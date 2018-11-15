@@ -28,7 +28,11 @@
           </panel-query-empty>
         </civicase-panel-query>
         <!-- New Milestones -->
-        <civicase-panel-query name="{{newMilestonesPanel.name}}" query="newMilestonesPanel.query" handlers="newMilestonesPanel.handlers" custom-data="newMilestonesPanel.custom">
+        <civicase-panel-query
+          name="{{newMilestonesPanel.name}}"
+          query="newMilestonesPanel.query"
+          handlers="newMilestonesPanel.handlers"
+          custom-data="newMilestonesPanel.custom">
           <panel-query-title>
             You have {{loading.full ? '-' : total}} milestones due
           </panel-query-title>
@@ -55,7 +59,11 @@
           </panel-query-empty>
         </civicase-panel-query>
         <!-- Activities -->
-        <civicase-panel-query name="{{activitiesPanel.name}}" query="activitiesPanel.query" handlers="activitiesPanel.handlers" custom-data="activitiesPanel.custom">
+        <civicase-panel-query
+          name="{{activitiesPanel.name}}"
+          query="activitiesPanel.query"
+          handlers="activitiesPanel.handlers"
+          custom-data="activitiesPanel.custom">
           <panel-query-title>
             You have {{loading.full ? '-' : total}} {{customData.itemName}} due
           </panel-query-title>
