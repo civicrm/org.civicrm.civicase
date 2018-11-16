@@ -353,8 +353,8 @@
      *
      * @param {Boolean} [useCache=true]
      */
-    function load (useCache) {
-      useCache = useCache !== false;
+    function load (options) {
+      options = _.defaults({}, options, { useCache: true });
 
       $scope.loadingDays = true;
 
@@ -368,7 +368,7 @@
       // This is also the reason why `date` has to be passed all the way down
       // to the `loadDaysWithActivities` function
       (function (date) {
-        if (useCache && daysWithActivities[getYearMonth(date)]) {
+        if (options.useCache && daysWithActivities[getYearMonth(date)]) {
           return $q.resolve();
         }
 
@@ -469,19 +469,19 @@
      * The days are returned in an object containing also the year+month they
      * belong to, so that they can be properly grouped in the internal list of days
      *
-     * @param {*} status
      * @param {Date} date
+     * @param {*} status
      * @return {Promise}
      */
-    function loadDaysWithActivities (status, date) {
+    function loadDaysWithActivities (date, status) {
       var params = {};
       var dateMoment = moment(date);
 
       params.status_id = status;
       params.activity_date_time = {
         BETWEEN: [
-          dateMoment.startOf('month').format('YYYY-MM-DD') + ' 00:00:00',
-          dateMoment.endOf('month').format('YYYY-MM-DD') + ' 23:59:59'
+          dateMoment.startOf('month').format('YYYY-MM-DD HH:mm:ss'),
+          dateMoment.endOf('month').format('YYYY-MM-DD HH:mm:ss')
         ]
       };
 
@@ -507,7 +507,7 @@
     function loadDaysWithActivitiesCompleted (date) {
       var status = CRM.civicase.activityStatusTypes.completed[0];
 
-      return loadDaysWithActivities(status, date)
+      return loadDaysWithActivities(date, status)
         .then(_.curryRight(updateDaysList)(date)('completed'));
     }
 
@@ -520,7 +520,7 @@
     function loadDaysWithActivitiesIncomplete (date) {
       var status = { 'IN': CRM.civicase.activityStatusTypes.incomplete };
 
-      return loadDaysWithActivities(status, date)
+      return loadDaysWithActivities(date, status)
         .then(_.curryRight(updateDaysList)(date)('incomplete'));
     }
 
@@ -577,7 +577,7 @@
         }
       });
 
-      load(false);
+      load({ useCache: false });
     }
 
     /**
