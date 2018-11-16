@@ -156,7 +156,7 @@
 
     var debouncedLoad;
     var daysWithActivities = {};
-    var selectedMoment = null;
+    var selectedDate = null;
 
     $scope.loadingDays = false;
     $scope.loadingActivities = false;
@@ -199,7 +199,11 @@
 
     (function init () {
       debouncedLoad = _.debounce(function () {
-        $scope.$apply(load);
+        var args = arguments;
+
+        $scope.$apply(function () {
+          load.apply(null, args);
+        });
       }, DEBOUNCE_WAIT);
 
       initListeners();
@@ -336,17 +340,30 @@
     function load () {
       $scope.loadingDays = true;
 
-      loadDaysWithActivitiesIncomplete()
-        .then(function () {
-          $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
-        })
-        .then(loadDaysWithActivitiesCompleted)
-        .then(function () {
-          $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
-        })
-        .then(function () {
-          $scope.loadingDays = false;
-        });
+      // @NOTE The user could be switching to different dates (in particular, months)
+      // in between the first and second request (as they are not made in parallel).
+      //
+      // The IIFE is then used to keep a reference to the value of `selectedDate`
+      // at the moment of invocation, to make sure that both api requests are made
+      // for the same date
+      //
+      // This is also the reason why `date` has to be passed all the way down
+      // to the `loadDaysWithActivities` function
+      (function (date) {
+        loadDaysWithActivitiesIncomplete(date)
+          .then(function () {
+            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+          })
+          .then(function () {
+            return loadDaysWithActivitiesCompleted(date);
+          })
+          .then(function () {
+            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+          })
+          .then(function () {
+            $scope.loadingDays = false;
+          });
+      }(selectedDate));
     }
 
     /**
@@ -420,25 +437,23 @@
     }
 
     /**
-     * Loads the dates within the currently selected month (if any is selected)
+     * Loads the dates within the month of the given date
      * with at least an activity with the given status(es)
      *
-     * @param {*} statusParam
+     * @param {*} status
+     * @param {Date} date
      * @return {Promise}
      */
-    function loadDaysWithActivities (statusParam) {
+    function loadDaysWithActivities (status, date) {
       var params = {};
 
-      params.status_id = statusParam;
-
-      if (selectedMoment) {
-        params.activity_date_time = {
-          BETWEEN: [
-            selectedMoment.startOf('month').format('YYYY-MM-DD') + ' 00:00:00',
-            selectedMoment.endOf('month').format('YYYY-MM-DD') + ' 23:59:59'
-          ]
-        };
-      }
+      params.status_id = status;
+      params.activity_date_time = {
+        BETWEEN: [
+          moment(date).startOf('month').format('YYYY-MM-DD') + ' 00:00:00',
+          moment(date).endOf('month').format('YYYY-MM-DD') + ' 23:59:59'
+        ]
+      };
 
       if ($scope.caseId) {
         params.case_id = getCaseIdApiParam();
@@ -456,22 +471,26 @@
     /**
      * Loads the days with at least a completed activity
      *
+     * @param {Date} date
      * @return {Promise}
      */
-    function loadDaysWithActivitiesCompleted () {
-      return loadDaysWithActivities(CRM.civicase.activityStatusTypes.completed[0])
+    function loadDaysWithActivitiesCompleted (date) {
+      var status = CRM.civicase.activityStatusTypes.completed[0];
+
+      return loadDaysWithActivities(status, date)
         .then(_.curryRight(updateDaysList)('completed'));
     }
 
     /**
      * Loads the days with at least an incomplete activity
      *
+     * @param {Date} date
      * @return {Promise}
      */
-    function loadDaysWithActivitiesIncomplete () {
-      return loadDaysWithActivities({
-        'IN': CRM.civicase.activityStatusTypes.incomplete
-      })
+    function loadDaysWithActivitiesIncomplete (date) {
+      var status = { 'IN': CRM.civicase.activityStatusTypes.incomplete };
+
+      return loadDaysWithActivities(status, date)
         .then(_.curryRight(updateDaysList)('incomplete'));
     }
 
@@ -491,15 +510,15 @@
     }
 
     /**
-     * Stores the selected date on the datepicker (as a moment) and triggers
-     * the load logic (debounced, if specified)
+     * Stores the currently selected date on the datepicker (as a Moment)
+     * and triggers the load logic (debounced, if specified)
      *
      * @param {Date} selectedDate
      * @param {Boolean} debounce whether the load logic should be debounced to
      *   avoid flooding the API
      */
-    function setSelectedDateAndLoad (selectedDate, debounce) {
-      selectedMoment = moment(selectedDate);
+    function setSelectedDateAndLoad (_selectedDate_, debounce) {
+      selectedDate = _selectedDate_;
       debounce === true ? debouncedLoad() : load();
     }
 
