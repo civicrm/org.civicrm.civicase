@@ -545,16 +545,16 @@
     });
 
     describe('when the date picker selects a month', function () {
-      var allArgs, endOfMonth, selectedMoment, startOfMonth;
+      var allArgs, endOfMonth, nextMonth, startOfMonth;
 
       beforeEach(function () {
-        selectedMoment = moment();
-        startOfMonth = selectedMoment.startOf('month').format('YYYY-MM-DD');
-        endOfMonth = selectedMoment.endOf('month').format('YYYY-MM-DD');
+        nextMonth = moment(dates.today).add(1, 'month');
+        startOfMonth = nextMonth.startOf('month').format('YYYY-MM-DD');
+        endOfMonth = nextMonth.endOf('month').format('YYYY-MM-DD');
 
         initControllerAndEmitDatepickerReadyEvent();
         crmApi.calls.reset();
-        $rootScope.$emit('civicase::uibDaypicker::monthSelected', selectedMoment.toDate());
+        $rootScope.$emit('civicase::uibDaypicker::monthSelected', nextMonth.toDate());
         $scope.$digest();
 
         allArgs = crmApi.calls.allArgs();
