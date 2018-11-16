@@ -169,33 +169,7 @@
       startingDay: 1
     };
 
-    /**
-     * Called when the user clicks on a day on the datepicker directive
-     *
-     * If the day has any activities on it, it loads the activities and display
-     * them in a popover
-     */
-    $scope.onDateSelected = function () {
-      var date = moment($scope.selectedDate).format('YYYY-MM-DD');
-
-      if (!daysWithActivities[date]) {
-        return;
-      }
-
-      $scope.loadingActivities = true;
-      $scope.selectedActivites = [];
-
-      $scope.$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
-
-      loadActivitiesOfDate(date)
-        .then(function (activities) {
-          loadContactsOfActivities(activities)
-            .then(function () {
-              $scope.selectedActivites = activities;
-              $scope.loadingActivities = false;
-            });
-        });
-    };
+    $scope.onDateSelected = onDateSelected;
 
     (function init () {
       createDebouncedLoad();
@@ -499,6 +473,34 @@
 
       return loadDaysWithActivities(status, date)
         .then(_.curryRight(updateDaysList)('incomplete'));
+    }
+
+    /**
+     * Called when the user clicks on a day on the datepicker directive
+     *
+     * If the day has any activities on it, it loads the activities and display
+     * them in a popover
+     */
+    function onDateSelected () {
+      var date = moment($scope.selectedDate).format('YYYY-MM-DD');
+
+      if (!daysWithActivities[date]) {
+        return;
+      }
+
+      $scope.loadingActivities = true;
+      $scope.selectedActivites = [];
+
+      $scope.$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
+
+      loadActivitiesOfDate(date)
+        .then(function (activities) {
+          loadContactsOfActivities(activities)
+            .then(function () {
+              $scope.selectedActivites = activities;
+              $scope.loadingActivities = false;
+            });
+        });
     }
 
     /**
