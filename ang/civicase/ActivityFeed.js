@@ -17,8 +17,7 @@
         params: '=civicaseActivityFeed',
         showBulkActions: '=',
         caseTypeId: '=',
-        refreshCase: '=?refreshCallback',
-        affixDisabled: '@'
+        refreshCase: '=?refreshCallback'
       }
     };
   });
@@ -401,7 +400,7 @@
     }
   }
 
-  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document, $rootScope) {
+  module.directive('civicaseActivityDetailsAffix', function ($timeout, $rootScope, ActivityPanelMeasurements) {
     return {
       link: civicaseActivityDetailsAffix
     };
@@ -414,14 +413,11 @@
      * @param {Object} attr
      */
     function civicaseActivityDetailsAffix (scope, $element, attr) {
-      var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
-      // TODO Check if the attribute can be passed via scope variable
-      var affixDisabled = (attr.affixDisabled === 'true');
+      var $activityDetailsPanel, activityPanelMeasurements;
 
       (function init () {
-        if (affixDisabled) {
-          return;
-        }
+        $activityDetailsPanel = $element.find('.civicase__activity-panel');
+        activityPanelMeasurements = ActivityPanelMeasurements($activityDetailsPanel);
 
         affixActivityDetailsPanel();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
@@ -431,27 +427,17 @@
        * Sets Activity Details Panel affix offsets
        */
       function affixActivityDetailsPanel () {
-        $timeout(function () {
-          $activityDetailsPanel = $element.find('.panel');
-          $filter = $('.civicase__activity-filter');
-          $feedListContainer = $('.civicase__activity-feed__list-container');
-          $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-          $toolbarDrawer = $('#toolbar');
+        $activityDetailsPanel.affix({
+          offset: {
+            top: activityPanelMeasurements.getTopOffset(),
+            bottom: activityPanelMeasurements.getBottomOffset()
+          }
+        });
 
-          $activityDetailsPanel.affix({
-            offset: {
-              top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
-              bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
-            }
-          }).on('affixed.bs.affix', function () {
-            $activityDetailsPanel
-              .css('top', ($toolbarDrawer.height() + $tabs.height() + $filter.height()))
-              .css('padding-top', 32);
-          }).on('affixed-top.bs.affix', function () {
-            $activityDetailsPanel
-              .css('top', 'auto')
-              .css('padding-top', 0);
-          });
+        $activityDetailsPanel.on('affixed.bs.affix', function () {
+          $activityDetailsPanel.css('top', activityPanelMeasurements.getDistanceFromTop());
+        }).on('affixed-top.bs.affix', function () {
+          $activityDetailsPanel.css('top', 'auto');
         });
       }
 
@@ -461,8 +447,8 @@
       function resetAffix () {
         $timeout(function () {
           if ($activityDetailsPanel.data('bs.affix')) {
-            $activityDetailsPanel.data('bs.affix').options.offset.top = $activityDetailsPanel.offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height());
-            $activityDetailsPanel.data('bs.affix').options.offset.bottom = $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height());
+            $activityDetailsPanel.data('bs.affix').options.offset.top = activityPanelMeasurements.getTopOffset();
+            $activityDetailsPanel.data('bs.affix').options.offset.bottom = activityPanelMeasurements.getBottomOffset();
           }
         });
       }

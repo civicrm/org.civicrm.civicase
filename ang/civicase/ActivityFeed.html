@@ -1,6 +1,6 @@
 <div class="panel panel-default civicase__activity-feed">
   <div
-    civicase-activity-filters="filters" case-timelines="caseTimelines" affix-disabled="{{affixDisabled}}"
+    civicase-activity-filters="filters" case-timelines="caseTimelines"
     display-options="displayOptions" show-checkboxes="showCheckboxes" feed-params="params"
     displayed-count="activities.length" total-count="totalCount" bulk-allowed="bulkAllowed"
     selected-activities="selectedActivities">
@@ -83,9 +83,9 @@
         <!-- End - Pager -->
       </div>
       <!-- activity details -->
-      <div civicase-activity-details-affix
+      <div
+        civicase-activity-details-affix
         class="civicase__activity-feed__list-container__right"
-        affix-disabled="{{affixDisabled}}"
         civicase-activity-panel="viewingActivity"
         refresh-callback="refreshAll"
         ng-if="viewingActivity.id">

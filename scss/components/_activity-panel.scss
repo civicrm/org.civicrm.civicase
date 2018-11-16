@@ -1,16 +1,21 @@
 .civicase__activity-panel {
-  margin-top: 37px;
+  &.affix {
+    position: fixed !important;
+    width: calc(30% - 12px);
 
-  .panel {
-    overflow: auto;
-
-    &.affix {
-      position: fixed !important;
-      width: calc(30% - 12px); // 12px = padding outside civicase__activity-feed__list-container * 30%
+    @media (max-width: $activity-feed-breakpoint) {
+      width: calc(40% - 12px);
     }
   }
 
+  .panel {
+    overflow: auto;
+    position: relative;
+  }
+
   .panel-body {
+    margin-bottom: 76px; // height of activity panel footer
+    overflow: auto;
     padding: 0;
   }
 
@@ -41,16 +46,6 @@
   }
 }
 
-@media screen and (max-width: $activity-feed-breakpoint) {
-  .civicase__activity-panel {
-    .panel {
-      &.affix {
-        width: calc(40% - 16px);
-      }
-    }
-  }
-}
-
 .civicase__activity-panel__close,
 .civicase__activity-panel__maximise {
   color: $gray-darker;
@@ -74,7 +69,7 @@
 }
 
 .civicase__activity-panel__priority-dropdown {
-  margin-right: 15px;
+  margin-right: 10px;
 
   .list-group-item-info {
     color: $crm-gray-matte;
@@ -89,6 +84,7 @@
 
 .civicase__activity-panel__core_container {
   min-height: 200px;
+  position: static !important;
 
   /* stylelint-disable max-nesting-depth, selector-max-compound-selectors */
   .help {
@@ -147,9 +143,12 @@
 
   .crm-submit-buttons {
     border-bottom: 0 !important;
+    bottom: 0;
     height: auto !important;
     margin: 0;
     padding: 20px !important;
+    position: absolute;
+    width: 100%;
 
     .edit {
       @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
