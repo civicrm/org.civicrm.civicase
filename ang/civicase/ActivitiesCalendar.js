@@ -178,8 +178,8 @@
     }());
 
     /**
-     * Adds the given days to the internal list of days with activities, assigning
-     * the given status to each of them.
+     * Adds the given days to the internal list of days with activities, grouped
+     * by month, assigning the given status to each of them.
      *
      * A 'completed' day won't be added to the list, if a day marked with
      * 'incomplete' already exists. The only exception is if the 'completed' day
@@ -189,7 +189,9 @@
      * @param {String} status
      */
     function addDays (days, status) {
-      days.reduce(function (acc, date) {
+      daysWithActivities[days.yearMonth] = daysWithActivities[days.yearMonth] || {};
+
+      days.list.reduce(function (acc, date) {
         var keepDay = acc[date] && acc[date].status === 'incomplete' && !acc[date].toFlush;
 
         acc[date] = keepDay ? acc[date] : {
@@ -201,7 +203,7 @@
         acc[date].toFlush = false;
 
         return acc;
-      }, daysWithActivities);
+      }, daysWithActivities[days.yearMonth]);
     }
 
     /**
@@ -222,11 +224,17 @@
      * Deletes the days with the given status that have not been updated
      * in the last refresh (ie they had activites initially, but now they haven't anymore)
      *
+     * If a month ends up with no days left, the month gets deleted too
+     *
      * @param {String} status
      */
     function flushDays (status) {
-      _.forEach(daysWithActivities, function (day, date) {
-        day.status === status && day.toFlush && (delete daysWithActivities[date]);
+      _.forEach(daysWithActivities, function (days, month) {
+        _.forEach(days, function (day, date) {
+          day.status === status && day.toFlush && (delete daysWithActivities[month][date]);
+        });
+
+        _.isEmpty(daysWithActivities[month]) && delete daysWithActivities[month];
       });
     }
 
@@ -269,13 +277,14 @@
      *   can be "day", "month", or "year".
      */
     function getDayCustomClass (params) {
-      var classSuffix = '';
-      var day = daysWithActivities[moment(params.date).format('YYYY-MM-DD')];
+      var classSuffix, day;
       var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
 
       if (!isInCurrentMonth && params.mode === 'day') {
         return 'invisible';
       }
+
+      day = getDayWithActivities(params.date);
 
       if (!day || params.mode !== 'day') {
         return;
@@ -290,6 +299,23 @@
       }
 
       return 'civicase__activities-calendar__day-status civicase__activities-calendar__day-status--' + classSuffix;
+    }
+
+    /**
+     * Gets the internally stored day with activities (if any) of the given date
+     *
+     * @param {Date} date
+     * @return {Object/null}
+     */
+    function getDayWithActivities (date) {
+      var day = moment(date).format('YYYY-MM-DD');
+      var month = moment(date).format('YYYY-MM');
+
+      try {
+        return daysWithActivities[month][day];
+      } catch (e) {
+        return null;
+      }
     }
 
     /**
@@ -383,11 +409,12 @@
      * Loads the activities of the given date. It checks if the activities are
      * already cached before making an API request
      *
-     * @param {String} date YYYY-MM-DD
+     * @param {Date} date
      * @return {Promise} resolves to {Array}
      */
     function loadActivitiesOfDate (date) {
-      var day = daysWithActivities[date];
+      var dateMoment = moment(date);
+      var day = getDayWithActivities(date);
 
       if (day.activitiesCache.length) {
         return $q.resolve(day.activitiesCache);
@@ -395,7 +422,10 @@
 
       return loadActivities({
         activity_date_time: {
-          BETWEEN: [ date + ' 00:00:00', date + ' 23:59:59' ]
+          BETWEEN: [
+            dateMoment.format('YYYY-MM-DD') + ' 00:00:00',
+            dateMoment.format('YYYY-MM-DD') + ' 23:59:59'
+          ]
         }
       })
         .then(function (activities) {
@@ -418,8 +448,11 @@
     }
 
     /**
-     * Loads the dates within the month of the given date
+     * Loads the days within the month of the given date
      * with at least an activity with the given status(es)
+     *
+     * The days are returned in an object containing also the year+month they
+     * belong to, so that they can be properly grouped in the internal list of days
      *
      * @param {*} status
      * @param {Date} date
@@ -427,12 +460,17 @@
      */
     function loadDaysWithActivities (status, date) {
       var params = {};
+      var dateMoment = moment(date);
+      var returnValue = {
+        list: [],
+        yearMonth: dateMoment.format('YYYY-MM')
+      };
 
       params.status_id = status;
       params.activity_date_time = {
         BETWEEN: [
-          moment(date).startOf('month').format('YYYY-MM-DD') + ' 00:00:00',
-          moment(date).endOf('month').format('YYYY-MM-DD') + ' 23:59:59'
+          dateMoment.startOf('month').format('YYYY-MM-DD') + ' 00:00:00',
+          dateMoment.endOf('month').format('YYYY-MM-DD') + ' 23:59:59'
         ]
       };
 
@@ -442,10 +480,10 @@
 
       return crmApi('Activity', 'getdayswithactivities', params)
         .then(function (result) {
-          return result.values;
+          return _.assign({}, returnValue, { list: result.values });
         })
         .catch(function () {
-          return [];
+          return _.assign({}, returnValue);
         });
     }
 
@@ -482,9 +520,7 @@
      * them in a popover
      */
     function onDateSelected () {
-      var date = moment($scope.selectedDate).format('YYYY-MM-DD');
-
-      if (!daysWithActivities[date]) {
+      if (!getDayWithActivities($scope.selectedDate)) {
         return;
       }
 
@@ -493,7 +529,7 @@
 
       $scope.$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
 
-      loadActivitiesOfDate(date)
+      loadActivitiesOfDate($scope.selectedDate)
         .then(function (activities) {
           loadContactsOfActivities(activities)
             .then(function () {
@@ -511,8 +547,10 @@
      * API calls, they will be deleted
      */
     function reload () {
-      _.each(daysWithActivities, function (day) {
-        day.toFlush = true;
+      _.each(daysWithActivities, function (month) {
+        _.each(month, function (day) {
+          day.toFlush = true;
+        });
       });
 
       load();
