@@ -343,8 +343,12 @@
 
     /**
      * Entry point of the load logic
+     *
+     * @param {Boolean} [useCache=true]
      */
-    function load () {
+    function load (useCache) {
+      useCache = useCache !== false;
+
       $scope.loadingDays = true;
 
       // @NOTE The user could be switching to different dates (in particular, months)
@@ -357,7 +361,11 @@
       // This is also the reason why `date` has to be passed all the way down
       // to the `loadDaysWithActivities` function
       (function (date) {
-        loadDaysWithActivitiesIncomplete(date)
+        if (useCache && daysWithActivities[moment(date).format('YYYY-MM')]) {
+          return $q.resolve();
+        }
+
+        return loadDaysWithActivitiesIncomplete(date)
           .then(function () {
             $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
           })
@@ -366,11 +374,11 @@
           })
           .then(function () {
             $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
-          })
-          .then(function () {
-            $scope.loadingDays = false;
           });
-      }(selectedDate));
+      }(selectedDate))
+        .then(function () {
+          $scope.loadingDays = false;
+        });
     }
 
     /**
@@ -553,7 +561,7 @@
         });
       });
 
-      load();
+      load(false);
     }
 
     /**
