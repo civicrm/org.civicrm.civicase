@@ -179,7 +179,7 @@
 
     /**
      * Adds the given days to the internal list of days with activities, grouped
-     * by month, assigning the given status to each of them.
+     * by year+month, assigning the given status to each of them.
      *
      * A 'completed' day won't be added to the list, if a day marked with
      * 'incomplete' already exists. The only exception is if the 'completed' day
@@ -187,11 +187,12 @@
      *
      * @param {Object} days api response
      * @param {String} status
+     * @param {String} yearMonth YYYY-MM format
      */
-    function addDays (days, status) {
-      daysWithActivities[days.yearMonth] = daysWithActivities[days.yearMonth] || {};
+    function addDays (days, status, yearMonth) {
+      daysWithActivities[yearMonth] = daysWithActivities[yearMonth] || {};
 
-      days.list.reduce(function (acc, date) {
+      days.reduce(function (acc, date) {
         var keepDay = acc[date] && acc[date].status === 'incomplete' && !acc[date].toFlush;
 
         acc[date] = keepDay ? acc[date] : {
@@ -203,7 +204,7 @@
         acc[date].toFlush = false;
 
         return acc;
-      }, daysWithActivities[days.yearMonth]);
+      }, daysWithActivities[yearMonth]);
     }
 
     /**
@@ -224,17 +225,13 @@
      * Deletes the days with the given status that have not been updated
      * in the last refresh (ie they had activites initially, but now they haven't anymore)
      *
-     * If a month ends up with no days left, the month gets deleted too
-     *
      * @param {String} status
+     * @param {String} yearMonth
      */
-    function flushDays (status) {
-      _.forEach(daysWithActivities, function (days, month) {
-        _.forEach(days, function (day, date) {
-          day.status === status && day.toFlush && (delete daysWithActivities[month][date]);
-        });
-
-        _.isEmpty(daysWithActivities[month]) && delete daysWithActivities[month];
+    function flushDays (status, yearMonth) {
+      _.forEach(daysWithActivities[yearMonth], function (day, date) {
+        day.status === status && day.toFlush &&
+        (delete daysWithActivities[yearMonth][date]);
       });
     }
 
@@ -309,13 +306,23 @@
      */
     function getDayWithActivities (date) {
       var day = moment(date).format('YYYY-MM-DD');
-      var month = moment(date).format('YYYY-MM');
 
       try {
-        return daysWithActivities[month][day];
+        return daysWithActivities[getYearMonth(date)][day];
       } catch (e) {
         return null;
       }
+    }
+
+    /**
+     * Utility function that returns the year+month of the given date in
+     * the YYYY-MM format
+     *
+     * @param {Date} date
+     * @return {String}
+     */
+    function getYearMonth (date) {
+      return moment(date).format('YYYY-MM');
     }
 
     /**
@@ -469,10 +476,6 @@
     function loadDaysWithActivities (status, date) {
       var params = {};
       var dateMoment = moment(date);
-      var returnValue = {
-        list: [],
-        yearMonth: dateMoment.format('YYYY-MM')
-      };
 
       params.status_id = status;
       params.activity_date_time = {
@@ -488,10 +491,10 @@
 
       return crmApi('Activity', 'getdayswithactivities', params)
         .then(function (result) {
-          return _.assign({}, returnValue, { list: result.values });
+          return result.values;
         })
         .catch(function () {
-          return _.assign({}, returnValue);
+          return [];
         });
     }
 
@@ -505,7 +508,7 @@
       var status = CRM.civicase.activityStatusTypes.completed[0];
 
       return loadDaysWithActivities(status, date)
-        .then(_.curryRight(updateDaysList)('completed'));
+        .then(_.curryRight(updateDaysList)(date)('completed'));
     }
 
     /**
@@ -518,7 +521,7 @@
       var status = { 'IN': CRM.civicase.activityStatusTypes.incomplete };
 
       return loadDaysWithActivities(status, date)
-        .then(_.curryRight(updateDaysList)('incomplete'));
+        .then(_.curryRight(updateDaysList)(date)('incomplete'));
     }
 
     /**
@@ -548,17 +551,30 @@
     }
 
     /**
-     * It marks all the days currently in the internal list to be deleted, before
-     * triggering the main load logic
+     * Before calling the main load logic and forcing it to not use the cache, it
+     * performs two type of data reset
      *
-     * This ensures that if some days won't be returned again from any of the
-     * API calls, they will be deleted
+     * hard reset: all months except the one of the currently selected date get
+     * delete directly from the internal cache
+     *
+     * soft reset: the month of the currently selected date is not deleted, but
+     * its days are marked to be flushed (deleted) later, in case they won't get
+     * by the next API requests
+     *
+     * The soft reset avoids removing all the dots at once before even making the
+     * API requests, making for a smoother UI experience
      */
     function reload () {
-      _.each(daysWithActivities, function (month) {
-        _.each(month, function (day) {
-          day.toFlush = true;
-        });
+      var currYearMonth = getYearMonth(selectedDate);
+
+      _.each(daysWithActivities, function (days, yearMonth) {
+        if (yearMonth === currYearMonth) {
+          _.each(daysWithActivities[yearMonth], function (day) {
+            day.toFlush = true;
+          });
+        } else {
+          delete daysWithActivities[yearMonth];
+        }
       });
 
       load(false);
@@ -578,16 +594,20 @@
     }
 
     /**
-     * Update the internal list of days with activities with the specified status
+     * Updates the internal list of days with activities with the specified status
+     * (affects only the days belonging to the year+month of the given date)
      *
      * It adds the given days and deletes those that are marked for deletion
      *
      * @param {Object} days api response
      * @param {String} status
+     * @param {Date} date
      */
-    function updateDaysList (days, status) {
-      addDays(days, status);
-      flushDays(status);
+    function updateDaysList (days, status, date) {
+      var yearMonth = getYearMonth(date);
+
+      addDays(days, status, yearMonth);
+      flushDays(status, yearMonth);
     }
   }
 })(CRM.$, CRM._, angular);
