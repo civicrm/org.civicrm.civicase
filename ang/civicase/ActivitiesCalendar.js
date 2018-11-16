@@ -198,14 +198,7 @@
     };
 
     (function init () {
-      debouncedLoad = _.debounce(function () {
-        var args = arguments;
-
-        $scope.$apply(function () {
-          load.apply(null, args);
-        });
-      }, DEBOUNCE_WAIT);
-
+      createDebouncedLoad();
       initListeners();
       initWatchers();
     }());
@@ -235,6 +228,20 @@
 
         return acc;
       }, daysWithActivities);
+    }
+
+    /**
+     * Creates a debounced version of the `load` function
+     */
+    function createDebouncedLoad () {
+      debouncedLoad = _.debounce(function () {
+        var args = arguments;
+
+        // Execute the function as part of the digest cycle
+        $scope.$apply(function () {
+          load.apply(null, args);
+        });
+      }, DEBOUNCE_WAIT);
     }
 
     /**
