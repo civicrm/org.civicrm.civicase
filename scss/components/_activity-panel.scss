@@ -2,6 +2,10 @@
   &.affix {
     position: fixed !important;
     width: calc(30% - 12px);
+
+    @media (max-width: $activity-feed-breakpoint) {
+      width: calc(40% - 12px);
+    }
   }
 
   .panel {
