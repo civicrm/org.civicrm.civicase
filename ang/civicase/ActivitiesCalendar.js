@@ -368,7 +368,7 @@
       // This is also the reason why `date` has to be passed all the way down
       // to the `loadDaysWithActivities` function
       (function (date) {
-        if (useCache && daysWithActivities[moment(date).format('YYYY-MM')]) {
+        if (useCache && daysWithActivities[getYearMonth(date)]) {
           return $q.resolve();
         }
 
@@ -555,11 +555,11 @@
      * performs two type of data reset
      *
      * hard reset: all months except the one of the currently selected date get
-     * delete directly from the internal cache
+     * deleted directly from the internal cache
      *
      * soft reset: the month of the currently selected date is not deleted, but
      * its days are marked to be flushed (deleted) later, in case they won't get
-     * by the next API requests
+     * returned anymore by the next API requests
      *
      * The soft reset avoids removing all the dots at once before even making the
      * API requests, making for a smoother UI experience
@@ -581,7 +581,7 @@
     }
 
     /**
-     * Stores the currently selected date on the datepicker (as a Moment)
+     * Stores the date currently selected on the datepicker
      * and triggers the load logic (debounced, if specified)
      *
      * @param {Date} selectedDate

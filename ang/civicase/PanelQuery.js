@@ -222,7 +222,7 @@
      * It triggers a full reload if the panel's name is passed with the event
      *
      * @param {Object} $event
-     * @para§m {String/Array} name
+     * @param {String/Array} name
      */
     function reloadEventHandler ($event, name) {
       var refresh = _.isArray(name)
