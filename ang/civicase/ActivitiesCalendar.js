@@ -152,7 +152,11 @@
 
   function civicaseActivitiesCalendarController ($q, $rootScope, $scope, crmApi,
     formatActivity, ContactsDataService) {
+    var DEBOUNCE_WAIT = 300;
+
+    var debouncedLoad;
     var daysWithActivities = {};
+    var selectedDate = null;
 
     $scope.loadingDays = false;
     $scope.loadingActivities = false;
@@ -165,42 +169,17 @@
       startingDay: 1
     };
 
-    /**
-     * Called when the user clicks on a day on the datepicker directive
-     *
-     * If the day has any activities on it, it loads the activities and display
-     * them in a popover
-     */
-    $scope.onDateSelected = function () {
-      var date = moment($scope.selectedDate).format('YYYY-MM-DD');
-
-      if (!daysWithActivities[date]) {
-        return;
-      }
-
-      $scope.loadingActivities = true;
-      $scope.selectedActivites = [];
-
-      $scope.$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
-
-      loadActivitiesOfDate(date)
-        .then(function (activities) {
-          loadContactsOfActivities(activities)
-            .then(function () {
-              $scope.selectedActivites = activities;
-              $scope.loadingActivities = false;
-            });
-        });
-    };
+    $scope.onDateSelected = onDateSelected;
 
     (function init () {
+      createDebouncedLoad();
       initListeners();
       initWatchers();
     }());
 
     /**
-     * Adds the given days to the internal list of days with activities, assigning
-     * the given status to each of them.
+     * Adds the given days to the internal list of days with activities, grouped
+     * by year+month, assigning the given status to each of them.
      *
      * A 'completed' day won't be added to the list, if a day marked with
      * 'incomplete' already exists. The only exception is if the 'completed' day
@@ -208,8 +187,11 @@
      *
      * @param {Object} days api response
      * @param {String} status
+     * @param {String} yearMonth YYYY-MM format
      */
-    function addDays (days, status) {
+    function addDays (days, status, yearMonth) {
+      daysWithActivities[yearMonth] = daysWithActivities[yearMonth] || {};
+
       days.reduce(function (acc, date) {
         var keepDay = acc[date] && acc[date].status === 'incomplete' && !acc[date].toFlush;
 
@@ -222,7 +204,21 @@
         acc[date].toFlush = false;
 
         return acc;
-      }, daysWithActivities);
+      }, daysWithActivities[yearMonth]);
+    }
+
+    /**
+     * Creates a debounced version of the `load` function
+     */
+    function createDebouncedLoad () {
+      debouncedLoad = _.debounce(function () {
+        var args = arguments;
+
+        // Execute the function as part of the digest cycle
+        $scope.$apply(function () {
+          load.apply(null, args);
+        });
+      }, DEBOUNCE_WAIT);
     }
 
     /**
@@ -230,10 +226,12 @@
      * in the last refresh (ie they had activites initially, but now they haven't anymore)
      *
      * @param {String} status
+     * @param {String} yearMonth
      */
-    function flushDays (status) {
-      _.forEach(daysWithActivities, function (day, date) {
-        day.status === status && day.toFlush && (delete daysWithActivities[date]);
+    function flushDays (status, yearMonth) {
+      _.forEach(daysWithActivities[yearMonth], function (day, date) {
+        day.status === status && day.toFlush &&
+        (delete daysWithActivities[yearMonth][date]);
       });
     }
 
@@ -276,13 +274,14 @@
      *   can be "day", "month", or "year".
      */
     function getDayCustomClass (params) {
-      var classSuffix = '';
-      var day = daysWithActivities[moment(params.date).format('YYYY-MM-DD')];
+      var classSuffix, day;
       var isInCurrentMonth = this.datepicker.activeDate.getMonth() === params.date.getMonth();
 
       if (!isInCurrentMonth && params.mode === 'day') {
         return 'invisible';
       }
+
+      day = getDayWithActivities(params.date);
 
       if (!day || params.mode !== 'day') {
         return;
@@ -300,11 +299,43 @@
     }
 
     /**
+     * Gets the internally stored day with activities (if any) of the given date
+     *
+     * @param {Date} date
+     * @return {Object/null}
+     */
+    function getDayWithActivities (date) {
+      var day = moment(date).format('YYYY-MM-DD');
+
+      try {
+        return daysWithActivities[getYearMonth(date)][day];
+      } catch (e) {
+        return null;
+      }
+    }
+
+    /**
+     * Utility function that returns the year+month of the given date in
+     * the YYYY-MM format
+     *
+     * @param {Date} date
+     * @return {String}
+     */
+    function getYearMonth (date) {
+      return moment(date).format('YYYY-MM');
+    }
+
+    /**
      * Initializes the controller's listeners
      */
     function initListeners () {
-      $rootScope.$on('civicase::uibDaypicker::compiled', load);
       $rootScope.$on('civicase::ActivitiesCalendar::reload', reload);
+      $rootScope.$on('civicase::uibDaypicker::monthSelected', function (__, selectedDate) {
+        setSelectedDateAndLoad(selectedDate, true);
+      });
+      $rootScope.$on('civicase::uibDaypicker::compiled', function (__, selectedDate) {
+        setSelectedDateAndLoad(selectedDate);
+      });
     }
 
     /**
@@ -319,18 +350,39 @@
 
     /**
      * Entry point of the load logic
+     *
+     * @param {Boolean} [useCache=true]
      */
-    function load () {
+    function load (options) {
+      options = _.defaults({}, options, { useCache: true });
+
       $scope.loadingDays = true;
 
-      loadDaysWithActivitiesIncomplete()
-        .then(function () {
-          $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
-        })
-        .then(loadDaysWithActivitiesCompleted)
-        .then(function () {
-          $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
-        })
+      // @NOTE The user could be switching to different dates (in particular, months)
+      // in between the first and second request (as they are not made in parallel).
+      //
+      // The IIFE is then used to keep a reference to the value of `selectedDate`
+      // at the moment of invocation, to make sure that both api requests are made
+      // for the same date
+      //
+      // This is also the reason why `date` has to be passed all the way down
+      // to the `loadDaysWithActivities` function
+      (function (date) {
+        if (options.useCache && daysWithActivities[getYearMonth(date)]) {
+          return $q.resolve();
+        }
+
+        return loadDaysWithActivitiesIncomplete(date)
+          .then(function () {
+            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+          })
+          .then(function () {
+            return loadDaysWithActivitiesCompleted(date);
+          })
+          .then(function () {
+            $scope.$emit('civicase::ActivitiesCalendar::refreshDatepicker');
+          });
+      }(selectedDate))
         .then(function () {
           $scope.loadingDays = false;
         });
@@ -372,11 +424,12 @@
      * Loads the activities of the given date. It checks if the activities are
      * already cached before making an API request
      *
-     * @param {String} date YYYY-MM-DD
+     * @param {Date} date
      * @return {Promise} resolves to {Array}
      */
     function loadActivitiesOfDate (date) {
-      var day = daysWithActivities[date];
+      var dateMoment = moment(date);
+      var day = getDayWithActivities(date);
 
       if (day.activitiesCache.length) {
         return $q.resolve(day.activitiesCache);
@@ -384,7 +437,10 @@
 
       return loadActivities({
         activity_date_time: {
-          BETWEEN: [ date + ' 00:00:00', date + ' 23:59:59' ]
+          BETWEEN: [
+            dateMoment.format('YYYY-MM-DD') + ' 00:00:00',
+            dateMoment.format('YYYY-MM-DD') + ' 23:59:59'
+          ]
         }
       })
         .then(function (activities) {
@@ -407,15 +463,27 @@
     }
 
     /**
-     * Loads the dates with at least an activity with the given status(es)
+     * Loads the days within the month of the given date
+     * with at least an activity with the given status(es)
      *
-     * @param {*} statusParam
+     * The days are returned in an object containing also the year+month they
+     * belong to, so that they can be properly grouped in the internal list of days
+     *
+     * @param {Date} date
+     * @param {*} status
      * @return {Promise}
      */
-    function loadDaysWithActivities (statusParam) {
+    function loadDaysWithActivities (date, status) {
       var params = {};
+      var dateMoment = moment(date);
 
-      params.status_id = statusParam;
+      params.status_id = status;
+      params.activity_date_time = {
+        BETWEEN: [
+          dateMoment.startOf('month').format('YYYY-MM-DD HH:mm:ss'),
+          dateMoment.endOf('month').format('YYYY-MM-DD HH:mm:ss')
+        ]
+      };
 
       if ($scope.caseId) {
         params.case_id = getCaseIdApiParam();
@@ -433,51 +501,113 @@
     /**
      * Loads the days with at least a completed activity
      *
+     * @param {Date} date
      * @return {Promise}
      */
-    function loadDaysWithActivitiesCompleted () {
-      return loadDaysWithActivities(CRM.civicase.activityStatusTypes.completed[0])
-        .then(_.curryRight(updateDaysList)('completed'));
+    function loadDaysWithActivitiesCompleted (date) {
+      var status = CRM.civicase.activityStatusTypes.completed[0];
+
+      return loadDaysWithActivities(date, status)
+        .then(_.curryRight(updateDaysList)(date)('completed'));
     }
 
     /**
      * Loads the days with at least an incomplete activity
      *
+     * @param {Date} date
      * @return {Promise}
      */
-    function loadDaysWithActivitiesIncomplete () {
-      return loadDaysWithActivities({
-        'IN': CRM.civicase.activityStatusTypes.incomplete
-      })
-        .then(_.curryRight(updateDaysList)('incomplete'));
+    function loadDaysWithActivitiesIncomplete (date) {
+      var status = { 'IN': CRM.civicase.activityStatusTypes.incomplete };
+
+      return loadDaysWithActivities(date, status)
+        .then(_.curryRight(updateDaysList)(date)('incomplete'));
     }
 
     /**
-     * It marks all the days currently in the internal list to be deleted, before
-     * triggering the main load logic
+     * Called when the user clicks on a day on the datepicker directive
      *
-     * This ensures that if some days won't be returned again from any of the
-     * API calls, they will be deleted
+     * If the day has any activities on it, it loads the activities and display
+     * them in a popover
+     */
+    function onDateSelected () {
+      if (!getDayWithActivities($scope.selectedDate)) {
+        return;
+      }
+
+      $scope.loadingActivities = true;
+      $scope.selectedActivites = [];
+
+      $scope.$emit('civicase::ActivitiesCalendar::openActivitiesPopover');
+
+      loadActivitiesOfDate($scope.selectedDate)
+        .then(function (activities) {
+          loadContactsOfActivities(activities)
+            .then(function () {
+              $scope.selectedActivites = activities;
+              $scope.loadingActivities = false;
+            });
+        });
+    }
+
+    /**
+     * Before calling the main load logic and forcing it to not use the cache, it
+     * performs two type of data reset
+     *
+     * hard reset: all months except the one of the currently selected date get
+     * deleted directly from the internal cache
+     *
+     * soft reset: the month of the currently selected date is not deleted, but
+     * its days are marked to be flushed (deleted) later, in case they won't get
+     * returned anymore by the next API requests
+     *
+     * The soft reset avoids removing all the dots at once before even making the
+     * API requests, making for a smoother UI experience
      */
     function reload () {
-      _.each(daysWithActivities, function (day) {
-        day.toFlush = true;
+      var currYearMonth = getYearMonth(selectedDate);
+
+      _.each(daysWithActivities, function (days, yearMonth) {
+        if (yearMonth === currYearMonth) {
+          _.each(daysWithActivities[yearMonth], function (day) {
+            day.toFlush = true;
+          });
+        } else {
+          delete daysWithActivities[yearMonth];
+        }
       });
 
-      load();
+      load({ useCache: false });
     }
 
     /**
-     * Update the internal list of days with activities with the specified status
+     * Stores the date currently selected on the datepicker
+     * and triggers the load logic (debounced, if specified)
+     *
+     * @param {Date} selectedDate
+     * @param {Boolean} debounce whether the load logic should be debounced to
+     *   avoid flooding the API
+     */
+    function setSelectedDateAndLoad (_selectedDate_, debounce) {
+      selectedDate = _selectedDate_;
+      debounce === true ? debouncedLoad() : load();
+    }
+
+    /**
+     * Updates the internal list of days with activities with the specified status
+     * (affects only the days belonging to the year+month of the given date)
      *
      * It adds the given days and deletes those that are marked for deletion
      *
      * @param {Object} days api response
      * @param {String} status
+     * @param {Date} date
      */
-    function updateDaysList (days, status) {
-      addDays(days, status);
-      flushDays(status);
+    function updateDaysList (days, status, date) {
+      var yearMonth = getYearMonth(date);
+
+      addDays(days, status, yearMonth);
+      flushDays(status, yearMonth);
     }
   }
 })(CRM.$, CRM._, angular);
