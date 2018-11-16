@@ -2,13 +2,20 @@
   var module = angular.module('civicase');
 
   module.config(function ($provide) {
-    $provide.decorator('uibMonthpickerDirective', function ($controller, $delegate) {
+    $provide.decorator('uibDatepickerDirective', function ($controller, $delegate) {
       var datepicker = $delegate[0];
 
       datepicker.compile = function () {
         return function ($scope) {
           datepicker.link.apply(this, arguments);
-          augmentMonthSelectMethod($scope, 'select');
+
+          // Watches for changes in the value of the currently selected date
+          // and emits an event if the month has changed
+          $scope.$watch('activeDt.date', function (newDate, oldDate) {
+            if (newDate && oldDate && (newDate.getMonth() !== oldDate.getMonth())) {
+              $scope.$emit('civicase::uibDaypicker::monthSelected', $scope.activeDt.date);
+            }
+          });
         };
       };
 
@@ -21,7 +28,6 @@
       datepicker.compile = function () {
         return function ($scope) {
           datepicker.link.apply(this, arguments);
-          augmentMonthSelectMethod($scope, 'move');
 
           // Emits an event to signal that the directive is compiled and attached
           // to the DOM, with the currently selected date passed as param
@@ -63,21 +69,4 @@
       return $delegate;
     });
   });
-
-  /**
-   * Augment the original month select method with the given name, by making it
-   * emit an event with the selected month passed as param
-   *
-   * @param {Object} $scope
-   * @param {String} methodName
-   */
-  function augmentMonthSelectMethod ($scope, methodName) {
-    var originalMethod;
-
-    originalMethod = $scope[methodName];
-    $scope[methodName] = function () {
-      originalMethod.apply(this, arguments);
-      $scope.$emit('civicase::uibDaypicker::monthSelected', $scope.activeDt.date);
-    };
-  }
 })(angular);
