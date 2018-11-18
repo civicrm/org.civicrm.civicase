@@ -1,7 +1,7 @@
 (function ($, _, angular) {
   var module = angular.module('civicase');
 
-  module.directive('civicasePopover', function ($rootScope, $timeout, $uibPosition) {
+  module.directive('civicasePopover', function ($document, $rootScope, $timeout, $uibPosition) {
     return {
       scope: {
         appendTo: '=',
@@ -22,7 +22,6 @@
       var $bootstrapThemeContainer = $('#bootstrap-theme');
       var $toggleButton = $element.find('civicase-popover-toggle-button');
       var $toggleElement = $toggleButton.length > 0 ? $toggleButton : $($scope.positionReference);
-
       $scope.triggerEvent = $scope.triggerEvent || 'click';
 
       (function init () {
@@ -39,6 +38,9 @@
       };
 
       function attachEventListeners () {
+        var $body = $('body');
+        var closeEventHasBeenAttached = $body.hasClass('civicase__popup-attached');
+
         $toggleButton.on($scope.triggerEvent, function (event) {
           if (!$scope.isOpen) {
             $rootScope.$broadcast('civicase::popover::close-all');
@@ -53,14 +55,16 @@
           $scope.isOpen = false;
         });
 
-        if (!$('body').hasClass('civicase__popup-attached')) {
-          $(document).on('click', function ($event) {
-            if ($('.civicase__popover-box').find($event.target).length === 0) {
+        if (!closeEventHasBeenAttached) {
+          $document.on('click', function ($event) {
+            var isNotInsideAPopoverBox = $('.civicase__popover-box').find($event.target).length === 0;
+
+            if (isNotInsideAPopoverBox) {
               $rootScope.$broadcast('civicase::popover::close-all');
               $rootScope.$digest();
             }
           });
-          $('body').addClass('civicase__popup-attached');
+          $body.addClass('civicase__popup-attached');
         }
       }
 
