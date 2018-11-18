@@ -57,6 +57,7 @@
           $(document).on('click', function ($event) {
             if ($('.civicase__popover-box').find($event.target).length === 0) {
               $rootScope.$broadcast('civicase::popover::close-all');
+              $rootScope.$digest();
             }
           });
           $('body').addClass('civicase__popup-attached');
