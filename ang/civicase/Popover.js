@@ -25,6 +25,8 @@
       $scope.triggerEvent = $scope.triggerEvent || 'click';
 
       (function init () {
+        $scope.isOpen = false;
+
         transcludeElements();
         initWatchers();
         attachEventListeners();
@@ -47,8 +49,8 @@
           }
 
           $scope.togglePopoverState();
-          $scope.$apply();
           event.stopPropagation();
+          $scope.$digest();
         });
 
         $scope.$on('civicase::popover::close-all', function () {
