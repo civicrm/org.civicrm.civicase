@@ -4,7 +4,6 @@
  * Case.getdetailscount API
  *
  * Provides a count of cases but properly respects filters unlike `getcount`.
- * Please refer to C51-277 for more information.
  *
  * @param array $params
  * @return array API result
