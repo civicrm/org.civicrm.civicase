@@ -13,6 +13,10 @@ function civicrm_api3_case_getdetailscount($params) {
   $params['options'] = CRM_Utils_Array::value('options', $params, []);
   $params['options']['is_count'] = 1;
 
+  // Remove unnecesary parameters:
+  unset($params['return']);
+  unset($params['sequential']);
+
   $casesList = civicrm_api3('Case', 'getdetails', $params);
 
   return $casesList['values'];
