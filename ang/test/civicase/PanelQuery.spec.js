@@ -393,6 +393,25 @@
         it('stores the count', function () {
           expect(panelQueryScope.total).toEqual(NO_OF_RESULTS);
         });
+
+        describe('when the count action is provided', function () {
+          var action;
+
+          beforeEach(function () {
+            $scope.queryData.countAction = 'customcountaction';
+
+            crmApi.calls.reset();
+            compileDirective();
+
+            requests = crmApi.calls.argsFor(0)[0];
+            request = requests[Object.keys(requests)[1]];
+            action = request[1];
+          });
+
+          it('gets the count using the provided count action', function () {
+            expect(action).toBe($scope.queryData.countAction);
+          });
+        });
       });
     });
 
