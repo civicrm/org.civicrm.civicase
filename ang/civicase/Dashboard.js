@@ -35,7 +35,7 @@
         cf.status_id = [status];
       }
       if ($scope.myCasesOnly) {
-        cf.case_manager = [CRM.config.user_contact_id];
+        cf.case_manager = CRM.config.user_contact_id;
       }
       return '#/case/list?' + $.param({cf: JSON.stringify(cf)});
     };
@@ -55,7 +55,7 @@
      */
     function caseRelationshipTypeWatcher (newValue) {
       newValue === 'is_case_manager'
-        ? $scope.activityFilters.case_filter.case_manager = [CRM.config.user_contact_id]
+        ? $scope.activityFilters.case_filter.case_manager = CRM.config.user_contact_id
         : delete ($scope.activityFilters.case_filter.case_manager);
 
       newValue === 'is_involved'

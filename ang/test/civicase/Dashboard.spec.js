@@ -57,7 +57,7 @@
 
         it('filters the cases and activties where the user is the manager', function () {
           expect($scope.activityFilters.case_filter).toEqual(jasmine.objectContaining({
-            case_manager: [ CRM.config.user_contact_id ]
+            case_manager: CRM.config.user_contact_id
           }));
         });
       });
