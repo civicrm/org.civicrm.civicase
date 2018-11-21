@@ -351,7 +351,7 @@
       }
       return [
         ['Case', 'getcaselist', $.extend(true, returnCaseParams, params)],
-        ['Case', 'getcount', params]
+        ['Case', 'getdetailscount', params]
       ];
     }
 

@@ -48,7 +48,7 @@
             'id': { 'LIKE': '%' + $scope.filters.id + '%' },
             'contact_is_deleted': 0
           })],
-          ['Case', 'getcount', jasmine.objectContaining({
+          ['Case', 'getdetailscount', jasmine.objectContaining({
             'case_type_id.is_active': 1,
             'id': { 'LIKE': '%' + $scope.filters.id + '%' },
             'contact_is_deleted': 0

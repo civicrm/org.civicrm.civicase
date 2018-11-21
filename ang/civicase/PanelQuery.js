@@ -120,7 +120,7 @@
 
       var apiCalls = {
         get: [ $scope.query.entity, ($scope.query.action || 'get'), prepareGetParams(paramsCopy) ],
-        count: [ $scope.query.entity, 'getcount', paramsCopy ]
+        count: [ $scope.query.entity, ($scope.query.countAction || 'getcount'), paramsCopy ]
       };
 
       skipCount && (delete apiCalls.count);

@@ -43,13 +43,9 @@
         'name': 'related',
         'title': 'Other cases for this contact',
         'filterParams': {
-          'case_manager': Contact.getContactIDFromUrl(),
-          'options': { // Todo: Should be removed after Fixing count API response for case list. C51-277
-            'limit': 0
-          }
+          'case_manager': Contact.getContactIDFromUrl()
         },
-        'showContactRole': true,
-        'disableLoadMore': true // Todo: Should be removed after Fixing count API response for case list. C51-277
+        'showContactRole': true
       }
     ];
 
@@ -147,7 +143,7 @@
         totalCountApi.push(params.count);
       });
 
-      // getTotalCasesCount(totalCountApi); // Todo: Uncommented after Fixing count API response for case list. C51-277
+      getTotalCasesCount(totalCountApi);
     }
 
     /**
@@ -178,7 +174,7 @@
 
       return {
         cases: ['Case', 'getcaselist', $.extend(true, returnCaseParams, filter, params)],
-        count: ['Case', 'getcount', $.extend(true, returnCaseParams, filter, params)]
+        count: ['Case', 'getdetailscount', $.extend(true, returnCaseParams, filter, params)]
       };
     }
 
@@ -241,7 +237,6 @@
         }, []);
 
         fetchContactsData(allCases);
-        $scope.totalCount = allCases.length; // Todo: Should be removed after Fixing count API response for case list. C51-277
 
         if (!$scope.selectedCase) {
           setCaseAsSelected(allCases[0]);

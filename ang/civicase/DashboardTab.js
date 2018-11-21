@@ -85,7 +85,7 @@
     };
     $scope.newCasesPanel = {
       custom: { itemName: 'cases', caseClick: casesCustomClick },
-      query: { entity: 'Case', action: 'getcaselist', params: getQueryParams('cases') },
+      query: { entity: 'Case', action: 'getcaselist', countAction: 'getdetailscount', params: getQueryParams('cases') },
       handlers: {
         range: _.curry(rangeHandler)('start_date')('YYYY-MM-DD')(false),
         results: _.curry(resultsHandler)(formatCase)('contacts')
