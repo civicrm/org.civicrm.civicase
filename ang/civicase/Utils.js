@@ -443,6 +443,11 @@
     /**
      * Link function for civicaseUiDateRange directive
      *
+     * Given that the directive uses crm-ui-datepicker with `time: false`
+     * (that is, the user can't select the time manually), it makes sure that
+     * any selected "from" date is set with the time = 00:00:00
+     * and any selected "to" date with the time = 23:59:59
+     *
      * @param {Object} $scope
      * @param {Object} element
      * @param {Object} attrs
@@ -453,17 +458,38 @@
         if (context === 'userInput' || context === 'crmClear') {
           $timeout(function () {
             if ($scope.input.from && $scope.input.to) {
-              $scope.data = {BETWEEN: [$scope.input.from, $scope.input.to]};
+              $scope.data = { BETWEEN: [
+                setDateTimeAsRangeLimit($scope.input.from, 'lower'),
+                setDateTimeAsRangeLimit($scope.input.to, 'upper')
+              ] };
             } else if ($scope.input.from) {
-              $scope.data = {'>=': $scope.input.from};
+              $scope.data = {'>=': setDateTimeAsRangeLimit($scope.input.from, 'lower')};
             } else if ($scope.input.to) {
-              $scope.data = {'<=': $scope.input.to};
+              $scope.data = {'<=': setDateTimeAsRangeLimit($scope.input.to, 'upper')};
             } else {
               $scope.data = null;
             }
           });
         }
       });
+    }
+
+    /**
+     * Given a date or datetime, it returns it as the lower (YYYY-MM-DD 00:00:00)
+     * or upper (YYYY-MM-DD 23:59:59) datetime range limit
+     *
+     * @param {String} dateTime
+     *   could be either YYYY-MM-DD or YYYY-MM-DD HH:mm:ss
+     * @param {String} [limit="lower"]
+     *   whether the datetime should be set as the lower or upper limit
+     * @return {String}
+     */
+    function setDateTimeAsRangeLimit (dateTime, limit) {
+      limit = limit !== 'upper' ? 'lower' : limit;
+
+      return dateTime.split(' ')[0] + ' ' + (
+        limit === 'lower' ? '00:00:00' : '23:59:59'
+      );
     }
   });
 
