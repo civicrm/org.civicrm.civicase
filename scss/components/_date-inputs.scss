@@ -1,11 +1,17 @@
 .civicase__ui-range {
   > span {
     display: inline-block;
+    margin-right: 16px;
+  }
+
+  .crm-form-date {
+    display: inline-block;
+    width: 134px;
   }
 
   .crm-form-date-wrapper {
     display: inline-block;
-    position: relative;  
+    position: relative;
   }
 
   .crm-clear-link {
@@ -17,6 +23,6 @@
 
     .fa-times::before {
       content: '\f057';
-    }      
-  }  
+    }
+  }
 }

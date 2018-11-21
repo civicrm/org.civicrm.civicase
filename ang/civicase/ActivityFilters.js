@@ -140,6 +140,11 @@
             name: 'text',
             label: ts('Contains text'),
             html_type: 'Text'
+          },
+          {
+            name: 'activity_date_time',
+            label: ts('Activity date'),
+            html_type: 'Select Date'
           }
         ];
 
