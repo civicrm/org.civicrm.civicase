@@ -6,6 +6,7 @@
       scope: {
         appendTo: '=',
         isOpen: '=?',
+        positionReference: '=',
         triggerEvent: '=?'
       },
       transclude: {
@@ -95,13 +96,14 @@
        */
       function initWatchers () {
         $scope.$watch('isOpen', repositionPopover);
+        $scope.$watch('positionReference', repositionPopover);
       }
 
       /**
        * Reposition the popover element
        */
       function repositionPopover () {
-        var position;
+        var position, positionReference;
 
         if (!$scope.isOpen) {
           return;
@@ -109,7 +111,8 @@
 
         initPopoverReference();
 
-        position = getPopoverPositionUnderElement($toggleButton);
+        positionReference = $scope.positionReference || $toggleButton;
+        position = getPopoverPositionUnderElement(positionReference);
         $popover.css(position);
       }
 

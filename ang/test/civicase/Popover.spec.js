@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 
 (function ($) {
-  fdescribe('Popover', function () {
+  describe('Popover', function () {
     var $compile, $rootScope, $scope, $toggleButton, $uibPosition, popover;
 
     beforeEach(module('civicase', 'civicase.templates'));
@@ -13,11 +13,12 @@
     }));
 
     beforeEach(function () {
+      $scope = $rootScope.$new();
       initDirective();
     });
 
     afterEach(function () {
-      $('.civicase-popover-test').remove();
+      removeTestDomElements();
     });
 
     describe('opening the popover', function () {
@@ -72,6 +73,28 @@
       });
     });
 
+    describe('opening the popover on top of a specific element', function () {
+      var currentPosition, expectedPosition, sampleReference;
+
+      describe('when the position reference is provided', function () {
+        beforeEach(function () {
+          sampleReference = $('.sample-reference');
+          $scope.positionReference = sampleReference;
+
+          removeTestDomElements();
+          initDirective();
+          $toggleButton.click();
+
+          expectedPosition = getPopoverExpectedPositionUnderElement(sampleReference);
+          currentPosition = getPopoverCurrentPosition();
+        });
+
+        it('displays the popover under the given element', function () {
+          expect(currentPosition).toEqual(expectedPosition);
+        });
+      });
+    });
+
     /**
      * Returns the current position of the popover element.
      *
@@ -108,7 +131,8 @@
       var testHtml = $(`
         <div class="civicase-popover-test">
           <div id="bootstrap-theme"></div>
-          <civicase-popover>
+          <i class="sample-reference">Sample reference element</i>
+          <civicase-popover position-reference="positionReference">
             <civicase-popover-toggle-button>
               When you click here,
             </civicase-popover-toggle-button>
@@ -121,12 +145,18 @@
 
       testHtml.appendTo('body');
 
-      $scope = $rootScope.$new();
       popover = $compile(testHtml)($scope);
 
       $rootScope.$digest();
 
       $toggleButton = popover.find('civicase-popover-toggle-button');
+    }
+
+    /**
+     * Removes DOM elements added by this spec.
+     */
+    function removeTestDomElements () {
+      $('.civicase-popover-test').remove();
     }
   });
 })(CRM.$);
