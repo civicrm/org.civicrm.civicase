@@ -58,10 +58,6 @@
       beforeEach(function () {
         result = activityPanelMeasurements.getTopOffset();
         expectedResult = $activityPanel.offset().top - toolbarTabsFiltersHeight;
-        console.log('@@@', $activityPanel.offset(), toolbarTabsFiltersHeight, result);
-        if (result !== expectedResult) {
-          console.log($('body').html());
-        }
       });
 
       it('returns the panel top offset taking into consideration the toolbar, case tabs, and case filters height', function () {
