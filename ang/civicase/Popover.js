@@ -6,7 +6,6 @@
       scope: {
         appendTo: '=',
         isOpen: '=?',
-        positionReference: '=',
         triggerEvent: '=?'
       },
       transclude: {
@@ -18,13 +17,12 @@
     };
 
     function civicasePopoverLink ($scope, $element, attrs, ctrl, $transcludeFn) {
-      var $popover;
-      var $bootstrapThemeContainer = $('#bootstrap-theme');
-      var $toggleButton = $element.find('civicase-popover-toggle-button');
-      var $toggleElement = $toggleButton.length > 0 ? $toggleButton : $($scope.positionReference);
-      $scope.triggerEvent = $scope.triggerEvent || 'click';
+      var $bootstrapThemeContainer, $popover, $toggleButton;
 
       (function init () {
+        $bootstrapThemeContainer = $('#bootstrap-theme');
+        $toggleButton = $element.find('civicase-popover-toggle-button');
+        $scope.triggerEvent = $scope.triggerEvent || 'click';
         $scope.isOpen = false;
 
         transcludeElements();
@@ -97,7 +95,6 @@
        */
       function initWatchers () {
         $scope.$watch('isOpen', repositionPopover);
-        $scope.$watch('positionReference', repositionPopover);
       }
 
       /**
@@ -106,13 +103,13 @@
       function repositionPopover () {
         var position;
 
-        if (!$scope.isOpen || !$scope.positionReference) {
+        if (!$scope.isOpen) {
           return;
         }
 
         initPopoverReference();
 
-        position = getPopoverPositionUnderElement($toggleElement);
+        position = getPopoverPositionUnderElement($toggleButton);
         $popover.css(position);
       }
 

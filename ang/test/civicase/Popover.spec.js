@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 
 (function ($) {
-  describe('Popover', function () {
+  fdescribe('Popover', function () {
     var $compile, $rootScope, $scope, $toggleButton, $uibPosition, popover;
 
     beforeEach(module('civicase', 'civicase.templates'));
@@ -108,7 +108,7 @@
       var testHtml = $(`
         <div class="civicase-popover-test">
           <div id="bootstrap-theme"></div>
-          <civicase-popover position-reference="'#bootstrap-theme'" trigger-event="'click'">
+          <civicase-popover>
             <civicase-popover-toggle-button>
               When you click here,
             </civicase-popover-toggle-button>
