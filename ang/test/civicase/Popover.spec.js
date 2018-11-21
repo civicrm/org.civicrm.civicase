@@ -55,6 +55,17 @@
           expect($('#bootstrap-theme .popover').length).toBe(1);
         });
       });
+
+      describe('when "is open" is set to true', function () {
+        beforeEach(function () {
+          $scope.isOpen = true;
+          $rootScope.$digest();
+        });
+
+        it('displays the popover content', function () {
+          expect(popover.find('civicase-popover-content').is(':visible')).toBe(true);
+        });
+      });
     });
 
     describe('when the popover is open', function () {
@@ -132,7 +143,9 @@
         <div class="civicase-popover-test">
           <div id="bootstrap-theme"></div>
           <i class="sample-reference">Sample reference element</i>
-          <civicase-popover position-reference="positionReference">
+          <civicase-popover
+            position-reference="positionReference"
+            is-open="isOpen">
             <civicase-popover-toggle-button>
               When you click here,
             </civicase-popover-toggle-button>
