@@ -9,12 +9,20 @@
     <div class="arrow"></div>
     <div class="popover-content" ng-switch="loadingActivities">
       <civicase-activity-card-placeholder ng-switch-when="true"></civicase-activity-card-placeholder>
-      <div ng-switch-when="false" ng-repeat="activity in selectedActivites | orderBy: '-is_overdue'"
+      <div
+        ng-switch-when="false"
+        ng-repeat="activity in selectedActivites | orderBy: '-is_overdue' | limitTo:activitiesDisplayLimit"
         case-activity-card="activity"
         custom-dropdown-class="civicase__activities-calendar__dropdown"
         refresh-on-checkbox-toggle="true"
         refresh-callback="refresh">
       </div>
+      <a
+        ng-if="selectedActivites.length > activitiesDisplayLimit"
+        class="btn btn-block btn-secondary text-uppercase"
+        ng-href="{{seeMoreLinkUrl(selectedDate)}}">
+        see more
+      </a>
     </div>
   </div>
 </div>

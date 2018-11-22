@@ -150,8 +150,8 @@
 
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
-  function civicaseActivitiesCalendarController ($q, $rootScope, $scope, crmApi,
-    formatActivity, ContactsDataService) {
+  function civicaseActivitiesCalendarController ($q, $rootScope, $route, $sce,
+    $scope, crmApi, formatActivity, ContactsDataService) {
     var ACTIVITIES_DISPLAY_LIMIT = 25;
     var DEBOUNCE_WAIT = 300;
 
@@ -172,6 +172,7 @@
     };
 
     $scope.onDateSelected = onDateSelected;
+    $scope.seeMoreLinkUrl = seeMoreLinkUrl;
 
     (function init () {
       createDebouncedLoad();
@@ -314,6 +315,30 @@
       } catch (e) {
         return null;
       }
+    }
+
+    /**
+     * Returns the querystring params for the "see more" link, so that the link
+     * sends the user to the activity feed already filtered by the given date
+     *
+     * @param {Date} date
+     * @return {Object}
+     */
+    function getSeeMoreQueryParams (date) {
+      var dateMoment = moment(date);
+
+      return _.merge({}, $route.current.params, {
+        dtab: 1,
+        af: {
+          '@moreFilters': true,
+          activity_date_time: {
+            BETWEEN: [
+              dateMoment.startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+              dateMoment.endOf('day').format('YYYY-MM-DD HH:mm:ss')
+            ]
+          }
+        }
+      });
     }
 
     /**
@@ -583,6 +608,20 @@
       });
 
       load({ useCache: false });
+    }
+
+    /**
+     * Creates the url for the "see more" link, based on the given date
+     * (the link will send the user to the activity feed, filtered by that date)
+     *
+     * @return {Date} date
+     * @return {TrustedValueHolderType}
+     */
+    function seeMoreLinkUrl (date) {
+      var urlParams = getSeeMoreQueryParams(date);
+      urlParams.af = JSON.stringify(urlParams.af);
+
+      return $sce.trustAsResourceUrl('#/case?' + $.param(urlParams));
     }
 
     /**

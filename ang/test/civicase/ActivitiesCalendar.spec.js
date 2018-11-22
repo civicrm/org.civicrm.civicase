@@ -624,6 +624,65 @@
       });
     });
 
+    describe('"see more" link url', function () {
+      var currentRouteParams, queryParams, url;
+
+      beforeEach(function () {
+        currentRouteParams = {
+          dtab: 0,
+          foo: 'foo',
+          af: { bar: 'bar' }
+        };
+
+        initController(null, {
+          '$route': { current: { params: currentRouteParams } }
+        });
+
+        url = $scope.seeMoreLinkUrl(dates.yesterday);
+        queryParams = extractQueryStringParams();
+      });
+
+      it('is a trusted url', function () {
+        expect(url.$$unwrapTrustedValue).toBeDefined();
+      });
+
+      it('redirects to the activities feed tab', function () {
+        expect(queryParams.dtab).toBe('1');
+      });
+
+      it('opens by default the "filter activites" section', function () {
+        expect(queryParams.af['@moreFilters']).toBe(true);
+      });
+
+      it('automatically filters the feed by the given date', function () {
+        expect(queryParams.af.activity_date_time).toEqual({
+          'BETWEEN': [
+            moment(dates.yesterday).startOf('day').format('YYYY-MM-DD+HH:mm:ss'),
+            moment(dates.yesterday).endOf('day').format('YYYY-MM-DD+HH:mm:ss')
+          ]
+        });
+      });
+
+      it('keeps the rest of the params of the current route', function () {
+        expect(queryParams.foo).toBe(currentRouteParams.foo);
+        expect(queryParams.af.bar).toBe(currentRouteParams.af.bar);
+      });
+
+      function extractQueryStringParams () {
+        var paramsCouples = url.$$unwrapTrustedValue().split('?')[1].split('&');
+
+        return paramsCouples.reduce(function (acc, couple) {
+          var coupleKeyVal = couple.split('=');
+
+          acc[coupleKeyVal[0]] = coupleKeyVal[0] === 'af'
+            ? JSON.parse(decodeURIComponent(coupleKeyVal[1]))
+            : coupleKeyVal[1];
+
+          return acc;
+        }, {});
+      }
+    });
+
     /**
      * Generates some mock activities, each with an id and some contact ids
      */
@@ -666,10 +725,10 @@
     /**
      * Initializes the activities calendar component
      */
-    function initController ($params) {
-      $controller('civicaseActivitiesCalendarController', {
+    function initController ($params, otherDeps) {
+      $controller('civicaseActivitiesCalendarController', _.assign({
         $scope: _.assign($scope, { caseId: _.uniqueId() }, $params)
-      });
+      }, otherDeps));
     }
 
     /**
