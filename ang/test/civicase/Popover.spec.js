@@ -191,6 +191,7 @@
           <style>
             /* Ensures the popover is smaller than the current window's width: */
             .popover {
+              position: absolute;
               width: 100px;
             }
           </style>

@@ -130,7 +130,7 @@
           return;
         }
 
-        !$popover && initPopoverReference();
+        initPopoverReference();
 
         positionReference = $scope.positionReference || $toggleButton;
         position = getPopoverPositionUnderElement(positionReference);
