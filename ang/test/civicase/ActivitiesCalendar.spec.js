@@ -395,6 +395,16 @@
         spyOn($scope, '$emit').and.callThrough();
       });
 
+      describe('basic tests', function () {
+        beforeEach(function () {
+          initController();
+        });
+
+        it('has a limit set for how many activities should be displayed', function () {
+          expect($scope.activitiesDisplayLimit).toBe(25);
+        });
+      });
+
       describe('when selecting a date with no activities included', function () {
         beforeEach(function () {
           initializeForDateSelect();
@@ -424,16 +434,38 @@
           expect($scope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::openActivitiesPopover');
         });
 
-        it('makes an api request to fetch all the activities for that date', function () {
-          var formattedDay = moment(dates.today).format('YYYY-MM-DD');
+        it('makes an api request', function () {
+          expect(crmApi).toHaveBeenCalledWith('Activity', 'get', jasmine.any(Object));
+        });
 
-          expect(crmApi).toHaveBeenCalledWith('Activity', 'get', jasmine.objectContaining({
-            activity_date_time: {
-              BETWEEN: [ formattedDay + ' 00:00:00', formattedDay + ' 23:59:59' ]
-            },
-            case_id: $scope.caseId,
-            options: { limit: 0 }
-          }));
+        describe('api request params', function () {
+          var params;
+
+          beforeEach(function () {
+            params = crmApi.calls.argsFor(0)[2];
+          });
+
+          it('fetches the activities of the selected date', function () {
+            var formattedDay = moment(dates.today).format('YYYY-MM-DD');
+
+            expect(params).toEqual(jasmine.objectContaining({
+              activity_date_time: {
+                BETWEEN: [ formattedDay + ' 00:00:00', formattedDay + ' 23:59:59' ]
+              }
+            }));
+          });
+
+          it('fetches the activities belonging to the case passed in the scope', function () {
+            expect(params).toEqual(jasmine.objectContaining({
+              case_id: $scope.caseId
+            }));
+          });
+
+          it('fetches one activity more than the display limit', function () {
+            expect(params).toEqual(jasmine.objectContaining({
+              options: { limit: $scope.activitiesDisplayLimit + 1 }
+            }));
+          });
         });
 
         describe('when the activities are loaded', function () {

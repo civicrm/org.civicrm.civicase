@@ -152,12 +152,14 @@
 
   function civicaseActivitiesCalendarController ($q, $rootScope, $scope, crmApi,
     formatActivity, ContactsDataService) {
+    var ACTIVITIES_DISPLAY_LIMIT = 25;
     var DEBOUNCE_WAIT = 300;
 
     var debouncedLoad;
     var daysWithActivities = {};
     var selectedDate = null;
 
+    $scope.activitiesDisplayLimit = ACTIVITIES_DISPLAY_LIMIT;
     $scope.loadingDays = false;
     $scope.loadingActivities = false;
     $scope.selectedActivites = [];
@@ -412,7 +414,10 @@
         ],
         sequential: 1,
         options: {
-          limit: 0
+          // We try to get one activity more than the display limit, so we can
+          // tell if we need to show the "show more" link in the activities list
+          // (if the limit is 25 and we fetched 26, we still show 25 + "show more")
+          limit: $scope.activitiesDisplayLimit + 1
         }
       }))
         .then(function (result) {
