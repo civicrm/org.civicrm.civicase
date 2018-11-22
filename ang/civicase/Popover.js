@@ -6,6 +6,7 @@
       scope: {
         appendTo: '=',
         isOpen: '=?',
+        popoverClass: '@',
         positionReference: '=',
         triggerEvent: '=?'
       },
