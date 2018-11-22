@@ -18,7 +18,7 @@
     };
 
     function civicasePopoverLink ($scope, $element, attrs, ctrl, $transcludeFn) {
-      var $bootstrapThemeContainer, $popover, $toggleButton;
+      var $bootstrapThemeContainer, $popover, $popoverArrow, $toggleButton;
 
       (function init () {
         $bootstrapThemeContainer = $('#bootstrap-theme');
@@ -84,6 +84,22 @@
       }
 
       /**
+       * Returns the number of pixes the popover needs to be adjusted to take into
+       * consideration the position of the popover arrow.
+       *
+       * @param {String} direction the direction the popover will be aligned to.
+       */
+      function getArrowPositionModifier (direction) {
+        if (direction === 'bottom-left') {
+          return $popoverArrow.outerWidth() / 2 * -1;
+        } else if (direction === 'bottom-right') {
+          return $popoverArrow.outerWidth() / 2;
+        } else {
+          return 0;
+        }
+      }
+
+      /**
        * Get the left and top position for the popover relative to the given element
        * and direction.
        *
@@ -92,14 +108,15 @@
        *   defaults to "bottom".
        */
       function getPopoverPositionUnderElement ($element, direction) {
-        var position, bootstrapThemeContainerOffset;
+        var arrowPositionModifier, position, bootstrapThemeContainerOffset;
         direction = direction || 'bottom';
         position = $uibPosition.positionElements($element, $popover, direction, true);
         bootstrapThemeContainerOffset = $bootstrapThemeContainer.offset();
+        arrowPositionModifier = getArrowPositionModifier(direction);
 
         return {
           top: position.top - bootstrapThemeContainerOffset.top,
-          left: position.left - bootstrapThemeContainerOffset.left
+          left: position.left - bootstrapThemeContainerOffset.left + arrowPositionModifier
         };
       }
 
@@ -108,6 +125,7 @@
        */
       function initPopoverReference () {
         $popover = $element.find('.popover');
+        $popoverArrow = $popover.find('.arrow');
 
         $popover.appendTo($scope.appendTo ? $($scope.appendTo) : $bootstrapThemeContainer);
       }
@@ -138,8 +156,14 @@
 
         if (isHidden.left) {
           position = getPopoverPositionUnderElement(positionReference, 'bottom-left');
+
+          $popoverArrow.css('left', $popoverArrow.outerWidth());
         } else if (isHidden.right) {
           position = getPopoverPositionUnderElement(positionReference, 'bottom-right');
+
+          $popoverArrow.css('left', 'calc(100% - ' + $popoverArrow.outerWidth() + 'px)');
+        } else {
+          $popoverArrow.css('left', '50%');
         }
 
         $popover.css(position);

@@ -66,6 +66,10 @@
         it('appends the popover to the bootstrap theme container', function () {
           expect($('#bootstrap-theme .popover').length).toBe(1);
         });
+
+        it('aligns the popover arrow to the middle of the popover', function () {
+          expect(popover.find('.arrow').css('left')).toBe('50%');
+        });
       });
 
       describe('when "is open" is set to true', function () {
@@ -136,6 +140,13 @@
         it('displays the popover inside of the window', function () {
           expect(currentPosition).toEqual(expectedPosition);
         });
+
+        it('aligns the popover arrow to the left', function () {
+          var arrowCurrentPosition = popover.find('.arrow').css('left');
+          var arrowExpectedPosition = popover.find('.arrow').outerWidth() + 'px';
+
+          expect(arrowCurrentPosition).toBe(arrowExpectedPosition);
+        });
       });
 
       describe('when the popover is hidden by the windows right border', function () {
@@ -149,6 +160,13 @@
 
         it('displays the popover inside of the window', function () {
           expect(currentPosition).toEqual(expectedPosition);
+        });
+
+        it('aligns the popover arrow to the right', function () {
+          var arrowCurrentPosition = popover.find('.arrow').css('left');
+          var arrowExpectedPosition = 'calc(-' + popover.find('.arrow').outerWidth() + 'px + 100%)'; // 100% - arrow width
+
+          expect(arrowCurrentPosition).toBe(arrowExpectedPosition);
         });
       });
     });
@@ -172,13 +190,21 @@
      */
     function getPopoverExpectedPositionUnderElement ($element, direction) {
       var $popover = popover.find('.popover');
+      var $popoverArrow = popover.find('.arrow');
       var $bootstrapThemeContainer = $('#bootstrap-theme');
       var position = $uibPosition.positionElements($element, $popover, (direction || 'bottom'), true);
       var bootstrapThemeContainerOffset = $bootstrapThemeContainer.offset();
+      var arrowPositionModifier = 0;
+
+      if (direction === 'bottom-left') {
+        arrowPositionModifier = $popoverArrow.outerWidth() / 2 * -1;
+      } else if (direction === 'bottom-right') {
+        arrowPositionModifier = $popoverArrow.outerWidth() / 2;
+      }
 
       return {
         top: position.top - bootstrapThemeContainerOffset.top + 'px',
-        left: position.left - bootstrapThemeContainerOffset.left + 'px'
+        left: position.left - bootstrapThemeContainerOffset.left + arrowPositionModifier + 'px'
       };
     }
 
@@ -193,6 +219,10 @@
             .popover {
               position: absolute;
               width: 100px;
+            }
+
+            .arrow {
+              padding: 0 11px;
             }
           </style>
           <div id="bootstrap-theme"></div>
