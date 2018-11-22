@@ -19,6 +19,11 @@
 
     function civicasePopoverLink ($scope, $element, attrs, ctrl, $transcludeFn) {
       var $bootstrapThemeContainer, $popover, $popoverArrow, $toggleButton;
+      var ARROW_POSITION_VALUES = {
+        'default': '50%',
+        'bottom-left': '%width%px',
+        'bottom-right': 'calc(100% - %width%px)'
+      };
 
       (function init () {
         $bootstrapThemeContainer = $('#bootstrap-theme');
@@ -70,20 +75,6 @@
       }
 
       /**
-       * Determines if the given position would either hide the popopver on the left or right
-       * window's border.
-       *
-       * @param {Object} position
-       * @return {Object}
-       */
-      function checkIfPositionHidesPopover (position) {
-        return {
-          left: position.left - $popover.width() < 0,
-          right: position.left + $popover.width() > $(window).width()
-        };
-      }
-
-      /**
        * Returns the number of pixes the popover needs to be adjusted to take into
        * consideration the position of the popover arrow.
        *
@@ -97,6 +88,25 @@
         } else {
           return 0;
         }
+      }
+
+      /**
+       * Determines which direction the popover should be displayed as given a position.
+       * If the position would make the popover hidden from the viewport, it will return
+       * the proper alignment, otherwise it returns "default".
+       *
+       * @param {Object} position
+       * @return {String}
+       */
+      function getPopoverDirection (position) {
+        var directions = {
+          'bottom-left': position.left - $popover.width() < 0,
+          'bottom-right': position.left + $popover.width() > $(window).width()
+        };
+
+        return _.findKey(directions, function (isDirectionHidden) {
+          return isDirectionHidden;
+        }) || 'default';
       }
 
       /**
@@ -142,7 +152,7 @@
        * Reposition the popover element
        */
       function repositionPopover () {
-        var isHidden, position, positionReference;
+        var arrowPosition, popoverDirection, position, positionReference;
 
         if (!$scope.isOpen) {
           return;
@@ -152,20 +162,15 @@
 
         positionReference = $scope.positionReference || $toggleButton;
         position = getPopoverPositionUnderElement(positionReference);
-        isHidden = checkIfPositionHidesPopover(position);
+        popoverDirection = getPopoverDirection(position);
+        arrowPosition = ARROW_POSITION_VALUES.default;
 
-        if (isHidden.left) {
-          position = getPopoverPositionUnderElement(positionReference, 'bottom-left');
-
-          $popoverArrow.css('left', $popoverArrow.outerWidth());
-        } else if (isHidden.right) {
-          position = getPopoverPositionUnderElement(positionReference, 'bottom-right');
-
-          $popoverArrow.css('left', 'calc(100% - ' + $popoverArrow.outerWidth() + 'px)');
-        } else {
-          $popoverArrow.css('left', '50%');
+        if (popoverDirection !== 'default') {
+          position = getPopoverPositionUnderElement(positionReference, popoverDirection);
+          arrowPosition = ARROW_POSITION_VALUES[popoverDirection].replace('%width%', $popoverArrow.outerWidth());
         }
 
+        $popoverArrow.css('left', arrowPosition);
         $popover.css(position);
       }
 
