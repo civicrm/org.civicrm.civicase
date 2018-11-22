@@ -70,11 +70,32 @@
       }
 
       /**
-       * Get the left and top position for the popover
+       * Determines if the given position would either hide the popopver on the left or right
+       * window's border.
+       *
+       * @param {Object} position
+       * @return {Object}
        */
-      function getPopoverPositionUnderElement ($element) {
-        var position = $uibPosition.positionElements($element, $popover, 'bottom', true);
-        var bootstrapThemeContainerOffset = $bootstrapThemeContainer.offset();
+      function checkIfPositionHidesPopover (position) {
+        return {
+          left: position.left - $popover.width() < 0,
+          right: position.left + $popover.width() > $(window).width()
+        };
+      }
+
+      /**
+       * Get the left and top position for the popover relative to the given element
+       * and direction.
+       *
+       * @param {Object} $element the DOM element to use as reference.
+       * @param {String} direction which can be "bottom", "bottom-left", "bottom-right", etc.
+       *   defaults to "bottom".
+       */
+      function getPopoverPositionUnderElement ($element, direction) {
+        var position, bootstrapThemeContainerOffset;
+        direction = direction || 'bottom';
+        position = $uibPosition.positionElements($element, $popover, direction, true);
+        bootstrapThemeContainerOffset = $bootstrapThemeContainer.offset();
 
         return {
           top: position.top - bootstrapThemeContainerOffset.top,
@@ -103,16 +124,24 @@
        * Reposition the popover element
        */
       function repositionPopover () {
-        var position, positionReference;
+        var isHidden, position, positionReference;
 
         if (!$scope.isOpen) {
           return;
         }
 
-        initPopoverReference();
+        !$popover && initPopoverReference();
 
         positionReference = $scope.positionReference || $toggleButton;
         position = getPopoverPositionUnderElement(positionReference);
+        isHidden = checkIfPositionHidesPopover(position);
+
+        if (isHidden.left) {
+          position = getPopoverPositionUnderElement(positionReference, 'bottom-left');
+        } else if (isHidden.right) {
+          position = getPopoverPositionUnderElement(positionReference, 'bottom-right');
+        }
+
         $popover.css(position);
       }
 

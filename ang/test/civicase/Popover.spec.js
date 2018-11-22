@@ -2,7 +2,8 @@
 
 (function ($) {
   describe('Popover', function () {
-    var $compile, $rootScope, $scope, $toggleButton, $uibPosition, popover;
+    var $compile, $rootScope, $scope, $sampleReference, $toggleButton, $uibPosition,
+      popover;
 
     beforeEach(module('civicase', 'civicase.templates'));
 
@@ -14,7 +15,18 @@
 
     beforeEach(function () {
       $scope = $rootScope.$new();
+
       initDirective();
+
+      // Modifies the position and width for both the sample reference and toggle button elements:
+      $()
+        .add($sampleReference)
+        .add($toggleButton)
+        .css({
+          position: 'absolute',
+          left: '50%',
+          width: '10px'
+        });
     });
 
     afterEach(function () {
@@ -85,22 +97,57 @@
     });
 
     describe('opening the popover on top of a specific element', function () {
-      var currentPosition, expectedPosition, sampleReference;
+      var currentPosition, expectedPosition;
 
       describe('when the position reference is provided', function () {
         beforeEach(function () {
-          sampleReference = $('.sample-reference');
-          $scope.positionReference = sampleReference;
+          $scope.positionReference = $sampleReference;
+          $scope.isOpen = true;
 
-          removeTestDomElements();
-          initDirective();
-          $toggleButton.click();
+          $scope.$digest();
 
-          expectedPosition = getPopoverExpectedPositionUnderElement(sampleReference);
+          expectedPosition = getPopoverExpectedPositionUnderElement($sampleReference);
           currentPosition = getPopoverCurrentPosition();
         });
 
         it('displays the popover under the given element', function () {
+          expect(currentPosition).toEqual(expectedPosition);
+        });
+      });
+    });
+
+    describe('when the popover is hidden by the windows border', function () {
+      var currentPosition, expectedPosition;
+
+      beforeEach(function () {
+        $scope.positionReference = $sampleReference;
+        $scope.isOpen = true;
+      });
+
+      describe('when the popover is hidden by the windows left border', function () {
+        beforeEach(function () {
+          $sampleReference.css({ left: 0 });
+          $scope.$digest();
+
+          expectedPosition = getPopoverExpectedPositionUnderElement($sampleReference, 'bottom-left');
+          currentPosition = getPopoverCurrentPosition();
+        });
+
+        it('displays the popover inside of the window', function () {
+          expect(currentPosition).toEqual(expectedPosition);
+        });
+      });
+
+      describe('when the popover is hidden by the windows right border', function () {
+        beforeEach(function () {
+          $sampleReference.css({ left: $(window).width() });
+          $scope.$digest();
+
+          expectedPosition = getPopoverExpectedPositionUnderElement($sampleReference, 'bottom-right');
+          currentPosition = getPopoverCurrentPosition();
+        });
+
+        it('displays the popover inside of the window', function () {
           expect(currentPosition).toEqual(expectedPosition);
         });
       });
@@ -123,10 +170,10 @@
      *
      * @return {Object} with the top and left properties representing the popover position.
      */
-    function getPopoverExpectedPositionUnderElement ($element) {
+    function getPopoverExpectedPositionUnderElement ($element, direction) {
       var $popover = popover.find('.popover');
       var $bootstrapThemeContainer = $('#bootstrap-theme');
-      var position = $uibPosition.positionElements($element, $popover, 'bottom', true);
+      var position = $uibPosition.positionElements($element, $popover, (direction || 'bottom'), true);
       var bootstrapThemeContainerOffset = $bootstrapThemeContainer.offset();
 
       return {
@@ -141,6 +188,12 @@
     function initDirective () {
       var testHtml = $(`
         <div class="civicase-popover-test">
+          <style>
+            /* Ensures the popover is smaller than the current window's width: */
+            .popover {
+              width: 100px;
+            }
+          </style>
           <div id="bootstrap-theme"></div>
           <i class="sample-reference">Sample reference element</i>
           <civicase-popover
@@ -163,6 +216,7 @@
       $rootScope.$digest();
 
       $toggleButton = popover.find('civicase-popover-toggle-button');
+      $sampleReference = $('.sample-reference');
     }
 
     /**
