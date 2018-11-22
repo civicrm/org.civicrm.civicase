@@ -17,12 +17,12 @@
         refresh-on-checkbox-toggle="true"
         refresh-callback="refresh">
       </div>
-      <a
-        ng-if="selectedActivites.length > activitiesDisplayLimit"
-        class="btn btn-block btn-secondary text-uppercase"
-        ng-href="{{seeMoreLinkUrl(selectedDate)}}">
-        see more
-      </a>
     </div>
+    <a
+      ng-if="selectedActivites.length > activitiesDisplayLimit"
+      class="btn btn-block btn-secondary text-uppercase"
+      ng-href="{{seeMoreLinkUrl(selectedDate)}}">
+      see more
+    </a>
   </div>
 </div>
