@@ -172,7 +172,7 @@
     };
 
     $scope.onDateSelected = onDateSelected;
-    $scope.seeMoreLinkUrl = seeMoreLinkUrl;
+    $scope.seeAllLinkUrl = seeAllLinkUrl;
 
     (function init () {
       createDebouncedLoad();
@@ -614,13 +614,13 @@
     }
 
     /**
-     * Creates the url for the "see more" link, based on the given date
+     * Creates the url for the "see all" link, based on the given date
      * (the link will send the user to the activity feed, filtered by that date)
      *
      * @return {Date} date
      * @return {TrustedValueHolderType}
      */
-    function seeMoreLinkUrl (date) {
+    function seeAllLinkUrl (date) {
       var urlParams = getSeeMoreQueryParams(date);
 
       return $sce.trustAsResourceUrl('#/case?' + $.param(urlParams));

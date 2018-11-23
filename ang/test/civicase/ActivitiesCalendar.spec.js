@@ -624,7 +624,7 @@
       });
     });
 
-    describe('"see more" link url', function () {
+    describe('"see all" link url', function () {
       var currentRouteParams, queryParams, url;
 
       beforeEach(function () {
@@ -638,7 +638,7 @@
           '$route': { current: { params: currentRouteParams } }
         });
 
-        url = $scope.seeMoreLinkUrl(dates.yesterday);
+        url = $scope.seeAllLinkUrl(dates.yesterday);
         queryParams = extractQueryStringParams();
       });
 
@@ -669,7 +669,7 @@
       });
 
       /**
-       * Given the "see more" link url, it extracts the querystring parameters,
+       * Given the "see all" link url, it extracts the querystring parameters,
        * making sure to decode the value of the `af` property (given that the value
        * is an encoded JSON object)
        *
