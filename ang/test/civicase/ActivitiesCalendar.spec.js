@@ -668,6 +668,13 @@
         expect(queryParams.af.bar).toBe(currentRouteParams.af.bar);
       });
 
+      /**
+       * Given the "see more" link url, it extracts the querystring parameters,
+       * making sure to decode the value of the `af` property (given that the value
+       * is an encoded JSON object)
+       *
+       * return {Object}
+       */
       function extractQueryStringParams () {
         var paramsCouples = url.$$unwrapTrustedValue().split('?')[1].split('&');
 
@@ -724,10 +731,13 @@
 
     /**
      * Initializes the activities calendar component
+     *
+     * @param {Object} scopeProps additional properties to add to the scope
+     * @param {Object} otherDeps any addition dependencies to be injected
      */
-    function initController ($params, otherDeps) {
+    function initController (scopeProps, otherDeps) {
       $controller('civicaseActivitiesCalendarController', _.assign({
-        $scope: _.assign($scope, { caseId: _.uniqueId() }, $params)
+        $scope: _.assign($scope, { caseId: _.uniqueId() }, scopeProps)
       }, otherDeps));
     }
 

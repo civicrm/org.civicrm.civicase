@@ -326,8 +326,7 @@
      */
     function getSeeMoreQueryParams (date) {
       var dateMoment = moment(date);
-
-      return _.merge({}, $route.current.params, {
+      var params = _.merge({}, $route.current.params, {
         dtab: 1,
         af: {
           '@moreFilters': true,
@@ -339,6 +338,10 @@
           }
         }
       });
+
+      params.af = JSON.stringify(params.af);
+
+      return params;
     }
 
     /**
@@ -619,7 +622,6 @@
      */
     function seeMoreLinkUrl (date) {
       var urlParams = getSeeMoreQueryParams(date);
-      urlParams.af = JSON.stringify(urlParams.af);
 
       return $sce.trustAsResourceUrl('#/case?' + $.param(urlParams));
     }
