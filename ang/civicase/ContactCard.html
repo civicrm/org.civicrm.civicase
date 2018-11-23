@@ -2,7 +2,9 @@
   <span ng-if="!isAvatar" class="civicase__contact-name-container">
     <!-- Contact Icons -->
     <span ng-if="!noIcon">
-      <civicase-popover popover-class="contact-popover-container">
+      <civicase-popover
+        popover-class="contact-popover-container"
+        trigger-event="hover">
         <civicase-popover-toggle-button ng-click="initMainContact($event)">
           <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
           <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>

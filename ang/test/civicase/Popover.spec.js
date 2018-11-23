@@ -2,14 +2,15 @@
 
 (function ($) {
   describe('Popover', function () {
-    var $compile, $rootScope, $scope, $sampleReference, $toggleButton, $uibPosition,
-      popover;
+    var $compile, $rootScope, $scope, $sampleReference, $timeout, $toggleButton,
+      $uibPosition, popover;
 
     beforeEach(module('civicase', 'civicase.templates'));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$uibPosition_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_, _$uibPosition_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
+      $timeout = _$timeout_;
       $uibPosition = _$uibPosition_;
     }));
 
@@ -171,6 +172,86 @@
       });
     });
 
+    describe('hovering over the popover toggle button', function () {
+      var HOVER_THRESHOLD = 300;
+
+      beforeEach(function () {
+        $scope.triggerEvent = 'hover';
+        $scope.positionReference = $sampleReference;
+
+        removeTestDomElements();
+        initDirective();
+      });
+
+      describe('when hovering over the toggle button', function () {
+        beforeEach(function () {
+          $toggleButton.trigger('mouseenter');
+        });
+
+        it('displays the popover content', function () {
+          expect(popover.find('civicase-popover-content').is(':visible')).toBe(true);
+        });
+      });
+
+      describe('when the mouse leaves the toggle button', function () {
+        beforeEach(function () {
+          $scope.isOpen = true;
+
+          $rootScope.$digest();
+          $toggleButton.trigger('mouseleave');
+          $timeout.flush(HOVER_THRESHOLD);
+        });
+
+        it('hides the popover content', function () {
+          expect(popover.find('civicase-popover-content').is(':visible')).toBe(false);
+        });
+      });
+
+      describe('when the popover is open and the mouse moves from the toggle button to the popover', function () {
+        beforeEach(function () {
+          $scope.isOpen = true;
+
+          $rootScope.$digest();
+          $toggleButton.trigger('mouseleave');
+          $timeout.flush(HOVER_THRESHOLD - 1);
+          popover.find('.popover').trigger('mouseenter');
+        });
+
+        it('keeps the popover content visible', function () {
+          expect(popover.find('civicase-popover-content').is(':visible')).toBe(true);
+        });
+      });
+
+      describe('when the popover is open and the mouse moves from the popover to the toggle button', function () {
+        beforeEach(function () {
+          $scope.isOpen = true;
+
+          $rootScope.$digest();
+          popover.find('.popover').trigger('mouseleave');
+          $timeout.flush(HOVER_THRESHOLD - 1);
+          $toggleButton.trigger('mouseenter');
+        });
+
+        it('keeps the popover content visible', function () {
+          expect(popover.find('civicase-popover-content').is(':visible')).toBe(true);
+        });
+      });
+
+      describe('whe the popover is open and the mouse leaves the popover content', function () {
+        beforeEach(function () {
+          $scope.isOpen = true;
+
+          $rootScope.$digest();
+          popover.find('.popover').trigger('mouseleave');
+          $timeout.flush(HOVER_THRESHOLD);
+        });
+
+        it('hides the popover content', function () {
+          expect(popover.find('civicase-popover-content').is(':visible')).toBe(false);
+        });
+      });
+    });
+
     /**
      * Returns the current position of the popover element.
      *
@@ -229,7 +310,8 @@
           <i class="sample-reference">Sample reference element</i>
           <civicase-popover
             position-reference="positionReference"
-            is-open="isOpen">
+            is-open="isOpen"
+            trigger-event="{{triggerEvent}}">
             <civicase-popover-toggle-button>
               When you click here,
             </civicase-popover-toggle-button>

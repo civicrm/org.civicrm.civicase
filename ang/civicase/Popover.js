@@ -8,7 +8,7 @@
         isOpen: '=?',
         popoverClass: '@',
         positionReference: '=',
-        triggerEvent: '=?'
+        triggerEvent: '@'
       },
       transclude: {
         toggleButton: '?civicasePopoverToggleButton',
@@ -19,7 +19,8 @@
     };
 
     function civicasePopoverLink ($scope, $element, attrs, ctrl, $transcludeFn) {
-      var $bootstrapThemeContainer, $popover, $popoverArrow, $toggleButton;
+      var $bootstrapThemeContainer, $popover, $popoverArrow, $toggleButton, mouseLeaveTimeout;
+      var HOVER_THRESHOLD = 300;
       var ARROW_POSITION_VALUES = {
         'default': '50%',
         'bottom-left': '%width%px',
@@ -47,8 +48,17 @@
       function attachEventListeners () {
         var $body = $('body');
         var closeEventHasBeenAttached = $body.hasClass('civicase__popup-attached');
+        var triggerEvent = $scope.triggerEvent === 'hover'
+          ? 'mouseenter'
+          : $scope.triggerEvent;
 
-        $toggleButton.on($scope.triggerEvent, function (event) {
+        $toggleButton.on(triggerEvent, function (event) {
+          if (mouseLeaveTimeout) {
+            cancelMouseLeaveTimeout();
+
+            return;
+          }
+
           if (!$scope.isOpen) {
             $rootScope.$broadcast('civicase::popover::close-all');
           }
@@ -62,6 +72,10 @@
           $scope.isOpen = false;
         });
 
+        if ($scope.triggerEvent === 'hover') {
+          $toggleButton.on('mouseleave', closePopoverAfterDelay);
+        }
+
         if (!closeEventHasBeenAttached) {
           $document.on('click', function ($event) {
             var isNotInsideAPopoverBox = $('.civicase__popover-box').find($event.target).length === 0;
@@ -73,6 +87,25 @@
           });
           $body.addClass('civicase__popup-attached');
         }
+      }
+
+      /**
+       * Cancels the mouse leave timeout and removes any reference to it.
+       */
+      function cancelMouseLeaveTimeout () {
+        $timeout.cancel(mouseLeaveTimeout);
+        mouseLeaveTimeout = null;
+      }
+
+      /**
+       * Closes the popover after a 300ms delay. Useful when moving the mouse from
+       * the toggle button to the popover and vice versa.
+       */
+      function closePopoverAfterDelay () {
+        mouseLeaveTimeout = $timeout(function () {
+          $scope.isOpen = false;
+          mouseLeaveTimeout = null;
+        }, HOVER_THRESHOLD);
       }
 
       /**
@@ -139,6 +172,11 @@
         $popoverArrow = $popover.find('.arrow');
 
         $popover.appendTo($scope.appendTo ? $($scope.appendTo) : $bootstrapThemeContainer);
+
+        if ($scope.triggerEvent === 'hover') {
+          $popover.on('mouseenter', cancelMouseLeaveTimeout);
+          $popover.on('mouseleave', closePopoverAfterDelay);
+        }
       }
 
       /**
