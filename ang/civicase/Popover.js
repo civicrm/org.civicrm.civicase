@@ -23,7 +23,7 @@
       var $bootstrapThemeContainer, $popover, $popoverArrow, $toggleButton, mouseLeaveTimeout;
       var HOVER_THRESHOLD = 300;
       var ARROW_POSITION_VALUES = {
-        'default': '50%',
+        'bottom': '',
         'bottom-left': '%width%px',
         'bottom-right': 'calc(100% - %width%px)'
       };
@@ -138,13 +138,13 @@
        */
       function getPopoverDirection (position) {
         var directions = {
-          'bottom-left': position.left - $popover.width() < 0,
+          'bottom-left': position.left < 0,
           'bottom-right': position.left + $popover.width() > $(window).width()
         };
 
         return _.findKey(directions, function (isDirectionHidden) {
           return isDirectionHidden;
-        }) || 'default';
+        }) || 'bottom';
       }
 
       /**
@@ -203,18 +203,25 @@
 
         initPopoverReference();
 
-        positionReference = $scope.positionReference || $toggleButton;
-        position = getPopoverPositionUnderElement(positionReference);
-        popoverDirection = getPopoverDirection(position);
-        arrowPosition = ARROW_POSITION_VALUES.default;
+        /**
+         * @note The post digest helps determine the real width of the popover because
+         * it waits for content to be rendered. $timeout is too slow for this and has a
+         * noticeable delay that makes the popover jump for a brief second.
+         */
+        $scope.$$postDigest(function () {
+          positionReference = $scope.positionReference || $toggleButton;
+          position = getPopoverPositionUnderElement(positionReference);
+          popoverDirection = getPopoverDirection(position);
+          arrowPosition = ARROW_POSITION_VALUES[popoverDirection]
+            .replace('%width%', $popoverArrow.outerWidth());
 
-        if (popoverDirection !== 'default') {
-          position = getPopoverPositionUnderElement(positionReference, popoverDirection);
-          arrowPosition = ARROW_POSITION_VALUES[popoverDirection].replace('%width%', $popoverArrow.outerWidth());
-        }
+          if (popoverDirection !== 'bottom') {
+            position = getPopoverPositionUnderElement(positionReference, popoverDirection);
+          }
 
-        $popoverArrow.css('left', arrowPosition);
-        $popover.css(position);
+          $popoverArrow.css('left', arrowPosition);
+          $popover.css(position);
+        });
       }
 
       /**
