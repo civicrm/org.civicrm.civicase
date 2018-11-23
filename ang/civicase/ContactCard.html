@@ -4,8 +4,9 @@
     <span ng-if="!noIcon">
       <civicase-popover
         popover-class="contact-popover-container"
-        trigger-event="hover">
-        <civicase-popover-toggle-button ng-click="initMainContact($event)">
+        trigger-event="hover"
+        on-open="initMainContact()">
+        <civicase-popover-toggle-button>
           <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
           <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
           <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>

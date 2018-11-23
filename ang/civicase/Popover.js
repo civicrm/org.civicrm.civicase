@@ -6,6 +6,7 @@
       scope: {
         appendTo: '=',
         isOpen: '=?',
+        triggerOnOpenEvent: '&onOpen',
         popoverClass: '@',
         positionReference: '=',
         triggerEvent: '@'
@@ -30,8 +31,10 @@
       (function init () {
         $bootstrapThemeContainer = $('#bootstrap-theme');
         $toggleButton = $element.find('civicase-popover-toggle-button');
-        $scope.triggerEvent = $scope.triggerEvent || 'click';
         $scope.isOpen = false;
+        $scope.triggerEvent = _.isEmpty($scope.triggerEvent)
+          ? 'click'
+          : $scope.triggerEvent;
 
         transcludeElements();
         initWatchers();
@@ -64,6 +67,7 @@
           }
 
           $scope.togglePopoverState();
+          $scope.isOpen && $scope.triggerOnOpenEvent();
           event.stopPropagation();
           $scope.$digest();
         });

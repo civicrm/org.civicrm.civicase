@@ -16,6 +16,8 @@
 
     beforeEach(function () {
       $scope = $rootScope.$new();
+      $scope.onOpen = jasmine.createSpy('onOpen');
+      $scope.triggerEvent = 'click';
 
       initDirective();
 
@@ -54,6 +56,10 @@
 
           expectedPosition = getPopoverExpectedPositionUnderElement($toggleButton);
           currentPosition = getPopoverCurrentPosition();
+        });
+
+        it('triggers the "on open" event', function () {
+          expect($scope.onOpen).toHaveBeenCalled();
         });
 
         it('displays the popover content', function () {
@@ -97,6 +103,10 @@
 
         it('closes the popover', function () {
           expect($('civicase-popover-content').is(':visible')).toBe(false);
+        });
+
+        it('does not call the "on open" event', function () {
+          expect($scope.onOpen).not.toHaveBeenCalled();
         });
       });
     });
@@ -311,7 +321,8 @@
           <civicase-popover
             position-reference="positionReference"
             is-open="isOpen"
-            trigger-event="{{triggerEvent}}">
+            trigger-event="{{triggerEvent}}"
+            on-open="onOpen()">
             <civicase-popover-toggle-button>
               When you click here,
             </civicase-popover-toggle-button>
