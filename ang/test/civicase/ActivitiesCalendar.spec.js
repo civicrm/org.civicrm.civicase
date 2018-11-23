@@ -639,7 +639,7 @@
         });
 
         url = $scope.seeAllLinkUrl(dates.yesterday);
-        queryParams = extractQueryStringParams();
+        queryParams = CRM.testUtils.extractQueryStringParams(url.$$unwrapTrustedValue());
       });
 
       it('is a trusted url', function () {
@@ -667,27 +667,6 @@
         expect(queryParams.foo).toBe(currentRouteParams.foo);
         expect(queryParams.af.bar).toBe(currentRouteParams.af.bar);
       });
-
-      /**
-       * Given the "see all" link url, it extracts the querystring parameters,
-       * making sure to decode the value of the `af` property (given that the value
-       * is an encoded JSON object)
-       *
-       * return {Object}
-       */
-      function extractQueryStringParams () {
-        var paramsCouples = url.$$unwrapTrustedValue().split('?')[1].split('&');
-
-        return paramsCouples.reduce(function (acc, couple) {
-          var coupleKeyVal = couple.split('=');
-
-          acc[coupleKeyVal[0]] = coupleKeyVal[0] === 'af'
-            ? JSON.parse(decodeURIComponent(coupleKeyVal[1]))
-            : coupleKeyVal[1];
-
-          return acc;
-        }, {});
-      }
     });
 
     /**
