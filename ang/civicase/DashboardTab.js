@@ -325,17 +325,19 @@
      * @return {Object}
      */
     function viewCasesQueryParams () {
-      var filterKey;
       var params = {};
 
       if ($scope.filters.caseRelationshipType !== 'all') {
         params.cf = {};
 
-        filterKey = $scope.filters.caseRelationshipType === 'is_case_manager'
-          ? 'case_manager'
-          : 'contact_id';
+        // @NOTE: The case list page expects the param's value to be
+        // inside an array (`case_filter.contact_id` already is)
+        if ($scope.filters.caseRelationshipType === 'is_case_manager') {
+          params.cf.case_manager = [$scope.activityFilters.case_filter.case_manager];
+        } else {
+          params.cf.contact_id = $scope.activityFilters.case_filter.contact_id;
+        }
 
-        params.cf[filterKey] = $scope.activityFilters.case_filter[filterKey];
         params.cf = JSON.stringify(params.cf);
       }
 
