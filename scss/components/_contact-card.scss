@@ -36,26 +36,8 @@
 .civicase__contact-additional__container,
 .civicase__tooltip-popup-list--additional-contacts {
   color: $brand-primary;
-  cursor: pointer;
   padding-left: 0 !important;
   padding-right: 0 !important;
-
-  a {
-    display: flex !important;
-  }
-
-  .popover {
-    border: 1px solid $gray-light;
-    border-radius: 0;
-
-    .arrow {
-      border-bottom-color: $gray-light;
-    }
-  }
-
-  .popover-content {
-    padding: 0;
-  }
 
   .civicase__contact-icon {
     font-size: 18px;
@@ -63,6 +45,26 @@
 
   .civicase__contact-name-additional {
     color: $brand-primary;
+  }
+}
+
+.civicase__contact-additional__popover {
+  border: 1px solid $gray-light;
+  border-radius: 0;
+  box-shadow: $box-shadow-tooltip;
+  cursor: pointer;
+
+  a {
+    display: flex !important;
+    line-height: 22px;
+  }
+
+  .arrow {
+    border-bottom-color: $gray-light;
+  }
+
+  .popover-content {
+    padding: 0;
   }
 }
 
