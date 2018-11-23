@@ -18,11 +18,14 @@
         refresh-callback="refresh">
       </div>
     </div>
-    <a
-      ng-if="selectedActivites.length > activitiesDisplayLimit"
-      class="btn btn-block btn-secondary text-uppercase"
-      ng-href="{{seeMoreLinkUrl(selectedDate)}}">
-      see more
-    </a>
+    <div
+      class="activities-calendar-popover__footer"
+      ng-if="selectedActivites.length > activitiesDisplayLimit">
+      <a
+        class="btn btn-block btn-link activities-calendar-popover__see-all"
+        ng-href="{{seeMoreLinkUrl(selectedDate)}}">
+        See all
+      </a>
+    </div>
   </div>
 </div>
