@@ -11,6 +11,12 @@
       <div class="civicase__dashboard__tab__col civicase__dashboard__tab__col--right">
         <!-- New Cases -->
         <civicase-panel-query query="newCasesPanel.query" handlers="newCasesPanel.handlers" custom-data="newCasesPanel.custom">
+          <panel-query-actions>
+            {{customData.foobar()}}
+            <a class="panel-heading-control" ng-href="{{customData.viewCasesLink().url}}">
+              {{customData.viewCasesLink().label}}
+            </a>
+          </panel-query-actions>
           <panel-query-title>
             You have {{loading.full ? '-' : total}} new cases
           </panel-query-title>

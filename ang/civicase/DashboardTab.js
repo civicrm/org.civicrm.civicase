@@ -11,7 +11,7 @@
 
   module.controller('dashboardTabController', dashboardTabController);
 
-  function dashboardTabController ($location, $rootScope, $route, $scope,
+  function dashboardTabController ($location, $rootScope, $route, $sce, $scope,
     ContactsDataService, crmApi, formatCase, formatActivity) {
     var ACTIVITIES_QUERY_PARAMS_DEFAULTS = {
       'contact_id': 'user_contact_id',
@@ -84,7 +84,11 @@
       }
     };
     $scope.newCasesPanel = {
-      custom: { itemName: 'cases', caseClick: casesCustomClick },
+      custom: {
+        itemName: 'cases',
+        caseClick: casesCustomClick,
+        viewCasesLink: viewCasesLink
+      },
       query: { entity: 'Case', action: 'getcaselist', countAction: 'getdetailscount', params: getQueryParams('cases') },
       handlers: {
         range: _.curry(rangeHandler)('start_date')('YYYY-MM-DD')(false),
@@ -284,6 +288,58 @@
       } catch (e) {
         return formattedResults;
       }
+    }
+
+    /**
+     * Returns an object representing the "view cases" link
+     *
+     * Depending on the value of the relationship type filter, both the label
+     * and the url of the link might change
+     *
+     * This function is being called directly on the view so that the object
+     * is updated automatically whenever the relationship type filter value changes
+     *
+     * @return {Object}
+     */
+    function viewCasesLink () {
+      var queryParams = viewCasesQueryParams();
+
+      return {
+        url: $sce.trustAsResourceUrl('#/case/list?' + $.param(queryParams)),
+        label: $scope.filters.caseRelationshipType === 'all'
+          ? 'View all cases'
+          : 'View all my cases'
+      };
+    }
+
+    /**
+     * Returns the query string params for the "view cases" link
+     *
+     * The only query string parameter needed by the link is
+     *   `cf.case_manager` if the relationship type filter is set on "My Cases"
+     *   `cf.contact_id` if the relationship type filter is set on "Cases I'm involved in""
+     *
+     * If the relationship type filter is set on "All Cases", then
+     * no parameter is needed
+     *
+     * @return {Object}
+     */
+    function viewCasesQueryParams () {
+      var filterKey;
+      var params = {};
+
+      if ($scope.filters.caseRelationshipType !== 'all') {
+        params.cf = {};
+
+        filterKey = $scope.filters.caseRelationshipType === 'is_case_manager'
+          ? 'case_manager'
+          : 'contact_id';
+
+        params.cf[filterKey] = $scope.activityFilters.case_filter[filterKey];
+        params.cf = JSON.stringify(params.cf);
+      }
+
+      return params;
     }
   }
 })(angular, CRM.$, CRM._, CRM.civicase.activityStatusTypes);
