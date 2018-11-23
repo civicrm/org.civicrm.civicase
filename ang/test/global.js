@@ -23,7 +23,15 @@
      * @return {Object}
      */
     extractQueryStringParams: function (url) {
-      var paramsCouples = url.split('?')[1].split('&');
+      var queryString, paramsCouples;
+
+      queryString = url.split('?')[1];
+
+      if (!queryString) {
+        return {};
+      }
+
+      paramsCouples = queryString.split('&');
 
       return paramsCouples.reduce(function (acc, couple) {
         var coupleKeyVal = couple.split('=');
