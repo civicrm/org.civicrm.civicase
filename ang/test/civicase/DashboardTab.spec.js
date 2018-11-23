@@ -249,12 +249,12 @@
             expect($scope.newCasesPanel.custom.viewCasesLink).toBeDefined();
           });
 
-          it('returns a label for the link', function () {
-            expect($scope.newCasesPanel.custom.viewCasesLink().label).toBeDefined();
+          it('contains a label for the link', function () {
+            expect($scope.newCasesPanel.custom.viewCasesLink.label).toBeDefined();
           });
 
-          it('returns a trusted url for the link', function () {
-            var url = $scope.newCasesPanel.custom.viewCasesLink().url;
+          it('contains a trusted url for the link', function () {
+            var url = $scope.newCasesPanel.custom.viewCasesLink.url;
 
             expect(url).toBeDefined();
             expect(url.$$unwrapTrustedValue).toBeDefined();
@@ -264,8 +264,9 @@
             beforeEach(function () {
               $scope.filters.caseRelationshipType = 'is_case_manager';
               $scope.activityFilters.case_filter.case_manager = userId;
+              $scope.$digest();
 
-              linkProps = $scope.newCasesPanel.custom.viewCasesLink();
+              linkProps = $scope.newCasesPanel.custom.viewCasesLink;
               queryParams = CRM.testUtils.extractQueryStringParams(linkProps.url.$$unwrapTrustedValue());
             });
 
@@ -282,8 +283,9 @@
             beforeEach(function () {
               $scope.filters.caseRelationshipType = 'is_involved';
               $scope.activityFilters.case_filter.contact_id = [userId];
+              $scope.$digest();
 
-              linkProps = $scope.newCasesPanel.custom.viewCasesLink();
+              linkProps = $scope.newCasesPanel.custom.viewCasesLink;
               queryParams = CRM.testUtils.extractQueryStringParams(linkProps.url.$$unwrapTrustedValue());
             });
 
@@ -299,8 +301,9 @@
           describe('when the relationship type filter is: All Cases', function () {
             beforeEach(function () {
               $scope.filters.caseRelationshipType = 'all';
+              $scope.$digest();
 
-              linkProps = $scope.newCasesPanel.custom.viewCasesLink();
+              linkProps = $scope.newCasesPanel.custom.viewCasesLink;
               queryParams = CRM.testUtils.extractQueryStringParams(linkProps.url.$$unwrapTrustedValue());
             });
 

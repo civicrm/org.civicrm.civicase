@@ -87,7 +87,7 @@
       custom: {
         itemName: 'cases',
         caseClick: casesCustomClick,
-        viewCasesLink: viewCasesLink
+        viewCasesLink: viewCasesLink()
       },
       query: { entity: 'Case', action: 'getcaselist', countAction: 'getdetailscount', params: getQueryParams('cases') },
       handlers: {
@@ -192,8 +192,9 @@
         }
 
         $scope.activitiesPanel.query.params = getQueryParams('activities');
-        $scope.newCasesPanel.query.params = getQueryParams('cases');
         $scope.newMilestonesPanel.query.params = getQueryParams('milestones');
+        $scope.newCasesPanel.query.params = getQueryParams('cases');
+        $scope.newCasesPanel.custom.viewCasesLink = viewCasesLink();
 
         loadCaseIds();
       });
