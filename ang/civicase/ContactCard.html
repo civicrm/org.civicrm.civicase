@@ -38,12 +38,16 @@
     <!-- End - Contact Avatar -->
   </span>
   <!-- Additional Contact Dropdown -->
-  <civicase-popover popover-class="contact-popover-container">
-    <civicase-popover-toggle-button ng-click="initMainContact($event)">
+  <civicase-popover
+    popover-class="civicase__contact-additional__popover"
+    ng-if="contacts.length > 1">
+    <civicase-popover-toggle-button
+      class="btn-group civicase__contact-additional__container"
+      ng-class="{'crm_notification-badge': isAvatar, 'civicase__contact-additional__container--avatar': isAvatar}">
       <span>+{{ contacts.length - 1 }}</span>
     </civicase-popover-toggle-button>
     <civicase-popover-content>
-      <div class="contact-popover-container" ng-include="'contact-popover.html'"></div>
+      <div ng-include="'additional-contacts.html'"></div>
     </civicase-popover-content>
   </civicase-popover>
   <!-- End - Additional Contact Dropdown -->
