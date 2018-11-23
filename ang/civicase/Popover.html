@@ -1,10 +1,10 @@
-  <div class="civicase__popover"
-    aria-haspopup="true"
-    aria-expanded="{{isOpen}}">
-    <span ng-transclude="toggleButton"></span>
-    <div class="popover bottom civicase__popover-box {{popoverClass}}" style="display: block" ng-if="isOpen">
-      <div class="arrow"></div>
-      <div class="popover-content" ng-transclude="content">
-      </div>
+<div class="civicase__popover"
+  aria-haspopup="true"
+  aria-expanded="{{isOpen}}">
+  <span ng-transclude="toggleButton"></span>
+  <div class="popover bottom civicase__popover-box {{popoverClass}}" ng-if="isOpen">
+    <div class="arrow"></div>
+    <div class="popover-content" ng-transclude="content">
     </div>
   </div>
+</div>
