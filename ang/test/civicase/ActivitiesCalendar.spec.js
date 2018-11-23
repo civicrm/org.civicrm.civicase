@@ -395,6 +395,16 @@
         spyOn($scope, '$emit').and.callThrough();
       });
 
+      describe('basic tests', function () {
+        beforeEach(function () {
+          initController();
+        });
+
+        it('has a limit set for how many activities should be displayed', function () {
+          expect($scope.activitiesDisplayLimit).toBe(25);
+        });
+      });
+
       describe('when selecting a date with no activities included', function () {
         beforeEach(function () {
           initializeForDateSelect();
@@ -424,16 +434,38 @@
           expect($scope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::openActivitiesPopover');
         });
 
-        it('makes an api request to fetch all the activities for that date', function () {
-          var formattedDay = moment(dates.today).format('YYYY-MM-DD');
+        it('makes an api request', function () {
+          expect(crmApi).toHaveBeenCalledWith('Activity', 'get', jasmine.any(Object));
+        });
 
-          expect(crmApi).toHaveBeenCalledWith('Activity', 'get', jasmine.objectContaining({
-            activity_date_time: {
-              BETWEEN: [ formattedDay + ' 00:00:00', formattedDay + ' 23:59:59' ]
-            },
-            case_id: $scope.caseId,
-            options: { limit: 0 }
-          }));
+        describe('api request params', function () {
+          var params;
+
+          beforeEach(function () {
+            params = crmApi.calls.argsFor(0)[2];
+          });
+
+          it('fetches the activities of the selected date', function () {
+            var formattedDay = moment(dates.today).format('YYYY-MM-DD');
+
+            expect(params).toEqual(jasmine.objectContaining({
+              activity_date_time: {
+                BETWEEN: [ formattedDay + ' 00:00:00', formattedDay + ' 23:59:59' ]
+              }
+            }));
+          });
+
+          it('fetches the activities belonging to the case passed in the scope', function () {
+            expect(params).toEqual(jasmine.objectContaining({
+              case_id: $scope.caseId
+            }));
+          });
+
+          it('fetches one activity more than the display limit', function () {
+            expect(params).toEqual(jasmine.objectContaining({
+              options: { limit: $scope.activitiesDisplayLimit + 1 }
+            }));
+          });
         });
 
         describe('when the activities are loaded', function () {
@@ -592,6 +624,72 @@
       });
     });
 
+    describe('"see all" link url', function () {
+      var currentRouteParams, queryParams, url;
+
+      beforeEach(function () {
+        currentRouteParams = {
+          dtab: 0,
+          foo: 'foo',
+          af: { bar: 'bar' }
+        };
+
+        initController(null, {
+          '$route': { current: { params: currentRouteParams } }
+        });
+
+        url = $scope.seeAllLinkUrl(dates.yesterday);
+        queryParams = extractQueryStringParams();
+      });
+
+      it('is a trusted url', function () {
+        expect(url.$$unwrapTrustedValue).toBeDefined();
+      });
+
+      it('redirects to the activities feed tab', function () {
+        expect(queryParams.dtab).toBe('1');
+      });
+
+      it('opens by default the "filter activites" section', function () {
+        expect(queryParams.af['@moreFilters']).toBe(true);
+      });
+
+      it('automatically filters the feed by the given date', function () {
+        expect(queryParams.af.activity_date_time).toEqual({
+          'BETWEEN': [
+            moment(dates.yesterday).startOf('day').format('YYYY-MM-DD+HH:mm:ss'),
+            moment(dates.yesterday).endOf('day').format('YYYY-MM-DD+HH:mm:ss')
+          ]
+        });
+      });
+
+      it('keeps the rest of the params of the current route', function () {
+        expect(queryParams.foo).toBe(currentRouteParams.foo);
+        expect(queryParams.af.bar).toBe(currentRouteParams.af.bar);
+      });
+
+      /**
+       * Given the "see all" link url, it extracts the querystring parameters,
+       * making sure to decode the value of the `af` property (given that the value
+       * is an encoded JSON object)
+       *
+       * return {Object}
+       */
+      function extractQueryStringParams () {
+        var paramsCouples = url.$$unwrapTrustedValue().split('?')[1].split('&');
+
+        return paramsCouples.reduce(function (acc, couple) {
+          var coupleKeyVal = couple.split('=');
+
+          acc[coupleKeyVal[0]] = coupleKeyVal[0] === 'af'
+            ? JSON.parse(decodeURIComponent(coupleKeyVal[1]))
+            : coupleKeyVal[1];
+
+          return acc;
+        }, {});
+      }
+    });
+
     /**
      * Generates some mock activities, each with an id and some contact ids
      */
@@ -633,11 +731,14 @@
 
     /**
      * Initializes the activities calendar component
+     *
+     * @param {Object} scopeProps additional properties to add to the scope
+     * @param {Object} otherDeps any addition dependencies to be injected
      */
-    function initController ($params) {
-      $controller('civicaseActivitiesCalendarController', {
-        $scope: _.assign($scope, { caseId: _.uniqueId() }, $params)
-      });
+    function initController (scopeProps, otherDeps) {
+      $controller('civicaseActivitiesCalendarController', _.assign({
+        $scope: _.assign($scope, { caseId: _.uniqueId() }, scopeProps)
+      }, otherDeps));
     }
 
     /**

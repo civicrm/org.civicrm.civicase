@@ -150,14 +150,16 @@
 
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
-  function civicaseActivitiesCalendarController ($q, $rootScope, $scope, crmApi,
-    formatActivity, ContactsDataService) {
+  function civicaseActivitiesCalendarController ($q, $rootScope, $route, $sce,
+    $scope, crmApi, formatActivity, ContactsDataService) {
+    var ACTIVITIES_DISPLAY_LIMIT = 25;
     var DEBOUNCE_WAIT = 300;
 
     var debouncedLoad;
     var daysWithActivities = {};
     var selectedDate = null;
 
+    $scope.activitiesDisplayLimit = ACTIVITIES_DISPLAY_LIMIT;
     $scope.loadingDays = false;
     $scope.loadingActivities = false;
     $scope.selectedActivites = [];
@@ -170,6 +172,7 @@
     };
 
     $scope.onDateSelected = onDateSelected;
+    $scope.seeAllLinkUrl = seeAllLinkUrl;
 
     (function init () {
       createDebouncedLoad();
@@ -315,6 +318,33 @@
     }
 
     /**
+     * Returns the querystring params for the "see more" link, so that the link
+     * sends the user to the activity feed already filtered by the given date
+     *
+     * @param {Date} date
+     * @return {Object}
+     */
+    function getSeeMoreQueryParams (date) {
+      var dateMoment = moment(date);
+      var params = _.merge({}, $route.current.params, {
+        dtab: 1,
+        af: {
+          '@moreFilters': true,
+          activity_date_time: {
+            BETWEEN: [
+              dateMoment.startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+              dateMoment.endOf('day').format('YYYY-MM-DD HH:mm:ss')
+            ]
+          }
+        }
+      });
+
+      params.af = JSON.stringify(params.af);
+
+      return params;
+    }
+
+    /**
      * Utility function that returns the year+month of the given date in
      * the YYYY-MM format
      *
@@ -412,7 +442,10 @@
         ],
         sequential: 1,
         options: {
-          limit: 0
+          // We try to get one activity more than the display limit, so we can
+          // tell if we need to show the "show more" link in the activities list
+          // (if the limit is 25 and we fetched 26, we still show 25 + "show more")
+          limit: $scope.activitiesDisplayLimit + 1
         }
       }))
         .then(function (result) {
@@ -578,6 +611,19 @@
       });
 
       load({ useCache: false });
+    }
+
+    /**
+     * Creates the url for the "see all" link, based on the given date
+     * (the link will send the user to the activity feed, filtered by that date)
+     *
+     * @return {Date} date
+     * @return {TrustedValueHolderType}
+     */
+    function seeAllLinkUrl (date) {
+      var urlParams = getSeeMoreQueryParams(date);
+
+      return $sce.trustAsResourceUrl('#/case?' + $.param(urlParams));
     }
 
     /**
