@@ -48,6 +48,16 @@
         $scope.isOpen = !$scope.isOpen;
       };
 
+      /**
+       * Adds the following event listeners to the popover:
+       * - The toggle button gets a click listener by default.
+       * - When the toggle action is set to hover, the mouseneter and mouseleave events
+       *   are attached to the toggle element.
+       * - A click event is attached to the body to determine if the user clicked outside
+       *   the popover and close it.
+       * - The scope listens for `civicase::popover::close-all` events in order to programmatically
+       *   close the popover.
+       */
       function attachEventListeners () {
         var $body = $('body');
         var closeEventHasBeenAttached = $body.hasClass('civicase__popup-attached');
