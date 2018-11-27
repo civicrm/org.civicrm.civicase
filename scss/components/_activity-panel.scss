@@ -1,11 +1,6 @@
 .civicase__activity-panel {
   &.affix {
     position: fixed !important;
-    width: calc(30% - 12px);
-
-    @media (max-width: $activity-feed-breakpoint) {
-      width: calc(40% - 12px);
-    }
   }
 
   .panel {
@@ -13,8 +8,19 @@
     position: relative;
   }
 
+  .panel-heading,
+  .panel-subheading {
+    position: absolute;
+    width: 100%;
+  }
+
+  .panel-subheading {
+    top: 63px; // height of activity panel header
+  }
+
   .panel-body {
     margin-bottom: 76px; // height of activity panel footer
+    margin-top: 120px; // height of activity panel header + subheader
     overflow: auto;
     padding: 0;
   }
