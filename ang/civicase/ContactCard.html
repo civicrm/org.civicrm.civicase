@@ -5,11 +5,14 @@
       <civicase-popover
         popover-class="contact-popover-container"
         trigger-event="hover"
+        is-open="contactPopoverIsOpen"
         on-open="initMainContact()">
-        <civicase-popover-toggle-button>
-          <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
-          <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
-          <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
+        <civicase-popover-toggle-button
+          class="civicase__contact-icon"
+          ng-class="{ 'civicase__contact-icon--highlighted': contactPopoverIsOpen }">
+          <i class="material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
+          <i class="material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
+          <i class="material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
         </civicase-popover-toggle-button>
         <civicase-popover-content>
           <div ng-include="'contact-popover.html'"></div>

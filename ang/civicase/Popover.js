@@ -79,7 +79,7 @@
           $scope.togglePopoverState();
           $scope.isOpen && $scope.triggerOnOpenEvent();
           event.stopPropagation();
-          $scope.$digest();
+          $scope.$apply();
         });
 
         $scope.$on('civicase::popover::close-all', function () {

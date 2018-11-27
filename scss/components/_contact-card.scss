@@ -23,7 +23,8 @@
   font-size: 18px;
   margin-top: 2px;
 
-  &:hover {
+  &:hover,
+  &.civicase__contact-icon--highlighted {
     color: $brand-primary;
     cursor: pointer;
   }
