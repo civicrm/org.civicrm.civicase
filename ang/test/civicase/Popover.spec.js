@@ -16,6 +16,7 @@
 
     beforeEach(function () {
       $scope = $rootScope.$new();
+      $scope.isOpen = false;
       $scope.onOpen = jasmine.createSpy('onOpen');
       $scope.triggerEvent = 'click';
 

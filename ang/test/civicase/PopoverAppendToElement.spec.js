@@ -18,7 +18,7 @@
     afterEach(function () {
       $.fn.offset = originalJQueryOffset;
 
-      $('#bootstrap-theme').remove();
+      $('.popover-container').remove();
     });
 
     describe('Appending the popover to another element', function () {
@@ -31,6 +31,10 @@
         simulatePopoverOpen();
         $.fn.offset.and.returnValue(expectedPosition);
         $timeout.flush();
+      });
+
+      afterEach(function () {
+        $('.popover-container').remove();
       });
 
       it('appends the popover to the given element', function () {

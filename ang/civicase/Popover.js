@@ -23,7 +23,7 @@
       var $bootstrapThemeContainer, $popover, $popoverArrow, $toggleButton, mouseLeaveTimeout;
       var HOVER_THRESHOLD = 300;
       var ARROW_POSITION_VALUES = {
-        'bottom': '',
+        'bottom': '50%',
         'bottom-left': '%width%px',
         'bottom-right': 'calc(100% - %width%px)'
       };
@@ -197,8 +197,7 @@
        * Initiate Watchers
        */
       function initWatchers () {
-        $scope.$watch('isOpen', repositionPopover);
-        $scope.$watch('positionReference', repositionPopover);
+        $scope.$watchGroup(['isOpen', 'positionReference'], repositionPopover);
       }
 
       /**
