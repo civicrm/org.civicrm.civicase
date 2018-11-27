@@ -435,9 +435,13 @@
         });
 
         $activityDetailsPanel.on('affixed.bs.affix', function () {
-          $activityDetailsPanel.css('top', activityPanelMeasurements.getDistanceFromTop());
+          $activityDetailsPanel
+            .css('top', activityPanelMeasurements.getDistanceFromTop())
+            .width($element.width());
         }).on('affixed-top.bs.affix', function () {
-          $activityDetailsPanel.css('top', 'auto');
+          $activityDetailsPanel
+            .css('top', 'auto')
+            .css('width', 'auto');
         });
       }
 

@@ -9,7 +9,6 @@
       (function init () {
         $filter = $('.civicase__activity-filter');
         $feedListContainer = $('.civicase__activity-feed__list-container');
-        $panelActionBar = $activityPanel.find('.crm-submit-buttons');
         $panelHeader = $activityPanel.find('.panel-heading');
         $panelSubHeader = $activityPanel.find('.panel-subheading');
         $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
@@ -48,6 +47,7 @@
        */
       function getPanelBodyTopOffset () {
         var topOffset = getDistanceFromTop();
+        $panelActionBar = $activityPanel.find('.crm-submit-buttons');
 
         return topOffset + $panelHeader.outerHeight() + $panelSubHeader.outerHeight() + $panelActionBar.outerHeight();
       }
