@@ -42,8 +42,11 @@
     popover-class="civicase__contact-additional__popover"
     ng-if="contacts.length > 1">
     <civicase-popover-toggle-button
-      class="civicase__contact-additional__container"
-      ng-class="{'crm_notification-badge': isAvatar, 'civicase__contact-additional__container--avatar': isAvatar}">
+      ng-class="{
+        'crm_notification-badge': isAvatar,
+        'civicase__contact-additional__container--avatar': isAvatar,
+        'civicase__contact-additional__container': !isAvatar
+      }">
       +{{ contacts.length - 1 }}
     </civicase-popover-toggle-button>
     <civicase-popover-content>
