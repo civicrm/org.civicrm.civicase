@@ -147,7 +147,7 @@
      */
     function selectEveryActivity () {
       $scope.selectedActivities = [];
-      $scope.selectedActivities = allActivities;
+      $scope.selectedActivities = _.cloneDeep(allActivities);
       selectDisplayedActivities(); // Update the UI model with displayed cases selected;
     }
 

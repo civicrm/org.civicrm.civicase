@@ -162,7 +162,7 @@
 
         it('displays the modal title as "Copy Type Activity"', function () {
           // @FIX: the activity at this point only has the id, source_contact_id properties. The type field is not defined:
-          expect(modalOpenCall[3].title).toBe('Copy %1 Activity');
+          expect(modalOpenCall[3].title).toBe('Copy Activity');
         });
 
         describe('the model', function () {

@@ -62,9 +62,10 @@
      */
     $scope.moveCopyActivity = function (activities, operation) {
       var activitiesCopy = _.cloneDeep(activities);
-      var title = operation[0].toUpperCase() + operation.slice(1) + ((activities.length === 1)
-        ? ts(' %1 Activity', {1: activitiesCopy[0].type})
-        : ts(' %1 Activities', {1: activitiesCopy.length}));
+      var title = operation[0].toUpperCase() + operation.slice(1) +
+        ((activities.length === 1)
+          ? ts(' %1Activity', {1: activitiesCopy[0].type ? activitiesCopy[0].type + ' ' : ''})
+          : ts(' %1 Activities', {1: activitiesCopy.length}));
       var model = {
         ts: ts,
         case_id: activitiesCopy.length > 1 ? '' : activitiesCopy[0].case_id,
@@ -128,6 +129,7 @@
 
       return crmApi([['Activity', 'get', {
         sequential: 1,
+        options: {limit: 0},
         return: [
           'subject', 'details', 'activity_type_id', 'status_id',
           'source_contact_name', 'target_contact_name', 'assignee_contact_name',
