@@ -2,16 +2,22 @@
   <span ng-if="!isAvatar" class="civicase__contact-name-container">
     <!-- Contact Icons -->
     <span ng-if="!noIcon">
-      <span uib-popover-template="'contact-popover.html'"
+      <civicase-popover
         popover-class="contact-popover-container"
-        popover-append-to-body="true"
-        popover-placement="auto bottom"
-        popover-trigger="'mouseenter'"
-        ng-mouseover="initMainContact()">
-        <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
-        <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
-        <i class="civicase__contact-icon material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
-      </span>
+        trigger-event="hover"
+        is-open="contactPopoverIsOpen"
+        on-open="initMainContact()">
+        <civicase-popover-toggle-button
+          class="civicase__contact-icon"
+          ng-class="{ 'civicase__contact-icon--highlighted': contactPopoverIsOpen }">
+          <i class="material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
+          <i class="material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
+          <i class="material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
+        </civicase-popover-toggle-button>
+        <civicase-popover-content>
+          <div ng-include="'contact-popover.html'"></div>
+        </civicase-popover-content>
+      </civicase-popover>
     </span>
     <!-- End - Contact Icons -->
     <!-- Contact Name -->
@@ -35,20 +41,21 @@
     <!-- End - Contact Avatar -->
   </span>
   <!-- Additional Contact Dropdown -->
-  <div
-    uib-popover-template="'additional-contacts.html'"
-    popover-placement="bottom"
-    popover-trigger="'outsideClick'"
+  <civicase-popover
     popover-class="civicase__contact-additional__popover"
-    civicase-popover-append-to-element="#bootstrap-theme"
-    ng-click="$event.stopPropagation()"
-    ng-if="contacts.length > 1"
-    ng-class="{'crm_notification-badge': isAvatar, 'civicase__contact-additional__container--avatar': isAvatar}"
-    class="btn-group civicase__contact-additional__container"
-    aria-haspopup="true"
-    aria-expanded="false">
-    <span>+{{ contacts.length - 1 }}</span>
-  </div>
+    ng-if="contacts.length > 1">
+    <civicase-popover-toggle-button
+      ng-class="{
+        'crm_notification-badge': isAvatar,
+        'civicase__contact-additional__container--avatar': isAvatar,
+        'civicase__contact-additional__container': !isAvatar
+      }">
+      +{{ contacts.length - 1 }}
+    </civicase-popover-toggle-button>
+    <civicase-popover-content>
+      <div ng-include="'additional-contacts.html'"></div>
+    </civicase-popover-content>
+  </civicase-popover>
   <!-- End - Additional Contact Dropdown -->
 
   <script type="text/ng-template" id="additional-contacts.html">

@@ -22,9 +22,9 @@
         // This is executed one step after the original popover positioning:
         $timeout(function () {
           var position = $popover.offset();
-
           $popover.appendTo(attrs.civicasePopoverAppendToElement);
           $popover.offset(position);
+          $popover.show();
         }, 1, false);
       }
     }

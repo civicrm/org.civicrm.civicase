@@ -135,7 +135,7 @@ $overview-grid-cell-width: 200px;
     .civicase__case-overview__breakdown-field {
       border: 0;
     }
-  }  
+  }
 }
 
 .civicase__case-overview__breakdown-field {
@@ -170,17 +170,17 @@ $overview-grid-cell-width: 200px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      width: 100%;    
+      width: 100%;
     }
 
     &::after {
-      left: 0;  
+      left: 0;
     }
   }
 
   &:last-child {
     &::after {
-      right: 0;  
+      right: 0;
     }
   }
 }
@@ -192,24 +192,6 @@ $overview-grid-cell-width: 200px;
 
     &::after {
       background-color: $gray-lighter;
-    }
-  }
-}
-
-.___outside-namespace {
-  .civicase__case-overview__popup {
-    border: 1px solid $gray-light;
-    border-radius: 2px;
-    box-shadow: $box-shadow-tooltip;
-    color: $gray-darker;
-    padding: 8px 12px;
-
-    .popover-content {
-      padding: 0;
-    }
-
-    .arrow {
-      border-bottom-color: $gray-light !important;
     }
   }
 }
