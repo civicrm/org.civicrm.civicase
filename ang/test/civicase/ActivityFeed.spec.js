@@ -115,13 +115,13 @@
       var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
 
       beforeEach(function () {
-        $activityDetailsPanel = element.find('.civicase__activity-panel');
         $filter = CRM.$('.civicase__activity-filter');
         $feedListContainer = CRM.$('.civicase__activity-feed__list-container');
         $tabs = CRM.$('.civicase__dashboard').length > 0 ? CRM.$('.civicase__dashboard__tab-container ul.nav') : CRM.$('.civicase__case-body_tab');
         $toolbarDrawer = CRM.$('#toolbar');
 
         compileDirective();
+        $activityDetailsPanel = element.find('.civicase__activity-panel');
       });
 
       afterEach(function () {
@@ -134,6 +134,21 @@
             top: $activityDetailsPanel.offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.outerHeight()),
             bottom: CRM.$($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
           }
+        });
+      });
+
+      describe('when the activity details panel is iniliased with window already scrolled', function () {
+        beforeEach(function () {
+          compileDirective(true);
+          $activityDetailsPanel = element.find('.civicase__activity-panel');
+        });
+
+        it('sets the top positioning', function () {
+          expect($activityDetailsPanel.css('top')).toBe(($toolbarDrawer.height() + $tabs.height() + $filter.height()) + 'px');
+        });
+
+        it('sets the width', function () {
+          expect($activityDetailsPanel.width()).toBe(element.width());
         });
       });
     });
@@ -180,11 +195,18 @@
     /**
      * Compiles the directive and appends test DOM elements to the body.
      */
-    function compileDirective () {
+    function compileDirective (isAffixedOnInit) {
+      var activityDetailsPanel = angular.element('<div civicase-activity-details-affix><div class="civicase__activity-panel"></div></div>');
+
       CRM.$('<div class="civicase__activity-feed__list-container"></div>').appendTo('body');
       CRM.$('<div class="civicase__activity-filter"></div>').appendTo('body');
       CRM.$('<div id="toolbar"></div>').appendTo('body');
-      element = $compile(angular.element('<div civicase-activity-details-affix><div class="civicase__activity-panel"></div></div>'))(scope);
+
+      if (isAffixedOnInit) {
+        activityDetailsPanel.find('.civicase__activity-panel').addClass('affix');
+      }
+
+      element = $compile(activityDetailsPanel)(scope);
     }
 
     /**
