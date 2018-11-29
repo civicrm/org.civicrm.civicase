@@ -139,7 +139,7 @@
 
       describe('when the activity details panel is iniliased with window already scrolled', function () {
         beforeEach(function () {
-          compileDirective(true);
+          compileDirective({isAffixedOnInit: true});
           $activityDetailsPanel = element.find('.civicase__activity-panel');
         });
 
@@ -194,15 +194,18 @@
 
     /**
      * Compiles the directive and appends test DOM elements to the body.
+     *
+     * @param {Object} options
      */
-    function compileDirective (isAffixedOnInit) {
+    function compileDirective (options) {
+      options = options || {};
       var activityDetailsPanel = angular.element('<div civicase-activity-details-affix><div class="civicase__activity-panel"></div></div>');
 
       CRM.$('<div class="civicase__activity-feed__list-container"></div>').appendTo('body');
       CRM.$('<div class="civicase__activity-filter"></div>').appendTo('body');
       CRM.$('<div id="toolbar"></div>').appendTo('body');
 
-      if (isAffixedOnInit) {
+      if (options.isAffixedOnInit) {
         activityDetailsPanel.find('.civicase__activity-panel').addClass('affix');
       }
 

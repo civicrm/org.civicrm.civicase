@@ -419,9 +419,28 @@
         $activityDetailsPanel = $element.find('.civicase__activity-panel');
         activityPanelMeasurements = ActivityPanelMeasurements($activityDetailsPanel);
 
+        initEvents();
         setActivityDetailsPanelAffixOffsets();
+
+        if ($activityDetailsPanel.hasClass('affix')) {
+          setActivityDetailsPanelPosition();
+        }
+
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
+
+      /**
+       * Init events
+       */
+      function initEvents () {
+        $activityDetailsPanel
+          .on('affixed.bs.affix', setActivityDetailsPanelPosition)
+          .on('affixed-top.bs.affix', function () {
+            $activityDetailsPanel
+              .css('top', 'auto')
+              .css('width', 'auto');
+          });
+      }
 
       /**
        * Sets Activity Details Panel affix offsets
@@ -433,18 +452,6 @@
             bottom: activityPanelMeasurements.getBottomOffset()
           }
         });
-
-        $activityDetailsPanel
-          .on('affixed.bs.affix', setActivityDetailsPanelPosition)
-          .on('affixed-top.bs.affix', function () {
-            $activityDetailsPanel
-              .css('top', 'auto')
-              .css('width', 'auto');
-          });
-
-        if ($activityDetailsPanel.hasClass('affix')) {
-          setActivityDetailsPanelPosition();
-        }
       }
 
       /**
