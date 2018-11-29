@@ -56,12 +56,6 @@ $overview-grid-cell-width: 200px;
     }
   }
 
-  .civicase__checkbox--checked {
-    color: $brand-primary !important;
-    font-size: 24px !important;
-    top: 0 !important;
-  }
-
   span {
     vertical-align: middle;
   }
@@ -126,12 +120,6 @@ $overview-grid-cell-width: 200px;
       color: $crm-gray-matte !important;
       font-size: 18px;
     }
-  }
-
-  .civicase__checkbox {
-    cursor: pointer;
-    display: inline-block;
-    margin-right: 5px;
   }
 }
 
@@ -240,7 +228,7 @@ $overview-grid-cell-width: 200px;
   border-radius: 2px;
   box-shadow: $box-shadow-tooltip;
   color: $gray-darker;
-  padding: 8px 12px;
+  padding: 0;
 
   &.dropdown-menu {
     margin-top: 15px;
@@ -256,6 +244,31 @@ $overview-grid-cell-width: 200px;
 
     &.left {
       left: 20px;
+    }
+  }
+
+  .dropdown-menu {
+    box-shadow: none;
+    display: inherit;
+    position: inherit;
+  }
+
+  .civicase__checkbox {
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .civicase__checkbox--checked {
+    color: $brand-primary !important;
+    font-size: 24px !important;
+    top: 0 !important;
+  }
+
+  a {
+    line-height: 18px;
+
+    > * {
+      vertical-align: middle;
     }
   }
 }
