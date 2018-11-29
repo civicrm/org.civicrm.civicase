@@ -419,14 +419,14 @@
         $activityDetailsPanel = $element.find('.civicase__activity-panel');
         activityPanelMeasurements = ActivityPanelMeasurements($activityDetailsPanel);
 
-        affixActivityDetailsPanel();
+        setActivityDetailsPanelAffixOffsets();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
 
       /**
        * Sets Activity Details Panel affix offsets
        */
-      function affixActivityDetailsPanel () {
+      function setActivityDetailsPanelAffixOffsets () {
         $activityDetailsPanel.affix({
           offset: {
             top: activityPanelMeasurements.getTopOffset(),
@@ -434,15 +434,26 @@
           }
         });
 
-        $activityDetailsPanel.on('affixed.bs.affix', function () {
-          $activityDetailsPanel
-            .css('top', activityPanelMeasurements.getDistanceFromTop())
-            .width($element.width());
-        }).on('affixed-top.bs.affix', function () {
-          $activityDetailsPanel
-            .css('top', 'auto')
-            .css('width', 'auto');
-        });
+        $activityDetailsPanel
+          .on('affixed.bs.affix', setActivityDetailsPanelPosition)
+          .on('affixed-top.bs.affix', function () {
+            $activityDetailsPanel
+              .css('top', 'auto')
+              .css('width', 'auto');
+          });
+
+        if ($activityDetailsPanel.hasClass('affix')) {
+          setActivityDetailsPanelPosition();
+        }
+      }
+
+      /**
+       * Sets Activity Details Panel postition when affixed
+       */
+      function setActivityDetailsPanelPosition () {
+        $activityDetailsPanel
+          .css('top', activityPanelMeasurements.getDistanceFromTop())
+          .width($element.width());
       }
 
       /**
