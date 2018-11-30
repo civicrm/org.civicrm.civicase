@@ -229,6 +229,7 @@ $overview-grid-cell-width: 200px;
   box-shadow: $box-shadow-tooltip;
   color: $gray-darker;
   padding: 0;
+  z-index: 1;
 
   &.dropdown-menu {
     margin-top: 15px;
