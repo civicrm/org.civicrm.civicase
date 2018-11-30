@@ -45,9 +45,9 @@
         element.isolateScope().showBreakdown = false;
       });
 
-      describe('when showHideBreakdown is called', function () {
+      describe('when toggleBrekdownVisibility is called', function () {
         beforeEach(function () {
-          element.isolateScope().showHideBreakdown();
+          element.isolateScope().toggleBrekdownVisibility();
         });
 
         it('resets showBreakdown to true', function () {
@@ -61,9 +61,9 @@
         element.isolateScope().showBreakdown = true;
       });
 
-      describe('when showHideBreakdown is called', function () {
+      describe('when toggleBrekdownVisibility is called', function () {
         beforeEach(function () {
-          element.isolateScope().showHideBreakdown();
+          element.isolateScope().toggleBrekdownVisibility();
         });
 
         it('resets showBreakdown to false', function () {

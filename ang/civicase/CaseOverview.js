@@ -81,7 +81,9 @@
     };
 
     /**
-     * checks if all statuses are disabled
+     * Checks if all statuses are disabled
+     *
+     * @return {Boolean}
      */
     $scope.isAllStatusesDisbabled = function () {
       return _.filter($scope.caseStatuses, function (status) {
@@ -108,9 +110,9 @@
     };
 
     /**
-     * Toggle show breakdown dropdown
+     * Toggles the visibility of the breakdown dropdown
      */
-    $scope.showHideBreakdown = function () {
+    $scope.toggleBrekdownVisibility = function () {
       $scope.showBreakdown = !$scope.showBreakdown;
     };
 

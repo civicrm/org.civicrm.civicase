@@ -28,7 +28,7 @@
           Overview
           <i
             class="material-icons civicase__case-overview__flow-status__icon"
-            ng-click="showHideBreakdown()"
+            ng-click="toggleBrekdownVisibility()"
             ng-if="caseTypesLength > 1">
             {{showBreakdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
           </i>
@@ -36,7 +36,7 @@
         <div
           class="civicase__case-overview__flow-status civicase__case-overview__flow-status--hoverable"
           ng-if="!status.disabled"
-          ng-repeat="(sid, status) in caseStatuses"
+          ng-repeat="(statusId, status) in caseStatuses"
           uib-popover="{{ status.label }}"
           popover-trigger="'mouseenter'"
           popover-placement="bottom"
@@ -44,7 +44,7 @@
           popover-class="civicase__tooltip-popup-list">
           <div class="civicase__case-overview__flow-status__count">
             <a ng-href="{{ caseListLink(null, status.name) }}">
-              {{ summaryData.all[sid] || '0' }}
+              {{ summaryData.all[statusId] || '0' }}
             </a>
           </div>
           <div class="civicase__case-overview__flow-status__description">
@@ -73,9 +73,9 @@
         <div
           class="civicase__case-overview__breakdown-field"
           ng-if="!status.disabled"
-          ng-repeat="(sid, status) in caseStatuses">
+          ng-repeat="(statusId, status) in caseStatuses">
           <a ng-href="{{ caseListLink(caseType.name, status.name) }}">
-            {{ summaryData[ctid][sid] || '0' }}
+            {{ summaryData[ctid][statusId] || '0' }}
           </a>
         </div>
         <div class="civicase__case-overview__breakdown-field" ng-if="isAllStatusesDisbabled()"> - </div>
