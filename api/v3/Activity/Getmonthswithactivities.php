@@ -10,12 +10,8 @@ use CRM_Civicase_ExtensionUtil as E;
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
 function _civicrm_api3_activity_Getmonthswithactivities_spec(&$spec) {
-  $allowed = ['activity_date_time', 'activity_status_id', 'case_id'];
-  $all = civicrm_api3('Activity', 'getfields', array('api_action' => 'get'))['values'];
-  
-  $spec = array_filter($all, function ($name) use ($allowed) {
-    return in_array($name, $allowed);
-  }, ARRAY_FILTER_USE_KEY);
+  $activityFields = civicrm_api3('Activity', 'getfields', array('api_action' => 'get'));
+  $spec = $activityFields['values'];
 }
 
 /**
@@ -28,40 +24,34 @@ function _civicrm_api3_activity_Getmonthswithactivities_spec(&$spec) {
  * @see civicrm_api3_create_success
  * @throws API_Exception
  */
-function civicrm_api3_activity_Getmonthswithactivities($params) {
-  $dao = CRM_Utils_SQL_Select::from('civicrm_activity a');
-  $dao->select(['YEAR(a.activity_date_time) AS year, MONTH(a.activity_date_time) AS month']);
+function civicrm_api3_activity_Getmonthswithactivities($params)
+{
+    $result = civicrm_api3('Activity', 'get', array_merge($params, [
+      'sequential' => 1,
+      'return' => 'activity_date_time',
+      'options' => ['limit' => 0],
+    ]));
 
-  if (array_key_exists('activity_date_time', $params)) {
-      _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($params['activity_date_time'], 'a.activity_date_time', $dao);
-  }
+    if (!boolval($result['is_error'])) {
+      $grouped_activity_dates = array();
+      $grouped_activity_dates_indexes = array();
+      $index = 0;
 
-  if (array_key_exists('activity_status_id', $params)) {
-      _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($params['activity_status_id'], 'a.status_id', $dao);
-  }
+      foreach($result['values'] as $activity_date_time) {
+        list($activity_year, $activity_month) = explode('-', $activity_date_time['activity_date_time']);
+        
+        if (!isset($grouped_activity_dates_indexes[$activity_month . $activity_year])) {
+          $grouped_activity_dates_indexes[$activity_month . $activity_year] = $index;
+          $index++;
+          $grouped_activity_dates[] = array(
+            'year' => $activity_year,
+            'month' => $activity_month,
+          );
+        }
+      }
 
-  if (array_key_exists('case_id', $params)) {
-      $dao->join('ca', 'INNER JOIN civicrm_case_activity AS ca ON a.id = ca.activity_id');
-      _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($params['case_id'], 'ca.case_id', $dao);
-  }
+      return civicrm_api3_create_success($grouped_activity_dates, $params, 'Activity', 'getmonthswithactivities');
+    }
 
-  $dao->groupBy('YEAR(a.activity_date_time), MONTH(a.activity_date_time) ASC');
-  $result = $dao->execute()->fetchAll();
-
-  $params['sequential'] = 1;
-
-  return civicrm_api3_create_success($result, $params, 'Activity', 'getmonthswithactivities');
-}
-
-/**
- * Creates a WHERE clause with the given API parameter and column name
- *
- * @param array $param
- * @param string $param
- * @param CRM_Utils_SQL_Select $param
- */
-function _civicrm_api3_activity_Getmonthswithactivities_handle_id_param($param, $column, $dao) {
-  $param = is_array($param) ? $param : array('=' => $param);
-
-  $dao->where(CRM_Core_DAO::createSQLFilter($column, $param));
+    return civicrm_api3_create_error($result['error_message'], $params);
 }
