@@ -5,6 +5,7 @@
     return {
       scope: {
         appendTo: '=',
+        autoCloseOtherPopovers: '<?',
         isOpen: '=?',
         triggerOnOpenEvent: '&onOpen',
         popoverClass: '@',
@@ -32,6 +33,7 @@
         $bootstrapThemeContainer = $('#bootstrap-theme');
         $toggleButton = $element.find('civicase-popover-toggle-button');
         $scope.isOpen = false;
+        $scope.autoCloseOtherPopovers = $scope.autoCloseOtherPopovers !== false;
         $scope.triggerEvent = _.isEmpty($scope.triggerEvent)
           ? 'click'
           : $scope.triggerEvent;
@@ -72,7 +74,7 @@
             return;
           }
 
-          if (!$scope.isOpen) {
+          if (!$scope.isOpen && $scope.autoCloseOtherPopovers) {
             $rootScope.$broadcast('civicase::popover::close-all');
           }
 
@@ -94,7 +96,7 @@
           $document.on('click', function ($event) {
             var isNotInsideAPopoverBox = $('.civicase__popover-box').find($event.target).length === 0;
 
-            if (isNotInsideAPopoverBox) {
+            if (isNotInsideAPopoverBox && $scope.autoCloseOtherPopovers) {
               $rootScope.$broadcast('civicase::popover::close-all');
               $rootScope.$digest();
             }
