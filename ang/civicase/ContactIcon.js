@@ -6,6 +6,7 @@
       controller: 'civicaseContactIconController',
       templateUrl: '~/civicase/ContactIcon.html',
       scope: {
+        autoCloseOtherPopovers: '<?',
         contactId: '<'
       }
     };
