@@ -22,7 +22,7 @@
     });
 
     describe('when the directive initializes', function () {
-      it('requests the icon data for the cotnact', function () {
+      it('requests the icon data for the contact', function () {
         expect(contactsDataServiceMock.getContactIconOf).toHaveBeenCalledWith($scope.contactId);
       });
 

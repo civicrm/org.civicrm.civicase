@@ -249,7 +249,7 @@
         });
       });
 
-      describe('whe the popover is open and the mouse leaves the popover content', function () {
+      describe('when the popover is open and the mouse leaves the popover content', function () {
         beforeEach(function () {
           $scope.isOpen = true;
 
