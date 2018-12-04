@@ -2,22 +2,7 @@
   <span ng-if="!isAvatar" class="civicase__contact-name-container">
     <!-- Contact Icons -->
     <span ng-if="!noIcon">
-      <civicase-popover
-        popover-class="contact-popover-container"
-        trigger-event="hover"
-        is-open="contactPopoverIsOpen"
-        on-open="initMainContact()">
-        <civicase-popover-toggle-button
-          class="civicase__contact-icon"
-          ng-class="{ 'civicase__contact-icon--highlighted': contactPopoverIsOpen }">
-          <i class="material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Individual'">person</i>
-          <i class="material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Household'">home</i>
-          <i class="material-icons" ng-if="getContactIconOf(contacts[0].contact_id) === 'Organisation'">domain</i>
-        </civicase-popover-toggle-button>
-        <civicase-popover-content>
-          <div ng-include="'contact-popover.html'"></div>
-        </civicase-popover-content>
-      </civicase-popover>
+      <civicase-contact-icon contact-id="contacts[0].contact_id"></civicase-contact-icon>
     </span>
     <!-- End - Contact Icons -->
     <!-- Contact Name -->
@@ -64,73 +49,13 @@
         <a
           title="{{ ts('View Contact') }}"
           href="{{ url('civicrm/contact/view', {cid: contact.contact_id}) }}">
-          <i class="civicase__contact-icon-additional material-icons" ng-if="getContactIconOf(contact.contact_id) === 'Individual'">person</i>
-          <i class="civicase__contact-icon-additional material-icons" ng-if="getContactIconOf(contact.contact_id) === 'Household'">home</i>
-          <i class="civicase__contact-icon-additional material-icons" ng-if="getContactIconOf(contact.contact_id) === 'Organisation'">domain</i>
+          <civicase-contact-icon
+            auto-close-other-popovers="false"
+            contact-id="contact.contact_id">
+          </civicase-contact-icon>
           <span class="civicase__contact-name-additional">{{ contact.display_name }}</span>
         </a>
       </li>
     </ul>
-  </script>
-
-  <script type="text/ng-template" id="contact-popover.html">
-    <div class="civicase__contact-popover">
-      <div class="civicase__contact-popover__header">
-        <h2>{{mainContact.display_name}}</h2>
-        <hr />
-      </div>
-      <div class="civicase__contact-popover__column">
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>Home Phone</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.phone.phone}}</div>
-        </div>
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>Home Mobile</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.mobile.phone}}</div>
-        </div>
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>Primary Address</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.street_address}}</div>
-        </div>
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>City</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.city}}</div>
-        </div>
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>State</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.state_province}}</div>
-        </div>
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>Postal Code</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.postal_code}}</div>
-        </div>
-      </div>
-      <div class="civicase__contact-popover__column">
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>Primary Email</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.email}}</div>
-        </div>
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>Groups</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.groups}}</div>
-        </div>
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>Tags</strong></div>
-          <div class="civicase__contact-popover__detail-value">
-            <span ng-repeat="tag in mainContact['api.EntityTag.get'].values">
-              <span civicase-tag="tag"></span>&nbsp;
-            </span>
-          </div>
-        </div>
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>Gender</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.gender}}</div>
-        </div>
-        <div class="civicase__contact-popover__detail-group">
-          <div class="civicase__contact-popover__detail-header"><strong>Date of Birth</strong></div>
-          <div class="civicase__contact-popover__detail-value">{{mainContact.birth_date | date:'longDate'}}</div>
-        </div>
-      </div>
-    </div>
   </script>
 </span>

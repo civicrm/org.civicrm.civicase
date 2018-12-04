@@ -16,6 +16,7 @@
 
     beforeEach(function () {
       $scope = $rootScope.$new();
+      $scope.autoCloseOtherPopovers = true;
       $scope.isOpen = false;
       $scope.onOpen = jasmine.createSpy('onOpen');
       $scope.triggerEvent = 'click';
@@ -37,17 +38,17 @@
       removeTestDomElements();
     });
 
-    describe('opening the popover', function () {
-      describe('when the component initializes', function () {
-        it('hides the popover content', function () {
-          expect(popover.find('civicase-popover-content').is(':visible')).toBe(false);
-        });
-
-        it('displays the toggle button', function () {
-          expect($toggleButton.is(':visible')).toBe(true);
-        });
+    describe('when the component initializes', function () {
+      it('hides the popover content', function () {
+        expect(popover.find('civicase-popover-content').is(':visible')).toBe(false);
       });
 
+      it('displays the toggle button', function () {
+        expect($toggleButton.is(':visible')).toBe(true);
+      });
+    });
+
+    describe('opening the popover', function () {
       describe('when clicking on the toggle button', function () {
         var expectedPosition, currentPosition;
 
@@ -248,7 +249,7 @@
         });
       });
 
-      describe('whe the popover is open and the mouse leaves the popover content', function () {
+      describe('when the popover is open and the mouse leaves the popover content', function () {
         beforeEach(function () {
           $scope.isOpen = true;
 
@@ -259,6 +260,52 @@
 
         it('hides the popover content', function () {
           expect(popover.find('civicase-popover-content').is(':visible')).toBe(false);
+        });
+      });
+    });
+
+    describe('automatically closing other popovers', function () {
+      describe('when set to automatically close other popovers and this popover closes', function () {
+        beforeEach(function () {
+          $scope.isOpen = false;
+
+          spyOn($rootScope, '$broadcast');
+          $rootScope.$digest();
+          $toggleButton.click();
+          $rootScope.$digest();
+        });
+
+        it('closes other popovers', function () {
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('civicase::popover::close-all');
+        });
+      });
+
+      describe('when other popovers are not set to automatically close and this popover closes', function () {
+        beforeEach(function () {
+          $scope.isOpen = true;
+          $scope.autoCloseOtherPopovers = false;
+
+          spyOn($rootScope, '$broadcast');
+          initDirective();
+        });
+
+        afterEach(function () {
+          removeTestDomElements();
+        });
+
+        it('does not close other popovers', function () {
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith('civicase::popover::close-all');
+        });
+      });
+
+      describe('when the popover close all event is broadcasted', function () {
+        beforeEach(function () {
+          $rootScope.$broadcast('civicase::popover::close-all');
+          $rootScope.$digest();
+        });
+
+        it('closes this popover', function () {
+          expect($scope.isOpen).toBe(false);
         });
       });
     });
@@ -323,6 +370,7 @@
             position-reference="positionReference"
             is-open="isOpen"
             trigger-event="{{triggerEvent}}"
+            auto-close-other-popovers="autoCloseOtherPopovers"
             on-open="onOpen()">
             <civicase-popover-toggle-button>
               When you click here,
