@@ -140,7 +140,12 @@
       describe('when the activity details panel is iniliased with window already scrolled', function () {
         beforeEach(function () {
           compileDirective({isAffixedOnInit: true});
+
           $activityDetailsPanel = element.find('.civicase__activity-panel');
+        });
+
+        afterEach(function () {
+          removeTestDomElements();
         });
 
         it('sets the top positioning', function () {
