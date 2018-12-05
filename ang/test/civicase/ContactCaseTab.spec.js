@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 
 (function (_) {
-  fdescribe('Contact Case Tab', function () {
+  describe('Contact Case Tab', function () {
     var $controller, $rootScope, $scope, mockContactId, mockContactService;
 
     beforeEach(module('civicase', function ($provide) {
