@@ -4,11 +4,13 @@
   module.directive('civicaseContactCaseTab', function () {
     return {
       restrict: 'EA',
-      controller: CivicaseContactCaseTabController,
+      controller: 'CivicaseContactCaseTabController',
       templateUrl: '~/civicase/ContactCaseTab.html',
       scope: {}
     };
   });
+
+  module.controller('CivicaseContactCaseTabController', CivicaseContactCaseTabController);
 
   function CivicaseContactCaseTabController ($scope, crmApi, formatCase, Contact, ContactsDataService) {
     var commonConfigs = {
@@ -22,13 +24,14 @@
     };
 
     $scope.caseDetailsLoaded = false;
+    $scope.contactId = Contact.getContactIDFromUrl();
     $scope.casesListConfig = [
       {
         'name': 'opened',
         'title': 'Open Cases',
         'filterParams': {
           'status_id.grouping': 'Opened',
-          'contact_id': Contact.getContactIDFromUrl()
+          'contact_id': $scope.contactId
         },
         'showContactRole': false
       }, {
@@ -36,14 +39,14 @@
         'title': 'Resolved cases',
         'filterParams': {
           'status_id.grouping': 'Closed',
-          'contact_id': Contact.getContactIDFromUrl()
+          'contact_id': $scope.contactId
         },
         'showContactRole': false
       }, {
         'name': 'related',
         'title': 'Other cases for this contact',
         'filterParams': {
-          'case_manager': Contact.getContactIDFromUrl()
+          'case_manager': $scope.contactId
         },
         'showContactRole': true
       }
@@ -186,7 +189,7 @@
      */
     function getContactRole (caseObj) {
       var contact = _.find(caseObj.contacts, {
-        contact_id: Contact.getContactIDFromUrl()
+        contact_id: $scope.contactId
       });
 
       return contact ? contact.role : 'No Role Associated';
