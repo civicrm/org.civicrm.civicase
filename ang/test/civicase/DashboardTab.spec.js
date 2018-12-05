@@ -128,6 +128,10 @@
           expect($scope.newCasesPanel.query.params['status_id.grouping']).toBe('Opened');
         });
 
+        it('fetches cases that have not been deleted', function () {
+          expect($scope.newCasesPanel.query.params.is_deleted).toBe(0);
+        });
+
         it('sorts by start_date, descending order', function () {
           expect($scope.newCasesPanel.query.params.options.sort).toBe('start_date DESC');
         });
