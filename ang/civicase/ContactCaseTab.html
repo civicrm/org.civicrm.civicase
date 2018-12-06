@@ -4,7 +4,7 @@
   <div class="civicase__contact-cases-tab clearfix">
     <a ng-if="checkPerm('add cases')"
       class="btn-primary btn civicase__contact-cases-tab-add"
-      ng-href="{{ 'civicrm/case/add' | civicaseCrmUrl:{reset: 1, action: 'add', context: 'standalone'} }}"
+      ng-href="{{ 'civicrm/case/add' | civicaseCrmUrl:{cid: contactId, reset: 1, action: 'add', context: 'standalone'} }}"
       crm-popup-form-success="refresh()">
       <i class="material-icons">add_circle</i>
       {{ ts('Add case') }}
