@@ -264,6 +264,9 @@
      * @return {Promise}
      */
     function loadActivities () {
+      var apiAction = $scope.filters['@involvingContact'] === 'myActivities'
+        ? 'getcontactactivities'
+        : 'get';
       var returnParams = {
         sequential: 1,
         return: [
@@ -316,8 +319,8 @@
       }
 
       return crmApi({
-        acts: ['Activity', 'get', $.extend(true, returnParams, params)],
-        all: ['Activity', 'get', $.extend(true, {
+        acts: ['Activity', apiAction, $.extend(true, returnParams, params)],
+        all: ['Activity', apiAction, $.extend(true, {
           sequential: 1,
           return: ['id'],
           options: { limit: 0 }}, params)] // all activities, also used to get count
