@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 (function (_) {
   describe('civicaseCaseDetails', function () {
-    var element, $compile, $rootScope, $scope, $provide, crmApi, crmApiMock, $q, formatCase, CasesData;
+    var element, $compile, $rootScope, $scope, $provide, crmApi, crmApiMock, $q, formatCase, CasesData, CasesUtils;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
       $provide = _$provide_;
@@ -21,16 +21,18 @@
       $provide.value('formatCase', formatCaseMock);
     }));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_, _crmApi_, _$q_, _formatCase_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_, _crmApi_, _$q_, _formatCase_, _CasesUtils_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       CasesData = _CasesData_;
+      CasesUtils = _CasesUtils_;
       $scope = $rootScope.$new();
       $q = _$q_;
       crmApi = _crmApi_;
       formatCase = _formatCase_;
 
       crmApi.and.returnValue($q.resolve(CasesData.get()));
+      spyOn(CasesUtils, 'fetchMoreContactsInformation');
     }));
 
     describe('basic tests', function () {

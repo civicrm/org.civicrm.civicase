@@ -16,7 +16,7 @@
 
   module.controller('civicaseCaseDetailsController', civicaseCaseDetailsController);
 
-  function civicaseCaseDetailsController ($location, $scope, BulkActions, crmApi, formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route, $timeout) {
+  function civicaseCaseDetailsController ($location, $scope, BulkActions, crmApi, formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route, $timeout, CasesUtils) {
     // The ts() and hs() functions help load strings for this module.
     // TODO: Move the common logic into a common controller (based on the usage of ContactCaseTabCaseDetails)
     var ts = $scope.ts = CRM.ts('civicase');
@@ -244,7 +244,8 @@
 
     /**
      * Prepare Related Cases
-     * @param {*} caseObj
+     *
+     * @param {Object} caseObj
      */
     function prepareRelatedCases (caseObj) {
       caseObj.relatedCases = _.each(_.cloneDeep(caseObj['api.Case.getcaselist.relatedCasesByContact'].values), formatCase);
@@ -263,7 +264,7 @@
         return !!y.is_linked - !!x.is_linked;
       });
 
-      $scope.$emit('civicase::fetchMoreContactsInformation', caseObj.relatedCases);
+      CasesUtils.fetchMoreContactsInformation(caseObj.relatedCases);
       $scope.relatedCasesPager.num = 1;
 
       delete (caseObj['api.Case.getcaselist.relatedCasesByContact']);
