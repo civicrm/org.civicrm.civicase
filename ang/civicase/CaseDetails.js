@@ -16,7 +16,7 @@
 
   module.controller('civicaseCaseDetailsController', civicaseCaseDetailsController);
 
-  function civicaseCaseDetailsController ($location, $scope, BulkActions, crmApi, formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route, $timeout) {
+  function civicaseCaseDetailsController ($location, $scope, BulkActions, crmApi, formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route, $timeout, CasesUtils) {
     // The ts() and hs() functions help load strings for this module.
     // TODO: Move the common logic into a common controller (based on the usage of ContactCaseTabCaseDetails)
     var ts = $scope.ts = CRM.ts('civicase');
@@ -223,22 +223,8 @@
     function formatCaseDetails (item) {
       formatCase(item);
       item.definition = caseTypes[item.case_type_id].definition;
-      item.relatedCases = _.each(_.cloneDeep(item['api.Case.getcaselist.1'].values), formatCase);
-      // Add linked cases
-      _.each(_.cloneDeep(item['api.Case.getcaselist.2'].values), function (linkedCase) {
-        var existing = _.find(item.relatedCases, {id: linkedCase.id});
-        if (existing) {
-          existing.is_linked = true;
-        } else {
-          linkedCase.is_linked = true;
-          item.relatedCases.push(formatCase(linkedCase));
-        }
-      });
-      $scope.$emit('civicase::fetchMoreContactsInformation', item.relatedCases);
-      $scope.relatedCasesPager.num = 1;
 
-      delete (item['api.Case.getcaselist.1']);
-      delete (item['api.Case.getcaselist.2']);
+      prepareRelatedCases(item);
       // Recent communications
       item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.2'].values), formatAct);
       delete (item['api.Activity.get.2']);
@@ -254,6 +240,35 @@
       delete (item['api.CustomValue.gettree']);
 
       return item;
+    }
+
+    /**
+     * Prepare Related Cases
+     *
+     * @param {Object} caseObj
+     */
+    function prepareRelatedCases (caseObj) {
+      caseObj.relatedCases = _.each(_.cloneDeep(caseObj['api.Case.getcaselist.relatedCasesByContact'].values), formatCase);
+      // Add linked cases
+      _.each(_.cloneDeep(caseObj['api.Case.getcaselist.linkedCases'].values), function (linkedCase) {
+        var existing = _.find(caseObj.relatedCases, {id: linkedCase.id});
+        if (existing) {
+          existing.is_linked = true;
+        } else {
+          linkedCase.is_linked = true;
+          caseObj.relatedCases.push(formatCase(linkedCase));
+        }
+      });
+
+      caseObj.relatedCases.sort(function (x, y) {
+        return !!y.is_linked - !!x.is_linked;
+      });
+
+      CasesUtils.fetchMoreContactsInformation(caseObj.relatedCases);
+      $scope.relatedCasesPager.num = 1;
+
+      delete (caseObj['api.Case.getcaselist.relatedCasesByContact']);
+      delete (caseObj['api.Case.getcaselist.linkedCases']);
     }
 
     function getAllowedCaseStatuses (definition) {
