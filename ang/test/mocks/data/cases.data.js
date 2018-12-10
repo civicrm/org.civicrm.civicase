@@ -1691,6 +1691,11 @@
       ]
     };
 
+    _.each(casesMockData.values, function (caseObj) {
+      caseObj['api.Case.getcaselist.relatedCasesByContact'].values = [angular.copy(casesMockData.values[0])];
+      caseObj['api.Case.getcaselist.linkedCases'].values = [angular.copy(casesMockData.values[1])];
+    });
+
     return {
       /**
        * Returns a list of mocked cases
@@ -1698,7 +1703,7 @@
        * @return {Array} each array contains an object with the activity data.
        */
       get: function () {
-        return _.clone(casesMockData);
+        return angular.copy(casesMockData);
       }
     };
   });
