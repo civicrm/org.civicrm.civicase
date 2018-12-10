@@ -15,6 +15,8 @@ class CRM_Civicase_Activity_ContactActivitiesSelector {
   public function getActivitiesForContact($params) {
     $newParams = $this->getParamsWithoutOffsetsAndLimits($params);
 
+    $this->addAssigneeContactIdToReturnParams($newParams);
+
     $activities = civicrm_api3('Activity', 'get', $newParams);
 
     if ($activities['error']) {
@@ -40,6 +42,21 @@ class CRM_Civicase_Activity_ContactActivitiesSelector {
     $params['options'] = $options;
 
     return $params;
+  }
+
+  /**
+   * Adds the `assignee_contact_id` field to the return parameter. This field
+   * is necesary in order to properly filter the activities for the contact and
+   * remove activities that have been delegated to someone else.
+   *
+   * @param array $params
+   */
+  private function addAssigneeContactIdToReturnParams(&$params) {
+    $return = (array) CRM_Utils_Array::value('return', $params, []);
+    $return[] = 'assignee_contact_id';
+    $return = array_unique($return);
+    $return = implode(',', $return);
+    $params['return'] = $return;
   }
 
   /**
