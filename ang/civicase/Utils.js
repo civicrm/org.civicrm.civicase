@@ -306,8 +306,7 @@
       return {
         id: caseId,
         return: caseReturnParams,
-        // Related cases by contact
-        'api.Case.getcaselist.1': {
+        'api.Case.getcaselist.relatedCasesByContact': {
           contact_id: {IN: '$value.contact_id'},
           id: {'!=': '$value.id'},
           is_deleted: 0,
@@ -315,7 +314,7 @@
           'api.Activity.get.1': allActivitiesParams
         },
         // Linked cases
-        'api.Case.getcaselist.2': {
+        'api.Case.getcaselist.linkedCases': {
           id: {IN: '$value.related_case_ids'},
           is_deleted: 0,
           return: caseListReturnParams,

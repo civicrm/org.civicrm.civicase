@@ -191,8 +191,8 @@
             16: '1',
             53: '1'
           },
-          'api.Case.getcaselist.1': { 'values': [] },
-          'api.Case.getcaselist.2': { 'values': [] },
+          'api.Case.getcaselist.relatedCasesByContact': { 'values': [] },
+          'api.Case.getcaselist.linkedCases': { 'values': [] },
           'api.Activity.get.1': {
             'is_error': 0,
             'version': 3,
@@ -801,8 +801,8 @@
           'color': '#42afcb',
           'case_type': 'Housing Support',
           'selected': false,
-          'api.Case.getcaselist.1': { 'values': [] },
-          'api.Case.getcaselist.2': { 'values': [] },
+          'api.Case.getcaselist.relatedCasesByContact': { 'values': [] },
+          'api.Case.getcaselist.linkedCases': { 'values': [] },
           'api.Activity.get.1': {
             'is_error': 0,
             'version': 3,
@@ -1368,8 +1368,8 @@
           'color': '#42afcb',
           'case_type': 'Adult Day Care Referral',
           'selected': false,
-          'api.Case.getcaselist.1': { 'values': [] },
-          'api.Case.getcaselist.2': { 'values': [] },
+          'api.Case.getcaselist.relatedCasesByContact': { 'values': [] },
+          'api.Case.getcaselist.linkedCases': { 'values': [] },
           'api.Activity.get.1': {
             'is_error': 0,
             'version': 3,
