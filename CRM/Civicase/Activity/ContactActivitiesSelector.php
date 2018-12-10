@@ -90,6 +90,7 @@ class CRM_Civicase_Activity_ContactActivitiesSelector {
     $options = CRM_Utils_Array::value('options', $params, []);
     $limit = CRM_Utils_Array::value('limit', $options, self::API_DEFAULT_LIMIT);
     $offset = CRM_Utils_Array::value('offset', $options, 0);
+    $limit = $limit === 0 ? NULL : $limit;
 
     $activities['values'] = array_slice($activities['values'], $offset, $limit);
   }
