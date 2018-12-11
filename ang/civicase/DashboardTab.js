@@ -31,7 +31,8 @@
     };
     var CASES_QUERY_PARAMS_DEFAULTS = {
       'status_id.grouping': 'Opened',
-      'options': { 'sort': 'start_date DESC' }
+      'options': { 'sort': 'start_date DESC' },
+      'is_deleted': 0
     };
     var MILESTONES_QUERY_PARAMS_DEFAULTS = {
       'contact_id': 'user_contact_id',
