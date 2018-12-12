@@ -3,3 +3,11 @@
     background: $crm-white;
   }
 }
+
+.select2-container-disabled {
+  .select2-choice {
+    background: $gray-lighter;
+    cursor: no-drop;
+    opacity: 0.8;
+  }
+}

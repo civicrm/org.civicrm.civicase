@@ -1,17 +1,28 @@
 .civicase__activity-panel {
-  margin-top: 37px;
-  width: 484px;
+  &.affix {
+    position: fixed !important;
+  }
 
   .panel {
     overflow: auto;
-    width: 484px;
+    position: relative;
+  }
 
-    &.affix {
-      position: fixed !important;
-    }
+  .panel-heading,
+  .panel-subheading {
+    position: absolute;
+    width: 100%;
+  }
+
+  .panel-subheading {
+    border-bottom: 1px solid $gray-light;
+    top: 63px; // height of activity panel header
   }
 
   .panel-body {
+    margin-bottom: 76px; // height of activity panel footer
+    margin-top: 120px; // height of activity panel header + subheader
+    overflow: auto;
     padding: 0;
   }
 
@@ -42,10 +53,16 @@
   }
 }
 
-.civicase__activity-panel__close {
+.civicase__activity-panel__close,
+.civicase__activity-panel__maximise {
   color: $gray-darker;
   font-size: $font-size-h2;
   padding: 0;
+}
+
+.civicase__activity-panel__maximise {
+  margin-right: 5px;
+  transform: rotate(45deg);
 }
 
 .civicase__activity-panel__status-dropdown {
@@ -59,7 +76,7 @@
 }
 
 .civicase__activity-panel__priority-dropdown {
-  margin-right: 15px;
+  margin-right: 10px;
 
   .list-group-item-info {
     color: $crm-gray-matte;
@@ -74,6 +91,7 @@
 
 .civicase__activity-panel__core_container {
   min-height: 200px;
+  position: static !important;
 
   /* stylelint-disable max-nesting-depth, selector-max-compound-selectors */
   .help {
@@ -132,9 +150,13 @@
 
   .crm-submit-buttons {
     border-bottom: 0 !important;
+    border-top: 1px solid $gray-light;
+    bottom: 0;
     height: auto !important;
     margin: 0;
     padding: 20px !important;
+    position: absolute;
+    width: 100%;
 
     .edit {
       @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);

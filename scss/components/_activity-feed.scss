@@ -8,7 +8,6 @@
 
   .civicase__panel-transparent-header {
     margin: auto;
-    width: 870px;
 
     > .panel-body {
       background: transparent;
@@ -44,7 +43,8 @@
 
 .civicase__activity-feed__activity-container {
   display: inline-block;
-  width: 765px;
+  margin-left: 5px;
+  width: calc(100% - 50px); // 50px = width of contact icon + gap
 }
 
 .civicase__activity-feed__list {
@@ -78,6 +78,7 @@
 .civicase__activity-feed__list-item {
   display: inline-block;
   position: relative;
+  width: 100%;
 
   > .civicase__contact-card {
     display: inline-block;
@@ -102,11 +103,11 @@
     margin-bottom: 5px;
     margin-left: auto;
     margin-right: auto;
-    width: 668px;
+    width: calc(100% - 80px); // 80px = difference in size between activity card with ribbon
   }
 
   .civicase__activity-card--ribbon {
-    width: 748px;
+    width: 100%;
   }
 }
 
@@ -137,10 +138,29 @@
   justify-content: center;
 }
 
+.civicase__activity-feed__list-container__left {
+  min-width: 620px;
+  overflow: auto;
+  width: 50%;
+}
+
+.civicase__activity-feed__list-container__right {
+  min-width: 425px;
+  width: 30%;
+}
+
 .civicase__activity-feed__placeholder {
-  .civicase__activity-feed__list-item {
-    &::before {
-      display: none;
-    }
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+@media screen and (max-width: $activity-feed-breakpoint) {
+  .civicase__activity-feed__list-container__left {
+    width: 60%;
+  }
+
+  .civicase__activity-feed__list-container__right {
+    width: 40%;
   }
 }

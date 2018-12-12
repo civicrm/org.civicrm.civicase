@@ -1,13 +1,21 @@
 /* eslint-env jasmine */
 (function ($, _, moment) {
   describe('dashboardTabController', function () {
-    var $controller, $rootScope, $scope, formatActivity, formatActivityMock,
-      formatCase, formatCaseMock;
+    var $controller, $rootScope, $scope, crmApi, formatActivity, formatCase,
+      mockedCases;
+
+    function generateMockedCases () {
+      mockedCases = _.times(5, function () {
+        return { id: _.uniqueId() };
+      });
+    }
 
     beforeEach(module('civicase.templates', 'civicase', 'crmUtil'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _formatActivity_, _formatCase_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _crmApi_,
+      _formatActivity_, _formatCase_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      crmApi = _crmApi_;
       formatActivity = _formatActivity_;
       formatCase = _formatCase_;
       $scope = $rootScope.$new();
@@ -16,12 +24,84 @@
       $scope.activityFilters = {
         case_filter: { foo: 'foo' }
       };
-
-      mockFormatFunctions();
-      initController();
     }));
 
+    beforeEach(inject(function ($q) {
+      generateMockedCases();
+      crmApi.and.returnValue($q.resolve({
+        values: mockedCases
+      }));
+    }));
+
+    describe('case ids', function () {
+      beforeEach(function () {
+        initController();
+      });
+
+      it('queries the API for the ids of all the cases that match the relationship filter', function () {
+        expect(crmApi).toHaveBeenCalledWith('Case', 'getcaselist', jasmine.objectContaining(_.assign({
+          'status_id.grouping': 'Opened',
+          'return': 'id',
+          sequential: 1,
+          options: {
+            limit: 0
+          }
+        }, $scope.activityFilters.case_filter)));
+      });
+
+      it('stores the list of ids', function () {
+        expect($scope.caseIds).toEqual(mockedCases.map(function (caseObj) {
+          return caseObj.id;
+        }));
+      });
+
+      describe('when the relationship type changes', function () {
+        var newFilterValue;
+
+        beforeEach(function () {
+          newFilterValue = 'bar';
+
+          $scope.filters.caseRelationshipType = 'is_involved';
+          $scope.activityFilters.case_filter.foo = newFilterValue;
+
+          crmApi.calls.reset();
+          $scope.$digest();
+        });
+
+        it('adds the properties of the `case_filter` object to the query params', function () {
+          expect(crmApi).toHaveBeenCalledWith('Case', 'getcaselist', jasmine.objectContaining({
+            foo: newFilterValue
+          }));
+        });
+      });
+    });
+
+    describe('refresh callback for activity cards in the calendar', function () {
+      beforeEach(function () {
+        spyOn($rootScope, '$emit');
+        initController();
+
+        $scope.activityCardRefreshCalendar();
+        $scope.$digest();
+      });
+
+      it('emits the calendar reload event', function () {
+        expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+      });
+
+      it('reload both the activities and milestone panels', function () {
+        expect($rootScope.$emit).toHaveBeenCalledWith('civicase::PanelQuery::reload', [
+          'activities',
+          'milestones'
+        ]);
+      });
+    });
+
     describe('panel-query panel: new cases', function () {
+      beforeEach(function () {
+        initController();
+      });
+
       it('is defined', function () {
         expect($scope.newCasesPanel).toBeDefined();
       });
@@ -46,6 +126,10 @@
 
         it('fetches only the cases with the "Opened" class', function () {
           expect($scope.newCasesPanel.query.params['status_id.grouping']).toBe('Opened');
+        });
+
+        it('fetches cases that have not been deleted', function () {
+          expect($scope.newCasesPanel.query.params.is_deleted).toBe(0);
         });
 
         it('sorts by start_date, descending order', function () {
@@ -76,7 +160,7 @@
             });
 
             it('calls the formatCase service on each result item', function () {
-              expect(formatCaseMock.calls.count()).toBe(mockedResults.length);
+              expect(formatCase.calls.count()).toBe(mockedResults.length);
             });
 
             it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
@@ -157,6 +241,85 @@
             });
           });
         });
+
+        describe('view cases link', function () {
+          var linkProps, queryParams, userId;
+
+          beforeEach(function () {
+            userId = 20;
+          });
+
+          it('is defined', function () {
+            expect($scope.newCasesPanel.custom.viewCasesLink).toBeDefined();
+          });
+
+          it('contains a label for the link', function () {
+            expect($scope.newCasesPanel.custom.viewCasesLink.label).toBeDefined();
+          });
+
+          it('contains a trusted url for the link', function () {
+            var url = $scope.newCasesPanel.custom.viewCasesLink.url;
+
+            expect(url).toBeDefined();
+            expect(url.$$unwrapTrustedValue).toBeDefined();
+          });
+
+          describe('when the relationship type filter is: My cases', function () {
+            beforeEach(function () {
+              $scope.filters.caseRelationshipType = 'is_case_manager';
+              $scope.activityFilters.case_filter.case_manager = userId;
+              $scope.$digest();
+
+              linkProps = $scope.newCasesPanel.custom.viewCasesLink;
+              queryParams = CRM.testUtils.extractQueryStringParams(linkProps.url.$$unwrapTrustedValue());
+            });
+
+            it('sets "View all my cases" as label', function () {
+              expect(linkProps.label).toBe('View all my cases');
+            });
+
+            it('passes the correct filter to the manage cases page', function () {
+              expect(queryParams.cf.case_manager).toEqual([userId]);
+            });
+          });
+
+          describe('when the relationship type filter is: Cases I\'m involved with', function () {
+            beforeEach(function () {
+              $scope.filters.caseRelationshipType = 'is_involved';
+              $scope.activityFilters.case_filter.contact_id = [userId];
+              $scope.$digest();
+
+              linkProps = $scope.newCasesPanel.custom.viewCasesLink;
+              queryParams = CRM.testUtils.extractQueryStringParams(linkProps.url.$$unwrapTrustedValue());
+            });
+
+            it('sets "View all my cases" as label', function () {
+              expect(linkProps.label).toBe('View all my cases');
+            });
+
+            it('passes the correct filter to the manage cases page', function () {
+              expect(queryParams.cf.contact_id).toEqual([userId]);
+            });
+          });
+
+          describe('when the relationship type filter is: All Cases', function () {
+            beforeEach(function () {
+              $scope.filters.caseRelationshipType = 'all';
+              $scope.$digest();
+
+              linkProps = $scope.newCasesPanel.custom.viewCasesLink;
+              queryParams = CRM.testUtils.extractQueryStringParams(linkProps.url.$$unwrapTrustedValue());
+            });
+
+            it('sets "View all cases" as label', function () {
+              expect(linkProps.label).toBe('View all cases');
+            });
+
+            it('passes the correct filter to the manage cases page', function () {
+              expect(queryParams.cf).not.toBeDefined();
+            });
+          });
+        });
       });
 
       describe('when the relationship type changes', function () {
@@ -181,8 +344,16 @@
     });
 
     describe('panel-query panel: new milestones', function () {
+      beforeEach(function () {
+        initController();
+      });
+
       it('is defined', function () {
         expect($scope.newMilestonesPanel).toBeDefined();
+      });
+
+      it('has a name defined', function () {
+        expect($scope.newMilestonesPanel.name).toBe('milestones');
       });
 
       describe('query', function () {
@@ -266,7 +437,7 @@
             });
 
             it('calls the formatCase service on each result item', function () {
-              expect(formatActivityMock.calls.count()).toBe(mockedResults.length);
+              expect(formatActivity.calls.count()).toBe(mockedResults.length);
             });
 
             it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
@@ -352,6 +523,32 @@
             });
           });
         });
+
+        describe('refresh callback for activity cards', function () {
+          it('is defined', function () {
+            expect($scope.newMilestonesPanel.custom.cardRefresh).toBeDefined();
+          });
+
+          describe('when called', function () {
+            beforeEach(function () {
+              spyOn($rootScope, '$emit');
+
+              $scope.newMilestonesPanel.custom.cardRefresh();
+              $scope.$digest();
+            });
+
+            it('emits the calendar reload event', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+            });
+
+            it('reloads its own panel', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith(
+                'civicase::PanelQuery::reload',
+                $scope.newMilestonesPanel.name
+              );
+            });
+          });
+        });
       });
 
       describe('when the relationship type changes', function () {
@@ -374,8 +571,16 @@
     });
 
     describe('panel-query panel: activities', function () {
+      beforeEach(function () {
+        initController();
+      });
+
       it('is defined', function () {
         expect($scope.activitiesPanel).toBeDefined();
+      });
+
+      it('has a name defined', function () {
+        expect($scope.activitiesPanel.name).toBe('activities');
       });
 
       describe('query', function () {
@@ -459,7 +664,7 @@
             });
 
             it('calls the formatCase service on each result item', function () {
-              expect(formatActivityMock.calls.count()).toBe(mockedResults.length);
+              expect(formatActivity.calls.count()).toBe(mockedResults.length);
             });
 
             it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
@@ -545,6 +750,32 @@
             });
           });
         });
+
+        describe('refresh callback for activity cards', function () {
+          it('is defined', function () {
+            expect($scope.activitiesPanel.custom.cardRefresh).toBeDefined();
+          });
+
+          describe('when called', function () {
+            beforeEach(function () {
+              spyOn($rootScope, '$emit');
+
+              $scope.activitiesPanel.custom.cardRefresh();
+              $scope.$digest();
+            });
+
+            it('emits the calendar reload event', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith('civicase::ActivitiesCalendar::reload');
+            });
+
+            it('reloads its own panel', function () {
+              expect($rootScope.$emit).toHaveBeenCalledWith(
+                'civicase::PanelQuery::reload',
+                $scope.activitiesPanel.name
+              );
+            });
+          });
+        });
       });
 
       describe('when the relationship type changes', function () {
@@ -571,9 +802,7 @@
      */
     function initController () {
       $controller('dashboardTabController', {
-        $scope: $scope,
-        formatActivity: formatActivityMock,
-        formatCase: formatCaseMock
+        $scope: $scope
       });
       $scope.$digest();
     }
@@ -616,21 +845,6 @@
       var end = now.endOf(range).format(format);
 
       return [start, end];
-    }
-
-    /**
-     * Mocks the formatActivity and formatCase functions
-     */
-    function mockFormatFunctions () {
-      formatActivityMock = jasmine.createSpy(formatActivity)
-        .and.callFake(function (activity) {
-          return activity;
-        });
-
-      formatCaseMock = jasmine.createSpy(formatCase)
-        .and.callFake(function (caseObj) {
-          return caseObj;
-        });
     }
 
     /**

@@ -8,7 +8,7 @@
     };
   });
 
-  module.controller('CivicaseCaseListTableController', function ($rootScope, $scope, $window, BulkActions, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService) {
+  module.controller('CivicaseCaseListTableController', function ($rootScope, $scope, $window, BulkActions, crmApi, crmStatus, crmUiHelp, crmThrottle, $timeout, formatCase, ContactsDataService, CasesUtils) {
     var firstLoad = true;
     var allCases;
 
@@ -204,44 +204,6 @@
     }
 
     /**
-     * Fetch additional information about the contacts
-     *
-     * @param {object} event
-     * @param {array} cases
-     */
-    function fetchContactsData (event, cases) {
-      var contacts = [];
-
-      _.each(cases, function (caseObj) {
-        contacts = contacts.concat(getAllContactIdsForCase(caseObj));
-      });
-
-      ContactsDataService.add(contacts);
-    }
-
-    /**
-     * Get all the contacts of the given case
-     *
-     * @param {object} caseObj
-     * @return {array}
-     */
-    function getAllContactIdsForCase (caseObj) {
-      var contacts = [];
-
-      _.each(caseObj.contacts, function (currentCase) {
-        contacts.push(currentCase.contact_id);
-      });
-
-      _.each(caseObj.allActivities, function (activity) {
-        contacts = contacts.concat(activity.assignee_contact_id);
-        contacts = contacts.concat(activity.target_contact_id);
-        contacts.push(activity.source_contact_id);
-      });
-
-      return contacts;
-    }
-
-    /**
      * Get all cases
      */
     function getCases () {
@@ -251,7 +213,7 @@
         .then(function (result) {
           var cases = _.each(result[0].values, formatCase);
 
-          $scope.$emit('civicase::fetchMoreContactsInformation', cases);
+          CasesUtils.fetchMoreContactsInformation(cases);
 
           if ($scope.viewingCase) {
             if ($scope.viewingCaseDetails) {
@@ -351,7 +313,7 @@
       }
       return [
         ['Case', 'getcaselist', $.extend(true, returnCaseParams, params)],
-        ['Case', 'getcount', params]
+        ['Case', 'getdetailscount', params]
       ];
     }
 
@@ -378,7 +340,6 @@
      * Initialise watchers
      */
     function initiateWatchers () {
-      $rootScope.$on('civicase::fetchMoreContactsInformation', fetchContactsData);
       $scope.$watchCollection('sort', updateCases);
       $scope.$watchCollection('page', updateCases);
       $scope.$watch('cases', casesWatcher, true);

@@ -111,23 +111,7 @@
       </div>
       <!-- End Next Activity -->
       <!-- Calendar -->
-      <div class="civicase__summary-tab-tile panel civicase__panel-transparent-header civicase__summary-tab-tile--fixed">
-        <div class="civicase__loading-placeholder__oneline" style="width: 10em; margin-bottom: 10px;"></div>
-        <div class="panel-body">
-          <div class="civicase__activity-card civicase__activity-card--big civicase__activity-card">
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <div class="civicase__loading-placeholder__oneline" style="width: 100%; font-size: 10px; margin-top: 10px;margin-bottom: 30px;"></div>
-                <div class="civicase__loading-placeholder__oneline" style="width: 100%; margin-bottom: 15px;"></div>
-                <div class="civicase__loading-placeholder__oneline" style="width: 100%; margin-bottom: 15px;"></div>
-                <div class="civicase__loading-placeholder__oneline" style="width: 100%; margin-bottom: 15px;"></div>
-                <div class="civicase__loading-placeholder__oneline" style="width: 100%; margin-bottom: 15px;"></div>
-                <div class="civicase__loading-placeholder__oneline" style="width: 60%;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <civicase-activities-calendar-placeholder></civicase-activities-calendar-placeholder>
       <!-- End - Calendar-->
     </div>
     <div>
@@ -189,24 +173,26 @@
       </div>
 
       <div class="panel-body clearfix">
-        <div
-          class="panel panel-default civicase__panel-transparent-header">
-          <div class="panel-heading">
-            <h3><div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div></h3>
-          </div>
-          <div class="panel-body">
-            <div class="civicase__activity-feed__list">
-              <div class="civicase__activity-feed__list-item">
-                <div class="civicase__activity-feed__activity-container">
-                  <div class="civicase__activity-card civicase__activity-card--long" ng-repeat="i in [0,1,2,3,4]">
-                    <div class="panel panel-default">
-                      <div class="panel-body">
-                        <div class="civicase__activity-card-row" style="margin-bottom: 8px;">
-                          <div class="civicase__loading-placeholder__oneline" style="width: 0.8em; font-size: 24px; margin-right: 10px;"></div>
-                          <div class="civicase__loading-placeholder__oneline" style="width: 8em; font-size: 18px;"></div>
-                          <div class="civicase__activity__right-container civicase__loading-placeholder__oneline" style="width: 7em;"></div>
+        <div class="civicase__activity-feed__placeholder">
+          <div
+            class="panel panel-default civicase__panel-transparent-header">
+            <div class="panel-heading">
+              <h3><div class="civicase__loading-placeholder__oneline" style="width: 12em;"></div></h3>
+            </div>
+            <div class="panel-body">
+              <div class="civicase__activity-feed__list">
+                <div class="civicase__activity-feed__list-item">
+                  <div class="civicase__activity-feed__activity-container">
+                    <div class="civicase__activity-card civicase__activity-card--long" ng-repeat="i in [0,1,2,3,4]">
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <div class="civicase__activity-card-row" style="margin-bottom: 8px;">
+                            <div class="civicase__loading-placeholder__oneline" style="width: 0.8em; font-size: 24px; margin-right: 10px;"></div>
+                            <div class="civicase__loading-placeholder__oneline" style="width: 8em; font-size: 18px;"></div>
+                            <div class="civicase__activity__right-container civicase__loading-placeholder__oneline" style="width: 7em;"></div>
+                          </div>
+                          <div class="civicase__activity-card-row--file civicase__loading-placeholder__oneline" style="width: 8em; margin-bottom: 10px;"></div>
                         </div>
-                        <div class="civicase__activity-card-row--file civicase__loading-placeholder__oneline" style="width: 8em; margin-bottom: 10px;"></div>
                       </div>
                     </div>
                   </div>

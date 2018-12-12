@@ -9,6 +9,7 @@
       controller: 'panelQueryCtrl',
       scope: {
         query: '<',
+        name: '@?',
         customData: '<?',
         handlers: '<?'
       },
@@ -31,9 +32,9 @@
 
   module.controller('panelQueryCtrl', panelQueryCtrl);
 
-  panelQueryCtrl.$inject = ['$log', '$q', '$scope', 'crmApi'];
+  panelQueryCtrl.$inject = ['$log', '$q', '$rootScope', '$scope', 'crmApi'];
 
-  function panelQueryCtrl ($log, $q, $scope, crmApi) {
+  function panelQueryCtrl ($log, $q, $rootScope, $scope, crmApi) {
     var PAGE_SIZE = 5;
     var cacheByPage = [];
 
@@ -54,9 +55,10 @@
       range: { from: 1, to: PAGE_SIZE }
     };
 
-    $scope.loadData = loadData;
-
     (function init () {
+      $scope.name = $scope.name || _.uniqueId('panel-query-');
+
+      initListeners();
       initWatchers();
       verifyData();
       loadData();
@@ -118,7 +120,7 @@
 
       var apiCalls = {
         get: [ $scope.query.entity, ($scope.query.action || 'get'), prepareGetParams(paramsCopy) ],
-        count: [ $scope.query.entity, 'getcount', paramsCopy ]
+        count: [ $scope.query.entity, ($scope.query.countAction || 'getcount'), paramsCopy ]
       };
 
       skipCount && (delete apiCalls.count);
@@ -132,6 +134,13 @@
         .then(function (processed) {
           $scope.results = processed;
         });
+    }
+
+    /**
+     * Initializes the directive's event listeners
+     */
+    function initListeners () {
+      $rootScope.$on('civicase::PanelQuery::reload', reloadEventHandler);
     }
 
     /**
@@ -207,6 +216,20 @@
      */
     function processResults (results) {
       return $q.resolve($scope.handlers.results ? $scope.handlers.results(results) : results);
+    }
+
+    /**
+     * It triggers a full reload if the panel's name is passed with the event
+     *
+     * @param {Object} $event
+     * @param {String/Array} name
+     */
+    function reloadEventHandler ($event, name) {
+      var refresh = _.isArray(name)
+        ? _.includes(name, $scope.name)
+        : $scope.name === name;
+
+      refresh && loadData();
     }
 
     /**

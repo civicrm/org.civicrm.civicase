@@ -1,6 +1,6 @@
 <div class="panel panel-secondary civicase__case-overview">
   <div class="panel-body" ng-init="loadStatsData()">
-    <div class="civicase__case-overview-container">
+    <div class="civicase__case-overview-container" civicase-custom-scrollbar scrollbar-config="{autoHide: false}">
       <div class="civicase__case-overview__flow">
         <div class="civicase__case-overview__flow-status">
           Overview
@@ -17,7 +17,8 @@
           uib-popover="{{ status.label }}"
           popover-trigger="'mouseenter'"
           popover-placement="bottom"
-          popover-class="civicase__case-overview__popup">
+          popover-append-to-body="true"
+          popover-class="civicase__tooltip-popup-list">
           <div class="civicase__case-overview__flow-status__count">
             <a ng-href="{{ caseListLink(null, status.name) }}">
               {{ summaryData.all[sid] || '0' }}
@@ -39,14 +40,15 @@
           uib-popover="{{ caseType.title }}"
           popover-trigger="'mouseenter'"
           popover-placement="bottom"
-          popover-class="civicase__case-overview__popup">
+          popover-append-to-body="true"
+          popover-class="civicase__tooltip-popup-list">
           <a ng-href="{{ caseListLink(caseType.name) }}">
             {{ caseType.title }}
           </a>
         </div>
         <div
           class="civicase__case-overview__breakdown-field"
-          ng-repeat="(sid, status) in caseStatuses">             
+          ng-repeat="(sid, status) in caseStatuses">
           <a ng-href="{{ caseListLink(caseType.name, status.name) }}">
             {{ summaryData[ctid][sid] || '0' }}
           </a>
