@@ -192,8 +192,8 @@ $items = array();
 $webformsToDisplay = Civi::settings()->get('civi_drupal_webforms');
 if (isset($webformsToDisplay)) {
   $allowedWebforms = array();
-  foreach ($webformsToDisplay as $item) {
-    $allowedWebforms[] = $item['nid'];
+  foreach ($webformsToDisplay as $webformNode) {
+    $allowedWebforms[] = $webformNode['nid'];
   }
   $webforms = civicrm_api3('Case', 'getwebforms');
   if (isset($webforms['values'])) {
@@ -201,13 +201,17 @@ if (isset($webformsToDisplay)) {
       if (!in_array($webform['nid'], $allowedWebforms)) {
         continue;
       }
+      $node = node_load($webform['nid']);
+      $data = $node->webform_civicrm['data'];
+      $clients = $data['case'][1]['case'][1]['client_id'];
+      $client = reset($clients);
       $items[] = array(
         'title' => $webform['title'],
-        'action' => 'gotoWebform(cases[0], "' . $webform['path'] . '")',
+        'action' => 'gotoWebform(cases[0], "' . $webform['path'] . '", '.$client.')',
         'icon' => 'fa-link',
       );
     }
-    $options['caseActions'][] = array(
+    $options['webforms'] = array(
       'title' => ts('Webforms'),
       'action' => '',
       'icon' => 'fa-file-text-o',

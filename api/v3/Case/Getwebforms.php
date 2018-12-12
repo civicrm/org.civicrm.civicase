@@ -37,9 +37,10 @@ function civicrm_api3_case_getwebforms($params) {
   $query = "SELECT a.nid, a.data, n.title
           FROM webform_civicrm_forms a
           INNER JOIN node n ON a.nid = n.nid";
-  $dao = CRM_Core_DAO::executeQuery($query);
-
-  while ($dao->fetch()) {
+  db_set_active('default');
+  $daos = db_query($query);
+  db_set_active('civicrm');
+  foreach ($daos as $dao) {
     $data = unserialize($dao->data);
     if ($data['case']['number_of_case'] >= 0) {
       $webforms[] = array(
