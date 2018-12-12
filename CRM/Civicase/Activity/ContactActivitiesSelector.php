@@ -5,28 +5,50 @@ class CRM_Civicase_Activity_ContactActivitiesSelector {
   const API_DEFAULT_LIMIT = 25;
 
   /**
-   * Get the activities for a given contact. The contact must be either the creator,
+   * Returns all the activities for a given contact. The contact must be either the creator,
    * the client, or be one of the assignees for the activity. Also, the activity should
    * not be assigned to someone else unless the contact is also an assignee.
    *
-   * @param array
+   * @param array $params
    * @return array
    */
-  public function getActivitiesForContact($params) {
+  public function getAllActivitiesForContact($params) {
     $newParams = $this->getParamsWithoutOffsetsAndLimits($params);
 
     $this->addAssigneeContactIdToReturnParams($newParams);
 
     $activities = civicrm_api3('Activity', 'get', $newParams);
 
-    if ($activities['error']) {
-      return $activities;
-    }
-
     $this->filterOutActivitiesNotBelongingToContact($activities, $newParams);
+
+    return $activities;
+  }
+
+  /**
+   * Returns paginated activities for the given contact using the limit and offset
+   * options.
+   *
+   * @param array $params
+   * @return array
+   */
+  public function getPaginatedActivitiesForContact($params) {
+    $activities = $this->getAllActivitiesForContact($params);
+
     $this->paginateActivityRecords($activities, $params);
 
     return $activities;
+  }
+
+  /**
+   * Returns the number of activities for the given contact.
+   *
+   * @param array $params
+   * @return int
+   */
+  public function getActivitiesForContactCount($params) {
+    $activities = $this->getAllActivitiesForContact($params);
+
+    return $activities['count'];
   }
 
   /**
@@ -93,5 +115,6 @@ class CRM_Civicase_Activity_ContactActivitiesSelector {
     $limit = $limit === 0 ? NULL : $limit;
 
     $activities['values'] = array_slice($activities['values'], $offset, $limit);
+    $activities['count'] = count($activities['values']);
   }
 }

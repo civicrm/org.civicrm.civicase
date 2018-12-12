@@ -9,7 +9,6 @@
 function _civicrm_api3_activity_getcontactactivities_spec(&$params) {
   _civicrm_api3_activity_get_spec($params);
 
-  $params['case_id']['api.required'] = TRUE;
   $params['contact_id']['api.required'] = TRUE;
   $params['return'] = [
     'api.required' => TRUE,
@@ -19,7 +18,6 @@ function _civicrm_api3_activity_getcontactactivities_spec(&$params) {
     'description' => 'The "assignee_contact_id" field is required for this action.',
   ];
 }
-
 /**
  * Returns the activities for the given contact, limited to a specific case.
  *
@@ -28,5 +26,5 @@ function _civicrm_api3_activity_getcontactactivities_spec(&$params) {
 function civicrm_api3_activity_getcontactactivities ($params) {
   $contactActivitySelector = new CRM_Civicase_Activity_ContactActivitiesSelector();
 
-  return $contactActivitySelector->getActivitiesForContact($params);
+  return $contactActivitySelector->getPaginatedActivitiesForContact($params);
 }
