@@ -20,10 +20,13 @@ function _civicrm_api3_activity_getcontactactivities_spec(&$params) {
 }
 /**
  * Returns the activities for the given contact, limited to a specific case.
+ * This action is needed because the default "get" action does not filter out
+ * activities that have been deletaged to another contact and can't be queried
+ * using the API since the condition is too complex for it.
  *
  * @param array $params
  */
-function civicrm_api3_activity_getcontactactivities ($params) {
+function civicrm_api3_activity_getcontactactivities($params) {
   $contactActivitySelector = new CRM_Civicase_Activity_ContactActivitiesSelector();
 
   return $contactActivitySelector->getPaginatedActivitiesForContact($params);

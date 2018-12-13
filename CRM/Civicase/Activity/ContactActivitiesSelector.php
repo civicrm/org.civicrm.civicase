@@ -86,13 +86,13 @@ class CRM_Civicase_Activity_ContactActivitiesSelector {
    * the requested one. It also updates the activities count in order to reflect the
    * new value.
    *
-   * @param array $activites
+   * @param array $activities
    * @param array $params
    * @return array
    */
   private function filterOutActivitiesNotBelongingToContact(&$activities, $params) {
     $activities['values'] = array_filter($activities['values'], function ($activity) use ($params) {
-      $hasNoAssignee = !isset($activity['assignee_contact_id']) || empty($activity['assignee_contact_id']);
+      $hasNoAssignee = empty($activity['assignee_contact_id']);
       $isContactAssignedToActivity = in_array($params['contact_id'], $activity['assignee_contact_id']);
 
       return $hasNoAssignee || $isContactAssignedToActivity;
@@ -104,9 +104,8 @@ class CRM_Civicase_Activity_ContactActivitiesSelector {
   /**
    * Paginates the activity records according to the limit and offset params.
    *
-   * @param array $activites
+   * @param array $activities
    * @param array $params
-   * @return array
    */
   private function paginateActivityRecords(&$activities, $params) {
     $options = CRM_Utils_Array::value('options', $params, []);
@@ -117,4 +116,5 @@ class CRM_Civicase_Activity_ContactActivitiesSelector {
     $activities['values'] = array_slice($activities['values'], $offset, $limit);
     $activities['count'] = count($activities['values']);
   }
+
 }
