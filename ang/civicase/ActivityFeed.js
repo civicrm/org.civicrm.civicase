@@ -259,11 +259,20 @@
     }
 
     /**
-     * Load activities
+     * Load activities.
+     *
+     * Note: When the filter is set to "My Activities" the action
+     * used is `getcontactactivities` instead of `get` since this action
+     * properly returns activities that belong to the contact, but have not
+     * been delegated to someone else. This query can't be replicated using
+     * api params hence the need for a specialized action.
      *
      * @return {Promise}
      */
     function loadActivities () {
+      var apiAction = $scope.filters['@involvingContact'] === 'myActivities'
+        ? 'getcontactactivities'
+        : 'get';
       var returnParams = {
         sequential: 1,
         return: [
@@ -316,8 +325,8 @@
       }
 
       return crmApi({
-        acts: ['Activity', 'get', $.extend(true, returnParams, params)],
-        all: ['Activity', 'get', $.extend(true, {
+        acts: ['Activity', apiAction, $.extend(true, returnParams, params)],
+        all: ['Activity', apiAction, $.extend(true, {
           sequential: 1,
           return: ['id'],
           options: { limit: 0 }}, params)] // all activities, also used to get count
