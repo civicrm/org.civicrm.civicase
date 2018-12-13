@@ -202,6 +202,14 @@ function civicase_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  * @param CRM_Core_Form $form
  */
 function civicase_civicrm_buildForm($formName, &$form) {
+  $hooks = [
+    new CRM_Civicase_Hook_BuildForm_CaseClientPopulator(),
+  ];
+
+  foreach ($hooks as $hook) {
+    $hook->run($form);
+  }
+
   // Display category option for activity types and activity statuses
   if ($formName == 'CRM_Admin_Form_Options' && in_array($form->getVar('_gName'), array('activity_type', 'activity_status'))) {
     $options = civicrm_api3('optionValue', 'get', array(
