@@ -102,8 +102,9 @@
   background: $contact-avatar-background;
   margin-left: 0;
   margin-top: -10px;
+  min-width: 30px;
   opacity: 1 !important;
-  padding: 3.5px 5px;
+  padding: 5px;
 }
 
 .civicase__contact-avatar--image {
