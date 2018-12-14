@@ -9,14 +9,6 @@
         'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
         'is_overdue', 'case_id'
       ];
-      var allActivitiesParams = {
-        case_id: caseId,
-        options: {
-          limit: '0',
-          sort: 'activity_date_time ASC'
-        },
-        return: activityReturnParams
-      };
       var caseReturnParams = [
         'subject', 'details', 'contact_id', 'case_type_id', 'status_id',
         'contacts', 'start_date', 'end_date', 'is_deleted', 'activity_summary',
@@ -39,20 +31,16 @@
           contact_id: {IN: '$value.contact_id'},
           id: {'!=': '$value.id'},
           is_deleted: 0,
-          return: caseListReturnParams,
-          'api.Activity.get.1': allActivitiesParams
+          return: caseListReturnParams
         },
         // Linked cases
         'api.Case.getcaselist.linkedCases': {
           id: {IN: '$value.related_case_ids'},
           is_deleted: 0,
-          return: caseListReturnParams,
-          'api.Activity.get.1': allActivitiesParams
+          return: caseListReturnParams
         },
-        // Gets all the activities for the case
-        'api.Activity.get.1': allActivitiesParams,
         // For the "recent communication" panel
-        'api.Activity.get.2': {
+        'api.Activity.get.recentCommunication': {
           case_id: caseId,
           is_current_revision: 1,
           is_test: 0,
@@ -62,7 +50,7 @@
           return: activityReturnParams
         },
         // For the "tasks" panel
-        'api.Activity.get.3': {
+        'api.Activity.get.tasks': {
           case_id: caseId,
           is_current_revision: 1,
           is_test: 0,
@@ -72,7 +60,7 @@
           return: activityReturnParams
         },
         // For the "Next Activity" panel
-        'api.Activity.get.4': {
+        'api.Activity.get.nextActivitiesWhichIsNotMileStone': {
           case_id: caseId,
           status_id: {'!=': 'Completed'},
           'activity_type_id.grouping': {'NOT LIKE': '%milestone%'},

@@ -488,9 +488,9 @@
               }
             ]
           },
-          'api.Activity.get.2': { 'values': [] },
-          'api.Activity.get.3': { 'values': [] },
-          'api.Activity.get.4': {
+          'api.Activity.get.recentCommunication': { 'values': [] },
+          'api.Activity.get.tasks': { 'values': [] },
+          'api.Activity.get.nextActivitiesWhichIsNotMileStone': {
             'values': [
               {
                 'id': '1009',
@@ -1098,9 +1098,9 @@
               }
             ]
           },
-          'api.Activity.get.2': { 'values': [] },
-          'api.Activity.get.3': { 'values': [] },
-          'api.Activity.get.4': {
+          'api.Activity.get.recentCommunication': { 'values': [] },
+          'api.Activity.get.tasks': { 'values': [] },
+          'api.Activity.get.nextActivitiesWhichIsNotMileStone': {
             'values': [
               {
                 'id': '1009',
@@ -1665,9 +1665,9 @@
               }
             ]
           },
-          'api.Activity.get.2': { 'values': [] },
-          'api.Activity.get.3': { 'values': [] },
-          'api.Activity.get.4': {
+          'api.Activity.get.recentCommunication': { 'values': [] },
+          'api.Activity.get.tasks': { 'values': [] },
+          'api.Activity.get.nextActivitiesWhichIsNotMileStone': {
             'values': [
               {
                 'id': '1009',

@@ -242,6 +242,8 @@ function calculate_activities_for_category($category, $ids, $statusTypeIds, $sta
   WHERE ca.activity_id = a.id AND a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id IN (" . implode(',', $ids) . ")
   AND a.activity_type_id IN (SELECT value FROM civicrm_option_value WHERE grouping ". $categoryCondition ." AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
   ". $isOverdueCondition ."
+  AND is_current_revision = 1
+  AND is_deleted = 0
   AND a.status_id IN ($statusTypeIds)
   GROUP BY ca.case_id";
   $dao = CRM_Core_DAO::executeQuery($query);

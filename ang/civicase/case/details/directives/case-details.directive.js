@@ -168,7 +168,6 @@
         // Maintain the reference to the variable in the parent scope.
         delete ($scope.item.tag_id);
         _.assign($scope.item, formatCaseDetails(data));
-        countScheduledActivities();
         $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
 
         $scope.$broadcast('updateCaseData');
@@ -265,28 +264,6 @@
       return $document.width() < WINDOW_WIDTH_BREAKPOINT;
     }
 
-    /**
-     * Counts the Scheduled Activities and the overdues
-     */
-    function countScheduledActivities () {
-      var status, ifDateInPast;
-      var scheduled = { count: 0, overdue: 0 };
-
-      _.each($scope.item.allActivities, function (val, key) {
-        status = CRM.civicase.activityStatuses[val.status_id];
-
-        if (status.label === 'Scheduled') {
-          scheduled.count++;
-
-          ifDateInPast = moment(val.activity_date_time).isBefore(moment());
-          if (ifDateInPast) {
-            scheduled.overdue++;
-          }
-        }
-      });
-      $scope.item.category_count.scheduled = scheduled;
-    }
-
     function formatAct (act) {
       return formatActivity(act, $scope.item.id);
     }
@@ -302,15 +279,22 @@
       item.definition = caseTypes[item.case_type_id].definition;
 
       prepareRelatedCases(item);
+
+      // Scheduled Count
+      item.status_count = { scheduled: {} };
+      item.status_count.scheduled.count = item['api.Activity.getcount.scheduled'];
+      item.status_count.scheduled.overdue = item['api.Activity.getcount.scheduled_overdue'];
+      delete (item['api.Activity.getcount.scheduled']);
+      delete (item['api.Activity.getcount.scheduled_overdue']);
       // Recent communications
-      item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.2'].values), formatAct);
-      delete (item['api.Activity.get.2']);
+      item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.recentCommunication'].values), formatAct);
+      delete (item['api.Activity.get.recentCommunication']);
       // Tasks
-      item.tasks = _.each(_.cloneDeep(item['api.Activity.get.3'].values), formatAct);
-      delete (item['api.Activity.get.3']);
+      item.tasks = _.each(_.cloneDeep(item['api.Activity.get.tasks'].values), formatAct);
+      delete (item['api.Activity.get.tasks']);
       // nextActivitiesWhichIsNotMileStoneList
-      item.nextActivityNotMilestone = _.each(_.cloneDeep(item['api.Activity.get.4'].values), formatAct)[0];
-      delete (item['api.Activity.get.4']);
+      item.nextActivityNotMilestone = _.each(_.cloneDeep(item['api.Activity.get.nextActivitiesWhichIsNotMileStone'].values), formatAct)[0];
+      delete (item['api.Activity.get.nextActivitiesWhichIsNotMileStone']);
 
       // Custom fields
       item.customData = item['api.CustomValue.gettree'].values || [];
