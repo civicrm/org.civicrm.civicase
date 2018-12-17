@@ -60,7 +60,12 @@
     $scope.caseIds = null;
     $scope.activitiesPanel = {
       name: 'activities',
-      query: { entity: 'Activity', params: getQueryParams('activities') },
+      query: {
+        entity: 'Activity',
+        action: 'getcontactactivities',
+        countAction: 'getcontactactivitiescount',
+        params: getQueryParams('activities')
+      },
       custom: {
         itemName: 'activities',
         involvementFilter: { '@involvingContact': 'myActivities' },
@@ -73,7 +78,12 @@
     };
     $scope.newMilestonesPanel = {
       name: 'milestones',
-      query: { entity: 'Activity', params: getQueryParams('milestones') },
+      query: {
+        entity: 'Activity',
+        action: 'getcontactactivities',
+        countAction: 'getcontactactivitiescount',
+        params: getQueryParams('milestones')
+      },
       custom: {
         itemName: 'milestones',
         involvementFilter: { '@involvingContact': 'myActivities' },
@@ -208,6 +218,7 @@
           return;
         }
 
+        updatePanelQueryActions($scope.newMilestonesPanel);
         $rootScope.$broadcast(
           'civicaseActivityFeed.query',
           $scope.newMilestonesPanel.custom.involvementFilter,
@@ -221,6 +232,7 @@
           return;
         }
 
+        updatePanelQueryActions($scope.activitiesPanel);
         $rootScope.$broadcast(
           'civicaseActivityFeed.query',
           $scope.activitiesPanel.custom.involvementFilter,
@@ -279,7 +291,6 @@
       // Flattened list of all the contact ids of all the contacts of all the cases
       var contactIds = _(results).pluck(contactsProp).flatten().pluck('contact_id').uniq().value();
       var formattedResults = results.map(formatFn);
-
       // The try/catch block is necessary because the service does not
       // return a Promise if it doesn't find any new contacts to fetch
       try {
@@ -290,6 +301,21 @@
       } catch (e) {
         return formattedResults;
       }
+    }
+
+    /**
+     * Updates the action and count action for the given panel query data depending on the selected filter.
+     * When filtering by "My Activities" the action is "getcontactactivities" and "getcontactactivitiescount",
+     * otherwise it's "get" and "getcount".
+     *
+     * @param {Object} panelQueryData
+     */
+    function updatePanelQueryActions (panelQueryData) {
+      var defaultActions = { action: 'get', countAction: 'getcount' };
+      var myActivityActions = { action: 'getcontactactivities', countAction: 'getcontactactivitiescount' };
+      var isRequestingMyActivities = panelQueryData.custom.involvementFilter['@involvingContact'] === 'myActivities';
+
+      $.extend(panelQueryData.query, isRequestingMyActivities ? myActivityActions : defaultActions);
     }
 
     /**

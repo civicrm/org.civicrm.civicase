@@ -38,14 +38,17 @@
       }));
 
       describe('loadActivities', function () {
+        beforeEach(function () {
+          crmApi.and.returnValue($q.resolve({acts: {}}));
+          initController();
+          $scope.filters.activitySet = CaseTypes.get()['1'].definition.activitySets[0].name;
+          $scope.filters.activity_type_id = '5';
+        });
+
         describe('when filtered by activity set and activity id', function () {
           var expectedActivityTypeIDs = [];
 
           beforeEach(function () {
-            crmApi.and.returnValue($q.resolve({acts: {}}));
-            initController();
-            $scope.filters.activitySet = CaseTypes.get()['1'].definition.activitySets[0].name;
-            $scope.filters.activity_type_id = '5';
             $scope.$digest();
 
             _.each(CaseTypes.get()['1'].definition.activitySets[0].activityTypes, function (activityTypeFromSet) {
@@ -56,9 +59,31 @@
             expectedActivityTypeIDs.push($scope.filters.activity_type_id);
           });
 
+          it('requests the activities using the "get" api action', function () {
+            expect(crmApi).toHaveBeenCalledWith({
+              acts: ['Activity', 'get', jasmine.any(Object)],
+              all: ['Activity', 'get', jasmine.any(Object)]
+            });
+          });
+
           it('filters by the activities of the selected activity set and the activity id', function () {
             var args = crmApi.calls.mostRecent().args[0].acts[2].activity_type_id;
             expect(args).toEqual({ IN: expectedActivityTypeIDs });
+          });
+        });
+
+        describe('when filtered by "My Activities"', function () {
+          beforeEach(function () {
+            $scope.filters['@involvingContact'] = 'myActivities';
+
+            $scope.$digest();
+          });
+
+          it('requests the activities using the "get contact activities" api action', function () {
+            expect(crmApi).toHaveBeenCalledWith({
+              acts: ['Activity', 'getcontactactivities', jasmine.any(Object)],
+              all: ['Activity', 'getcontactactivities', jasmine.any(Object)]
+            });
           });
         });
       });

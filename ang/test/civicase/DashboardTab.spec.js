@@ -365,8 +365,12 @@
           expect($scope.newMilestonesPanel.query.entity).toBe('Activity');
         });
 
-        it('does not call a custom endpoint', function () {
-          expect($scope.newMilestonesPanel.query.action).not.toBeDefined();
+        it('queries the `get contact activities` action by default', function () {
+          expect($scope.newMilestonesPanel.query.action).toBe('getcontactactivities');
+        });
+
+        it('counts using the `get contact activities count` action by default', function () {
+          expect($scope.newMilestonesPanel.query.countAction).toBe('getcontactactivitiescount');
         });
 
         it('adds the params defined in the relationship filter', function () {
@@ -513,6 +517,14 @@
               $scope.$digest();
             });
 
+            it('sets the query action to "get"', function () {
+              expect($scope.newMilestonesPanel.query.action).toBe('get');
+            });
+
+            it('sets the count query action to "get count"', function () {
+              expect($scope.newMilestonesPanel.query.countAction).toBe('getcount');
+            });
+
             it('broadcasts a "civicaseActivityFeed.query" event', function () {
               expect($rootScope.$broadcast).toHaveBeenCalledWith(
                 'civicaseActivityFeed.query',
@@ -520,6 +532,21 @@
                 $scope.newMilestonesPanel.query.params,
                 true
               );
+            });
+          });
+
+          describe('when it changes to "my activities"', function () {
+            beforeEach(function () {
+              $scope.newMilestonesPanel.custom.involvementFilter = { '@involvingContact': 'myActivities' };
+              $scope.$digest();
+            });
+
+            it('sets the query action to "get contact activities"', function () {
+              expect($scope.newMilestonesPanel.query.action).toBe('getcontactactivities');
+            });
+
+            it('sets the count query action to "get contact activities count"', function () {
+              expect($scope.newMilestonesPanel.query.countAction).toBe('getcontactactivitiescount');
             });
           });
         });
@@ -592,8 +619,12 @@
           expect($scope.activitiesPanel.query.entity).toBe('Activity');
         });
 
-        it('does not call a custom endpoint', function () {
-          expect($scope.activitiesPanel.query.action).not.toBeDefined();
+        it('queries the `get contact activities` action by default', function () {
+          expect($scope.activitiesPanel.query.action).toBe('getcontactactivities');
+        });
+
+        it('counts using the `get contact activities count` action by default', function () {
+          expect($scope.activitiesPanel.query.countAction).toBe('getcontactactivitiescount');
         });
 
         it('adds the params defined in the relationship filter', function () {
@@ -740,6 +771,14 @@
               $scope.$digest();
             });
 
+            it('sets the query action to "get"', function () {
+              expect($scope.activitiesPanel.query.action).toBe('get');
+            });
+
+            it('sets the count query action to "get count"', function () {
+              expect($scope.activitiesPanel.query.countAction).toBe('getcount');
+            });
+
             it('broadcasts a "civicaseActivityFeed.query" event', function () {
               expect($rootScope.$broadcast).toHaveBeenCalledWith(
                 'civicaseActivityFeed.query',
@@ -747,6 +786,21 @@
                 $scope.activitiesPanel.query.params,
                 true
               );
+            });
+          });
+
+          describe('when it changes to "my activities"', function () {
+            beforeEach(function () {
+              $scope.activitiesPanel.custom.involvementFilter = { '@involvingContact': 'myActivities' };
+              $scope.$digest();
+            });
+
+            it('sets the query action to "get contact activities"', function () {
+              expect($scope.activitiesPanel.query.action).toBe('getcontactactivities');
+            });
+
+            it('sets the count query action to "get contact activities count"', function () {
+              expect($scope.activitiesPanel.query.countAction).toBe('getcontactactivitiescount');
             });
           });
         });
