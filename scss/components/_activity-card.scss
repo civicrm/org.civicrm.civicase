@@ -169,12 +169,11 @@
 .civicase__activity-card-row {
   align-items: flex-start;
   display: flex;
-  line-height: 18px;
+  line-height: 1.8em;
   vertical-align: middle;
 }
 
 .civicase__activity-card-row--first {
-  line-height: 22px;
   margin-bottom: 5px;
 }
 
@@ -198,6 +197,10 @@
   .civicase__pipe {
     margin: 0 5px;
   }
+}
+
+.civicase__contact-icon .material-icons {
+  line-height: inherit;
 }
 
 .civicase__activity-with {
