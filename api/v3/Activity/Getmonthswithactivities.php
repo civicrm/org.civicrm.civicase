@@ -26,32 +26,30 @@ function _civicrm_api3_activity_Getmonthswithactivities_spec(&$spec) {
  */
 function civicrm_api3_activity_Getmonthswithactivities($params)
 {
-    $result = civicrm_api3('Activity', 'get', array_merge($params, [
-      'sequential' => 1,
-      'return' => 'activity_date_time',
-      'options' => ['limit' => 0],
-    ]));
+  $result = civicrm_api3('Activity', 'get', array_merge($params, [
+    'sequential' => 1,
+    'return' => 'activity_date_time',
+    'options' => ['limit' => 0],
+  ]));
 
-    if (!boolval($result['is_error'])) {
-      $grouped_activity_dates = array();
-      $grouped_activity_dates_indexes = array();
-      $index = 0;
-
-      foreach($result['values'] as $activity_date_time) {
-        list($activity_year, $activity_month) = explode('-', $activity_date_time['activity_date_time']);
-        
-        if (!isset($grouped_activity_dates_indexes[$activity_month . $activity_year])) {
-          $grouped_activity_dates_indexes[$activity_month . $activity_year] = $index;
-          $index++;
-          $grouped_activity_dates[] = array(
-            'year' => $activity_year,
-            'month' => $activity_month,
-          );
-        }
-      }
-
-      return civicrm_api3_create_success($grouped_activity_dates, $params, 'Activity', 'getmonthswithactivities');
-    }
-
+  if (boolval($result['is_error'])) {
     return civicrm_api3_create_error($result['error_message'], $params);
+  }
+  
+  $grouped_activity_dates = [];
+  $grouped_activity_dates_indexes = [];
+
+  foreach($result['values'] as $activity_date_time) {
+    list($activity_year, $activity_month) = explode('-', $activity_date_time['activity_date_time']);
+    
+    if (!isset($grouped_activity_dates_indexes[$activity_month . $activity_year])) {
+      $grouped_activity_dates_indexes[$activity_month . $activity_year] = true;
+      $grouped_activity_dates[] = array(
+        'year' => $activity_year,
+        'month' => $activity_month,
+      );
+    }
+  }
+
+  return civicrm_api3_create_success($grouped_activity_dates, $params, 'Activity', 'getmonthswithactivities');
 }

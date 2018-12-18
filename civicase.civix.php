@@ -443,22 +443,3 @@ function _civicase_civix_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) 
     $metaDataFolders[] = $settingsDir;
   }
 }
-
-/**
- * (Delegated) Implements hook_civicrm_entityTypes().
- *
- * Find any *.entityType.php files, merge their content, and return.
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_entityTypes
- */
-
-function _civicase_civix_civicrm_entityTypes(&$entityTypes) {
-  $entityTypes = array_merge($entityTypes, array (
-    'CRM_Civicase_DAO_CaseContactLock' => 
-    array (
-      'name' => 'CaseContactLock',
-      'class' => 'CRM_Civicase_DAO_CaseContactLock',
-      'table' => 'civicase_contactlock',
-    ),
-  ));
-}
