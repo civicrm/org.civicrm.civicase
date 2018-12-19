@@ -28,6 +28,10 @@
     color: $brand-primary;
     cursor: pointer;
   }
+
+  .material-icons {
+    line-height: inherit;
+  }
 }
 
 .civicase__contact-additional__container {
