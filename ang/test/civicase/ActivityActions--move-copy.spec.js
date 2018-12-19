@@ -1,8 +1,8 @@
 /* eslint-env jasmine */
 
 (function (_, $) {
-  describe('ActivityActions', function () {
-    var $controller, $q, $rootScope, $scope, activitiesMockData,
+  describe('MoveCopyActivityAction', function () {
+    var $q, $rootScope, MoveCopyActivityAction, activitiesMockData,
       crmApiMock, dialogServiceMock;
 
     beforeEach(module('civicase', 'civicase.data', function ($provide) {
@@ -13,20 +13,16 @@
       $provide.value('dialogService', dialogServiceMock);
     }));
 
-    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _activitiesMockData_,
-      _crmApi_) {
-      $controller = _$controller_;
+    beforeEach(inject(function (_$q_, _$rootScope_, _activitiesMockData_,
+      _MoveCopyActivityAction_) {
       $q = _$q_;
       $rootScope = _$rootScope_;
       activitiesMockData = _activitiesMockData_;
+      MoveCopyActivityAction = _MoveCopyActivityAction_;
     }));
 
-    beforeEach(function () {
-      initController();
-    });
-
     describe('Copy Activities bulk action', function () {
-      var activities, modalOpenCall, model;
+      var activities, modalOpenCall, model, selectedActivities;
 
       beforeEach(function () {
         var caseId = _.uniqueId();
@@ -37,12 +33,30 @@
           activity.case_id = caseId;
         });
 
-        $scope.selectedActivities = _.sample(activities, 2);
+        selectedActivities = _.sample(activities, 2);
+      });
+
+      describe('when selecting activities more than the allowed limit', function () {
+        var errorMessage;
+
+        beforeEach(function () {
+          spyOn(CRM, 'alert');
+          MoveCopyActivityAction.moveCopyActivities(Array(201), 'copy');
+          errorMessage = 'The maximum number of Activities you can select to move/copy is 200. ' +
+          'You have selected 201.' +
+          ' Please select fewer Activities from your search results and try again.';
+        });
+
+        it('shows a error message to the user', function () {
+          expect(CRM.alert).toHaveBeenCalledWith(
+            errorMessage, 'Maximum Exceeded', 'error'
+          );
+        });
       });
 
       describe('when selecting some activities and then copy them to a new case', function () {
         beforeEach(function () {
-          $scope.moveCopyActivity($scope.selectedActivities, 'copy');
+          MoveCopyActivityAction.moveCopyActivities(selectedActivities, 'copy');
 
           modalOpenCall = dialogServiceMock.open.calls.mostRecent().args;
           model = modalOpenCall[2];
@@ -81,8 +95,8 @@
           beforeEach(function () {
             var saveMethod = modalOpenCall[3].buttons[0].click;
             model.case_id = _.uniqueId();
-            selectedActivitiesIds = _.map($scope.selectedActivities, 'id');
-            expectedActivitySavingCalls = _.cloneDeep($scope.selectedActivities)
+            selectedActivitiesIds = _.map(selectedActivities, 'id');
+            expectedActivitySavingCalls = _.cloneDeep(selectedActivities)
               .map(function (activity) {
                 delete activity.id;
 
@@ -92,8 +106,8 @@
               });
 
             spyOn($.fn, 'dialog');
-            spyOn($scope, '$emit');
-            crmApiMock.and.returnValue($q.resolve([{ values: $scope.selectedActivities }]));
+            spyOn($rootScope, '$emit');
+            crmApiMock.and.returnValue($q.resolve([{ values: selectedActivities }]));
             saveMethod();
             $rootScope.$digest();
           });
@@ -101,6 +115,7 @@
           it('requests the information for the selected activities', function () {
             expect(crmApiMock).toHaveBeenCalledWith([['Activity', 'get', {
               sequential: 1,
+              options: {limit: 0},
               return: [
                 'subject', 'details', 'activity_type_id', 'status_id',
                 'source_contact_name', 'target_contact_name', 'assignee_contact_name',
@@ -116,7 +131,7 @@
           });
 
           it('emits a civicase activity updated event', function () {
-            expect($scope.$emit).toHaveBeenCalledWith('civicase::activity::updated');
+            expect($rootScope.$emit).toHaveBeenCalledWith('civicase::activity::updated');
           });
 
           it('closes the dialog', function () {
@@ -127,11 +142,11 @@
         describe('when the selected case is the same as the current case', function () {
           beforeEach(function () {
             var saveMethod = modalOpenCall[3].buttons[0].click;
-            model.case_id = $scope.selectedActivities[0].case_id;
+            model.case_id = selectedActivities[0].case_id;
 
             spyOn($.fn, 'dialog');
-            spyOn($scope, '$emit');
-            crmApiMock.and.returnValue($q.resolve([{ values: $scope.selectedActivities }]));
+            spyOn($rootScope, '$emit');
+            crmApiMock.and.returnValue($q.resolve([{ values: selectedActivities }]));
             saveMethod();
             $rootScope.$digest();
           });
@@ -141,7 +156,7 @@
           });
 
           it('does not emit the civicase activity updated event', function () {
-            expect($scope.$emit).not.toHaveBeenCalledWith('civicase::activity::updated');
+            expect($rootScope.$emit).not.toHaveBeenCalledWith('civicase::activity::updated');
           });
 
           it('closes the dialog', function () {
@@ -152,9 +167,9 @@
 
       describe('when selecting a single activity and copying it to a new case', function () {
         beforeEach(function () {
-          $scope.selectedActivities = _.sample(activities, 1);
+          selectedActivities = _.sample(activities, 1);
 
-          $scope.moveCopyActivity($scope.selectedActivities, 'copy');
+          MoveCopyActivityAction.moveCopyActivities(selectedActivities, 'copy');
 
           modalOpenCall = dialogServiceMock.open.calls.mostRecent().args;
           model = modalOpenCall[2];
@@ -167,7 +182,7 @@
 
         describe('the model', function () {
           it('defines the case id the same as the selected activity', function () {
-            expect(model.case_id).toBe($scope.selectedActivities[0].case_id);
+            expect(model.case_id).toBe(selectedActivities[0].case_id);
           });
 
           it('displays the subject', function () {
@@ -175,16 +190,10 @@
           });
 
           it('defines an empty subject', function () {
-            expect(model.subject).toBe($scope.selectedActivities[0].subject);
+            expect(model.subject).toBe(selectedActivities[0].subject);
           });
         });
       });
     });
-
-    function initController () {
-      $scope = $rootScope.$new();
-
-      $controller('civicaseActivityActionsController', { $scope: $scope });
-    }
   });
 })(CRM._, CRM.$);
