@@ -99,6 +99,27 @@
     display: block;
     padding: $crm-dropdown-item-padding;
   }
+
+  /* Caseview menu dropdown */
+  ul.dropdown-menu {
+    > li {
+      position: relative;
+      >  ul.dropdown-menu.sub-menu {
+        width: 100%;
+        left: -100%;
+        margin-top: -40px;
+        position: absolute;
+      }
+      &:hover {
+        > ul.dropdown-menu.sub-menu {
+          visibility: visible;
+          opacity: 1;
+          display: block;
+        }
+      }
+    }
+  }
+
 }
 
 .civicase__case-header__action-icon {

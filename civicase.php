@@ -566,6 +566,37 @@ function civicase_civicrm_navigationMenu(&$menu) {
       $item['url'] = $rewriteMap[$item['url']];
     }
   });
+
+  // add new menu item
+  // Check that our item doesn't already exist
+  $menu_item_search = array('url' => 'civicrm/case/webforms');
+  $menu_items = array();
+  CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
+
+  if ( ! empty($menu_items) ) {
+    return;
+  }
+
+  $navId = CRM_Core_DAO::singleValueQuery("SELECT max(id) FROM civicrm_navigation");
+  if (is_integer($navId)) {
+    $navId++;
+  }
+  // Find the Civicase menu
+  $caseID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'CiviCase', 'id', 'name');
+  $administerID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+  $menu[$administerID]['child'][$caseID]['child'][$navId] = array(
+    'attributes' => array (
+      'label' => ts('CiviCase Webforms'),
+      'name' => 'CiviCase Webforms',
+      'url' => 'civicrm/case/webforms',
+      'permission' => 'access CiviCase',
+      'operator' => 'OR',
+      'separator' => 1,
+      'parentID' => $caseID,
+      'navID' => $navId,
+      'active' => 1
+    ),
+  );
 }
 
 /**

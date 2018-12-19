@@ -7,6 +7,11 @@
       template:
       '<li ng-class="{disabled: !isActionEnabled(action)}" ng-if="isActionAllowed(action)" ng-repeat="action in caseActions">' +
       '  <a href ng-click="doAction(action)"><i class="fa {{action.icon}}"></i> {{ action.title }}</a>' +
+      '  <ul ng-if="isHasSubMenu(action)" class="dropdown-menu sub-menu">' +
+      '    <li ng-class="{disabled: !isActionEnabled(subMenu)}" ng-if="isActionAllowed(subMenu)" ng-repeat="subMenu in action.items">' +
+      '      <a href ng-click="doAction(subMenu)"><i class="fa {{subMenu.icon}}"></i> {{ subMenu.title }}</a>' +
+      '    </li>' +
+      '  </ul>' +
       '</li>',
       scope: {
         cases: '=civicaseActions',
@@ -16,6 +21,10 @@
       link: function ($scope, element, attributes) {
         var ts = CRM.ts('civicase');
         var multi = $scope.multi = attributes.multiple;
+
+        $scope.isHasSubMenu = function(action) {
+          return (action.items && action.items.length);
+        };
 
         $scope.isActionEnabled = function (action) {
           return (!action.number || $scope.cases.length === +action.number);
@@ -298,6 +307,16 @@
               win.focus();
             },
 
+            gotoWebform: function(selectedCase, path, clientId) {
+              var clientId = 'cid' + clientId;
+              var url = CRM.url(path, {
+                case1: selectedCase.id,
+                [clientId]: selectedCase.client[0].contact_id
+              });
+              var win = window.open(url, '_blank');
+              win.focus();
+            },
+
             lockCases: function (currentCase) {
               var popupPath = {
                 path: 'civicrm/case/locked-contacts',
@@ -309,6 +328,7 @@
 
               return popupPath;
             }
+
           });
 
           // Open popup if callback returns a path & query

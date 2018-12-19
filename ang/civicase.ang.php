@@ -186,6 +186,40 @@ if (CRM_Core_Permission::check('delete in CiviCase')) {
     'icon' => 'fa-trash',
   );
 }
+// Add webforms with cases attached to menu
+$items = array();
+
+$webformsToDisplay = Civi::settings()->get('civi_drupal_webforms');
+if (isset($webformsToDisplay)) {
+  $allowedWebforms = array();
+  foreach ($webformsToDisplay as $webformNode) {
+    $allowedWebforms[] = $webformNode['nid'];
+  }
+  $webforms = civicrm_api3('Case', 'getwebforms');
+  if (isset($webforms['values'])) {
+    foreach ($webforms['values'] as $webform) {
+      if (!in_array($webform['nid'], $allowedWebforms)) {
+        continue;
+      }
+      $node = node_load($webform['nid']);
+      $data = $node->webform_civicrm['data'];
+      $clients = $data['case'][1]['case'][1]['client_id'];
+      $client = reset($clients);
+      $items[] = array(
+        'title' => $webform['title'],
+        'action' => 'gotoWebform(cases[0], "' . $webform['path'] . '", '.$client.')',
+        'icon' => 'fa-link',
+      );
+    }
+    $options['webforms'] = array(
+      'title' => ts('Webforms'),
+      'action' => '',
+      'icon' => 'fa-file-text-o',
+      'items' => $items,
+    );
+  }
+}
+
 // Contact tasks
 $contactTasks = CRM_Contact_Task::permissionedTaskTitles(CRM_Core_Permission::getPermission());
 $options['contactTasks'] = array();
