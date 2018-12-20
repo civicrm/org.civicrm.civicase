@@ -24,23 +24,47 @@ function _civicrm_api3_activity_Getmonthswithactivities_spec(&$spec) {
  * @see civicrm_api3_create_success
  * @throws API_Exception
  */
-function civicrm_api3_activity_Getmonthswithactivities($params)
-{
-  $result = civicrm_api3('Activity', 'get', array_merge($params, [
+function civicrm_api3_activity_Getmonthswithactivities($params) {
+  $passed_options = $params['options'] ? $params['options'] : [];
+  $params = array_merge($params, [
     'sequential' => 1,
     'return' => 'activity_date_time',
-    'options' => ['limit' => 0],
-  ]));
+    'options' => array_merge($passed_options, [
+      'limit' => 0,
+    ]),
+  ]);
 
-  if (boolval($result['is_error'])) {
-    return civicrm_api3_create_error($result['error_message'], $params);
+  $options = _civicrm_api3_get_options_from_params($params, FALSE, 'Activity', 'get');
+  $sql = CRM_Utils_SQL_Select::fragment();
+
+  _civicrm_api3_activity_get_extraFilters($params, $sql);
+
+  if (!empty($options['sort'])) {
+    $sort = explode(', ', $options['sort']);
+
+    foreach ($sort as $index => &$sortString) {
+      list($sortField, $dir) = array_pad(explode(' ', $sortString), 2, 'ASC');
+      if ($sortField == 'is_overdue') {
+        $incomplete = implode(',', array_keys(CRM_Activity_BAO_Activity::getStatusesByType(CRM_Activity_BAO_Activity::INCOMPLETE)));
+        $sql->orderBy("IF((a.activity_date_time >= NOW() OR a.status_id NOT IN ($incomplete)), 0, 1) $dir", NULL, $index);
+        $sortString = '(1)';
+      }
+    }
+    $params['options']['sort'] = implode(', ', $sort);
   }
+
+  if (!empty($options['return']['is_overdue']) && (empty($options['return']['status_id']) || empty($options['return']['activity_date_time']))) {
+    $options['return']['status_id'] = $options['return']['activity_date_time'] = 1;
+    $params['return'] = array_keys($options['return']);
+  }
+
+  $activities = _civicrm_api3_basic_get(_civicrm_api3_get_BAO(__FUNCTION__), $params, FALSE, 'Activity', $sql);
   
   $grouped_activity_dates = [];
   $grouped_activity_dates_indexes = [];
 
-  foreach($result['values'] as $activity_date_time) {
-    list($activity_year, $activity_month) = explode('-', $activity_date_time['activity_date_time']);
+  foreach($activities as $activity) {
+    list($activity_year, $activity_month) = explode('-', $activity['activity_date_time']);
     
     if (!isset($grouped_activity_dates_indexes[$activity_month . $activity_year])) {
       $grouped_activity_dates_indexes[$activity_month . $activity_year] = true;
