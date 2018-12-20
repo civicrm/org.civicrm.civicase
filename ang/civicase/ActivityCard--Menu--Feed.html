@@ -2,27 +2,8 @@
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <i class="material-icons">more_vert</i>
   </button>
-  <ul class="dropdown-menu dropdown-menu-right">
-    <li>
-      <a href ng-click="moveCopyActivity(activity, 'move')">
-        <i class="material-icons">next_week</i> {{ ts('Move to Case') }}
-      </a>
-    </li>
-    <li>
-      <a href ng-click="moveCopyActivity(activity, 'copy')">
-        <i class="material-icons">filter_none</i> {{ ts('Copy to Case') }}
-      </a>
-    </li>
-    <li>
-      <a ng-href="{{ 'civicrm/case/activity/download-all-files' | civicaseCrmUrl:{ activity_id: activity.id } }}" ng-if="activity.type === 'File Upload'">
-        <i class="material-icons">file_download</i> {{ ts('Download All') }}
-      </a>
-    </li>
-    <li class="divider"></li>
-    <li>
-      <a href ng-click="deleteActivity(activity)">
-        <i class="material-icons">delete</i> {{ ts('Delete') }}
-      </a>
-    </li>
+  <ul
+    class="dropdown-menu dropdown-menu-right" civicase-activity-actions
+    mode="case-activity-feed" selected-activities="[activity]">
   </ul>
 </div>

@@ -51,17 +51,6 @@
       return JSON.stringify(caseGetParams());
     };
 
-    $scope.editActivityUrl = function (id) {
-      return CRM.url('civicrm/case/activity', {
-        action: 'update',
-        reset: 1,
-        cid: $scope.item.client[0].contact_id,
-        caseid: $scope.item.id,
-        id: id,
-        civicase_reload: $scope.caseGetParams()
-      });
-    };
-
     /**
      * Toggle focus of the Summary View
      */
@@ -174,6 +163,17 @@
     };
 
     $scope.viewActivityUrl = function (id) {
+      return CRM.url('civicrm/case/activity', {
+        action: 'update',
+        reset: 1,
+        cid: $scope.item.client[0].contact_id,
+        caseid: $scope.item.id,
+        id: id,
+        civicase_reload: $scope.caseGetParams()
+      });
+    };
+
+    this.getEditActivityUrl = function (id) {
       return CRM.url('civicrm/case/activity', {
         action: 'update',
         reset: 1,
