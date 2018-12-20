@@ -14,20 +14,23 @@
      * @param {String} operation
      */
     this.moveCopyActivities = function (activities, operation) {
-      if (ifActivityLimitIsReached(activities)) {
+      var isActivityLimitReached = activities.length > MOVE_COPY_ACTIVITY_LIMIT;
+
+      if (isActivityLimitReached) {
+        displayActivityLimitWarning(activities);
         return;
       }
 
       var activitiesCopy = _.cloneDeep(activities);
       var title = operation[0].toUpperCase() + operation.slice(1) +
         ((activities.length === 1)
-          ? ts(' %1Activity', {1: activitiesCopy[0].type ? activitiesCopy[0].type + ' ' : ''})
-          : ts(' %1 Activities', {1: activitiesCopy.length}));
+          ? ts(' %1Activity', {1: activities[0].type ? activities[0].type + ' ' : ''})
+          : ts(' %1 Activities', {1: activities.length}));
       var model = {
         ts: ts,
-        case_id: activitiesCopy.length > 1 ? '' : activitiesCopy[0].case_id,
-        isSubjectVisible: activitiesCopy.length === 1,
-        subject: activitiesCopy.length > 1 ? '' : activitiesCopy[0].subject
+        case_id: activities.length > 1 ? '' : activitiesCopy[0].case_id,
+        isSubjectVisible: activities.length === 1,
+        subject: activities.length > 1 ? '' : activitiesCopy[0].subject
       };
 
       dialogService.open('MoveCopyActCard', '~/civicase/ActivityMoveCopy.html', model, {
@@ -39,7 +42,7 @@
           text: ts('Save'),
           icons: {primary: 'fa-check'},
           click: function () {
-            moveCopyConfirmationHandler.call(this, operation, activities, activitiesCopy, model);
+            moveCopyConfirmationHandler.call(this, operation, activities, model);
           }
         }]
       });
@@ -50,57 +53,65 @@
      *
      * @param {String} operation
      * @param {Array} activities
-     * @param {Array} activitiesCopy
      * @param {Object} model
      */
-    function moveCopyConfirmationHandler (operation, activities, activitiesCopy, model) {
-      var ifCaseIdIsNew = !_.find(activitiesCopy, function (activity) {
+    function moveCopyConfirmationHandler (operation, activities, model) {
+      var isCaseIdNew = !_.find(activities, function (activity) {
         return activity.case_id === model.case_id;
       });
 
-      if (model.case_id && ifCaseIdIsNew) {
-        var apiCalls = [];
+      if (model.case_id && isCaseIdNew) {
+        fetchActivitiesInfo(activities)
+          .then(function (activitiesData) {
+            var apiCalls = prepareApiCalls(activitiesData, operation, model);
 
-        fetchActivitiesInfo(activitiesCopy)
-          .then(function (data) {
-            activities = data[0].values;
-
-            _.each(activities, function (activity) {
-              if (operation === 'copy') {
-                delete activity.id;
-              }
-              if (activities.length === 1) {
-                activity.subject = model.subject;
-              }
-              activity.case_id = model.case_id;
-              apiCalls.push(['Activity', 'create', activity]);
-            });
-
-            crmApi(apiCalls)
-              .then(function () {
-                $rootScope.$emit('civicase::activity::updated');
-              });
+            return crmApi(apiCalls);
+          })
+          .then(function () {
+            $rootScope.$emit('civicase::activity::updated');
           });
       }
+
       $(this).dialog('close');
     }
 
     /**
-     * Check if thesent activities count exceed the allowed limit
+     * Prepare the API calls for the move/copy operation
+     *
+     * @param {Array} activitiesData
+     * @param {String} operation
+     * @param {Object} model
+     * @return {Array} apiCalls
+     */
+    function prepareApiCalls (activitiesData, operation, model) {
+      var apiCalls = [];
+
+      _.each(activitiesData, function (activity) {
+        if (operation === 'copy') {
+          delete activity.id;
+        }
+        if (activitiesData.length === 1) {
+          activity.subject = model.subject;
+        }
+        activity.case_id = model.case_id;
+        apiCalls.push(['Activity', 'create', activity]);
+      });
+
+      return apiCalls;
+    }
+
+    /**
+     * Displays a warning message about activity limit reached
      *
      * @param {Array} activities
-     * @return {Boolean}
      */
-    function ifActivityLimitIsReached (activities) {
-      if (activities.length > MOVE_COPY_ACTIVITY_LIMIT) {
-        var errorMsg = ts('The maximum number of Activities you can select to move/copy is %1. ' +
-          'You have selected %2.' +
-          ' Please select fewer Activities from your search results and try again.',
-        { 1: MOVE_COPY_ACTIVITY_LIMIT, 2: activities.length });
+    function displayActivityLimitWarning (activities) {
+      var errorMsg = ts('The maximum number of Activities you can select to move/copy is %1. ' +
+        'You have selected %2.' +
+        ' Please select fewer Activities from your search results and try again.',
+      { 1: MOVE_COPY_ACTIVITY_LIMIT, 2: activities.length });
 
-        CRM.alert(errorMsg, 'Maximum Exceeded', 'error');
-        return true;
-      }
+      CRM.alert(errorMsg, 'Maximum Exceeded', 'error');
     }
 
     /**
@@ -124,7 +135,9 @@
           'tag_id.color', 'file_id', 'is_overdue', 'case_id', 'priority_id'
         ],
         id: { 'IN': activityIds }
-      }]]);
+      }]]).then(function (activitiesResponse) {
+        return activitiesResponse[0].values;
+      });
     }
   }
 })(angular, CRM.$, CRM._);

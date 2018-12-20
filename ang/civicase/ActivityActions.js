@@ -5,26 +5,43 @@
     return {
       scope: {
         mode: '@',
-        selectedActivities: '=',
-        editActivityUrl: '=?editActivityUrl'
+        selectedActivities: '='
       },
+      require: '^civicaseCaseDetails',
       controller: civicaseActivityActionsController,
       templateUrl: '~/civicase/ActivityActions.html',
-      restrict: 'A'
+      restrict: 'A',
+      link: civicaseActivityActionsLink
     };
   });
 
   module.controller('civicaseActivityActionsController', civicaseActivityActionsController);
 
+  function civicaseActivityActionsLink ($scope, attrs, element, caseDetails) {
+    $scope.getEditActivityUrl = caseDetails.getEditActivityUrl;
+  }
+
   function civicaseActivityActionsController ($scope, crmApi, getActivityFeedUrl, MoveCopyActivityAction) {
     var ts = $scope.ts = CRM.ts('civicase');
-    $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.getActivityFeedUrl = getActivityFeedUrl;
+    $scope.deleteActivity = deleteActivity;
+    $scope.moveCopyActivity = MoveCopyActivityAction.moveCopyActivities;
+    $scope.isActivityEditable = isActivityEditable;
 
-    $scope.isActivityEditable = function (activity) {
-      var type = CRM.civicase.activityTypes[activity.activity_type_id].name;
+    /**
+     * Checks if the sent activity is enabled
+     *
+     * @param {Object} activity
+     */
+    function isActivityEditable (activity) {
+      var activityType = CRM.civicase.activityTypes[activity.activity_type_id].name;
+      var nonEditableActivityTypes = [
+        'Email',
+        'Print PDF Letter'
+      ];
 
-      return (type !== 'Email' && type !== 'Print PDF Letter') && $scope.editActivityUrl;
-    };
+      return !_.includes(nonEditableActivityTypes, activityType) && $scope.getEditActivityUrl;
+    }
 
     /**
      * Delete activities
@@ -32,7 +49,7 @@
      * @param {Array} activities
      * @param {jQuery} dialog - the dialog which should be closed once deletion is over
      */
-    $scope.deleteActivity = function (activities, dialog) {
+    function deleteActivity (activities, dialog) {
       CRM.confirm({
         title: ts('Delete Activity'),
         message: ts('Permanently delete %1 activit%2?', {1: activities.length, 2: activities.length > 1 ? 'ies' : 'y'})
@@ -52,8 +69,6 @@
           $(dialog).dialog('close');
         }
       });
-    };
-
-    $scope.moveCopyActivity = MoveCopyActivityAction.moveCopyActivities;
+    }
   }
 })(CRM.$, CRM._, angular);

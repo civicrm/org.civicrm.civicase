@@ -24,7 +24,6 @@
         refresh: '=refreshCallback',
         refreshOnCheckboxToggle: '=?',
         bulkAllowed: '=',
-        editActivityUrl: '=?editActivityUrl',
         type: '=type',
         customClickEvent: '='
       }

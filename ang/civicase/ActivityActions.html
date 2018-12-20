@@ -1,10 +1,10 @@
 <li ng-if="mode === 'case-summary'">
-  <a ng-href="#{{ activityFeedUrl(selectedActivities[0].case_id, null, null, null, selectedActivities[0].id) }}">
+  <a ng-href="#{{ getActivityFeedUrl(selectedActivities[0].case_id, null, null, null, selectedActivities[0].id) }}">
     <i class="material-icons">pageview</i> {{ ts('View in Feed') }}
   </a>
 </li>
 <li ng-if="mode === 'case-summary' && isActivityEditable(selectedActivities[0])">
-  <a ng-href="{{ editActivityUrl(selectedActivities[0].id) }}" class="crm-popup">
+  <a ng-href="{{ getEditActivityUrl(selectedActivities[0].id) }}" class="crm-popup">
     <i class="material-icons">edit</i> {{ ts('Edit') }}
   </a>
 </li>

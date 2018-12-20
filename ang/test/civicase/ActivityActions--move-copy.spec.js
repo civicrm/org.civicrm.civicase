@@ -36,21 +36,46 @@
         selectedActivities = _.sample(activities, 2);
       });
 
-      describe('when selecting activities more than the allowed limit', function () {
+      describe('activity limit', function () {
         var errorMessage;
 
         beforeEach(function () {
           spyOn(CRM, 'alert');
-          MoveCopyActivityAction.moveCopyActivities(Array(201), 'copy');
           errorMessage = 'The maximum number of Activities you can select to move/copy is 200. ' +
           'You have selected 201.' +
           ' Please select fewer Activities from your search results and try again.';
         });
 
-        it('shows a error message to the user', function () {
-          expect(CRM.alert).toHaveBeenCalledWith(
-            errorMessage, 'Maximum Exceeded', 'error'
-          );
+        describe('when selecting activities more than the allowed limit', function () {
+          beforeEach(function () {
+            MoveCopyActivityAction.moveCopyActivities(Array(201), 'copy');
+          });
+
+          it('shows a error message to the user', function () {
+            expect(CRM.alert).toHaveBeenCalledWith(
+              errorMessage, 'Maximum Exceeded', 'error'
+            );
+          });
+        });
+
+        describe('when selecting activities exactly same as allowed limit', function () {
+          beforeEach(function () {
+            MoveCopyActivityAction.moveCopyActivities(Array(200), 'copy');
+          });
+
+          it('shows a error message to the user', function () {
+            expect(CRM.alert).not.toHaveBeenCalledWith();
+          });
+        });
+
+        describe('when selecting activities less than the allowed limit', function () {
+          beforeEach(function () {
+            MoveCopyActivityAction.moveCopyActivities(Array(199), 'copy');
+          });
+
+          it('shows a error message to the user', function () {
+            expect(CRM.alert).not.toHaveBeenCalledWith();
+          });
         });
       });
 
@@ -211,21 +236,46 @@
         selectedActivities = _.sample(activities, 2);
       });
 
-      describe('when selecting activities more than the allowed limit', function () {
+      describe('activity limit', function () {
         var errorMessage;
 
         beforeEach(function () {
           spyOn(CRM, 'alert');
-          MoveCopyActivityAction.moveCopyActivities(Array(201), 'move');
           errorMessage = 'The maximum number of Activities you can select to move/copy is 200. ' +
           'You have selected 201.' +
           ' Please select fewer Activities from your search results and try again.';
         });
 
-        it('shows a error message to the user', function () {
-          expect(CRM.alert).toHaveBeenCalledWith(
-            errorMessage, 'Maximum Exceeded', 'error'
-          );
+        describe('when selecting activities more than the allowed limit', function () {
+          beforeEach(function () {
+            MoveCopyActivityAction.moveCopyActivities(Array(201), 'move');
+          });
+
+          it('shows a error message to the user', function () {
+            expect(CRM.alert).toHaveBeenCalledWith(
+              errorMessage, 'Maximum Exceeded', 'error'
+            );
+          });
+        });
+
+        describe('when selecting activities exactly same as allowed limit', function () {
+          beforeEach(function () {
+            MoveCopyActivityAction.moveCopyActivities(Array(200), 'move');
+          });
+
+          it('shows a error message to the user', function () {
+            expect(CRM.alert).not.toHaveBeenCalledWith();
+          });
+        });
+
+        describe('when selecting activities less than the allowed limit', function () {
+          beforeEach(function () {
+            MoveCopyActivityAction.moveCopyActivities(Array(199), 'move');
+          });
+
+          it('shows a error message to the user', function () {
+            expect(CRM.alert).not.toHaveBeenCalledWith();
+          });
         });
       });
 
