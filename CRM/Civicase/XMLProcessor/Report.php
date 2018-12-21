@@ -7,7 +7,7 @@ class CRM_Civicase_XMLProcessor_Report extends CRM_Case_XMLProcessor_Report {
    * @param $activities
    * @param $selectedActivities
    */
-  public function getActivities($clientID, $caseID, $activityTypes, &$activities, $selectedActivities) {
+  public function getActivities($clientID, $caseID, $activityTypes, &$activities, $selectedActivities = null) {
 
     // get all activities for this case that in this activityTypes set
     foreach ($activityTypes as $aType) {
@@ -58,7 +58,7 @@ AND    ac.case_id = %1
    *
    * @return mixed
    */
-  public static function getCaseReport($clientID, $caseID, $activitySetName, $params, $form, $selectedActivities) {
+  public static function getCaseReport($clientID, $caseID, $activitySetName, $params, $form, $selectedActivities = null) {
 
     $template = CRM_Core_Smarty::singleton();
 
