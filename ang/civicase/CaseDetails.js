@@ -184,6 +184,21 @@
       });
     };
 
+    this.getPrintActivityUrl = function (selectedActivities) {
+      selectedActivities = selectedActivities.map(function (item) {
+        return item['id'];
+      }).join(',');
+
+      return CRM.url('civicrm/case/customreport/print', {
+        all: 1,
+        redact: 0,
+        cid: $scope.item.client[0].contact_id,
+        asn: 'standard_timeline',
+        caseID: $scope.item.id,
+        sact: selectedActivities
+      });
+    };
+
     function caseGetParams () {
       return getCaseQueryParams($scope.item.id, panelLimit);
     }

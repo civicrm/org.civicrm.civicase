@@ -7,26 +7,38 @@
         mode: '@',
         selectedActivities: '='
       },
-      require: '^civicaseCaseDetails',
+      require: '?^civicaseCaseDetails',
       controller: civicaseActivityActionsController,
       templateUrl: '~/civicase/ActivityActions.html',
       restrict: 'A',
       link: civicaseActivityActionsLink
     };
+
+    function civicaseActivityActionsLink ($scope, attrs, element, caseDetails) {
+      if (caseDetails) {
+        $scope.getEditActivityUrl = caseDetails.getEditActivityUrl;
+        $scope.getPrintActivityUrl = caseDetails.getPrintActivityUrl;
+      } else {
+        $scope.isDashBoardPage = true;
+      }
+    }
   });
 
   module.controller('civicaseActivityActionsController', civicaseActivityActionsController);
 
-  function civicaseActivityActionsLink ($scope, attrs, element, caseDetails) {
-    $scope.getEditActivityUrl = caseDetails.getEditActivityUrl;
-  }
-
-  function civicaseActivityActionsController ($scope, crmApi, getActivityFeedUrl, MoveCopyActivityAction) {
+  function civicaseActivityActionsController ($window, $scope, crmApi, getActivityFeedUrl, MoveCopyActivityAction) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.getActivityFeedUrl = getActivityFeedUrl;
     $scope.deleteActivity = deleteActivity;
     $scope.moveCopyActivity = MoveCopyActivityAction.moveCopyActivities;
     $scope.isActivityEditable = isActivityEditable;
+    $scope.printReport = printReport;
+
+    function printReport (selectedActivities) {
+      var url = $scope.getPrintActivityUrl(selectedActivities);
+
+      $window.open(url, '_blank').focus();
+    }
 
     /**
      * Checks if the sent activity is enabled
