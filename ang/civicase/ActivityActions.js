@@ -16,10 +16,9 @@
 
     function civicaseActivityActionsLink ($scope, attrs, element, caseDetails) {
       if (caseDetails) {
+        $scope.isCaseSummaryPage = true;
         $scope.getEditActivityUrl = caseDetails.getEditActivityUrl;
         $scope.getPrintActivityUrl = caseDetails.getPrintActivityUrl;
-      } else {
-        $scope.isDashBoardPage = true;
       }
     }
   });
