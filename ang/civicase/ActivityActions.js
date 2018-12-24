@@ -7,26 +7,50 @@
         mode: '@',
         selectedActivities: '='
       },
-      require: '^civicaseCaseDetails',
+      require: '?^civicaseCaseDetails',
       controller: civicaseActivityActionsController,
       templateUrl: '~/civicase/ActivityActions.html',
       restrict: 'A',
       link: civicaseActivityActionsLink
     };
+
+    /**
+     * Angular JS's link function for the directive civicaseActivityActions
+     * @param {Object} $scope
+     * @param {Object} attrs
+     * @param {Object} element
+     * @param {Object} caseDetails
+     */
+    function civicaseActivityActionsLink ($scope, attrs, element, caseDetails) {
+      if (caseDetails) {
+        // TODO - Unit test pending
+        $scope.isCaseSummaryPage = true;
+        $scope.getEditActivityUrl = caseDetails.getEditActivityUrl;
+        $scope.getPrintActivityUrl = caseDetails.getPrintActivityUrl;
+      }
+    }
   });
 
   module.controller('civicaseActivityActionsController', civicaseActivityActionsController);
 
-  function civicaseActivityActionsLink ($scope, attrs, element, caseDetails) {
-    $scope.getEditActivityUrl = caseDetails.getEditActivityUrl;
-  }
-
-  function civicaseActivityActionsController ($scope, crmApi, getActivityFeedUrl, MoveCopyActivityAction) {
+  function civicaseActivityActionsController ($window, $scope, crmApi, getActivityFeedUrl, MoveCopyActivityAction) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.getActivityFeedUrl = getActivityFeedUrl;
     $scope.deleteActivity = deleteActivity;
     $scope.moveCopyActivity = MoveCopyActivityAction.moveCopyActivities;
     $scope.isActivityEditable = isActivityEditable;
+    $scope.printReport = printReport;
+
+    /**
+     * Print a report for the sent activities
+     *
+     * @param {Array} selectedActivities
+     */
+    function printReport (selectedActivities) {
+      var url = $scope.getPrintActivityUrl(selectedActivities);
+
+      $window.open(url, '_blank').focus();
+    }
 
     /**
      * Checks if the sent activity is enabled

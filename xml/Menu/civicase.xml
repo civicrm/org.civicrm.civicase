@@ -35,4 +35,9 @@
     <title>Locked Contacts</title>
     <access_arguments>access all cases and activities;access my cases and activities</access_arguments>
   </item>
+  <item>
+    <path>civicrm/case/customreport/print</path>
+    <page_callback>CRM_Civicase_XMLProcessor_Report::printCaseReport</page_callback>
+    <access_arguments>access all cases and activities</access_arguments>
+  </item>
 </menu>

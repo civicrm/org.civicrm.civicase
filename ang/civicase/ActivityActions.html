@@ -8,7 +8,11 @@
     <i class="material-icons">edit</i> {{ ts('Edit') }}
   </a>
 </li>
-
+<li ng-if="isCaseSummaryPage && mode === 'case-activity-bulk-action'">
+  <a href ng-click="printReport(selectedActivities)">
+    <i class="material-icons">print</i> {{ ts('Print Report') }}
+  </a>
+</li>
 <li>
   <a href ng-click="moveCopyActivity(selectedActivities, 'move')">
     <i class="material-icons">next_week</i> {{ ts('Move to Case') }}
