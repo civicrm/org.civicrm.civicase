@@ -14,6 +14,13 @@
       link: civicaseActivityActionsLink
     };
 
+    /**
+     * Angular JS's link function for the directive civicaseActivityActions
+     * @param {Object} $scope
+     * @param {Object} attrs
+     * @param {Object} element
+     * @param {Object} caseDetails
+     */
     function civicaseActivityActionsLink ($scope, attrs, element, caseDetails) {
       if (caseDetails) {
         $scope.isCaseSummaryPage = true;
@@ -33,6 +40,11 @@
     $scope.isActivityEditable = isActivityEditable;
     $scope.printReport = printReport;
 
+    /**
+     * Print a report for the sent activities
+     *
+     * @param {Array} selectedActivities
+     */
     function printReport (selectedActivities) {
       var url = $scope.getPrintActivityUrl(selectedActivities);
 

@@ -184,6 +184,12 @@
       });
     };
 
+    /**
+     * Get the url to print activities
+     *
+     * @param {Array} selectedActivities
+     * @return {String}
+     */
     this.getPrintActivityUrl = function (selectedActivities) {
       selectedActivities = selectedActivities.map(function (item) {
         return item['id'];

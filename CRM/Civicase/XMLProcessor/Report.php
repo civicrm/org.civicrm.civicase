@@ -1,27 +1,30 @@
 <?php
+
 class CRM_Civicase_XMLProcessor_Report extends CRM_Case_XMLProcessor_Report {
   /**
+   * Get Activities which match the sent filters
+   *
    * @param int $clientID
    * @param int $caseID
    * @param $activityTypes
    * @param $activities
    * @param $selectedActivities
    */
-  public function getActivities($clientID, $caseID, $activityTypes, &$activities, $selectedActivities = null) {
+  public function getActivities($clientID, $caseID, $activityTypes, &$activities, $selectedActivities = NULL) {
 
     // get all activities for this case that in this activityTypes set
     foreach ($activityTypes as $aType) {
-      $map[$aType['id']] = $aType;
+      $activityTypesMap[$aType['id']] = $aType;
     }
 
     // get all core activities
     $coreActivityTypes = CRM_Case_PseudoConstant::caseActivityType(FALSE, TRUE);
 
     foreach ($coreActivityTypes as $aType) {
-      $map[$aType['id']] = $aType;
+      $activityTypesMap[$aType['id']] = $aType;
     }
 
-    $activityTypeIDs = implode(',', array_keys($map));
+    $activityTypeIDs = implode(',', array_keys($activityTypesMap));
     $query = "
 SELECT a.*, c.id as caseID
 FROM   civicrm_activity a,
@@ -38,7 +41,7 @@ AND    ac.case_id = %1
     $params = array(1 => array($caseID, 'Integer'));
     $dao = CRM_Core_DAO::executeQuery($query, $params);
     while ($dao->fetch()) {
-      $activityTypeInfo = $map[$dao->activity_type_id];
+      $activityTypeInfo = $activityTypesMap[$dao->activity_type_id];
       if (count($selectedActivities) === 0 || in_array($dao->id, $selectedActivities)) {
         $activities[] = $this->getActivity($clientID,
           $dao,
@@ -49,16 +52,18 @@ AND    ac.case_id = %1
   }
 
   /**
+   * Get the Case Report for the sent filters
+   *
    * @param int $clientID
    * @param int $caseID
    * @param string $activitySetName
    * @param array $params
-   * @param CRM_Core_Form $form
+   * @param CRM_Civicase_XMLProcessor_Report $report
    * @param array $selectedActivities
    *
    * @return mixed
    */
-  public static function getCaseReport($clientID, $caseID, $activitySetName, $params, $form, $selectedActivities = null) {
+  public static function getCaseReport($clientID, $caseID, $activitySetName, $params, $report, $selectedActivities = NULL) {
 
     $template = CRM_Core_Smarty::singleton();
 
@@ -67,16 +72,16 @@ AND    ac.case_id = %1
     $template->assign('activitySetName', $activitySetName);
 
     if (!empty($params['is_redact'])) {
-      $form->_isRedact = TRUE;
+      $report->_isRedact = TRUE;
       $template->assign('_isRedact', 'true');
     }
     else {
-      $form->_isRedact = FALSE;
+      $report->_isRedact = FALSE;
       $template->assign('_isRedact', 'false');
     }
 
     // first get all case information
-    $case = $form->caseInfo($clientID, $caseID);
+    $case = $report->caseInfo($clientID, $caseID);
     $template->assign_by_ref('case', $case);
 
     if ($params['include_activities'] == 1) {
@@ -86,14 +91,14 @@ AND    ac.case_id = %1
       $template->assign('includeActivities', 'Missing activities only');
     }
 
-    $xml = $form->retrieve($case['caseTypeName']);
+    $xml = $report->retrieve($case['caseTypeName']);
 
     $activitySetNames = CRM_Case_XMLProcessor_Process::activitySets($xml->ActivitySets);
     $pageTitle = CRM_Utils_Array::value($activitySetName, $activitySetNames);
     $template->assign('pageTitle', $pageTitle);
 
     if ($activitySetName) {
-      $activityTypes = $form->getActivityTypes($xml, $activitySetName);
+      $activityTypes = $report->getActivityTypes($xml, $activitySetName);
     }
     else {
       $activityTypes = CRM_Case_XMLProcessor::allActivityTypes();
@@ -105,7 +110,7 @@ AND    ac.case_id = %1
 
     // next get activity set Information
     $activitySet = array(
-      'label' => $form->getActivitySetLabel($xml, $activitySetName),
+      'label' => $report->getActivitySetLabel($xml, $activitySetName),
       'includeActivities' => 'All',
       'redact' => 'false',
     );
@@ -113,22 +118,28 @@ AND    ac.case_id = %1
 
     //now collect all the information about activities
     $activities = array();
-    $form->getActivities($clientID, $caseID, $activityTypes, $activities, $selectedActivities);
+    $report->getActivities($clientID, $caseID, $activityTypes, $activities, $selectedActivities);
     $template->assign_by_ref('activities', $activities);
     // now run the template
     $contents = $template->fetch('CRM/Case/XMLProcessor/Report.tpl');
     return $contents;
   }
 
+  /**
+   * Print report of a specific case
+   */
   public static function printCaseReport() {
+    $xmlProcessor = new CRM_Case_XMLProcessor_Process();
+
     $caseID = CRM_Utils_Request::retrieve('caseID', 'Positive');
     $clientID = CRM_Utils_Request::retrieve('cid', 'Positive');
     $activitySetName = CRM_Utils_Request::retrieve('asn', 'String');
-    $selectedActivities = array_filter(explode (",", CRM_Utils_Request::retrieve('sact', 'CommaSeparatedIntegers')));
+    $selectedActivities = array_filter(explode(",", CRM_Utils_Request::retrieve('sact', 'CommaSeparatedIntegers')));
     $isRedact = CRM_Utils_Request::retrieve('redact', 'Boolean');
     $includeActivities = CRM_Utils_Request::retrieve('all', 'Positive');
     $params = $otherRelationships = $globalGroupInfo = array();
     $report = new CRM_Civicase_XMLProcessor_Report($isRedact);
+
     if ($includeActivities) {
       $params['include_activities'] = 1;
     }
@@ -137,44 +148,47 @@ AND    ac.case_id = %1
       $params['is_redact'] = 1;
       $report->_redactionStringRules = array();
     }
+
     $template = CRM_Core_Smarty::singleton();
 
     //get case related relationships (Case Role)
     $caseRelationships = CRM_Case_BAO_Case::getCaseRoles($clientID, $caseID);
     $caseType = CRM_Case_BAO_Case::getCaseType($caseID, 'name');
 
-    $xmlProcessor = new CRM_Case_XMLProcessor_Process();
     $caseRoles = $xmlProcessor->get($caseType, 'CaseRoles');
     foreach ($caseRelationships as $key => & $value) {
       if (!empty($caseRoles[$value['relation_type']])) {
         unset($caseRoles[$value['relation_type']]);
       }
-      if ($isRedact) {
-        if (!array_key_exists($value['name'], $report->_redactionStringRules)) {
-          $report->_redactionStringRules = CRM_Utils_Array::crmArrayMerge($report->_redactionStringRules,
-            array($value['name'] => 'name_' . rand(10000, 100000))
-          );
-        }
-        $value['name'] = $report->redact($value['name'], TRUE, $report->_redactionStringRules);
-        if (!empty($value['email']) &&
-          !array_key_exists($value['email'], $report->_redactionStringRules)
-        ) {
-          $report->_redactionStringRules = CRM_Utils_Array::crmArrayMerge($report->_redactionStringRules,
-            array($value['email'] => 'email_' . rand(10000, 100000))
-          );
-        }
-
-        $value['email'] = $report->redact($value['email'], TRUE, $report->_redactionStringRules);
-
-        if (!empty($value['phone']) &&
-          !array_key_exists($value['phone'], $report->_redactionStringRules)
-        ) {
-          $report->_redactionStringRules = CRM_Utils_Array::crmArrayMerge($report->_redactionStringRules,
-            array($value['phone'] => 'phone_' . rand(10000, 100000))
-          );
-        }
-        $value['phone'] = $report->redact($value['phone'], TRUE, $report->_redactionStringRules);
+      if (!$isRedact) {
+        continue;
       }
+      if (!array_key_exists($value['name'], $report->_redactionStringRules)) {
+        $report->_redactionStringRules = CRM_Utils_Array::crmArrayMerge($report->_redactionStringRules,
+          array($value['name'] => 'name_' . rand(10000, 100000))
+        );
+      }
+
+      $value['name'] = $report->redact($value['name'], TRUE, $report->_redactionStringRules);
+
+      if (!empty($value['email']) &&
+        !array_key_exists($value['email'], $report->_redactionStringRules)
+      ) {
+        $report->_redactionStringRules = CRM_Utils_Array::crmArrayMerge($report->_redactionStringRules,
+          array($value['email'] => 'email_' . rand(10000, 100000))
+        );
+      }
+
+      $value['email'] = $report->redact($value['email'], TRUE, $report->_redactionStringRules);
+
+      if (!empty($value['phone']) &&
+        !array_key_exists($value['phone'], $report->_redactionStringRules)
+      ) {
+        $report->_redactionStringRules = CRM_Utils_Array::crmArrayMerge($report->_redactionStringRules,
+          array($value['phone'] => 'phone_' . rand(10000, 100000))
+        );
+      }
+      $value['phone'] = $report->redact($value['phone'], TRUE, $report->_redactionStringRules);
     }
 
     $caseRoles['client'] = CRM_Case_BAO_Case::getContactNames($caseID);
@@ -316,4 +330,5 @@ AND    ac.case_id = %1
     echo $printReport;
     CRM_Utils_System::civiExit();
   }
+
 }
