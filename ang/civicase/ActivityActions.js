@@ -23,6 +23,7 @@
      */
     function civicaseActivityActionsLink ($scope, attrs, element, caseDetails) {
       if (caseDetails) {
+        // TODO - Unit test pending
         $scope.isCaseSummaryPage = true;
         $scope.getEditActivityUrl = caseDetails.getEditActivityUrl;
         $scope.getPrintActivityUrl = caseDetails.getPrintActivityUrl;

@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 (function (_) {
   describe('civicaseCaseDetails', function () {
-    var element, $compile, $rootScope, $scope, $provide, crmApi, crmApiMock, $q, formatCase, CasesData, CasesUtils;
+    var element, controller, activitiesMockData, $controller, $compile, $rootScope, $scope, $provide, crmApi, crmApiMock, $q, formatCase, CasesData, CasesUtils;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
       $provide = _$provide_;
@@ -21,9 +21,11 @@
       $provide.value('formatCase', formatCaseMock);
     }));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_, _crmApi_, _$q_, _formatCase_, _CasesUtils_) {
+    beforeEach(inject(function (_$compile_, _$controller_, _$rootScope_, _activitiesMockData_, _CasesData_, _crmApi_, _$q_, _formatCase_, _CasesUtils_) {
       $compile = _$compile_;
+      $controller = _$controller_;
       $rootScope = _$rootScope_;
+      activitiesMockData = _activitiesMockData_;
       CasesData = _CasesData_;
       CasesUtils = _CasesUtils_;
       $scope = $rootScope.$new();
@@ -163,9 +165,49 @@
       });
     });
 
+    describe('when printing selected activities', function () {
+      var selectedActivities;
+
+      beforeEach(function () {
+        initController();
+
+        controller.getPrintActivityUrl(activitiesMockData.get());
+        selectedActivities = activitiesMockData.get().map(function (item) {
+          return item['id'];
+        }).join(',');
+      });
+
+      it('retuns the url to print the activities', function () {
+        expect(CRM.url).toHaveBeenCalledWith('civicrm/case/customreport/print', {
+          all: 1,
+          redact: 0,
+          cid: $scope.item.client[0].contact_id,
+          asn: 'standard_timeline',
+          caseID: $scope.item.id,
+          sact: selectedActivities
+        });
+      });
+    });
+
     function compileDirective () {
       $scope.viewingCaseDetails = formatCase(CasesData.get().values[0]);
       element = $compile('<div civicase-case-details="viewingCaseDetails"></div>')($scope);
+      $scope.$digest();
+    }
+
+    /**
+     * Initializes the case details controller.
+     *
+     * @param {Object} caseItem a case item to pass to the controller. Defaults to
+     * a case from the mock data.
+     */
+    function initController (caseItem) {
+      $scope = $rootScope.$new();
+
+      controller = $controller('civicaseCaseDetailsController', {
+        $scope: $scope
+      });
+      $scope.item = caseItem || _.cloneDeep(CasesData.get().values[0]);
       $scope.$digest();
     }
 
