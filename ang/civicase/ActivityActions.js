@@ -33,11 +33,12 @@
 
   module.controller('civicaseActivityActionsController', civicaseActivityActionsController);
 
-  function civicaseActivityActionsController ($window, $scope, crmApi, getActivityFeedUrl, MoveCopyActivityAction) {
+  function civicaseActivityActionsController ($window, $scope, crmApi, getActivityFeedUrl, MoveCopyActivityAction, TagsActivityAction) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.getActivityFeedUrl = getActivityFeedUrl;
     $scope.deleteActivity = deleteActivity;
     $scope.moveCopyActivity = MoveCopyActivityAction.moveCopyActivities;
+    $scope.manageTags = TagsActivityAction.manageTags;
     $scope.isActivityEditable = isActivityEditable;
     $scope.printReport = printReport;
 

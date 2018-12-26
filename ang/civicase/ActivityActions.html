@@ -23,6 +23,16 @@
     <i class="material-icons">filter_none</i> {{ ts('Copy to Case') }}
   </a>
 </li>
+<li>
+  <a href ng-click="manageTags('add', selectedActivities)">
+    <i class="material-icons">add_circle</i> {{ ts('Tag - add to activities') }}
+  </a>
+</li>
+<li>
+  <a href ng-click="manageTags('remove', selectedActivities)">
+    <i class="material-icons">remove_circle</i> {{ ts('Tag - remove from activities') }}
+  </a>
+</li>
 <li ng-if="mode === 'case-activity-feed' && selectedActivities[0].type === 'File Upload'">
   <a
     ng-href="{{ 'civicrm/case/activity/download-all-files' | civicaseCrmUrl:{ activity_id: selectedActivities[0].id } }}">

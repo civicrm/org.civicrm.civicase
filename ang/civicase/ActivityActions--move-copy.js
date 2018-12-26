@@ -33,7 +33,7 @@
         subject: activities.length > 1 ? '' : activitiesCopy[0].subject
       };
 
-      dialogService.open('MoveCopyActCard', '~/civicase/ActivityMoveCopy.html', model, {
+      dialogService.open('MoveCopyActCard', '~/civicase/ActivityActions--move-copy.html', model, {
         autoOpen: false,
         height: 'auto',
         width: '40%',
