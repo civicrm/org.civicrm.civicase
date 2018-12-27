@@ -3,7 +3,7 @@
 
   module.service('TagsActivityAction', TagsActivityAction);
 
-  function TagsActivityAction ($rootScope, crmApi, dialogService) {
+  function TagsActivityAction ($rootScope, $sce, crmApi, dialogService) {
     /**
      * Add/Remove tags to activities
      *
@@ -118,7 +118,7 @@
       if (!_.isEmpty(filteredTags)) {
         _.each(filteredTags, function (tag) {
           returnArray.push(tag);
-          tag.name = '&nbsp;'.repeat(level * 2) + tag.name;
+          tag.name = $sce.trustAsHtml('&nbsp;'.repeat(level * 2) + tag.name);
           returnArray = returnArray.concat(prepareGenericTags(tags, tag.id, level + 1));
         });
       }
