@@ -21,11 +21,55 @@
 
       getTags()
         .then(function (tags) {
-          console.log(prepareGenericTags(tags));
-          console.log(prepareTagSetsTree(tags));
-        });
+          var model = setModelObjectForModal(tags);
 
-      dialogService.open('MoveCopyActCard', '~/civicase/ActivityActions--tags.html', {}, {
+          openTagsModal(model, title, saveButtonLabel);
+        });
+    };
+
+    /**
+     * Set the model object to be used in the modal
+     *
+     * @param {Array} tags
+     * @return {Object}
+     */
+    function setModelObjectForModal (tags) {
+      var model = {};
+
+      model.genericTags = prepareGenericTags(tags);
+      model.tagSets = prepareTagSetsTree(tags);
+
+      model.selectedGenericTags = [];
+      model.toggleGenericTags = toggleGenericTags;
+
+      return model;
+    }
+
+    /**
+     * Toggle the State of Generic tags
+     *
+     * @param {Object} model
+     * @param {String} tagID
+     */
+    function toggleGenericTags (model, tagID) {
+      if (model.selectedGenericTags.indexOf(tagID) === -1) {
+        model.selectedGenericTags.push(tagID);
+      } else {
+        model.selectedGenericTags = _.reject(model.selectedGenericTags, function (tag) {
+          return tag === tagID;
+        });
+      }
+    }
+
+    /**
+     * Opens the modal for addition/removal of tags
+     *
+     * @param {Object} model
+     * @param {String} title
+     * @param {String} saveButtonLabel
+     */
+    function openTagsModal (model, title, saveButtonLabel) {
+      dialogService.open('MoveCopyActCard', '~/civicase/ActivityActions--tags.html', model, {
         autoOpen: false,
         height: 'auto',
         width: '40%',
@@ -37,7 +81,7 @@
           }
         }]
       });
-    };
+    }
 
     /**
      * Get the tags for Activities from API end point
@@ -98,7 +142,10 @@
       if (!_.isEmpty(filteredTags)) {
         _.each(filteredTags, function (tag) {
           var children = _.filter(tags, function (child) {
-            return child.parent_id === tag.id && child.is_tagset === '0';
+            if (child.parent_id === tag.id && child.is_tagset === '0') {
+              child.text = child.name;
+              return true;
+            }
           });
 
           if (children.length > 0) {
