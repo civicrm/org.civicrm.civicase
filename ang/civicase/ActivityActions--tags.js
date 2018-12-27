@@ -23,7 +23,7 @@
         .then(function (tags) {
           var model = setModelObjectForModal(tags);
 
-          openTagsModal(model, title, saveButtonLabel);
+          openTagsModal(model, title, saveButtonLabel, operation, activities);
         });
     };
 
@@ -67,8 +67,10 @@
      * @param {Object} model
      * @param {String} title
      * @param {String} saveButtonLabel
+     * @param {String} operation
+     * @param {Array} activities
      */
-    function openTagsModal (model, title, saveButtonLabel) {
+    function openTagsModal (model, title, saveButtonLabel, operation, activities) {
       dialogService.open('MoveCopyActCard', '~/civicase/ActivityActions--tags.html', model, {
         autoOpen: false,
         height: 'auto',
@@ -78,11 +80,54 @@
           text: saveButtonLabel,
           icons: {primary: 'fa-check'},
           click: function () {
+            addRemoveTagsConfirmationHandler(operation, activities, model);
           }
         }]
       });
     }
 
+    /**
+     * Add/Remove tags confirmation handler
+     *
+     * @param {String} operation
+     * @param {Array} activities
+     * @param {Object} model
+     * @return {Promise}
+     */
+    function addRemoveTagsConfirmationHandler (operation, activities, model) {
+      var tagIds = model.selectedGenericTags;
+
+      _.each(model.tagSets, function (tag) {
+        tagIds = tagIds.concat(JSON.parse('[' + tag.selectedTags + ']'));
+      });
+
+      var apiCalls = prepareApiCalls(operation, activities, tagIds);
+
+      return crmApi(apiCalls);
+    }
+
+    /**
+     * Prepare the API calls for the Add/Remove operation
+     *
+     * @param {String} operation
+     * @param {Array} activities
+     * @param {Array} tagIds
+     * @return {Array}
+     */
+    function prepareApiCalls (operation, activities, tagIds) {
+      var apiCalls = [];
+      var action = operation === 'add' ? 'create' : 'delete';
+
+      _.each(activities, function (activity) {
+        apiCalls.push(['EntityTag', action, {
+          entity_table: 'civicrm_activity',
+          entity_id: activity.id,
+          tag_id: tagIds
+        }]);
+      });
+
+      return apiCalls;
+    }
     /**
      * Get the tags for Activities from API end point
      *
