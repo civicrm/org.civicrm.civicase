@@ -80,7 +80,7 @@
           text: saveButtonLabel,
           icons: {primary: 'fa-check'},
           click: function () {
-            addRemoveTagsConfirmationHandler(operation, activities, model);
+            addRemoveTagsConfirmationHandler.call(this, operation, activities, model);
           }
         }]
       });
@@ -98,12 +98,19 @@
       var tagIds = model.selectedGenericTags;
 
       _.each(model.tagSets, function (tag) {
-        tagIds = tagIds.concat(JSON.parse('[' + tag.selectedTags + ']'));
+        if (tag.selectedTags) {
+          tagIds = tagIds.concat(JSON.parse('[' + tag.selectedTags + ']'));
+        }
       });
 
       var apiCalls = prepareApiCalls(operation, activities, tagIds);
 
-      return crmApi(apiCalls);
+      crmApi(apiCalls)
+        .then(function () {
+          $rootScope.$emit('civicase::activity::updated');
+        });
+
+      $(this).dialog('close');
     }
 
     /**
