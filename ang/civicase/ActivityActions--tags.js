@@ -143,11 +143,11 @@
      * @return {Promise}
      */
     function getTags () {
-      return crmApi([['Tag', 'get', {
+      return crmApi('Tag', 'get', {
         'sequential': 1,
         'used_for': { 'LIKE': '%civicrm_activity%' }
-      }]]).then(function (data) {
-        return data[0].values;
+      }).then(function (data) {
+        return data.values;
       });
     }
 
@@ -169,13 +169,15 @@
         return child.parent_id === parentID && child.is_tagset === '0';
       });
 
-      if (!_.isEmpty(filteredTags)) {
-        _.each(filteredTags, function (tag) {
-          returnArray.push(tag);
-          tag.indentationLevel = level;
-          returnArray = returnArray.concat(prepareGenericTags(tags, tag.id, level + 1));
-        });
+      if (_.isEmpty(filteredTags)) {
+        return [];
       }
+
+      _.each(filteredTags, function (tag) {
+        returnArray.push(tag);
+        tag.indentationLevel = level;
+        returnArray = returnArray.concat(prepareGenericTags(tags, tag.id, level + 1));
+      });
 
       return returnArray;
     }
@@ -193,22 +195,24 @@
         return !child.parent_id && child.is_tagset === '1';
       });
 
-      if (!_.isEmpty(filteredTags)) {
-        _.each(filteredTags, function (tag) {
-          var children = _.filter(tags, function (child) {
-            if (child.parent_id === tag.id && child.is_tagset === '0') {
-              child.text = child.name;
-              return true;
-            }
-          });
-
-          if (children.length > 0) {
-            tag.children = children;
-          }
-
-          returnArray.push(tag);
-        });
+      if (_.isEmpty(filteredTags)) {
+        return [];
       }
+
+      _.each(filteredTags, function (tag) {
+        var children = _.filter(tags, function (child) {
+          if (child.parent_id === tag.id && child.is_tagset === '0') {
+            child.text = child.name;
+            return true;
+          }
+        });
+
+        if (children.length > 0) {
+          tag.children = children;
+        }
+
+        returnArray.push(tag);
+      });
 
       return returnArray;
     }

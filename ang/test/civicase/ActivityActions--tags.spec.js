@@ -29,17 +29,17 @@
       var modalOpenCall;
 
       beforeEach(function () {
-        crmApiMock.and.returnValue($q.resolve([{ values: TagsMockData.get() }]));
+        crmApiMock.and.returnValue($q.resolve({ values: TagsMockData.get() }));
         TagsActivityAction.manageTags('add', activitiesMockData.get());
         $rootScope.$digest();
         modalOpenCall = dialogServiceMock.open.calls.mostRecent().args;
       });
 
       it('fetches the tags from the api endpoint', function () {
-        expect(crmApiMock).toHaveBeenCalledWith([['Tag', 'get', {
+        expect(crmApiMock).toHaveBeenCalledWith('Tag', 'get', {
           'sequential': 1,
           'used_for': { 'LIKE': '%civicrm_activity%' }
-        }]]);
+        });
       });
 
       it('sets the title of the modal as "Tag Activities"', function () {
@@ -97,20 +97,20 @@
         });
 
         describe('child tags are indented in the UI', function () {
-          var tagWhichHaveOneLevelOfParent, tagWhichHaveTwoLevelofParent;
+          var tagWithOneLevelOfParent, tagWithTwoLevelofParent;
 
           beforeEach(function () {
-            tagWhichHaveOneLevelOfParent = _.find(modalOpenCall[2].genericTags, function (tag) {
+            tagWithOneLevelOfParent = _.find(modalOpenCall[2].genericTags, function (tag) {
               return tag.name === 'L1';
             });
-            tagWhichHaveTwoLevelofParent = _.find(modalOpenCall[2].genericTags, function (tag) {
+            tagWithTwoLevelofParent = _.find(modalOpenCall[2].genericTags, function (tag) {
               return tag.name === 'L2';
             });
           });
 
-          it('does not include tagsets as generic tags', function () {
-            expect(tagWhichHaveOneLevelOfParent.indentationLevel).toBe(1);
-            expect(tagWhichHaveTwoLevelofParent.indentationLevel).toBe(2);
+          it('child tags are indented', function () {
+            expect(tagWithOneLevelOfParent.indentationLevel).toBe(1);
+            expect(tagWithTwoLevelofParent.indentationLevel).toBe(2);
           });
         });
       });
@@ -196,17 +196,17 @@
       var modalOpenCall;
 
       beforeEach(function () {
-        crmApiMock.and.returnValue($q.resolve([{ values: TagsMockData.get() }]));
+        crmApiMock.and.returnValue($q.resolve({ values: TagsMockData.get() }));
         TagsActivityAction.manageTags('remove', activitiesMockData.get());
         $rootScope.$digest();
         modalOpenCall = dialogServiceMock.open.calls.mostRecent().args;
       });
 
       it('fetches the tags from the api endpoint', function () {
-        expect(crmApiMock).toHaveBeenCalledWith([['Tag', 'get', {
+        expect(crmApiMock).toHaveBeenCalledWith('Tag', 'get', {
           'sequential': 1,
           'used_for': { 'LIKE': '%civicrm_activity%' }
-        }]]);
+        });
       });
 
       it('sets the title of the modal as "Tag Activities (Remove)"', function () {

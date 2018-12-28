@@ -1,15 +1,15 @@
 <div id="bootstrap-theme" class="civicase__tags-modal">
   <form class="form-horizontal">
-    <div class="form-group civicase__tags-modal__generic-tags__container">
+    <div class="form-group civicase__tags-modal__generic-tags-container">
       <div ng-repeat="tag in model.genericTags">
         <input
           id="civicase_tags_{{tag.id}}"
           type="checkbox" value="{{tag.name}}"
           ng-click="model.toggleGenericTags(model, tag.id)"/>
-        <label for="civicase_tags_{{tag.id}}">{{'&nbsp;'.repeat(tag.indentationLevel)}}{{tag.name}}</label>
+        <label for="civicase_tags_{{tag.id}}" style="margin-left: {{(tag.indentationLevel*4)}}px;">{{tag.name}}</label>
       </div>
     </div>
-    <div ng-repeat="tag in model.tagSets" class="form-group civicase__tags-modal__tagsets__container">
+    <div ng-repeat="tag in model.tagSets" class="form-group civicase__tags-modal__tagsets-container">
       <div class="row">
         <label class="col-sm-3">{{tag.name}}</label>
         <input
