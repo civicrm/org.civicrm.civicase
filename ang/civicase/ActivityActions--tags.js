@@ -3,7 +3,7 @@
 
   module.service('TagsActivityAction', TagsActivityAction);
 
-  function TagsActivityAction ($rootScope, $sce, crmApi, dialogService) {
+  function TagsActivityAction ($rootScope, crmApi, dialogService) {
     /**
      * Add/Remove tags to activities
      *
@@ -21,7 +21,7 @@
 
       getTags()
         .then(function (tags) {
-          var model = setModelObjectForModal(tags);
+          var model = setModelObjectForModal(tags, activities);
 
           openTagsModal(model, title, saveButtonLabel, operation, activities);
         });
@@ -31,11 +31,13 @@
      * Set the model object to be used in the modal
      *
      * @param {Array} tags
+     * @param {Array} activities
      * @return {Object}
      */
-    function setModelObjectForModal (tags) {
+    function setModelObjectForModal (tags, activities) {
       var model = {};
 
+      model.selectedActivitiesLength = activities.length;
       model.genericTags = prepareGenericTags(tags);
       model.tagSets = prepareTagSetsTree(tags);
 
@@ -71,14 +73,14 @@
      * @param {Array} activities
      */
     function openTagsModal (model, title, saveButtonLabel, operation, activities) {
-      dialogService.open('MoveCopyActCard', '~/civicase/ActivityActions--tags.html', model, {
+      dialogService.open('TagsActivityAction', '~/civicase/ActivityActions--tags.html', model, {
         autoOpen: false,
         height: 'auto',
         width: '40%',
         title: title,
         buttons: [{
           text: saveButtonLabel,
-          icons: {primary: 'fa-check'},
+          icons: operation === 'add' ? {primary: 'fa-check'} : false,
           click: function () {
             addRemoveTagsConfirmationHandler.call(this, operation, activities, model);
           }
@@ -170,7 +172,7 @@
       if (!_.isEmpty(filteredTags)) {
         _.each(filteredTags, function (tag) {
           returnArray.push(tag);
-          tag.name = $sce.trustAsHtml('&nbsp;'.repeat(level * 2) + tag.name);
+          tag.indentationLevel = level;
           returnArray = returnArray.concat(prepareGenericTags(tags, tag.id, level + 1));
         });
       }

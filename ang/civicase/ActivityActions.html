@@ -23,12 +23,12 @@
     <i class="material-icons">filter_none</i> {{ ts('Copy to Case') }}
   </a>
 </li>
-<li>
+<li ng-if="mode === 'case-activity-bulk-action'">
   <a href ng-click="manageTags('add', selectedActivities)">
     <i class="material-icons">add_circle</i> {{ ts('Tag - add to activities') }}
   </a>
 </li>
-<li>
+<li ng-if="mode === 'case-activity-bulk-action'">
   <a href ng-click="manageTags('remove', selectedActivities)">
     <i class="material-icons">remove_circle</i> {{ ts('Tag - remove from activities') }}
   </a>

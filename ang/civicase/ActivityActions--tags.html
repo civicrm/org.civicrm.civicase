@@ -6,7 +6,7 @@
           id="civicase_tags_{{tag.id}}"
           type="checkbox" value="{{tag.name}}"
           ng-click="model.toggleGenericTags(model, tag.id)"/>
-        <label for="civicase_tags_{{tag.id}}" ng-bind-html="tag.name"></label>
+        <label for="civicase_tags_{{tag.id}}">{{'&nbsp;'.repeat(tag.indentationLevel)}}{{tag.name}}</label>
       </div>
     </div>
     <div ng-repeat="tag in model.tagSets" class="form-group civicase__tags-modal__tagsets__container">
@@ -19,5 +19,6 @@
           crm-ui-select="{allowClear: true, multiple: true, data: tag.children}"/>
       </div>
     </div>
+    <div class="civicase__tags-modal__activities-count">Number of selected Activities: {{model.selectedActivitiesLength}}</div>
   </form>
 </div>
