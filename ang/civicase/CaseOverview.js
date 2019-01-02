@@ -92,13 +92,6 @@
     };
 
     /**
-     * Toggle show breakdown dropdown
-     */
-    $scope.showHideBreakdown = function () {
-      $scope.showBreakdown = !$scope.showBreakdown;
-    };
-
-    /**
      * Toggle status view
      *
      * @param {event} event object
