@@ -12,7 +12,7 @@
             </civicase-popover-toggle-button>
             <civicase-popover-content>
               <ul class="dropdown-menu" role="menu">
-                <li ng-repeat="(sid, status) in caseStatuses">
+                <li ng-repeat="status in caseStatuses">
                   <a href ng-click="toggleStatusView($event, $index)">
                     <span class="civicase__checkbox">
                       <i ng-if="!status.disabled" class="civicase__checkbox--checked material-icons">check_box</i>
