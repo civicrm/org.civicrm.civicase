@@ -85,7 +85,7 @@ AND    ac.case_id = %1
     $template->assign_by_ref('case', $case);
 
     if ($params['include_activities'] == 1) {
-      $template->assign('includeActivities', '');
+      $template->assign('includeActivities', 'All');
     }
     else {
       $template->assign('includeActivities', 'Missing activities only');
@@ -144,15 +144,21 @@ AND    ac.case_id = %1
   }
 
   /**
-   * Redact Case Relationship Fields
+   * Process Case Relationship Fields
    *
    * @param CRM_Civicase_XMLProcessor_Report $report
+   * @param array $caseRoles
    * @param array $caseRelationships
+   * @param boolean $isRedact
    */
-  private function redactCaseRelationshipFields($report, &$caseRelationships) {
+  private static function processCaseRelationshipFields(&$report, &$caseRoles, &$caseRelationships, $isRedact) {
     foreach ($caseRelationships as $key => & $value) {
       if (!empty($caseRoles[$value['relation_type']])) {
         unset($caseRoles[$value['relation_type']]);
+      }
+
+      if (!$isRedact) {
+        continue;
       }
 
       if (!array_key_exists($value['name'], $report->_redactionStringRules)) {
@@ -190,7 +196,7 @@ AND    ac.case_id = %1
    * @param CRM_Civicase_XMLProcessor_Report $report
    * @param array $caseRoles
    */
-  private function redactCaseClientFields (&$report, &$caseRoles) {
+  private static function redactCaseClientFields (&$report, &$caseRoles) {
     foreach ($caseRoles['client'] as &$client) {
       if (!array_key_exists(CRM_Utils_Array::value('sort_name', $client), $report->_redactionStringRules)) {
 
@@ -227,9 +233,11 @@ AND    ac.case_id = %1
    *
    * @param CRM_Civicase_XMLProcessor_Report $report
    * @param array $relClient
+   * @param array $caseRelationships
    * @param array $otherRelationships
+   * @param boolean $isRedact
    */
-  private function processClientRelationshipFields ($report, &$relClient, &$otherRelationships, $isRedact) {
+  private static function processClientRelationshipFields (&$report, &$relClient, $caseRelationships, &$otherRelationships, $isRedact) {
     foreach ($relClient as $r) {
       if ($isRedact) {
         if (!array_key_exists($r['name'], $report->_redactionStringRules)) {
@@ -272,7 +280,7 @@ AND    ac.case_id = %1
    * @param CRM_Civicase_XMLProcessor_Report $report
    * @param array $relGlobal
    */
-  private function redactGlobalRelationshipFields ($report, &$relGlobal) {
+  private static function redactGlobalRelationshipFields (&$report, &$relGlobal) {
     foreach ($relGlobal as & $r) {
       if (!array_key_exists($r['sort_name'], $report->_redactionStringRules)) {
         $report->_redactionStringRules = CRM_Utils_Array::crmArrayMerge($report->_redactionStringRules,
@@ -344,12 +352,12 @@ AND    ac.case_id = %1
     $relGlobal = CRM_Case_BAO_Case::getGlobalContacts($globalGroupInfo);
 
     if ($isRedact) {
-      CRM_Civicase_XMLProcessor_Report::redactCaseRelationshipFields($report, $caseRelationships);
       CRM_Civicase_XMLProcessor_Report::redactCaseClientFields($report, $caseRoles);
       CRM_Civicase_XMLProcessor_Report::redactGlobalRelationshipFields($report, $relGlobal);
     }
 
-    CRM_Civicase_XMLProcessor_Report::processClientRelationshipFields($report, $relClient, $otherRelationships, $isRedact);
+    CRM_Civicase_XMLProcessor_Report::processCaseRelationshipFields($report, $caseRoles, $caseRelationships, $isRedact);
+    CRM_Civicase_XMLProcessor_Report::processClientRelationshipFields($report, $relClient, $caseRelationships, $otherRelationships, $isRedact);
 
     // Retrieve custom values for cases.
     $customValues = CRM_Core_BAO_CustomValueTable::getEntityValues($caseID, 'Case');
