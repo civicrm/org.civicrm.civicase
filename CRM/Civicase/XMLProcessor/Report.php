@@ -85,7 +85,7 @@ AND    ac.case_id = %1
     $template->assign_by_ref('case', $case);
 
     if ($params['include_activities'] == 1) {
-      $template->assign('includeActivities', '');
+      $template->assign('includeActivities', 'All');
     }
     else {
       $template->assign('includeActivities', 'Missing activities only');
