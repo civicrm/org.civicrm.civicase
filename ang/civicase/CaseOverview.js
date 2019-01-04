@@ -40,7 +40,8 @@
    * @param {Object} $scope
    * @param {crmApi} Object
    */
-  function civicaseCaseOverviewController ($scope, crmApi) {
+  function civicaseCaseOverviewController ($scope, crmApi, BrowserCache) {
+    var browserCacheContainerName = 'civicase.CaseOverview.disabledCaseStatuses';
     $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.caseTypes = CRM.civicase.caseTypes;
     $scope.caseTypesLength = _.size(CRM.civicase.caseTypes);
@@ -52,6 +53,7 @@
         $scope.showBreakdown = false;
       }
 
+      loadDisabledCaseStatuses();
       loadStatsData();
     }());
 
@@ -99,6 +101,7 @@
      */
     $scope.toggleStatusView = function ($event, index) {
       $scope.caseStatuses[index + 1].disabled = !$scope.caseStatuses[index + 1].disabled;
+      storeDisabledCaseStatuses();
       $event.stopPropagation();
     };
 
@@ -119,6 +122,33 @@
       crmApi(apiCalls).then(function (response) {
         $scope.summaryData = response[0].values;
       });
+    }
+
+    /**
+     * Loads from the browser cache the ids of the case status that have been
+     * previously disabled and marks them as such.
+     */
+    function loadDisabledCaseStatuses () {
+      var disabledCaseStatuses = BrowserCache.get(browserCacheContainerName, []);
+
+      disabledCaseStatuses.forEach(function (caseStatusId) {
+        $scope.caseStatuses[caseStatusId].disabled = true;
+      });
+    }
+
+    /**
+     * Stores in the browser cache the id values of the case statuses that have been
+     * disabled.
+     */
+    function storeDisabledCaseStatuses () {
+      var disabledCaseStatusesIds = _.chain($scope.caseStatuses)
+        .pick(function (caseStatus, key) {
+          return caseStatus.disabled;
+        })
+        .keys()
+        .value();
+
+      BrowserCache.set(browserCacheContainerName, disabledCaseStatusesIds);
     }
   }
 })(angular, CRM.$, CRM._);

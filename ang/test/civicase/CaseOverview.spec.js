@@ -1,9 +1,16 @@
 /* eslint-env jasmine */
-(function (_) {
+(function ($, _) {
   describe('CaseOverview', function () {
-    var element, $q, $scope, $rootScope, $compile, CasesOverviewStats, crmApi, targetElementScope;
+    var element, $q, $scope, $rootScope, $compile, BrowserCache,
+      CasesOverviewStats, crmApi, targetElementScope;
 
-    beforeEach(module('civicase', 'civicase.data', 'civicase.templates'));
+    beforeEach(module('civicase', 'civicase.data', 'civicase.templates', function ($provide) {
+      BrowserCache = jasmine.createSpyObj('BrowserCache', ['clear', 'get', 'set']);
+
+      BrowserCache.get.and.returnValue([1, 3]);
+
+      $provide.value('BrowserCache', BrowserCache);
+    }));
 
     beforeEach(inject(function (_$compile_, _$q_, _$rootScope_, _crmApi_, _CasesOverviewStatsData_) {
       $compile = _$compile_;
@@ -37,6 +44,43 @@
     describe('caseListLink', function () {
       it('checks the output of caseListLink function', function () {
         expect(element.isolateScope().caseListLink('type', 'status')).toEqual('#/case/list?cf=%7B%22case_type_id%22%3A%5B%22type%22%5D%2C%22status_id%22%3A%5B%22status%22%5D%7D');
+      });
+    });
+
+    fdescribe('Case Status', function () {
+      describe('when the component loads', function () {
+        it('requests the case status that are disabled stored in the browser cache', function () {
+          expect(BrowserCache.get).toHaveBeenCalledWith('civicase.CaseOverview.disabledCaseStatuses', []);
+        });
+
+        it('disables the case statuses marked as disabled by the browser cache', function () {
+          expect($scope.caseStatuses[1].disabled).toBe(true);
+          expect($scope.caseStatuses[3].disabled).toBe(true);
+        });
+      });
+
+      describe('when marking a status as disabled', function () {
+        beforeEach(function () {
+          $scope.caseStatuses[1].disabled = true;
+          $scope.caseStatuses[3].disabled = true;
+          element.isolateScope().toggleStatusView($.Event(), 1); // disables the case status #2
+        });
+
+        it('stores the disabled case statuses including the new one', function () {
+          expect(BrowserCache.set).toHaveBeenCalledWith('civicase.CaseOverview.disabledCaseStatuses', [ '1', '2', '3' ]);
+        });
+      });
+
+      describe('when marking a status as enabled', function () {
+        beforeEach(function () {
+          $scope.caseStatuses[1].disabled = true;
+          $scope.caseStatuses[3].disabled = true;
+          element.isolateScope().toggleStatusView($.Event(), 0); // enables the case status #1
+        });
+
+        it('stores the disabled case statuses including the new one', function () {
+          expect(BrowserCache.set).toHaveBeenCalledWith('civicase.CaseOverview.disabledCaseStatuses', [ '3' ]);
+        });
       });
     });
 
@@ -95,4 +139,4 @@
       });
     }
   });
-})(CRM._);
+})(CRM.$, CRM._);
