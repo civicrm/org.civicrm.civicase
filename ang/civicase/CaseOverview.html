@@ -13,7 +13,8 @@
             <civicase-popover-content>
               <ul class="dropdown-menu" role="menu">
                 <li ng-repeat="status in caseStatuses">
-                  <a href ng-click="toggleStatusVisibility($event, $index)">
+                  <a class="civicase__checkbox-container"
+                    href ng-click="toggleStatusVisibility($event, $index)">
                     <span class="civicase__checkbox">
                       <i ng-if="!status.isHidden" class="civicase__checkbox--checked material-icons">check_box</i>
                     </span>

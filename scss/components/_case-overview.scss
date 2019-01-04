@@ -55,10 +55,6 @@ $overview-grid-cell-width: 200px;
       top: 1px;
     }
   }
-
-  span {
-    vertical-align: middle;
-  }
 }
 
 .civicase__case-overview__flow-status {
@@ -270,7 +266,7 @@ $overview-grid-cell-width: 200px;
     top: 0 !important;
   }
 
-  a {
+  .civicase__checkbox-container {
     line-height: 18px;
 
     > * {
