@@ -1,25 +1,24 @@
 /* eslint-env jasmine */
 (function ($, _) {
   describe('CaseOverview', function () {
-    var element, $q, $scope, $rootScope, $compile, BrowserCache,
-      CasesOverviewStats, crmApi, targetElementScope;
+    var $compile, $provide, $q, $rootScope, $scope, BrowserCache,
+      CasesOverviewStats, crmApi, element, targetElementScope;
 
-    beforeEach(module('civicase', 'civicase.data', 'civicase.templates', function ($provide) {
-      BrowserCache = jasmine.createSpyObj('BrowserCache', ['clear', 'get', 'set']);
-
-      BrowserCache.get.and.returnValue([1, 3]);
-
-      $provide.value('BrowserCache', BrowserCache);
+    beforeEach(module('civicase', 'civicase.data', 'civicase.templates', function (_$provide_) {
+      $provide = _$provide_;
     }));
 
-    beforeEach(inject(function (_$compile_, _$q_, _$rootScope_, _crmApi_, _CasesOverviewStatsData_) {
+    beforeEach(inject(function (_$compile_, _$q_, _$rootScope_, BrowserCacheMock, _crmApi_, _CasesOverviewStatsData_) {
       $compile = _$compile_;
       $q = _$q_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       crmApi = _crmApi_;
       CasesOverviewStats = _CasesOverviewStatsData_.get();
+      BrowserCache = BrowserCacheMock;
 
+      BrowserCache.get.and.returnValue([1, 3]);
+      $provide.value('BrowserCache', BrowserCache);
       crmApi.and.returnValue($q.resolve([CasesOverviewStats]));
     }));
 
