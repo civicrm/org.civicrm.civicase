@@ -54,7 +54,13 @@
           </div>
           <span class="civicase__case-overview__flow-status__border"  ng-style="{'background-color': status.color}"></span>
         </div>
-        <div class="civicase__case-overview__flow-status" ng-if="isAllStatusesDisbabled()"> - </div>
+        <div class="civicase__case-overview__flow-status" ng-if="isAllStatusesDisbabled()">
+          <div class="civicase__case-overview__flow-status__no-status-selected-warning">
+            <h3>No status selected</h3>
+            <p class="description">Select status from the drop down on the left to see an overview</p>
+          </div>
+           <span>-</span>
+        </div>
       </div>
       <div
         class="civicase__case-overview__breakdown"

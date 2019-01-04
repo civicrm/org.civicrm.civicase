@@ -142,6 +142,11 @@ $overview-grid-cell-width: 200px;
   width: 100%;
 }
 
+.civicase__case-overview__flow-status__no-status-selected-warning {
+  text-align: center;
+  width: 100%;
+}
+
 .civicase__case-overview__flow-status__description {
   color: $crm-gray-matte;
   margin: 0 auto;
