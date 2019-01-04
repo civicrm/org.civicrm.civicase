@@ -13,9 +13,9 @@
             <civicase-popover-content>
               <ul class="dropdown-menu" role="menu">
                 <li ng-repeat="status in caseStatuses">
-                  <a href ng-click="toggleStatusView($event, $index)">
+                  <a href ng-click="toggleStatusVisibility($event, $index)">
                     <span class="civicase__checkbox">
-                      <i ng-if="!status.disabled" class="civicase__checkbox--checked material-icons">check_box</i>
+                      <i ng-if="!status.isHidden" class="civicase__checkbox--checked material-icons">check_box</i>
                     </span>
                     <span>
                       {{ status.label }}
@@ -35,7 +35,7 @@
         </div>
         <div
           class="civicase__case-overview__flow-status civicase__case-overview__flow-status--hoverable"
-          ng-if="!status.disabled"
+          ng-if="!status.isHidden"
           ng-repeat="(statusId, status) in caseStatuses"
           uib-popover="{{ status.label }}"
           popover-trigger="'mouseenter'"
@@ -54,7 +54,7 @@
           </div>
           <span class="civicase__case-overview__flow-status__border"  ng-style="{'background-color': status.color}"></span>
         </div>
-        <div class="civicase__case-overview__flow-status" ng-if="isAllStatusesDisbabled()">
+        <div class="civicase__case-overview__flow-status" ng-if="areAllStatusesHidden()">
           <div class="civicase__case-overview__flow-status__no-status-selected-warning">
             <h3>No status selected</h3>
             <p class="description">Select status from the drop down on the left to see an overview</p>
@@ -78,13 +78,13 @@
         </div>
         <div
           class="civicase__case-overview__breakdown-field"
-          ng-if="!status.disabled"
+          ng-if="!status.isHidden"
           ng-repeat="(statusId, status) in caseStatuses">
           <a ng-href="{{ caseListLink(caseType.name, status.name) }}">
             {{ summaryData[ctid][statusId] || '0' }}
           </a>
         </div>
-        <div class="civicase__case-overview__breakdown-field" ng-if="isAllStatusesDisbabled()"> - </div>
+        <div class="civicase__case-overview__breakdown-field" ng-if="areAllStatusesHidden()"> - </div>
       </div>
     </div>
   </div>

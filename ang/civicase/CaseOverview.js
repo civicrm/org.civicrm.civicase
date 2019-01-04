@@ -41,7 +41,7 @@
    * @param {crmApi} Object
    */
   function civicaseCaseOverviewController ($scope, crmApi, BrowserCache) {
-    var BROWSER_CACHE_IDENTIFIER = 'civicase.CaseOverview.disabledCaseStatuses';
+    var BROWSER_CACHE_IDENTIFIER = 'civicase.CaseOverview.hiddenCaseStatuses';
 
     $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.caseTypes = CRM.civicase.caseTypes;
@@ -54,9 +54,20 @@
         $scope.showBreakdown = false;
       }
 
-      loadDisabledCaseStatuses();
+      loadHiddenCaseStatuses();
       loadStatsData();
     }());
+
+    /**
+     * Checks if all statuses are hidden
+     *
+     * @return {Boolean}
+     */
+    $scope.areAllStatusesHidden = function () {
+      return _.filter($scope.caseStatuses, function (status) {
+        return !status.isHidden;
+      }).length === 0;
+    };
 
     /**
      * Creates link to the filtered cases list
@@ -84,25 +95,14 @@
     };
 
     /**
-     * Checks if all statuses are disabled
-     *
-     * @return {Boolean}
-     */
-    $scope.isAllStatusesDisbabled = function () {
-      return _.filter($scope.caseStatuses, function (status) {
-        return !status.disabled;
-      }).length === 0;
-    };
-
-    /**
      * Toggle status view
      *
      * @param {event} event object
      * @param {Number} index of the case status
      */
-    $scope.toggleStatusView = function ($event, index) {
-      $scope.caseStatuses[index + 1].disabled = !$scope.caseStatuses[index + 1].disabled;
-      storeDisabledCaseStatuses();
+    $scope.toggleStatusVisibility = function ($event, index) {
+      $scope.caseStatuses[index + 1].isHidden = !$scope.caseStatuses[index + 1].isHidden;
+      storeHiddenCaseStatuses();
       $event.stopPropagation();
     };
 
@@ -112,6 +112,18 @@
     $scope.toggleBrekdownVisibility = function () {
       $scope.showBreakdown = !$scope.showBreakdown;
     };
+
+    /**
+     * Loads from the browser cache the ids of the case status that have been
+     * previously hidden and marks them as such.
+     */
+    function loadHiddenCaseStatuses () {
+      var hiddenCaseStatuses = BrowserCache.get(BROWSER_CACHE_IDENTIFIER, []);
+
+      hiddenCaseStatuses.forEach(function (caseStatusId) {
+        $scope.caseStatuses[caseStatusId].isHidden = true;
+      });
+    }
 
     /**
      * Loads Stats data
@@ -126,30 +138,18 @@
     }
 
     /**
-     * Loads from the browser cache the ids of the case status that have been
-     * previously disabled and marks them as such.
-     */
-    function loadDisabledCaseStatuses () {
-      var disabledCaseStatuses = BrowserCache.get(BROWSER_CACHE_IDENTIFIER, []);
-
-      disabledCaseStatuses.forEach(function (caseStatusId) {
-        $scope.caseStatuses[caseStatusId].disabled = true;
-      });
-    }
-
-    /**
      * Stores in the browser cache the id values of the case statuses that have been
-     * disabled.
+     * hidden.
      */
-    function storeDisabledCaseStatuses () {
-      var disabledCaseStatusesIds = _.chain($scope.caseStatuses)
+    function storeHiddenCaseStatuses () {
+      var hiddenCaseStatusesIds = _.chain($scope.caseStatuses)
         .pick(function (caseStatus, key) {
-          return caseStatus.disabled;
+          return caseStatus.isHidden;
         })
         .keys()
         .value();
 
-      BrowserCache.set(BROWSER_CACHE_IDENTIFIER, disabledCaseStatusesIds);
+      BrowserCache.set(BROWSER_CACHE_IDENTIFIER, hiddenCaseStatusesIds);
     }
   }
 })(angular, CRM.$, CRM._);

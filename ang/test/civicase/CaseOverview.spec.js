@@ -49,41 +49,41 @@
 
     describe('Case Status', function () {
       describe('when the component loads', function () {
-        it('requests the case status that are disabled stored in the browser cache', function () {
-          expect(BrowserCache.get).toHaveBeenCalledWith('civicase.CaseOverview.disabledCaseStatuses', []);
+        it('requests the case status that are hidden stored in the browser cache', function () {
+          expect(BrowserCache.get).toHaveBeenCalledWith('civicase.CaseOverview.hiddenCaseStatuses', []);
         });
 
-        it('disables the case statuses marked as disabled by the browser cache', function () {
-          expect($scope.caseStatuses[1].disabled).toBe(true);
-          expect($scope.caseStatuses[3].disabled).toBe(true);
+        it('hides the case statuses marked as hidden by the browser cache', function () {
+          expect($scope.caseStatuses[1].isHidden).toBe(true);
+          expect($scope.caseStatuses[3].isHidden).toBe(true);
         });
       });
 
-      describe('when marking a status as disabled', function () {
+      describe('when marking a status as hidden', function () {
         beforeEach(function () {
-          $scope.caseStatuses[1].disabled = true;
-          $scope.caseStatuses[2].disabled = false;
-          $scope.caseStatuses[3].disabled = true;
+          $scope.caseStatuses[1].isHidden = true;
+          $scope.caseStatuses[2].isHidden = false;
+          $scope.caseStatuses[3].isHidden = true;
 
-          element.isolateScope().toggleStatusView($.Event(), 1); // disables the case status #2
+          element.isolateScope().toggleStatusVisibility($.Event(), 1); // disables the case status #2
         });
 
-        it('stores the disabled case statuses including the new one', function () {
-          expect(BrowserCache.set).toHaveBeenCalledWith('civicase.CaseOverview.disabledCaseStatuses', [ '1', '2', '3' ]);
+        it('stores the hidden case statuses including the new one', function () {
+          expect(BrowserCache.set).toHaveBeenCalledWith('civicase.CaseOverview.hiddenCaseStatuses', [ '1', '2', '3' ]);
         });
       });
 
       describe('when marking a status as enabled', function () {
         beforeEach(function () {
-          $scope.caseStatuses[1].disabled = true;
-          $scope.caseStatuses[2].disabled = false;
-          $scope.caseStatuses[3].disabled = true;
+          $scope.caseStatuses[1].isHidden = true;
+          $scope.caseStatuses[2].isHidden = false;
+          $scope.caseStatuses[3].isHidden = true;
 
-          element.isolateScope().toggleStatusView($.Event(), 0); // enables the case status #1
+          element.isolateScope().toggleStatusVisibility($.Event(), 0); // enables the case status #1
         });
 
-        it('stores the disabled case statuses including the new one', function () {
-          expect(BrowserCache.set).toHaveBeenCalledWith('civicase.CaseOverview.disabledCaseStatuses', [ '3' ]);
+        it('stores the hidden case statuses including the new one', function () {
+          expect(BrowserCache.set).toHaveBeenCalledWith('civicase.CaseOverview.hiddenCaseStatuses', [ '3' ]);
         });
       });
     });
