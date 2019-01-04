@@ -41,7 +41,8 @@
    * @param {crmApi} Object
    */
   function civicaseCaseOverviewController ($scope, crmApi, BrowserCache) {
-    var browserCacheContainerName = 'civicase.CaseOverview.disabledCaseStatuses';
+    var BROWSER_CACHE_IDENTIFIER = 'civicase.CaseOverview.disabledCaseStatuses';
+
     $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.caseTypes = CRM.civicase.caseTypes;
     $scope.caseTypesLength = _.size(CRM.civicase.caseTypes);
@@ -129,7 +130,7 @@
      * previously disabled and marks them as such.
      */
     function loadDisabledCaseStatuses () {
-      var disabledCaseStatuses = BrowserCache.get(browserCacheContainerName, []);
+      var disabledCaseStatuses = BrowserCache.get(BROWSER_CACHE_IDENTIFIER, []);
 
       disabledCaseStatuses.forEach(function (caseStatusId) {
         $scope.caseStatuses[caseStatusId].disabled = true;
@@ -148,7 +149,7 @@
         .keys()
         .value();
 
-      BrowserCache.set(browserCacheContainerName, disabledCaseStatusesIds);
+      BrowserCache.set(BROWSER_CACHE_IDENTIFIER, disabledCaseStatusesIds);
     }
   }
 })(angular, CRM.$, CRM._);
