@@ -8,6 +8,10 @@
     };
   });
 
+  module.factory('BrowserCache', function () {
+    return CRM.cache;
+  });
+
   /** doNutty converts a dc.pieChart() to a stylized donut chart. */
   module.factory('doNutty', function () {
     return function doNutty (chart, totalWidth, statCallback) {

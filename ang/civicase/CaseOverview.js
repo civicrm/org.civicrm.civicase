@@ -40,7 +40,9 @@
    * @param {Object} $scope
    * @param {crmApi} Object
    */
-  function civicaseCaseOverviewController ($scope, crmApi) {
+  function civicaseCaseOverviewController ($scope, crmApi, BrowserCache) {
+    var BROWSER_CACHE_IDENTIFIER = 'civicase.CaseOverview.hiddenCaseStatuses';
+
     $scope.caseStatuses = CRM.civicase.caseStatuses;
     $scope.caseTypes = CRM.civicase.caseTypes;
     $scope.caseTypesLength = _.size(CRM.civicase.caseTypes);
@@ -52,8 +54,20 @@
         $scope.showBreakdown = false;
       }
 
+      loadHiddenCaseStatuses();
       loadStatsData();
     }());
+
+    /**
+     * Checks if all statuses are hidden
+     *
+     * @return {Boolean}
+     */
+    $scope.areAllStatusesHidden = function () {
+      return _.filter($scope.caseStatuses, function (status) {
+        return !status.isHidden;
+      }).length === 0;
+    };
 
     /**
      * Creates link to the filtered cases list
@@ -81,11 +95,35 @@
     };
 
     /**
-     * Toggle show breakdown dropdown
+     * Toggle status view
+     *
+     * @param {event} event object
+     * @param {Number} index of the case status
      */
-    $scope.showHideBreakdown = function () {
+    $scope.toggleStatusVisibility = function ($event, index) {
+      $scope.caseStatuses[index + 1].isHidden = !$scope.caseStatuses[index + 1].isHidden;
+      storeHiddenCaseStatuses();
+      $event.stopPropagation();
+    };
+
+    /**
+     * Toggles the visibility of the breakdown dropdown
+     */
+    $scope.toggleBrekdownVisibility = function () {
       $scope.showBreakdown = !$scope.showBreakdown;
     };
+
+    /**
+     * Loads from the browser cache the ids of the case status that have been
+     * previously hidden and marks them as such.
+     */
+    function loadHiddenCaseStatuses () {
+      var hiddenCaseStatuses = BrowserCache.get(BROWSER_CACHE_IDENTIFIER, []);
+
+      hiddenCaseStatuses.forEach(function (caseStatusId) {
+        $scope.caseStatuses[caseStatusId].isHidden = true;
+      });
+    }
 
     /**
      * Loads Stats data
@@ -97,6 +135,21 @@
       crmApi(apiCalls).then(function (response) {
         $scope.summaryData = response[0].values;
       });
+    }
+
+    /**
+     * Stores in the browser cache the id values of the case statuses that have been
+     * hidden.
+     */
+    function storeHiddenCaseStatuses () {
+      var hiddenCaseStatusesIds = _.chain($scope.caseStatuses)
+        .pick(function (caseStatus, key) {
+          return caseStatus.isHidden;
+        })
+        .keys()
+        .value();
+
+      BrowserCache.set(BROWSER_CACHE_IDENTIFIER, hiddenCaseStatusesIds);
     }
   }
 })(angular, CRM.$, CRM._);

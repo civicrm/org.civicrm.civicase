@@ -47,7 +47,7 @@ $overview-grid-cell-width: 200px;
     width: $overview-grid-cell-width;
     z-index: 5;
 
-    .material-icons {
+    .civicase__case-overview__flow-status__icon {
       color: $brand-primary;
       cursor: pointer;
       margin-left: 8px;
@@ -85,6 +85,7 @@ $overview-grid-cell-width: 200px;
     font-weight: $crm-font-weight-h3;
     line-height: 22px;
     padding-left: 24px;
+    z-index: 10;
   }
 
   &:last-child {
@@ -92,6 +93,28 @@ $overview-grid-cell-width: 200px;
 
     &::after {
       content: none;
+    }
+  }
+}
+
+.civicase__case-overview__flow-status-settings {
+  position: relative;
+
+  .btn {
+    color: inherit;
+    margin-right: 10px;
+    padding: 3px 0;
+    text-decoration: none !important;
+  }
+
+  .civicase__case-overview__flow-status__icon--settings {
+    color: inherit !important;
+    margin: 0 !important;
+    vertical-align: middle;
+
+    &.material-icons {
+      color: $crm-gray-matte !important;
+      font-size: 18px;
     }
   }
 }
@@ -111,6 +134,11 @@ $overview-grid-cell-width: 200px;
   font-size: 24px;
   font-weight: $crm-font-weight-h3;
   line-height: 33px;
+  text-align: center;
+  width: 100%;
+}
+
+.civicase__case-overview__flow-status__empty-state {
   text-align: center;
   width: 100%;
 }
@@ -192,6 +220,57 @@ $overview-grid-cell-width: 200px;
 
     &::after {
       background-color: $gray-lighter;
+    }
+  }
+}
+
+.civicase__case-overview__popup {
+  border: 1px solid $gray-light;
+  border-radius: 2px;
+  box-shadow: $box-shadow-tooltip;
+  color: $gray-darker;
+  padding: 0;
+  z-index: 1;
+
+  &.dropdown-menu {
+    margin-top: 15px;
+    padding: 8px 0;
+  }
+
+  .popover-content {
+    padding: 0;
+  }
+
+  .arrow {
+    border-bottom-color: $gray-light;
+
+    &.left {
+      left: 20px;
+    }
+  }
+
+  .dropdown-menu {
+    box-shadow: none;
+    display: inherit;
+    position: inherit;
+  }
+
+  .civicase__checkbox {
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .civicase__checkbox--checked {
+    color: $brand-primary !important;
+    font-size: 24px !important;
+    top: 0 !important;
+  }
+
+  .civicase__checkbox-container {
+    line-height: 18px;
+
+    > * {
+      vertical-align: middle;
     }
   }
 }
