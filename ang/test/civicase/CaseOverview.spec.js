@@ -47,7 +47,7 @@
       });
     });
 
-    fdescribe('Case Status', function () {
+    describe('Case Status', function () {
       describe('when the component loads', function () {
         it('requests the case status that are disabled stored in the browser cache', function () {
           expect(BrowserCache.get).toHaveBeenCalledWith('civicase.CaseOverview.disabledCaseStatuses', []);
@@ -62,7 +62,9 @@
       describe('when marking a status as disabled', function () {
         beforeEach(function () {
           $scope.caseStatuses[1].disabled = true;
+          $scope.caseStatuses[2].disabled = false;
           $scope.caseStatuses[3].disabled = true;
+
           element.isolateScope().toggleStatusView($.Event(), 1); // disables the case status #2
         });
 
@@ -74,7 +76,9 @@
       describe('when marking a status as enabled', function () {
         beforeEach(function () {
           $scope.caseStatuses[1].disabled = true;
+          $scope.caseStatuses[2].disabled = false;
           $scope.caseStatuses[3].disabled = true;
+
           element.isolateScope().toggleStatusView($.Event(), 0); // enables the case status #1
         });
 
