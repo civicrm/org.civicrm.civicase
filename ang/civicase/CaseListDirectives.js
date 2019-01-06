@@ -27,6 +27,7 @@
      *   attributes of directive
      */
     function civicaseStickyTableHeaderLink (scope, $el, attrs) {
+      var $toolbarDrawer = $('#toolbar');
       var $table = $el;
       var $header = $el.find('thead');
 
@@ -86,7 +87,7 @@
             .on('affixed.bs.affix', function () {
               $header.scrollLeft($table.scrollLeft()); // Bind scrolling
               $header.css('top', bodyPadding + 'px'); // Set top pos to body padding so that it don't overlap with the toolbar
-              $table.css('padding-top', $header.height() + 'px'); // Add top padding to remove the glitch when header moves out of DOM relative position
+              $toolbarDrawer.is(':visible') && $table.css('padding-top', $header.height() + 'px'); // Add top padding to remove the glitch when header moves out of DOM relative position
             })
             .on('affixed-top.bs.affix', function () {
               $header.css('top', 0); // Resets top pos when in default state
