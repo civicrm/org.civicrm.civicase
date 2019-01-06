@@ -387,7 +387,11 @@
             top: $casePanelBody.offset().top - bodyPadding
           }
         }).on('affixed.bs.affix', function () {
-          $caseNavigation.css('top', $toolbarDrawer.height());
+          var caseNavigationTopPosition = $toolbarDrawer.is(':visible')
+            ? $toolbarDrawer.height()
+            : bodyPadding;
+
+          $caseNavigation.css('top', caseNavigationTopPosition);
         }).on('affixed-top.bs.affix', function () {
           $caseNavigation.css('top', 'auto');
         });
