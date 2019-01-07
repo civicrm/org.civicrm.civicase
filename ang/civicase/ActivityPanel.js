@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityPanel', function ($rootScope, BulkActions) {
+  module.directive('civicaseActivityPanel', function ($rootScope, ActivityPanelMeasurements, BulkActions) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/ActivityPanel.html',
@@ -20,9 +20,13 @@
      * @param {Object} element
      */
     function civicaseActivityPanelLink (scope, element, attrs) {
+      var activityPanelMeasurements;
       var ts = CRM.ts('civicase');
 
       (function init () {
+        activityPanelMeasurements = ActivityPanelMeasurements(element);
+
+        setPanelHeight();
         $rootScope.$on('civicase::activity-card::load-activity-form', loadActivityForm);
         element.on('crmFormSuccess', scope.refresh);
         element.on('crmLoad', crmLoadListener);
@@ -32,6 +36,7 @@
        * Listener for crmLoad event
        */
       function crmLoadListener () {
+        setPanelBodyHeight();
         // Workaround bug where href="#" changes the angular route
         $('a.crm-clear-link', this).removeAttr('href');
         $('a.delete.button', this).click(onDeleteClickEvent);
@@ -61,6 +66,25 @@
       }
 
       /**
+       * Set height for activity panel
+       */
+      function setPanelHeight () {
+        var topOffset = activityPanelMeasurements.getDistanceFromTop();
+
+        element.height('calc(100vh - ' + topOffset + 'px)');
+      }
+
+      /**
+       * Set height for activity panel body
+       */
+      function setPanelBodyHeight () {
+        var $panelBody = element.find('.panel-body');
+        var bodyTopOffset = activityPanelMeasurements.getPanelBodyTopOffset();
+
+        $panelBody.height('calc(100vh - ' + bodyTopOffset + 'px)');
+      }
+
+      /**
        * Listener for click event of delete button
        */
       function onDeleteClickEvent () {
@@ -79,7 +103,7 @@
     }
   });
 
-  function civicaseActivityPanelController ($scope, getActivityFeedUrl, dialogService, templateExists, crmApi, crmBlocker, crmStatus, DateHelper) {
+  function civicaseActivityPanelController ($scope, dialogService, templateExists, crmApi, crmBlocker, crmStatus, DateHelper) {
     $scope.activityPriorties = CRM.civicase.priority;
     $scope.allowedActivityStatuses = {};
 

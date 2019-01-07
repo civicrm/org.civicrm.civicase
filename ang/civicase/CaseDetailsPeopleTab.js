@@ -79,9 +79,23 @@
       if (onlyChecked || $scope[tab + 'SelectionMode'] === 'checked') {
         return _.collect(_.filter($scope[tab], {checked: true}), idField);
       } else if ($scope[tab + 'SelectionMode'] === 'all') {
-        return _.collect($scope[tab], idField);
+        return _.collect(_.filter($scope[tab], function (el) {
+          return el.contact_id;
+        }), idField);
       }
       return [];
+    };
+
+    /**
+     * On the contact tab all the records don't have some contact assigned
+     * This filters the list with roles assigned to a contact.
+     *
+     * @param {Array} records
+     */
+    $scope.getCountOfRolesWithContacts = function (roles) {
+      return _.filter(roles, function (role) {
+        return role.contact_id;
+      }).length;
     };
 
     /**

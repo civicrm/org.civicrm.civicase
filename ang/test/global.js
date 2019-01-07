@@ -11,4 +11,37 @@
 
   CRM.loadForm = jasmine.createSpy('loadForm');
   CRM.url = jasmine.createSpy('url');
+
+  // Common utility functions for tests
+  CRM.testUtils = {
+
+    /**
+     * Given a full url, it extracts the querystring parameters, making sure
+     * to decode and parse any value that is an encoded JSON object
+     *
+     * @param {String} url
+     * @return {Object}
+     */
+    extractQueryStringParams: function (url) {
+      var queryString, paramsCouples;
+
+      queryString = url.split('?')[1];
+
+      if (!queryString) {
+        return {};
+      }
+
+      paramsCouples = queryString.split('&');
+
+      return paramsCouples.reduce(function (acc, couple) {
+        var coupleKeyVal = couple.split('=');
+
+        acc[coupleKeyVal[0]] = coupleKeyVal[1].match(/^%7B.+%7D/)
+          ? JSON.parse(decodeURIComponent(coupleKeyVal[1]))
+          : coupleKeyVal[1];
+
+        return acc;
+      }, {});
+    }
+  };
 }(CRM));

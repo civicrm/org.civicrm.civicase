@@ -15,30 +15,24 @@
     beforeEach(function () {
       affixOriginalFunction = CRM.$.fn.affix;
       offsetOriginalFunction = CRM.$.fn.offset;
-    });
 
-    beforeEach(function () {
       CRM.$.fn.offset = function () {
         return { top: 100 };
       };
-    });
 
-    beforeEach(function () {
       CRM.$.fn.affix = jasmine.createSpy('affix');
       affixReturnValue = jasmine.createSpyObj('affix', ['on']);
       affixReturnValue.on.and.returnValue(affixReturnValue);
       CRM.$.fn.affix.and.returnValue(affixReturnValue);
       originalBindToRoute = $scope.$bindToRoute;
       $scope.$bindToRoute = jasmine.createSpy('$bindToRoute');
-    });
 
-    beforeEach(function () {
       initController();
     });
 
     afterEach(function () {
       CRM.$.fn.affix = affixOriginalFunction;
-      CRM.$.fn.affix = offsetOriginalFunction;
+      CRM.$.fn.offset = offsetOriginalFunction;
       $scope.$bindToRoute = originalBindToRoute;
     });
 
@@ -92,7 +86,7 @@
           });
 
           it('sets the contact id filter equal to my id', function () {
-            expect($scope.filters.contact_id).toEqual([CRM.config.user_contact_id]);
+            expect($scope.filters.contact_involved).toEqual([CRM.config.user_contact_id]);
           });
         });
       });

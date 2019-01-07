@@ -1,3 +1,47 @@
+<li ng-if="mode === 'case-summary'">
+  <a ng-href="#{{ getActivityFeedUrl(selectedActivities[0].case_id, null, null, null, selectedActivities[0].id) }}">
+    <i class="material-icons">pageview</i> {{ ts('View in Feed') }}
+  </a>
+</li>
+<li ng-if="mode === 'case-summary' && isActivityEditable(selectedActivities[0])">
+  <a ng-href="{{ getEditActivityUrl(selectedActivities[0].id) }}" class="crm-popup">
+    <i class="material-icons">edit</i> {{ ts('Edit') }}
+  </a>
+</li>
+<li ng-if="isCaseSummaryPage && mode === 'case-activity-bulk-action'">
+  <a href ng-click="printReport(selectedActivities)">
+    <i class="material-icons">print</i> {{ ts('Print Report') }}
+  </a>
+</li>
 <li>
-  <a href="" ng-click="deleteActivity(selectedActivities)">{{ts('Delete')}}</a>
+  <a href ng-click="moveCopyActivity(selectedActivities, 'move')">
+    <i class="material-icons">next_week</i> {{ ts('Move to Case') }}
+  </a>
+</li>
+<li>
+  <a href ng-click="moveCopyActivity(selectedActivities, 'copy')">
+    <i class="material-icons">filter_none</i> {{ ts('Copy to Case') }}
+  </a>
+</li>
+<li ng-if="mode === 'case-activity-bulk-action'">
+  <a href ng-click="manageTags('add', selectedActivities)">
+    <i class="material-icons">add_circle</i> {{ ts('Tag - add to activities') }}
+  </a>
+</li>
+<li ng-if="mode === 'case-activity-bulk-action'">
+  <a href ng-click="manageTags('remove', selectedActivities)">
+    <i class="material-icons">remove_circle</i> {{ ts('Tag - remove from activities') }}
+  </a>
+</li>
+<li ng-if="mode === 'case-activity-feed' && selectedActivities[0].type === 'File Upload'">
+  <a
+    ng-href="{{ 'civicrm/case/activity/download-all-files' | civicaseCrmUrl:{ activity_id: selectedActivities[0].id } }}">
+    <i class="material-icons">file_download</i> {{ ts('Download All') }}
+  </a>
+</li>
+<li class="divider"></li>
+<li>
+  <a href ng-click="deleteActivity(selectedActivities)">
+    <i class="material-icons">delete</i> {{ ts('Delete') }}
+  </a>
 </li>

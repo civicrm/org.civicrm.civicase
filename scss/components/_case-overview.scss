@@ -1,3 +1,5 @@
+$overview-grid-cell-width: 200px;
+
 .civicase__case-overview {
   .panel-body {
     background-color: $crm-gray-lightest;
@@ -6,24 +8,31 @@
 }
 
 .civicase__case-overview-container {
-  margin-left: 200px;
-  overflow: auto;
-
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  .civicase__case-overview__flow,
+  .simplebar-content {
+    position: static;
+  }
+
+  .simplebar-content {
+    padding-right: 0 !important;
   }
 }
 
 .civicase__case-overview__breakdown,
 .civicase__case-overview__flow {
   display: flex;
+  margin-left: $overview-grid-cell-width;
 }
 
 .civicase__case-overview__flow-status,
 .civicase__case-overview__breakdown-field {
   display: inline-flex;
-  flex-basis: 200px;
+  flex-basis: $overview-grid-cell-width;
   flex-grow: 1;
   flex-shrink: 0;
 
@@ -35,10 +44,10 @@
     left: 0;
     position: absolute;
     top: auto;
-    width: 200px;
+    width: $overview-grid-cell-width;
     z-index: 5;
 
-    .material-icons {
+    .civicase__case-overview__flow-status__icon {
       color: $brand-primary;
       cursor: pointer;
       margin-left: 8px;
@@ -76,6 +85,7 @@
     font-weight: $crm-font-weight-h3;
     line-height: 22px;
     padding-left: 24px;
+    z-index: 10;
   }
 
   &:last-child {
@@ -83,6 +93,28 @@
 
     &::after {
       content: none;
+    }
+  }
+}
+
+.civicase__case-overview__flow-status-settings {
+  position: relative;
+
+  .btn {
+    color: inherit;
+    margin-right: 10px;
+    padding: 3px 0;
+    text-decoration: none !important;
+  }
+
+  .civicase__case-overview__flow-status__icon--settings {
+    color: inherit !important;
+    margin: 0 !important;
+    vertical-align: middle;
+
+    &.material-icons {
+      color: $crm-gray-matte !important;
+      font-size: 18px;
     }
   }
 }
@@ -102,6 +134,11 @@
   font-size: 24px;
   font-weight: $crm-font-weight-h3;
   line-height: 33px;
+  text-align: center;
+  width: 100%;
+}
+
+.civicase__case-overview__flow-status__empty-state {
   text-align: center;
   width: 100%;
 }
@@ -126,7 +163,7 @@
     .civicase__case-overview__breakdown-field {
       border: 0;
     }
-  }  
+  }
 }
 
 .civicase__case-overview__breakdown-field {
@@ -140,22 +177,39 @@
     color: $crm-gray-matte;
   }
 
+  &:first-child,
+  &:last-child {
+    &::after {
+      background-color: $crm-gray-lightest;
+      bottom: -1px;
+      content: '';
+      height: 1px;
+      position: absolute;
+      width: 24px;
+    }
+  }
+
   &:first-child {
     background-color: $crm-gray-lightest;
-    display: block;
     font-weight: $crm-font-weight-h3;
-    margin-left: 24px;
-    overflow: hidden;
-    padding-left: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 176px;
+
+    a {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    &::after {
+      left: 0;
+    }
   }
 
   &:last-child {
-    margin-right: 24px;
-    padding-right: 0;
-    width: 176px;    
+    &::after {
+      right: 0;
+    }
   }
 }
 
@@ -175,7 +229,13 @@
   border-radius: 2px;
   box-shadow: $box-shadow-tooltip;
   color: $gray-darker;
-  padding: 8px 12px;
+  padding: 0;
+  z-index: 1;
+
+  &.dropdown-menu {
+    margin-top: 15px;
+    padding: 8px 0;
+  }
 
   .popover-content {
     padding: 0;
@@ -183,5 +243,34 @@
 
   .arrow {
     border-bottom-color: $gray-light;
+
+    &.left {
+      left: 20px;
+    }
+  }
+
+  .dropdown-menu {
+    box-shadow: none;
+    display: inherit;
+    position: inherit;
+  }
+
+  .civicase__checkbox {
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .civicase__checkbox--checked {
+    color: $brand-primary !important;
+    font-size: 24px !important;
+    top: 0 !important;
+  }
+
+  .civicase__checkbox-container {
+    line-height: 18px;
+
+    > * {
+      vertical-align: middle;
+    }
   }
 }

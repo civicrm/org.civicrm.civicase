@@ -191,8 +191,8 @@
             16: '1',
             53: '1'
           },
-          'api.Case.getcaselist.1': { 'values': [] },
-          'api.Case.getcaselist.2': { 'values': [] },
+          'api.Case.getcaselist.relatedCasesByContact': { 'values': [] },
+          'api.Case.getcaselist.linkedCases': { 'values': [] },
           'api.Activity.get.1': {
             'is_error': 0,
             'version': 3,
@@ -801,8 +801,8 @@
           'color': '#42afcb',
           'case_type': 'Housing Support',
           'selected': false,
-          'api.Case.getcaselist.1': { 'values': [] },
-          'api.Case.getcaselist.2': { 'values': [] },
+          'api.Case.getcaselist.relatedCasesByContact': { 'values': [] },
+          'api.Case.getcaselist.linkedCases': { 'values': [] },
           'api.Activity.get.1': {
             'is_error': 0,
             'version': 3,
@@ -1368,8 +1368,8 @@
           'color': '#42afcb',
           'case_type': 'Adult Day Care Referral',
           'selected': false,
-          'api.Case.getcaselist.1': { 'values': [] },
-          'api.Case.getcaselist.2': { 'values': [] },
+          'api.Case.getcaselist.relatedCasesByContact': { 'values': [] },
+          'api.Case.getcaselist.linkedCases': { 'values': [] },
           'api.Activity.get.1': {
             'is_error': 0,
             'version': 3,
@@ -1691,6 +1691,11 @@
       ]
     };
 
+    _.each(casesMockData.values, function (caseObj) {
+      caseObj['api.Case.getcaselist.relatedCasesByContact'].values = [angular.copy(casesMockData.values[0])];
+      caseObj['api.Case.getcaselist.linkedCases'].values = [angular.copy(casesMockData.values[1])];
+    });
+
     return {
       /**
        * Returns a list of mocked cases
@@ -1698,7 +1703,7 @@
        * @return {Array} each array contains an object with the activity data.
        */
       get: function () {
-        return _.clone(casesMockData);
+        return angular.copy(casesMockData);
       }
     };
   });

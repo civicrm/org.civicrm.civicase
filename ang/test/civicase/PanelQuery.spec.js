@@ -23,6 +23,42 @@
       }));
     }));
 
+    describe('[name] attribute', function () {
+      beforeEach(function () {
+        spyOn(_, 'uniqueId');
+      });
+
+      describe('when not provided', function () {
+        var randomName;
+
+        beforeEach(function () {
+          randomName = 'panel-query-20';
+
+          _.uniqueId.and.returnValue(randomName);
+          compileDirective();
+        });
+
+        it('generates its own name', function () {
+          expect(_.uniqueId).toHaveBeenCalledWith('panel-query-');
+          expect(panelQueryScope.name).toBe(randomName);
+        });
+      });
+
+      describe('when provided', function () {
+        var givenName = 'foo-bar-baz';
+
+        beforeEach(function () {
+          $scope.panelName = givenName;
+          compileDirective();
+        });
+
+        it('uses the given name', function () {
+          expect(_.uniqueId).not.toHaveBeenCalled();
+          expect(panelQueryScope.name).toBe(givenName);
+        });
+      });
+    });
+
     describe('[query] attribute', function () {
       beforeEach(function () {
         $scope.queryData = { entity: 'Foo', params: { foo: 'foo' } };
@@ -357,6 +393,25 @@
         it('stores the count', function () {
           expect(panelQueryScope.total).toEqual(NO_OF_RESULTS);
         });
+
+        describe('when the count action is provided', function () {
+          var action;
+
+          beforeEach(function () {
+            $scope.queryData.countAction = 'customcountaction';
+
+            crmApi.calls.reset();
+            compileDirective();
+
+            requests = crmApi.calls.argsFor(0)[0];
+            request = requests[Object.keys(requests)[1]];
+            action = request[1];
+          });
+
+          it('gets the count using the provided count action', function () {
+            expect(action).toBe($scope.queryData.countAction);
+          });
+        });
       });
     });
 
@@ -536,6 +591,50 @@
       });
     });
 
+    describe('reload event', function () {
+      var panelName;
+
+      beforeEach(function () {
+        panelName = 'foo-bar';
+        $scope.panelName = panelName;
+
+        compileDirective();
+        crmApi.calls.reset();
+      });
+
+      describe('when the event passes the panel name', function () {
+        describe('when the name is standalone', function () {
+          beforeEach(function () {
+            $rootScope.$emit('civicase::PanelQuery::reload', panelName);
+          });
+
+          it('triggers the api requests again', function () {
+            expect(crmApi).toHaveBeenCalled();
+          });
+        });
+
+        describe('when the name is in a list', function () {
+          beforeEach(function () {
+            $rootScope.$emit('civicase::PanelQuery::reload', ['other-name', panelName]);
+          });
+
+          it('triggers the api requests again', function () {
+            expect(crmApi).toHaveBeenCalled();
+          });
+        });
+      });
+
+      describe('when the event does not pass the panel name', function () {
+        beforeEach(function () {
+          $rootScope.$emit('civicase::PanelQuery::reload', 'other-name');
+        });
+
+        it('does not trigger the api requests again', function () {
+          expect(crmApi).not.toHaveBeenCalled();
+        });
+      });
+    });
+
     /**
      * Function responsible for setting up compilation of the directive
      *
@@ -552,6 +651,7 @@
         entity: 'FooBar', params: { foo: 'foo', bar: 'bar' }
       };
 
+      attributes += $scope.panelName ? ' name="' + $scope.panelName + '"' : '';
       attributes += $scope.handlersData ? ' handlers="handlersData"' : '';
       attributes += $scope.customData ? ' custom-data="customData"' : '';
 

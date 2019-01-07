@@ -32,7 +32,10 @@
 
     .civicase__contact-icon {
       font-size: 30px;
-      margin-top: 3px;
+    }
+
+    .material-icons {
+      line-height: 1;
     }
 
     .civicase__contact-additional__arrow {
@@ -41,6 +44,7 @@
   }
 
   .civicase__contact-name {
+    margin-top: 1px;
     max-width: 300px;
   }
 
@@ -48,6 +52,10 @@
     display: inline-block;
     position: relative;
     top: 4px;
+
+    .material-icons {
+      line-height: 1;
+    }
   }
 
   .civicase__case-card__tag {
@@ -99,6 +107,30 @@
     display: block;
     padding: $crm-dropdown-item-padding;
   }
+
+  /* Caseview menu dropdown */
+  /* stylelint-disable selector-max-compound-selectors, max-nesting-depth */
+  .dropdown-menu {
+    > li {
+      position: relative;
+
+      > .dropdown-menu.sub-menu {
+        left: -100%;
+        margin-top: -40px;
+        position: absolute;
+        width: 100%;
+      }
+
+      &:hover {
+        > .dropdown-menu.sub-menu {
+          display: block;
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+  }
+
 }
 
 .civicase__case-header__action-icon {

@@ -1,0 +1,79 @@
+<?php
+use CRM_Civicase_ExtensionUtil as E;
+
+/**
+ * Activity.Getmonthswithactivities API specification
+ *
+ * @param array $spec description of fields supported by this API call
+ * 
+ * @return void
+ * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
+ */
+function _civicrm_api3_activity_Getmonthswithactivities_spec(&$spec) {
+  $activityFields = civicrm_api3('Activity', 'getfields', array('api_action' => 'get'));
+  $spec = $activityFields['values'];
+}
+
+/**
+ * Returns list of unique [MM, YYYY] month-year pair with at least an activity
+ * 
+ * @method Activity.Getmonthswithactivities API
+ *
+ * @param array $params
+ * @return array API result with list of months
+ * @see civicrm_api3_create_success
+ * @throws API_Exception
+ */
+function civicrm_api3_activity_Getmonthswithactivities($params) {
+  $passed_options = $params['options'] ? $params['options'] : [];
+  $params = array_merge($params, [
+    'sequential' => 1,
+    'return' => 'activity_date_time',
+    'options' => array_merge($passed_options, [
+      'limit' => 0,
+    ]),
+  ]);
+
+  $options = _civicrm_api3_get_options_from_params($params, FALSE, 'Activity', 'get');
+  $sql = CRM_Utils_SQL_Select::fragment();
+
+  _civicrm_api3_activity_get_extraFilters($params, $sql);
+
+  if (!empty($options['sort'])) {
+    $sort = explode(', ', $options['sort']);
+
+    foreach ($sort as $index => &$sortString) {
+      list($sortField, $dir) = array_pad(explode(' ', $sortString), 2, 'ASC');
+      if ($sortField == 'is_overdue') {
+        $incomplete = implode(',', array_keys(CRM_Activity_BAO_Activity::getStatusesByType(CRM_Activity_BAO_Activity::INCOMPLETE)));
+        $sql->orderBy("IF((a.activity_date_time >= NOW() OR a.status_id NOT IN ($incomplete)), 0, 1) $dir", NULL, $index);
+        $sortString = '(1)';
+      }
+    }
+    $params['options']['sort'] = implode(', ', $sort);
+  }
+
+  if (!empty($options['return']['is_overdue']) && (empty($options['return']['status_id']) || empty($options['return']['activity_date_time']))) {
+    $options['return']['status_id'] = $options['return']['activity_date_time'] = 1;
+    $params['return'] = array_keys($options['return']);
+  }
+
+  $activities = _civicrm_api3_basic_get(_civicrm_api3_get_BAO(__FUNCTION__), $params, FALSE, 'Activity', $sql);
+  
+  $grouped_activity_dates = [];
+  $grouped_activity_dates_indexes = [];
+
+  foreach($activities as $activity) {
+    list($activity_year, $activity_month) = explode('-', $activity['activity_date_time']);
+    
+    if (!isset($grouped_activity_dates_indexes[$activity_month . $activity_year])) {
+      $grouped_activity_dates_indexes[$activity_month . $activity_year] = true;
+      $grouped_activity_dates[] = array(
+        'year' => $activity_year,
+        'month' => $activity_month,
+      );
+    }
+  }
+
+  return civicrm_api3_create_success($grouped_activity_dates, $params, 'Activity', 'getmonthswithactivities');
+}

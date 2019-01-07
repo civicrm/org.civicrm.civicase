@@ -17,8 +17,7 @@
         params: '=civicaseActivityFeed',
         showBulkActions: '=',
         caseTypeId: '=',
-        refreshCase: '=?refreshCallback',
-        affixDisabled: '@'
+        refreshCase: '=?refreshCallback'
       }
     };
   });
@@ -50,16 +49,18 @@
       initiateWatchersAndEvents();
     }());
 
+    $scope.findActivityById = function (searchIn, activityID) {
+      return _.find(searchIn, { id: activityID });
+    };
+
     /**
      * Toggle Bulk Actions checkbox of the given activity
      */
     $scope.toggleSelected = function (activity) {
-      if ($scope.selectedActivities.indexOf(activity.id) === -1) {
-        $scope.selectedActivities.push(activity.id);
+      if (!$scope.findActivityById($scope.selectedActivities, activity.id)) {
+        $scope.selectedActivities.push($scope.findActivityById(allActivities, activity.id));
       } else {
-        _.remove($scope.selectedActivities, function (activityID) {
-          return activityID === activity.id;
-        });
+        _.remove($scope.selectedActivities, { id: activity.id });
       }
     };
 
@@ -146,9 +147,7 @@
      */
     function selectEveryActivity () {
       $scope.selectedActivities = [];
-      $scope.selectedActivities = allActivities.map(function (activity) {
-        return activity.id;
-      });
+      $scope.selectedActivities = _.cloneDeep(allActivities);
       selectDisplayedActivities(); // Update the UI model with displayed cases selected;
     }
 
@@ -159,12 +158,10 @@
       var isCurrentActivityInSelectedCases;
 
       _.each($scope.activities, function (activity) {
-        isCurrentActivityInSelectedCases = _.find($scope.selectedActivities, function (activityID) {
-          return activityID === activity.id;
-        });
+        isCurrentActivityInSelectedCases = $scope.findActivityById($scope.selectedActivities, activity.id);
 
         if (!isCurrentActivityInSelectedCases) {
-          $scope.selectedActivities.push(activity.id);
+          $scope.selectedActivities.push($scope.findActivityById(allActivities, activity.id));
         }
       });
     }
@@ -260,11 +257,20 @@
     }
 
     /**
-     * Load activities
+     * Load activities.
+     *
+     * Note: When the filter is set to "My Activities" the action
+     * used is `getcontactactivities` instead of `get` since this action
+     * properly returns activities that belong to the contact, but have not
+     * been delegated to someone else. This query can't be replicated using
+     * api params hence the need for a specialized action.
      *
      * @return {Promise}
      */
     function loadActivities () {
+      var apiAction = $scope.filters['@involvingContact'] === 'myActivities'
+        ? 'getcontactactivities'
+        : 'get';
       var returnParams = {
         sequential: 1,
         return: [
@@ -317,8 +323,8 @@
       }
 
       return crmApi({
-        acts: ['Activity', 'get', $.extend(true, returnParams, params)],
-        all: ['Activity', 'get', $.extend(true, {
+        acts: ['Activity', apiAction, $.extend(true, returnParams, params)],
+        all: ['Activity', apiAction, $.extend(true, {
           sequential: 1,
           return: ['id'],
           options: { limit: 0 }}, params)] // all activities, also used to get count
@@ -401,7 +407,7 @@
     }
   }
 
-  module.directive('civicaseActivityDetailsAffix', function ($timeout, $document, $rootScope) {
+  module.directive('civicaseActivityDetailsAffix', function ($timeout, $rootScope, ActivityPanelMeasurements) {
     return {
       link: civicaseActivityDetailsAffix
     };
@@ -414,45 +420,54 @@
      * @param {Object} attr
      */
     function civicaseActivityDetailsAffix (scope, $element, attr) {
-      var $activityDetailsPanel, $filter, $feedListContainer, $tabs, $toolbarDrawer;
-      // TODO Check if the attribute can be passed via scope variable
-      var affixDisabled = (attr.affixDisabled === 'true');
+      var $activityDetailsPanel, activityPanelMeasurements;
 
       (function init () {
-        if (affixDisabled) {
-          return;
+        $activityDetailsPanel = $element.find('.civicase__activity-panel');
+        activityPanelMeasurements = ActivityPanelMeasurements($activityDetailsPanel);
+
+        initEvents();
+        setActivityDetailsPanelAffixOffsets();
+
+        if ($activityDetailsPanel.hasClass('affix')) {
+          setActivityDetailsPanelPosition();
         }
 
-        affixActivityDetailsPanel();
         $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
 
       /**
-       * Sets Activity Details Panel affix offsets
+       * Init events
        */
-      function affixActivityDetailsPanel () {
-        $timeout(function () {
-          $activityDetailsPanel = $element.find('.panel');
-          $filter = $('.civicase__activity-filter');
-          $feedListContainer = $('.civicase__activity-feed__list-container');
-          $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
-          $toolbarDrawer = $('#toolbar');
-
-          $activityDetailsPanel.affix({
-            offset: {
-              top: $element.find('.panel').offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height()),
-              bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
-            }
-          }).on('affixed.bs.affix', function () {
-            $activityDetailsPanel
-              .css('top', ($toolbarDrawer.height() + $tabs.height() + $filter.height()))
-              .css('padding-top', 32);
-          }).on('affixed-top.bs.affix', function () {
+      function initEvents () {
+        $activityDetailsPanel
+          .on('affixed.bs.affix', setActivityDetailsPanelPosition)
+          .on('affixed-top.bs.affix', function () {
             $activityDetailsPanel
               .css('top', 'auto')
-              .css('padding-top', 0);
+              .css('width', 'auto');
           });
+      }
+
+      /**
+       * Sets Activity Details Panel affix offsets
+       */
+      function setActivityDetailsPanelAffixOffsets () {
+        $activityDetailsPanel.affix({
+          offset: {
+            top: activityPanelMeasurements.getTopOffset(),
+            bottom: activityPanelMeasurements.getBottomOffset()
+          }
         });
+      }
+
+      /**
+       * Sets Activity Details Panel postition when affixed
+       */
+      function setActivityDetailsPanelPosition () {
+        $activityDetailsPanel
+          .css('top', activityPanelMeasurements.getDistanceFromTop())
+          .width($element.width());
       }
 
       /**
@@ -461,8 +476,8 @@
       function resetAffix () {
         $timeout(function () {
           if ($activityDetailsPanel.data('bs.affix')) {
-            $activityDetailsPanel.data('bs.affix').options.offset.top = $activityDetailsPanel.offset().top - ($toolbarDrawer.height() + $tabs.height() + $filter.height());
-            $activityDetailsPanel.data('bs.affix').options.offset.bottom = $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height());
+            $activityDetailsPanel.data('bs.affix').options.offset.top = activityPanelMeasurements.getTopOffset();
+            $activityDetailsPanel.data('bs.affix').options.offset.bottom = activityPanelMeasurements.getBottomOffset();
           }
         });
       }

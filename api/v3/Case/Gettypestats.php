@@ -46,7 +46,7 @@ function civicrm_api3_case_gettypestats($params) {
   $query->select(array('a.case_type_id as case_type_id, a.status_id as status_id, COUNT(a.id) as count'));
   $query->select('avg(datediff(coalesce(a.end_date, date(now())), a.start_date)) AS average_duration');
   if (!empty($params['my_cases'])) {
-    \Civi\CCase\Utils::joinOnManager($query);
+    \Civi\CCase\Utils::joinOnRelationship($sql, 'manager');
     $query->where('manager.id = ' . CRM_Core_Session::getLoggedInContactID());
   }
   if (!empty($params['status_id.grouping'])) {

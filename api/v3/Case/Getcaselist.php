@@ -14,6 +14,12 @@ function _civicrm_api3_case_getcaselist_spec(&$spec) {
     'type' => CRM_Utils_Type::T_INT,
   );
 
+  $spec['contact_involved'] = array(
+    'title' => 'Contact Involved',
+    'description' => 'Id of the contact involved as case roles',
+    'type' => CRM_Utils_Type::T_INT,
+  );
+
   $spec['contact_is_deleted'] = array(
     'title' => 'Contact Is Deleted',
     'description' => 'Set FALSE to filter out cases for deleted contacts, TRUE to return only cases of deleted contacts',

@@ -16,7 +16,7 @@
 
   module.controller('civicaseCaseDetailsController', civicaseCaseDetailsController);
 
-  function civicaseCaseDetailsController ($location, $scope, BulkActions, crmApi, formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route, $timeout) {
+  function civicaseCaseDetailsController ($location, $scope, BulkActions, crmApi, formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route, $timeout, CasesUtils) {
     // The ts() and hs() functions help load strings for this module.
     // TODO: Move the common logic into a common controller (based on the usage of ContactCaseTabCaseDetails)
     var ts = $scope.ts = CRM.ts('civicase');
@@ -49,17 +49,6 @@
 
     $scope.caseGetParams = function () {
       return JSON.stringify(caseGetParams());
-    };
-
-    $scope.editActivityUrl = function (id) {
-      return CRM.url('civicrm/case/activity', {
-        action: 'update',
-        reset: 1,
-        cid: $scope.item.client[0].contact_id,
-        caseid: $scope.item.id,
-        id: id,
-        civicase_reload: $scope.caseGetParams()
-      });
     };
 
     /**
@@ -144,7 +133,9 @@
         _.assign($scope.item, formatCaseDetails(data));
         countScheduledActivities();
         $scope.allowedCaseStatuses = getAllowedCaseStatuses($scope.item.definition);
+
         $scope.$broadcast('updateCaseData');
+        $scope.$emit('civicase::ActivitiesCalendar::reload');
       }
     };
 
@@ -179,6 +170,38 @@
         caseid: $scope.item.id,
         id: id,
         civicase_reload: $scope.caseGetParams()
+      });
+    };
+
+    this.getEditActivityUrl = function (id) {
+      return CRM.url('civicrm/case/activity', {
+        action: 'update',
+        reset: 1,
+        cid: $scope.item.client[0].contact_id,
+        caseid: $scope.item.id,
+        id: id,
+        civicase_reload: $scope.caseGetParams()
+      });
+    };
+
+    /**
+     * Get the url to print activities
+     *
+     * @param {Array} selectedActivities
+     * @return {String}
+     */
+    this.getPrintActivityUrl = function (selectedActivities) {
+      selectedActivities = selectedActivities.map(function (item) {
+        return item['id'];
+      }).join(',');
+
+      return CRM.url('civicrm/case/customreport/print', {
+        all: 1,
+        redact: 0,
+        cid: $scope.item.client[0].contact_id,
+        asn: 'standard_timeline',
+        caseID: $scope.item.id,
+        sact: selectedActivities
       });
     };
 
@@ -221,22 +244,8 @@
     function formatCaseDetails (item) {
       formatCase(item);
       item.definition = caseTypes[item.case_type_id].definition;
-      item.relatedCases = _.each(_.cloneDeep(item['api.Case.getcaselist.1'].values), formatCase);
-      // Add linked cases
-      _.each(_.cloneDeep(item['api.Case.getcaselist.2'].values), function (linkedCase) {
-        var existing = _.find(item.relatedCases, {id: linkedCase.id});
-        if (existing) {
-          existing.is_linked = true;
-        } else {
-          linkedCase.is_linked = true;
-          item.relatedCases.push(formatCase(linkedCase));
-        }
-      });
-      $scope.$emit('civicase::fetchMoreContactsInformation', item.relatedCases);
-      $scope.relatedCasesPager.num = 1;
 
-      delete (item['api.Case.getcaselist.1']);
-      delete (item['api.Case.getcaselist.2']);
+      prepareRelatedCases(item);
       // Recent communications
       item.recentCommunication = _.each(_.cloneDeep(item['api.Activity.get.2'].values), formatAct);
       delete (item['api.Activity.get.2']);
@@ -252,6 +261,35 @@
       delete (item['api.CustomValue.gettree']);
 
       return item;
+    }
+
+    /**
+     * Prepare Related Cases
+     *
+     * @param {Object} caseObj
+     */
+    function prepareRelatedCases (caseObj) {
+      caseObj.relatedCases = _.each(_.cloneDeep(caseObj['api.Case.getcaselist.relatedCasesByContact'].values), formatCase);
+      // Add linked cases
+      _.each(_.cloneDeep(caseObj['api.Case.getcaselist.linkedCases'].values), function (linkedCase) {
+        var existing = _.find(caseObj.relatedCases, {id: linkedCase.id});
+        if (existing) {
+          existing.is_linked = true;
+        } else {
+          linkedCase.is_linked = true;
+          caseObj.relatedCases.push(formatCase(linkedCase));
+        }
+      });
+
+      caseObj.relatedCases.sort(function (x, y) {
+        return !!y.is_linked - !!x.is_linked;
+      });
+
+      CasesUtils.fetchMoreContactsInformation(caseObj.relatedCases);
+      $scope.relatedCasesPager.num = 1;
+
+      delete (caseObj['api.Case.getcaselist.relatedCasesByContact']);
+      delete (caseObj['api.Case.getcaselist.linkedCases']);
     }
 
     function getAllowedCaseStatuses (definition) {
@@ -349,7 +387,11 @@
             top: $casePanelBody.offset().top - bodyPadding
           }
         }).on('affixed.bs.affix', function () {
-          $caseNavigation.css('top', $toolbarDrawer.height());
+          var caseNavigationTopPosition = $toolbarDrawer.is(':visible')
+            ? $toolbarDrawer.height()
+            : bodyPadding;
+
+          $caseNavigation.css('top', caseNavigationTopPosition);
         }).on('affixed-top.bs.affix', function () {
           $caseNavigation.css('top', 'auto');
         });

@@ -52,11 +52,10 @@
         'text': 'All Cases',
         'id': 'all'
       },
-      // @NOTE Disabled, see C51-277
-      // {
-      //   'text': 'My cases',
-      //   'id': 'is_case_manager'
-      // },
+      {
+        'text': 'My cases',
+        'id': 'is_case_manager'
+      },
       {
         'text': 'Cases I am involved',
         'id': 'is_involved'
@@ -253,7 +252,7 @@
     function relationshipTypeWatcher () {
       if ($scope.relationshipType) {
         $scope.relationshipType[0] === 'is_case_manager' ? $scope.filters.case_manager = [CRM.config.user_contact_id] : delete ($scope.filters.case_manager);
-        $scope.relationshipType[0] === 'is_involved' ? $scope.filters.contact_id = [CRM.config.user_contact_id] : delete ($scope.filters.contact_id);
+        $scope.relationshipType[0] === 'is_involved' ? $scope.filters.contact_involved = [CRM.config.user_contact_id] : delete ($scope.filters.contact_involved);
       }
     }
 

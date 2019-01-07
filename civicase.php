@@ -202,6 +202,14 @@ function civicase_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  * @param CRM_Core_Form $form
  */
 function civicase_civicrm_buildForm($formName, &$form) {
+  $hooks = [
+    new CRM_Civicase_Hook_BuildForm_CaseClientPopulator(),
+  ];
+
+  foreach ($hooks as $hook) {
+    $hook->run($form);
+  }
+
   // Display category option for activity types and activity statuses
   if ($formName == 'CRM_Admin_Form_Options' && in_array($form->getVar('_gName'), array('activity_type', 'activity_status'))) {
     $options = civicrm_api3('optionValue', 'get', array(
@@ -521,6 +529,12 @@ function civicase_civicrm_pageRun(&$page) {
   if ($page instanceof CRM_Civicase_Page_CaseAngular || $page instanceof CRM_Contact_Page_View_Summary) {
     CRM_Core_Resources::singleton()->addScriptFile('uk.co.compucorp.civicase', 'packages/moment.min.js');
   }
+
+  // Adds simplescrollbarjs
+  if ($page instanceof CRM_Civicase_Page_CaseAngular ) {
+    CRM_Core_Resources::singleton()->addScriptFile('uk.co.compucorp.civicase', 'packages/simplebar.min.js');
+    CRM_Core_Resources::singleton()->addStyleFile('uk.co.compucorp.civicase', 'packages/simplebar.min.css', 1000, 'html-header');
+  }
 }
 
 /**
@@ -552,6 +566,37 @@ function civicase_civicrm_navigationMenu(&$menu) {
       $item['url'] = $rewriteMap[$item['url']];
     }
   });
+
+  // add new menu item
+  // Check that our item doesn't already exist
+  $menu_item_search = array('url' => 'civicrm/case/webforms');
+  $menu_items = array();
+  CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
+
+  if ( ! empty($menu_items) ) {
+    return;
+  }
+
+  $navId = CRM_Core_DAO::singleValueQuery("SELECT max(id) FROM civicrm_navigation");
+  if (is_integer($navId)) {
+    $navId++;
+  }
+  // Find the Civicase menu
+  $caseID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'CiviCase', 'id', 'name');
+  $administerID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+  $menu[$administerID]['child'][$caseID]['child'][$navId] = array(
+    'attributes' => array (
+      'label' => ts('CiviCase Webforms'),
+      'name' => 'CiviCase Webforms',
+      'url' => 'civicrm/case/webforms',
+      'permission' => 'access CiviCase',
+      'operator' => 'OR',
+      'separator' => 1,
+      'parentID' => $caseID,
+      'navID' => $navId,
+      'active' => 1
+    ),
+  );
 }
 
 /**
