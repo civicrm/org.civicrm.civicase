@@ -46,9 +46,10 @@
         });
 
         describe('when filtered by activity set and activity id', function () {
-          var expectedActivityTypeIDs = [];
+          var expectedActivityTypeIDs;
 
           beforeEach(function () {
+            expectedActivityTypeIDs = [];
             $scope.$digest();
 
             _.each(CaseTypes.get()['1'].definition.activitySets[0].activityTypes, function (activityTypeFromSet) {

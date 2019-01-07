@@ -13,6 +13,8 @@ describe('CaseListDirective', function () {
     }));
 
     beforeEach(function () {
+      CRM.$('body').append('<div id="toolbar" style="height: 60px"></div>');
+
       element = $compile(angular.element('<div civicase-sticky-table-header> <table><thead><th>Sample title</th><th>Sample title</th></thead></table></div>'))(scope);
     });
 
@@ -26,6 +28,8 @@ describe('CaseListDirective', function () {
 
     afterEach(function () {
       CRM.$.fn.affix = affixOriginalFunction;
+
+      CRM.$('#toolbar').remove();
     });
 
     describe('if loading is not complete and case is focused', function () {
@@ -122,6 +126,39 @@ describe('CaseListDirective', function () {
 
       it('resets the padding for top header and when the header gets back to its state', function () {
         expect(affixReturnValue.on).toHaveBeenCalledWith('affixed-top.bs.affix', jasmine.any(Function));
+      });
+    });
+
+    describe('table list padding', function () {
+      var affixEventHandler;
+
+      beforeEach(inject(function ($timeout) {
+        element.find('thead').css('height', '100px');
+        scope.$digest();
+        $timeout.flush();
+
+        affixEventHandler = affixReturnValue.on.calls.argsFor(0)[1];
+      }));
+
+      describe('when scrolling and the toolbar drawer is visible', function () {
+        beforeEach(inject(function () {
+          affixEventHandler();
+        }));
+
+        it('adds a padding to the table equal to the table header', function () {
+          expect(element.css('padding-top')).toBe(element.find('thead').css('height'));
+        });
+      });
+
+      describe('when scrolling and the toolbar drawer is not visible', function () {
+        beforeEach(function () {
+          CRM.$('#toolbar').hide();
+          affixEventHandler();
+        });
+
+        it('does not add a padding to the table', function () {
+          expect(element.css('padding-top')).toBe('');
+        });
       });
     });
   });
