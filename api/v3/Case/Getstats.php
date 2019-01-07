@@ -27,7 +27,7 @@ function civicrm_api3_case_getstats($params) {
   $query = CRM_Utils_SQL_Select::from('civicrm_case a');
   $query->select(array('a.case_type_id as case_type_id, a.status_id as status_id, COUNT(a.id) as count'));
   if (!empty($params['my_cases'])) {
-    \Civi\CCase\Utils::joinOnManager($query);
+    \Civi\CCase\Utils::joinOnRelationship($sql, 'manager');
     $query->where('manager.id = ' . CRM_Core_Session::getLoggedInContactID());
   }
   $query->groupBy('a.case_type_id, a.status_id');

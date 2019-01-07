@@ -300,7 +300,7 @@
         }
       });
       // Filter out deleted contacts
-      if (!params.contact_id) {
+      if (!params.contact_involved) {
         params.contact_is_deleted = 0;
       }
       // If no status specified, default to all open cases
