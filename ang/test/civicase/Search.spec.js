@@ -86,7 +86,7 @@
           });
 
           it('sets the contact id filter equal to my id', function () {
-            expect($scope.filters.contact_id).toEqual([CRM.config.user_contact_id]);
+            expect($scope.filters.contact_involved).toEqual([CRM.config.user_contact_id]);
           });
         });
       });

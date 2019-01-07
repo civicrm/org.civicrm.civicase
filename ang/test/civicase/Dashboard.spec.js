@@ -71,7 +71,7 @@
 
         it('filters the cases and activties where the user is involved', function () {
           expect($scope.activityFilters.case_filter).toEqual(jasmine.objectContaining({
-            contact_id: [ CRM.config.user_contact_id ]
+            contact_involved: {'IN': [CRM.config.user_contact_id]}
           }));
         });
       });
