@@ -22,7 +22,7 @@
         <li>
           <a
             class="crm-popup"
-            ng-href="{{ 'civicrm/activity/pdf/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id, context: 'standalone' } }}">
+            ng-click="createPDFLetter()">
             <i class="material-icons">picture_as_pdf</i>
             {{ts('Create PDF letter')}}
           </a>

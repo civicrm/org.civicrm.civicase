@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActions', function (dialogService) {
+  module.directive('civicaseActions', function (dialogService, PrintMergeCaseAction) {
     return {
       restrict: 'A',
       template:
@@ -22,7 +22,7 @@
         var ts = CRM.ts('civicase');
         var multi = $scope.multi = attributes.multiple;
 
-        $scope.isHasSubMenu = function(action) {
+        $scope.isHasSubMenu = function (action) {
           return (action.items && action.items.length);
         };
 
@@ -239,29 +239,7 @@
 
               return popupPath;
             },
-
-            printMerge: function (cases) {
-              var contactIds = [];
-              var caseIds = [];
-
-              _.each(cases, function (item) {
-                caseIds.push(item.id);
-                contactIds.push(item.client[0].contact_id);
-              });
-
-              var popupPath = {
-                path: 'civicrm/activity/pdf/add',
-                query: {
-                  action: 'add',
-                  reset: 1,
-                  context: 'standalone',
-                  cid: contactIds.join(),
-                  caseid: caseIds.join()
-                }
-              };
-              return popupPath;
-            },
-
+            printMerge: PrintMergeCaseAction.getPath,
             exportCases: function (cases) {
               var caseIds = _.collect(cases, 'id');
               var popupPath = {
@@ -307,8 +285,8 @@
               win.focus();
             },
 
-            gotoWebform: function(selectedCase, path, clientId) {
-              var clientId = 'cid' + clientId;
+            gotoWebform: function (selectedCase, path, clientId) {
+              clientId = 'cid' + clientId;
               var url = CRM.url(path, {
                 case1: selectedCase.id,
                 [clientId]: selectedCase.client[0].contact_id
