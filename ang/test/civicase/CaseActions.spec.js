@@ -14,7 +14,7 @@ describe('Action', function () {
     var element;
 
     beforeEach(function () {
-      element = $compile('<div civicase-actions=[]></div>')($rootScope);
+      element = $compile('<div civicase-case-actions=[]></div>')($rootScope);
       $rootScope.$digest();
     });
 

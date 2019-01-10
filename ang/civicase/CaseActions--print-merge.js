@@ -8,7 +8,7 @@
      * Get path object to print/merge
      *
      * @param {Array} cases
-     * @return {Object}
+     * @return {Object} popup path object
      */
     this.getPath = function (cases) {
       var contactIds = [];
@@ -19,7 +19,7 @@
         contactIds.push(item.client[0].contact_id);
       });
 
-      var popupPath = {
+      return {
         path: 'civicrm/activity/pdf/add',
         query: {
           action: 'add',
@@ -29,8 +29,6 @@
           caseid: caseIds.join()
         }
       };
-
-      return popupPath;
     };
   }
 })(angular, CRM.$, CRM._);

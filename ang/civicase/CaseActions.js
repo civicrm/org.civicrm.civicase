@@ -1,27 +1,28 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActions', function (dialogService, PrintMergeCaseAction) {
+  module.directive('civicaseCaseActions', function (dialogService, PrintMergeCaseAction) {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/Actions.html',
+      templateUrl: '~/civicase/CaseActions.html',
       scope: {
-        cases: '=civicaseActions',
+        cases: '=civicaseCaseActions',
         refresh: '=refreshCallback',
         popupParams: '='
       },
-      link: civicaseActionsLink
+      link: civicaseCaseActionsLink
     };
 
     /**
-     * Angular JS's link function for civicaseActions Directive
+     * Angular JS's link function for civicaseCaseActions Directive
+     *
      * @param {Object} $scope
      * @param {Object} element
      * @param {Object} attributes
      */
-    function civicaseActionsLink ($scope, element, attributes) {
+    function civicaseCaseActionsLink ($scope, element, attributes) {
       var ts = CRM.ts('civicase');
-      var multi = $scope.multi = attributes.multiple;
+      var isBulkMode = attributes.isBulkMode;
 
       $scope.isHasSubMenu = function (action) {
         return (action.items && action.items.length);
@@ -36,7 +37,7 @@
         var isCaseLockAllowed = CRM.civicase.allowCaseLocks;
 
         return (isLockCaseAction && isCaseLockAllowed) ||
-          (!isLockCaseAction && (!action.number || ((multi && action.number > 1) || (!multi && action.number === 1))));
+          (!isLockCaseAction && (!action.number || ((isBulkMode && action.number > 1) || (!isBulkMode && action.number === 1))));
       };
 
       // Perform bulk actions
@@ -78,44 +79,55 @@
               buttons: [{
                 text: ts('Save'),
                 icons: {primary: 'fa-check'},
-                click: function () {
-                  var calls = [];
-                  var values = [];
-
-                  function tagParams (tagIds) {
-                    var params = {entity_id: item.id, entity_table: 'civicrm_case'};
-                    _.each(tagIds, function (id, i) {
-                      params['tag_id_' + i] = id;
-                    });
-                    return params;
-                  }
-
-                  _.each(keys, function (key) {
-                    _.each(model[key], function (id) {
-                      values.push(id);
-                    });
-                  });
-
-                  var toRemove = _.difference(_.keys(item.tag_id), values);
-                  var toAdd = _.difference(values, _.keys(item.tag_id));
-
-                  if (toRemove.length) {
-                    calls.push(['EntityTag', 'delete', tagParams(toRemove)]);
-                  }
-
-                  if (toAdd.length) {
-                    calls.push(['EntityTag', 'create', tagParams(toAdd)]);
-                  }
-
-                  if (calls.length) {
-                    calls.push(['Activity', 'create', {case_id: item.id, status_id: 'Completed', activity_type_id: 'Change Case Tags'}]);
-                    $scope.refresh(calls);
-                  }
-
-                  $(this).dialog('close');
-                }
+                click: editTagModalClickEvent
               }]
             });
+
+            /**
+             * Handles the click event for the Edit Tag Modal's Click Event
+             */
+            function editTagModalClickEvent () {
+              var calls = [];
+              var values = [];
+
+              function tagParams (tagIds) {
+                var params = {entity_id: item.id, entity_table: 'civicrm_case'};
+
+                _.each(tagIds, function (id, i) {
+                  params['tag_id_' + i] = id;
+                });
+
+                return params;
+              }
+
+              _.each(keys, function (key) {
+                _.each(model[key], function (id) {
+                  values.push(id);
+                });
+              });
+
+              var toRemove = _.difference(_.keys(item.tag_id), values);
+              var toAdd = _.difference(values, _.keys(item.tag_id));
+
+              if (toRemove.length) {
+                calls.push(['EntityTag', 'delete', tagParams(toRemove)]);
+              }
+
+              if (toAdd.length) {
+                calls.push(['EntityTag', 'create', tagParams(toAdd)]);
+              }
+
+              if (calls.length) {
+                calls.push(['Activity', 'create', {
+                  case_id: item.id,
+                  status_id: 'Completed',
+                  activity_type_id: 'Change Case Tags'
+                }]);
+                $scope.refresh(calls);
+              }
+
+              $(this).dialog('close');
+            }
           },
 
           deleteCases: function (cases, mode) {
@@ -140,6 +152,7 @@
             CRM.confirm({title: action.title, message: msg})
               .on('crmConfirm:yes', function () {
                 var calls = [];
+
                 _.each(cases, function (item) {
                   calls.push(['Case', mode, { id: item.id, move_to_trash: trash }]);
                 });
@@ -170,16 +183,22 @@
             var currentStatuses = _.uniq(_.collect(cases, 'status_id'));
             var currentStatus = currentStatuses.length === 1 ? currentStatuses[0] : null;
             var msg = '<form>' +
-                '<div><input name="change_case_status" placeholder="' + ts('Select New Status') + '" /></div>' +
+                '<div><input name="change_case_status" placeholder="' +
+                ts('Select New Status') + '" /></div>' +
                 '<label for="change_case_status_details">' + ts('Notes') + '</label>' +
                 '<textarea id="change_case_status_details"></textarea>' +
                 '</form>';
             var statuses = _.map(CRM.civicase.caseStatuses, function (item, statusId) {
-              return { id: item.name, text: item.label, disabled: statusId === currentStatus };
+              return {
+                id: item.name,
+                text: item.label,
+                disabled: statusId === currentStatus
+              };
             });
 
             _.each(types, function (caseTypeId) {
               var allowedStatuses = CRM.civicase.caseTypes[caseTypeId].definition.statuses || [];
+
               if (allowedStatuses.length) {
                 _.remove(statuses, function (status) {
                   return allowedStatuses.indexOf(status.id) < 0;
@@ -208,9 +227,11 @@
                       1: item.status,
                       2: _.result(_.find(statuses, {id: status}), 'text')
                     });
+
                     calls.push(['Case', 'create', {id: item.id, status_id: status}]);
                     calls.push(['Activity', 'create', {case_id: item.id, status_id: 'Completed', activity_type_id: 'Change Case Status', subject: subject, details: details}]);
                   });
+
                   $scope.refresh(calls);
                 }
               });
@@ -251,6 +272,7 @@
                 id: caseIds.join()
               }
             };
+
             return popupPath;
           },
 
@@ -283,6 +305,7 @@
               caseID: selectedCase.id
             });
             var win = window.open(url, '_blank');
+
             win.focus();
           },
 
@@ -293,19 +316,18 @@
               [clientId]: selectedCase.client[0].contact_id
             });
             var win = window.open(url, '_blank');
+
             win.focus();
           },
 
           lockCases: function (currentCase) {
-            var popupPath = {
+            return {
               path: 'civicrm/case/locked-contacts',
               query: {
                 reset: 1,
                 case_id: currentCase.id
               }
             };
-
-            return popupPath;
           }
 
         });
@@ -343,7 +365,8 @@
           ];
         } else {
           $scope.caseActions = _.cloneDeep(CRM.civicase.caseActions);
-          if (!$scope.multi) {
+
+          if (!isBulkMode) {
             _.remove($scope.caseActions, {action: 'changeStatus(cases)'});
           }
         }

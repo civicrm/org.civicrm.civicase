@@ -20,7 +20,7 @@
         returnValue = PrintMergeCaseAction.getPath([caseObj]);
       });
 
-      it('returns path to open popup for sending printing/merging', function () {
+      it('returns path for opening popup to print/merge document', function () {
         expect(returnValue).toEqual({
           path: 'civicrm/activity/pdf/add',
           query: {
