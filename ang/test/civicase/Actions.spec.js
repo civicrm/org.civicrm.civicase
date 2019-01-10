@@ -3,7 +3,7 @@
 describe('Action', function () {
   var $compile, $rootScope;
 
-  beforeEach(module('civicase'));
+  beforeEach(module('civicase', 'civicase.templates'));
 
   beforeEach(inject(function (_$compile_, _$rootScope_) {
     $compile = _$compile_;
