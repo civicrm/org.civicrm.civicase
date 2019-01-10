@@ -13,16 +13,15 @@
       <ul class="dropdown-menu">
         <li>
           <a
-            class="crm-popup"
-            ng-href="{{ 'civicrm/activity/email/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id } }}">
+            class="crm-popup" href ng-click="createEmail()">
             <i class="material-icons">email</i>
             {{ts('Create email')}}
           </a>
         </li>
         <li>
           <a
-            class="crm-popup"
-            ng-href="{{ 'civicrm/activity/pdf/add' | civicaseCrmUrl:{ action: 'add', caseid: item.id, reset: 1, cid: role.contact_id, context: 'standalone' } }}">
+            class="crm-popup" href
+            ng-click="createPDFLetter()">
             <i class="material-icons">picture_as_pdf</i>
             {{ts('Create PDF letter')}}
           </a>

@@ -3,7 +3,7 @@
 describe('Action', function () {
   var $compile, $rootScope;
 
-  beforeEach(module('civicase'));
+  beforeEach(module('civicase', 'civicase.templates'));
 
   beforeEach(inject(function (_$compile_, _$rootScope_) {
     $compile = _$compile_;
@@ -14,7 +14,7 @@ describe('Action', function () {
     var element;
 
     beforeEach(function () {
-      element = $compile('<div civicase-actions=[]></div>')($rootScope);
+      element = $compile('<div civicase-case-actions=[]></div>')($rootScope);
       $rootScope.$digest();
     });
 

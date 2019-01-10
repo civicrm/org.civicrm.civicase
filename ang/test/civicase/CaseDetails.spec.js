@@ -295,6 +295,46 @@
       });
     });
 
+    describe('when creating an email', function () {
+      var loadFormArguments;
+
+      beforeEach(function () {
+        initController();
+        spyOn($scope, '$emit');
+        CRM.loadForm.and.returnValue({
+          on: function () {
+            loadFormArguments = arguments;
+          }
+        });
+
+        $scope.createEmail();
+      });
+
+      it('open a popup to create emails', function () {
+        expect(CRM.url).toHaveBeenCalledWith('civicrm/activity/email/add', {
+          action: 'add',
+          caseid: $scope.item.id,
+          atype: '3',
+          reset: 1,
+          context: 'standalone'
+        });
+      });
+
+      it("creates a listener for the popup's close event", function () {
+        expect(loadFormArguments[0]).toBe('crmFormSuccess');
+      });
+
+      describe('when popup closes', function () {
+        beforeEach(function () {
+          loadFormArguments[1]();
+        });
+
+        it('refreshes the activity feed', function () {
+          expect($scope.$emit).toHaveBeenCalledWith('civicase::activity::updated');
+        });
+      });
+    });
+
     /**
      * Initializes the case details controller.
      *
