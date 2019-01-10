@@ -1,17 +1,17 @@
 /* eslint-env jasmine */
 (function ($) {
   describe('contactCard', function () {
-    var element, crmApi, $q, $compile, $rootScope, $scope, ContactsData, ContactsDataService;
+    var element, crmApi, $q, $compile, $rootScope, $scope, ContactsData, ContactsCache;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data'));
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$q_, _crmApi_, _ContactsData_, _ContactsDataService_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$q_, _crmApi_, _ContactsData_, _ContactsCache_) {
       $q = _$q_;
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       crmApi = _crmApi_;
       ContactsData = _ContactsData_;
-      ContactsDataService = _ContactsDataService_;
+      ContactsCache = _ContactsCache_;
       $scope = $rootScope.$new();
     }));
 
@@ -62,7 +62,7 @@
       describe('image url', function () {
         beforeEach(function () {
           crmApi.and.returnValue($q.resolve(ContactsData));
-          ContactsDataService.add(ContactsData.values);
+          ContactsCache.add(ContactsData.values);
           compileDirective(true, ContactsData.values[0].contact_id, ContactsData.values[0].display_name);
         });
 

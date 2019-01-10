@@ -1,16 +1,16 @@
 /* eslint-env jasmine */
 (function (_) {
   describe('CasesUtils', function () {
-    var CasesData, ContactsDataService, CasesUtils;
+    var CasesData, ContactsCache, CasesUtils;
 
     beforeEach(module('civicase', 'civicase.data', 'civicase.templates'));
 
-    beforeEach(inject(function (_ContactsDataService_, _CasesData_, _CasesUtils_) {
-      ContactsDataService = _ContactsDataService_;
+    beforeEach(inject(function (_ContactsCache_, _CasesData_, _CasesUtils_) {
+      ContactsCache = _ContactsCache_;
       CasesData = _CasesData_;
       CasesUtils = _CasesUtils_;
 
-      spyOn(ContactsDataService, 'add');
+      spyOn(ContactsCache, 'add');
     }));
 
     describe('fetchMoreContactsInformation()', function () {
@@ -27,7 +27,7 @@
       });
 
       it('fetches all contacts of the case', function () {
-        expect(ContactsDataService.add).toHaveBeenCalledWith([1, 2, 3, 4]);
+        expect(ContactsCache.add).toHaveBeenCalledWith([1, 2, 3, 4]);
       });
     });
   });

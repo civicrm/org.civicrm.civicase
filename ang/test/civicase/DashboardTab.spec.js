@@ -146,14 +146,14 @@
           });
 
           describe('when invoked', function () {
-            var contactsCount, ContactsDataService;
+            var contactsCount, ContactsCache;
 
-            beforeEach(inject(function (_ContactsDataService_) {
-              ContactsDataService = _ContactsDataService_;
+            beforeEach(inject(function (_ContactsCache_) {
+              ContactsCache = _ContactsCache_;
             }));
 
             beforeEach(function () {
-              spyOn(ContactsDataService, 'add');
+              spyOn(ContactsCache, 'add');
 
               contactsCount = countTotalAndUniqueContactIds(mockedResults, 'contacts');
               $scope.newCasesPanel.handlers.results(mockedResults);
@@ -163,10 +163,10 @@
               expect(formatCase.calls.count()).toBe(mockedResults.length);
             });
 
-            it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
-              var contactIds = ContactsDataService.add.calls.argsFor(0)[0];
+            it('calls ContactsCache.add() with a duplicate-free list of the results\'s contacts', function () {
+              var contactIds = ContactsCache.add.calls.argsFor(0)[0];
 
-              expect(ContactsDataService.add).toHaveBeenCalled();
+              expect(ContactsCache.add).toHaveBeenCalled();
               expect(contactIds).not.toEqual(contactsCount.total);
               expect(contactIds).toEqual(contactsCount.uniq);
             });
@@ -427,14 +427,14 @@
           });
 
           describe('when invoked', function () {
-            var contactsCount, ContactsDataService;
+            var contactsCount, ContactsCache;
 
-            beforeEach(inject(function (_ContactsDataService_) {
-              ContactsDataService = _ContactsDataService_;
+            beforeEach(inject(function (_ContactsCache_) {
+              ContactsCache = _ContactsCache_;
             }));
 
             beforeEach(function () {
-              spyOn(ContactsDataService, 'add');
+              spyOn(ContactsCache, 'add');
 
               contactsCount = countTotalAndUniqueContactIds(mockedResults, 'case_id.contacts');
               $scope.newMilestonesPanel.handlers.results(mockedResults);
@@ -444,10 +444,10 @@
               expect(formatActivity.calls.count()).toBe(mockedResults.length);
             });
 
-            it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
-              var contactIds = ContactsDataService.add.calls.argsFor(0)[0];
+            it('calls ContactsCache.add() with a duplicate-free list of the results\'s contacts', function () {
+              var contactIds = ContactsCache.add.calls.argsFor(0)[0];
 
-              expect(ContactsDataService.add).toHaveBeenCalled();
+              expect(ContactsCache.add).toHaveBeenCalled();
               expect(contactIds).not.toEqual(contactsCount.total);
               expect(contactIds).toEqual(contactsCount.uniq);
             });
@@ -681,14 +681,14 @@
           });
 
           describe('when invoked', function () {
-            var contactsCount, ContactsDataService;
+            var contactsCount, ContactsCache;
 
-            beforeEach(inject(function (_ContactsDataService_) {
-              ContactsDataService = _ContactsDataService_;
+            beforeEach(inject(function (_ContactsCache_) {
+              ContactsCache = _ContactsCache_;
             }));
 
             beforeEach(function () {
-              spyOn(ContactsDataService, 'add');
+              spyOn(ContactsCache, 'add');
 
               contactsCount = countTotalAndUniqueContactIds(mockedResults, 'case_id.contacts');
               $scope.activitiesPanel.handlers.results(mockedResults);
@@ -698,10 +698,10 @@
               expect(formatActivity.calls.count()).toBe(mockedResults.length);
             });
 
-            it('calls ContactsDataService.add() with a duplicate-free list of the results\'s contacts', function () {
-              var contactIds = ContactsDataService.add.calls.argsFor(0)[0];
+            it('calls ContactsCache.add() with a duplicate-free list of the results\'s contacts', function () {
+              var contactIds = ContactsCache.add.calls.argsFor(0)[0];
 
-              expect(ContactsDataService.add).toHaveBeenCalled();
+              expect(ContactsCache.add).toHaveBeenCalled();
               expect(contactIds).not.toEqual(contactsCount.total);
               expect(contactIds).toEqual(contactsCount.uniq);
             });

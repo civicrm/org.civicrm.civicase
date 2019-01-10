@@ -1,23 +1,23 @@
 /* eslint-env jasmine */
 (function (_) {
-  describe('ContactsDataService', function () {
-    var $q, $rootScope, ContactsDataService, ContactsData, crmApi;
+  describe('ContactsCache', function () {
+    var $q, $rootScope, ContactsCache, ContactsData, crmApi;
 
     beforeEach(function () {
       module('civicase', 'civicase.data');
     });
 
-    beforeEach(inject(function (_$q_, _$rootScope_, _ContactsDataService_, _ContactsData_, _crmApi_) {
+    beforeEach(inject(function (_$q_, _$rootScope_, _ContactsCache_, _ContactsData_, _crmApi_) {
       $q = _$q_;
       $rootScope = _$rootScope_;
-      ContactsDataService = _ContactsDataService_;
+      ContactsCache = _ContactsCache_;
       ContactsData = _.cloneDeep(_ContactsData_);
       crmApi = _crmApi_;
     }));
 
     describe('basic tests', function () {
       it('has the correct interface', function () {
-        expect(ContactsDataService).toEqual(jasmine.objectContaining({
+        expect(ContactsCache).toEqual(jasmine.objectContaining({
           add: jasmine.any(Function),
           getImageUrlOf: jasmine.any(Function),
           getContactIconOf: jasmine.any(Function),
@@ -70,7 +70,7 @@
         beforeEach(function () {
           _.extend(expectedApiParams, { 'id': { 'IN': ContactsData.values } });
 
-          ContactsDataService.add(ContactsData.values);
+          ContactsCache.add(ContactsData.values);
         });
 
         it('gets the details of sent contacts', function () {
@@ -83,11 +83,11 @@
 
         beforeEach(function () {
           contactsForTheFirstCall = [ContactsData.values[0]];
-          ContactsDataService.add(contactsForTheFirstCall);
+          ContactsCache.add(contactsForTheFirstCall);
           contactsForTheSecondCall = [ContactsData.values[1]];
 
           _.extend(expectedApiParams, { 'id': { 'IN': contactsForTheSecondCall } });
-          ContactsDataService.add(contactsForTheSecondCall);
+          ContactsCache.add(contactsForTheSecondCall);
         });
 
         it('gets the details of new contacts only', function () {
@@ -101,8 +101,8 @@
 
         beforeEach(function () {
           contactsForTheFirstCall = [ContactsData.values[0]];
-          promise1 = ContactsDataService.add(contactsForTheFirstCall);
-          promise2 = ContactsDataService.add(contactsForTheFirstCall);
+          promise1 = ContactsCache.add(contactsForTheFirstCall);
+          promise2 = ContactsCache.add(contactsForTheFirstCall);
         });
 
         it('second call waits for the first one to finish', function () {
@@ -120,7 +120,7 @@
           ContactsData.values[0].tags = 'tag1,tag2,tag3';
 
           crmApi.and.returnValue($q.resolve(ContactsData));
-          ContactsDataService.add(ContactsData.values);
+          ContactsCache.add(ContactsData.values);
           $rootScope.$digest();
 
           expectedContact = _.cloneDeep(ContactsData.values[0]);
@@ -134,7 +134,7 @@
           delete expectedContact['api.Phone.get'];
           delete expectedContact['api.GroupContact.get'];
 
-          returnedContact = ContactsDataService.getCachedContact(ContactsData.values[0].contact_id);
+          returnedContact = ContactsCache.getCachedContact(ContactsData.values[0].contact_id);
         });
 
         it('returns the cached contact', function () {
@@ -145,10 +145,10 @@
       describe('when the contact does not exist', function () {
         beforeEach(function () {
           crmApi.and.returnValue($q.resolve(ContactsData));
-          ContactsDataService.add(ContactsData.values);
+          ContactsCache.add(ContactsData.values);
           $rootScope.$digest();
 
-          returnedContact = ContactsDataService.getCachedContact(_.random(100, 1000));
+          returnedContact = ContactsCache.getCachedContact(_.random(100, 1000));
         });
 
         it('returns null', function () {
@@ -162,9 +162,9 @@
 
       beforeEach(function () {
         crmApi.and.returnValue($q.resolve(ContactsData));
-        ContactsDataService.add(ContactsData.values);
+        ContactsCache.add(ContactsData.values);
         $rootScope.$digest();
-        returnValue = ContactsDataService.getImageUrlOf(ContactsData.values[0].contact_id);
+        returnValue = ContactsCache.getImageUrlOf(ContactsData.values[0].contact_id);
       });
 
       it('gets the image url of sent contact id', function () {
@@ -177,9 +177,9 @@
 
       beforeEach(function () {
         crmApi.and.returnValue($q.resolve(ContactsData));
-        ContactsDataService.add(ContactsData.values);
+        ContactsCache.add(ContactsData.values);
         $rootScope.$digest();
-        returnValue = ContactsDataService.getContactIconOf(ContactsData.values[0].contact_id);
+        returnValue = ContactsCache.getContactIconOf(ContactsData.values[0].contact_id);
       });
 
       it('gets the contact type of sent contact id', function () {

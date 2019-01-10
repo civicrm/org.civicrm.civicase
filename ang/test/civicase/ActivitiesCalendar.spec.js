@@ -469,14 +469,14 @@
         });
 
         describe('when the activities are loaded', function () {
-          var ContactsDataService;
+          var ContactsCache;
 
-          beforeEach(inject(function (_ContactsDataService_) {
-            ContactsDataService = _ContactsDataService_;
+          beforeEach(inject(function (_ContactsCache_) {
+            ContactsCache = _ContactsCache_;
           }));
 
           beforeEach(function () {
-            spyOn(ContactsDataService, 'add').and.callThrough();
+            spyOn(ContactsCache, 'add').and.callThrough();
             $scope.$digest();
           });
 
@@ -489,7 +489,7 @@
               .pluck('case_id.contacts').flatten()
               .pluck('contact_id').value();
 
-            expect(ContactsDataService.add).toHaveBeenCalledWith(activitiesContacts);
+            expect(ContactsCache.add).toHaveBeenCalledWith(activitiesContacts);
           });
 
           it('turns off the loading state', function () {

@@ -1,0 +1,15 @@
+<div
+  class="panel-header civicase__case-header"
+  ng-if="item && areDetailsLoaded"
+  ng-include="'~/civicase/case/case-details/case-details-header.html'">
+</div>
+<div
+  class="panel-body civicase__case-body"
+  ng-if="item && areDetailsLoaded"
+  ng-include="'~/civicase/case/case-details/case-details-tabs.html'">
+</div>
+<div
+  ng-if="!areDetailsLoaded"
+  class="civicase__loading-placeholder__case-view-panel"
+  ng-include="'~/civicase/case/case-details/case-details-placeholder.html'">
+</div>

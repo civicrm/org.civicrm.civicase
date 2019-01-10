@@ -1,0 +1,95 @@
+<div class="civicase__summary-tab crm-entity" data-entity="Case" data-id="{{ item.id }}">
+  <!-- Subject and QuickLinks -->
+  <div class="panel panel-default civicase__summary-tab__basic-details">
+    <div class="panel-body">
+      <div class="civicase__summary-tab__subject-container">
+        <div class="civicase__summary-tab__subject">
+          <p crm-editable="item" data-field="subject" data-type="textarea" data-placeholder="Click to add subject" crm-form-success="onChangeSubject($data)"></p>
+        </div>
+        <!-- <div class="civicase__summary-tab__description"> -->
+          <!-- <p crm-editable="item" data-field="details" data-type="textarea" data-placeholder="This case doesn't currently have a description. Click here to add now"></p> -->
+        <!-- </div> -->
+        <div>
+          <span class="civicase__summary-tab__last-updated">Case last updated: </span>
+          <span>{{formatDate(item.modified_date, 'DD MMMM YYYY' )}}</span>
+        </div>
+      </div>
+      <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, 'task', 'incomplete') }}">
+        <div>{{item.category_count.incomplete.task || 0}}</div>
+        <div>Open Tasks</div>
+        <div
+          ng-class="{ 'invisible': !item.category_count.overdue.task }"
+          class="text-danger civicase__summary-overdue-count">
+          {{item.category_count.overdue.task}} overdue
+        </div>
+      </a>
+      <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, 'communication', 'incomplete') }}">
+        <div>{{item.category_count.incomplete.communication ? item.category_count.incomplete.communication : 0}}</div>
+        <div>Unread Comms</div>
+        <div
+          ng-class="{ 'invisible': !item.category_count.overdue.communication }"
+          class="text-danger civicase__summary-overdue-count">
+          {{item.category_count.overdue.communication}} overdue
+        </div>
+      </a>
+      <a class="civicase__summary-activity-count" ng-href="#{{ activityFeedUrl(item.id, null, null, 'Scheduled') }}">
+        <div>{{item.category_count.scheduled.count}}</div>
+        <div>Scheduled Activities</div>
+        <div
+          ng-class="{ 'invisible': !item.category_count.scheduled.overdue }"
+          class="text-danger civicase__summary-overdue-count">
+          {{item.category_count.scheduled.overdue}} overdue
+        </div>
+      </a>
+    </div>
+  </div>
+  <!-- End - Subject and QuickLinks -->
+  <div class="civicase__summary-tab-tile-container">
+    <div class="civicase__summary-tab-tile panel civicase__panel-transparent-header civicase__summary-tab-tile--responsive">
+      <!-- next milestone card -->
+      <div class="panel-heading">
+        <h3 class="panel-title">Next Milestone</h3>
+      </div>
+      <div class="panel-body">
+        <div
+          case-activity-card="item.activity_summary.milestone[0]"
+          crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+          refresh-callback="refresh"
+          mode="big"
+          type="'milestone'"
+          case="item">
+        </div>
+      </div>
+    </div>
+    <div class="civicase__summary-tab-tile panel civicase__panel-transparent-header civicase__summary-tab-tile--responsive">
+      <!-- next Activity card -->
+      <div class="panel-heading">
+        <h3 class="panel-title">Next Activity</h3>
+      </div>
+      <div class="panel-body">
+        <div
+          case-activity-card="item.nextActivityNotMilestone"
+          crm-popup-form-success="pushCaseData($data.civicase_reload[0])"
+          refresh-callback="refresh"
+          mode="big"
+          type="'activity'"
+          case="item">
+        </div>
+      </div>
+    </div>
+    <div class="civicase__summary-tab-tile  panel civicase__panel-transparent-header civicase__summary-tab-tile--fixed">
+      <civicase-activities-calendar
+        case-id="item.id"
+        refresh-callback="refresh">
+      </civicase-activities-calendar>
+    </div>
+  </div>
+  <div ng-include="'~/civicase/case/case-details/summary-tab/case-summary-custom-data.html'"></div>
+  <div class="clearfix civicase__summary-tab-tile-container">
+    <div class="civicase__summary-tab-tile civicase__summary-tab__activity-list col-lg-6 col-md-12 panel civicase__panel-transparent-header" ng-include="'~/civicase/case/case-details/summary-tab/case-summary-recent-communications.html'"></div>
+    <div class="civicase__summary-tab-tile civicase__summary-tab__activity-list col-lg-6 col-md-12 panel civicase__panel-transparent-header" ng-include="'~/civicase/case/case-details/summary-tab/case-summary-tasks.html'"></div>
+  </div>
+  <!-- Other Cases -->
+  <div ng-if="item && item.relatedCases.length" ng-include="'~/civicase/case/case-details/summary-tab/case-summary-other-cases.html'"></div>
+  <!-- End - Other Cases -->
+</div>

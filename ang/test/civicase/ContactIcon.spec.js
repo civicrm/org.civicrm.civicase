@@ -9,7 +9,7 @@
       contactsDataServiceMock = jasmine.createSpyObj('contactsDataService', ['getContactIconOf']);
       contactsDataServiceMock.getContactIconOf.and.returnValue(expectedContactIcon);
 
-      $provide.value('ContactsDataService', contactsDataServiceMock);
+      $provide.value('ContactsCache', contactsDataServiceMock);
     }));
 
     beforeEach(inject(function (_$controller_, _$rootScope_) {
