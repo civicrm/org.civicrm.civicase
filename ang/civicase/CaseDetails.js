@@ -54,6 +54,25 @@
     };
 
     /**
+     * Opens the popup for Creating Email
+     */
+    $scope.createEmail = function () {
+      var createEmailURLParams = {
+        action: 'add',
+        caseid: $scope.item.id,
+        atype: '3',
+        reset: 1,
+        context: 'standalone'
+      };
+
+      CRM
+        .loadForm(CRM.url('civicrm/activity/email/add', createEmailURLParams))
+        .on('crmFormSuccess', function () {
+          $scope.$emit('civicase::activity::updated');
+        });
+    };
+
+    /**
      * Opens the popup for Creating PDF letter
      */
     $scope.createPDFLetter = function () {
