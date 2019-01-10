@@ -80,7 +80,7 @@
      * @param {String} contactDisplayName
      */
     function compileDirective (isAvatar, contactID, contactDisplayName) {
-      element = $compile('<div contact-card contacts="contacts" avatar="isAvatar">')($scope);
+      element = $compile('<div civicase-contact-card contacts="contacts" avatar="isAvatar">')($scope);
       $scope.isAvatar = isAvatar;
       $scope.contacts = {};
       $scope.contacts[contactID] = contactDisplayName;

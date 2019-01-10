@@ -15,7 +15,7 @@
       <i ng-if="!data.is_linked" class="civicase__case-card__link-type material-icons" title="{{ ts('Case is for the same client(s)') }}">person</i>
     </div>
 
-    <div contact-card class="civicase__case-card__contact" contacts="data.client"></div>
+    <div civicase-contact-card class="civicase__case-card__contact" contacts="data.client"></div>
 
     <div class="civicase__case-card__type">{{ data.case_type }}</div>
 

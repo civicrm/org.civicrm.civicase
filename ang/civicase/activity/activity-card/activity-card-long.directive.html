@@ -85,7 +85,7 @@
           <!-- End - Activity Date -->
 
           <!-- Avatar -->
-          <span ng-if="activity.assignee_contact_name" contact-card avatar="true" contacts="activity.assignee_contact_name"></span>
+          <span ng-if="activity.assignee_contact_name" civicase-contact-card avatar="true" contacts="activity.assignee_contact_name"></span>
           <!-- End - Avatar -->
           <div ng-include="'~/civicase/activity/activity-card/activity-card-menu-feed.html'" ng-if="bulkAllowed"></div>
         </span>
@@ -98,11 +98,11 @@
       <div class="civicase__activity-card-row civicase__activity-card-row--communication" ng-if="activity.category.indexOf('communication') > -1">
         <div>
           <span>To:&nbsp;</span>
-          <span ng-if="activity.target_contact_name" contact-card contacts="activity.target_contact_name"></span>
+          <span ng-if="activity.target_contact_name" civicase-contact-card contacts="activity.target_contact_name"></span>
         </div>
         <div class="civicase__activity__right-container">
           <span>From:&nbsp;</span>
-          <span ng-if="activity.source_contact_id" contact-card contacts="activity.source_contact_id"></span>
+          <span ng-if="activity.source_contact_id" civicase-contact-card contacts="activity.source_contact_id"></span>
         </div>
       </div>
       <div class="civicase__activity-card-row" ng-if="activity.category.indexOf('alert') > -1">
@@ -141,7 +141,7 @@
         <span class="civicase__activity-card__case-type">{{ activity.case.type.title }}</span>
         <div class="civicase__activity__right-container">
           <div>
-            <span contact-card contacts="activity.case.client"></span>
+            <span civicase-contact-card contacts="activity.case.client"></span>
           </div>
           <span class="crm_notification-badge" style="background-color: {{ activity.case.status.color }};">{{ activity.case.status.label }}</span>
         </div>

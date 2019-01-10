@@ -10,7 +10,7 @@
         class="civicase__case-header__content__trash text-danger material-icons"
         title="{{ ts('Case is in Trash') }}">delete_outline
       </i>
-      <div class="civicase__contact-card--client" contact-card contacts="item.client" no-icon="item.is_deleted"></div>
+      <div class="civicase__contact-card--client" civicase-contact-card contacts="item.client" no-icon="item.is_deleted"></div>
     </div>
     <div class="civicase__case-header__dates">
       <span>{{ CRM.utils.formatDate(item.start_date) || '. . .' }}</span> -
@@ -48,7 +48,7 @@
 
       <span class="pull-right">
         <span>Case Manager:</span>
-        <span><span class="civicase__contact-card civicase__contact-card--manager" contact-card contacts="[item.manager]"></span></span>
+        <span><span class="civicase__contact-card civicase__contact-card--manager" civicase-contact-card contacts="[item.manager]"></span></span>
       </span>
     </div>
   </div>

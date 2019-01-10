@@ -16,7 +16,7 @@
       ng-click="toggleSelected(); $event.stopPropagation();">
       <i ng-if="data.selected" class="civicase__checkbox--checked material-icons">check_box</i>
     </span>
-    <div contact-card class="civicase__case-card__contact" contacts="data.client"></div>
+    <div civicase-contact-card class="civicase__case-card__contact" contacts="data.client"></div>
     <div class="civicase__case-card__additional-information">
       <span class="civicase__case-card__case-id">
         Case ID: {{ data.id }}
