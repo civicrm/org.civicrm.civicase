@@ -7,15 +7,14 @@
       resolve: {
         hiddenFilters: function () {}
       },
-      templateUrl: '~/civicase/case/case-list/case-list.html'
+      templateUrl: '~/civicase/case/list/directives/case-list.html'
     });
   });
 
   module.config(function ($routeProvider) {
     $routeProvider.when('/case', {
       reloadOnSearch: false,
-      controller: 'civicaseDashboardController',
-      templateUrl: '~/civicase/dashboard/dashboard.html'
+      template: '<civicase-dashboard></civicase-dashboard>'
     });
   });
 

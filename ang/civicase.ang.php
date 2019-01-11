@@ -235,11 +235,12 @@ $options['allowCaseLocks'] = (bool) Civi::settings()->get('civicaseAllowCaseLock
 return array(
   'js' => array(
     'assetBuilder://visual-bundle.js', // at the moment, it's safe to include this multiple times -- deduped by resource manager
-    'ang/app.module.js',
+    'ang/civicase.js',
     'ang/civicase/*.js',
     'ang/civicase/*/*.js',
     'ang/civicase/*/*/*.js',
     'ang/civicase/*/*/*/*.js',
+    'ang/civicase/*/*/*/*/*.js',
   ),
   'css' => array(
     'assetBuilder://visual-bundle.css', // at the moment, it's safe to include this multiple times -- deduped by resource manager
