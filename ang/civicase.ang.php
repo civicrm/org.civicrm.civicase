@@ -232,12 +232,35 @@ foreach (CRM_Contact_Task::$_tasks as $id => $value) {
 $options['allowMultipleCaseClients'] = (bool) Civi::settings()->get('civicaseAllowMultipleClients');
 $options['allowCaseLocks'] = (bool) Civi::settings()->get('civicaseAllowCaseLocks');
 
-return array(
-  'js' => array(
+if (!function_exists('glob_recursive')) {
+  /**
+   * Recursive Glob function
+   * Source: http://php.net/manual/en/function.glob.php#106595
+   * Does not support flag GLOB_BRACE
+   */
+  function glob_recursive($pattern, $flags = 0) {
+    $files = glob($pattern, $flags);
+
+    foreach (glob(dirname($pattern) . '/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
+      $files = array_merge($files, glob_recursive($dir . '/' . basename($pattern), $flags));
+    }
+
+    return $files;
+  }
+}
+
+/**
+ * Get a list of JS files
+ */
+function getJSFiles () {
+  return array_merge(array(
     'assetBuilder://visual-bundle.js', // at the moment, it's safe to include this multiple times -- deduped by resource manager
-    'ang/civicase.js',
-    'ang/civicase/*.js',
-  ),
+    'ang/civicase.js'
+  ), glob_recursive(dirname(__FILE__) . '/civicase/*.js'));
+}
+
+return array(
+  'js' => getJSFiles(),
   'css' => array(
     'assetBuilder://visual-bundle.css', // at the moment, it's safe to include this multiple times -- deduped by resource manager
     'css/*.css',
