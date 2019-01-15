@@ -90,7 +90,7 @@
         it('opens a case selection modal', function () {
           expect(dialogServiceMock.open).toHaveBeenCalledWith(
             'MoveCopyActCard',
-            '~/civicase/ActivityActions--move-copy.html',
+            '~/civicase/activity/actions/services/move-copy-activity-action.html',
             jasmine.any(Object),
             jasmine.any(Object)
           );
@@ -290,7 +290,7 @@
         it('opens a case selection modal', function () {
           expect(dialogServiceMock.open).toHaveBeenCalledWith(
             'MoveCopyActCard',
-            '~/civicase/ActivityActions--move-copy.html',
+            '~/civicase/activity/actions/services/move-copy-activity-action.html',
             jasmine.any(Object),
             jasmine.any(Object)
           );

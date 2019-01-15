@@ -156,7 +156,7 @@
       it('opens the modal to add tags', function () {
         expect(dialogServiceMock.open).toHaveBeenCalledWith(
           'TagsActivityAction',
-          '~/civicase/ActivityActions--tags.html',
+          '~/civicase/activity/actions/services/tags-activity-action.html',
           jasmine.any(Object),
           jasmine.any(Object)
         );
@@ -323,7 +323,7 @@
       it('opens the modal to remove tags', function () {
         expect(dialogServiceMock.open).toHaveBeenCalledWith(
           'TagsActivityAction',
-          '~/civicase/ActivityActions--tags.html',
+          '~/civicase/activity/actions/services/tags-activity-action.html',
           jasmine.any(Object),
           jasmine.any(Object)
         );
