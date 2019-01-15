@@ -23,6 +23,7 @@ describe('civicaseCaseListSortHeader directive', function () {
           name: 'next_activity',
           sort: 'next_activity'
         };
+
         compileDirective(scope, header);
       });
 
@@ -46,6 +47,7 @@ describe('civicaseCaseListSortHeader directive', function () {
         beforeEach(function () {
           scope.sort = { field: '', dir: '', sortable: true };
           header = 'next_activity';
+
           compileDirective(scope, header);
         });
 
@@ -60,6 +62,7 @@ describe('civicaseCaseListSortHeader directive', function () {
             header = 'next_activity';
             scope.sort = { field: header, dir: '', sortable: true };
             scope.changeSortDir = jasmine.createSpy('changeSortDir');
+
             compileDirective(scope, header);
             element.trigger('click');
           });
@@ -74,6 +77,7 @@ describe('civicaseCaseListSortHeader directive', function () {
             header = 'next_activity';
             scope.sort = { field: 'not_next_activity', dir: '', sortable: true };
             scope.changeSortDir = jasmine.createSpy('changeSortDir');
+
             compileDirective(scope, header);
             element.trigger('click');
           });
@@ -93,6 +97,7 @@ describe('civicaseCaseListSortHeader directive', function () {
           header = 'next_activity';
           scope.sort = { field: header, dir: '', sortable: true };
           scope.changeSortDir = jasmine.createSpy('changeSortDir');
+
           compileDirective(scope, header);
         });
 
