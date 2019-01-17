@@ -98,7 +98,7 @@
         return;
       }
 
-      var form = CRM.loadForm(CRM.url('civicrm/case/activity', {
+      CRM.loadForm(CRM.url('civicrm/case/activity', {
         action: 'update',
         id: activity.id,
         cid: $scope.case.client[0].contact_id,
@@ -106,12 +106,6 @@
         reset: 1
       })).on('crmFormSuccess', function () {
         $scope.refresh();
-      }).on('crmLoad', function () {
-        $('a.delete.button').click(function () {
-          $scope.deleteActivity(activity, form);
-
-          return false;
-        });
       });
     };
 
