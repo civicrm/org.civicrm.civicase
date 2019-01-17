@@ -50,7 +50,7 @@
         activityCard.isolateScope().viewInPopup(null, activity);
       });
 
-      it('opens the modal to edit the activity', function () {
+      it('prepares the url to open the activity modal', function () {
         expect(CRM.url).toHaveBeenCalledWith('civicrm/case/activity', {
           action: 'update',
           id: activity.id,
@@ -58,6 +58,9 @@
           caseid: activity.case_id,
           reset: 1
         });
+      });
+
+      it('opens the modal to edit the activity', function () {
         expect(CRM.loadForm).toHaveBeenCalledWith(crmUrlReturnVal);
       });
 
