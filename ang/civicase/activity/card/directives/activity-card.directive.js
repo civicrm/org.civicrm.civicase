@@ -94,20 +94,25 @@
      * @param {object} activity
      */
     $scope.viewInPopup = function ($event, activity) {
-      if (!$event || !$($event.target).is('a, a *, input, button, button *')) {
-        var context = activity.case_id ? 'case' : 'activity';
-        var form = CRM.loadForm(CRM.url('civicrm/activity', {action: 'view', id: activity.id, reset: 1, context: context}))
-          .on('crmFormSuccess', function () {
-            $scope.refresh();
-          })
-          .on('crmLoad', function () {
-            $('a.delete.button').click(function () {
-              $scope.deleteActivity(activity, form);
-
-              return false;
-            });
-          });
+      if ($event && $($event.target).is('a, a *, input, button, button *')) {
+        return;
       }
+
+      var form = CRM.loadForm(CRM.url('civicrm/case/activity', {
+        action: 'update',
+        id: activity.id,
+        cid: $scope.case.client[0].contact_id,
+        caseid: activity.case_id,
+        reset: 1
+      })).on('crmFormSuccess', function () {
+        $scope.refresh();
+      }).on('crmLoad', function () {
+        $('a.delete.button').click(function () {
+          $scope.deleteActivity(activity, form);
+
+          return false;
+        });
+      });
     };
 
     /**
