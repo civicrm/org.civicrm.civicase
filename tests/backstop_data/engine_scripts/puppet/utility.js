@@ -20,4 +20,22 @@ module.exports = class CrmPage {
       return uiBlock.style.display === 'block';
     }, {}, selector);
   }
+
+  /**
+   * Waits for Angular to load by checking #bootstrap-theme element
+   */
+  async waitForAngular () {
+    await this.engine.waitForSelector('#bootstrap-theme');
+  }
+
+  /**
+   * Waits for all the loading placeholders to vanish
+   */
+  async waitForLoadingComplete () {
+    await this.engine.waitFor(() => {
+      const allLoadingElements = document.querySelectorAll('div[class*="civicase__loading-placeholder"]');
+
+      return allLoadingElements.length === 0;
+    });
+  }
 };

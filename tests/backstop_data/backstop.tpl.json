@@ -17,8 +17,7 @@
   "scenarios": [
     {
       "label": "Civicase - Dashboard",
-      "url": "{url}/civicrm/case/a/#/case",
-      "onReadyScript": "civicase/dashboard.js"
+      "url": "{url}/civicrm/case/a/#/case"
     }
   ],
   "report": ["CLI", "browser"],

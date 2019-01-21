@@ -1,4 +1,8 @@
-module.exports = async (page, scenario, vp) => {
+const Utility = require('./utility.js');
 
-  // add more ready handlers here...
+module.exports = async (page, scenario, vp) => {
+  const utility = new Utility(page, scenario, vp);
+
+  await utility.waitForAngular();
+  await utility.waitForLoadingComplete();
 };
