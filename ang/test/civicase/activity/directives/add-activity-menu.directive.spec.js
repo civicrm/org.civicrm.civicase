@@ -41,6 +41,36 @@
         });
       });
 
+      describe('activity menu', function () {
+        var activityTypeWithMaxInstance, activityTypeExceedingMaxInstanceIsHidden;
+
+        beforeEach(function () {
+          var activityTypes = CRM.civicase.caseTypes[1].definition.activityTypes;
+          activityTypeWithMaxInstance = activityTypes.find(function (activity) {
+            return activity.max_instances;
+          });
+          var actTypeId = _.findKey(CRM.civicase.activityTypes, {
+            name: activityTypeWithMaxInstance.name
+          });
+          var mockCase = {
+            case_type_id: 1,
+            allActivities: [
+              { id: _.uniqueId(), activity_type_id: actTypeId }
+            ]
+          };
+
+          initController(mockCase);
+
+          activityTypeExceedingMaxInstanceIsHidden = !_.find($scope.availableActivityTypes, function (activityType) {
+            return activityType.name === activityTypeWithMaxInstance.name;
+          });
+        });
+
+        it('hides activity types exceeding max instance', function () {
+          expect(activityTypeExceedingMaxInstanceIsHidden).toBe(true);
+        });
+      });
+
       /**
        * Initializes the add activity menu controller.
        *
