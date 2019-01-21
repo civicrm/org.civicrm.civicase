@@ -57,7 +57,7 @@
         if (exclude.indexOf(actSpec.name) < 0) {
           var actTypeId = _.findKey(civicase.activityTypes, {name: actSpec.name});
 
-          if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances >= parseInt(activityCount[actTypeId]))) {
+          if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances > parseInt(activityCount[actTypeId]))) {
             ret.push($.extend({id: actTypeId}, civicase.activityTypes[actTypeId]));
           }
         }
