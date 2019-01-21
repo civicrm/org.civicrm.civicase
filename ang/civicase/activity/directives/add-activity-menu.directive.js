@@ -24,14 +24,7 @@
         $scope.availableActivityTypes = getAvailableActivityTypes(
           $scope.case.activity_count, definition);
       } else {
-        $scope.$watch('case.definition', function (definition) {
-          if (!definition) {
-            return;
-          }
-
-          $scope.availableActivityTypes = getAvailableActivityTypes(
-            $scope.case.activity_count, definition);
-        });
+        initWatchers();
       }
     })();
 
@@ -64,7 +57,7 @@
         if (exclude.indexOf(actSpec.name) < 0) {
           var actTypeId = _.findKey(civicase.activityTypes, {name: actSpec.name});
 
-          if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances < activityCount[actTypeId])) {
+          if (!actSpec.max_instances || !activityCount[actTypeId] || (actSpec.max_instances >= parseInt(activityCount[actTypeId]))) {
             ret.push($.extend({id: actTypeId}, civicase.activityTypes[actTypeId]));
           }
         }
@@ -83,6 +76,25 @@
       }
 
       return _.sortBy(ret, 'label');
+    }
+
+    /**
+     * Initialise watchers
+     */
+    function initWatchers () {
+      $scope.$watch('case.definition', function (definition) {
+        if (!definition) {
+          return;
+        }
+
+        $scope.availableActivityTypes = getAvailableActivityTypes(
+          $scope.case.activity_count, definition);
+      });
+
+      $scope.$watch('case.allActivities', function () {
+        $scope.availableActivityTypes = getAvailableActivityTypes(
+          $scope.case.activity_count, $scope.case.definition);
+      });
     }
 
     /**
