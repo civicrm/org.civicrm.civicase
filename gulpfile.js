@@ -25,7 +25,7 @@ var sass = require('gulp-sass');
 var stripCssComments = require('gulp-strip-css-comments');
 var sourcemaps = require('gulp-sourcemaps');
 var transformSelectors = require('gulp-transform-selectors');
-var runBackstopJS = require('./gulp-tasks/backstopjs.js');
+var backstopJSTask = require('./gulp-tasks/backstopjs.js');
 
 var bootstrapNamespace = '#bootstrap-theme';
 var outsideNamespaceRegExp = /^\.___outside-namespace/;
@@ -109,7 +109,4 @@ gulp.task('test', function (done) {
   * 'backstopjs:openReport': For opening reports in the browser
   * 'backstopjs:approve': Approving reports
   */
-
-['reference', 'test', 'openReport', 'approve'].map(action => {
-  gulp.task('backstopjs:' + action, () => runBackstopJS(action));
-});
+['reference', 'test', 'openReport', 'approve'].map(backstopJSTask);

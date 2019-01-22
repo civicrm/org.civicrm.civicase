@@ -208,4 +208,11 @@ async function writeCookies () {
   fs.writeFileSync(cookieFilePath, JSON.stringify(cookies));
 }
 
-module.exports = runBackstopJS;
+/**
+ * Exports backstopJS related tasks task
+ *
+ * @param {String} action
+ */
+module.exports = (action) => {
+  gulp.task('backstopjs:' + action, () => runBackstopJS(action));
+};

@@ -64,7 +64,7 @@ This test suite is based on [BackstopJS](https://garris.github.io/BackstopJS) pl
 Documentation available [here](https://github.com/garris/BackstopJS#backstopjs)
 
 ### Requirements
-A CiviCRM with pre-configured CiviCRM, Shoreditch, CiviCase, and any other dependencies. [See how](https://github.com/compucorp/uk.co.compucorp.civicase#installation-civibuild)
+A Drupal site with pre-configured CiviCRM, Shoreditch, CiviCase, and any other dependencies. [See how](https://github.com/compucorp/uk.co.compucorp.civicase#installation-civibuild)
 
 #### Technical
 * [Node.js](https://nodejs.org/en/) v8.1.2
