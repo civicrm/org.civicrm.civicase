@@ -1,0 +1,21 @@
+.civicase__activity-month-nav {
+  height: 400px;
+  width: 120px;
+}
+
+.civicase__activity-month-nav__group-title {
+  color: $gray-darker;
+  font-weight: $crm-font-weight-h5;
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+.civicase__activity-month-nav__group-year {
+  color: $gray-darker;
+  margin-bottom: 10px;
+}
+
+.civicase__activity-month-nav__group-month {
+  color: $crm-gray-matte;
+  font-weight: $font-weight-heading;
+}

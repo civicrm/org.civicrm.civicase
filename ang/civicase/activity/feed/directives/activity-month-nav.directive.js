@@ -5,7 +5,7 @@
     return {
       restrict: 'A',
       replace: true,
-      templateUrl: '~/civicase/activity/feed/activity-month-nav.directive.html'
+      templateUrl: '~/civicase/activity/feed/directives/activity-month-nav.directive.html'
     };
   });
 })(angular, CRM.$, CRM._, CRM);
