@@ -101,7 +101,6 @@
       CRM.loadForm(CRM.url('civicrm/case/activity', {
         action: 'update',
         id: activity.id,
-        cid: $scope.case.client[0].contact_id,
         caseid: activity.case_id,
         reset: 1
       })).on('crmFormSuccess', function () {
