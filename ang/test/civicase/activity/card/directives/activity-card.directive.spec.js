@@ -26,18 +26,11 @@
     });
 
     describe('when editing an activity in the popup', function () {
-      var activity, caseObj, loadFormSpy, crmUrlReturnVal, crmFormSuccessCallback;
+      var activity, loadFormSpy, crmUrlReturnVal, crmFormSuccessCallback;
 
       beforeEach(function () {
         crmUrlReturnVal = 'some string';
         activity = activitiesMockData.get()[0];
-        caseObj = {
-          client: [{
-            contact_id: '1'
-          }]
-        };
-
-        activityCard.isolateScope().case = caseObj;
 
         loadFormSpy = jasmine.createSpyObj('loadForm', ['on']);
         loadFormSpy.on.and.callFake(function (event, fn) {
@@ -54,7 +47,6 @@
         expect(CRM.url).toHaveBeenCalledWith('civicrm/case/activity', {
           action: 'update',
           id: activity.id,
-          cid: caseObj.client[0].contact_id,
           caseid: activity.case_id,
           reset: 1
         });
