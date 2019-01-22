@@ -14,12 +14,6 @@
     "html_report": "html_report",
     "ci_report": "ci_report"
   },
-  "scenarios": [
-    {
-      "label": "Civicase - Dashboard",
-      "url": "{url}/civicrm/case/a/#/case"
-    }
-  ],
   "report": ["CLI", "browser"],
   "engine": "puppeteer",
   "engineOptions": {

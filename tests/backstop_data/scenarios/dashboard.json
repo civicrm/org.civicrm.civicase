@@ -1,0 +1,8 @@
+{
+  "scenarios": [
+    {
+      "label": "Civicase - Dashboard",
+      "url": "{url}/civicrm/case/a/#/case"
+    }
+  ]
+}

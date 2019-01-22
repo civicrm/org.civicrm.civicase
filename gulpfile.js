@@ -53,6 +53,36 @@ var bootstrapNamespace = '#bootstrap-theme';
 var outsideNamespaceRegExp = /^\.___outside-namespace/;
 
 /**
+ * Returns the list of the scenarios from
+ *   a. All the different groups if `group` is == '_all_',
+ *   b. Only the given group
+ *
+ * @param {String} group
+ * @return {Array}
+ */
+function buildScenariosList (group) {
+  const config = siteConfig();
+  const dirPath = path.join(BACKSTOP_DIR, 'scenarios');
+
+  return _(fs.readdirSync(dirPath))
+    .filter(scenario => {
+      return (group === '_all_' ? true : scenario === `${group}.json`) && scenario.endsWith('.json');
+    })
+    .map(scenario => {
+      return JSON.parse(fs.readFileSync(path.join(dirPath, scenario))).scenarios;
+    })
+    .flatten()
+    .map((scenario, index, scenarios) => {
+      return _.assign(scenario, {
+        cookiePath: path.join(BACKSTOP_DIR, 'cookies', 'admin.json'),
+        count: '(' + (index + 1) + ' of ' + scenarios.length + ')',
+        url: scenario.url.replace('{url}', config.url)
+      });
+    })
+    .value();
+}
+
+/**
  * Removes the temp config file and sends a notification
  * based on the given outcome from BackstopJS
  *
@@ -77,17 +107,11 @@ function cleanUpAndNotify (success) {
  * @return {String}
  */
 function createTempConfig () {
-  var config = siteConfig();
+  var group = argv.group ? argv.group : '_all_';
+  var list = buildScenariosList(group);
   var content = JSON.parse(fs.readFileSync(FILES.tpl));
 
-  content.scenarios = _(content.scenarios).map((scenario, index, scenarios) => {
-    return _.assign(scenario, {
-      cookiePath: path.join(BACKSTOP_DIR, 'cookies', 'admin.json'),
-      count: '(' + (index + 1) + ' of ' + scenarios.length + ')',
-      url: scenario.url.replace('{url}', config.url)
-    });
-  })
-    .value();
+  content.scenarios = list;
 
   ['bitmaps_reference', 'bitmaps_test', 'html_report', 'ci_report', 'engine_scripts'].forEach(path => {
     content.paths[path] = BACKSTOP_DIR + content.paths[path];
