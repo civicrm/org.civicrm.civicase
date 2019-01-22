@@ -56,7 +56,6 @@
   "devDependencies": {
     "ansi-colors": "^2.0.2",
     "backstopjs": "^3.3.1",
-    "clean": "^4.0.2",
     "civicrm-cv": "^0.1.2",
     "civicrm-scssroot": "git://github.com/totten/civicrm-scssroot.git#v0.1.1",
     "fs": "0.0.1-security",
