@@ -13,8 +13,8 @@
 
   <div class="panel-body clearfix">
     <div crm-ui-debug="activities"></div>
-    <div class="civicase__activity-feed__list-container">
-      <div class="civicase__activity-feed__list-container__left">
+    <div class="civicase__activity-feed__body">
+      <div class="civicase__activity-feed__body__list">
         <div
           class="panel panel-default civicase__panel-transparent-header"
           ng-if="activityGroup.activities.length" ng-repeat="activityGroup in activityGroups">
@@ -85,7 +85,7 @@
       <!-- activity details -->
       <div
         civicase-activity-details-affix
-        class="civicase__activity-feed__list-container__right"
+        class="civicase__activity-feed__body__details"
         civicase-activity-panel="viewingActivity"
         refresh-callback="refreshAll"
         ng-if="viewingActivity.id">

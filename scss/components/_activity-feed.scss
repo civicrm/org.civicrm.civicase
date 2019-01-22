@@ -133,18 +133,18 @@
   }
 }
 
-.civicase__activity-feed__list-container {
+.civicase__activity-feed__body {
   display: flex;
   justify-content: center;
 }
 
-.civicase__activity-feed__list-container__left {
+.civicase__activity-feed__body__list {
   min-width: 620px;
   overflow: auto;
   width: 50%;
 }
 
-.civicase__activity-feed__list-container__right {
+.civicase__activity-feed__body__details {
   min-width: 425px;
   width: 30%;
 }
@@ -156,11 +156,11 @@
 }
 
 @media screen and (max-width: $activity-feed-breakpoint) {
-  .civicase__activity-feed__list-container__left {
+  .civicase__activity-feed__body__list {
     width: 60%;
   }
 
-  .civicase__activity-feed__list-container__right {
+  .civicase__activity-feed__body__details {
     width: 40%;
   }
 }
