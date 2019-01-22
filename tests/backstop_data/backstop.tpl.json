@@ -1,0 +1,26 @@
+{
+  "id": "civicase_5_1",
+  "viewports": [{
+    "name": "desktop",
+    "width": 1920,
+    "height": 3000
+  }],
+  "onBeforeScript": "onBefore.js",
+  "onReadyScript": "onReady.js",
+  "paths": {
+    "bitmaps_reference": "screenshots/reference",
+    "bitmaps_test": "screenshots/test",
+    "engine_scripts": "engine_scripts/puppet",
+    "html_report": "html_report",
+    "ci_report": "ci_report"
+  },
+  "report": ["CLI", "browser"],
+  "engine": "puppeteer",
+  "engineOptions": {
+    "waitTimeout": 120000
+  },
+  "asyncCaptureLimit": 1,
+  "asyncCompareLimit": 50,
+  "debug": false,
+  "debugWindow": false
+}

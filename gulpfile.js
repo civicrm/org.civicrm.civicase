@@ -10,21 +10,22 @@
  */
 'use strict';
 
-var gulp = require('gulp');
-var bulk = require('gulp-sass-bulk-import');
-var sass = require('gulp-sass');
-var civicrmScssRoot = require('civicrm-scssroot')();
-var postcss = require('gulp-postcss');
-var postcssPrefix = require('postcss-prefix-selector');
-var postcssDiscardDuplicates = require('postcss-discard-duplicates');
-var stripCssComments = require('gulp-strip-css-comments');
-var transformSelectors = require('gulp-transform-selectors');
-var cssmin = require('gulp-cssmin');
-var rename = require('gulp-rename');
-var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('gulp-autoprefixer');
+var bulk = require('gulp-sass-bulk-import');
+var civicrmScssRoot = require('civicrm-scssroot')();
+var cssmin = require('gulp-cssmin');
+var gulp = require('gulp');
 var karma = require('karma');
 var path = require('path');
+var postcss = require('gulp-postcss');
+var postcssDiscardDuplicates = require('postcss-discard-duplicates');
+var postcssPrefix = require('postcss-prefix-selector');
+var rename = require('gulp-rename');
+var sass = require('gulp-sass');
+var stripCssComments = require('gulp-strip-css-comments');
+var sourcemaps = require('gulp-sourcemaps');
+var transformSelectors = require('gulp-transform-selectors');
+var backstopJSTask = require('./gulp-tasks/backstopjs.js');
 
 var bootstrapNamespace = '#bootstrap-theme';
 var outsideNamespaceRegExp = /^\.___outside-namespace/;
@@ -100,3 +101,12 @@ gulp.task('test', function (done) {
     singleRun: true
   }, done).start();
 });
+
+/**
+  * Gulp backstop tasks
+  * 'backstopjs:reference': For creating reference screenshots
+  * 'backstopjs:test': For creating test screenshots and matching them
+  * 'backstopjs:openReport': For opening reports in the browser
+  * 'backstopjs:approve': Approving reports
+  */
+['reference', 'test', 'openReport', 'approve'].map(backstopJSTask);
