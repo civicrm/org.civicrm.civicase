@@ -109,7 +109,6 @@
       var args = {
         action: 'add',
         reset: 1,
-        cid: $scope.case.client[0].contact_id,
         caseid: $scope.case.id,
         atype: actType.id,
         civicase_reload: caseQueryParams
