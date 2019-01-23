@@ -70,7 +70,7 @@
         <div id="toolbar" style="height: 100px;">Toolbar</div>
         <div class="civicase__case-body_tab" style="height: 100px;">Case tabs</div>
         <div class="civicase__activity-filter" style="height: 100px;">Case filters</div>
-        <div class="civicase__activity-feed__list-container" style="height: 600px;">
+        <div class="civicase__activity-feed__body" style="height: 600px;">
           Activity feed list container
         </div>
         <div class="activity-panel">
@@ -84,7 +84,7 @@
       $(html).appendTo('body');
 
       $activityPanel = $('.activity-panel');
-      $feedListContainer = $('.civicase__activity-feed__list-container');
+      $feedListContainer = $('.civicase__activity-feed__body');
     }
   });
 })(CRM.$);

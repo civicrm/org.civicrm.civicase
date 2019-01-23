@@ -142,7 +142,7 @@
 
       beforeEach(function () {
         $filter = CRM.$('.civicase__activity-filter');
-        $feedListContainer = CRM.$('.civicase__activity-feed__list-container');
+        $feedListContainer = CRM.$('.civicase__activity-feed__body');
         $tabs = CRM.$('.civicase__dashboard').length > 0 ? CRM.$('.civicase__dashboard__tab-container ul.nav') : CRM.$('.civicase__case-body_tab');
         $toolbarDrawer = CRM.$('#toolbar');
 
@@ -232,7 +232,7 @@
       options = options || {};
       var activityDetailsPanel = angular.element('<div civicase-activity-details-affix><div class="civicase__activity-panel"></div></div>');
 
-      CRM.$('<div class="civicase__activity-feed__list-container"></div>').appendTo('body');
+      CRM.$('<div class="civicase__activity-feed__body"></div>').appendTo('body');
       CRM.$('<div class="civicase__activity-filter"></div>').appendTo('body');
       CRM.$('<div id="toolbar"></div>').appendTo('body');
 
@@ -247,7 +247,7 @@
      * Removes DOM elements added for testing purposes.
      */
     function removeTestDomElements () {
-      CRM.$('.civicase__activity-feed__list-container').remove();
+      CRM.$('.civicase__activity-feed__body').remove();
       CRM.$('.civicase__activity-filter').remove();
       CRM.$('#toolbar').remove();
     }
