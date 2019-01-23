@@ -4,7 +4,7 @@
   module.directive('civicaseFileUploader', function () {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/shared/file/file-uploader.directive.html',
+      templateUrl: '~/civicase/shared/directives/file-uploader.directive.html',
       controller: caseFilesUploaderController,
       scope: {
         ctx: '=civicaseFileUploader',
