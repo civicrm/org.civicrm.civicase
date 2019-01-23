@@ -9,6 +9,10 @@
   .civicase__panel-transparent-header {
     margin: auto;
 
+    &:not(:first-child) {
+      margin-top: 35px;
+    }
+
     > .panel-body {
       background: transparent;
       border-top: 0;
