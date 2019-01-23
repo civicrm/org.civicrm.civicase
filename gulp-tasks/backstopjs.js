@@ -1,3 +1,10 @@
+/**
+ * @file
+ * This file contains functional configurations for setting up backstopJS test suite
+ */
+
+'use strict';
+
 var _ = require('lodash');
 var argv = require('yargs').argv;
 var backstopjs = require('backstopjs');
