@@ -1,6 +1,6 @@
 /**
  * @file
- * This file contains function for karma tests gulp task
+ * Exports Gulp "test" task
  */
 
 'use strict';

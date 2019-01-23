@@ -1,10 +1,6 @@
 /**
  * @file
- * This file contains function for sass gulp task
- *
- * The gulp task compiles and minifies scss/civicase.scss file into css/civicase.min.css.
- * Also prefix the output css selector with `#bootstrap-theme` selector except the output.
- * selector starts from either `body`, `page-civicrm-case` or `.___outside-namespace` classes.
+ * Exports Gulp "sass" task
  */
 
 'use strict';
@@ -23,9 +19,14 @@ var stripCssComments = require('gulp-strip-css-comments');
 var sourcemaps = require('gulp-sourcemaps');
 var transformSelectors = require('gulp-transform-selectors');
 
-var bootstrapNamespace = '#bootstrap-theme';
-var outsideNamespaceRegExp = /^\.___outside-namespace/;
+var BOOTSTRAP_NAMESPACE = '#bootstrap-theme';
+var OUTSIDE_NAMESPACE_REGEX = /^\.___outside-namespace/;
 
+/*
+ * The gulp task compiles and minifies scss/civicase.scss file into css/civicase.min.css.
+ * Also prefix the output css selector with `#bootstrap-theme` selector except the output.
+ * selector starts from either `body`, `page-civicrm-case` or `.___outside-namespace` classes.
+ */
 function sassTask () {
   return gulp.src('scss/civicase.scss')
     .pipe(bulk())
@@ -41,8 +42,8 @@ function sassTask () {
     }).on('error', sass.logError))
     .pipe(stripCssComments({ preserve: false }))
     .pipe(postcss([postcssPrefix({
-      prefix: bootstrapNamespace + ' ',
-      exclude: [/^body/, /page-civicrm-case/, outsideNamespaceRegExp]
+      prefix: BOOTSTRAP_NAMESPACE + ' ',
+      exclude: [/^body/, /page-civicrm-case/, OUTSIDE_NAMESPACE_REGEX]
     }), postcssDiscardDuplicates]))
     .pipe(transformSelectors(removeOutsideNamespaceMarker, { splitOnCommas: true }))
     .pipe(cssmin({ sourceMap: true }))
@@ -59,7 +60,7 @@ function sassTask () {
  * @return {String}
  */
 function removeOutsideNamespaceMarker (selector) {
-  return selector.replace(outsideNamespaceRegExp, '');
+  return selector.replace(OUTSIDE_NAMESPACE_REGEX, '');
 }
 
 module.exports = sassTask;

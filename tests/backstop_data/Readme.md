@@ -48,9 +48,8 @@ The backstop test suite for Civicase 5.1 extension covers following screens
 - [ ] Contact Page - Case Tab - Loading more results icon (When clicked on load more
 
 ## Modals
-- [ ] Modals - Contact Popover Modal
-- [ ] Modals - + 1 Contact Popover Modal
-- [ ] Modals - Dashboard Main screen - Calendar - Acitivity card
+- [ ] Modals - Contact Popover
+- [ ] Modals - Additional Contacts Popover
 - [ ] Modals - Status popup for activity details
 - [ ] Modals - Manage Cases - Next Activity - card menu
 - [ ] Modals - Manage Cases - Case Detail - Actions Menu

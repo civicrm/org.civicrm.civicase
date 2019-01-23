@@ -1,9 +1,7 @@
 /**
  * @file
- * This file contains function for sass:sync gulp task
+ * Exports Gulp "sass:sync" task
  */
-
-'use strict';
 
 var civicrmScssRoot = require('civicrm-scssroot')();
 
