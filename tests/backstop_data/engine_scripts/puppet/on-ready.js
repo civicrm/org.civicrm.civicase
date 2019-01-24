@@ -8,7 +8,7 @@ module.exports = async (page, scenario, vp) => {
 
   await utility.waitForAngular();
 
-  if (!scenario.showLoading) {
+  if (!scenario.captureLoadingScreen) {
     await utility.waitForLoadingComplete();
   }
 

@@ -13,7 +13,7 @@ module.exports = async (page, scenario, vp) => {
       await page.waitFor(hoverSelectorIndex);
       await page.hover(hoverSelectorIndex);
 
-      if (scenario.loadsAjax) {
+      if (scenario.waitForAjaxComplete) {
         await utility.waitForLoadingComplete();
       }
     }
@@ -24,7 +24,7 @@ module.exports = async (page, scenario, vp) => {
       await page.waitFor(clickSelectorIndex);
       await page.click(clickSelectorIndex);
 
-      if (scenario.loadsAjax) {
+      if (scenario.waitForAjaxComplete) {
         await utility.waitForLoadingComplete();
       }
     }
