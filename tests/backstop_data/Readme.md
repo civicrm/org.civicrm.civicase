@@ -11,10 +11,11 @@
 The backstop test suite for Civicase 5.1 extension covers following screens
 
 ## Dashboard
-- [ ] Dashboard Main screen - With overview table expanded and tooltip visible on one of the titles
-- [ ] Dashboard Overview table with gear icon opened
-- [ ] Dashboard Main screen - with loading screens
-- [ ] Dashboard Main screen - Calendar - Acitivity card
+- [x] Dashboard Main screen - With overview table expanded and tooltip visible on one of the titles
+- [x] Dashboard Overview table with gear icon opened
+- [x] Dashboard Main screen - with loading screens
+- [x] Dashboard Main screen - Calendar - Acitivity card
+- [x] Dashboard Main screen - Calendar - Acitivity card - Loading State
 - [ ] Dashboard Main screen  - Empty State
 
 ## Activities Feed Panel
@@ -64,3 +65,15 @@ The backstop test suite for Civicase 5.1 extension covers following screens
 - [ ] Modals - Manage Cases - Case Detail - Actions Menu
 - [ ] Modals - Manage Cases - Case Detail - Actions Menu - Edit Tags
 - [ ] Modals - Manage Cases List - Files - menu actions
+
+# Developer Guide
+
+Scenario object by default contains `label` key and `url` key and [some others](https://github.com/garris/BackstopJS#advanced-scenarios)
+
+This test suite is customised for angular app specific to civicase, so it uses some custom prorperties on top
+
+```
+waitForAjaxComplete             // Set to true if any event (click/hover) loads some content through AJAX
+isUIBPopover                    // Set to true if the hover state opens a uib popover
+captureLoadingScreen            // Sets to true if backstop don't want to wait for loading state to complete and capture the loading screen
+```
