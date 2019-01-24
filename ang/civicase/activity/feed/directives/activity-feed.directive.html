@@ -15,6 +15,16 @@
     <div crm-ui-debug="activities"></div>
     <div class="civicase__activity-feed__body">
       <div class="civicase__activity-feed__body__list">
+        <!-- Pager -->
+        <div class="text-center civicase__activity-feed-pager">
+          <div class="civicase__activity-feed-pager__more" ng-if="checkIfRecordsAvailableOnDirection('up')">
+            <button
+              class="btn btn-primary" ng-click="previousPage()"
+              title="{{ ts('Click for more') }}">&nbsp; LOAD MORE &nbsp;
+            </button>
+          </div>
+        </div>
+        <!-- End - Pager -->
         <div
           class="panel panel-default civicase__panel-transparent-header"
           ng-if="activityGroup.activities.length" ng-repeat="activityGroup in activityGroups">
@@ -55,6 +65,7 @@
                 <div class="civicase__activity-feed__activity-container">
                   <div
                     case-activity-card="activity"
+                    data-offset-number="{{activity.cardId}}"
                     mode="long"
                     refresh-on-checkbox-toggle="true"
                     bulk-allowed="bulkAllowed"
@@ -68,12 +79,12 @@
         </div>
         <!-- Pager -->
         <div class="text-center civicase__activity-feed-pager">
-          <div class="civicase__activity-feed-pager__no-more" ng-if="!remaining">
+          <div class="civicase__activity-feed-pager__no-more" ng-if="!checkIfRecordsAvailableOnDirection('down')">
             <button class="btn btn-default" disabled>
-              {{ remaining === false ? ts('None Found') : ts('Showing all %1', {1: totalCount}) }}
+              {{ totalCount === 0 ? ts('None Found') : ts('Showing all %1', {1: totalCount}) }}
             </button>
           </div>
-          <div class="civicase__activity-feed-pager__more" ng-if="remaining && remaining !== true">
+          <div class="civicase__activity-feed-pager__more" ng-if="checkIfRecordsAvailableOnDirection('down')">
             <button
               class="btn btn-primary" ng-click="nextPage()"
               title="{{ ts('Click for more') }}">&nbsp; LOAD MORE &nbsp;
