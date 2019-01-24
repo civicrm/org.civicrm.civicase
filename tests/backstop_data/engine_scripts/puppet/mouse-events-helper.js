@@ -1,12 +1,21 @@
-module.exports = async (page, scenario) => {
-  var hoverSelector = scenario.hoverSelectors || scenario.hoverSelector;
-  var clickSelector = scenario.clickSelectors || scenario.clickSelector;
-  var postInteractionWait = scenario.postInteractionWait; // selector [str] | ms [int]
+'use strict';
+
+const Utility = require('./utility.js');
+
+module.exports = async (page, scenario, vp) => {
+  const hoverSelector = scenario.hoverSelectors || scenario.hoverSelector;
+  const clickSelector = scenario.clickSelectors || scenario.clickSelector;
+  const postInteractionWait = scenario.postInteractionWait; // selector [str] | ms [int]
+  const utility = new Utility(page, scenario, vp);
 
   if (hoverSelector) {
     for (const hoverSelectorIndex of [].concat(hoverSelector)) {
       await page.waitFor(hoverSelectorIndex);
       await page.hover(hoverSelectorIndex);
+
+      if (scenario.loadsAjax) {
+        await utility.waitForLoadingComplete();
+      }
     }
   }
 
@@ -14,6 +23,10 @@ module.exports = async (page, scenario) => {
     for (const clickSelectorIndex of [].concat(clickSelector)) {
       await page.waitFor(clickSelectorIndex);
       await page.click(clickSelectorIndex);
+
+      if (scenario.loadsAjax) {
+        await utility.waitForLoadingComplete();
+      }
     }
   }
 

@@ -7,7 +7,10 @@ module.exports = async (page, scenario, vp) => {
   const utility = new Utility(page, scenario, vp);
 
   await utility.waitForAngular();
-  await utility.waitForLoadingComplete();
+
+  if (!scenario.showLoading) {
+    await utility.waitForLoadingComplete();
+  }
 
   await mouseEventsHelper(page, scenario);
 };
