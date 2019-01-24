@@ -5,8 +5,8 @@
     "width": 1920,
     "height": 3000
   }],
-  "onBeforeScript": "onBefore.js",
-  "onReadyScript": "onReady.js",
+  "onBeforeScript": "on-before.js",
+  "onReadyScript": "on-ready.js",
   "paths": {
     "bitmaps_reference": "screenshots/reference",
     "bitmaps_test": "screenshots/test",
