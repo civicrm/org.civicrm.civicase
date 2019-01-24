@@ -7,10 +7,10 @@
  * sass:sync
  * sass
  * test
- * backstopjs
- * backstopjs
- * backstopjs
- * backstopjs
+ * backstopjs:reference
+ * backstopjs:test
+ * backstopjs:openReport
+ * backstopjs:approve
  * watch
  */
 

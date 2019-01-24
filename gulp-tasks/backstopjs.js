@@ -1,6 +1,6 @@
 /**
  * @file
- * This file contains functional configurations for setting up backstopJS test suite
+ * Contains functional configurations for setting up backstopJS test suite
  */
 
 'use strict';
