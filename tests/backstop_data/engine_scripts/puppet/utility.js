@@ -38,4 +38,17 @@ module.exports = class CrmPage {
       return allLoadingElements.length === 0;
     });
   }
+
+  /**
+   * Clones UIB Popover popup DOM node
+   */
+  async cloneUibPopover () {
+    await this.engine.evaluate(() => {
+      let uibPopover = document.querySelector('div[uib-popover-popup]');
+      const uibPopoverClone = uibPopover.cloneNode(true);
+
+      // Insert the new node before the reference node
+      uibPopover.parentNode.insertBefore(uibPopoverClone, uibPopover.nextSibling);
+    });
+  }
 };

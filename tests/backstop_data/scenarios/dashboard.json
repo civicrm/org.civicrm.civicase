@@ -4,7 +4,8 @@
       "label": "Civicase - Dashboard - With overview table expanded and tooltip visible on one of the titles",
       "url": "{url}/civicrm/case/a/#/case",
       "clickSelector": ".civicase__case-overview__flow-status-settings + .civicase__case-overview__flow-status__icon",
-      "hoverSelector": ".civicase__case-overview__flow-status--hoverable"
+      "hoverSelector": ".civicase__case-overview__flow-status--hoverable",
+      "isUIBPopover": true
     },
     {
       "label": "Civicase - Dashboard - With overview table expanded and gear icon opened",

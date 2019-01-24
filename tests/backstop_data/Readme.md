@@ -1,3 +1,12 @@
+# Data Setup/Requirements
+ The backstopJS test suite needs following to be setup in prior
+
+## Dashboard Section
+
+* The current month calendar has atleast one day with some activity
+
+---
+
 # Covered Screens
 The backstop test suite for Civicase 5.1 extension covers following screens
 
