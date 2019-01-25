@@ -1,0 +1,60 @@
+{
+  "scenarios": [{
+    "label": "Activity Feed Panel - Main Section",
+    "url": "{url}/civicrm/case/a/#/case?dtab=1"
+  },
+  {
+    "label": "Activity Feed Panel - Bulk Actions",
+    "url": "{url}/civicrm/case/a/#/case?dtab=1",
+    "onReadyScript": "activity-feed-panel/bulk-actions.js"
+  },
+  {
+    "label": "Activity Feed Panel - Loading State",
+    "url": "{url}/civicrm/case/a/#/case?dtab=1",
+    "captureLoadingScreen": true
+  },
+  {
+    "label": "Activity Feed Panel - Load more clicked",
+    "url": "{url}/civicrm/case/a/#/case?dtab=1",
+    "clickSelector": ".civicase__activity-feed-pager__more .btn"
+  },
+  {
+    "label": "Activity Feed Panel - Selected Filter",
+    "url": "{url}/civicrm/case/a/#/case?dtab=1",
+    "clickSelectors": [
+      ".civicase__activity-filter__more",
+      ".civicase__activity-filter__contact"
+    ]
+  },
+  {
+    "label": "Activity Feed Panel - Activity Details - Select Activity",
+    "url": "{url}/civicrm/case/a/#/case?dtab=1",
+    "onReadyScript": "activity-feed-panel/activity-detail.js"
+  },
+  {
+    "label": "Activity Feed Panel - Activity Details - Selected Activity - Details",
+    "url": "{url}/civicrm/case/a/#/case?dtab=1",
+    "onReadyScript": "activity-feed-panel/activity-detail.js",
+    "selectors": [".CRM_Activity_Form_Activity"]
+  },
+  {
+    "label": "Activity Feed Panel - Activity Card Menu",
+    "url": "{url}/civicrm/case/a/#/case?dtab=1",
+    "clickSelector": ".civicase__activity-feed__list:first-child .civicase__activity-card .civicase__activity-card-menu"
+  },
+  {
+    "label": "Activity Feed Panel - Activity Details - Edit Activity",
+    "url": "{url}/civicrm/case/a/#/case?dtab=1",
+    "onReadyScript": "activity-feed-panel/activity-edit-details.js"
+  },
+  {
+    "label": "Activity Feed Panel - On Manage Cases",
+    "url": "{url}/civicrm/case/a/#/case/list",
+    "onReadyScript": "activity-feed-panel/on-manage-cases.js"
+  },
+  {
+    "label": "Activity Feed Panel - On Contact Page",
+    "url": "{url}/civicrm/contact/search?reset=1",
+    "onReadyScript": "activity-feed-panel/on-contact-page.js"
+  }]
+}

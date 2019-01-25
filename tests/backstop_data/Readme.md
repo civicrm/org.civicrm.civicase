@@ -5,6 +5,9 @@
 
 * The current calendar month has at least one day with some activities
 
+## Contact Section
+* Make sure the civicase is installed with demo data and should have a contact name "Betty Adams" and have some activities for the contact
+
 ---
 
 # Covered Screens

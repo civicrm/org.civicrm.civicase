@@ -2,8 +2,8 @@
   "id": "Civicase 5.1",
   "viewports": [{
     "name": "desktop",
-    "width": 1920,
-    "height": 3000
+    "width": 1680,
+    "height": 1050
   }],
   "onBeforeScript": "on-before.js",
   "onReadyScript": "on-ready.js",

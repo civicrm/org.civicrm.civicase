@@ -29,8 +29,7 @@ async function hoverSelectorAction (page, scenario, viewport) {
   const utility = new Utility(page, scenario, viewport);
 
   for (const hoverSelector of hoverSelectors) {
-    await page.waitFor(hoverSelector);
-    await page.hover(hoverSelector);
+    await utility.waitForAndHover(clickSelectorIndex);
 
     if (scenario.waitForAjaxComplete) {
       await utility.waitForLoadingComplete();
@@ -50,8 +49,7 @@ async function clickSelectorAction (page, scenario, viewport) {
   const utility = new Utility(page, scenario, viewport);
 
   for (const clickSelector of clickSelectors) {
-    await page.waitFor(clickSelector);
-    await page.click(clickSelector);
+    await utility.waitForAndClick(clickSelectorIndex);
 
     if (scenario.waitForAjaxComplete) {
       await utility.waitForLoadingComplete();
