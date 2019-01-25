@@ -3,7 +3,7 @@
 
 ## Dashboard Section
 
-* The current month calendar has atleast one day with some activity
+* The current calendar month has at least one day with some activities
 
 ---
 

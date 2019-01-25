@@ -1,7 +1,7 @@
 'use strict';
 
 const Utility = require('./utility.js');
-const mouseEventsHelper = require('./mouse-events-helper');
+const mouseEventsHelper = require('./mouse-events-helper.js');
 
 module.exports = async (page, scenario, vp) => {
   const utility = new Utility(page, scenario, vp);

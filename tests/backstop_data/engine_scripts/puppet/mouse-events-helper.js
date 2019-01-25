@@ -2,35 +2,59 @@
 
 const Utility = require('./utility.js');
 
-module.exports = async (page, scenario, vp) => {
-  const hoverSelector = scenario.hoverSelectors || scenario.hoverSelector;
-  const clickSelector = scenario.clickSelectors || scenario.clickSelector;
-  const postInteractionWait = scenario.postInteractionWait; // selector [str] | ms [int]
-  const utility = new Utility(page, scenario, vp);
+module.exports = async (page, scenario, viewport) => {
+  const actions = [
+    { name: 'hoverSelector', execute: hoverSelectorAction },
+    { name: 'hoverSelectors', execute: hoverSelectorAction },
+    { name: 'clickSelector', execute: clickSelectorAction },
+    { name: 'clickSelectors', execute: clickSelectorAction }
+  ];
 
-  if (hoverSelector) {
-    for (const hoverSelectorIndex of [].concat(hoverSelector)) {
-      await page.waitFor(hoverSelectorIndex);
-      await page.hover(hoverSelectorIndex);
+  for (const action of actions) {
+    const scenarioHasAction = !!scenario[action.name];
 
-      if (scenario.waitForAjaxComplete) {
-        await utility.waitForLoadingComplete();
-      }
-    }
-  }
-
-  if (clickSelector) {
-    for (const clickSelectorIndex of [].concat(clickSelector)) {
-      await page.waitFor(clickSelectorIndex);
-      await page.click(clickSelectorIndex);
-
-      if (scenario.waitForAjaxComplete) {
-        await utility.waitForLoadingComplete();
-      }
-    }
-  }
-
-  if (postInteractionWait) {
-    await page.waitFor(postInteractionWait);
+    scenarioHasAction && await action.execute(page, scenario, viewport);
   }
 };
+
+/**
+ * Action handler for hover event
+ *
+ * @param {Object} page pupettter engine object
+ * @param {Object} scenario object of each scenario
+ * @param {Object} viewport viewport configurations
+ */
+async function hoverSelectorAction (page, scenario, viewport) {
+  const hoverSelectors = scenario.hoverSelectors || [ scenario.hoverSelector ];
+  const utility = new Utility(page, scenario, viewport);
+
+  for (const hoverSelector of hoverSelectors) {
+    await page.waitFor(hoverSelector);
+    await page.hover(hoverSelector);
+
+    if (scenario.waitForAjaxComplete) {
+      await utility.waitForLoadingComplete();
+    }
+  }
+}
+
+/**
+ * Action handler for click event
+ *
+ * @param {Object} page pupettter engine object
+ * @param {Object} scenario object of each scenario
+ * @param {Object} viewport viewport configurations
+ */
+async function clickSelectorAction (page, scenario, viewport) {
+  const clickSelectors = scenario.clickSelectors || [ scenario.clickSelector ];
+  const utility = new Utility(page, scenario, viewport);
+
+  for (const clickSelector of clickSelectors) {
+    await page.waitFor(clickSelector);
+    await page.click(clickSelector);
+
+    if (scenario.waitForAjaxComplete) {
+      await utility.waitForLoadingComplete();
+    }
+  }
+}
