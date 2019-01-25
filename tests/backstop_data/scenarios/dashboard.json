@@ -1,8 +1,35 @@
 {
   "scenarios": [
     {
-      "label": "Civicase - Dashboard",
-      "url": "{url}/civicrm/case/a/#/case"
+      "label": "Civicase - Dashboard - With overview table expanded and tooltip visible on one of the titles",
+      "url": "{url}/civicrm/case/a/#/case",
+      "clickSelector": ".civicase__case-overview__flow-status-settings + .civicase__case-overview__flow-status__icon",
+      "hoverSelector": ".civicase__case-overview__flow-status--hoverable",
+      "isUIBPopover": true
+    },
+    {
+      "label": "Civicase - Dashboard - With overview table expanded and gear icon opened",
+      "url": "{url}/civicrm/case/a/#/case",
+      "clickSelectors": [
+        ".civicase__case-overview__flow-status-settings + .civicase__case-overview__flow-status__icon",
+        ".civicase__case-overview__flow-status-settings"
+      ]
+    },
+    {
+      "label": "Civicase - Dashboard - Loading State",
+      "url": "{url}/civicrm/case/a/#/case",
+      "captureLoadingScreen": true
+    },
+    {
+      "label": "Civicase - Dashboard - Calendar - Activity Card",
+      "url": "{url}/civicrm/case/a/#/case",
+      "clickSelector": ".civicase__activities-calendar__day-status",
+      "waitForAjaxComplete": true
+    },
+    {
+      "label": "Civicase - Dashboard - Calendar - Activity Card - Loading state",
+      "url": "{url}/civicrm/case/a/#/case",
+      "clickSelector": ".civicase__activities-calendar__day-status"
     }
   ]
 }
