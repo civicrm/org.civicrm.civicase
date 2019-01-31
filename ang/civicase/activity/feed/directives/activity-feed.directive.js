@@ -392,39 +392,41 @@
      * Initiate watchers and event handlers
      */
     function initiateWatchersAndEvents () {
-      $scope.$watchCollection('filters', function () {
-        activityStartingOffset = 0;
-        pageNum.up = 0;
-        getActivities({ direction: 'down' });
-      });
-      $scope.$watchCollection('displayOptions', function () {
-        activityStartingOffset = 0;
-        pageNum.up = 0;
-        getActivities({ direction: 'down' });
-      });
-      $scope.$watch('params.filters', function () {
-        activityStartingOffset = 0;
-        pageNum.up = 0;
-        getActivities({ direction: 'down' });
-      }, true);
-      $scope.$on('updateCaseData', function () {
-        activityStartingOffset = 0;
-        pageNum.up = 0;
-        getActivities({ direction: 'down' });
-      });
+      $scope.$watchCollection('filters', resetPages);
+      $scope.$watchCollection('displayOptions', resetPages);
+      $scope.$watch('params.filters', resetPages, true);
+      $scope.$on('updateCaseData', resetPages);
       $rootScope.$on('civicase::activity::updated', refreshAll);
-      $rootScope.$on('civicase::month-nav::clicked', function (event, param) {
-        pageNum.up = 0;
-        pageNum.down = 0;
-        activityStartingOffset = param.startingOffset;
-        getActivities({
-          direction: 'down'
-        });
-      });
+      $rootScope.$on('civicase::month-nav::clicked', monthNavClickListener);
       $scope.$on('civicase::bulk-actions::bulk-selections', bulkSelectionsListener);
       $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
         $scope.viewActivity(activity.id, $event);
       });
+    }
+
+    /**
+     * Listener for 'civicase::month-nav::clicked' event
+     *
+     * @param {Object} event
+     * @param {Object} param
+     */
+    function monthNavClickListener (event, param) {
+      pageNum.up = 0;
+      pageNum.down = 0;
+      activityStartingOffset = param.startingOffset;
+      getActivities({
+        direction: 'down'
+      });
+    }
+
+    /**
+     * Resets the pages and calls 'getActivities'
+     */
+    function resetPages () {
+      activityStartingOffset = 0;
+      pageNum.up = 0;
+
+      getActivities({ direction: 'down' });
     }
 
     /**
