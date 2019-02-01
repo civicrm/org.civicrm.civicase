@@ -282,7 +282,7 @@
      * @param {Object} mode
      */
     function getActivities (mode) {
-      if (mode.nextPage !== true && mode.direction !== 'up') {
+      if (mode.nextPage !== true && mode.direction !== 'up' && !mode.monthNavClicked) {
         deselectAllActivities();
         pageNum.down = 0;
       }
@@ -415,7 +415,8 @@
       pageNum.down = 0;
       activityStartingOffset = param.startingOffset;
       getActivities({
-        direction: 'down'
+        direction: 'down',
+        monthNavClicked: true
       });
     }
 
