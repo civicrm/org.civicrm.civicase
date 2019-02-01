@@ -106,7 +106,7 @@
 
       var monthObject = {
         count: dateObject.count,
-        isOverDueGroup: isOverDueGroup,
+        isOverDueGroup: !!isOverDueGroup,
         month: dateObject.month,
         year: dateObject.year,
         monthName: moment(dateObject.month, 'MM').format('MMMM')
