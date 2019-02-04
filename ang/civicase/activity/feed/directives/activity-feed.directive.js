@@ -244,7 +244,7 @@
           group = past;
         }
         // identification of the card, used in scroll into view for quick nav
-        act.cardId = index;
+        act.cardId = (activityStartingOffset - (pageNum.up * ITEMS_PER_PAGE)) + index;
 
         group.activities.push(act);
       });
@@ -364,14 +364,14 @@
         }
       });
 
+      if ($scope.params && $scope.params.filters) {
+        angular.extend(params, $scope.params.filters);
+      }
+
       $rootScope.$broadcast(
         'civicaseActivityFeed.query',
         $scope.filters, params, false, $scope.displayOptions.overdue_first
       );
-
-      if ($scope.params && $scope.params.filters) {
-        angular.extend(params, $scope.params.filters);
-      }
 
       return crmApi({
         acts: ['Activity', apiAction, $.extend(true, {}, returnParams, params)],

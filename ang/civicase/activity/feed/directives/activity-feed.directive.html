@@ -13,7 +13,7 @@
 
   <div class="panel-body clearfix">
     <div crm-ui-debug="activities"></div>
-    <div class="civicase__activity-feed__body">
+    <div class="civicase__activity-feed__body" ng-show="!isLoading">
       <div class="civicase__activity-feed__body__list">
         <!-- Upside Pager -->
         <div class="text-center civicase__activity-feed-pager">
@@ -82,8 +82,8 @@
         <div class="text-center civicase__activity-feed-pager civicase__activity-feed-pager--down">
           <div
             class="civicase__activity-feed-pager__no-more"
-            ng-if="!checkIfRecordsAvailableOnDirection('down') && !checkIfRecordsAvailableOnDirection('up')">
-            <button class="btn btn-default" disabled>
+            ng-if="totalCount && !checkIfRecordsAvailableOnDirection('down') && !checkIfRecordsAvailableOnDirection('up')">
+            <button class="btn btn-default" disabled ng-cloak>
               {{ totalCount === 0 ? ts('None Found') : ts('Showing all %1', {1: totalCount}) }}
             </button>
           </div>

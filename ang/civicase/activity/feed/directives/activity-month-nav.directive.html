@@ -4,6 +4,7 @@
     ng-repeat="group in groups">
     <div class="civicase__activity-month-nav__group-title">{{group.groupName}}</div>
     <div ng-repeat="yearObj in group.records">
+      <div class="civicase__activity-month-nav__group-gap"></div>
       <div class="civicase__activity-month-nav__group-year">{{yearObj.year}}</div>
       <div class="civicase__activity-month-nav__group-gap"></div>
       <div ng-repeat="monthObj in yearObj.months">

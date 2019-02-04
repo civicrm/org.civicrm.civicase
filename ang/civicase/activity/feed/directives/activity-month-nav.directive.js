@@ -56,7 +56,7 @@
           return group.records.length > 0;
         });
 
-        setStartingOffsets();
+        setStartingOffsetsAndSort();
       });
     }
 
@@ -201,6 +201,9 @@
         $scope.$emit('civicase::month-nav::set-starting-offset', {
           startingOffset: monthObj.startingOffset
         });
+
+        // scroll to the first activity
+        $('[data-offset-number]').eq(0)[0].scrollIntoView({ behavior: 'smooth' });
       } else {
         scrollAndHighlight(monthObj);
       }
@@ -220,12 +223,16 @@
     }
 
     /**
-     * Sets the starting offset for each month
+     * Sets the starting offset for each month and sorts by year
      */
-    function setStartingOffsets () {
+    function setStartingOffsetsAndSort () {
       var offset = 0;
 
       _.each($scope.groups, function (group) {
+        group.records = _.sortBy(group.records, function (record) {
+          return record.year * -1;
+        });
+
         _.each(group.records, function (record) {
           _.each(record.months, function (month) {
             month.startingOffset = offset;
