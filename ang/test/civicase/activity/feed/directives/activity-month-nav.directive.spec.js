@@ -1,7 +1,3 @@
-// navigateToMonth
-//    emit
-//    scroll
-
 /* eslint-env jasmine */
 
 (function (_) {
