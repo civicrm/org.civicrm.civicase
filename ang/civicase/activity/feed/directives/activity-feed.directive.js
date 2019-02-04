@@ -38,6 +38,7 @@
     $scope.viewingActivity = {};
     $scope.caseTimelines = $scope.caseTypeId ? _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label') : [];
     $scope.refreshAll = refreshAll;
+    $scope.showSpinner = { up: false, down: false };
 
     (function init () {
       bindRouteParamsToScope();
@@ -282,6 +283,8 @@
      * @param {Object} mode
      */
     function getActivities (mode) {
+      showSpinner(mode);
+
       if (mode.nextPage !== true && mode.direction !== 'up' && !mode.monthNavClicked) {
         deselectAllActivities();
         pageNum.down = 0;
@@ -301,6 +304,8 @@
         $scope.viewingActivity = {};
         $scope.viewActivity($scope.aid);
         $scope.isLoading = false;
+        $scope.showSpinner.up = false;
+        $scope.showSpinner.down = false;
       });
     }
 
@@ -509,6 +514,19 @@
 
       if (activityTypeIDs.length) {
         params['activity_type_id'] = {IN: activityTypeIDs};
+      }
+    }
+
+    /**
+     * Shows the spinner before loading new data
+     *
+     * @param {Object} mode
+     */
+    function showSpinner (mode) {
+      if (mode.direction === 'up') {
+        $scope.showSpinner.up = true;
+      } else if (mode.direction === 'down' && mode.nextPage === true) {
+        $scope.showSpinner.down = true;
       }
     }
   }
