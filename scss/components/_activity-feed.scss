@@ -122,12 +122,21 @@
   vertical-align: top;
 }
 
-.civicase__activity-feed-pager__no-more,
-.civicase__activity-feed-pager__more {
-  > .btn {
-    margin-top: 40px;
+.civicase__activity-feed-pager {
+  .material-icons {
+    font-size: 28px;
   }
 }
+
+.civicase__activity-feed-pager--down {
+  .civicase__activity-feed-pager__no-more,
+  .civicase__activity-feed-pager__more {
+    > .btn {
+      margin-top: 40px;
+    }
+  }
+}
+
 
 .civicase__activity-feed-pager__no-more {
   > .btn {

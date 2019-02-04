@@ -127,6 +127,25 @@
        */
       get: function () {
         return _.clone(activitiesMockData);
+      },
+
+      /**
+       * Returns sent number of mocked activities
+       *
+       * @return {Array} each array contains an object with the activity data.
+       */
+      getSentNoOfActivities: function (number) {
+        var activities = [];
+        var activity;
+
+        for (var i = 0; i < number; i++) {
+          activity = _.clone(activitiesMockData[0]);
+          activity.id = parseInt(activity.id) + i;
+
+          activities.push(activity);
+        }
+
+        return activities;
       }
     };
   }]);
