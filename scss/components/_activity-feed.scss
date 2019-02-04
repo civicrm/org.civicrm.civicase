@@ -176,6 +176,10 @@
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+
+  .civicase__panel-transparent-header {
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: $activity-feed-breakpoint) {
