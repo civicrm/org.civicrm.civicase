@@ -198,7 +198,7 @@
      */
     function navigateToMonth (monthObj) {
       if (!checkIfMonthIsAlreadyLoaded(monthObj)) {
-        $scope.$emit('civicase::month-nav::clicked', {
+        $scope.$emit('civicase::month-nav::set-starting-offset', {
           startingOffset: monthObj.startingOffset
         });
       } else {

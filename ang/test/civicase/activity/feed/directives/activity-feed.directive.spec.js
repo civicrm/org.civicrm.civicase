@@ -106,7 +106,7 @@
                 initController();
                 $scope.$digest();
 
-                $scope.$emit('civicase::month-nav::clicked', {
+                $scope.$emit('civicase::month-nav::set-starting-offset', {
                   startingOffset: 0
                 });
                 $scope.$digest();
@@ -129,7 +129,7 @@
                 initController();
                 $scope.$digest();
 
-                $scope.$emit('civicase::month-nav::clicked', {
+                $scope.$emit('civicase::month-nav::set-starting-offset', {
                   startingOffset: 0
                 });
                 $scope.$digest();
@@ -154,7 +154,7 @@
               initController();
               $scope.$digest();
 
-              $scope.$emit('civicase::month-nav::clicked', {
+              $scope.$emit('civicase::month-nav::set-starting-offset', {
                 startingOffset: 30
               });
               $scope.$digest();
@@ -218,7 +218,7 @@
           initController();
           $scope.$digest();
 
-          $scope.$emit('civicase::month-nav::clicked', {
+          $scope.$emit('civicase::month-nav::set-starting-offset', {
             startingOffset: 10
           });
           $scope.$digest();

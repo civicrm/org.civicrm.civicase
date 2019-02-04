@@ -396,7 +396,7 @@
       $scope.$watch('params.filters', resetPages, true);
       $scope.$on('updateCaseData', resetPages);
       $rootScope.$on('civicase::activity::updated', refreshAll);
-      $rootScope.$on('civicase::month-nav::clicked', monthNavClickListener);
+      $rootScope.$on('civicase::month-nav::set-starting-offset', monthNavSetStartingOffsetListener);
       $scope.$on('civicase::bulk-actions::bulk-selections', bulkSelectionsListener);
       $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
         $scope.viewActivity(activity.id, $event);
@@ -404,12 +404,12 @@
     }
 
     /**
-     * Listener for 'civicase::month-nav::clicked' event
+     * Listener for 'civicase::month-nav::set-starting-offset' event
      *
      * @param {Object} event
      * @param {Object} param
      */
-    function monthNavClickListener (event, param) {
+    function monthNavSetStartingOffsetListener (event, param) {
       pageNum.up = 0;
       pageNum.down = 0;
       activityStartingOffset = param.startingOffset;
