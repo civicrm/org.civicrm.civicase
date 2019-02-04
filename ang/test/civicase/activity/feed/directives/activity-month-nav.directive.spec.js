@@ -36,32 +36,37 @@
           });
 
           it('shows the future months', function () {
-            expect($scope.groups[0]).toEqual(
-              {
-                groupName: 'future',
-                records: [
-                  {
-                    year: monthData[0].year,
-                    months: [
-                      { count: monthData[0].count, isOverDueGroup: false, month: monthData[0].month, year: monthData[0].year, monthName: moment().set('month', monthData[0].month - 1).format('MMMM'), startingOffset: 0 }
-                    ]
-                  }
-                ]
-              });
+            expect($scope.groups[0]).toEqual({
+              groupName: 'future',
+              records: [{
+                year: monthData[0].year,
+                months: [{
+                  count: monthData[0].count,
+                  isOverDueGroup: false,
+                  month: monthData[0].month,
+                  year: monthData[0].year,
+                  monthName: moment().set('month', monthData[0].month - 1).format('MMMM'),
+                  startingOffset: 0
+                }]
+              }]
+            });
           });
 
           it('shows the now months', function () {
             expect($scope.groups[1]).toEqual(
               {
                 groupName: 'now',
-                records: [
-                  {
-                    year: monthData[1].year,
-                    months: [
-                      { count: monthData[1].count, isOverDueGroup: false, month: monthData[1].month, year: monthData[0].year, monthName: moment().set('month', monthData[1].month - 1).format('MMMM'), startingOffset: monthData[0].count }
-                    ]
-                  }
-                ]
+                records: [{
+                  year: monthData[1].year,
+                  months: [{
+                    count: monthData[1].count,
+                    isOverDueGroup: false,
+                    month: monthData[1].month,
+                    year: monthData[0].year,
+                    monthName: moment().set('month', monthData[1].month - 1).format('MMMM'),
+                    startingOffset: monthData[0].count
+                  }]
+                }]
               });
           });
 
@@ -69,14 +74,17 @@
             expect($scope.groups[2]).toEqual(
               {
                 groupName: 'past',
-                records: [
-                  {
+                records: [{
+                  year: monthData[2].year,
+                  months: [{
+                    count: monthData[2].count,
+                    isOverDueGroup: false,
+                    month: monthData[2].month,
                     year: monthData[2].year,
-                    months: [
-                      { count: monthData[2].count, isOverDueGroup: false, month: monthData[2].month, year: monthData[2].year, monthName: moment().set('month', monthData[2].month - 1).format('MMMM'), startingOffset: monthData[0].count + monthData[1].count }
-                    ]
-                  }
-                ]
+                    monthName: moment().set('month', monthData[2].month - 1).format('MMMM'),
+                    startingOffset: monthData[0].count + monthData[1].count
+                  }]
+                }]
               });
           });
         });
@@ -101,16 +109,31 @@
             expect($scope.groups).toEqual([
               {
                 groupName: 'overdue',
-                records: [
-                  {
+                records: [{
+                  year: monthData[0].year,
+                  months: [{
+                    count: monthData[0].count,
+                    isOverDueGroup: true,
+                    month: monthData[0].month,
                     year: monthData[0].year,
-                    months: [
-                      { count: monthData[0].count, isOverDueGroup: true, month: monthData[0].month, year: monthData[0].year, monthName: moment().set('month', monthData[0].month - 1).format('MMMM'), startingOffset: 0 },
-                      { count: monthData[1].count, isOverDueGroup: true, month: monthData[1].month, year: monthData[1].year, monthName: moment().set('month', monthData[1].month - 1).format('MMMM'), startingOffset: monthData[0].count },
-                      { count: monthData[2].count, isOverDueGroup: true, month: monthData[2].month, year: monthData[2].year, monthName: moment().set('month', monthData[2].month - 1).format('MMMM'), startingOffset: monthData[0].count + monthData[1].count }
-                    ]
-                  }
-                ]
+                    monthName: moment().set('month', monthData[0].month - 1).format('MMMM'),
+                    startingOffset: 0
+                  }, {
+                    count: monthData[1].count,
+                    isOverDueGroup: true,
+                    month: monthData[1].month,
+                    year: monthData[1].year,
+                    monthName: moment().set('month', monthData[1].month - 1).format('MMMM'),
+                    startingOffset: monthData[0].count
+                  }, {
+                    count: monthData[2].count,
+                    isOverDueGroup: true,
+                    month: monthData[2].month,
+                    year: monthData[2].year,
+                    monthName: moment().set('month', monthData[2].month - 1).format('MMMM'),
+                    startingOffset: monthData[0].count + monthData[1].count
+                  }]
+                }]
               }]);
           });
         });

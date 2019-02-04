@@ -58,6 +58,7 @@
 
           it('filters by the activities of the selected activity set and the activity id', function () {
             var args = crmApi.calls.mostRecent().args[0].acts[2].activity_type_id;
+
             expect(args).toEqual({ IN: expectedActivityTypeIDs });
           });
         });
@@ -83,6 +84,7 @@
           beforeEach(function () {
             activitiesInCurrentPage = [];
             allActivities = [];
+
             mockActivitiesAPICall();
             initController();
             $scope.$digest();
@@ -99,6 +101,7 @@
               beforeEach(function () {
                 activitiesInCurrentPage = activitiesMockData.getSentNoOfActivities(20);
                 allActivities = activitiesMockData.getSentNoOfActivities(20);
+
                 mockActivitiesAPICall();
                 initController();
                 $scope.$digest();
@@ -121,6 +124,7 @@
               beforeEach(function () {
                 activitiesInCurrentPage = activitiesMockData.getSentNoOfActivities(30);
                 allActivities = activitiesMockData.getSentNoOfActivities(30);
+
                 mockActivitiesAPICall();
                 initController();
                 $scope.$digest();
@@ -145,6 +149,7 @@
             beforeEach(function () {
               activitiesInCurrentPage = activitiesMockData.getSentNoOfActivities(60);
               allActivities = activitiesMockData.getSentNoOfActivities(60);
+
               mockActivitiesAPICall();
               initController();
               $scope.$digest();
@@ -207,6 +212,7 @@
         beforeEach(function () {
           activitiesInCurrentPage = activitiesMockData.getSentNoOfActivities(60);
           allActivities = activitiesMockData.getSentNoOfActivities(60);
+
           mockActivitiesAPICall();
 
           initController();

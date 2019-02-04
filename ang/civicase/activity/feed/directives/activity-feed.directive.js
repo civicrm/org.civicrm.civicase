@@ -297,7 +297,6 @@
 
         $scope.activityGroups = groupActivities($scope.activities);
         $scope.totalCount = allActivities.length;
-
         // reset viewingActivity to get latest data
         $scope.viewingActivity = {};
         $scope.viewActivity($scope.aid);
@@ -318,7 +317,6 @@
      */
     function loadActivities (mode) {
       var options = setActivityAPIOptions(mode);
-
       var apiAction = $scope.filters['@involvingContact'] === 'myActivities'
         ? 'getcontactactivities'
         : 'get';
@@ -370,6 +368,7 @@
         'civicaseActivityFeed.query',
         $scope.filters, params, false, $scope.displayOptions.overdue_first
       );
+
       if ($scope.params && $scope.params.filters) {
         angular.extend(params, $scope.params.filters);
       }
@@ -414,6 +413,7 @@
       pageNum.up = 0;
       pageNum.down = 0;
       activityStartingOffset = param.startingOffset;
+
       getActivities({
         direction: 'down',
         monthNavClicked: true
