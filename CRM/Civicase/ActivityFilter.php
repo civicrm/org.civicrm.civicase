@@ -37,6 +37,17 @@ class CRM_Civicase_ActivityFilter {
       throw new API_Exception("case_filter and case_id are mutually exclusive");
     }
 
+    CRM_Civicase_ActivityFilter::updateParams($apiRequest['params']);
+
+    $e->setApiRequest($apiRequest);
+  }
+
+  /**
+   * Translates `case_filter=...` expression to a concrete list of `case_id=1,2,3,...`.
+   *
+   * @param {Array} $params
+   */
+  public static function updateParams (&$params) {
     // Look up matching `case_id`
     $caseParams = array(
       'is_deleted' => 0,
@@ -46,17 +57,15 @@ class CRM_Civicase_ActivityFilter {
       ),
       'return' => array('id'),
     );
-    CRM_Utils_Array::extend($caseParams, $apiRequest['params']['case_filter']);
-    if (!empty($apiRequest['params']['check_permissions'])) {
-      $caseParams['check_permissions'] = $apiRequest['params']['check_permissions'];
+    CRM_Utils_Array::extend($caseParams, $params['case_filter']);
+    if (!empty($params['check_permissions'])) {
+      $caseParams['check_permissions'] = $params['check_permissions'];
     }
     $caseResult = civicrm_api3('Case', 'getdetails', $caseParams);
 
     // Revise the Activity.get call
-    unset($apiRequest['params']['case_filter']);
+    unset($params['case_filter']);
     // Add case ids to the query or else a bogus value to ensure no results
-    $apiRequest['params']['case_id'] = empty($caseResult['values']) ? -1 : array('IN' => array_keys($caseResult['values']));
-    $e->setApiRequest($apiRequest);
+    $params['case_id'] = empty($caseResult['values']) ? -1 : array('IN' => array_keys($caseResult['values']));
   }
-
 }

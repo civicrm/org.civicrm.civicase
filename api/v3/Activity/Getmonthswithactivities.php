@@ -37,6 +37,10 @@ function civicrm_api3_activity_Getmonthswithactivities($params) {
   $options = _civicrm_api3_get_options_from_params($params, FALSE, 'Activity', 'get');
   $sql = CRM_Utils_SQL_Select::fragment();
 
+  if (isset($params['case_filter'])) {
+    CRM_Civicase_ActivityFilter::updateParams($params);
+  }
+
   _civicrm_api3_activity_get_extraFilters($params, $sql);
 
   if (!empty($options['sort'])) {

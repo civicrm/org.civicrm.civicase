@@ -223,7 +223,7 @@
     }
 
     /**
-     * Sets the starting offset for each month and sorts by year
+     * Sets the starting offset for each month and sorts by year and month
      */
     function setStartingOffsetsAndSort () {
       var offset = 0;
@@ -234,6 +234,10 @@
         });
 
         _.each(group.records, function (record) {
+          record.months = _.sortBy(record.months, function (monthObj) {
+            return monthObj.month * -1;
+          });
+
           _.each(record.months, function (month) {
             month.startingOffset = offset;
             offset += month.count;
