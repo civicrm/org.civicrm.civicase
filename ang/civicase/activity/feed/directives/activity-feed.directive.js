@@ -400,8 +400,8 @@
       $scope.$watchCollection('displayOptions', resetPages);
       $scope.$watch('params.filters', resetPages, true);
       $scope.$on('updateCaseData', resetPages);
-      $rootScope.$on('civicase::activity::updated', refreshAll);
-      $rootScope.$on('civicase::month-nav::set-starting-offset', monthNavSetStartingOffsetListener);
+      $scope.$on('civicase::activity::updated', refreshAll);
+      $scope.$on('civicase::month-nav::set-starting-offset', monthNavSetStartingOffsetListener);
       $scope.$on('civicase::bulk-actions::bulk-selections', bulkSelectionsListener);
       $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
         $scope.viewActivity(activity.id, $event);

@@ -12,7 +12,7 @@
 
   module.controller('civicaseActivityMonthNavController', civicaseActivityMonthNavController);
 
-  function civicaseActivityMonthNavController ($scope, crmApi) {
+  function civicaseActivityMonthNavController ($rootScope, $scope, crmApi) {
     $scope.navigateToMonth = navigateToMonth;
 
     (function init () {
@@ -198,7 +198,7 @@
      */
     function navigateToMonth (monthObj) {
       if (!checkIfMonthIsAlreadyLoaded(monthObj)) {
-        $scope.$emit('civicase::month-nav::set-starting-offset', {
+        $rootScope.$broadcast('civicase::month-nav::set-starting-offset', {
           startingOffset: monthObj.startingOffset
         });
 
