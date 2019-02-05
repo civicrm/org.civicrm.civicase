@@ -523,10 +523,9 @@
      * @param {Object} mode
      */
     function showSpinner (mode) {
-      if (mode.direction === 'up') {
+      if (mode.direction === 'up' || mode.monthNavClicked === true) {
         $scope.showSpinner.up = true;
-      } else if (mode.direction === 'down' &&
-        (mode.nextPage === true || mode.monthNavClicked === true)) {
+      } else if (mode.direction === 'down' && mode.nextPage === true) {
         $scope.showSpinner.down = true;
       }
     }

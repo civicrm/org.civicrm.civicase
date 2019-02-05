@@ -203,7 +203,7 @@
         });
 
         // scroll to the first activity
-        $('[data-offset-number]').eq(0)[0].scrollIntoView({ behavior: 'smooth' });
+        $('[data-offset-number]').eq(0)[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
       } else {
         scrollAndHighlight(monthObj);
       }
@@ -218,7 +218,7 @@
       var selector = '[data-offset-number=' + monthObj.startingOffset + ']';
       var element = $(selector);
 
-      element[0].scrollIntoView({ behavior: 'smooth' });
+      element[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
       element.effect('highlight', {}, 3000);
     }
 
