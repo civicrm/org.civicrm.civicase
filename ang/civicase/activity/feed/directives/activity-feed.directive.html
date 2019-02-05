@@ -17,7 +17,9 @@
       <div class="civicase__activity-feed__body__list">
         <!-- Upside Pager -->
         <div class="text-center civicase__activity-feed-pager">
-          <div class="civicase__activity-feed-pager__more" ng-if="checkIfRecordsAvailableOnDirection('up')">
+          <div
+            class="civicase__activity-feed-pager__more"
+            ng-if="checkIfRecordsAvailableOnDirection('up')">
             <button
               ng-if="!showSpinner.up"
               class="btn btn-link" ng-click="previousPage()"
@@ -89,7 +91,9 @@
               {{ totalCount === 0 ? ts('None Found') : ts('Showing all %1', {1: totalCount}) }}
             </button>
           </div>
-          <div class="civicase__activity-feed-pager__more" ng-if="checkIfRecordsAvailableOnDirection('down')">
+          <div
+            class="civicase__activity-feed-pager__more"
+            ng-if="checkIfRecordsAvailableOnDirection('down')">
             <button
               ng-if="!showSpinner.down"
               class="btn btn-link" ng-click="nextPage()"

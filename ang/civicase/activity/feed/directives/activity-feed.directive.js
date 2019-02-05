@@ -525,7 +525,8 @@
     function showSpinner (mode) {
       if (mode.direction === 'up') {
         $scope.showSpinner.up = true;
-      } else if (mode.direction === 'down' && mode.nextPage === true) {
+      } else if (mode.direction === 'down' &&
+        (mode.nextPage === true || mode.monthNavClicked === true)) {
         $scope.showSpinner.down = true;
       }
     }
