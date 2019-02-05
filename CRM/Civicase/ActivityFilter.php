@@ -58,9 +58,11 @@ class CRM_Civicase_ActivityFilter {
       'return' => array('id'),
     );
     CRM_Utils_Array::extend($caseParams, $params['case_filter']);
+
     if (!empty($params['check_permissions'])) {
       $caseParams['check_permissions'] = $params['check_permissions'];
     }
+
     $caseResult = civicrm_api3('Case', 'getdetails', $caseParams);
 
     // Revise the Activity.get call

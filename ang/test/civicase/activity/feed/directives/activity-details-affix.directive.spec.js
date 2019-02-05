@@ -57,7 +57,7 @@ describe('civicaseActivityDetailsAffix', function () {
       });
     });
 
-    describe('when the activity details panel is iniliased with window already scrolled', function () {
+    describe('when the activity details panel is initialised with window already scrolled', function () {
       beforeEach(function () {
         compileDirective({isAffixedOnInit: true});
 
@@ -72,7 +72,7 @@ describe('civicaseActivityDetailsAffix', function () {
         expect($activityDetailsPanel.css('top')).toBe(($toolbarDrawer.height() + $tabs.height() + $filter.height()) + 'px');
       });
 
-      it('sets the width', function () {
+      it('sets the width of the activity details panel', function () {
         expect($activityDetailsPanel.width()).toBe(element.width());
       });
     });
@@ -94,7 +94,7 @@ describe('civicaseActivityDetailsAffix', function () {
       expect($activityDetailsPanel.css('top')).toBe(($toolbarDrawer.height() + $tabs.height() + $filter.height()) + 'px');
     });
 
-    it('sets the width', function () {
+    it('sets the width of the activity details panel', function () {
       expect($activityDetailsPanel.width()).toBe(element.width());
     });
   });

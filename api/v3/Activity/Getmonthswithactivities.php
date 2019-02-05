@@ -63,7 +63,6 @@ function civicrm_api3_activity_Getmonthswithactivities($params) {
   }
 
   $activities = _civicrm_api3_basic_get(_civicrm_api3_get_BAO(__FUNCTION__), $params, FALSE, 'Activity', $sql);
-
   $grouped_activity_dates = [];
 
   foreach($activities as $activity) {

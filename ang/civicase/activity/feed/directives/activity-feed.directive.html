@@ -18,15 +18,14 @@
         <!-- Upside Pager -->
         <div class="text-center civicase__activity-feed-pager">
           <div
-            class="civicase__activity-feed-pager__more"
-            ng-if="checkIfRecordsAvailableOnDirection('up')">
+            class="civicase__activity-feed-pager__more">
+            <div ng-if="showSpinner.up" class="civicase__spinner"></div>
             <button
-              ng-if="!showSpinner.up"
+              ng-if="!showSpinner.up && checkIfRecordsAvailableOnDirection('up')"
               class="btn btn-link" ng-click="previousPage()"
               title="{{ ts('Click for more') }}">
               <i class="material-icons">keyboard_arrow_up</i>
             </button>
-            <div ng-if="showSpinner.up" class="civicase__spinner"></div>
           </div>
         </div>
         <!-- End - Upside Pager -->
@@ -86,21 +85,23 @@
         <div class="text-center civicase__activity-feed-pager civicase__activity-feed-pager--down">
           <div
             class="civicase__activity-feed-pager__no-more"
-            ng-if="(totalCount !== undefined) && !checkIfRecordsAvailableOnDirection('down') && !checkIfRecordsAvailableOnDirection('up')">
+            ng-if="(totalCount !== undefined) &&
+             !showSpinner.down &&
+             !checkIfRecordsAvailableOnDirection('down') &&
+             !checkIfRecordsAvailableOnDirection('up')">
             <button class="btn btn-default" disabled>
               {{ totalCount === 0 ? ts('None Found') : ts('Showing all %1', {1: totalCount}) }}
             </button>
           </div>
           <div
-            class="civicase__activity-feed-pager__more"
-            ng-if="checkIfRecordsAvailableOnDirection('down')">
+            class="civicase__activity-feed-pager__more">
+            <div ng-if="showSpinner.down" class="civicase__spinner"></div>
             <button
-              ng-if="!showSpinner.down"
+              ng-if="!showSpinner.down && checkIfRecordsAvailableOnDirection('down')"
               class="btn btn-link" ng-click="nextPage()"
               title="{{ ts('Click for more') }}">
               <i class="material-icons">keyboard_arrow_down</i>
             </button>
-            <div ng-if="showSpinner.down" class="civicase__spinner"></div>
           </div>
         </div>
         <!-- End - Pager -->

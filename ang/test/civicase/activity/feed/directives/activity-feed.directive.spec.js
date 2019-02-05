@@ -135,7 +135,7 @@
                 $scope.$digest();
               });
 
-              it('does shows load more button on down direction', function () {
+              it('shows load more button on down direction', function () {
                 expect($scope.checkIfRecordsAvailableOnDirection('down')).toBe(true);
               });
 
@@ -160,11 +160,11 @@
               $scope.$digest();
             });
 
-            it('does not show load more button on down direction', function () {
+            it('shows load more button on down direction', function () {
               expect($scope.checkIfRecordsAvailableOnDirection('down')).toBe(true);
             });
 
-            it('does not show load more button on top direction', function () {
+            it('shows load more button on top direction', function () {
               expect($scope.checkIfRecordsAvailableOnDirection('up')).toBe(true);
             });
           });

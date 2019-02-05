@@ -5,7 +5,6 @@
     var futureMonth = moment().add(1, 'month');
     var currentMonth = moment();
     var pastMonth = moment().add(-1, 'month');
-
     var monthNavMockData = [{
       count: 9,
       month: futureMonth.format('MM'),
