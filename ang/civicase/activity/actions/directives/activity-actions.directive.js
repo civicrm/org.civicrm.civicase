@@ -33,7 +33,7 @@
 
   module.controller('civicaseActivityActionsController', civicaseActivityActionsController);
 
-  function civicaseActivityActionsController ($window, $scope, crmApi, getActivityFeedUrl, MoveCopyActivityAction, TagsActivityAction) {
+  function civicaseActivityActionsController ($window, $rootScope, $scope, crmApi, getActivityFeedUrl, MoveCopyActivityAction, TagsActivityAction) {
     var ts = $scope.ts = CRM.ts('civicase');
     $scope.getActivityFeedUrl = getActivityFeedUrl;
     $scope.deleteActivity = deleteActivity;
@@ -87,7 +87,7 @@
 
         crmApi(apiCalls)
           .then(function () {
-            $scope.$emit('civicase::activity::updated');
+            $rootScope.$broadcast('civicase::activity::updated');
           });
 
         if (dialog && $(dialog).data('uiDialog')) {

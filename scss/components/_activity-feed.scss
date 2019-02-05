@@ -122,12 +122,25 @@
   vertical-align: top;
 }
 
-.civicase__activity-feed-pager__no-more,
-.civicase__activity-feed-pager__more {
-  > .btn {
+.civicase__activity-feed-pager {
+  .material-icons {
+    font-size: 28px;
+  }
+}
+
+.civicase__activity-feed-pager--down {
+  .civicase__activity-feed-pager__no-more,
+  .civicase__activity-feed-pager__more {
+    > .btn {
+      margin-top: 40px;
+    }
+  }
+
+  .civicase__spinner {
     margin-top: 40px;
   }
 }
+
 
 .civicase__activity-feed-pager__no-more {
   > .btn {
@@ -163,6 +176,10 @@
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+
+  .civicase__panel-transparent-header {
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: $activity-feed-breakpoint) {

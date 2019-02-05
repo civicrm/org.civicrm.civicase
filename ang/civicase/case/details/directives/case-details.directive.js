@@ -16,7 +16,7 @@
 
   module.controller('civicaseCaseDetailsController', civicaseCaseDetailsController);
 
-  function civicaseCaseDetailsController ($location, $scope, BulkActions, crmApi,
+  function civicaseCaseDetailsController ($location, $rootScope, $scope, BulkActions, crmApi,
     formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route,
     $timeout, CasesUtils, PrintMergeCaseAction) {
     // The ts() and hs() functions help load strings for this module.
@@ -68,7 +68,7 @@
       CRM
         .loadForm(CRM.url('civicrm/activity/email/add', createEmailURLParams))
         .on('crmFormSuccess', function () {
-          $scope.$emit('civicase::activity::updated');
+          $rootScope.$broadcast('civicase::activity::updated');
         });
     };
 

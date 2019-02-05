@@ -22,7 +22,7 @@
       TagsActivityAction = _TagsActivityAction_;
 
       spyOn($.fn, 'dialog');
-      spyOn($rootScope, '$emit');
+      spyOn($rootScope, '$broadcast');
     }));
 
     describe('Add Tags to Activities bulk action', function () {

@@ -42,8 +42,9 @@
        * @param {Object} filters
        * @param {Object} params
        * @param {Boolean} reset if it's necessary to delete the previously-set properties
+       * @param {Boolean} overdueFirst
        */
-      function feedQueryListener (event, filters, params, reset) {
+      function feedQueryListener (event, filters, params, reset, overdueFirst) {
         if (reset) {
           delete params.contact_id;
           delete params.assignee_contact_id;

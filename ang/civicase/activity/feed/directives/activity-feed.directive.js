@@ -17,12 +17,15 @@
 
   module.controller('civicaseActivityFeedController', civicaseActivityFeedController);
 
-  function civicaseActivityFeedController ($scope, $q, BulkActions, crmApi, crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService, ContactsCache) {
+  function civicaseActivityFeedController ($scope, $q, BulkActions, crmApi,
+    crmUiHelp, crmThrottle, formatActivity, $rootScope, dialogService,
+    ContactsCache) {
     // The ts() and hs() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var ITEMS_PER_PAGE = 25;
+    var activityStartingOffset = 0;
     var caseId = $scope.params ? $scope.params.case_id : null;
-    var pageNum = 0;
+    var pageNum = { down: 0, up: 0 };
     var allActivities = [];
 
     $scope.isLoading = true;
@@ -31,17 +34,47 @@
     $scope.activities = {};
     $scope.activityGroups = [];
     $scope.bulkAllowed = $scope.showBulkActions && BulkActions.isAllowed();
-    $scope.remaining = true;
     $scope.selectedActivities = [];
     $scope.viewingActivity = {};
     $scope.caseTimelines = $scope.caseTypeId ? _.sortBy(CRM.civicase.caseTypes[$scope.caseTypeId].definition.activitySets, 'label') : [];
     $scope.refreshAll = refreshAll;
+    $scope.showSpinner = { up: false, down: false };
 
     (function init () {
       bindRouteParamsToScope();
       initiateWatchersAndEvents();
     }());
 
+    /**
+     * Check if more records are vailable in the given direction
+     *
+     * @param {String} direction
+     * @return {Boolean}
+     */
+    $scope.checkIfRecordsAvailableOnDirection = function (direction) {
+      if ($scope.totalCount === 0) {
+        return false;
+      }
+
+      var lastRecordShownInGivenDirection;
+
+      if (direction === 'down') {
+        lastRecordShownInGivenDirection = (activityStartingOffset + (ITEMS_PER_PAGE * (pageNum.down + 1)));
+
+        return lastRecordShownInGivenDirection < ($scope.totalCount - 1);
+      } else if (direction === 'up') {
+        lastRecordShownInGivenDirection = (activityStartingOffset - (ITEMS_PER_PAGE * pageNum.up));
+
+        return lastRecordShownInGivenDirection > 0;
+      }
+    };
+
+    /**
+     * Find activity by given ID
+     *
+     * @param {Array} searchIn - array of activities to search into
+     * @param {Int/String} activityID
+     */
     $scope.findActivityById = function (searchIn, activityID) {
       return _.find(searchIn, { id: activityID });
     };
@@ -61,8 +94,16 @@
      * Load next set of activities
      */
     $scope.nextPage = function () {
-      ++pageNum;
-      getActivities(true);
+      ++pageNum.down;
+      getActivities({ direction: 'down', nextPage: true });
+    };
+
+    /**
+     * Load previous set of activities
+     */
+    $scope.previousPage = function () {
+      ++pageNum.up;
+      getActivities({ direction: 'up' });
     };
 
     /**
@@ -129,6 +170,24 @@
     }
 
     /**
+     * Sets the activities array based on direction
+     *
+     * @param {String} mode
+     * @param {Array} newActivities
+     */
+    function buildActivitiesArray (mode, newActivities) {
+      if (mode.direction === 'down') {
+        if (pageNum.down) {
+          $scope.activities = $scope.activities.concat(newActivities);
+        } else {
+          $scope.activities = newActivities;
+        }
+      } else if (mode.direction === 'up') {
+        $scope.activities = newActivities.concat($scope.activities);
+      }
+    }
+
+    /**
      * Deselection of all activities
      */
     function deselectAllActivities () {
@@ -177,7 +236,7 @@
 
       groups.push(upcoming = {key: 'upcoming', title: ts('Future Activities'), activities: []});
       groups.push(past = {key: 'past', title: ts('Past Activities - Prior to Today'), activities: []});
-      _.each(activities, function (act) {
+      _.each(activities, function (act, index) {
         if (act.activity_date_time > now) {
           group = upcoming;
         } else if (overdue && act.is_overdue) {
@@ -185,6 +244,9 @@
         } else {
           group = past;
         }
+        // identification of the card, used in scroll into view for quick nav
+        act.cardId = (activityStartingOffset - (pageNum.up * ITEMS_PER_PAGE)) + index;
+
         group.activities.push(act);
       });
 
@@ -218,34 +280,32 @@
     /**
      * Get all activities
      *
-     * @param {Boolean} nextPage
+     * @param {Object} mode
      */
-    function getActivities (nextPage) {
-      if (nextPage !== true) {
+    function getActivities (mode) {
+      showSpinner(mode);
+
+      if (mode.nextPage !== true && mode.direction !== 'up' && !mode.monthNavClicked) {
         deselectAllActivities();
-        pageNum = 0;
+        pageNum.down = 0;
       }
 
-      crmThrottle(loadActivities).then(function (result) {
+      return crmThrottle(function () {
+        return loadActivities(mode);
+      }).then(function (result) {
         var newActivities = _.each(result[0].acts.values, formatActivity);
         allActivities = result[0].all.values;
-        var remaining = allActivities.length - (ITEMS_PER_PAGE * (pageNum + 1));
 
-        if (pageNum) {
-          $scope.activities = $scope.activities.concat(newActivities);
-        } else {
-          $scope.activities = newActivities;
-        }
+        buildActivitiesArray(mode, newActivities);
+
         $scope.activityGroups = groupActivities($scope.activities);
         $scope.totalCount = allActivities.length;
-        $scope.remaining = remaining > 0 ? remaining : 0;
-        if (!allActivities.length && !pageNum) {
-          $scope.remaining = false;
-        }
         // reset viewingActivity to get latest data
         $scope.viewingActivity = {};
         $scope.viewActivity($scope.aid);
         $scope.isLoading = false;
+        $scope.showSpinner.up = false;
+        $scope.showSpinner.down = false;
       });
     }
 
@@ -260,7 +320,8 @@
      *
      * @return {Promise}
      */
-    function loadActivities () {
+    function loadActivities (mode) {
+      var options = setActivityAPIOptions(mode);
       var apiAction = $scope.filters['@involvingContact'] === 'myActivities'
         ? 'getcontactactivities'
         : 'get';
@@ -272,11 +333,7 @@
           'activity_date_time', 'is_star', 'original_id', 'tag_id.name', 'tag_id.description',
           'tag_id.color', 'file_id', 'is_overdue', 'case_id', 'priority_id'
         ],
-        options: {
-          sort: ($scope.displayOptions.overdue_first ? 'is_overdue DESC, ' : '') + 'activity_date_time DESC',
-          limit: ITEMS_PER_PAGE,
-          offset: ITEMS_PER_PAGE * pageNum
-        }
+        options: options
       };
       var params = {
         is_current_revision: 1,
@@ -284,6 +341,7 @@
         is_test: 0,
         options: {}
       };
+
       if (caseId) {
         params.case_id = caseId;
       } else if (!$scope.displayOptions.include_case) {
@@ -310,13 +368,18 @@
           }
         }
       });
-      $rootScope.$broadcast('civicaseActivityFeed.query', $scope.filters, params);
+
       if ($scope.params && $scope.params.filters) {
         angular.extend(params, $scope.params.filters);
       }
 
+      $rootScope.$broadcast(
+        'civicaseActivityFeed.query',
+        $scope.filters, params, false, $scope.displayOptions.overdue_first
+      );
+
       return crmApi({
-        acts: ['Activity', apiAction, $.extend(true, returnParams, params)],
+        acts: ['Activity', apiAction, $.extend(true, {}, returnParams, params)],
         all: ['Activity', apiAction, $.extend(true, {
           sequential: 1,
           return: ['id'],
@@ -333,15 +396,43 @@
      * Initiate watchers and event handlers
      */
     function initiateWatchersAndEvents () {
-      $scope.$watchCollection('filters', getActivities);
-      $scope.$watchCollection('displayOptions', getActivities);
-      $scope.$watch('params.filters', getActivities, true);
-      $scope.$on('updateCaseData', getActivities);
-      $rootScope.$on('civicase::activity::updated', refreshAll);
+      $scope.$watchCollection('filters', resetPages);
+      $scope.$watchCollection('displayOptions', resetPages);
+      $scope.$watch('params.filters', resetPages, true);
+      $scope.$on('updateCaseData', resetPages);
+      $scope.$on('civicase::activity::updated', refreshAll);
+      $scope.$on('civicase::month-nav::set-starting-offset', monthNavSetStartingOffsetListener);
       $scope.$on('civicase::bulk-actions::bulk-selections', bulkSelectionsListener);
       $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
         $scope.viewActivity(activity.id, $event);
       });
+    }
+
+    /**
+     * Listener for 'civicase::month-nav::set-starting-offset' event
+     *
+     * @param {Object} event
+     * @param {Object} param
+     */
+    function monthNavSetStartingOffsetListener (event, param) {
+      pageNum.up = 0;
+      pageNum.down = 0;
+      activityStartingOffset = param.startingOffset;
+
+      getActivities({
+        direction: 'down',
+        monthNavClicked: true
+      });
+    }
+
+    /**
+     * Resets the pages and calls 'getActivities'
+     */
+    function resetPages () {
+      activityStartingOffset = 0;
+      pageNum.up = 0;
+
+      getActivities({ direction: 'down' });
     }
 
     /**
@@ -360,9 +451,36 @@
         }
 
         crmApi(apiCalls, true).then(function (result) {
-          getActivities(false);
+          getActivities({ direction: 'down' });
         });
       }
+    }
+
+    /**
+     * Sets the Activity API option parameters
+     *
+     * @param {Object} mode
+     * @return {Object}
+     */
+    function setActivityAPIOptions (mode) {
+      var options = {
+        sort: ($scope.displayOptions.overdue_first ? 'is_overdue DESC, ' : '') + 'activity_date_time DESC',
+        limit: ITEMS_PER_PAGE,
+        offset: null
+      };
+
+      if (mode.direction === 'down') {
+        options.offset = activityStartingOffset + (ITEMS_PER_PAGE * pageNum.down);
+      } else if (mode.direction === 'up') {
+        options.offset = activityStartingOffset - (ITEMS_PER_PAGE * pageNum.up);
+
+        if (options.offset < 0) {
+          options.limit = ITEMS_PER_PAGE + options.offset;
+          options.offset = 0;
+        }
+      }
+
+      return options;
     }
 
     /**
@@ -396,6 +514,19 @@
 
       if (activityTypeIDs.length) {
         params['activity_type_id'] = {IN: activityTypeIDs};
+      }
+    }
+
+    /**
+     * Shows the spinner before loading new data
+     *
+     * @param {Object} mode
+     */
+    function showSpinner (mode) {
+      if (mode.direction === 'up' || mode.monthNavClicked === true) {
+        $scope.showSpinner.up = true;
+      } else if (mode.direction === 'down' && mode.nextPage === true) {
+        $scope.showSpinner.down = true;
       }
     }
   }

@@ -300,7 +300,7 @@
 
       beforeEach(function () {
         initController();
-        spyOn($scope, '$emit');
+        spyOn($rootScope, '$broadcast');
         CRM.loadForm.and.returnValue({
           on: function () {
             loadFormArguments = arguments;
@@ -330,7 +330,7 @@
         });
 
         it('refreshes the activity feed', function () {
-          expect($scope.$emit).toHaveBeenCalledWith('civicase::activity::updated');
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('civicase::activity::updated');
         });
       });
     });

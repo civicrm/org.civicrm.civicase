@@ -68,7 +68,7 @@
             return crmApi(apiCalls);
           })
           .then(function () {
-            $rootScope.$emit('civicase::activity::updated');
+            $rootScope.$broadcast('civicase::activity::updated');
           });
       }
 

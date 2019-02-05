@@ -131,7 +131,7 @@
               });
 
             spyOn($.fn, 'dialog');
-            spyOn($rootScope, '$emit');
+            spyOn($rootScope, '$broadcast');
             crmApiMock.and.returnValue($q.resolve([{ values: selectedActivities }]));
             saveMethod();
             $rootScope.$digest();
@@ -156,7 +156,7 @@
           });
 
           it('emits a civicase activity updated event', function () {
-            expect($rootScope.$emit).toHaveBeenCalledWith('civicase::activity::updated');
+            expect($rootScope.$broadcast).toHaveBeenCalledWith('civicase::activity::updated');
           });
 
           it('closes the dialog', function () {
@@ -170,7 +170,7 @@
             model.case_id = selectedActivities[0].case_id;
 
             spyOn($.fn, 'dialog');
-            spyOn($rootScope, '$emit');
+            spyOn($rootScope, '$broadcast');
             crmApiMock.and.returnValue($q.resolve([{ values: selectedActivities }]));
             saveMethod();
             $rootScope.$digest();
@@ -181,7 +181,7 @@
           });
 
           it('does not emit the civicase activity updated event', function () {
-            expect($rootScope.$emit).not.toHaveBeenCalledWith('civicase::activity::updated');
+            expect($rootScope.$broadcast).not.toHaveBeenCalledWith('civicase::activity::updated');
           });
 
           it('closes the dialog', function () {
@@ -329,7 +329,7 @@
               });
 
             spyOn($.fn, 'dialog');
-            spyOn($rootScope, '$emit');
+            spyOn($rootScope, '$broadcast');
             crmApiMock.and.returnValue($q.resolve([{ values: selectedActivities }]));
             saveMethod();
             $rootScope.$digest();
@@ -354,7 +354,7 @@
           });
 
           it('emits a civicase activity updated event', function () {
-            expect($rootScope.$emit).toHaveBeenCalledWith('civicase::activity::updated');
+            expect($rootScope.$broadcast).toHaveBeenCalledWith('civicase::activity::updated');
           });
 
           it('closes the dialog', function () {
@@ -368,7 +368,7 @@
             model.case_id = selectedActivities[0].case_id;
 
             spyOn($.fn, 'dialog');
-            spyOn($rootScope, '$emit');
+            spyOn($rootScope, '$broadcast');
             crmApiMock.and.returnValue($q.resolve([{ values: selectedActivities }]));
             saveMethod();
             $rootScope.$digest();
@@ -379,7 +379,7 @@
           });
 
           it('does not emit the civicase activity updated event', function () {
-            expect($rootScope.$emit).not.toHaveBeenCalledWith('civicase::activity::updated');
+            expect($rootScope.$broadcast).not.toHaveBeenCalledWith('civicase::activity::updated');
           });
 
           it('closes the dialog', function () {

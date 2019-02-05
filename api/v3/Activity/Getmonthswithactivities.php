@@ -5,7 +5,7 @@ use CRM_Civicase_ExtensionUtil as E;
  * Activity.Getmonthswithactivities API specification
  *
  * @param array $spec description of fields supported by this API call
- * 
+ *
  * @return void
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
@@ -16,7 +16,7 @@ function _civicrm_api3_activity_Getmonthswithactivities_spec(&$spec) {
 
 /**
  * Returns list of unique [MM, YYYY] month-year pair with at least an activity
- * 
+ *
  * @method Activity.Getmonthswithactivities API
  *
  * @param array $params
@@ -36,6 +36,10 @@ function civicrm_api3_activity_Getmonthswithactivities($params) {
 
   $options = _civicrm_api3_get_options_from_params($params, FALSE, 'Activity', 'get');
   $sql = CRM_Utils_SQL_Select::fragment();
+
+  if (isset($params['case_filter'])) {
+    CRM_Civicase_ActivityFilter::updateParams($params);
+  }
 
   _civicrm_api3_activity_get_extraFilters($params, $sql);
 
@@ -59,19 +63,28 @@ function civicrm_api3_activity_Getmonthswithactivities($params) {
   }
 
   $activities = _civicrm_api3_basic_get(_civicrm_api3_get_BAO(__FUNCTION__), $params, FALSE, 'Activity', $sql);
-  
   $grouped_activity_dates = [];
-  $grouped_activity_dates_indexes = [];
 
   foreach($activities as $activity) {
     list($activity_year, $activity_month) = explode('-', $activity['activity_date_time']);
-    
-    if (!isset($grouped_activity_dates_indexes[$activity_month . $activity_year])) {
-      $grouped_activity_dates_indexes[$activity_month . $activity_year] = true;
+
+    $activity_group_index = -1;
+    foreach ($grouped_activity_dates as $key => $val) {
+      if ($val['year'] === $activity_year && $val['month'] === $activity_month) {
+        $activity_group_index = $key;
+
+        break;
+      }
+    }
+
+    if ($activity_group_index === -1) {
       $grouped_activity_dates[] = array(
         'year' => $activity_year,
         'month' => $activity_month,
+        'count' => 1,
       );
+    } else {
+      $grouped_activity_dates[$activity_group_index]['count'] = $grouped_activity_dates[$activity_group_index]['count'] + 1;
     }
   }
 
