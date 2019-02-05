@@ -6,11 +6,19 @@
     var currentMonth = moment();
     var pastMonth = moment().add(-1, 'month');
 
-    var monthNavMockData = [
-      { count: 9, month: futureMonth.format('MM'), year: futureMonth.format('YYYY') },
-      { count: 10, month: currentMonth.format('MM'), year: currentMonth.format('YYYY') },
-      { count: 11, month: pastMonth.format('MM'), year: pastMonth.format('YYYY') }
-    ];
+    var monthNavMockData = [{
+      count: 9,
+      month: futureMonth.format('MM'),
+      year: futureMonth.format('YYYY')
+    }, {
+      count: 10,
+      month: currentMonth.format('MM'),
+      year: currentMonth.format('YYYY')
+    }, {
+      count: 11,
+      month: pastMonth.format('MM'),
+      year: pastMonth.format('YYYY')
+    }];
 
     return {
       /**
