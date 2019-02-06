@@ -4,10 +4,38 @@
   module.directive('civicaseActivityMonthNav', function () {
     return {
       restrict: 'A',
-      replace: true,
       templateUrl: '~/civicase/activity/feed/directives/activity-month-nav.directive.html',
-      controller: 'civicaseActivityMonthNavController'
+      controller: 'civicaseActivityMonthNavController',
+      link: civicaseActivityMonthNavLink
     };
+
+    /**
+     * Link function for civicaseActivityMonthNav
+     *
+     * @param {Object} scope
+     * @param {Object} $el
+     * @param {Object} attr
+     */
+    function civicaseActivityMonthNavLink (scope, $el, attr) {
+      (function init () {
+        setNavHeight();
+      }());
+
+      /**
+       * Set height for activity month nav
+       */
+      function setNavHeight () {
+        var $filter = $('.civicase__activity-filter');
+        var $toolbarDrawer = $('#toolbar');
+        var $monthNav = $el.find('.civicase__activity-month-nav');
+        var $tabs = $('.civicase__dashboard').length > 0
+          ? $('.civicase__dashboard__tab-container ul.nav')
+          : $('.civicase__case-body_tab');
+        var topOffset = ($filter.height() + $toolbarDrawer.height() + $tabs.height());
+
+        $monthNav.height('calc(100vh - ' + topOffset + 'px)');
+      }
+    }
   });
 
   module.controller('civicaseActivityMonthNavController', civicaseActivityMonthNavController);
