@@ -47,11 +47,13 @@
        * Sets Activity Details Panel affix offsets
        */
       function setActivityDetailsPanelAffixOffsets () {
-        $activityDetailsPanel.affix({
-          offset: {
-            top: activityPanelMeasurements.getTopOffset(),
-            bottom: activityPanelMeasurements.getBottomOffset()
-          }
+        $timeout(function () {
+          $activityDetailsPanel.affix({
+            offset: {
+              top: activityPanelMeasurements.getTopOffset(),
+              bottom: activityPanelMeasurements.getBottomOffset()
+            }
+          });
         });
       }
 
