@@ -19,7 +19,7 @@
 
       (function init () {
         affixMonthNav();
-        $rootScope.$on('civicase::case-search::dropdown-toggle', resetAffix);
+        scope.$on('civicase::case-search::dropdown-toggle', resetAffix);
       }());
 
       /**

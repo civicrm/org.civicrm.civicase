@@ -43,7 +43,7 @@
        * Initialise all subscribers
        */
       function initSubscribers () {
-        $rootScope.$on('civicase::case-search::dropdown-toggle', reAdjustFixedHeader);
+        scope.$on('civicase::case-search::dropdown-toggle', reAdjustFixedHeader);
         $rootScope.$on('civicase::bulk-actions::bulk-message-toggle', reAdjustFixedHeader);
       }
 
