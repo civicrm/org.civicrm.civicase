@@ -177,7 +177,7 @@
 
         it('aligns the popover arrow to the right', function () {
           var arrowCurrentPosition = popover.find('.arrow').css('left');
-          var arrowExpectedPosition = 'calc(-' + popover.find('.arrow').outerWidth() + 'px + 100%)'; // 100% - arrow width
+          var arrowExpectedPosition = 'calc(100% + -' + popover.find('.arrow').outerWidth() + 'px)'; // 100% - arrow width
 
           expect(arrowCurrentPosition).toBe(arrowExpectedPosition);
         });
