@@ -45,6 +45,7 @@
   module.controller('civicaseActivityMonthNavController', civicaseActivityMonthNavController);
 
   function civicaseActivityMonthNavController ($rootScope, $scope, crmApi) {
+    var currentlyActiveMonth = false;
     $scope.navigateToMonth = navigateToMonth;
 
     (function init () {
@@ -229,6 +230,12 @@
      * @param {Object} monthObj
      */
     function navigateToMonth (monthObj) {
+      if (currentlyActiveMonth) {
+        currentlyActiveMonth.active = false;
+      }
+      currentlyActiveMonth = monthObj;
+      monthObj.active = true;
+
       if (!checkIfMonthIsAlreadyLoaded(monthObj)) {
         $rootScope.$broadcast('civicase::month-nav::set-starting-offset', {
           startingOffset: monthObj.startingOffset
