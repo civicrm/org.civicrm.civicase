@@ -98,6 +98,9 @@
         });
       };
 
+      /**
+       * Toogle More filters visibility
+       */
       $scope.toggleMoreFilters = function () {
         $scope.filters['@moreFilters'] = !$scope.filters['@moreFilters'];
 

@@ -2,6 +2,66 @@
 
 (function (_) {
   describe('civicaseActivityMonthNav', function () {
+    describe('Activity Month Nav Directive', function () {
+      var $compile, $rootScope, $scope, $timeout, heightSpy;
+
+      beforeEach(module('civicase', 'civicase.templates'));
+
+      beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
+        $compile = _$compile_;
+        $rootScope = _$rootScope_;
+        $timeout = _$timeout_;
+
+        $scope = $rootScope.$new();
+
+        heightSpy = spyOn(CRM.$.fn, 'height');
+      }));
+
+      describe('on init', function () {
+        var heightSpyCallSelectors, expectedHeightSpyCallSelectors;
+
+        beforeEach(function () {
+          initDirective(true);
+          $timeout.flush();
+
+          heightSpyCallSelectors = _.map(heightSpy.calls.all(), function (callObj) {
+            return callObj.object.selector;
+          });
+          expectedHeightSpyCallSelectors = [
+            '#toolbar',
+            '.civicase__case-body_tab',
+            '.civicase__activity-month-nav',
+            '.civicase__dashboard__tab-container ul.nav',
+            '.civicase__activity-filter'
+          ];
+        });
+
+        it('sets the height of the month nav', function () {
+          expect(_.union(heightSpyCallSelectors, expectedHeightSpyCallSelectors))
+            .toEqual(expectedHeightSpyCallSelectors);
+          expect(heightSpy.calls.argsFor(2)[0].startsWith('calc(100vh - ')).toBe(true);
+        });
+      });
+
+      /**
+       * Initializes the civicaseActivityMonthNav directive
+       */
+      function initDirective (isDashboard) {
+        var html = `<div civicase-activity-month-nav></div>
+          <div class='civicase__dashboard'></div>
+          <div class='civicase__activity-filter'></div>
+          <div id='toolbar'></div>
+          <div class='civicase__activity-month-nav'></div>
+          <div class='civicase__dashboard__tab-container'>
+            <ul class='nav'></ul>
+          </div>
+          <div class="civicase__case-body_tab"></div>`;
+
+        $compile(html)($scope);
+        $scope.$digest();
+      }
+    });
+
     describe('Activity Month Nav Controller', function () {
       var $scope, $controller, $rootScope, crmApi, $q, monthNavMockData;
 

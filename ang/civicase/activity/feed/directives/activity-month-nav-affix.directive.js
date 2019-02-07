@@ -47,7 +47,9 @@
             top: monthNavTopOffset - distanceFromTop,
             bottom: $($document).height() - ($feedListContainer.offset().top + $feedListContainer.height())
           }
-        }).on('affixed.bs.affix', function () {
+        });
+
+        $monthNav.on('affixed.bs.affix', function () {
           $monthNav.css('top', distanceFromTop);
         }).on('affixed-top.bs.affix', function () {
           $monthNav.css('top', 'auto');
@@ -71,18 +73,22 @@
 
       /**
        * Resets Activity Month Nav affix offsets
+       *
+       * @param {Boolean} recalculateTopOffset
        */
       function resetAffix (recalculateTopOffset) {
         $timeout(function () {
-          if ($monthNav.data('bs.affix')) {
-            if (recalculateTopOffset) {
-              monthNavTopOffset = $monthNav.offset().top;
-            }
-
-            distanceFromTop = $filter.outerHeight() + $toolbarDrawer.height() + $tabs.height();
-
-            $monthNav.data('bs.affix').options.offset.top = monthNavTopOffset - distanceFromTop;
+          if (!$monthNav.data('bs.affix')) {
+            return;
           }
+
+          if (recalculateTopOffset) {
+            monthNavTopOffset = $monthNav.offset().top;
+          }
+
+          distanceFromTop = $filter.outerHeight() + $toolbarDrawer.height() + $tabs.height();
+
+          $monthNav.data('bs.affix').options.offset.top = monthNavTopOffset - distanceFromTop;
         });
       }
     }
