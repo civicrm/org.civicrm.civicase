@@ -31,7 +31,9 @@ describe('civicaseActivityMonthNavAffix', function () {
     beforeEach(function () {
       $filter = CRM.$('.civicase__activity-filter');
       $feedListContainer = CRM.$('.civicase__activity-feed__body');
-      $tabs = CRM.$('.civicase__dashboard').length > 0 ? CRM.$('.civicase__dashboard__tab-container ul.nav') : CRM.$('.civicase__case-body_tab');
+      $tabs = CRM.$('.civicase__dashboard').length > 0
+        ? CRM.$('.civicase__dashboard__tab-container ul.nav')
+        : CRM.$('.civicase__case-body_tab');
       $toolbarDrawer = CRM.$('#toolbar');
 
       compileDirective();

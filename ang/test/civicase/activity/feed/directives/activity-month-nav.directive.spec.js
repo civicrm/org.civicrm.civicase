@@ -3,7 +3,8 @@
 (function (_) {
   describe('civicaseActivityMonthNav', function () {
     describe('Activity Month Nav Directive', function () {
-      var $compile, $rootScope, $scope, $timeout, heightSpy;
+      var $compile, $rootScope, $scope, $timeout, heightSpy,
+        topOffset;
 
       beforeEach(module('civicase', 'civicase.templates'));
 
@@ -14,51 +15,101 @@
 
         $scope = $rootScope.$new();
 
-        heightSpy = spyOn(CRM.$.fn, 'height');
+        heightSpy = spyOn(CRM.$.fn, 'height').and.callThrough();
       }));
 
       describe('on init', function () {
-        var heightSpyCallSelectors, expectedHeightSpyCallSelectors;
+        var $filter, $toolbarDrawer, $dashboardTabs, $caseBodyTabs;
 
-        beforeEach(function () {
-          initDirective(true);
-          $timeout.flush();
-
-          heightSpyCallSelectors = _.map(heightSpy.calls.all(), function (callObj) {
-            return callObj.object.selector;
-          });
-          expectedHeightSpyCallSelectors = [
-            '#toolbar',
-            '.civicase__case-body_tab',
-            '.civicase__activity-month-nav',
-            '.civicase__dashboard__tab-container ul.nav',
-            '.civicase__activity-filter'
-          ];
+        afterEach(function () {
+          removeAdditionalMarkup();
         });
 
-        it('sets the height of the month nav', function () {
-          expect(_.union(heightSpyCallSelectors, expectedHeightSpyCallSelectors))
-            .toEqual(expectedHeightSpyCallSelectors);
-          expect(heightSpy.calls.argsFor(2)[0].startsWith('calc(100vh - ')).toBe(true);
+        describe('when used inside dashboard page', function () {
+          beforeEach(function () {
+            addAdditionalMarkup(true);
+            initDirective();
+
+            $filter = CRM.$('.civicase__activity-filter');
+            $toolbarDrawer = CRM.$('#toolbar');
+            $dashboardTabs = CRM.$('.civicase__dashboard__tab-container ul.nav');
+            $caseBodyTabs = CRM.$('.civicase__case-body_tab');
+
+            $timeout.flush();
+
+            topOffset = $filter.outerHeight() +
+              $toolbarDrawer.height() +
+              $dashboardTabs.height();
+          });
+
+          it('sets the height of the month nav to summation of filter, toolbar and dashboard tab', function () {
+            expect(heightSpy.calls.argsFor(2)[0]).toBe('calc(100vh - ' + topOffset + 'px)');
+          });
+        });
+
+        describe('when used inside case summary page', function () {
+          beforeEach(function () {
+            addAdditionalMarkup();
+            initDirective();
+
+            $filter = CRM.$('.civicase__activity-filter');
+            $toolbarDrawer = CRM.$('#toolbar');
+            $dashboardTabs = CRM.$('.civicase__dashboard__tab-container ul.nav');
+            $caseBodyTabs = CRM.$('.civicase__case-body_tab');
+
+            $timeout.flush();
+
+            topOffset = $filter.outerHeight() +
+              $toolbarDrawer.height() +
+              $caseBodyTabs.height();
+          });
+
+          it('sets the height of the month nav to summation of filter, toolbar and case body tab', function () {
+            expect(heightSpy.calls.argsFor(2)[0]).toBe('calc(100vh - ' + topOffset + 'px)');
+          });
         });
       });
 
       /**
        * Initializes the civicaseActivityMonthNav directive
        */
-      function initDirective (isDashboard) {
-        var html = `<div civicase-activity-month-nav></div>
-          <div class='civicase__dashboard'></div>
-          <div class='civicase__activity-filter'></div>
-          <div id='toolbar'></div>
-          <div class='civicase__activity-month-nav'></div>
-          <div class='civicase__dashboard__tab-container'>
-            <ul class='nav'></ul>
-          </div>
-          <div class="civicase__case-body_tab"></div>`;
+      function initDirective () {
+        var html = '<div civicase-activity-month-nav></div>';
 
         $compile(html)($scope);
         $scope.$digest();
+      }
+
+      /**
+       * Add aditional markup
+       *
+       * @param {Boolean} isDashboard
+       */
+      function addAdditionalMarkup (isDashboard) {
+        var markup = `<div id='activity-month-nav-spec-additional-markup'>
+        <div class='civicase__activity-filter' style='height: 100px'></div>
+        <div id='toolbar' style='height: 200px'></div>
+        <div class='civicase__activity-month-nav'></div>
+        <div class="civicase__case-body_tab" style='height: 400px'></div>
+        </div>`;
+
+        CRM.$(markup).appendTo('body');
+
+        if (isDashboard) {
+          markup = `<div class='civicase__dashboard'></div>
+            <div class='civicase__dashboard__tab-container'>
+              <ul class='nav' style='height: 300px'></ul>
+            </div>`;
+
+          CRM.$(markup).appendTo('#activity-month-nav-spec-additional-markup');
+        }
+      }
+
+      /**
+       * Remove aditional markup
+       */
+      function removeAdditionalMarkup () {
+        CRM.$('#activity-month-nav-spec-additional-markup').remove();
       }
     });
 
