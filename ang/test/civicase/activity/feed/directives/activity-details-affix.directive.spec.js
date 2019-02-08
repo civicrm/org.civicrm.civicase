@@ -1,16 +1,17 @@
 /* eslint-env jasmine */
 
 describe('civicaseActivityDetailsAffix', function () {
-  var element, $compile, $document, $rootScope, scope, affixReturnValue,
-    affixOriginalFunction;
+  var element, $compile, $document, $rootScope, $timeout, scope,
+    affixReturnValue, affixOriginalFunction;
 
   beforeEach(module('civicase'));
 
-  beforeEach(inject(function (_$compile_, _$rootScope_, _$document_) {
+  beforeEach(inject(function (_$compile_, _$rootScope_, _$document_, _$timeout_) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     scope = $rootScope.$new();
     $document = _$document_;
+    $timeout = _$timeout_;
   }));
 
   beforeEach(function () {
@@ -41,6 +42,7 @@ describe('civicaseActivityDetailsAffix', function () {
       $toolbarDrawer = CRM.$('#toolbar');
 
       compileDirective();
+      $timeout.flush();
       $activityDetailsPanel = element.find('.civicase__activity-panel');
     });
 

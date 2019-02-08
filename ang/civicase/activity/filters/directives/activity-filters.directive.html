@@ -81,8 +81,8 @@
       </button>
       <button
         class="civicase__activity-filter__more btn btn-{{filters['@moreFilters'] ? 'active' : 'default'}}"
-        ng-click="filters['@moreFilters'] = filters['@moreFilters'] ? false : true"
-        title="{{ ts('Show only starred items') }}">
+        ng-click="toggleMoreFilters()"
+        title="{{ ts('Click to view More Filters') }}">
         <i class="material-icons">tune</i> <span>Filter Activities</span>
       </button>
     </span>

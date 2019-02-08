@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityFilters', function ($timeout, crmUiHelp) {
+  module.directive('civicaseActivityFilters', function ($rootScope, $timeout, crmUiHelp) {
     return {
       restrict: 'A',
       scope: {
@@ -96,6 +96,15 @@
         _.each(_.keys($scope.filters), function (key) {
           delete $scope.filters[key];
         });
+      };
+
+      /**
+       * Toogle More filters visibility
+       */
+      $scope.toggleMoreFilters = function () {
+        $scope.filters['@moreFilters'] = !$scope.filters['@moreFilters'];
+
+        $rootScope.$broadcast('civicase::activity-filters::more-filters-toggled');
       };
 
       /**

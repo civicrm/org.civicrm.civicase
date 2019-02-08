@@ -20,7 +20,7 @@
       var $casePanelBody = $('.civicase__case-details-panel > .panel-body');
       var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
 
-      $rootScope.$on('civicase::case-search::dropdown-toggle', function () {
+      scope.$on('civicase::case-search::dropdown-toggle', function () {
         $timeout(function () {
           // Reset right case view tab header
           if ($caseNavigation.data('bs.affix')) {

@@ -10,6 +10,7 @@
       <div ng-repeat="monthObj in yearObj.months">
         <div
           class="civicase__activity-month-nav__group-month"
+          ng-class="{'active': monthObj.active}"
           ng-click="navigateToMonth(monthObj)">
           {{monthObj.monthName}}
         </div>

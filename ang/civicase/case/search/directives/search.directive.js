@@ -185,7 +185,7 @@
      * Watcher for expanded state and update tableHeader top offset likewise
      */
     function expandedWatcher () {
-      $scope.$emit('civicase::case-search::dropdown-toggle');
+      $rootScope.$broadcast('civicase::case-search::dropdown-toggle');
     }
 
     /**

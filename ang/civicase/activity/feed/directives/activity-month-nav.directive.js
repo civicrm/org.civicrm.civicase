@@ -1,18 +1,51 @@
 (function (angular, $, _, CRM) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityMonthNav', function () {
+  module.directive('civicaseActivityMonthNav', function ($timeout) {
     return {
       restrict: 'A',
-      replace: true,
       templateUrl: '~/civicase/activity/feed/directives/activity-month-nav.directive.html',
-      controller: 'civicaseActivityMonthNavController'
+      controller: 'civicaseActivityMonthNavController',
+      link: civicaseActivityMonthNavLink
     };
+
+    /**
+     * Link function for civicaseActivityMonthNav
+     *
+     * @param {Object} scope
+     * @param {Object} $el
+     * @param {Object} attr
+     */
+    function civicaseActivityMonthNavLink (scope, $el, attr) {
+      (function init () {
+        setNavHeight();
+        scope.$on('civicase::case-search::dropdown-toggle', setNavHeight);
+        scope.$on('civicase::activity-filters::more-filters-toggled', setNavHeight);
+      }());
+
+      /**
+       * Set height for activity month nav
+       */
+      function setNavHeight () {
+        $timeout(function () {
+          var $filter = $('.civicase__activity-filter');
+          var $toolbarDrawer = $('#toolbar');
+          var $monthNav = $el.find('.civicase__activity-month-nav');
+          var $tabs = $('.civicase__dashboard').length > 0
+            ? $('.civicase__dashboard__tab-container ul.nav')
+            : $('.civicase__case-body_tab');
+          var topOffset = ($filter.outerHeight() + $toolbarDrawer.height() + $tabs.height());
+
+          $monthNav.height('calc(100vh - ' + topOffset + 'px)');
+        });
+      }
+    }
   });
 
   module.controller('civicaseActivityMonthNavController', civicaseActivityMonthNavController);
 
   function civicaseActivityMonthNavController ($rootScope, $scope, crmApi) {
+    var currentlyActiveMonth = false;
     $scope.navigateToMonth = navigateToMonth;
 
     (function init () {
@@ -197,6 +230,12 @@
      * @param {Object} monthObj
      */
     function navigateToMonth (monthObj) {
+      if (currentlyActiveMonth) {
+        currentlyActiveMonth.active = false;
+      }
+      currentlyActiveMonth = monthObj;
+      monthObj.active = true;
+
       if (!checkIfMonthIsAlreadyLoaded(monthObj)) {
         $rootScope.$broadcast('civicase::month-nav::set-starting-offset', {
           startingOffset: monthObj.startingOffset
