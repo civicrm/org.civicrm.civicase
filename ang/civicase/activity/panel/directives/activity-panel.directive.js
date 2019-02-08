@@ -106,17 +106,21 @@
   function civicaseActivityPanelController ($scope, dialogService, crmApi, crmBlocker, crmStatus, DateHelper) {
     $scope.activityPriorties = CRM.civicase.priority;
     $scope.allowedActivityStatuses = {};
+    $scope.closeDetailsPanel = closeDetailsPanel;
+    $scope.setStatusTo = setStatusTo;
+    $scope.setPriorityTo = setPriorityTo;
 
     (function init () {
       $scope.$watch('activity.id', showActivityDetails);
+      $scope.$on('civicase::case-details::unfocused', closeDetailsPanel);
     }());
 
     /**
      * Close the activity details panel
      */
-    $scope.closeDetailsPanel = function () {
+    function closeDetailsPanel () {
       delete $scope.activity.id;
-    };
+    }
 
     /**
      * Set status of sent activity
@@ -124,11 +128,11 @@
      * @param {object} activity
      * @param {object} activityStatusId
      */
-    $scope.setStatusTo = function (activity, activityStatusId) {
+    function setStatusTo (activity, activityStatusId) {
       activity.status_id = activityStatusId;
       // Setvalue api avoids messy revisioning issues
       $scope.refresh([['Activity', 'setvalue', {id: activity.id, field: 'status_id', value: activity.status_id}]], true);
-    };
+    }
 
     /**
      * Set priority of sent activity
@@ -136,11 +140,11 @@
      * @param {object} activity
      * @param {object} priorityId
      */
-    $scope.setPriorityTo = function (activity, priorityId) {
+    function setPriorityTo (activity, priorityId) {
       activity.priority_id = priorityId;
       // Setvalue api avoids messy revisioning issues
       $scope.refresh([['Activity', 'setvalue', {id: activity.id, field: 'priority_id', value: activity.priority_id}]], true);
-    };
+    }
 
     /**
      * Set Allowed Activity status's

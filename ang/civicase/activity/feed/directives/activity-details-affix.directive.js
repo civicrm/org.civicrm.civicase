@@ -1,7 +1,8 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityDetailsAffix', function ($timeout, $rootScope, ActivityPanelMeasurements) {
+  module.directive('civicaseActivityDetailsAffix', function ($timeout,
+    $document, $rootScope, ActivityPanelMeasurements) {
     return {
       link: civicaseActivityDetailsAffix
     };
@@ -28,6 +29,7 @@
         }
 
         scope.$on('civicase::case-search::dropdown-toggle', resetAffix);
+        $rootScope.$broadcast('civicase::activity-details::initialised');
       }());
 
       /**
