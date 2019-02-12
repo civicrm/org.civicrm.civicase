@@ -32,8 +32,13 @@
   }
 
   .civicase__activity-type {
+    display: block;
     font-size: 16px;
     margin-right: 12px;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .civicase__activity-attachment__icon {

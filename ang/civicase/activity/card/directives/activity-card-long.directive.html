@@ -24,10 +24,8 @@
         <!-- End - Task - Checkbox -->
         <!-- Type -->
         <span
-          class="civicase__activity-type"
-          ng-if="activity.type !== 'File Upload'"
-          ng-class="{'civicase__activity-type--completed': (activity.category.indexOf('task') > -1 && activity.is_completed)}">
-          {{ activity.type }}
+          civicase-activity-type-tooltip
+          ng-if="activity.type !== 'File Upload'">
         </span>
         <span
           class="civicase__activity-subject"
