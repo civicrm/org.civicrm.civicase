@@ -11,7 +11,11 @@
           $scope.filters = {contact_id: {/literal}{$cid|json}{literal}};
           $scope.displayOptions = {include_case: false};
         },
-        template: '<div id="bootstrap-theme" class="civicase__container" show-bulk-actions="true" civicase-activity-feed="{filters: filters, displayOptions: displayOptions}"></div>'
+        template: '<div id="bootstrap-theme"' +
+          'class="civicase__container"' +
+          'hide-quick-nav-when-details-is-visible="true"' +
+          'show-bulk-actions="true"' +
+          'civicase-activity-feed="{filters: filters, displayOptions: displayOptions}"></div>'
       });
     });
   })(angular, CRM.$, CRM._);

@@ -27,7 +27,7 @@
         activityPanelMeasurements = ActivityPanelMeasurements(element);
 
         setPanelHeight();
-        $rootScope.$on('civicase::activity-card::load-activity-form', loadActivityForm);
+        scope.$on('civicase::activity-feed::show-activity-panel', loadActivityForm);
         element.on('crmFormSuccess', scope.refresh);
         element.on('crmLoad', crmLoadListener);
       }());
@@ -103,7 +103,8 @@
     }
   });
 
-  function civicaseActivityPanelController ($scope, dialogService, crmApi, crmBlocker, crmStatus, DateHelper) {
+  function civicaseActivityPanelController ($scope, $rootScope, dialogService,
+    crmApi, crmBlocker, crmStatus, DateHelper) {
     $scope.activityPriorties = CRM.civicase.priority;
     $scope.allowedActivityStatuses = {};
     $scope.closeDetailsPanel = closeDetailsPanel;
@@ -120,6 +121,8 @@
      */
     function closeDetailsPanel () {
       delete $scope.activity.id;
+
+      $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
     }
 
     /**
@@ -169,7 +172,7 @@
       if ($scope.activity.id) {
         setAllowedActivityStatuses();
 
-        $scope.$emit('civicase::activity-card::load-activity-form', $scope.activity);
+        $rootScope.$broadcast('civicase::activity-feed::show-activity-panel', $scope.activity);
       }
     }
   }
