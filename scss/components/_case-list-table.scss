@@ -25,6 +25,10 @@
 
   .civicase__bulkactions-actions-dropdown {
     top: 2px;
+
+    .civicase__bulkactions-actions-dropdown__text {
+      width: 60px;
+    }
   }
 
   .civicase__case-list-column--first {
@@ -198,7 +202,7 @@
 .civicase__case-sort-dropdown {
   box-shadow: none;
   display: inline-block;
-  width: 110px !important;
+  width: 90px !important;
 
   .select2-chosen {
     padding-top: 1px;
