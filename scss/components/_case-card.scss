@@ -55,6 +55,13 @@
   }
 }
 
+.civicase__case-card--case-list {
+  .civicase__case-card__activity-info {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
 .civicase__case-card--other {
   border-bottom: 1px solid $gray-light;
   min-height: auto;
@@ -152,12 +159,13 @@
   padding: 5px 0;
 }
 
-.civicase__case-card__spacer {
+.civicase__case-card__tag,
+.civicase__case-card__activity-count-container {
   margin-right: 8px;
 }
 
-.civicase__case-card__tag {
-  margin-right: 8px;
+.civicase__case-card__activity-count-container {
+  display: inline-block;
 }
 
 .civicase__case-card--detached {

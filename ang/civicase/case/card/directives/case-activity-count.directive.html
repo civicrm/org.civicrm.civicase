@@ -1,0 +1,62 @@
+<!-- Tasks -->
+<div class="civicase__case-card__activity-count-container">
+  <span>Tasks: </span>
+  <a class="civicase__case-card__activity-count"
+      ng-if="data.category_count.incomplete.task"
+      ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'task', statusType: 'incomplete' })}}"
+  > {{ data.category_count.incomplete.task }} </a>
+  <span ng-if="data.category_count.incomplete.task && data.category_count.overdue.task" class="civicase__pipe"> | </span>
+  <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
+      ng-if="data.category_count.overdue.task"
+      ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'task', statusType: 'incomplete' })}}"
+  > {{ data.category_count.overdue.task }} </a>
+  <span ng-if="!data.category_count.incomplete.task && !data.category_count.overdue.task" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
+</div>
+<!-- End Tasks -->
+
+<!-- Communication -->
+<div class="civicase__case-card__activity-count-container">
+  <span>Comms: </span>
+  <a class="civicase__case-card__activity-count"
+      ng-if="data.category_count.incomplete.communication"
+      ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'communication', statusType: 'incomplete' })}}"
+  > {{ data.category_count.incomplete.communication }} </a>
+  <span ng-if="data.category_count.incomplete.communication && data.category_count.overdue.communication" class="civicase__pipe"> | </span>
+  <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
+      ng-if="data.category_count.overdue.communication"
+      ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'communication', statusType: 'incomplete' })}}"
+  > {{ data.category_count.overdue.communication }} </a>
+  <span ng-if="!data.category_count.incomplete.communication && !data.category_count.overdue.communication" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
+</div>
+<!-- End Communication -->
+
+<!-- Others -->
+<div class="civicase__case-card__activity-count-container">
+  <span>Other: </span>
+  <a class="civicase__case-card__activity-count"
+      ng-if="data.category_count.incomplete.other"
+      ng-href="{{getActivityFeedUrl({ caseId: data.id, category: otherCategories, statusType: 'incomplete' })}}"
+  > {{ data.category_count.incomplete.other }} </a>
+  <span ng-if="data.category_count.incomplete.other && data.category_count.overdue.other" class="civicase__pipe"> | </span>
+  <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
+      ng-if="data.category_count.overdue.other"
+      ng-href="{{getActivityFeedUrl({ caseId: data.id, category: otherCategories, statusType: 'incomplete' })}}"
+  > {{ data.category_count.overdue.other }} </a>
+  <span ng-if="!data.category_count.incomplete.other && !data.category_count.overdue.other" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
+</div>
+<!-- Others -->
+
+<!-- Tooltip -->
+<span
+  ng-if="tooltipEnabled"
+  class='civicase__case-activity-count__popover'
+  uib-popover-template="'civicase__case-activity-count__popover_template'"
+  popover-placement="bottom"
+  popover-trigger="'mouseenter'">
+  <span>...</span>
+</span>
+
+<script id="civicase__case-activity-count__popover_template" type="text/ng-template">
+  <span ng-bind-html="dynamicTooltipContent"><span>
+</script>
+<!-- End Tooltip -->
