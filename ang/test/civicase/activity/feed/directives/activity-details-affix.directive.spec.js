@@ -24,6 +24,8 @@ describe('civicaseActivityDetailsAffix', function () {
     affixReturnValue = jasmine.createSpyObj('affix', ['on']);
     affixReturnValue.on.and.returnValue(affixReturnValue);
     CRM.$.fn.affix.and.returnValue(affixReturnValue);
+
+    spyOn($rootScope, '$broadcast').and.callThrough();
   });
 
   afterEach(function () {
@@ -48,6 +50,11 @@ describe('civicaseActivityDetailsAffix', function () {
 
     afterEach(function () {
       removeTestDomElements();
+    });
+
+    it('fires an event to notify activity details initialisation', function () {
+      expect($rootScope.$broadcast)
+        .toHaveBeenCalledWith('civicase::activity-details::initialised');
     });
 
     it('applies static positioning to the activity details', function () {

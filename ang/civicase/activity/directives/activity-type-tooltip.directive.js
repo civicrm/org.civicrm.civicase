@@ -4,7 +4,7 @@
   module.directive('civicaseActivityTypeTooltip', function ($timeout) {
     return {
       restrict: 'A',
-      templateUrl: '~/civicase/activity/card/directives/activity-type-tooltip.directive.html',
+      templateUrl: '~/civicase/activity/directives/activity-type-tooltip.directive.html',
       link: caseActivityTypeTooltipLink
     };
 

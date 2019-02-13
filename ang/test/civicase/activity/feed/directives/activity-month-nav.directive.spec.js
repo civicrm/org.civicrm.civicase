@@ -70,6 +70,63 @@
         });
       });
 
+      describe('when activity panel show/hide', function () {
+        beforeEach(function () {
+          initDirective();
+          $timeout.flush();
+        });
+
+        describe('when activity panel is shown', function () {
+          describe('and hide-quick-nav-when-details-is-visible property is true', function () {
+            beforeEach(function () {
+              $scope.hideQuickNavWhenDetailsIsVisible = true;
+              $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
+            });
+
+            it('hides the activity nav', function () {
+              expect($scope.isVisible).toBe(false);
+            });
+          });
+
+          describe('and hide-quick-nav-when-details-is-visible property is false', function () {
+            beforeEach(function () {
+              $scope.hideQuickNavWhenDetailsIsVisible = false;
+              $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
+            });
+
+            it('does not hide the activity nav', function () {
+              expect($scope.isVisible).toBe(true);
+            });
+          });
+        });
+
+        describe('when activity panel is hidden', function () {
+          describe('and hide-quick-nav-when-details-is-visible property is true', function () {
+            beforeEach(function () {
+              $scope.isVisible = false;
+              $scope.hideQuickNavWhenDetailsIsVisible = true;
+              $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
+            });
+
+            it('shows the activity nav', function () {
+              expect($scope.isVisible).toBe(true);
+            });
+          });
+
+          describe('and hide-quick-nav-when-details-is-visible property is false', function () {
+            beforeEach(function () {
+              $scope.isVisible = false;
+              $scope.hideQuickNavWhenDetailsIsVisible = false;
+              $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
+            });
+
+            it('does not show the activity nav', function () {
+              expect($scope.isVisible).toBe(false);
+            });
+          });
+        });
+      });
+
       /**
        * Initializes the civicaseActivityMonthNav directive
        */
