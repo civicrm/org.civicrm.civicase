@@ -52,7 +52,7 @@ describe('civicaseActivityDetailsAffix', function () {
       removeTestDomElements();
     });
 
-    it('fires an event to notify activity details initialisation', function () {
+    it('fires an event to notify activity details affix initialisation', function () {
       expect($rootScope.$broadcast)
         .toHaveBeenCalledWith('civicase::activity-details::affix-initialised');
     });

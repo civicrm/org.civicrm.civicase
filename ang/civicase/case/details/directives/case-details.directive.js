@@ -45,7 +45,7 @@
       $scope.$watch('isFocused', isFocusedWatcher);
       $scope.$watch('item', itemWatcher);
       $scope.$on('civicase::activity-details::affix-initialised',
-        activityDetailsInitListener);
+        activityDetailsAffixListener);
     }());
 
     $scope.addTimeline = function (name) {
@@ -244,7 +244,7 @@
     /**
      * Listener for civicase::activity-details::affix-initialised
      */
-    function activityDetailsInitListener () {
+    function activityDetailsAffixListener () {
       if (checkIfWindowWidthBreakpointIsReached()) {
         $scope.isFocused = true;
       }

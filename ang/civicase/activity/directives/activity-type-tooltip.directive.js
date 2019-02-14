@@ -5,7 +5,8 @@
     return {
       restrict: 'A',
       templateUrl: '~/civicase/activity/directives/activity-type-tooltip.directive.html',
-      link: caseActivityTypeTooltipLink
+      link: caseActivityTypeTooltipLink,
+      scope: {}
     };
 
     /**

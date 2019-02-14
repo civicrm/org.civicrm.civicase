@@ -6,7 +6,10 @@
       restrict: 'A',
       templateUrl: '~/civicase/activity/feed/directives/activity-month-nav.directive.html',
       controller: 'civicaseActivityMonthNavController',
-      link: civicaseActivityMonthNavLink
+      link: civicaseActivityMonthNavLink,
+      scope: {
+        hideQuickNavWhenDetailsIsVisible: '='
+      }
     };
 
     /**

@@ -69,14 +69,14 @@
 
       describe('when case is unfocused and screen width is less than 1690px', function () {
         beforeEach(function () {
-          spyOn($rootScope, '$broadcast');
+          spyOn($rootScope, '$broadcast').and.callThrough();
           spyOn($document, 'width').and.returnValue(1600);
           compileDirective();
           element.isolateScope().isFocused = true;
           element.isolateScope().focusToggle();
         });
 
-        it('fires an event', function () {
+        it('fires the case details unfocused event', function () {
           expect($rootScope.$broadcast)
             .toHaveBeenCalledWith('civicase::case-details::unfocused');
         });
@@ -91,7 +91,7 @@
           element.isolateScope().focusToggle();
         });
 
-        it('fires an event', function () {
+        it('does not fire the case details unfocused event', function () {
           expect($rootScope.$broadcast).not.toHaveBeenCalled();
         });
       });

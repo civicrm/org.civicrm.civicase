@@ -64,7 +64,7 @@
         expect(activityPanel.isolateScope().activity.id).toBeUndefined();
       });
 
-      it('fires and event to notify the closing of activity panel', function () {
+      it('fires an event to notify the closing of activity panel', function () {
         expect($rootScope.$broadcast)
           .toHaveBeenCalledWith('civicase::activity-feed::hide-activity-panel');
       });

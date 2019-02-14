@@ -4,7 +4,7 @@
   describe('civicaseActivityMonthNav', function () {
     describe('Activity Month Nav Directive', function () {
       var $compile, $rootScope, $scope, $timeout, heightSpy,
-        topOffset;
+        topOffset, activityMonthNavElement;
 
       beforeEach(module('civicase', 'civicase.templates'));
 
@@ -79,23 +79,23 @@
         describe('when activity panel is shown', function () {
           describe('and hide-quick-nav-when-details-is-visible property is true', function () {
             beforeEach(function () {
-              $scope.hideQuickNavWhenDetailsIsVisible = true;
+              activityMonthNavElement.isolateScope().hideQuickNavWhenDetailsIsVisible = true;
               $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
             });
 
             it('hides the activity nav', function () {
-              expect($scope.isVisible).toBe(false);
+              expect(activityMonthNavElement.isolateScope().isVisible).toBe(false);
             });
           });
 
           describe('and hide-quick-nav-when-details-is-visible property is false', function () {
             beforeEach(function () {
-              $scope.hideQuickNavWhenDetailsIsVisible = false;
+              activityMonthNavElement.isolateScope().hideQuickNavWhenDetailsIsVisible = false;
               $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
             });
 
             it('does not hide the activity nav', function () {
-              expect($scope.isVisible).toBe(true);
+              expect(activityMonthNavElement.isolateScope().isVisible).toBe(true);
             });
           });
         });
@@ -103,25 +103,25 @@
         describe('when activity panel is hidden', function () {
           describe('and hide-quick-nav-when-details-is-visible property is true', function () {
             beforeEach(function () {
-              $scope.isVisible = false;
-              $scope.hideQuickNavWhenDetailsIsVisible = true;
+              activityMonthNavElement.isolateScope().isVisible = false;
+              activityMonthNavElement.isolateScope().hideQuickNavWhenDetailsIsVisible = true;
               $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
             });
 
             it('shows the activity nav', function () {
-              expect($scope.isVisible).toBe(true);
+              expect(activityMonthNavElement.isolateScope().isVisible).toBe(true);
             });
           });
 
           describe('and hide-quick-nav-when-details-is-visible property is false', function () {
             beforeEach(function () {
-              $scope.isVisible = false;
-              $scope.hideQuickNavWhenDetailsIsVisible = false;
+              activityMonthNavElement.isolateScope().isVisible = false;
+              activityMonthNavElement.isolateScope().hideQuickNavWhenDetailsIsVisible = false;
               $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
             });
 
             it('does not show the activity nav', function () {
-              expect($scope.isVisible).toBe(false);
+              expect(activityMonthNavElement.isolateScope().isVisible).toBe(false);
             });
           });
         });
@@ -133,7 +133,7 @@
       function initDirective () {
         var html = '<div civicase-activity-month-nav></div>';
 
-        $compile(html)($scope);
+        activityMonthNavElement = $compile(html)($scope);
         $scope.$digest();
       }
 
