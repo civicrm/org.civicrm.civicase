@@ -25,7 +25,7 @@
   });
 
   module.controller('CivicaseCaseCardController', function ($scope, getActivityFeedUrl, DateHelper) {
-    $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.getActivityFeedUrl = getActivityFeedUrl;
     $scope.formatDate = DateHelper.formatDate;
     $scope.otherCategories = _.map(_.filter(CRM.civicase.activityCategories, function (category) {
       return category.name !== 'task' && category.name !== 'communication';

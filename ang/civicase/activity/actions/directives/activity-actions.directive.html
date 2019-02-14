@@ -1,5 +1,5 @@
 <li ng-if="mode === 'case-summary'">
-  <a ng-href="#{{ getActivityFeedUrl(selectedActivities[0].case_id, null, null, null, selectedActivities[0].id) }}">
+  <a ng-href="{{ getActivityFeedUrl({ caseId: selectedActivities[0].case_id, activityId: selectedActivities[0].id }) }}">
     <i class="material-icons">pageview</i> {{ ts('View in Feed') }}
   </a>
 </li>

@@ -29,7 +29,7 @@
 
     $scope.areDetailsLoaded = false;
     $scope.relatedCasesPager = { total: 0, size: 5, num: 0, range: {} };
-    $scope.activityFeedUrl = getActivityFeedUrl;
+    $scope.getActivityFeedUrl = getActivityFeedUrl;
     $scope.bulkAllowed = BulkActions.isAllowed();
     $scope.caseTypesLength = _.size(caseTypes);
     $scope.CRM = CRM;

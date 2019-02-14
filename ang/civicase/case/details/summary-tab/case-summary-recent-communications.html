@@ -1,7 +1,7 @@
 <div class="panel-heading clearfix">
   <h3 class="panel-title pull-left">{{ ts('Recent Communications') }}</h3>
   <a class="pull-right"
-     ng-href="#{{ activityFeedUrl(item.id, 'communication', 'completed') }}"
+     ng-href="{{getActivityFeedUrl({ caseId: item.id, category: 'communication', statusType: 'completed' })}}"
      ng-if="item.category_count.completed.communication"
      title="{{ ts('View All') }}"
   >{{ ts('View All') }}</a>

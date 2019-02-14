@@ -28,7 +28,7 @@
       <span>Next Milestone: </span>
       <a class="civicase__case-card__next-milestone-date"
          ng-class="{'civicase__overdue-activity-icon': data.activity_summary.milestone[0].is_overdue}"
-         ng-href="#{{ activityFeedUrl(data.id, 'milestone', 'incomplete', null, data.activity_summary.milestone[0].id) }}"
+         ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'milestone', statusType: 'incomplete', activityId: data.activity_summary.milestone[0].id })}}"
          title="{{data.activity_summary.milestone[0].subject || data.activity_summary.milestone[0].type;}}"
       >{{ formatDate(data.activity_summary.milestone[0].activity_date_time, 'DD/MM/YYYY') }} </a>
     </div>
@@ -37,12 +37,12 @@
         <span>Tasks: </span>
         <a class="civicase__case-card__activity-count"
            ng-if="data.category_count.incomplete.task"
-           ng-href="#{{ activityFeedUrl(data.id, 'task', 'incomplete') }}"
+           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'task', statusType: 'incomplete' })}}"
         > {{ data.category_count.incomplete.task }} </a>
         <span ng-if="data.category_count.incomplete.task && data.category_count.overdue.task" class="civicase__pipe"> | </span>
         <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
            ng-if="data.category_count.overdue.task"
-           ng-href="#{{ activityFeedUrl(data.id, 'task', 'incomplete') }}"
+           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'task', statusType: 'incomplete' })}}"
         > {{ data.category_count.overdue.task }} </a>
         <span ng-if="!data.category_count.incomplete.task && !data.category_count.overdue.task" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
       </div>
@@ -50,12 +50,12 @@
         <span>Comms: </span>
         <a class="civicase__case-card__activity-count"
            ng-if="data.category_count.incomplete.communication"
-           ng-href="#{{ activityFeedUrl(data.id, 'communication', 'incomplete') }}"
+           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'communication', statusType: 'incomplete' })}}"
         > {{ data.category_count.incomplete.communication }} </a>
         <span ng-if="data.category_count.incomplete.communication && data.category_count.overdue.communication" class="civicase__pipe"> | </span>
         <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
            ng-if="data.category_count.overdue.communication"
-           ng-href="#{{ activityFeedUrl(data.id, 'communication', 'incomplete') }}"
+           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'communication', statusType: 'incomplete' })}}"
         > {{ data.category_count.overdue.communication }} </a>
         <span ng-if="!data.category_count.incomplete.communication && !data.category_count.overdue.communication" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
       </div>
@@ -63,12 +63,12 @@
         <span>Other: </span>
         <a class="civicase__case-card__activity-count"
            ng-if="data.category_count.incomplete.other"
-           ng-href="#{{ activityFeedUrl(data.id, otherCategories, 'incomplete') }}"
+           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: otherCategories, statusType: 'incomplete' })}}"
         > {{ data.category_count.incomplete.other }} </a>
         <span ng-if="data.category_count.incomplete.other && data.category_count.overdue.other" class="civicase__pipe"> | </span>
         <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
            ng-if="data.category_count.overdue.other"
-           ng-href="#{{ activityFeedUrl(data.id, otherCategories, 'incomplete') }}"
+           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: otherCategories, statusType: 'incomplete' })}}"
         > {{ data.category_count.overdue.other }} </a>
         <span ng-if="!data.category_count.incomplete.other && !data.category_count.overdue.other" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
       </div>
