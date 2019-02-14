@@ -31,7 +31,7 @@
         urlParams.filters || {}
       );
 
-      var p = angular.extend({}, $route.current.params, {
+      var finalUrlParams = angular.extend({}, $route.current.params, {
         aid: urlParams.activityId,
         focus: 1,
         sx: 0,
@@ -41,20 +41,20 @@
 
       if (currentPath !== '/case/list') {
         baseUrl = '#/case?';
-        p.dtab = 1;
+        finalUrlParams.dtab = 1;
 
         // If we're not already viewing a case, force the case id filter
-        p.cf = JSON.stringify({ id: urlParams.caseId });
+        finalUrlParams.cf = JSON.stringify({ id: urlParams.caseId });
       } else {
-        p.tab = 'activities';
+        finalUrlParams.tab = 'activities';
       }
 
       if (urlParams.caseId) {
-        p.caseId = parseInt(urlParams.caseId, 10);
+        finalUrlParams.caseId = parseInt(urlParams.caseId, 10);
       }
 
       // The value to mark as trusted in angular context for security.
-      return $sce.trustAsResourceUrl(baseUrl + $.param(p));
+      return $sce.trustAsResourceUrl(baseUrl + $.param(finalUrlParams));
     };
   });
 })(angular, CRM.$, CRM._, CRM);
