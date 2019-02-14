@@ -617,7 +617,7 @@
     function seeAllLinkUrl (date) {
       var activityFilters = getSeeMoreActivityFilters(date);
 
-      return getActivityFeedUrl({ filters: activityFilters });
+      return getActivityFeedUrl({ activityFilters: activityFilters });
     }
 
     /**

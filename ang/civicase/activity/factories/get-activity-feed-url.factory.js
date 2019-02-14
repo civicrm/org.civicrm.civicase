@@ -28,7 +28,7 @@
         {},
         $route.current.params.af || {},
         activityFilters,
-        urlParams.filters || {}
+        urlParams.activityFilters || {}
       );
 
       var finalUrlParams = angular.extend({}, $route.current.params, {
