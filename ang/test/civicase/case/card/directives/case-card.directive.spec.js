@@ -1,9 +1,13 @@
 /* eslint-env jasmine */
 (function ($) {
   describe('civicaseCaseCard', function () {
-    var element, $compile, $rootScope, $scope, CasesData;
+    var element, $compile, $rootScope, $route, $scope, CasesData;
 
-    beforeEach(module('civicase.templates', 'civicase', 'civicase.data'));
+    beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function ($provide) {
+      $route = { current: { params: {} } };
+
+      $provide.value('$route', $route);
+    }));
 
     beforeEach(inject(function (_$compile_, _$rootScope_, _CasesData_) {
       $compile = _$compile_;
