@@ -44,7 +44,7 @@
     (function init () {
       $scope.$watch('isFocused', isFocusedWatcher);
       $scope.$watch('item', itemWatcher);
-      $scope.$on('civicase::activity-details::initialised',
+      $scope.$on('civicase::activity-details::affix-initialised',
         activityDetailsInitListener);
     }());
 
@@ -242,7 +242,7 @@
     };
 
     /**
-     * Listener for civicase::activity-details::initialised
+     * Listener for civicase::activity-details::affix-initialised
      */
     function activityDetailsInitListener () {
       if (checkIfWindowWidthBreakpointIsReached()) {

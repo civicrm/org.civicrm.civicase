@@ -54,7 +54,7 @@ describe('civicaseActivityDetailsAffix', function () {
 
     it('fires an event to notify activity details initialisation', function () {
       expect($rootScope.$broadcast)
-        .toHaveBeenCalledWith('civicase::activity-details::initialised');
+        .toHaveBeenCalledWith('civicase::activity-details::affix-initialised');
     });
 
     it('applies static positioning to the activity details', function () {

@@ -232,7 +232,7 @@
         beforeEach(function () {
           spyOn($document, 'width').and.returnValue(1700);
           compileDirective();
-          $rootScope.$broadcast('civicase::activity-details::initialised');
+          $rootScope.$broadcast('civicase::activity-details::affix-initialised');
         });
 
         it('does not hide the case list', function () {
@@ -244,7 +244,7 @@
         beforeEach(function () {
           spyOn($document, 'width').and.returnValue(1650);
           compileDirective();
-          $rootScope.$broadcast('civicase::activity-details::initialised');
+          $rootScope.$broadcast('civicase::activity-details::affix-initialised');
         });
 
         it('hides the case list', function () {

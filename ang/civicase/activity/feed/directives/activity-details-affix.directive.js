@@ -29,7 +29,7 @@
         }
 
         scope.$on('civicase::case-search::dropdown-toggle', resetAffix);
-        $rootScope.$broadcast('civicase::activity-details::initialised');
+        $rootScope.$broadcast('civicase::activity-details::affix-initialised');
       }());
 
       /**
