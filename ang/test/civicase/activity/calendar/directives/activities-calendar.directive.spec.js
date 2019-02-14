@@ -2,9 +2,14 @@
 
 (function ($, _, moment) {
   describe('civicaseActivitiesCalendarController', function () {
-    var $controller, $q, $scope, $rootScope, crmApi, formatActivity, dates, mockedActivities;
+    var $controller, $q, $scope, $rootScope, $route, crmApi, formatActivity, dates,
+      mockedActivities;
 
-    beforeEach(module('civicase', 'crmUtil', 'civicase.data', 'ui.bootstrap'));
+    beforeEach(module('civicase', 'crmUtil', 'civicase.data', 'ui.bootstrap', function ($provide) {
+      $route = { current: { params: {} } };
+
+      $provide.value('$route', $route);
+    }));
 
     beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _crmApi_,
       _formatActivity_, datesMockData) {
@@ -633,10 +638,9 @@
           foo: 'foo',
           af: { bar: 'bar' }
         };
+        $route.current.params = currentRouteParams;
 
-        initController(null, {
-          '$route': { current: { params: currentRouteParams } }
-        });
+        initController(null);
 
         url = $scope.seeAllLinkUrl(dates.yesterday);
         queryParams = CRM.testUtils.extractQueryStringParams(url.$$unwrapTrustedValue());
@@ -644,6 +648,10 @@
 
       it('is a trusted url', function () {
         expect(url.$$unwrapTrustedValue).toBeDefined();
+      });
+
+      it('displays the activities from the dashboard by default', function () {
+        expect(url).toMatch(/^#\/case\?/);
       });
 
       it('redirects to the activities feed tab', function () {
