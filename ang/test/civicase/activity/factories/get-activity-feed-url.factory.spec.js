@@ -24,8 +24,11 @@
         activityFeedUrlObject = getActivityFeedUrlAsObject();
       });
 
-      it('returns an url pointing to the dashboard activity feed', function () {
+      it('returns a url pointing to the dashboard', function () {
         expect(activityFeedUrlObject.baseUrl).toBe('#/case');
+      });
+
+      it('it requests the activity feed tab using the dtab param', function () {
         expect(activityFeedUrlObject.params.dtab).toBe('1');
       });
     });
@@ -37,7 +40,7 @@
         activityFeedUrlObject = getActivityFeedUrlAsObject();
       });
 
-      it('returns an url pointing to the case activity feed', function () {
+      it('returns a url pointing to the case activity feed', function () {
         expect(activityFeedUrlObject.baseUrl).toBe('#/case/list');
         expect(activityFeedUrlObject.params.tab).toBe('activities');
       });

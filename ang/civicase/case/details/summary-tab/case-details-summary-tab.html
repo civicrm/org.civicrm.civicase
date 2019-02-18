@@ -34,7 +34,8 @@
           {{item.category_count.overdue.communication}} overdue
         </div>
       </a>
-      <a class="civicase__summary-activity-count" ng-href="{{getActivityFeedUrl({ caseId: item.id, status: 'Scheduled' })}}">
+      <a class="civicase__summary-activity-count"
+        ng-href="{{getActivityFeedUrl({ caseId: item.id, status: 'Scheduled' })}}">
         <div>{{item.category_count.scheduled.count}}</div>
         <div>Scheduled Activities</div>
         <div
