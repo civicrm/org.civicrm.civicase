@@ -6,7 +6,7 @@
     <span class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before" ng-if="item.category_count.overdue.task">{{item.category_count.overdue.task}} </span>
   </h3>
   <a class="pull-right"
-     ng-href="#{{ activityFeedUrl(item.id, 'task', 'completed') }}"
+     ng-href="{{ getActivityFeedUrl({ caseId: item.id, category: 'task', statusType: 'completed' }) }}"
      ng-if="item.category_count.incomplete.task"
      title="{{ ts('View All') }}"
   >{{ ts('View All') }}</a>

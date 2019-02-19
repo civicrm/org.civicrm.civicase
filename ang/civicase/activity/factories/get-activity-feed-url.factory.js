@@ -2,44 +2,59 @@
   var module = angular.module('civicase');
 
   module.factory('getActivityFeedUrl', function ($route, $location, $sce) {
-    return function (caseId, category, statusType, status, id) {
-      var af = {};
+    return function (urlParams) {
+      var activityFilters = {};
+      var baseUrl = '#/case/list?';
       var currentPath = $location.path();
 
-      caseId = parseInt(caseId, 10);
+      urlParams = urlParams || {};
+      urlParams.activityId = urlParams.activityId || 0;
 
-      if (category) {
-        af['activity_type_id.grouping'] = category;
+      if (urlParams.category) {
+        activityFilters['activity_type_id.grouping'] = urlParams.category;
       }
 
-      if (statusType) {
-        af.status_id = CRM.civicase.activityStatusTypes[statusType];
+      if (urlParams.statusType) {
+        activityFilters.status_id = CRM.civicase.activityStatusTypes[urlParams.statusType];
       }
 
-      if (status) {
-        af.status_id = [_.findKey(CRM.civicase.activityStatuses, function (statusObj) {
-          return statusObj.name === status;
+      if (urlParams.status) {
+        activityFilters.status_id = [_.findKey(CRM.civicase.activityStatuses, function (statusObj) {
+          return statusObj.name === urlParams.status;
         })];
       }
 
-      var p = {
-        caseId: caseId,
-        tab: 'activities',
-        aid: id || 0,
+      activityFilters = angular.extend(
+        {},
+        $route.current.params.af || {},
+        activityFilters,
+        urlParams.activityFilters || {}
+      );
+
+      var finalUrlParams = angular.extend({}, $route.current.params, {
+        aid: urlParams.activityId,
         focus: 1,
         sx: 0,
         ai: '{"myActivities":false,"delegated":false}',
-        af: JSON.stringify(af)
-      };
-      // If we're not already viewing a case, force the id filter
+        af: JSON.stringify(activityFilters)
+      });
+
       if (currentPath !== '/case/list') {
-        p.cf = JSON.stringify({id: caseId});
+        baseUrl = '#/case?';
+        finalUrlParams.dtab = 1;
+
+        // If we're not already viewing a case, force the case id filter
+        finalUrlParams.cf = JSON.stringify({ id: urlParams.caseId });
       } else {
-        p = angular.extend({}, $route.current.params, p);
+        finalUrlParams.tab = 'activities';
+      }
+
+      if (urlParams.caseId) {
+        finalUrlParams.caseId = parseInt(urlParams.caseId, 10);
       }
 
       // The value to mark as trusted in angular context for security.
-      return $sce.trustAsResourceUrl('/case/list?' + $.param(p));
+      return $sce.trustAsResourceUrl(baseUrl + $.param(finalUrlParams));
     };
   });
 })(angular, CRM.$, CRM._, CRM);

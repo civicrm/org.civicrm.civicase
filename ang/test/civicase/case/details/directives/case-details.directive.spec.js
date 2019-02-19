@@ -1,7 +1,8 @@
 /* eslint-env jasmine */
 (function (_) {
   describe('civicaseCaseDetails', function () {
-    var element, controller, activitiesMockData, $controller, $compile, $rootScope, $scope, $provide, crmApi, crmApiMock, $q, formatCase, CasesData, CasesUtils;
+    var element, controller, activitiesMockData, $controller, $compile, $rootScope,
+      $route, $scope, $provide, crmApi, crmApiMock, $q, formatCase, CasesData, CasesUtils;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
       $provide = _$provide_;
@@ -12,11 +13,13 @@
     beforeEach(inject(function ($q) {
       var formatCaseMock = jasmine.createSpy('formatCase');
       crmApiMock = jasmine.createSpy('crmApi').and.returnValue($q.resolve());
+      $route = { current: { params: {} } };
 
       formatCaseMock.and.callFake(function (data) {
         return data;
       });
 
+      $provide.value('$route', $route);
       $provide.value('crmApi', crmApiMock);
       $provide.value('formatCase', formatCaseMock);
     }));

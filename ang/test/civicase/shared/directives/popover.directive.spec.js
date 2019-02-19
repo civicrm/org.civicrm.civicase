@@ -176,8 +176,10 @@
         });
 
         it('aligns the popover arrow to the right', function () {
-          var arrowCurrentPosition = popover.find('.arrow').css('left');
-          var arrowExpectedPosition = 'calc(100% + -' + popover.find('.arrow').outerWidth() + 'px)';
+          var arrowCurrentPosition, arrowExpectedPosition, popoverWidth;
+          arrowCurrentPosition = popover.find('.arrow').css('left');
+          popoverWidth = popover.find('.arrow').outerWidth();
+          arrowExpectedPosition = `calc(-${popoverWidth}px + 100%)`;
 
           expect(arrowCurrentPosition).toBe(arrowExpectedPosition);
         });

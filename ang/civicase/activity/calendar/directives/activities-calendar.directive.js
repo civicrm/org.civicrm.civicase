@@ -151,7 +151,7 @@
   module.controller('civicaseActivitiesCalendarController', civicaseActivitiesCalendarController);
 
   function civicaseActivitiesCalendarController ($q, $rootScope, $route, $sce,
-    $scope, crmApi, formatActivity, ContactsCache) {
+    $scope, ContactsCache, crmApi, formatActivity, getActivityFeedUrl) {
     var ACTIVITIES_DISPLAY_LIMIT = 25;
     var DEBOUNCE_WAIT = 300;
 
@@ -318,30 +318,24 @@
     }
 
     /**
-     * Returns the querystring params for the "see more" link, so that the link
+     * Returns the activity filters params for the "see more" link, so that the link
      * sends the user to the activity feed already filtered by the given date
      *
      * @param {Date} date
      * @return {Object}
      */
-    function getSeeMoreQueryParams (date) {
+    function getSeeMoreActivityFilters (date) {
       var dateMoment = moment(date);
-      var params = _.merge({}, $route.current.params, {
-        dtab: 1,
-        af: {
-          '@moreFilters': true,
-          activity_date_time: {
-            BETWEEN: [
-              dateMoment.startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-              dateMoment.endOf('day').format('YYYY-MM-DD HH:mm:ss')
-            ]
-          }
+
+      return {
+        '@moreFilters': true,
+        'activity_date_time': {
+          'BETWEEN': [
+            dateMoment.startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+            dateMoment.endOf('day').format('YYYY-MM-DD HH:mm:ss')
+          ]
         }
-      });
-
-      params.af = JSON.stringify(params.af);
-
-      return params;
+      };
     }
 
     /**
@@ -621,9 +615,9 @@
      * @return {TrustedValueHolderType}
      */
     function seeAllLinkUrl (date) {
-      var urlParams = getSeeMoreQueryParams(date);
+      var activityFilters = getSeeMoreActivityFilters(date);
 
-      return $sce.trustAsResourceUrl('#/case?' + $.param(urlParams));
+      return getActivityFeedUrl({ activityFilters: activityFilters });
     }
 
     /**
