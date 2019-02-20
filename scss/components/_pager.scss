@@ -20,41 +20,11 @@
   [title='Last Page'],
   [title='Next Page'] {
     a {
-      font-weight: bold;
+      font-size: 16px;
+      font-weight: $font-weight-content;
+      top: -3px;
     }
   }
-
-  [title='Previous Page'] {
-    a::before {
-      content: '\00ab';  //laquo
-      font-weight: $font-weight-content;
-      margin-right: 5px;
-    }
-  }
-
-  [title='First Page'] {
-    a::before {
-      content: '\2039';  //lsaquo
-      font-weight: $font-weight-content;
-      margin-right: 5px;
-    }    
-  }
-
-  [title='Last Page'] {
-    a::after {
-      content: '\00bb';  //raquo
-      font-weight: $font-weight-content;
-      margin-left: 5px;
-    }    
-  }
-
-  [title='Next Page'] {
-    a::after {
-      content: '\203A';  //rsaquo
-      font-weight: $font-weight-content;
-      margin-left: 5px;
-    }
-  }  
 }
 
 .civicase__pager--fixed {

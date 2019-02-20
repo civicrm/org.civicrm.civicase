@@ -6,7 +6,10 @@
       restrict: 'A',
       templateUrl: '~/civicase/activity/feed/directives/activity-month-nav.directive.html',
       controller: 'civicaseActivityMonthNavController',
-      link: civicaseActivityMonthNavLink
+      link: civicaseActivityMonthNavLink,
+      scope: {
+        hideQuickNavWhenDetailsIsVisible: '='
+      }
     };
 
     /**
@@ -47,6 +50,7 @@
   function civicaseActivityMonthNavController ($rootScope, $scope, crmApi) {
     var currentlyActiveMonth = false;
     $scope.navigateToMonth = navigateToMonth;
+    $scope.isVisible = true;
 
     (function init () {
       initWatchers();
@@ -219,6 +223,24 @@
      */
     function initWatchers () {
       $scope.$on('civicaseActivityFeed.query', feedQueryListener);
+      $scope.$on('civicase::activity-feed::show-activity-panel', function () {
+        toggleMonthNavVisibility(false);
+      });
+      $scope.$on('civicase::activity-feed::hide-activity-panel', function () {
+        toggleMonthNavVisibility(true);
+      });
+    }
+
+    /**
+     * Toggles the visiblity of month nav,
+     * when hideQuickNavWhenDetailsIsVisible is true
+     *
+     * @param {Boolean} isVisible
+     */
+    function toggleMonthNavVisibility (isVisible) {
+      if ($scope.hideQuickNavWhenDetailsIsVisible) {
+        $scope.isVisible = isVisible;
+      }
     }
 
     /**

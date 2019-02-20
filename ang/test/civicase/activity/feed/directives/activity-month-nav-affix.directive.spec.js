@@ -52,6 +52,7 @@ describe('civicaseActivityMonthNavAffix', function () {
     describe('after activity feed completes loading', function () {
       beforeEach(function () {
         scope.isLoading = false;
+        scope.isVisible = true;
         scope.$digest();
         $timeout.flush();
       });
@@ -79,6 +80,7 @@ describe('civicaseActivityMonthNavAffix', function () {
       $toolbarDrawer = CRM.$('#toolbar');
 
       scope.isLoading = false;
+      scope.isVisible = true;
       scope.$digest();
       $timeout.flush();
 
@@ -97,6 +99,7 @@ describe('civicaseActivityMonthNavAffix', function () {
       $activityMonthNav = element.find('.civicase__activity-month-nav');
 
       scope.isLoading = false;
+      scope.isVisible = true;
       scope.$digest();
       $timeout.flush();
 
@@ -120,6 +123,7 @@ describe('civicaseActivityMonthNavAffix', function () {
       $toolbarDrawer = CRM.$('#toolbar');
 
       scope.isLoading = false;
+      scope.isVisible = true;
       scope.$digest();
       $timeout.flush();
     });

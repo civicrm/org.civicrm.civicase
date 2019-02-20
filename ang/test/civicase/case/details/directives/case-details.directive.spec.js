@@ -1,8 +1,9 @@
 /* eslint-env jasmine */
 (function (_) {
   describe('civicaseCaseDetails', function () {
-    var element, controller, activitiesMockData, $controller, $compile, $rootScope,
-      $route, $scope, $provide, crmApi, crmApiMock, $q, formatCase, CasesData, CasesUtils;
+    var element, controller, activitiesMockData, $controller, $compile,
+      $document, $rootScope, $scope, $provide, crmApi, crmApiMock, $q,
+      formatCase, CasesData, CasesUtils;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
       $provide = _$provide_;
@@ -24,8 +25,11 @@
       $provide.value('formatCase', formatCaseMock);
     }));
 
-    beforeEach(inject(function (_$compile_, _$controller_, _$rootScope_, _activitiesMockData_, _CasesData_, _crmApi_, _$q_, _formatCase_, _CasesUtils_) {
+    beforeEach(inject(function (_$compile_, _$controller_, _$rootScope_,
+      _$document_, _activitiesMockData_, _CasesData_, _crmApi_, _$q_,
+      _formatCase_, _CasesUtils_) {
       $compile = _$compile_;
+      $document = _$document_;
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       activitiesMockData = _activitiesMockData_;
@@ -51,14 +55,45 @@
     });
 
     describe('focusToggle()', function () {
-      beforeEach(function () {
-        compileDirective();
-        element.isolateScope().isFocused = true;
-        element.isolateScope().focusToggle();
+      describe('basic test', function () {
+        beforeEach(function () {
+          compileDirective();
+          element.isolateScope().isFocused = true;
+          element.isolateScope().focusToggle();
+        });
+
+        it('toggles the focus state', function () {
+          expect(element.isolateScope().isFocused).toBe(false);
+        });
       });
 
-      it('toggles the focus state', function () {
-        expect(element.isolateScope().isFocused).toBe(false);
+      describe('when case is unfocused and screen width is less than 1690px', function () {
+        beforeEach(function () {
+          spyOn($rootScope, '$broadcast').and.callThrough();
+          spyOn($document, 'width').and.returnValue(1600);
+          compileDirective();
+          element.isolateScope().isFocused = true;
+          element.isolateScope().focusToggle();
+        });
+
+        it('fires the case details unfocused event', function () {
+          expect($rootScope.$broadcast)
+            .toHaveBeenCalledWith('civicase::case-details::unfocused');
+        });
+      });
+
+      describe('when case is unfocused and screen width is more than 1690px', function () {
+        beforeEach(function () {
+          spyOn($rootScope, '$broadcast');
+          spyOn($document, 'width').and.returnValue(1700);
+          compileDirective();
+          element.isolateScope().isFocused = true;
+          element.isolateScope().focusToggle();
+        });
+
+        it('does not fire the case details unfocused event', function () {
+          expect($rootScope.$broadcast).not.toHaveBeenCalled();
+        });
       });
     });
 
@@ -188,6 +223,32 @@
           asn: 'standard_timeline',
           caseID: $scope.item.id,
           sact: selectedActivities
+        });
+      });
+    });
+
+    describe('when activity details panel is opened', function () {
+      describe('when width of the screen is more than 1690 px', function () {
+        beforeEach(function () {
+          spyOn($document, 'width').and.returnValue(1700);
+          compileDirective();
+          $rootScope.$broadcast('civicase::activity-details::affix-initialised');
+        });
+
+        it('does not hide the case list', function () {
+          expect(element.isolateScope().isFocused).not.toBe(true);
+        });
+      });
+
+      describe('when width of the screen is less than 1690 px', function () {
+        beforeEach(function () {
+          spyOn($document, 'width').and.returnValue(1650);
+          compileDirective();
+          $rootScope.$broadcast('civicase::activity-details::affix-initialised');
+        });
+
+        it('hides the case list', function () {
+          expect(element.isolateScope().isFocused).toBe(true);
         });
       });
     });

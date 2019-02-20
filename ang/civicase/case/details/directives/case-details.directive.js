@@ -16,9 +16,10 @@
 
   module.controller('civicaseCaseDetailsController', civicaseCaseDetailsController);
 
-  function civicaseCaseDetailsController ($location, $rootScope, $scope, BulkActions, crmApi,
-    formatActivity, formatCase, getActivityFeedUrl, getCaseQueryParams, $route,
-    $timeout, CasesUtils, PrintMergeCaseAction) {
+  function civicaseCaseDetailsController ($location, $rootScope, $scope,
+    $document, BulkActions, crmApi, formatActivity, formatCase,
+    getActivityFeedUrl, getCaseQueryParams, $route, $timeout,
+    CasesUtils, PrintMergeCaseAction) {
     // The ts() and hs() functions help load strings for this module.
     // TODO: Move the common logic into a common controller (based on the usage of ContactCaseTabCaseDetails)
     var ts = $scope.ts = CRM.ts('civicase');
@@ -43,6 +44,8 @@
     (function init () {
       $scope.$watch('isFocused', isFocusedWatcher);
       $scope.$watch('item', itemWatcher);
+      $scope.$on('civicase::activity-details::affix-initialised',
+        activityDetailsAffixListener);
     }());
 
     $scope.addTimeline = function (name) {
@@ -86,6 +89,10 @@
      */
     $scope.focusToggle = function () {
       $scope.isFocused = !$scope.isFocused;
+
+      if (!$scope.isFocused && checkIfWindowWidthBreakpointIsReached()) {
+        $rootScope.$broadcast('civicase::case-details::unfocused');
+      }
     };
 
     /**
@@ -234,8 +241,28 @@
       });
     };
 
+    /**
+     * Listener for civicase::activity-details::affix-initialised
+     */
+    function activityDetailsAffixListener () {
+      if (checkIfWindowWidthBreakpointIsReached()) {
+        $scope.isFocused = true;
+      }
+    }
+
     function caseGetParams () {
       return getCaseQueryParams($scope.item.id, panelLimit);
+    }
+
+    /**
+     * Check if window width has reached set breakpoint
+     *
+     * @return {Boolean}
+     */
+    function checkIfWindowWidthBreakpointIsReached () {
+      var WINDOW_WIDTH_BREAKPOINT = 1690;
+
+      return $document.width() < WINDOW_WIDTH_BREAKPOINT;
     }
 
     /**

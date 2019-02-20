@@ -10,7 +10,8 @@
         params: '=civicaseActivityFeed',
         showBulkActions: '=',
         caseTypeId: '=',
-        refreshCase: '=?refreshCallback'
+        refreshCase: '=?refreshCallback',
+        hideQuickNavWhenDetailsIsVisible: '='
       }
     };
   });
@@ -131,7 +132,7 @@
           });
         }
         $scope.viewingActivity = _.cloneDeep(act);
-        $scope.$emit('civicase::activity-card::load-activity-form', $scope.viewingActivity);
+        $rootScope.$broadcast('civicase::activity-feed::show-activity-panel', $scope.viewingActivity);
         $scope.aid = act.id;
       }
     };

@@ -1,5 +1,5 @@
 <div
-  class="panel panel-default panel-strip-primary civicase__case-card civicase__animated-checkbox-card"
+  class="panel panel-default panel-strip-primary civicase__case-card civicase__case-card--case-list civicase__animated-checkbox-card"
   ng-style="{'border-left-color': data.color}"
   ng-class="{
     'civicase__case-card--active': $parent.viewingCase === data.id,
@@ -32,46 +32,7 @@
          title="{{data.activity_summary.milestone[0].subject || data.activity_summary.milestone[0].type;}}"
       >{{ formatDate(data.activity_summary.milestone[0].activity_date_time, 'DD/MM/YYYY') }} </a>
     </div>
-    <div class="civicase__case-card__activity-info">
-      <div class="civicase__case-card__activity-count-container">
-        <span>Tasks: </span>
-        <a class="civicase__case-card__activity-count"
-           ng-if="data.category_count.incomplete.task"
-           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'task', statusType: 'incomplete' })}}"
-        > {{ data.category_count.incomplete.task }} </a>
-        <span ng-if="data.category_count.incomplete.task && data.category_count.overdue.task" class="civicase__pipe"> | </span>
-        <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
-           ng-if="data.category_count.overdue.task"
-           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'task', statusType: 'incomplete' })}}"
-        > {{ data.category_count.overdue.task }} </a>
-        <span ng-if="!data.category_count.incomplete.task && !data.category_count.overdue.task" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
-      </div>
-      <div class="civicase__case-card__activity-count-container">
-        <span>Comms: </span>
-        <a class="civicase__case-card__activity-count"
-           ng-if="data.category_count.incomplete.communication"
-           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'communication', statusType: 'incomplete' })}}"
-        > {{ data.category_count.incomplete.communication }} </a>
-        <span ng-if="data.category_count.incomplete.communication && data.category_count.overdue.communication" class="civicase__pipe"> | </span>
-        <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
-           ng-if="data.category_count.overdue.communication"
-           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: 'communication', statusType: 'incomplete' })}}"
-        > {{ data.category_count.overdue.communication }} </a>
-        <span ng-if="!data.category_count.incomplete.communication && !data.category_count.overdue.communication" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
-      </div>
-      <div class="civicase__case-card__activity-count-container">
-        <span>Other: </span>
-        <a class="civicase__case-card__activity-count"
-           ng-if="data.category_count.incomplete.other"
-           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: otherCategories, statusType: 'incomplete' })}}"
-        > {{ data.category_count.incomplete.other }} </a>
-        <span ng-if="data.category_count.incomplete.other && data.category_count.overdue.other" class="civicase__pipe"> | </span>
-        <a class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
-           ng-if="data.category_count.overdue.other"
-           ng-href="{{getActivityFeedUrl({ caseId: data.id, category: otherCategories, statusType: 'incomplete' })}}"
-        > {{ data.category_count.overdue.other }} </a>
-        <span ng-if="!data.category_count.incomplete.other && !data.category_count.overdue.other" class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">0</span>
-      </div>
+    <div class="civicase__case-card__activity-info" civicase-case-activity-count>
     </div>
     <div class="civicase__case-card__tags-container" ng-if="data.tag_id">
       <span

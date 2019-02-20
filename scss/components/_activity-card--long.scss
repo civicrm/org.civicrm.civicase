@@ -32,12 +32,18 @@
   }
 
   .civicase__activity-type {
+    display: block;
     font-size: 16px;
     margin-right: 12px;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .civicase__activity-attachment__icon {
-    margin-top: 2px;
+    position: relative;
+    top: 2px;
   }
 
   .civicase__activity-attachment__file-options {
@@ -70,6 +76,14 @@
     color: $crm-gray-matte;
     font-weight: $font-weight-content;
     margin-left: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .civicase__activity-subject--title {
+    display: block;
+    max-width: 400px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

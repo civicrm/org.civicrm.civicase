@@ -18,15 +18,20 @@
         distanceFromTop, monthNavTopOffset;
 
       (function init () {
-        scope.$watch('isLoading', checkIfLoadingCompleted);
+        scope.$watch('isLoading', checkIfReadyForAffix);
+        scope.$watch('isVisible', checkIfReadyForAffix);
       }());
 
-      function checkIfLoadingCompleted (loading) {
-        if (!loading) {
+      /**
+       * Check if Affix should be initialised
+       */
+      function checkIfReadyForAffix () {
+        if (!scope.isLoading && scope.isVisible) {
           $timeout(affixMonthNav);
           initResetAffixWatchers();
         }
       }
+
       /**
        * Sets Activity Month Nav
        */

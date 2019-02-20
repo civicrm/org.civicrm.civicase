@@ -17,6 +17,8 @@
       CRM.url.and.returnValue('crm url mock');
       refreshFunction = jasmine.createSpy('refresh');
 
+      spyOn($rootScope, '$broadcast').and.callThrough();
+
       initDirective();
     }));
 
@@ -60,6 +62,11 @@
 
       it('closes the activity panel', function () {
         expect(activityPanel.isolateScope().activity.id).toBeUndefined();
+      });
+
+      it('fires an event to notify the closing of activity panel', function () {
+        expect($rootScope.$broadcast)
+          .toHaveBeenCalledWith('civicase::activity-feed::hide-activity-panel');
       });
     });
 

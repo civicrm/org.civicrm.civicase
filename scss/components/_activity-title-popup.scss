@@ -1,0 +1,15 @@
+.civicase__activity-title-popup {
+  border: 1px solid $gray-light;
+  border-radius: 2px;
+  box-shadow: $box-shadow-tooltip;
+  padding: 0;
+  z-index: 5;
+
+  .arrow {
+    border-bottom-color: $gray-light;
+
+    &.left {
+      left: 20px;
+    }
+  }
+}
