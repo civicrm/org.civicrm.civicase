@@ -22,17 +22,12 @@
           <i ng-if="activity.is_completed" class="civicase__checkbox--checked material-icons">check_box</i>
         </span>
         <!-- End - Task - Checkbox -->
-        <!-- Type -->
+        <!-- Title - Type/Subject -->
         <span
-          civicase-activity-type-tooltip
-          ng-if="activity.type !== 'File Upload'">
+          civicase-activity-title-tooltip
+          activity='activity'>
         </span>
-        <span
-          class="civicase__activity-subject"
-          ng-if="activity.type === 'File Upload'">
-          {{ activity.subject || activity.type }}
-        </span>
-        <!-- End - Type -->
+        <!-- End - Title - Type/Subject -->
         <span class="civicase__activity__right-container" ng-if="activity.category.indexOf('alert') === -1">
           <!-- Attachments -->
           <div class="btn-group civicase__activity-attachment__container" ng-if="activity.type !== 'File Upload' && activity.file_id">

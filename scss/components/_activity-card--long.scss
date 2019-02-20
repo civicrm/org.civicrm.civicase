@@ -81,6 +81,14 @@
     white-space: nowrap;
   }
 
+  .civicase__activity-subject--title {
+    display: block;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .civicase__activity-card-menu.btn-group .btn {
     margin-left: 0;
     top: -2px;
