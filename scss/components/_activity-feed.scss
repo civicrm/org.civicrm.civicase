@@ -1,3 +1,5 @@
+$feed-child-min-height: 400px;
+
 .civicase__activity-feed {
   box-shadow: none;
 
@@ -9,10 +11,6 @@
 
   .civicase__panel-transparent-header {
     margin: auto;
-
-    &:not(:first-child) {
-      margin-top: 35px;
-    }
 
     > .panel-body {
       background: transparent;
@@ -155,23 +153,30 @@
 
 .civicase__activity-feed__body__list {
   flex-grow: 1;
-  margin: 0 15px;
+  margin: 24px 0 0;
   max-width: 660px;
+  min-height: $feed-child-min-height;
   overflow: auto;
 }
 
 .civicase__activity-feed__body__details {
-  margin-left: 15px;
-  margin-right: 15px;
-  margin-top: 32px;
+  box-sizing: content-box;
+  margin-top: 24px;
+  min-height: $feed-child-min-height;
   min-width: 450px;
+  overflow-y: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 8px;
   width: 450px;
 }
 
 .civicase__activity-feed__body__month-nav {
   margin-left: 15px;
   margin-right: 15px;
-  margin-top: 32px;
+  margin-top: 24px;
+  min-height: $feed-child-min-height;
+  overflow: auto;
   width: 100px;
 }
 

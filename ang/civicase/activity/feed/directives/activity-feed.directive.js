@@ -1,11 +1,12 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityFeed', function () {
+  module.directive('civicaseActivityFeed', function ($timeout) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/activity/feed/directives/activity-feed.directive.html',
       controller: civicaseActivityFeedController,
+      link: civicaseActivityFeedLink,
       scope: {
         params: '=civicaseActivityFeed',
         showBulkActions: '=',
@@ -14,6 +15,38 @@
         hideQuickNavWhenDetailsIsVisible: '='
       }
     };
+
+    /**
+     * Link function for civicaseActivityFeed
+     *
+     * @param {Object} $scope
+     * @param {Object} element
+     */
+    function civicaseActivityFeedLink (scope, element, attrs) {
+      (function init () {
+        scope.$watch('isLoading', checkIfReadyForAffix);
+      }());
+
+      /**
+       * Check if Affix should be initialised
+       */
+      function checkIfReadyForAffix () {
+        if (!scope.isLoading) {
+          $timeout(setListHeight);
+        }
+      }
+
+      /**
+       * Set height for activity list
+       */
+      function setListHeight () {
+        var $feedBody = $('.civicase__activity-feed__body');
+        var $feedList = $('.civicase__activity-feed__body__list');
+        var topOffset = $feedBody.offset().top + 24;
+
+        $feedList.height('calc(100vh - ' + topOffset + 'px)');
+      }
+    }
   });
 
   module.controller('civicaseActivityFeedController', civicaseActivityFeedController);

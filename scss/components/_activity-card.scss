@@ -144,6 +144,7 @@
 
 .civicase__activity__right-container {
   margin-left: auto;
+  white-space: nowrap;
 
   > * {
     display: inline-block !important;
@@ -184,6 +185,7 @@
 
 .civicase__activity-card-row--case-info {
   line-height: 2em;
+  white-space: nowrap;
 
   .civicase__contact-card {
     margin-right: 5px;

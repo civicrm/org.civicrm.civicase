@@ -8,6 +8,7 @@
       controller: 'civicaseActivityMonthNavController',
       link: civicaseActivityMonthNavLink,
       scope: {
+        isLoading: '=',
         hideQuickNavWhenDetailsIsVisible: '='
       }
     };
@@ -21,26 +22,27 @@
      */
     function civicaseActivityMonthNavLink (scope, $el, attr) {
       (function init () {
-        setNavHeight();
-        scope.$on('civicase::case-search::dropdown-toggle', setNavHeight);
-        scope.$on('civicase::activity-filters::more-filters-toggled', setNavHeight);
+        scope.$watch('isLoading', checkIfReadyForAffix);
       }());
+
+      /**
+       * Check if Affix should be initialised
+       */
+      function checkIfReadyForAffix () {
+        if (!scope.isLoading) {
+          $timeout(setNavHeight);
+        }
+      }
 
       /**
        * Set height for activity month nav
        */
       function setNavHeight () {
-        $timeout(function () {
-          var $filter = $('.civicase__activity-filter');
-          var $toolbarDrawer = $('#toolbar');
-          var $monthNav = $el.find('.civicase__activity-month-nav');
-          var $tabs = $('.civicase__dashboard').length > 0
-            ? $('.civicase__dashboard__tab-container ul.nav')
-            : $('.civicase__case-body_tab');
-          var topOffset = ($filter.outerHeight() + $toolbarDrawer.height() + $tabs.height());
+        var $feedBody = $('.civicase__activity-feed__body');
+        var $monthNav = $('.civicase__activity-feed__body__month-nav');
+        var topOffset = $feedBody.offset().top + 24;
 
-          $monthNav.height('calc(100vh - ' + topOffset + 'px)');
-        });
+        $monthNav.height('calc(100vh - ' + topOffset + 'px)');
       }
     }
   });
