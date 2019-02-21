@@ -18,6 +18,12 @@
     z-index: 1;
   }
 
+  thead {
+    tr:nth-child(1) {
+      background-color: transparent;
+    }
+  }
+
   thead .btn {
     font-size: 16px;
     text-transform: none;
@@ -62,6 +68,11 @@
   [uib-monthpicker] .civicase__activities-calendar__title-word,
   [uib-yearpicker] .civicase__activities-calendar__title-word {
     display: none;
+  }
+
+  tr {
+    background-color: $crm-white;
+    padding: 0 5px;
   }
 
   tr:nth-child(0n+2) th,
