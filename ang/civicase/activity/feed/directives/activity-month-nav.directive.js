@@ -1,15 +1,14 @@
 (function (angular, $, _, CRM) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityMonthNav', function ($timeout) {
+  module.directive('civicaseActivityMonthNav', function ($timeout, ActivityFeedMeasurements) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/activity/feed/directives/activity-month-nav.directive.html',
       controller: 'civicaseActivityMonthNavController',
       link: civicaseActivityMonthNavLink,
       scope: {
-        isLoading: '=',
-        hideQuickNavWhenDetailsIsVisible: '='
+        isLoading: '='
       }
     };
 
@@ -22,13 +21,13 @@
      */
     function civicaseActivityMonthNavLink (scope, $el, attr) {
       (function init () {
-        scope.$watch('isLoading', checkIfReadyForAffix);
+        scope.$watch('isLoading', checkIfLoadingCompleted);
       }());
 
       /**
-       * Check if Affix should be initialised
+       * Check if loading is complete
        */
-      function checkIfReadyForAffix () {
+      function checkIfLoadingCompleted () {
         if (!scope.isLoading) {
           $timeout(setNavHeight);
         }
@@ -38,11 +37,9 @@
        * Set height for activity month nav
        */
       function setNavHeight () {
-        var $feedBody = $('.civicase__activity-feed__body');
         var $monthNav = $('.civicase__activity-feed__body__month-nav');
-        var topOffset = $feedBody.offset().top + 24;
 
-        $monthNav.height('calc(100vh - ' + topOffset + 'px)');
+        $monthNav.height('calc(100vh - ' + ActivityFeedMeasurements.getTopOffset() + 'px)');
       }
     }
   });
@@ -52,7 +49,6 @@
   function civicaseActivityMonthNavController ($rootScope, $scope, crmApi) {
     var currentlyActiveMonth = false;
     $scope.navigateToMonth = navigateToMonth;
-    $scope.isVisible = true;
 
     (function init () {
       initWatchers();
@@ -225,24 +221,6 @@
      */
     function initWatchers () {
       $scope.$on('civicaseActivityFeed.query', feedQueryListener);
-      $scope.$on('civicase::activity-feed::show-activity-panel', function () {
-        toggleMonthNavVisibility(false);
-      });
-      $scope.$on('civicase::activity-feed::hide-activity-panel', function () {
-        toggleMonthNavVisibility(true);
-      });
-    }
-
-    /**
-     * Toggles the visiblity of month nav,
-     * when hideQuickNavWhenDetailsIsVisible is true
-     *
-     * @param {Boolean} isVisible
-     */
-    function toggleMonthNavVisibility (isVisible) {
-      if ($scope.hideQuickNavWhenDetailsIsVisible) {
-        $scope.isVisible = isVisible;
-      }
     }
 
     /**

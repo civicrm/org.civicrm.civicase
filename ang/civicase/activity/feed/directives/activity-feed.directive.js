@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityFeed', function ($timeout) {
+  module.directive('civicaseActivityFeed', function ($timeout, ActivityFeedMeasurements) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/activity/feed/directives/activity-feed.directive.html',
@@ -40,11 +40,9 @@
        * Set height for activity list
        */
       function setListHeight () {
-        var $feedBody = $('.civicase__activity-feed__body');
         var $feedList = $('.civicase__activity-feed__body__list');
-        var topOffset = $feedBody.offset().top + 24;
 
-        $feedList.height('calc(100vh - ' + topOffset + 'px)');
+        $feedList.height('calc(100vh - ' + ActivityFeedMeasurements.getTopOffset() + 'px)');
       }
     }
   });
@@ -62,6 +60,7 @@
     var pageNum = { down: 0, up: 0 };
     var allActivities = [];
 
+    $scope.isMonthNavVisible = true;
     $scope.isLoading = true;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityStatuses = CRM.civicase.activityStatuses;
@@ -440,6 +439,12 @@
       $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
         $scope.viewActivity(activity.id, $event);
       });
+      $scope.$on('civicase::activity-feed::show-activity-panel', function () {
+        toggleMonthNavVisibility(false);
+      });
+      $scope.$on('civicase::activity-feed::hide-activity-panel', function () {
+        toggleMonthNavVisibility(true);
+      });
     }
 
     /**
@@ -561,6 +566,18 @@
         $scope.showSpinner.up = true;
       } else if (mode.direction === 'down' && mode.nextPage === true) {
         $scope.showSpinner.down = true;
+      }
+    }
+
+    /**
+     * Toggles the visiblity of month nav,
+     * when hideQuickNavWhenDetailsIsVisible is true
+     *
+     * @param {Boolean} isMonthNavVisible
+     */
+    function toggleMonthNavVisibility (isMonthNavVisible) {
+      if ($scope.hideQuickNavWhenDetailsIsVisible) {
+        $scope.isMonthNavVisible = isMonthNavVisible;
       }
     }
   }

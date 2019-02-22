@@ -1,7 +1,8 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityPanel', function ($rootScope, $timeout, BulkActions) {
+  module.directive('civicaseActivityPanel', function ($rootScope, $timeout,
+    ActivityFeedMeasurements, BulkActions) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/activity/panel/directives/activity-panel.directive.html',
@@ -85,11 +86,9 @@
        * Set height for activity panel
        */
       function setPanelHeight () {
-        var $feedBody = $('.civicase__activity-feed__body');
         var $feedPanel = $('.civicase__activity-feed__body__details');
-        var topOffset = $feedBody.offset().top + 24;
 
-        $feedPanel.height('calc(100vh - ' + topOffset + 'px)');
+        $feedPanel.height('calc(100vh - ' + ActivityFeedMeasurements.getTopOffset() + 'px)');
       }
     }
   });
