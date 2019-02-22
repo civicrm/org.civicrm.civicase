@@ -3,7 +3,7 @@
   describe('CasesUtils', function () {
     var CasesData, ContactsCache, CasesUtils;
 
-    beforeEach(module('civicase', 'civicase.data', 'civicase.templates'));
+    beforeEach(module('civicase', 'civicase.data'));
 
     beforeEach(inject(function (_ContactsCache_, _CasesData_, _CasesUtils_) {
       ContactsCache = _ContactsCache_;

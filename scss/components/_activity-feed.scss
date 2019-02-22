@@ -9,6 +9,10 @@ $feed-child-min-height: 400px;
     padding: 15px;
   }
 
+  > .panel-body {
+    padding-top: 24px;
+  }
+
   .civicase__panel-transparent-header {
     margin: auto;
 
@@ -52,7 +56,8 @@ $feed-child-min-height: 400px;
 
 .civicase__activity-feed__list {
   padding-left: 10px;
-  padding-top: 5px;
+  padding-right: 10px;
+  padding-top: 6px;
   position: relative;
 
   &.active {
@@ -153,7 +158,6 @@ $feed-child-min-height: 400px;
 
 .civicase__activity-feed__body__list {
   flex-grow: 1;
-  margin: 24px 0 0;
   max-width: 660px;
   min-height: $feed-child-min-height;
   overflow: auto;
@@ -161,7 +165,6 @@ $feed-child-min-height: 400px;
 
 .civicase__activity-feed__body__details {
   box-sizing: content-box;
-  margin-top: 24px;
   min-height: $feed-child-min-height;
   min-width: 450px;
   overflow-y: auto;
@@ -174,7 +177,6 @@ $feed-child-min-height: 400px;
 .civicase__activity-feed__body__month-nav {
   margin-left: 15px;
   margin-right: 15px;
-  margin-top: 24px;
   min-height: $feed-child-min-height;
   overflow: auto;
   width: 100px;

@@ -24,13 +24,13 @@
      */
     function civicaseActivityFeedLink (scope, element, attrs) {
       (function init () {
-        scope.$watch('isLoading', checkIfReadyForAffix);
+        scope.$watch('isLoading', checkIfLoadingCompleted);
       }());
 
       /**
-       * Check if Affix should be initialised
+       * Check if loading is complete
        */
-      function checkIfReadyForAffix () {
+      function checkIfLoadingCompleted () {
         if (!scope.isLoading) {
           $timeout(setListHeight);
         }

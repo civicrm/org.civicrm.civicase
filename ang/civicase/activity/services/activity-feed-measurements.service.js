@@ -5,15 +5,15 @@
     this.getTopOffset = getTopOffset;
 
     /**
-     * Returns the offset from top for the affix functionality
+     * Returns the offset of feed body from top
      *
      * @return {Number}
      */
     function getTopOffset () {
       var $feedBody = $('.civicase__activity-feed__body');
-      var topOffset = $feedBody.offset().top + 24;
+      var topOffset = $feedBody.offset().top + 24; // 24px is the padding-top of `panel-body` of the feed
 
-      return topOffset + 24;
+      return topOffset;
     }
   });
 })(CRM.$, angular);
