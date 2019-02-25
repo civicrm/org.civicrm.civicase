@@ -37,10 +37,10 @@
             }
           }).on('affixed.bs.affix', function () {
             $filter.css('top', $toolbarDrawer.height() + $tabs.height());
-            $feedBodyPanel.css('padding-top', $filter.outerHeight() + 15);
+            $feedBodyPanel.css('padding-top', $filter.outerHeight() + 24);
           }).on('affixed-top.bs.affix', function () {
             $filter.css('top', 'auto');
-            $feedBodyPanel.css('padding-top', '15px');
+            $feedBodyPanel.css('padding-top', '24px');
           });
         });
       }

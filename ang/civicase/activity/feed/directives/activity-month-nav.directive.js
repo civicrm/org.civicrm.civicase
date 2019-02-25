@@ -1,14 +1,14 @@
 (function (angular, $, _, CRM) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityMonthNav', function ($timeout) {
+  module.directive('civicaseActivityMonthNav', function ($timeout, ActivityFeedMeasurements) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/activity/feed/directives/activity-month-nav.directive.html',
       controller: 'civicaseActivityMonthNavController',
       link: civicaseActivityMonthNavLink,
       scope: {
-        hideQuickNavWhenDetailsIsVisible: '='
+        isLoading: '='
       }
     };
 
@@ -21,26 +21,25 @@
      */
     function civicaseActivityMonthNavLink (scope, $el, attr) {
       (function init () {
-        setNavHeight();
-        scope.$on('civicase::case-search::dropdown-toggle', setNavHeight);
-        scope.$on('civicase::activity-filters::more-filters-toggled', setNavHeight);
+        scope.$watch('isLoading', checkIfLoadingCompleted);
       }());
+
+      /**
+       * Check if loading is complete
+       */
+      function checkIfLoadingCompleted () {
+        if (!scope.isLoading) {
+          $timeout(setNavHeight);
+        }
+      }
 
       /**
        * Set height for activity month nav
        */
       function setNavHeight () {
-        $timeout(function () {
-          var $filter = $('.civicase__activity-filter');
-          var $toolbarDrawer = $('#toolbar');
-          var $monthNav = $el.find('.civicase__activity-month-nav');
-          var $tabs = $('.civicase__dashboard').length > 0
-            ? $('.civicase__dashboard__tab-container ul.nav')
-            : $('.civicase__case-body_tab');
-          var topOffset = ($filter.outerHeight() + $toolbarDrawer.height() + $tabs.height());
+        var $monthNav = $('.civicase__activity-feed__body__month-nav');
 
-          $monthNav.height('calc(100vh - ' + topOffset + 'px)');
-        });
+        $monthNav.height('calc(100vh - ' + ActivityFeedMeasurements.getTopOffset() + 'px)');
       }
     }
   });
@@ -48,9 +47,9 @@
   module.controller('civicaseActivityMonthNavController', civicaseActivityMonthNavController);
 
   function civicaseActivityMonthNavController ($rootScope, $scope, crmApi) {
-    var currentlyActiveMonth = false;
+    var previousApiCalls = null;
+    var currentlyActiveMonth = null;
     $scope.navigateToMonth = navigateToMonth;
-    $scope.isVisible = true;
 
     (function init () {
       initWatchers();
@@ -78,6 +77,12 @@
      */
     function feedQueryListener (event, filters, params, reset, overdueFirst) {
       var apiCalls = getAPICalls(overdueFirst, params);
+
+      // do not re fetch the groups if params are same
+      if (previousApiCalls && _.isEqual(apiCalls, previousApiCalls)) {
+        return;
+      }
+      previousApiCalls = apiCalls;
 
       return crmApi(apiCalls).then(function (result) {
         initGroups();
@@ -223,24 +228,6 @@
      */
     function initWatchers () {
       $scope.$on('civicaseActivityFeed.query', feedQueryListener);
-      $scope.$on('civicase::activity-feed::show-activity-panel', function () {
-        toggleMonthNavVisibility(false);
-      });
-      $scope.$on('civicase::activity-feed::hide-activity-panel', function () {
-        toggleMonthNavVisibility(true);
-      });
-    }
-
-    /**
-     * Toggles the visiblity of month nav,
-     * when hideQuickNavWhenDetailsIsVisible is true
-     *
-     * @param {Boolean} isVisible
-     */
-    function toggleMonthNavVisibility (isVisible) {
-      if ($scope.hideQuickNavWhenDetailsIsVisible) {
-        $scope.isVisible = isVisible;
-      }
     }
 
     /**

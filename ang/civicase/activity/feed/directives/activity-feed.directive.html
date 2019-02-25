@@ -108,7 +108,6 @@
       </div>
       <!-- activity details -->
       <div
-        civicase-activity-details-affix
         class="civicase__activity-feed__body__details"
         civicase-activity-panel="viewingActivity"
         refresh-callback="refreshAll"
@@ -117,10 +116,10 @@
       <!-- end activity details -->
       <!-- quick month nav -->
       <div
+        ng-show='isMonthNavVisible'
         class="civicase__activity-feed__body__month-nav"
         civicase-activity-month-nav
-        civicase-activity-month-nav-affix
-        hide-quick-nav-when-details-is-visible="hideQuickNavWhenDetailsIsVisible">
+        is-loading="isLoading">
       </div>
       <!-- end quick month nav -->
     </div>

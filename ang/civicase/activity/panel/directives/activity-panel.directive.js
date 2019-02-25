@@ -1,7 +1,8 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityPanel', function ($rootScope, ActivityPanelMeasurements, BulkActions) {
+  module.directive('civicaseActivityPanel', function ($rootScope, $timeout,
+    ActivityFeedMeasurements, BulkActions) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/activity/panel/directives/activity-panel.directive.html',
@@ -20,13 +21,10 @@
      * @param {Object} element
      */
     function civicaseActivityPanelLink (scope, element, attrs) {
-      var activityPanelMeasurements;
       var ts = CRM.ts('civicase');
 
       (function init () {
-        activityPanelMeasurements = ActivityPanelMeasurements(element);
-
-        setPanelHeight();
+        $timeout(setPanelHeight);
         scope.$on('civicase::activity-feed::show-activity-panel', loadActivityForm);
         element.on('crmFormSuccess', scope.refresh);
         element.on('crmLoad', crmLoadListener);
@@ -36,7 +34,6 @@
        * Listener for crmLoad event
        */
       function crmLoadListener () {
-        setPanelBodyHeight();
         // Workaround bug where href="#" changes the angular route
         $('a.crm-clear-link', this).removeAttr('href');
         $('a.delete.button', this).click(onDeleteClickEvent);
@@ -44,6 +41,9 @@
         if (!BulkActions.isAllowed()) {
           $('div.crm-submit-buttons').remove();
         }
+
+        // Scrolls the details panel to top once new data loads
+        element.scrollTop(0);
       }
 
       /**
@@ -66,25 +66,6 @@
       }
 
       /**
-       * Set height for activity panel
-       */
-      function setPanelHeight () {
-        var topOffset = activityPanelMeasurements.getDistanceFromTop();
-
-        element.height('calc(100vh - ' + topOffset + 'px)');
-      }
-
-      /**
-       * Set height for activity panel body
-       */
-      function setPanelBodyHeight () {
-        var $panelBody = element.find('.panel-body');
-        var bodyTopOffset = activityPanelMeasurements.getPanelBodyTopOffset();
-
-        $panelBody.height('calc(100vh - ' + bodyTopOffset + 'px)');
-      }
-
-      /**
        * Listener for click event of delete button
        */
       function onDeleteClickEvent () {
@@ -99,6 +80,15 @@
         });
 
         return false;
+      }
+
+      /**
+       * Set height for activity panel
+       */
+      function setPanelHeight () {
+        var $feedPanel = $('.civicase__activity-feed__body__details');
+
+        $feedPanel.height('calc(100vh - ' + ActivityFeedMeasurements.getTopOffset() + 'px)');
       }
     }
   });

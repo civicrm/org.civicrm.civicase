@@ -235,6 +235,66 @@
         });
       });
 
+      describe('when activity panel show/hide', function () {
+        beforeEach(function () {
+          activitiesInCurrentPage = activitiesMockData.getSentNoOfActivities(25);
+          allActivities = activitiesMockData.getSentNoOfActivities(25);
+          mockActivitiesAPICall();
+
+          initController();
+          $scope.$digest();
+        });
+
+        describe('when activity panel is shown', function () {
+          describe('and hide-quick-nav-when-details-is-visible property is true', function () {
+            beforeEach(function () {
+              $scope.hideQuickNavWhenDetailsIsVisible = true;
+              $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
+            });
+
+            it('hides the activity nav', function () {
+              expect($scope.isMonthNavVisible).toBe(false);
+            });
+          });
+
+          describe('and hide-quick-nav-when-details-is-visible property is false', function () {
+            beforeEach(function () {
+              $scope.hideQuickNavWhenDetailsIsVisible = false;
+              $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
+            });
+
+            it('does not hide the activity nav', function () {
+              expect($scope.isMonthNavVisible).toBe(true);
+            });
+          });
+        });
+
+        describe('when activity panel is hidden', function () {
+          describe('and hide-quick-nav-when-details-is-visible property is true', function () {
+            beforeEach(function () {
+              $scope.isMonthNavVisible = false;
+              $scope.hideQuickNavWhenDetailsIsVisible = true;
+              $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
+            });
+
+            it('shows the activity nav', function () {
+              expect($scope.isMonthNavVisible).toBe(true);
+            });
+          });
+
+          describe('and hide-quick-nav-when-details-is-visible property is false', function () {
+            beforeEach(function () {
+              $scope.isMonthNavVisible = false;
+              $scope.hideQuickNavWhenDetailsIsVisible = false;
+              $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
+            });
+
+            it('does not show the activity nav', function () {
+              expect($scope.isMonthNavVisible).toBe(false);
+            });
+          });
+        });
+      });
       /**
        * Mocks Activities API calls
        */

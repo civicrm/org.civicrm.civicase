@@ -1,11 +1,12 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseActivityFeed', function () {
+  module.directive('civicaseActivityFeed', function ($timeout, ActivityFeedMeasurements) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/activity/feed/directives/activity-feed.directive.html',
       controller: civicaseActivityFeedController,
+      link: civicaseActivityFeedLink,
       scope: {
         params: '=civicaseActivityFeed',
         showBulkActions: '=',
@@ -14,6 +15,36 @@
         hideQuickNavWhenDetailsIsVisible: '='
       }
     };
+
+    /**
+     * Link function for civicaseActivityFeed
+     *
+     * @param {Object} $scope
+     * @param {Object} element
+     */
+    function civicaseActivityFeedLink (scope, element, attrs) {
+      (function init () {
+        scope.$watch('isLoading', checkIfLoadingCompleted);
+      }());
+
+      /**
+       * Check if loading is complete
+       */
+      function checkIfLoadingCompleted () {
+        if (!scope.isLoading) {
+          $timeout(setListHeight);
+        }
+      }
+
+      /**
+       * Set height for activity list
+       */
+      function setListHeight () {
+        var $feedList = $('.civicase__activity-feed__body__list');
+
+        $feedList.height('calc(100vh - ' + ActivityFeedMeasurements.getTopOffset() + 'px)');
+      }
+    }
   });
 
   module.controller('civicaseActivityFeedController', civicaseActivityFeedController);
@@ -29,6 +60,7 @@
     var pageNum = { down: 0, up: 0 };
     var allActivities = [];
 
+    $scope.isMonthNavVisible = true;
     $scope.isLoading = true;
     $scope.activityTypes = CRM.civicase.activityTypes;
     $scope.activityStatuses = CRM.civicase.activityStatuses;
@@ -407,6 +439,12 @@
       $scope.$on('civicaseAcitivityClicked', function (event, $event, activity) {
         $scope.viewActivity(activity.id, $event);
       });
+      $scope.$on('civicase::activity-feed::show-activity-panel', function () {
+        toggleMonthNavVisibility(false);
+      });
+      $scope.$on('civicase::activity-feed::hide-activity-panel', function () {
+        toggleMonthNavVisibility(true);
+      });
     }
 
     /**
@@ -528,6 +566,18 @@
         $scope.showSpinner.up = true;
       } else if (mode.direction === 'down' && mode.nextPage === true) {
         $scope.showSpinner.down = true;
+      }
+    }
+
+    /**
+     * Toggles the visiblity of month nav,
+     * when hideQuickNavWhenDetailsIsVisible is true
+     *
+     * @param {Boolean} isMonthNavVisible
+     */
+    function toggleMonthNavVisibility (isMonthNavVisible) {
+      if ($scope.hideQuickNavWhenDetailsIsVisible) {
+        $scope.isMonthNavVisible = isMonthNavVisible;
       }
     }
   }

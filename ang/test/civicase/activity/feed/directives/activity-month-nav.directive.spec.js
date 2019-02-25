@@ -3,126 +3,50 @@
 (function (_) {
   describe('civicaseActivityMonthNav', function () {
     describe('Activity Month Nav Directive', function () {
-      var $compile, $rootScope, $scope, $timeout, heightSpy,
-        topOffset, activityMonthNavElement;
+      var $compile, $rootScope, $scope, $timeout,
+        ActivityFeedMeasurements;
 
       beforeEach(module('civicase', 'civicase.templates'));
 
-      beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
+      beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_,
+        _ActivityFeedMeasurements_) {
         $compile = _$compile_;
         $rootScope = _$rootScope_;
         $timeout = _$timeout_;
+        ActivityFeedMeasurements = _ActivityFeedMeasurements_;
 
         $scope = $rootScope.$new();
-
-        heightSpy = spyOn(CRM.$.fn, 'height').and.callThrough();
       }));
 
       describe('on init', function () {
-        var $filter, $toolbarDrawer, $dashboardTabs, $caseBodyTabs;
+        beforeEach(function () {
+          addAdditionalMarkup();
+        });
 
         afterEach(function () {
           removeAdditionalMarkup();
         });
 
-        describe('when used inside dashboard page', function () {
+        describe('height of month nav', function () {
+          var originalJqueryHeightFn = CRM.$.fn.height;
+
           beforeEach(function () {
-            addAdditionalMarkup(true);
+            spyOn(ActivityFeedMeasurements, 'getTopOffset').and.returnValue(10);
+            spyOn(CRM.$.fn, 'height');
             initDirective();
 
-            $filter = CRM.$('.civicase__activity-filter');
-            $toolbarDrawer = CRM.$('#toolbar');
-            $dashboardTabs = CRM.$('.civicase__dashboard__tab-container ul.nav');
-            $caseBodyTabs = CRM.$('.civicase__case-body_tab');
-
             $timeout.flush();
-
-            topOffset = $filter.outerHeight() +
-              $toolbarDrawer.height() +
-              $dashboardTabs.height();
           });
 
-          it('sets the height of the month nav to summation of filter, toolbar and dashboard tab', function () {
-            expect(heightSpy.calls.argsFor(2)[0]).toBe('calc(100vh - ' + topOffset + 'px)');
-          });
-        });
-
-        describe('when used inside case summary page', function () {
-          beforeEach(function () {
-            addAdditionalMarkup();
-            initDirective();
-
-            $filter = CRM.$('.civicase__activity-filter');
-            $toolbarDrawer = CRM.$('#toolbar');
-            $dashboardTabs = CRM.$('.civicase__dashboard__tab-container ul.nav');
-            $caseBodyTabs = CRM.$('.civicase__case-body_tab');
-
-            $timeout.flush();
-
-            topOffset = $filter.outerHeight() +
-              $toolbarDrawer.height() +
-              $caseBodyTabs.height();
+          afterEach(function () {
+            CRM.$.fn.height = originalJqueryHeightFn;
           });
 
-          it('sets the height of the month nav to summation of filter, toolbar and case body tab', function () {
-            expect(heightSpy.calls.argsFor(2)[0]).toBe('calc(100vh - ' + topOffset + 'px)');
-          });
-        });
-      });
-
-      describe('when activity panel show/hide', function () {
-        beforeEach(function () {
-          initDirective();
-          $timeout.flush();
-        });
-
-        describe('when activity panel is shown', function () {
-          describe('and hide-quick-nav-when-details-is-visible property is true', function () {
-            beforeEach(function () {
-              activityMonthNavElement.isolateScope().hideQuickNavWhenDetailsIsVisible = true;
-              $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
-            });
-
-            it('hides the activity nav', function () {
-              expect(activityMonthNavElement.isolateScope().isVisible).toBe(false);
-            });
-          });
-
-          describe('and hide-quick-nav-when-details-is-visible property is false', function () {
-            beforeEach(function () {
-              activityMonthNavElement.isolateScope().hideQuickNavWhenDetailsIsVisible = false;
-              $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
-            });
-
-            it('does not hide the activity nav', function () {
-              expect(activityMonthNavElement.isolateScope().isVisible).toBe(true);
-            });
-          });
-        });
-
-        describe('when activity panel is hidden', function () {
-          describe('and hide-quick-nav-when-details-is-visible property is true', function () {
-            beforeEach(function () {
-              activityMonthNavElement.isolateScope().isVisible = false;
-              activityMonthNavElement.isolateScope().hideQuickNavWhenDetailsIsVisible = true;
-              $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
-            });
-
-            it('shows the activity nav', function () {
-              expect(activityMonthNavElement.isolateScope().isVisible).toBe(true);
-            });
-          });
-
-          describe('and hide-quick-nav-when-details-is-visible property is false', function () {
-            beforeEach(function () {
-              activityMonthNavElement.isolateScope().isVisible = false;
-              activityMonthNavElement.isolateScope().hideQuickNavWhenDetailsIsVisible = false;
-              $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
-            });
-
-            it('does not show the activity nav', function () {
-              expect(activityMonthNavElement.isolateScope().isVisible).toBe(false);
-            });
+          it('sets the height of the month nav', function () {
+            // in this case as `calc` is used, height cannot be tested
+            // by getting the actual height of the element,
+            // instead checking whether the height function is called
+            expect(CRM.$.fn.height).toHaveBeenCalledWith('calc(100vh - ' + 10 + 'px)');
           });
         });
       });
@@ -131,42 +55,26 @@
        * Initializes the civicaseActivityMonthNav directive
        */
       function initDirective () {
-        var html = '<div civicase-activity-month-nav></div>';
+        var html = `<div civicase-activity-month-nav></div>`;
 
-        activityMonthNavElement = $compile(html)($scope);
+        $compile(html)($scope);
         $scope.$digest();
       }
 
       /**
        * Add aditional markup
-       *
-       * @param {Boolean} isDashboard
        */
-      function addAdditionalMarkup (isDashboard) {
-        var markup = `<div id='activity-month-nav-spec-additional-markup'>
-        <div class='civicase__activity-filter' style='height: 100px'></div>
-        <div id='toolbar' style='height: 200px'></div>
-        <div class='civicase__activity-month-nav'></div>
-        <div class="civicase__case-body_tab" style='height: 400px'></div>
-        </div>`;
+      function addAdditionalMarkup () {
+        var markup = `<div class='civicase__activity-feed__body__month-nav'></div>`;
 
         CRM.$(markup).appendTo('body');
-
-        if (isDashboard) {
-          markup = `<div class='civicase__dashboard'></div>
-            <div class='civicase__dashboard__tab-container'>
-              <ul class='nav' style='height: 300px'></ul>
-            </div>`;
-
-          CRM.$(markup).appendTo('#activity-month-nav-spec-additional-markup');
-        }
       }
 
       /**
        * Remove aditional markup
        */
       function removeAdditionalMarkup () {
-        CRM.$('#activity-month-nav-spec-additional-markup').remove();
+        CRM.$('.civicase__activity-feed__body__month-nav').remove();
       }
     });
 
@@ -303,6 +211,45 @@
                   }]
                 }]
               }]);
+          });
+        });
+      });
+
+      describe('duplicate network call', function () {
+        describe(`when activity feed query event is fired with
+           different params`, function () {
+          beforeEach(function () {
+            var monthData = monthNavMockData.get();
+            crmApi.and.returnValue($q.resolve({
+              months: { values: monthData }
+            }));
+
+            initController();
+            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value' }, false, false);
+            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value2' }, false, false);
+            $scope.$digest();
+          });
+
+          it('fetches the months data for changed parameters', function () {
+            expect(crmApi.calls.count()).toBe(2);
+          });
+        });
+
+        describe(`when activity feed query event is fired with
+           same params`, function () {
+          beforeEach(function () {
+            crmApi.and.returnValue($q.resolve({
+              months: { values: monthNavMockData.get() }
+            }));
+
+            initController();
+            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value' }, false, false);
+            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value' }, false, false);
+            $scope.$digest();
+          });
+
+          it('does not fetch the months data again', function () {
+            expect(crmApi.calls.count()).toBe(1);
           });
         });
       });
