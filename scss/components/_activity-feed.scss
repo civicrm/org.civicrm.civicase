@@ -62,7 +62,7 @@ $feed-child-min-height: 400px;
 
   &.active {
     background: $activity-feed-active-bg;
-    border-radius: 5px;
+    border-radius: $card-border-radius;
   }
 
   &.civicase__animated-checkbox-card--expanded {

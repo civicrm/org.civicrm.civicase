@@ -1,6 +1,6 @@
 .civicase__activity-card {
   background: $crm-white;
-  border-radius: 5px;
+  border-radius: $card-border-radius;
   cursor: pointer;
 
   &:hover {

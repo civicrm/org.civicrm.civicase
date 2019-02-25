@@ -82,8 +82,8 @@
 
   // week days header
   tr:nth-child(2n) {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    border-top-left-radius: $card-border-radius;
+    border-top-right-radius: $card-border-radius;
     margin-top: -3px;
   }
 
@@ -115,8 +115,8 @@
   }
 
   tbody {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: $card-border-radius;
+    border-bottom-right-radius: $card-border-radius;
     box-shadow: $box-shadow-block;
     min-height: 205px;
   }

@@ -47,8 +47,8 @@
   module.controller('civicaseActivityMonthNavController', civicaseActivityMonthNavController);
 
   function civicaseActivityMonthNavController ($rootScope, $scope, crmApi) {
-    var previousApiCalls = false;
-    var currentlyActiveMonth = false;
+    var previousApiCalls = null;
+    var currentlyActiveMonth = null;
     $scope.navigateToMonth = navigateToMonth;
 
     (function init () {

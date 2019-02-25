@@ -9,9 +9,11 @@
 }
 
 .civicase__case-body_tab {
+  position: relative;
   z-index: 1;
 
   &.affix {
+    position: fixed;
     top: 0;
     z-index: 11;
 

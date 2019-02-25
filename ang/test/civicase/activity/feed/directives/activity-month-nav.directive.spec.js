@@ -216,8 +216,8 @@
       });
 
       describe('duplicate network call', function () {
-        describe('when activity feed query event is fired with ' +
-          'different params', function () {
+        describe(`when activity feed query event is fired with
+           different params`, function () {
           beforeEach(function () {
             var monthData = monthNavMockData.get();
             crmApi.and.returnValue($q.resolve({
@@ -235,8 +235,8 @@
           });
         });
 
-        describe('when activity feed query event is fired with ' +
-          'same params', function () {
+        describe(`when activity feed query event is fired with
+           same params`, function () {
           beforeEach(function () {
             crmApi.and.returnValue($q.resolve({
               months: { values: monthNavMockData.get() }
