@@ -71,8 +71,15 @@
   }
 
   >.panel-body {
+    border-radius: 5px;
     border-top: 0 !important;
     padding: 0;
+  }
+
+  .civicase__panel-transparent-header {
+    >.panel-body {
+      border-radius: 5px;
+    }
   }
 }
 
@@ -83,7 +90,7 @@
 }
 
 .civicase__summary-tab-tile--fixed {
-  width: 300px;
+  width: 350px;
 }
 
 .civicase__summary-tab-tile--responsive {

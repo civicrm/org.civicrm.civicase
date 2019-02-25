@@ -82,6 +82,8 @@
 
   // week days header
   tr:nth-child(2n) {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     margin-top: -3px;
   }
 
@@ -113,6 +115,8 @@
   }
 
   tbody {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     box-shadow: $box-shadow-block;
     min-height: 205px;
   }
@@ -141,10 +145,10 @@
   }
 
   .uib-day .btn.active {
-    height: 23px;
-    margin-top: 5px;
+    height: 28px;
+    margin-top: 2px;
     padding: 0;
-    width: 23px;
+    width: 28px;
   }
 
   .uib-day .material-icons {
