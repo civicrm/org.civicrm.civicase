@@ -215,6 +215,45 @@
         });
       });
 
+      describe('duplicate network call', function () {
+        describe('when activity feed query event is fired with ' +
+          'different params', function () {
+          beforeEach(function () {
+            var monthData = monthNavMockData.get();
+            crmApi.and.returnValue($q.resolve({
+              months: { values: monthData }
+            }));
+
+            initController();
+            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value' }, false, false);
+            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value2' }, false, false);
+            $scope.$digest();
+          });
+
+          it('fetches the months data for changed parameters', function () {
+            expect(crmApi.calls.count()).toBe(2);
+          });
+        });
+
+        describe('when activity feed query event is fired with ' +
+          'same params', function () {
+          beforeEach(function () {
+            crmApi.and.returnValue($q.resolve({
+              months: { values: monthNavMockData.get() }
+            }));
+
+            initController();
+            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value' }, false, false);
+            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value' }, false, false);
+            $scope.$digest();
+          });
+
+          it('does not fetch the months data again', function () {
+            expect(crmApi.calls.count()).toBe(1);
+          });
+        });
+      });
+
       /**
        * Initializes the month nav controller.
        */

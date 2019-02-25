@@ -47,6 +47,7 @@
   module.controller('civicaseActivityMonthNavController', civicaseActivityMonthNavController);
 
   function civicaseActivityMonthNavController ($rootScope, $scope, crmApi) {
+    var previousApiCalls = false;
     var currentlyActiveMonth = false;
     $scope.navigateToMonth = navigateToMonth;
 
@@ -76,6 +77,12 @@
      */
     function feedQueryListener (event, filters, params, reset, overdueFirst) {
       var apiCalls = getAPICalls(overdueFirst, params);
+
+      // do not re fetch the groups if params are same
+      if (previousApiCalls && _.isEqual(apiCalls, previousApiCalls)) {
+        return;
+      }
+      previousApiCalls = apiCalls;
 
       return crmApi(apiCalls).then(function (result) {
         initGroups();
