@@ -28,12 +28,18 @@
         });
 
         describe('height of month nav', function () {
+          var originalJqueryHeightFn = CRM.$.fn.height;
+
           beforeEach(function () {
             spyOn(ActivityFeedMeasurements, 'getTopOffset').and.returnValue(10);
             spyOn(CRM.$.fn, 'height');
             initDirective();
 
             $timeout.flush();
+          });
+
+          afterEach(function () {
+            CRM.$.fn.height = originalJqueryHeightFn;
           });
 
           it('sets the height of the month nav', function () {

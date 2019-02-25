@@ -15,15 +15,20 @@
       beforeEach(function () {
         addAdditionalMarkup();
 
+        var $feedPanelBody = CRM.$('.civicase__activity-feed>.panel-body');
+        var feedPanelBodyPaddingTop = parseInt($feedPanelBody.css('padding-top'));
+
         topOffset = ActivityFeedMeasurements.getTopOffset();
-        expectedTopOffset = CRM.$('.civicase__activity-feed__body').offset().top + 24;
+        expectedTopOffset =
+          CRM.$('.civicase__activity-feed__body').offset().top +
+          feedPanelBodyPaddingTop;
       });
 
       afterEach(function () {
         removeAdditionalMarkup();
       });
 
-      it('fetches all contacts of the case', function () {
+      it('returns the distance of activity feed body from the top of the screen', function () {
         expect(topOffset).toBe(expectedTopOffset);
       });
 
@@ -31,7 +36,11 @@
        * Add aditional markup
        */
       function addAdditionalMarkup () {
-        var markup = `<div class='civicase__activity-feed__body'></div>`;
+        var markup = `<div class='civicase__activity-feed'>
+          <div class='panel-body' style='padding-top: 24px'>
+            <div class='civicase__activity-feed__body'></div>
+          </div>
+        </div>`;
 
         CRM.$(markup).appendTo('body');
       }
@@ -40,7 +49,7 @@
        * Remove aditional markup
        */
       function removeAdditionalMarkup () {
-        CRM.$('.civicase__activity-feed__body').remove();
+        CRM.$('.civicase__activity-feed').remove();
       }
     });
   });

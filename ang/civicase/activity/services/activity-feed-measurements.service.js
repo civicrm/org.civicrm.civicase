@@ -11,7 +11,9 @@
      */
     function getTopOffset () {
       var $feedBody = $('.civicase__activity-feed__body');
-      var topOffset = $feedBody.offset().top + 24; // 24px is the padding-top of `panel-body` of the feed
+      var $feedPanelBody = $('.civicase__activity-feed>.panel-body');
+      var feedPanelBodyPaddingTop = parseInt($feedPanelBody.css('padding-top'));
+      var topOffset = $feedBody.offset().top + feedPanelBodyPaddingTop;
 
       return topOffset;
     }
