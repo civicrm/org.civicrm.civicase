@@ -6,7 +6,7 @@
 * The current calendar month has at least one day with some activities
 
 ## Contact Section
-* Make sure the civicase is installed with demo data and should have a contact name "Betty Adams" and have some activities for the contact
+* Make sure the civicase is installed with demo data and should have a contact name "Betty Adams" and at least have one activity for the contact.
 
 ---
 
@@ -26,7 +26,7 @@ The backstop test suite for Civicase 5.1 extension covers following screens
 - [ ] Activities Feed Panel - Loading screen
 - [ ] Activities Feed Panel - Bulk action Checkbox enabled and one checkbox checked, and bulk action dropdown opened
 - [ ] Activities Feed Panel - Load more state
-- [ ] Activities Feed Panel -  filter dropdowns
+- [ ] Activities Feed Panel - filter dropdowns
 - [ ] Activities Feed Panel - with one filter enabled
 - [ ] Activities Feed Panel - one activity selected
 - [ ] Activities Feed Panel - Activity card menu on case overview

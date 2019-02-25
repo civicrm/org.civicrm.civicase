@@ -53,7 +53,9 @@ module.exports = class CrmPage {
 
   /**
    * Checks if element is visible on screen
+   *
    * @param {String} selector - the css selector for the element to checkfor
+   * @return {Boolean}
    */
   async isElementVisible (selector) {
     return this.engine.evaluate((selector) => {

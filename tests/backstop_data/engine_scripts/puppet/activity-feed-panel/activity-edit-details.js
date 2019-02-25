@@ -4,7 +4,8 @@ const Utility = require('./../utility.js');
 
 module.exports = async (page, scenario, vp) => {
   const utility = new Utility(page, scenario, vp);
-  const viewPortOverride = Object.assign(page.viewport(), {height: 800});
+  // We override the height of the viewport so the Edit button is visible
+  const viewPortOverride = Object.assign(page.viewport(), { height: 800 });
 
   await page.setViewport(viewPortOverride);
 
