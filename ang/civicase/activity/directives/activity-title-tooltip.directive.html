@@ -1,16 +1,18 @@
-<span
-  ng-if="!tooltipEnabled">
-  <span ng-include="'activity-title.html'"></span>
-</span>
+<span class="civicase__activity-title-tooltip">
+  <span
+    ng-if="!tooltipEnabled">
+    <span ng-include="'activity-title.html'"></span>
+  </span>
 
-<div
-  ng-if="tooltipEnabled"
-  uib-popover="{{getTitleToolTip()}}"
-  popover-placement="bottom"
-  popover-class="civicase__activity-title-popup"
-  popover-trigger="'mouseenter'">
-  <span ng-include="'activity-title.html'"></span>
-</div>
+  <div
+    ng-if="tooltipEnabled"
+    uib-popover="{{getTitleToolTip()}}"
+    popover-placement="bottom"
+    popover-class="civicase__activity-title-popup"
+    popover-trigger="'mouseenter'">
+    <span ng-include="'activity-title.html'"></span>
+  </div>
+</span>
 
 <script type="text/ng-template" id="activity-title.html">
   <span
