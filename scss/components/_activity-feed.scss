@@ -2,6 +2,7 @@ $feed-child-min-height: 400px;
 
 .civicase__activity-feed {
   box-shadow: none;
+  margin-bottom: 0;
 
   .panel-body {
     background: transparent;
@@ -10,7 +11,7 @@ $feed-child-min-height: 400px;
   }
 
   > .panel-body {
-    padding-top: 24px;
+    padding-top: 8px;
   }
 
   .civicase__panel-transparent-header {
