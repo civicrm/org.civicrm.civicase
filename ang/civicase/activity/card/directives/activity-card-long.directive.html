@@ -29,6 +29,17 @@
         </span>
         <!-- End - Title - Type/Subject -->
         <span class="civicase__activity__right-container" ng-if="activity.category.indexOf('alert') === -1">
+          <!-- Tags -->
+          <div class="civicase__activity__tags-container" ng-if="activity.tag_id">
+            <span
+              class="badge"
+              title="{{ tag['tag_id.description'] }}"
+              ng-repeat="tag in activity.tag_id || []"
+              style="background-color: {{ tag['tag_id.color'] }};"
+            >{{ tag['tag_id.name'] }}</span>
+          </div>
+          <!-- End - Tags -->
+
           <!-- Attachments -->
           <div class="btn-group civicase__activity-attachment__container" ng-if="activity.type !== 'File Upload' && activity.file_id">
             <i ng-mouseover="getAttachments(activity)" class="civicase__activity-attachment__icon material-icons">attach_file</i>
@@ -55,16 +66,6 @@
             </ul>
           </div>
           <!-- End - Attachments -->
-          <!-- Tags -->
-          <div class="civicase__activity__tags-container" ng-if="activity.tag_id">
-            <span
-              class="badge"
-              title="{{ tag['tag_id.description'] }}"
-              ng-repeat="tag in activity.tag_id || []"
-              style="background-color: {{ tag['tag_id.color'] }};"
-            >{{ tag['tag_id.name'] }}</span>
-          </div>
-          <!-- End - Tags -->
 
           <!-- Rating -->
           <a ng-click="toggleActivityStar($event, activity)" href ng-if="activity.is_star" title="{{ activity.is_star === '0' ? ts('Add star') : ts('Unstar') }}">
