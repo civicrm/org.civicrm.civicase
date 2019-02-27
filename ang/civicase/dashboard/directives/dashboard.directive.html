@@ -13,7 +13,13 @@
         <!-- End - Dashboard Tab -->
         <!-- Activities Tab -->
         <uib-tab index="1" heading="{{ts('Activities')}}">
-          <div ng-if="activeTab === 1" civicase-activity-feed="{filters: activityFilters}" show-bulk-actions="true" class="civicase__dashboard-activites-feed"></div>
+          <div
+            ng-if="activeTab === 1"
+            civicase-activity-feed="{filters: activityFilters}"
+            hide-quick-nav-when-details-is-visible="true"
+            show-bulk-actions="true"
+            class="civicase__dashboard-activites-feed">
+          </div>
         </uib-tab>
         <!-- End - Activities Tab -->
         <div class="pull-right">

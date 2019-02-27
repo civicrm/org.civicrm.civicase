@@ -21,7 +21,8 @@
   module.config(function ($routeProvider) {
     $routeProvider.when('/activity/feed', {
       reloadOnSearch: false,
-      template: '<div id="bootstrap-theme" class="civicase__container" civicase-activity-feed="{}"></div>'
+      template: '<div id="bootstrap-theme" class="civicase__container" ' +
+        'civicase-activity-feed="{}" hide-quick-nav-when-details-is-visible="true"></div>'
     });
   });
 
