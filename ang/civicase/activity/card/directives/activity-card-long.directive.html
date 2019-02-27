@@ -23,9 +23,20 @@
         </span>
         <!-- End - Task - Checkbox -->
         <!-- Title - Type/Subject -->
-        <span
-          civicase-activity-title-tooltip
-          activity='activity'>
+        <civicase-tooltip
+          tooltip-text="activity.type !== 'File Upload' ? activity.type : (activity.subject || activity.type)">
+          <span
+            ng-if="activity.type !== 'File Upload'"
+            class="civicase__tooltip__ellipsis civicase__activity-type"
+            ng-class="{'civicase__activity-type--completed': (activity.category.indexOf('task') > -1 && activity.is_completed)}">
+            {{ activity.type }}
+          </span>
+          <span
+            class="civicase__tooltip__ellipsis civicase__activity-subject"
+            ng-if="activity.type === 'File Upload'">
+            {{ activity.subject || activity.type }}
+          </span>
+        </civicase-tooltip>
         </span>
         <!-- End - Title - Type/Subject -->
         <span class="civicase__activity__right-container" ng-if="activity.category.indexOf('alert') === -1">

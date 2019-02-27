@@ -34,6 +34,10 @@
     line-height: 25px;
   }
 
+  .civicase__tooltip {
+    max-width: 200px;
+  }
+
   .civicase__activity__right-container {
     .civicase__activity-date {
       font-size: $font-size-base;
