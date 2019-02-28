@@ -7,6 +7,7 @@
     angular.module('civicaseActivitiesTab', ['civicase']);
     angular.module('civicaseActivitiesTab').config(function($routeProvider) {
       $routeProvider.when('/', {
+        reloadOnSearch: false,
         controller: function($scope) {
           $scope.filters = {contact_id: {/literal}{$cid|json}{literal}};
           $scope.displayOptions = {include_case: false};

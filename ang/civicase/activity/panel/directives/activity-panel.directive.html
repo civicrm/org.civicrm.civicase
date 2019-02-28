@@ -55,7 +55,10 @@
     </div>
     <div class="panel-subheading">
       <h3 class="panel-subtitle clearfix">
-        <span>{{activity.type}}</span>
+        <civicase-tooltip
+          tooltip-text="activity.type">
+          <span class="civicase__tooltip__ellipsis">{{activity.type}}</span>
+        </civicase-tooltip>
         <div class="civicase__activity__right-container">
           <!-- Tags -->
           <div class="civicase__activity__tags-container" ng-if="activity.tag_id">

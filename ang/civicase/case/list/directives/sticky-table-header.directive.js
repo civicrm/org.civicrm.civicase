@@ -55,6 +55,19 @@
        */
       function fixPositioningOnLoadingOrFocusChange () {
         if (!scope.loading && !scope.caseIsFocused) {
+          affixTableHeader();
+        }
+      }
+
+      /**
+       * Checks if the affix header is already affixed,
+       * if yes, readjusts it,
+       * otherwise inits the affix
+       */
+      function affixTableHeader () {
+        if ($header.data('bs.affix')) {
+          reAdjustFixedHeader();
+        } else {
           computeFixPositioning();
         }
       }
@@ -67,7 +80,6 @@
         $timeout(function () {
           var bodyPadding = parseInt($('body').css('padding-top'), 10); // to see the space for fixed menus
           var topPos = $header.offset().top - bodyPadding;
-
           $('th', $header).each(function () {
             $(this).css('min-width', $(this).outerWidth() + 'px');
           });
@@ -81,6 +93,7 @@
           // After element is affixed set scrolling pos (to avoid glitch) and top position
             .on('affixed.bs.affix', function () {
               $header.scrollLeft($table.scrollLeft()); // Bind scrolling
+
               $header.css('top', bodyPadding + 'px'); // Set top pos to body padding so that it don't overlap with the toolbar
               $toolbarDrawer.is(':visible') && $table.css('padding-top', $header.height() + 'px'); // Add top padding to remove the glitch when header moves out of DOM relative position
             })

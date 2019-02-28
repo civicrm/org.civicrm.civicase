@@ -3,7 +3,7 @@
   describe('civicaseCaseDetails', function () {
     var element, controller, activitiesMockData, $controller, $compile,
       $document, $rootScope, $scope, $provide, crmApi, crmApiMock, $q,
-      formatCase, CasesData, CasesUtils;
+      formatCase, CasesData, CasesUtils, $route;
 
     beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function (_$provide_) {
       $provide = _$provide_;
@@ -232,7 +232,7 @@
         beforeEach(function () {
           spyOn($document, 'width').and.returnValue(1700);
           compileDirective();
-          $rootScope.$broadcast('civicase::activity-details::affix-initialised');
+          $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
         });
 
         it('does not hide the case list', function () {
@@ -244,7 +244,7 @@
         beforeEach(function () {
           spyOn($document, 'width').and.returnValue(1650);
           compileDirective();
-          $rootScope.$broadcast('civicase::activity-details::affix-initialised');
+          $rootScope.$broadcast('civicase::activity-feed::show-activity-panel');
         });
 
         it('hides the case list', function () {

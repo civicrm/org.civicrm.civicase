@@ -1,4 +1,4 @@
-.civicase__activity-title-popup {
+.civicase__tooltip__popup {
   border: 1px solid $gray-light;
   border-radius: 2px;
   box-shadow: $box-shadow-tooltip;
@@ -12,4 +12,11 @@
       left: 20px;
     }
   }
+}
+
+.civicase__tooltip__ellipsis {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

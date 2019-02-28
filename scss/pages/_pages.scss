@@ -27,6 +27,13 @@
 
 #{$outside-namespace-marker} {
   #civicaseActivitiesTab {
+    .civicase__activity-feed {
+      > .panel-body {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
     .civicase__activity-filter {
       padding: 16px 0;
 

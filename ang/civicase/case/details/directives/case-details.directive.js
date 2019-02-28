@@ -44,8 +44,8 @@
     (function init () {
       $scope.$watch('isFocused', isFocusedWatcher);
       $scope.$watch('item', itemWatcher);
-      $scope.$on('civicase::activity-details::affix-initialised',
-        activityDetailsAffixListener);
+      $scope.$on('civicase::activity-feed::show-activity-panel',
+        showActivityPanelListener);
     }());
 
     $scope.addTimeline = function (name) {
@@ -242,9 +242,9 @@
     };
 
     /**
-     * Listener for civicase::activity-details::affix-initialised
+     * Listener for civicase::activity-feed::show-activity-panel
      */
-    function activityDetailsAffixListener () {
+    function showActivityPanelListener () {
       if (checkIfWindowWidthBreakpointIsReached()) {
         $scope.isFocused = true;
       }
