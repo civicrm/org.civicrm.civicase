@@ -18,21 +18,17 @@
       </span>
     </civicase-popover-toggle-button>
     <civicase-popover-content>
-      <div ng-include="'additional-tags.html'"></div>
+      <ul class="civicase__tags-container__additional__list">
+        <li ng-repeat="tag in tagsArray" ng-if="$index >= showEllipsisAfter">
+          <span
+            class="badge"
+            title="{{ tag['tag_id.description'] }}"
+            style="background-color: {{ tag['tag_id.color'] }};">
+            {{ tag['tag_id.name'] }}
+          </span>
+        </li>
+      </ul>
     </civicase-popover-content>
   </civicase-popover>
   <!-- End - Additional Tags Dropdown -->
-
-  <script type="text/ng-template" id="additional-tags.html">
-    <ul class="civicase__tags-container__additional__list">
-      <li ng-repeat="tag in tagsArray" ng-if="$index >= showEllipsisAfter">
-        <span
-          class="badge"
-          title="{{ tag['tag_id.description'] }}"
-          style="background-color: {{ tag['tag_id.color'] }};">
-          {{ tag['tag_id.name'] }}
-        </span>
-      </li>
-    </ul>
-  </script>
 </div>
