@@ -33,6 +33,14 @@
     margin-right: 5px;
     margin-top: 2px;
   }
+
+  .panel-footer:hover {
+    background: $gray-light;
+
+    > a:hover {
+      text-decoration: none;
+    }
+  }
 }
 
 .civicase__activity-card-inner {

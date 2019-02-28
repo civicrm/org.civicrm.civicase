@@ -4,8 +4,8 @@
     'civicase__activity-card--draft': activity.status==='Draft',
     'civicase__activity-card--empty': !activity
   }">
-  <div ng-if="activity" class="panel panel-default" ng-click="viewInPopup($event, activity)">
-    <div class="panel-body">
+  <div ng-if="activity" class="panel panel-default">
+    <div class="panel-body" ng-click="viewInPopup($event, activity)">
       <div class="civicase__activity-card-row civicase__activity-card-row--first">
 
         <span ng-if="activity.icon || activity.category.indexOf('milestone') > -1" activity-icon="activity"></span>
@@ -87,14 +87,16 @@
       </div>
     </div>
     <div class="panel-footer" ng-if="activity.case">
-      <div class="civicase__activity-card-row civicase__activity-card-row--case-info" >
-        <span>
-          <span class="civicase__activity-card__case-id__label">Case ID:</span>
-          <span class="civicase__activity-card__case-id__value">{{activity.case_id}}</span>
-        </span>
-        <span class="civicase__pipe"> | </span>
-        <span class="civicase__activity-card__case-type">{{ activity.case.type.title }}</span>
-      </div>
+      <a ng-href="{{ 'civicrm/case/a/#/case/list' | civicaseCrmUrl:{ caseId: activity.case_id } }}">
+        <div class="civicase__activity-card-row civicase__activity-card-row--case-info" >
+          <span>
+            <span class="civicase__activity-card__case-id__label">Case ID:</span>
+            <span class="civicase__activity-card__case-id__value">{{activity.case_id}}</span>
+          </span>
+          <span class="civicase__pipe"> | </span>
+          <span class="civicase__activity-card__case-type">{{ activity.case.type.title }}</span>
+        </div>
+      </a>
     </div>
   </div>
 
