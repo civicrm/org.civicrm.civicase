@@ -35,7 +35,8 @@
   }
 
   .civicase__tooltip {
-    max-width: 200px;
+    flex: 1;
+    min-width: 0;
   }
 
   .civicase__activity__right-container {

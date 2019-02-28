@@ -32,7 +32,8 @@
   }
 
   .civicase__tooltip {
-    max-width: 200px;
+    flex: 1;
+    min-width: 0;
   }
 
   .civicase__activity-type {
@@ -102,10 +103,6 @@
 
     .civicase__activity-subject {
       margin-left: 52px;
-    }
-
-    .civicase__tooltip {
-      max-width: 180px;
     }
   }
 
