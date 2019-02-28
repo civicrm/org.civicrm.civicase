@@ -3,10 +3,6 @@
   border-radius: $card-border-radius;
   cursor: pointer;
 
-  &:hover {
-    background: $gray-lighter;
-  }
-
   .panel {
     box-shadow: none;
     height: 100%;
@@ -32,6 +28,15 @@
   .civicase__checkbox {
     margin-right: 5px;
     margin-top: 2px;
+  }
+
+  .panel-body:hover,
+  .panel-footer:hover {
+    background: $gray-lighter;
+  }
+
+  .panel-footer > a:hover {
+    text-decoration: none;
   }
 }
 
