@@ -40,14 +40,10 @@
         <!-- End - Title - Type/Subject -->
         <span class="civicase__activity__right-container" ng-if="activity.category.indexOf('alert') === -1">
           <!-- Tags -->
-          <div class="civicase__activity__tags-container" ng-if="activity.tag_id">
-            <span
-              class="badge"
-              title="{{ tag['tag_id.description'] }}"
-              ng-repeat="tag in activity.tag_id || []"
-              style="background-color: {{ tag['tag_id.color'] }};"
-            >{{ tag['tag_id.name'] }}</span>
-          </div>
+          <civicase-tags-container
+            tags="activity.tag_id"
+            show-ellipsis-after="1">
+          </civicase-tags-container>
           <!-- End - Tags -->
 
           <!-- Attachments -->
@@ -85,7 +81,18 @@
           <!-- End - Rating -->
 
           <!-- Activity Date -->
-          <span class="civicase__activity-date" ng-class="{'civicase__overdue-activity-icon': activity.is_overdue}">{{formatDate(activity.activity_date_time, 'DD MMM YYYY')}}</span>
+          <span
+            class="civicase__activity-date"
+            ng-class="{'civicase__overdue-activity-icon': activity.is_overdue}">
+            <span class="civicase__activity-date__with-year">
+              {{formatDate(activity.activity_date_time, 'DD MMM YYYY')}}
+            </span>
+            <span
+              class="civicase__activity-date__without-year"
+              title="{{formatDate(activity.activity_date_time, 'DD MMM YYYY')}}">
+              {{formatDate(activity.activity_date_time, 'DD MMM')}}
+            </span>
+          </span>
           <!-- End - Activity Date -->
 
           <!-- Avatar -->
@@ -111,14 +118,10 @@
       </div>
       <div class="civicase__activity-card-row" ng-if="activity.category.indexOf('alert') > -1">
         <!-- Tags for alert-->
-        <div class="civicase__activity__tags-container" ng-if="activity.tag_id">
-          <span
-            class="badge"
-            title="{{ tag['tag_id.description'] }}"
-            ng-repeat="tag in activity.tag_id || []"
-            style="background-color: {{ tag['tag_id.color'] }};"
-          >{{ tag['tag_id.name'] }}</span>
-        </div>
+        <civicase-tags-container
+          tags="activity.tag_id"
+          show-ellipsis-after="1">
+        </civicase-tags-container>
         <!-- End - Tags for alert -->
       </div>
 

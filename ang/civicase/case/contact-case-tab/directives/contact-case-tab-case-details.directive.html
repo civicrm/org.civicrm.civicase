@@ -103,13 +103,10 @@
           <span ng-if="!item.end_date">{{ ts('Ongoing') }}</span>
         </div>
         <span ng-if="item.tag_id" class="civicase__pipe"> | </span>
-        <div
-          ng-repeat="tag in item.tag_id || []"
-          class="civicase__case-card__tag badge"
-          ng-class="{'text-dark': CRM.utils.colorContrast(tag['tag_id.color'] || '#cccccc') === 'black'}"
-          style="background-color: {{ tag['tag_id.color'] }};">
-          {{ tag['tag_id.name'] }}
-        </div>
+        <civicase-tags-container
+          tags="item.tag_id"
+          show-ellipsis-after="1">
+        </civicase-tags-container>
       </div>
       <span class="pull-right civicase__contact-cases-tab__panel-fields--inline">
         <span class="civicase__contact-cases-tab__panel-field-emphasis">Case Manager:</span>

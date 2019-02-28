@@ -27,6 +27,10 @@
 
 #{$outside-namespace-marker} {
   #civicaseActivitiesTab {
+    // to maximise area for activity feed
+    margin-left: -10px;
+    margin-right: -10px;
+
     .civicase__activity-feed {
       > .panel-body {
         padding-left: 0;

@@ -65,14 +65,10 @@
         <div class="civicase__activity-subject">{{ activity.subject }}</div>
         <!-- End - Subject -->
         <!-- Tags -->
-        <div class="civicase__activity__tags-container" ng-if="activity.tag_id">
-          <span
-            class="badge"
-            title="{{ tag['tag_id.description'] }}"
-            ng-repeat="tag in activity.tag_id || []"
-            style="background-color: {{ tag['tag_id.color'] }};"
-          >{{ tag['tag_id.name'] }}</span>
-        </div>
+        <civicase-tags-container
+          tags="activity.tag_id"
+          show-ellipsis-after="2">
+        </civicase-tags-container>
         <!-- End - Tags -->
         <!-- With -->
         <div class="civicase__activity-card-row">
