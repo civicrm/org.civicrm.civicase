@@ -14,36 +14,39 @@
           <span>{{formatDate(item.modified_date, 'DD MMMM YYYY' )}}</span>
         </div>
       </div>
-      <a class="civicase__summary-activity-count"
-        ng-href="{{getActivityFeedUrl({ caseId: item.id, category: 'task', statusType: 'incomplete' })}}">
-        <div>{{item.category_count.incomplete.task || 0}}</div>
-        <div>Open Tasks</div>
-        <div
-          ng-class="{ 'invisible': !item.category_count.overdue.task }"
-          class="text-danger civicase__summary-overdue-count">
-          {{item.category_count.overdue.task}} overdue
-        </div>
-      </a>
-      <a class="civicase__summary-activity-count"
-        ng-href="{{getActivityFeedUrl({ caseId: item.id, category: 'communication', statusType: 'incomplete' })}}">
-        <div>{{item.category_count.incomplete.communication ? item.category_count.incomplete.communication : 0}}</div>
-        <div>Unread Comms</div>
-        <div
-          ng-class="{ 'invisible': !item.category_count.overdue.communication }"
-          class="text-danger civicase__summary-overdue-count">
-          {{item.category_count.overdue.communication}} overdue
-        </div>
-      </a>
-      <a class="civicase__summary-activity-count"
-        ng-href="{{getActivityFeedUrl({ caseId: item.id, status: 'Scheduled' })}}">
-        <div>{{item.category_count.scheduled.count}}</div>
-        <div>Scheduled Activities</div>
-        <div
-          ng-class="{ 'invisible': !item.category_count.scheduled.overdue }"
-          class="text-danger civicase__summary-overdue-count">
-          {{item.category_count.scheduled.overdue}} overdue
-        </div>
-      </a>
+      <div class="civicase__summary-activity-count">
+        <a ng-href="{{getActivityFeedUrl({ caseId: item.id, category: 'task', statusType: 'incomplete' })}}">
+          <div class="civicase__summary-activity-count__number">{{item.category_count.incomplete.task || 0}}</div>
+          <div class="civicase__summary-activity-count__description">Open Tasks</div>
+          <div
+            ng-class="{ 'invisible': !item.category_count.overdue.task }"
+            class="text-danger civicase__summary-overdue-count">
+            {{item.category_count.overdue.task}} overdue
+          </div>
+        </a>
+      </div>
+      <div class="civicase__summary-activity-count">
+        <a ng-href="{{getActivityFeedUrl({ caseId: item.id, category: 'communication', statusType: 'incomplete' })}}">
+          <div class="civicase__summary-activity-count__number">{{item.category_count.incomplete.communication ? item.category_count.incomplete.communication : 0}}</div>
+          <div class="civicase__summary-activity-count__description">Unread Comms</div>
+          <div
+            ng-class="{ 'invisible': !item.category_count.overdue.communication }"
+            class="text-danger civicase__summary-overdue-count">
+            {{item.category_count.overdue.communication}} overdue
+          </div>
+        </a>
+      </div>
+      <div class="civicase__summary-activity-count">
+        <a ng-href="{{getActivityFeedUrl({ caseId: item.id, status: 'Scheduled' })}}">
+          <div class="civicase__summary-activity-count__number">{{item.category_count.scheduled.count}}</div>
+          <div class="civicase__summary-activity-count__description">Scheduled Activities</div>
+          <div
+            ng-class="{ 'invisible': !item.category_count.scheduled.overdue }"
+            class="text-danger civicase__summary-overdue-count">
+            {{item.category_count.scheduled.overdue}} overdue
+          </div>
+        </a>
+      </div>
     </div>
   </div>
   <!-- End - Subject and QuickLinks -->
