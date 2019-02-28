@@ -55,6 +55,19 @@
        */
       function fixPositioningOnLoadingOrFocusChange () {
         if (!scope.loading && !scope.caseIsFocused) {
+          affixTableHeader();
+        }
+      }
+
+      /**
+       * Checks if the affix header is already affixed,
+       * if yes, readjusts it,
+       * otherwise inits the affix
+       */
+      function affixTableHeader () {
+        if ($header.data('bs.affix')) {
+          reAdjustFixedHeader();
+        } else {
           computeFixPositioning();
         }
       }
