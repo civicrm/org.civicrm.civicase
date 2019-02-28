@@ -2,7 +2,7 @@
   var module = angular.module('civicase');
 
   module.service('ActivityFeedMeasurements', function () {
-    this.setHeightOf = setHeightOf;
+    this.setScrollHeightOf = setScrollHeightOf;
 
     /**
      * Returns the offset of feed body from top
@@ -21,9 +21,17 @@
     /**
      * Returns the collective height of all contact tab children
      *
+     * $('.crm-contact-tabs-list').height() cannot be used to calculate the
+     * height of the tabs, because $('.crm-contact-tabs-list') gets the height
+     * of the right side panel(activity feed). Initially the height of the
+     * activity feed is very long(depends on how many activity it has),
+     * so the left tab also gets same height.
+     * So If that height is fetched and again set to activity feed,
+     * means nothing has changed, Thats why calculating child height is necessary.
+     *
      * @return {Number}
      */
-    function civicrmContactTabHeight () {
+    function getCivicrmContactTabHeight () {
       var height = 0;
       var $civicrmContactTabChildren = $('.crm-contact-tabs-list').children();
 
@@ -35,20 +43,20 @@
     }
 
     /**
-     * Set height of the sent element for scrolling
+     * Sets height of the given element for scrolling
      *
-     * @param {Object} $elm
+     * @param {Object} $element
      * @return {Number}
      */
-    function setHeightOf ($elm) {
+    function setScrollHeightOf ($element) {
       var $civicrmContactTabs = $('.crm-contact-tabs-list');
 
       if ($civicrmContactTabs.length) {
-        var height = civicrmContactTabHeight() +
+        var height = getCivicrmContactTabHeight() +
           $civicrmContactTabs.offset().top - getTopOffset();
-        $elm.height(height);
+        $element.height(height);
       } else {
-        $elm.height('calc(100vh - ' + getTopOffset() + 'px)');
+        $element.height('calc(100vh - ' + getTopOffset() + 'px)');
       }
     }
   });

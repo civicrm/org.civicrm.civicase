@@ -88,7 +88,7 @@
       function setPanelHeight () {
         var $feedPanel = $('.civicase__activity-feed__body__details');
 
-        ActivityFeedMeasurements.setHeightOf($feedPanel);
+        ActivityFeedMeasurements.setScrollHeightOf($feedPanel);
       }
     }
   });
