@@ -42,7 +42,7 @@
       function setListHeight () {
         var $feedList = $('.civicase__activity-feed__body__list');
 
-        $feedList.height('calc(100vh - ' + ActivityFeedMeasurements.getTopOffset() + 'px)');
+        ActivityFeedMeasurements.setScrollHeightOf($feedList);
       }
     }
   });
