@@ -154,6 +154,7 @@
       if (($scope.viewingActivity && $scope.viewingActivity.id === id) || !act) {
         $scope.viewingActivity = {};
         $scope.aid = 0;
+        $rootScope.$broadcast('civicase::activity-feed::hide-activity-panel');
       } else {
         // Mark email read
         if (act.status === 'Unread') {
