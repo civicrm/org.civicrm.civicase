@@ -1,6 +1,5 @@
 <div
   class="civicase__activity-card civicase__activity-card--long"
-  ng-click="viewActivityDetails($event, activity)"
   ng-class="{
     'civicase__activity-card--draft': activity.status==='Draft',
     'civicase__activity-card--ribbon': activity.category.indexOf('milestone') > -1,
@@ -8,7 +7,7 @@
     'civicase__activity-card--alert': activity.category.indexOf('alert') > -1,
     'civicase__activity-card--file': activity.type === 'File Upload'
   }">
-  <div class="panel panel-default">
+  <div class="panel panel-default" ng-click="viewActivityDetails($event, activity)">
     <div class="panel-body">
       <div class="civicase__activity-card-row civicase__activity-card-row--first">
         <span ng-if="activity.icon || activity.category.indexOf('milestone') > -1" activity-icon="activity"></span>
@@ -137,20 +136,22 @@
     </div>
     <!-- Case information -->
     <div class="panel-footer" ng-if="activity.case">
-      <div class="civicase__activity-card-row civicase__activity-card-row--case-info" >
-        <span>
-          <span class="civicase__activity-card__case-id__label">Case ID:</span>
-          <span class="civicase__activity-card__case-id__value">{{activity.case_id}}</span>
-        </span>
-        <span class="civicase__pipe"> | </span>
-        <span class="civicase__activity-card__case-type">{{ activity.case.type.title }}</span>
-        <div class="civicase__activity__right-container">
-          <div>
-            <span civicase-contact-card contacts="activity.case.client"></span>
+      <a ng-href="{{ 'civicrm/case/a/#/case/list' | civicaseCrmUrl:{ caseId: activity.case_id } }}">
+        <div class="civicase__activity-card-row civicase__activity-card-row--case-info" >
+          <span>
+            <span class="civicase__activity-card__case-id__label">Case ID:</span>
+            <span class="civicase__activity-card__case-id__value">{{activity.case_id}}</span>
+          </span>
+          <span class="civicase__pipe"> | </span>
+          <span class="civicase__activity-card__case-type">{{ activity.case.type.title }}</span>
+          <div class="civicase__activity__right-container">
+            <div>
+              <span civicase-contact-card contacts="activity.case.client"></span>
+            </div>
+            <span class="crm_notification-badge" style="background-color: {{ activity.case.status.color }};">{{ activity.case.status.label }}</span>
           </div>
-          <span class="crm_notification-badge" style="background-color: {{ activity.case.status.color }};">{{ activity.case.status.label }}</span>
         </div>
-      </div>
+      </a>
     </div>
     <!-- End - Case information -->
   </div>
