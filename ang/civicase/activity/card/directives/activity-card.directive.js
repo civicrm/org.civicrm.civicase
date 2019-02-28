@@ -94,18 +94,26 @@
      * @param {object} activity
      */
     $scope.viewInPopup = function ($event, activity) {
+      var activityFormUrl = 'civicrm/activity';
+      var activityFormParams = {
+        action: 'update',
+        id: activity.id,
+        reset: 1
+      };
+
       if ($event && $($event.target).is('a, a *, input, button, button *')) {
         return;
       }
 
-      CRM.loadForm(CRM.url('civicrm/case/activity', {
-        action: 'update',
-        id: activity.id,
-        caseid: activity.case_id,
-        reset: 1
-      })).on('crmFormSuccess', function () {
-        $scope.refresh();
-      });
+      if (activity.case_id) {
+        activityFormUrl = 'civicrm/case/activity';
+        activityFormParams.caseid = activity.case_id;
+      }
+
+      CRM.loadForm(CRM.url(activityFormUrl, activityFormParams))
+        .on('crmFormSuccess', function () {
+          $scope.refresh();
+        });
     };
 
     /**

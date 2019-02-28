@@ -60,6 +60,23 @@
         expect(loadFormSpy.on).toHaveBeenCalledWith('crmFormSuccess', jasmine.any(Function));
       });
 
+      describe('when editing an standalone activity', function () {
+        beforeEach(function () {
+          activity = activitiesMockData.get()[0];
+
+          delete activity.case_id;
+          activityCard.isolateScope().viewInPopup(null, activity);
+        });
+
+        it('opens the standalone activity modal form', function () {
+          expect(CRM.url).toHaveBeenCalledWith('civicrm/activity', jasmine.objectContaining({
+            action: 'update',
+            id: activity.id,
+            reset: 1
+          }));
+        });
+      });
+
       describe('when activity is saved', function () {
         beforeEach(function () {
           crmFormSuccessCallback();
