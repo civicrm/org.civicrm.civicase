@@ -37,7 +37,7 @@
   .panel-footer:hover {
     background: $gray-light;
 
-    a:hover {
+    > a:hover {
       text-decoration: none;
     }
   }
