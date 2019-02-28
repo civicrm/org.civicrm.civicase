@@ -33,6 +33,7 @@
 
   .civicase__tooltip {
     flex: 1;
+    max-width: 300px;
     min-width: 0;
   }
 
@@ -124,6 +125,11 @@
   .civicase__activity-icon-arrow {
     left: 22px;
     top: 8px;
+  }
+
+  .civicase__activity-card__case-type {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .civicase__activity-card-row--communication {

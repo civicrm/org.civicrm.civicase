@@ -40,7 +40,7 @@
             $feedBodyPanel.css('padding-top', $filter.outerHeight() + 24);
           }).on('affixed-top.bs.affix', function () {
             $filter.css('top', 'auto');
-            $feedBodyPanel.css('padding-top', '24px');
+            $feedBodyPanel.css('padding-top', '8px');
           });
         });
       }

@@ -1,8 +1,8 @@
-(function ($, angular) {
+(function ($, _, angular) {
   var module = angular.module('civicase');
 
   module.service('ActivityFeedMeasurements', function () {
-    this.getTopOffset = getTopOffset;
+    this.setHeightOf = setHeightOf;
 
     /**
      * Returns the offset of feed body from top
@@ -17,5 +17,39 @@
 
       return topOffset;
     }
+
+    /**
+     * Returns the collective height of all contact tab children
+     *
+     * @return {Number}
+     */
+    function civicrmContactTabHeight () {
+      var height = 0;
+      var $civicrmContactTabChildren = $('.crm-contact-tabs-list').children();
+
+      _.each($civicrmContactTabChildren, function (child) {
+        height += $(child).height();
+      });
+
+      return height;
+    }
+
+    /**
+     * Set height of the sent element for scrolling
+     *
+     * @param {Object} $elm
+     * @return {Number}
+     */
+    function setHeightOf ($elm) {
+      var $civicrmContactTabs = $('.crm-contact-tabs-list');
+
+      if ($civicrmContactTabs.length) {
+        var height = civicrmContactTabHeight() +
+          $civicrmContactTabs.offset().top - getTopOffset();
+        $elm.height(height);
+      } else {
+        $elm.height('calc(100vh - ' + getTopOffset() + 'px)');
+      }
+    }
   });
-})(CRM.$, angular);
+})(CRM.$, CRM._, angular);

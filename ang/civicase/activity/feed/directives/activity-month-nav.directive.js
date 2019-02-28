@@ -39,7 +39,7 @@
       function setNavHeight () {
         var $monthNav = $('.civicase__activity-feed__body__month-nav');
 
-        $monthNav.height('calc(100vh - ' + ActivityFeedMeasurements.getTopOffset() + 'px)');
+        ActivityFeedMeasurements.setHeightOf($monthNav);
       }
     }
   });
