@@ -3,6 +3,10 @@
   border-radius: $card-border-radius;
   cursor: pointer;
 
+  &:hover {
+    background: $gray-lighter;
+  }
+
   .panel {
     box-shadow: none;
     height: 100%;
@@ -30,13 +34,12 @@
     margin-top: 2px;
   }
 
-  .panel-body:hover,
   .panel-footer:hover {
-    background: $gray-lighter;
-  }
+    background: $gray-light;
 
-  .panel-footer > a:hover {
-    text-decoration: none;
+    a:hover {
+      text-decoration: none;
+    }
   }
 }
 
