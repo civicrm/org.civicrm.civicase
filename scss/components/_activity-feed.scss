@@ -169,12 +169,12 @@ $feed-child-min-height: 400px;
 .civicase__activity-feed__body__details {
   box-sizing: content-box;
   min-height: $feed-child-min-height;
-  min-width: 450px;
+  min-width: 550px;
   overflow-y: auto;
   padding-left: 15px;
   padding-right: 10px;
   padding-top: 8px;
-  width: 450px;
+  width: 550px;
 }
 
 .civicase__activity-feed__body__month-nav {
@@ -191,5 +191,35 @@ $feed-child-min-height: 400px;
 
   .civicase__panel-transparent-header {
     width: 100%;
+  }
+}
+
+@media (max-width: 1250px) {
+  .civicase__activity-feed {
+    .civicase__activity-card--long {
+      .civicase__activity-date__with-year {
+        display: none;
+      }
+
+      .civicase__activity-date__without-year {
+        display: inline-block;
+      }
+
+      &.civicase__activity-card--ribbon {
+        .civicase__tooltip {
+          max-width: 40px;
+        }
+
+        .panel-body {
+          padding: 15px 10px 15px 15px;
+        }
+      }
+
+      .civicase__tags-container {
+        .badge {
+          max-width: 35px;
+        }
+      }
+    }
   }
 }

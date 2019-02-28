@@ -54,8 +54,8 @@
     }
   }
 
-  .civicase__activity__tags-container {
-    margin-right: 10px;
+  .civicase__tags-container {
+    margin-right: 5px;
     margin-top: -3px;
   }
 
@@ -66,6 +66,16 @@
 
   .civicase__activity-date {
     margin-left: 5px;
+    margin-top: -1px;
+  }
+
+  .civicase__activity-date__with-year,
+  .civicase__activity-date__without-year {
+    vertical-align: middle;
+  }
+
+  .civicase__activity-date__without-year {
+    display: none;
   }
 
   .civicase__contact-additional__container--avatar {
@@ -95,7 +105,7 @@
     }
 
     .civicase__tooltip {
-      max-width: 125px;
+      max-width: 180px;
     }
   }
 

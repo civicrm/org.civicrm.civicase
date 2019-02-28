@@ -154,18 +154,9 @@
   color: $crm-gray-matte;
 }
 
-.civicase__case-card__tags-container {
-  display: flex;
-  padding: 5px 0;
-}
-
-.civicase__case-card__tag,
-.civicase__case-card__activity-count-container {
-  margin-right: 8px;
-}
-
 .civicase__case-card__activity-count-container {
   display: inline-block;
+  margin-right: 8px;
 }
 
 .civicase__case-card--detached {

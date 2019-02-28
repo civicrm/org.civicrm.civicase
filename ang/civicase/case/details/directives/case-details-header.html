@@ -38,13 +38,10 @@
 
       <span ng-if="item.tag_id" class="civicase__pipe"> | </span>
 
-      <div
-        ng-repeat="tag in item.tag_id || []"
-        class="civicase__case-card__tag badge"
-        ng-class="{'text-dark': CRM.utils.colorContrast(tag['tag_id.color'] || '#cccccc') === 'black'}"
-        style="background-color: {{ tag['tag_id.color'] }};">
-        {{ tag['tag_id.name'] }}
-      </div>
+      <civicase-tags-container
+        tags="item.tag_id"
+        show-ellipsis-after="3">
+      </civicase-tags-container>
 
       <span class="pull-right">
         <span>Case Manager:</span>

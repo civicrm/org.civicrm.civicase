@@ -34,14 +34,9 @@
     </div>
     <div class="civicase__case-card__activity-info" civicase-case-activity-count>
     </div>
-    <div class="civicase__case-card__tags-container" ng-if="data.tag_id">
-      <span
-        class="civicase__case-card__tag badge"
-        title="{{ tag['tag_id.description'] }}"
-        ng-repeat="tag in data.tag_id || []"
-        ng-class="{'text-dark': CRM.utils.colorContrast(tag['tag_id.color'] || '#cccccc') === 'black'}"
-        style="background-color: {{ tag['tag_id.color'] }};"
-      >{{ tag['tag_id.name'] }}</span>
-    </div>
+    <civicase-tags-container
+      tags="data.tag_id"
+      show-ellipsis-after="3">
+    </civicase-tags-container>
   </div>
 </div>
