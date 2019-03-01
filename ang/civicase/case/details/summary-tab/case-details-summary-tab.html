@@ -27,7 +27,7 @@
       </div>
       <div class="civicase__summary-activity-count">
         <a ng-href="{{getActivityFeedUrl({ caseId: item.id, category: 'communication', statusType: 'incomplete' })}}">
-          <div class="civicase__summary-activity-count__number">{{item.category_count.incomplete.communication ? item.category_count.incomplete.communication : 0}}</div>
+          <div class="civicase__summary-activity-count__number">{{item.category_count.incomplete.communication || 0}}</div>
           <div class="civicase__summary-activity-count__description">Unread Comms</div>
           <div
             ng-class="{ 'invisible': !item.category_count.overdue.communication }"

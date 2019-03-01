@@ -35,12 +35,11 @@
   border-left: 1px solid $gray-light;
   color: $gray-darker;
   display: table-cell;
-  flex-basis: 20%;
-  flex-direction: column;
   font-weight: $font-weight-heading;
   justify-content: center;
   text-align: center;
   vertical-align: top;
+  width: 20%;
 
   a,
   a:hover {
