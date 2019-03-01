@@ -356,9 +356,8 @@
      */
     function loadActivities (mode) {
       var options = setActivityAPIOptions(mode);
-      var apiAction = $scope.filters['@involvingContact'] === 'myActivities'
-        ? 'getcontactactivities'
-        : 'get';
+      var isMyActivitiesFilter = $scope.filters['@involvingContact'] === 'myActivities';
+      var apiAction = isMyActivitiesFilter ? 'getcontactactivities' : 'get';
       var returnParams = {
         sequential: 1,
         return: [
@@ -408,8 +407,13 @@
       }
 
       $rootScope.$broadcast(
-        'civicaseActivityFeed.query',
-        $scope.filters, params, false, $scope.displayOptions.overdue_first
+        'civicaseActivityFeed.query', {
+          filters: $scope.filters,
+          params: params,
+          reset: false,
+          overdueFirst: $scope.displayOptions.overdue_first,
+          isMyActivitiesFilter: isMyActivitiesFilter
+        }
       );
 
       return crmApi({

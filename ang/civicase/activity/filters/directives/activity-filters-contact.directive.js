@@ -39,29 +39,26 @@
        * Subscribe listener for civicaseActivityFeed.query
        *
        * @param {Object} event
-       * @param {Object} filters
-       * @param {Object} params
-       * @param {Boolean} reset if it's necessary to delete the previously-set properties
-       * @param {Boolean} overdueFirst
+       * @param {Object} allParameters
        */
-      function feedQueryListener (event, filters, params, reset, overdueFirst) {
-        if (reset) {
-          delete params.contact_id;
-          delete params.assignee_contact_id;
-          delete params.source_contact_id;
+      function feedQueryListener (event, allParameters) {
+        if (allParameters.reset) {
+          delete allParameters.params.contact_id;
+          delete allParameters.params.assignee_contact_id;
+          delete allParameters.params.source_contact_id;
         }
 
-        switch (filters['@involvingContact']) {
+        switch (allParameters.filters['@involvingContact']) {
           case 'myActivities':
-            params.contact_id = 'user_contact_id';
+            allParameters.params.contact_id = 'user_contact_id';
             break;
 
           case 'delegated':
-            if (_.isEmpty(params.assignee_contact_id)) {
-              params.assignee_contact_id = {'!=': 'user_contact_id'};
+            if (_.isEmpty(allParameters.params.assignee_contact_id)) {
+              allParameters.params.assignee_contact_id = {'!=': 'user_contact_id'};
             }
-            if (_.isEmpty(params.source_contact_id)) {
-              params.source_contact_id = 'user_contact_id';
+            if (_.isEmpty(allParameters.params.source_contact_id)) {
+              allParameters.params.source_contact_id = 'user_contact_id';
             }
             break;
 
