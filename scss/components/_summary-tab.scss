@@ -108,6 +108,7 @@
 .civicase__summary-tab-tile--responsive {
   flex-basis: calc(50% - 150px);
   flex-grow: 1;
+  min-width: 0;
 }
 
 .civicase__summary-tab__activity-list {
