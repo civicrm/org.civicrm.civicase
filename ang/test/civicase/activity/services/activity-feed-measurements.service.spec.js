@@ -9,47 +9,94 @@
       ActivityFeedMeasurements = _ActivityFeedMeasurements_;
     }));
 
-    describe('getTopOffset()', function () {
-      var topOffset, expectedTopOffset;
+    describe('setScrollHeightOf()', function () {
+      var expectedTopOffset, elementToSetHeightTo;
+      var originaljQueryHeightFn = CRM.$.fn.height;
 
       beforeEach(function () {
-        addAdditionalMarkup();
-
-        var $feedPanelBody = CRM.$('.civicase__activity-feed>.panel-body');
-        var feedPanelBodyPaddingTop = parseInt($feedPanelBody.css('padding-top'));
-
-        topOffset = ActivityFeedMeasurements.getTopOffset();
-        expectedTopOffset =
-          CRM.$('.civicase__activity-feed__body').offset().top +
-          feedPanelBodyPaddingTop;
+        spyOn(CRM.$.fn, 'height').and.callThrough();
       });
 
       afterEach(function () {
         removeAdditionalMarkup();
+        CRM.$.fn.height = originaljQueryHeightFn;
       });
 
-      it('returns the distance of activity feed body from the top of the screen', function () {
-        expect(topOffset).toBe(expectedTopOffset);
+      describe('when used outside of contacts tab', function () {
+        beforeEach(function () {
+          addAdditionalMarkup();
+
+          CRM.$('.activity-feed-measurement-test-markup')
+            .append('<div class="element-to-set-height-to"></div>');
+          elementToSetHeightTo = CRM.$('.element-to-set-height-to');
+
+          var $feedPanelBody = CRM.$('.civicase__activity-feed>.panel-body');
+          var feedPanelBodyPaddingTop = parseInt($feedPanelBody.css('padding-top'));
+
+          ActivityFeedMeasurements.setScrollHeightOf(elementToSetHeightTo);
+          expectedTopOffset =
+            CRM.$('.civicase__activity-feed__body').offset().top +
+            feedPanelBodyPaddingTop;
+        });
+
+        it('sets the height of the sent element', function () {
+          // as the height is using 'calc', actual height could not be measured
+          expect(CRM.$.fn.height).toHaveBeenCalledWith('calc(100vh - ' + expectedTopOffset + 'px)');
+        });
+      });
+
+      describe('when used inside of contacts tab', function () {
+        beforeEach(function () {
+          addAdditionalMarkup(true);
+
+          CRM.$('.activity-feed-measurement-test-markup')
+            .append('<div class="element-to-set-height-to"></div>');
+          elementToSetHeightTo = CRM.$('.element-to-set-height-to');
+
+          var $feedPanelBody = CRM.$('.civicase__activity-feed>.panel-body');
+          var feedPanelBodyPaddingTop = parseInt($feedPanelBody.css('padding-top'));
+
+          ActivityFeedMeasurements.setScrollHeightOf(elementToSetHeightTo);
+          expectedTopOffset =
+            CRM.$('.civicase__activity-feed__body').offset().top +
+            feedPanelBodyPaddingTop;
+        });
+
+        it('sets the height of the sent element', function () {
+          expect(elementToSetHeightTo.height())
+            .toBe((30 + 60) + CRM.$('.crm-contact-tabs-list').offset().top - expectedTopOffset);
+        });
       });
 
       /**
        * Add aditional markup
+       *
+       * @param {Boolean} isCivicrmTabsPresent
        */
-      function addAdditionalMarkup () {
+      function addAdditionalMarkup (isCivicrmTabsPresent) {
         var markup = `<div class='civicase__activity-feed'>
           <div class='panel-body' style='padding-top: 24px'>
             <div class='civicase__activity-feed__body'></div>
           </div>
         </div>`;
 
-        CRM.$(markup).appendTo('body');
+        if (isCivicrmTabsPresent) {
+          markup += `<div class="crm-contact-tabs-list">
+            <div style="height: 30px"></div>
+            <div style="height: 60px"></div>
+          </div>`;
+        }
+
+        var testMarkup = '<div class="activity-feed-measurement-test-markup">' + markup + '</div>';
+
+        CRM.$(testMarkup).appendTo('body');
       }
 
       /**
        * Remove aditional markup
        */
       function removeAdditionalMarkup () {
-        CRM.$('.civicase__activity-feed').remove();
+        CRM.$('.activity-feed-measurement-test-markup').remove();
       }
     });
   });

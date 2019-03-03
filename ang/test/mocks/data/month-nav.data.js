@@ -1,7 +1,7 @@
 (function (angular, _) {
   var module = angular.module('civicase.data');
 
-  module.service('monthNavMockData', ['datesMockData', function (dates) {
+  module.service('monthNavMockData', [function () {
     var futureMonth = moment().add(1, 'month');
     var currentMonth = moment();
     var pastMonth = moment().add(-1, 'month');

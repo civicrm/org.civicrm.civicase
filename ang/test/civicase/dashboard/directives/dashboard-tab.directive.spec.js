@@ -527,10 +527,11 @@
 
             it('broadcasts a "civicaseActivityFeed.query" event', function () {
               expect($rootScope.$broadcast).toHaveBeenCalledWith(
-                'civicaseActivityFeed.query',
-                $scope.newMilestonesPanel.custom.involvementFilter,
-                $scope.newMilestonesPanel.query.params,
-                true
+                'civicaseActivityFeed.query', {
+                  filters: $scope.newMilestonesPanel.custom.involvementFilter,
+                  params: $scope.newMilestonesPanel.query.params,
+                  reset: true
+                }
               );
             });
           });
@@ -781,10 +782,11 @@
 
             it('broadcasts a "civicaseActivityFeed.query" event', function () {
               expect($rootScope.$broadcast).toHaveBeenCalledWith(
-                'civicaseActivityFeed.query',
-                $scope.activitiesPanel.custom.involvementFilter,
-                $scope.activitiesPanel.query.params,
-                true
+                'civicaseActivityFeed.query', {
+                  filters: $scope.activitiesPanel.custom.involvementFilter,
+                  params: $scope.activitiesPanel.query.params,
+                  reset: true
+                }
               );
             });
           });
