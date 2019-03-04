@@ -34,24 +34,36 @@
   align-items: center;
   border-left: 1px solid $gray-light;
   color: $gray-darker;
-  display: flex;
-  flex-basis: 16.6%;
-  flex-direction: column;
+  display: table-cell;
   font-weight: $font-weight-heading;
   justify-content: center;
   text-align: center;
+  vertical-align: top;
+  width: 20%;
 
-  &:hover {
+  a,
+  a:hover {
     color: $gray-darker;
     text-decoration: none;
   }
 
-  > div:nth-child(1) {
+  a {
+    display: block;
+    height: 100%;
+    margin: 0 10px;
+  }
+
+  a:hover {
+    background: $gray-lighter;
+    border-radius: 5px;
+  }
+
+  .civicase__summary-activity-count__number {
     font-size: 56px;
     line-height: 76px;
   }
 
-  > div:nth-child(2) {
+  .civicase__summary-activity-count__description {
     color: $crm-gray-matte;
     font-size: 16px;
     line-height: 22px;
