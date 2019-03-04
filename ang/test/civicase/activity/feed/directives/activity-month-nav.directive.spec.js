@@ -99,9 +99,9 @@
             }));
 
             initController();
-            $scope.$emit('civicaseActivityFeed.query', {
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
               filters: {},
-              params: params,
+              apiParams: params,
               reset: false,
               overdueFirst: overdueFirst
             });
@@ -174,9 +174,9 @@
             }));
 
             initController();
-            $scope.$emit('civicaseActivityFeed.query', {
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
               filters: {},
-              params: params,
+              apiParams: params,
               reset: false,
               overdueFirst: overdueFirst
             });
@@ -227,15 +227,15 @@
             }));
 
             initController();
-            $scope.$emit('civicaseActivityFeed.query', {
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
               filters: {},
-              params: { key: 'value' },
+              apiParams: { key: 'value' },
               reset: false,
               overdueFirst: false
             });
-            $scope.$emit('civicaseActivityFeed.query', {
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
               filters: {},
-              params: { key: 'value2' },
+              apiParams: { key: 'value2' },
               reset: false,
               overdueFirst: false
             });
@@ -255,15 +255,15 @@
             }));
 
             initController();
-            $scope.$emit('civicaseActivityFeed.query', {
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
               filters: {},
-              params: { key: 'value' },
+              apiParams: { key: 'value' },
               reset: false,
               overdueFirst: false
             });
-            $scope.$emit('civicaseActivityFeed.query', {
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
               filters: {},
-              params: { key: 'value' },
+              apiParams: { key: 'value' },
               reset: false,
               overdueFirst: false
             });
@@ -288,8 +288,8 @@
 
         describe('when filtering with my activity filter', function () {
           beforeEach(function () {
-            $scope.$emit('civicaseActivityFeed.query', {
-              params: {},
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              apiParams: {},
               isMyActivitiesFilter: true
             });
             $scope.$digest();
@@ -308,8 +308,8 @@
 
         describe('when filtering without my activity filter', function () {
           beforeEach(function () {
-            $scope.$emit('civicaseActivityFeed.query', {
-              params: {}
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              apiParams: {}
             });
             $scope.$digest();
           });

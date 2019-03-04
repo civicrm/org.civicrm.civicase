@@ -39,26 +39,26 @@
        * Subscribe listener for civicaseActivityFeed.query
        *
        * @param {Object} event
-       * @param {Object} allParameters
+       * @param {Object} feedQueryParams
        */
-      function feedQueryListener (event, allParameters) {
-        if (allParameters.reset) {
-          delete allParameters.params.contact_id;
-          delete allParameters.params.assignee_contact_id;
-          delete allParameters.params.source_contact_id;
+      function feedQueryListener (event, feedQueryParams) {
+        if (feedQueryParams.reset) {
+          delete feedQueryParams.apiParams.contact_id;
+          delete feedQueryParams.apiParams.assignee_contact_id;
+          delete feedQueryParams.apiParams.source_contact_id;
         }
 
-        switch (allParameters.filters['@involvingContact']) {
+        switch (feedQueryParams.filters['@involvingContact']) {
           case 'myActivities':
-            allParameters.params.contact_id = 'user_contact_id';
+            feedQueryParams.apiParams.contact_id = 'user_contact_id';
             break;
 
           case 'delegated':
-            if (_.isEmpty(allParameters.params.assignee_contact_id)) {
-              allParameters.params.assignee_contact_id = {'!=': 'user_contact_id'};
+            if (_.isEmpty(feedQueryParams.apiParams.assignee_contact_id)) {
+              feedQueryParams.apiParams.assignee_contact_id = {'!=': 'user_contact_id'};
             }
-            if (_.isEmpty(allParameters.params.source_contact_id)) {
-              allParameters.params.source_contact_id = 'user_contact_id';
+            if (_.isEmpty(feedQueryParams.apiParams.source_contact_id)) {
+              feedQueryParams.apiParams.source_contact_id = 'user_contact_id';
             }
             break;
 

@@ -47,7 +47,8 @@
 
       describe('when used inside of contacts tab', function () {
         beforeEach(function () {
-          addAdditionalMarkup(true);
+          addAdditionalMarkup();
+          addContactsTabMarkup();
 
           CRM.$('.activity-feed-measurement-test-markup')
             .append('<div class="element-to-set-height-to"></div>');
@@ -70,26 +71,29 @@
 
       /**
        * Add aditional markup
-       *
-       * @param {Boolean} isCivicrmTabsPresent
        */
-      function addAdditionalMarkup (isCivicrmTabsPresent) {
+      function addAdditionalMarkup () {
         var markup = `<div class='civicase__activity-feed'>
           <div class='panel-body' style='padding-top: 24px'>
             <div class='civicase__activity-feed__body'></div>
           </div>
         </div>`;
 
-        if (isCivicrmTabsPresent) {
-          markup += `<div class="crm-contact-tabs-list">
-            <div style="height: 30px"></div>
-            <div style="height: 60px"></div>
-          </div>`;
-        }
-
         var testMarkup = '<div class="activity-feed-measurement-test-markup">' + markup + '</div>';
 
         CRM.$(testMarkup).appendTo('body');
+      }
+
+      /**
+       * Add Contacts Tab markup
+       */
+      function addContactsTabMarkup () {
+        var contactTabMarkup = `<div class="crm-contact-tabs-list">
+          <div style="height: 30px"></div>
+          <div style="height: 60px"></div>
+        </div>`;
+
+        CRM.$(contactTabMarkup).appendTo('.activity-feed-measurement-test-markup');
       }
 
       /**

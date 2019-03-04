@@ -222,7 +222,7 @@
         $rootScope.$broadcast(
           'civicaseActivityFeed.query', {
             filters: $scope.newMilestonesPanel.custom.involvementFilter,
-            params: $scope.newMilestonesPanel.query.params,
+            apiParams: $scope.newMilestonesPanel.query.params,
             reset: true
           }
         );
@@ -237,7 +237,7 @@
         $rootScope.$broadcast(
           'civicaseActivityFeed.query', {
             filters: $scope.activitiesPanel.custom.involvementFilter,
-            params: $scope.activitiesPanel.query.params,
+            apiParams: $scope.activitiesPanel.query.params,
             reset: true
           }
         );

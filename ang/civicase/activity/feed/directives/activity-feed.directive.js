@@ -409,7 +409,7 @@
       $rootScope.$broadcast(
         'civicaseActivityFeed.query', {
           filters: $scope.filters,
-          params: params,
+          apiParams: params,
           reset: false,
           overdueFirst: $scope.displayOptions.overdue_first,
           isMyActivitiesFilter: isMyActivitiesFilter
