@@ -220,10 +220,11 @@
 
         updatePanelQueryActions($scope.newMilestonesPanel);
         $rootScope.$broadcast(
-          'civicaseActivityFeed.query',
-          $scope.newMilestonesPanel.custom.involvementFilter,
-          $scope.newMilestonesPanel.query.params,
-          true
+          'civicaseActivityFeed.query', {
+            filters: $scope.newMilestonesPanel.custom.involvementFilter,
+            apiParams: $scope.newMilestonesPanel.query.params,
+            reset: true
+          }
         );
       }, true);
 
@@ -234,10 +235,11 @@
 
         updatePanelQueryActions($scope.activitiesPanel);
         $rootScope.$broadcast(
-          'civicaseActivityFeed.query',
-          $scope.activitiesPanel.custom.involvementFilter,
-          $scope.activitiesPanel.query.params,
-          true
+          'civicaseActivityFeed.query', {
+            filters: $scope.activitiesPanel.custom.involvementFilter,
+            apiParams: $scope.activitiesPanel.query.params,
+            reset: true
+          }
         );
       }, true);
     }

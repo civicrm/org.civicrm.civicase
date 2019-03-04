@@ -176,12 +176,16 @@
         });
 
         it('aligns the popover arrow to the right', function () {
-          var arrowCurrentPosition, arrowExpectedPosition, popoverWidth;
+          var arrowCurrentPosition, popoverWidth;
           arrowCurrentPosition = popover.find('.arrow').css('left');
           popoverWidth = popover.find('.arrow').outerWidth();
-          arrowExpectedPosition = `calc(-${popoverWidth}px + 100%)`;
 
-          expect(arrowCurrentPosition).toBe(arrowExpectedPosition);
+          // calc css property is returned in different format by different
+          // version of chromium, hence the following is used
+          expect([
+            `calc(-${popoverWidth}px + 100%)`,
+            `calc(100% + -${popoverWidth}px)`
+          ]).toContain(arrowCurrentPosition);
         });
       });
     });

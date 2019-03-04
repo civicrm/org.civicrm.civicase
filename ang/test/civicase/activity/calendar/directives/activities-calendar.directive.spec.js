@@ -5,11 +5,21 @@
     var $controller, $q, $scope, $rootScope, $route, crmApi, formatActivity, dates,
       mockedActivities;
 
+    beforeEach(function () {
+      jasmine.clock().install();
+      var today = moment('2018-10-19').toDate();
+      jasmine.clock().mockDate(today);
+    });
+
     beforeEach(module('civicase', 'crmUtil', 'civicase.data', 'ui.bootstrap', function ($provide) {
       $route = { current: { params: {} } };
 
       $provide.value('$route', $route);
     }));
+
+    afterEach(function () {
+      jasmine.clock().uninstall();
+    });
 
     beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _crmApi_,
       _formatActivity_, datesMockData) {
@@ -361,7 +371,7 @@
           beforeEach(function () {
             returnDateForStatus(dates.today, 'any');
             initControllerAndEmitDatepickerReadyEvent();
-
+            jasmine.clock().tick(1000);
             customClass = getDayCustomClass(dates.today);
           });
 
@@ -585,6 +595,12 @@
       var allArgs, endOfMonth, nextMonth, startOfMonth;
 
       beforeEach(function () {
+        spyOn(_, 'debounce').and.callFake(function (func) {
+          return function () {
+            func.apply(this, arguments);
+          };
+        });
+
         nextMonth = moment(dates.today).add(1, 'month');
         startOfMonth = nextMonth.startOf('month').format('YYYY-MM-DD');
         endOfMonth = nextMonth.endOf('month').format('YYYY-MM-DD');
@@ -598,34 +614,22 @@
       });
 
       // @NOTE: the function that loads the data when a new month is selected
-      // is debounced to avoid flooding, and as such can't be tested normally
-      // The use of `done` and `setTimeout` is necessary for jasmine to
-      // wait the next tick loop before testing the assertions
+      // is debounced to avoid flooding. But debounce cannot be tested using
+      // jasmine.clock() because it fails to mock setTimeout used by lodash
+      // So instead, it has been checked if debounce function has been called.
 
-      it('does not invoke the load function before 300ms', function (done) {
-        setTimeout(function () {
-          expect(crmApi).not.toHaveBeenCalled();
-          done();
-        }, 290);
+      it('invokes the load function after 300ms', function () {
+        expect(_.debounce).toHaveBeenCalledWith(jasmine.any(Function), 300);
+        expect(crmApi).toHaveBeenCalled();
       });
 
-      it('invokes the load function after 300ms', function (done) {
-        setTimeout(function () {
-          expect(crmApi).toHaveBeenCalled();
-          done();
-        }, 300);
-      });
-
-      it('loads the days with activities of the month of the selected date', function (done) {
-        setTimeout(function () {
-          expect(crmApi.calls.count()).toBe(2);
-          allArgs.forEach(function (args) {
-            expect(args[2].activity_date_time).toEqual({
-              'BETWEEN': [startOfMonth + ' 00:00:00', endOfMonth + ' 23:59:59']
-            });
+      it('loads the days with activities of the month of the selected date', function () {
+        expect(crmApi.calls.count()).toBe(2);
+        allArgs.forEach(function (args) {
+          expect(args[2].activity_date_time).toEqual({
+            'BETWEEN': [startOfMonth + ' 00:00:00', endOfMonth + ' 23:59:59']
           });
-          done();
-        }, 300);
+        });
       });
     });
 

@@ -75,7 +75,14 @@
         <!-- End - Task - Checkbox -->
 
         <!-- Type -->
-        <span class="civicase__activity-type" ng-class="{'civicase__activity-type--completed': (activity.category.indexOf('task') > -1 && activity.is_completed)}">{{ activity.type }}</span>
+        <civicase-tooltip
+          tooltip-text="activity.type">
+          <span
+            class="civicase__tooltip__ellipsis civicase__activity-type"
+            ng-class="{'civicase__activity-type--completed': (activity.category.indexOf('task') > -1 && activity.is_completed)}">
+            {{ activity.type }}
+          </span>
+        </civicase-tooltip>
         <!-- End - Type -->
       </div>
       <div class="civicase__activity-card-row" ng-if="activity.target_contact_name">

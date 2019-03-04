@@ -70,13 +70,17 @@
      * Subscribe listener for civicaseActivityFeed.query
      *
      * @param {Object} event
-     * @param {Object} filters
-     * @param {Object} params
-     * @param {Boolean} reset
-     * @param {Boolean} overdueFirst
+     * @param {Object} feedQueryParams
      */
-    function feedQueryListener (event, filters, params, reset, overdueFirst) {
-      var apiCalls = getAPICalls(overdueFirst, params);
+    function feedQueryListener (event, feedQueryParams) {
+      if (feedQueryParams.isMyActivitiesFilter) {
+        feedQueryParams.apiParams.isMyActivitiesFilter = feedQueryParams.isMyActivitiesFilter;
+      }
+
+      var apiCalls = getAPICalls(
+        feedQueryParams.overdueFirst,
+        feedQueryParams.apiParams
+      );
 
       // do not re fetch the groups if params are same
       if (previousApiCalls && _.isEqual(apiCalls, previousApiCalls)) {
@@ -87,7 +91,7 @@
       return crmApi(apiCalls).then(function (result) {
         initGroups();
 
-        if (overdueFirst) {
+        if (feedQueryParams.overdueFirst) {
           groupOverdueByYear(result.months_with_overdue.values);
           groupOthersByYear(result.months_wo_overdue.values);
         } else {

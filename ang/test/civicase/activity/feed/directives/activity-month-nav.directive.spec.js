@@ -28,25 +28,17 @@
         });
 
         describe('height of month nav', function () {
-          var originalJqueryHeightFn = CRM.$.fn.height;
+          var $monthNav;
 
           beforeEach(function () {
-            spyOn(ActivityFeedMeasurements, 'getTopOffset').and.returnValue(10);
-            spyOn(CRM.$.fn, 'height');
+            $monthNav = CRM.$('.civicase__activity-feed__body__month-nav');
+            spyOn(ActivityFeedMeasurements, 'setScrollHeightOf').and.returnValue(10);
             initDirective();
-
             $timeout.flush();
           });
 
-          afterEach(function () {
-            CRM.$.fn.height = originalJqueryHeightFn;
-          });
-
           it('sets the height of the month nav', function () {
-            // in this case as `calc` is used, height cannot be tested
-            // by getting the actual height of the element,
-            // instead checking whether the height function is called
-            expect(CRM.$.fn.height).toHaveBeenCalledWith('calc(100vh - ' + 10 + 'px)');
+            expect(ActivityFeedMeasurements.setScrollHeightOf).toHaveBeenCalledWith($monthNav);
           });
         });
       });
@@ -107,7 +99,12 @@
             }));
 
             initController();
-            $scope.$emit('civicaseActivityFeed.query', {}, params, false, overdueFirst);
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              filters: {},
+              apiParams: params,
+              reset: false,
+              overdueFirst: overdueFirst
+            });
             $scope.$digest();
           });
 
@@ -177,7 +174,12 @@
             }));
 
             initController();
-            $scope.$emit('civicaseActivityFeed.query', {}, params, false, overdueFirst);
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              filters: {},
+              apiParams: params,
+              reset: false,
+              overdueFirst: overdueFirst
+            });
             $scope.$digest();
           });
 
@@ -225,8 +227,18 @@
             }));
 
             initController();
-            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value' }, false, false);
-            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value2' }, false, false);
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              filters: {},
+              apiParams: { key: 'value' },
+              reset: false,
+              overdueFirst: false
+            });
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              filters: {},
+              apiParams: { key: 'value2' },
+              reset: false,
+              overdueFirst: false
+            });
             $scope.$digest();
           });
 
@@ -243,13 +255,71 @@
             }));
 
             initController();
-            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value' }, false, false);
-            $scope.$emit('civicaseActivityFeed.query', {}, { key: 'value' }, false, false);
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              filters: {},
+              apiParams: { key: 'value' },
+              reset: false,
+              overdueFirst: false
+            });
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              filters: {},
+              apiParams: { key: 'value' },
+              reset: false,
+              overdueFirst: false
+            });
             $scope.$digest();
           });
 
           it('does not fetch the months data again', function () {
             expect(crmApi.calls.count()).toBe(1);
+          });
+        });
+      });
+
+      describe('my activities filter', function () {
+        beforeEach(function () {
+          var monthData = monthNavMockData.get();
+          crmApi.and.returnValue($q.resolve({
+            months: { values: monthData }
+          }));
+
+          initController();
+        });
+
+        describe('when filtering with my activity filter', function () {
+          beforeEach(function () {
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              apiParams: {},
+              isMyActivitiesFilter: true
+            });
+            $scope.$digest();
+          });
+
+          it('creates the month list based on the my activity filter', function () {
+            expect(crmApi).toHaveBeenCalledWith({
+              months: [
+                'Activity', 'getmonthswithactivities', {
+                  isMyActivitiesFilter: true
+                }
+              ]
+            });
+          });
+        });
+
+        describe('when filtering without my activity filter', function () {
+          beforeEach(function () {
+            $rootScope.$broadcast('civicaseActivityFeed.query', {
+              apiParams: {}
+            });
+            $scope.$digest();
+          });
+
+          it('creates the month list without the my activity filter', function () {
+            expect(crmApi).toHaveBeenCalledWith({
+              months: [
+                'Activity', 'getmonthswithactivities', {}
+              ]
+            });
           });
         });
       });
