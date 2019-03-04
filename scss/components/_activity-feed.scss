@@ -180,8 +180,9 @@ $feed-child-min-height: 400px;
 .civicase__activity-feed__body__month-nav {
   margin-left: 15px;
   min-height: $feed-child-min-height;
-  overflow: auto;
-  width: 115px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 125px;
 }
 
 .civicase__activity-feed__placeholder {
