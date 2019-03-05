@@ -8,12 +8,15 @@
   </span>
   <!-- Additional Tags Dropdown -->
   <civicase-popover
+    trigger-event="hover"
+    hover-threshold="0"
+    hide-on-scroll=".civicase__activity-feed__body__list"
     popover-class="civicase__tags-container__additional__popover"
     ng-if="tagsArray.length > showEllipsisAfter">
     <civicase-popover-toggle-button>
       <span
         class="badge civicase__tags-container__additional-tags"
-        title="Click to see more Tags">
+        title="More Tags">
         ...
       </span>
     </civicase-popover-toggle-button>

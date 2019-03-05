@@ -10,7 +10,9 @@
         triggerOnOpenEvent: '&onOpen',
         popoverClass: '@',
         positionReference: '=',
-        triggerEvent: '@'
+        triggerEvent: '@',
+        hideOnScroll: '@',
+        hoverThreshold: '@'
       },
       transclude: {
         toggleButton: '?civicasePopoverToggleButton',
@@ -22,7 +24,7 @@
 
     function civicasePopoverLink ($scope, $element, attrs, ctrl, $transcludeFn) {
       var $bootstrapThemeContainer, $popover, $popoverArrow, $toggleButton, mouseLeaveTimeout;
-      var HOVER_THRESHOLD = 300;
+      var HOVER_THRESHOLD = $scope.hoverThreshold || 300;
       var ARROW_POSITION_VALUES = {
         'bottom': '50%',
         'bottom-left': '%width%px',
@@ -102,6 +104,14 @@
             }
           });
           $body.addClass('civicase__popup-attached');
+        }
+
+        if ($scope.hideOnScroll) {
+          $($scope.hideOnScroll).scroll(function ($event) {
+            $scope.$apply(function () {
+              $scope.isOpen = false;
+            });
+          });
         }
       }
 
