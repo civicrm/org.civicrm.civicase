@@ -1,11 +1,47 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseCaseListTable', function () {
+  module.directive('civicaseCaseListTable', function ($document, $timeout) {
     return {
       controller: 'CivicaseCaseListTableController',
+      link: civicaseCaseListTableControllerLink,
       templateUrl: '~/civicase/case/list/directives/case-list-table.directive.html'
     };
+
+    function civicaseCaseListTableControllerLink (scope) {
+      (function init () {
+        scope.$watch('caseIsFocused', checkIfCaseIsFocused);
+        scope.$watch('viewingCase', checkIfCaseIsFocused);
+      }());
+
+      /**
+       * Check if case is focused
+       */
+      function checkIfCaseIsFocused () {
+        var caseList = $('.civicase__case-list');
+
+        if (scope.caseIsFocused || !scope.viewingCase) {
+          caseList.height('auto');
+        } else {
+          setListHeight();
+        }
+      }
+
+      /**
+       * Set height for activity list
+       */
+      function setListHeight () {
+        var caseList = $('.civicase__case-list');
+        var crmPageTitle = $('[crm-page-title]');
+        var crmPageTitleHeight = crmPageTitle.is(':visible') ? crmPageTitle.outerHeight(true) : 0;
+        var caseListFilterPanel = $('.civicase__case-filter-panel__form');
+        var offsetTop = caseList.offset().top -
+          caseListFilterPanel.outerHeight() - crmPageTitleHeight;
+        var height = 'calc(100vh - ' + offsetTop + 'px)';
+
+        caseList.height(height);
+      }
+    }
   });
 
   module.controller('CivicaseCaseListTableController', function ($rootScope,

@@ -113,33 +113,72 @@
 
 .civicase__case-list {
   margin: 0;
+  overflow: hidden;
+  position: relative;
 
   .civicase__bulkactions-message {
     .alert {
       border-bottom: 0;
     }
   }
+
+  > .civicase__pager {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  .civicase__pager--fixed {
+    position: fixed;
+  }
+
+  .civicase__pager--viewing-case {
+    width: $case-card-width;
+
+    &.civicase__pager--fixed {
+      position: absolute;
+    }
+  }
+
+  .civicase__pager--case-focused {
+    display: none;
+  }
 }
 
 .civicase__case-list-panel {
   border-top: 1px solid $crm-grayblue-dark;
   box-shadow: none;
-  overflow: hidden;
+  overflow: auto;
   padding: 0;
+  position: relative;
   transition: width 0.3s linear;
 }
 
 .civicase__case-list-panel--summary {
-  float: left;
+  border-top: 0;
+  bottom: 45px;
+  position: absolute;
+  top: 65px;
   width: $case-card-width;
 
-  .civicase__pager--fixed {
-    width: $case-card-width;
+  thead {
+    display: none;
   }
 
   .civicase__case-list-column--first {
     background: $crm-white !important;
   }
+}
+
+.civicase__case-list-column--first--detached {
+  background: $crm-white;
+  border-bottom: 1px solid $crm-grayblue-dark;
+  border-top: 1px solid $crm-grayblue-dark;
+  height: 65px;
+  left: 0;
+  padding: 16px 14px;
+  position: absolute;
+  width: $case-card-width;
 }
 
 .civicase__case-list-panel--focused {
@@ -164,8 +203,8 @@
 }
 
 .civicase__case-details-panel--summary {
-  height: auto;
-  overflow: visible;
+  height: 100%;
+  overflow-y: auto;
   width: calc(100% - #{$case-card-width});
 }
 

@@ -37,6 +37,7 @@
       function initWatchers () {
         scope.$watch('isLoading', fixPositioningOnLoadingOrFocusChange);
         scope.$watch('caseIsFocused', fixPositioningOnLoadingOrFocusChange);
+        scope.$watch('viewingCase', fixPositioningOnLoadingOrFocusChange);
       }
 
       /**
@@ -54,7 +55,7 @@
        * @param {boolean} loading
        */
       function fixPositioningOnLoadingOrFocusChange () {
-        if (!scope.loading && !scope.caseIsFocused) {
+        if (!scope.loading && !scope.caseIsFocused && !scope.viewingCase) {
           affixTableHeader();
         }
       }
