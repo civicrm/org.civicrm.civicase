@@ -69,6 +69,20 @@
           },
           return: activityReturnParams
         },
+        'api.Activity.getcount.scheduled': {
+          case_id: caseId,
+          is_current_revision: 1,
+          is_deleted: 0,
+          'status_id': 'Scheduled'
+        },
+        // For the "scheduled-overdue" count
+        'api.Activity.getcount.scheduled_overdue': {
+          case_id: caseId,
+          is_current_revision: 1,
+          is_deleted: 0,
+          is_overdue: 1,
+          status_id: 'Scheduled'
+        },
         // Custom data
         'api.CustomValue.gettree': {
           entity_id: '$value.id',

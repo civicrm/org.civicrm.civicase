@@ -38,12 +38,12 @@
       </div>
       <div class="civicase__summary-activity-count">
         <a ng-href="{{getActivityFeedUrl({ caseId: item.id, status: 'Scheduled' })}}">
-          <div class="civicase__summary-activity-count__number">{{item.category_count.scheduled.count}}</div>
+          <div class="civicase__summary-activity-count__number">{{item.status_count.scheduled.count}}</div>
           <div class="civicase__summary-activity-count__description">Scheduled Activities</div>
           <div
-            ng-class="{ 'invisible': !item.category_count.scheduled.overdue }"
+            ng-class="{ 'invisible': !item.status_count.scheduled.overdue }"
             class="text-danger civicase__summary-overdue-count">
-            {{item.category_count.scheduled.overdue}} overdue
+            {{item.status_count.scheduled.overdue}} overdue
           </div>
         </a>
       </div>
