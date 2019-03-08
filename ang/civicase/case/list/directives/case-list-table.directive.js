@@ -290,19 +290,6 @@
      * @return {array}
      */
     function getCaseApiParams (filters, sort, page) {
-      var returnActivityParams = {
-        case_id: '$value.id',
-        options: {
-          limit: '0',
-          sort: 'activity_date_time ASC'
-        },
-        return: [
-          'subject', 'details', 'activity_type_id', 'status_id', 'source_contact_name',
-          'target_contact_name', 'assignee_contact_name', 'activity_date_time', 'is_star',
-          'original_id', 'tag_id.name', 'tag_id.description', 'tag_id.color', 'file_id',
-          'is_overdue', 'case_id'
-        ]
-      };
       var returnCaseParams = {
         sequential: 1,
         return: [
@@ -314,9 +301,7 @@
           sort: sort.field + ' ' + sort.dir,
           limit: page.size,
           offset: page.size * (page.num - 1)
-        },
-        // To get the count of overdue tasks
-        'api.Activity.get.1': returnActivityParams
+        }
       };
 
       // Keep things consistent and add a secondary sort on client name and a tertiary sort on case id
@@ -365,7 +350,6 @@
       $scope.isSelectAllAvailable = false;
       var params = getCaseApiParams(angular.extend({}, $scope.filters, $scope.hiddenFilters), $scope.sort, $scope.page);
       delete params[1];
-      delete params[0][2]['api.Activity.get.1'];
       params[0][2].return = ['case_type_id', 'status_id', 'is_deleted', 'contacts'];
       params[0][2].options.limit = 0;
 
