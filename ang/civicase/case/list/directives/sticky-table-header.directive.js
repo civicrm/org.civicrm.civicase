@@ -35,9 +35,9 @@
        * Initialise all watchers
        */
       function initWatchers () {
-        scope.$watch('isLoading', fixPositioningOnLoadingOrFocusChange);
-        scope.$watch('caseIsFocused', fixPositioningOnLoadingOrFocusChange);
-        scope.$watch('viewingCase', fixPositioningOnLoadingOrFocusChange);
+        scope.$watch('isLoading', fixPositioning);
+        scope.$watch('caseIsFocused', fixPositioning);
+        scope.$watch('viewingCase', fixPositioning);
       }
 
       /**
@@ -49,12 +49,12 @@
       }
 
       /**
-       * Loads only if loading completes and case is not focused
-       * for fixed header
+       * Loads only if loading completes and case is not focused and
+       * not viewing the case details for fixed header
        *
        * @param {boolean} loading
        */
-      function fixPositioningOnLoadingOrFocusChange () {
+      function fixPositioning () {
         if (!scope.loading && !scope.caseIsFocused && !scope.viewingCase) {
           affixTableHeader();
         }
