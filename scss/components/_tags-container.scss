@@ -49,6 +49,7 @@
   border-radius: 0;
   box-shadow: $box-shadow-tooltip;
   cursor: pointer;
+  padding: 0;
 
   a {
     display: flex !important;
@@ -56,10 +57,11 @@
   }
 
   .arrow {
-    border-bottom-color: $gray-light;
+    border-top-color: $gray-light;
   }
 
   .popover-content {
+    background: $crm-white;
     padding: 0;
   }
 }

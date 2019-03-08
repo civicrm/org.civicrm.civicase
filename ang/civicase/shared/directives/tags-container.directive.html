@@ -7,31 +7,30 @@
     {{ tag['tag_id.name'] }}
   </span>
   <!-- Additional Tags Dropdown -->
-  <civicase-popover
-    trigger-event="hover"
-    hover-threshold="0"
-    hide-on-scroll=".civicase__activity-feed__body__list"
+  <span
+    ng-if="tagsArray.length > showEllipsisAfter"
     popover-class="civicase__tags-container__additional__popover"
-    ng-if="tagsArray.length > showEllipsisAfter">
-    <civicase-popover-toggle-button>
-      <span
-        class="badge civicase__tags-container__additional-tags"
-        title="More Tags">
-        ...
-      </span>
-    </civicase-popover-toggle-button>
-    <civicase-popover-content>
-      <ul class="civicase__tags-container__additional__list">
-        <li ng-repeat="tag in tagsArray" ng-if="$index >= showEllipsisAfter">
-          <span
-            class="badge"
-            title="{{ tag['tag_id.description'] }}"
-            style="background-color: {{ tag['tag_id.color'] }};">
-            {{ tag['tag_id.name'] }}
-          </span>
-        </li>
-      </ul>
-    </civicase-popover-content>
-  </civicase-popover>
+    uib-popover-template="'civicase__tags-container__popover-template'"
+    popover-placement="top"
+    popover-trigger="'mouseenter'">
+    <span
+      class="badge civicase__tags-container__additional-tags"
+      title="More Tags">
+      ...
+    </span>
+  </span>
+
+  <script id="civicase__tags-container__popover-template" type="text/ng-template">
+    <ul class="civicase__tags-container__additional__list">
+      <li ng-repeat="tag in tagsArray" ng-if="$index >= showEllipsisAfter">
+        <span
+          class="badge"
+          title="{{ tag['tag_id.description'] }}"
+          style="background-color: {{ tag['tag_id.color'] }};">
+          {{ tag['tag_id.name'] }}
+        </span>
+      </li>
+    </ul>
+  </script>
   <!-- End - Additional Tags Dropdown -->
 </div>
