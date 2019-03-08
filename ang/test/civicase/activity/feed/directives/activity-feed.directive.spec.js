@@ -120,6 +120,31 @@
                 expect($scope.checkIfRecordsAvailableOnDirection('up')).toBe(false);
               });
             });
+
+            describe('and total count is 26', function () {
+              beforeEach(function () {
+                activitiesInCurrentPage = activitiesMockData.getSentNoOfActivities(26);
+                allActivities = activitiesMockData.getSentNoOfActivities(26);
+
+                mockActivitiesAPICall();
+                initController();
+                $scope.$digest();
+
+                $scope.$emit('civicase::month-nav::set-starting-offset', {
+                  startingOffset: 0
+                });
+                $scope.$digest();
+              });
+
+              it('shows load more button on down direction', function () {
+                expect($scope.checkIfRecordsAvailableOnDirection('down')).toBe(true);
+              });
+
+              it('does not show load more button on top direction', function () {
+                expect($scope.checkIfRecordsAvailableOnDirection('up')).toBe(false);
+              });
+            });
+
             describe('and more than 25', function () {
               beforeEach(function () {
                 activitiesInCurrentPage = activitiesMockData.getSentNoOfActivities(30);
