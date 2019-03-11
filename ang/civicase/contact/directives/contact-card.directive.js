@@ -21,6 +21,7 @@
 
       (function init () {
         $scope.$watch('data', refresh);
+        $scope.$on('civicase::contacts-cache::contacts-added', refresh);
       }());
 
       /**
