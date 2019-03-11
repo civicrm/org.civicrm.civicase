@@ -29,10 +29,14 @@ function civicrm_api3_case_getwebforms($params) {
   $webforms = array();
   $sysInfo = civicrm_api3('System', 'get')['values'][0];
   if (!isset($sysInfo['uf']) || $sysInfo['uf'] != 'Drupal') {
-    return civicrm_api3_create_error('Only Drupal CMS is supported!');
+    $out = civicrm_api3_create_success(array());
+    $out['warning_message'] = 'Only Drupal CMS is supported!';
+    return $out;
   }
   if (!module_exists('webform_civicrm')) {
-    return civicrm_api3_create_error('webform_civicrm module is required!');
+    $out = civicrm_api3_create_success(array());
+    $out['warning_message'] = 'webform_civicrm module is required!';
+    return $out;
   }
   $query = "SELECT a.nid, a.data, n.title
           FROM webform_civicrm_forms a
