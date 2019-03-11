@@ -14,7 +14,15 @@ describe('civicaseStickyTableHeader directive', function () {
   beforeEach(function () {
     CRM.$('body').append('<div id="toolbar" style="height: 60px"></div>');
 
-    element = $compile(angular.element('<div civicase-sticky-table-header> <table><thead><th>Sample title</th><th>Sample title</th></thead></table></div>'))(scope);
+    element = $compile(angular.element(`
+      <div civicase-sticky-table-header>
+        <table>
+          <thead>
+            <th style="width: 50px">Sample title</th>
+            <th style="width: 50px">Sample title</th>
+          </thead>
+        </table>
+      </div>`))(scope);
   });
 
   beforeEach(function () {
@@ -38,8 +46,8 @@ describe('civicaseStickyTableHeader directive', function () {
       scope.$digest();
     });
 
-    it('does not add min-width style to the table elements', function () {
-      expect(element.find('thead').html()).not.toContain('style="min-width');
+    it('does not set min-width of the table headers', function () {
+      expect(element.find('thead th').css('min-width')).toBe('');
     });
 
     it('does not makes the header sticky', function () {
@@ -62,8 +70,8 @@ describe('civicaseStickyTableHeader directive', function () {
       scope.$digest();
     });
 
-    it('does not add min-width style to the table elements', function () {
-      expect(element.find('thead').html()).not.toContain('style="min-width');
+    it('does not set min-width of the table headers', function () {
+      expect(element.find('thead th').css('min-width')).toBe('');
     });
 
     it('does not makes the header sticky', function () {
@@ -86,8 +94,8 @@ describe('civicaseStickyTableHeader directive', function () {
       scope.$digest();
     }));
 
-    it('does not add min-width style to the table elements', function () {
-      expect(element.find('thead').html()).not.toContain('style="min-width');
+    it('does not set min-width of the table headers', function () {
+      expect(element.find('thead th').css('min-width')).toBe('');
     });
 
     it('does not makes the header sticky', function () {
@@ -113,8 +121,9 @@ describe('civicaseStickyTableHeader directive', function () {
         $timeout.flush(); // Flushing any timeouts used.
       }));
 
-      it('adds min-width style to the table elements', function () {
-        expect(element.find('thead').html()).toContain('style="min-width');
+      it('sets min-width of the table headers, same as the width of themselves', function () {
+        expect(element.find('thead th').css('min-width'))
+          .toBe(element.find('thead th').outerWidth() + 'px');
       });
 
       it('makes the header sticky', function () {
@@ -138,8 +147,8 @@ describe('civicaseStickyTableHeader directive', function () {
         scope.$digest();
       }));
 
-      it('does not add min-width style to the table elements', function () {
-        expect(element.find('thead').html()).not.toContain('style="min-width');
+      it('does not set min-width of the table headers', function () {
+        expect(element.find('thead th').css('min-width')).toBe('');
       });
 
       it('does not makes the header sticky', function () {
