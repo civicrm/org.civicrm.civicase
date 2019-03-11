@@ -1,7 +1,111 @@
 /* eslint-env jasmine */
 
 (function (_) {
-  describe('CaseListTable', function () {
+  describe('CivicaseCaseListTable Directive', function () {
+    var $compile, $rootScope, $scope, originaljQueryHeightFn;
+
+    beforeEach(module('civicase', 'civicase.templates', function ($controllerProvider) {
+      $controllerProvider.register('CivicaseCaseListTableController', function () {});
+    }));
+
+    beforeEach(inject(function (_$compile_, _$rootScope_) {
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+
+      $scope = $rootScope.$new();
+      $scope.$bindToRoute = jasmine.createSpy('$bindToRoute');
+
+      originaljQueryHeightFn = CRM.$.fn.height;
+      spyOn(CRM.$.fn, 'height');
+      addAdditionalMarkup();
+    }));
+
+    afterEach(function () {
+      removeAdditionalMarkup();
+      CRM.$.fn.height = originaljQueryHeightFn;
+    });
+
+    describe('on init', function () {
+      describe('when case is focused', function () {
+        beforeEach(function () {
+          initDirective();
+          $scope.caseIsFocused = true;
+          $scope.$digest();
+        });
+
+        it('resets the height of the case list', function () {
+          expect(CRM.$.fn.height).toHaveBeenCalledWith('auto');
+        });
+      });
+
+      describe('when not viewing the case', function () {
+        beforeEach(function () {
+          initDirective();
+          $scope.viewingCase = false;
+          $scope.$digest();
+        });
+
+        it('resets the height of the case list', function () {
+          expect(CRM.$.fn.height).toHaveBeenCalledWith('auto');
+        });
+      });
+
+      describe('when viewing the case and case is not focused', function () {
+        var calculatedHeight;
+
+        beforeEach(function () {
+          initDirective();
+          $scope.viewingCase = true;
+          $scope.caseIsFocused = false;
+          $scope.$digest();
+
+          var caseList = CRM.$('.civicase__case-list');
+          var crmPageTitle = CRM.$('[crm-page-title]');
+          var crmPageTitleHeight = crmPageTitle.outerHeight(true);
+          var caseListFilterPanel = CRM.$('.civicase__case-filter-panel__form');
+          var offsetTop = caseList.offset().top -
+            caseListFilterPanel.outerHeight() - crmPageTitleHeight;
+          calculatedHeight = 'calc(100vh - ' + offsetTop + 'px)';
+        });
+
+        it('sets the height of the case list', function () {
+          expect(CRM.$.fn.height).toHaveBeenCalledWith(calculatedHeight);
+        });
+      });
+    });
+
+    /**
+     * Initializes the civicaseActivityMonthNav directive
+     */
+    function initDirective () {
+      var html = `<div civicase-case-list-table></div>`;
+
+      $compile(html)($scope);
+      $scope.$digest();
+    }
+
+    /**
+     * Add aditional markup
+     */
+    function addAdditionalMarkup () {
+      var markup = `<div class="civicase-case-list-directive-unit-test" style="height: 50px">
+        <div class='civicase__case-list'></div>
+        <div crm-page-title></div>
+        <div class="civicase__case-filter-panel__form"></div>
+      </div>`;
+
+      CRM.$(markup).appendTo('body');
+    }
+
+    /**
+     * Remove aditional markup
+     */
+    function removeAdditionalMarkup () {
+      CRM.$('.civicase-case-list-directive-unit-test').remove();
+    }
+  });
+
+  describe('CivicaseCaseListTableController', function () {
     var $controller, $q, $scope, CasesData, crmApi;
 
     beforeEach(module('civicase', 'civicase.data', 'crmUtil'));
@@ -19,6 +123,7 @@
         id: _.uniqueId()
       };
     }));
+
     describe('on calling applyAdvSearch()', function () {
       var expectedApiCallParams;
 

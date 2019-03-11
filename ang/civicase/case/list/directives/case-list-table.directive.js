@@ -4,33 +4,34 @@
   module.directive('civicaseCaseListTable', function ($document, $timeout) {
     return {
       controller: 'CivicaseCaseListTableController',
-      link: civicaseCaseListTableControllerLink,
+      link: civicaseCaseListTableLink,
       templateUrl: '~/civicase/case/list/directives/case-list-table.directive.html'
     };
 
-    function civicaseCaseListTableControllerLink (scope) {
+    function civicaseCaseListTableLink (scope) {
       (function init () {
-        scope.$watch('caseIsFocused', checkIfCaseIsFocused);
-        scope.$watch('viewingCase', checkIfCaseIsFocused);
+        scope.$watch('caseIsFocused', setCaseListHeight);
+        scope.$watch('viewingCase', setCaseListHeight);
       }());
 
       /**
-       * Check if case is focused
+       * Set Case list height
        */
-      function checkIfCaseIsFocused () {
+      function setCaseListHeight () {
         var caseList = $('.civicase__case-list');
 
         if (scope.caseIsFocused || !scope.viewingCase) {
           caseList.height('auto');
         } else {
-          setListHeight();
+          setFixedListHeight();
         }
       }
 
       /**
-       * Set height for activity list
+       * Set height for case list when case is not focused
+       * and viewing the case details
        */
-      function setListHeight () {
+      function setFixedListHeight () {
         var caseList = $('.civicase__case-list');
         var crmPageTitle = $('[crm-page-title]');
         var crmPageTitleHeight = crmPageTitle.is(':visible') ? crmPageTitle.outerHeight(true) : 0;
