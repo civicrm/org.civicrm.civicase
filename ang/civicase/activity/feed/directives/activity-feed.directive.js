@@ -94,7 +94,7 @@
       if (direction === 'down') {
         lastRecordShownInGivenDirection = (activityStartingOffset + (ITEMS_PER_PAGE * (pageNum.down + 1)));
 
-        return lastRecordShownInGivenDirection < ($scope.totalCount - 1);
+        return lastRecordShownInGivenDirection < $scope.totalCount;
       } else if (direction === 'up') {
         lastRecordShownInGivenDirection = (activityStartingOffset - (ITEMS_PER_PAGE * pageNum.up));
 

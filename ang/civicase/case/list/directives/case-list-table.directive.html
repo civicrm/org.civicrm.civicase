@@ -5,6 +5,10 @@
     is-select-all-available="isSelectAllAvailable" show-checkboxes="showCheckboxes"
     ng-hide="viewingCase">
   </civicase-bulk-actions-message>
+  <div ng-show="viewingCase"
+    class="civicase__case-list-column--first--detached"
+    ng-include="'~/civicase/case/list/directives/case-list-table-first-column-header.html'">
+  </div>
   <div
     class="panel panel-default civicase__case-list-panel"
     ng-class="{'civicase__case-list-panel--summary': viewingCase, 'civicase__case-list-panel--focused': caseIsFocused}">
@@ -12,57 +16,10 @@
       <table ng-show="!caseIsFocused" class="table civicase__case-list-table" >
         <thead class="civicase__case-list-table__header">
         <tr>
-          <th class="civicase__case-list-column--fixed civicase__case-list-column--first">
-            <civicase-bulk-actions-checkboxes
-              ng-show="!viewingCase && selectedCases && bulkAllowed && !item.lock"
-              class="pull-left"
-              show-checkboxes="showCheckboxes"
-              is-select-all-available="isSelectAllAvailable"
-              selected-items="selectedCases.length"
-              everything-count="totalCount"
-              displayed-count="cases.length">
-            </civicase-bulk-actions-checkboxes>
-            <span
-              class="civicase__bulkactions-actions-dropdown btn-group btn-group-sm"
-              ng-if="!viewingCase && selectedCases && bulkAllowed && !item.lock">
-              <div class="btn-group">
-                <button
-                  type="button" class="btn btn-default civicase__bulkactions-actions-dropdown__text"
-                  ng-class="{disabled: !selectedCases.length || !showCheckboxes}"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{ ts('Actions') }}
-                </button>
-                <button
-                  type="button" class="btn btn-default dropdown-toggle"
-                  ng-class="{disabled: !selectedCases.length || !showCheckboxes}"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" civicase-case-actions="selectedCases" is-bulk-mode="true" refresh-callback="refresh"></ul>
-              </div>
-            </span>
-            <span class="btn-group btn-group-sm pull-right" ng-if="sort.sortable">
-              <select class="form-control civicase__case-sort-dropdown" ng-model="sort.field" crm-ui-select>
-                <option value="id">{{ ts('Case ID') }}</option>
-                <option value="contact_id.sort_name">{{ ts('Case Client') }}</option>
-                <option value="subject">{{ ts('Subject') }}</option>
-                <option value="status_id.label">{{ ts('Status') }}</option>
-                <option value="case_type_id.title">{{ ts('Type') }}</option>
-                <option value="start_date">{{ ts('Start Date') }}</option>
-                <option value="end_date">{{ ts('End Date') }}</option>
-                <option value="created_date">{{ ts('Date Created') }}</option>
-                <option value="modified_date">{{ ts('Last Updated') }}</option>
-                <option value="case_manager.sort_name">{{ ts('Case Manager') }}</option>
-                <option value="my_role.label_b_a">{{ ts('My Role') }}</option>
-                <option value="next_activity">{{ ts('Next Activity') }}</option>
-                <option value="next_activity_category_milestone">{{ ts('Next Milestone') }}</option>
-                <option value="next_activity_category_task">{{ ts('Next Task') }}</option>
-                <option value="next_activity_category_communication">{{ ts('Next Communication') }}</option>
-              </select>
-              <i class="civicase__case-list__toggle-sort material-icons" ng-click="changeSortDir()">
-                import_export
-              </i>
-            </span>
+          <th
+            ng-show="!viewingCase"
+            class="civicase__case-list-column--fixed civicase__case-list-column--first"
+            ng-include="'~/civicase/case/list/directives/case-list-table-first-column-header.html'">
           </th>
           <th
             ng-show="!viewingCase"
@@ -128,22 +85,27 @@
         </tbody>
       </table>
     </div>
-    <div class="center-block civicase__pager" civicase-sticky-footer-pager>
-      <paging
-        ng-show="!caseIsFocused && page.total > 1"
-        page="page.num"
-        page-size="page.size"
-        total="totalCount"
-        adjacent="1"
-        dots="..."
-        show-prev-next="true"
-        show-first-last="true"
-        text-first="&laquo;"
-        text-last="&raquo;"
-        text-next="&rsaquo;"
-        text-prev="&lsaquo;"
-      ></paging>
-    </div>
+  </div>
+  <div
+    class="center-block civicase__pager" civicase-sticky-footer-pager
+    ng-class="{
+      'civicase__pager--viewing-case': viewingCase,
+      'civicase__pager--case-focused': caseIsFocused
+    }">
+    <paging
+      ng-show="!caseIsFocused && page.total > 1"
+      page="page.num"
+      page-size="page.size"
+      total="totalCount"
+      adjacent="1"
+      dots="..."
+      show-prev-next="true"
+      show-first-last="true"
+      text-first="&laquo;"
+      text-last="&raquo;"
+      text-next="&rsaquo;"
+      text-prev="&lsaquo;"
+    ></paging>
   </div>
   <div
     class="panel panel-default civicase__case-details-panel"
