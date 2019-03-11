@@ -271,7 +271,11 @@
           }
 
           $scope.cases = cases;
-          $scope.page.num = result[0].page || $scope.page.num;
+
+          if (result[0].page) {
+            $scope.page.num = result[0].page;
+          }
+
           $scope.totalCount = result[1];
           $scope.page.total = Math.ceil(result[1] / $scope.page.size);
           setPageTitle();
@@ -364,7 +368,7 @@
      */
     function initiateWatchers () {
       $scope.$watchCollection('sort', updateCases);
-      $scope.$watchCollection('page', updateCases);
+      $scope.$watchCollection('page.num', updateCases);
       $scope.$watch('cases', casesWatcher, true);
     }
 
