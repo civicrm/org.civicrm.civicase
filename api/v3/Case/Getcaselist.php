@@ -20,6 +20,26 @@ function _civicrm_api3_case_getcaselist_spec(&$spec) {
     'type' => CRM_Utils_Type::T_INT,
   );
 
+  $spec['role_contact'] = array(
+    'title' => 'Role Contact Id',
+    'description' => '',
+    'type' => CRM_Utils_Type::T_INT,
+    'FKClassName' => 'CRM_Contact_DAO_Contact',
+    'FKApiName' => 'Contact',
+  );
+
+  $spec['role_type'] = array(
+    'title' => 'Role Type',
+    'description' => '',
+    'type' => CRM_Utils_Type::T_INT,
+  );
+
+  $spec['role_can_be_client'] = array(
+    'title' => 'Role can be client?',
+    'description' => '',
+    'type' => CRM_Utils_Type::T_BOOLEAN,
+  );
+
   $spec['contact_is_deleted'] = array(
     'title' => 'Contact Is Deleted',
     'description' => 'Set FALSE to filter out cases for deleted contacts, TRUE to return only cases of deleted contacts',
