@@ -157,6 +157,7 @@
 .civicase__case-list-panel--summary {
   border-top: 0;
   bottom: 45px;
+  overflow-x: hidden;
   position: absolute;
   top: 65px;
   width: $case-card-width;
@@ -167,6 +168,12 @@
 
   .civicase__case-list-column--first {
     background: $crm-white !important;
+  }
+
+  .civicase__case-list-table {
+    td:first-child {
+      width: 100%;
+    }
   }
 }
 
