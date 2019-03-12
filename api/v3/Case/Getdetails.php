@@ -187,20 +187,27 @@ function civicrm_api3_case_getdetails($params) {
         'incomplete' => implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE))),
         'completed' => implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::COMPLETED))),
       );
+      // Creates category_count object with empty values
       foreach ($result['values'] as &$case) {
         $case['category_count'] = array_fill_keys(array_values($activityCategories), array());
       }
+
+      // fills each category with respective counts
       foreach ($activityCategories as $category) {
+        // calculates complete and incomplete activities
         foreach ($statusTypes as $statusType => $statusTypeIds) {
           calculate_activities_for_category($category, $ids, $statusTypeIds, $statusType, FALSE, $result);
         }
+        // calculates overdue activities
         calculate_activities_for_category($category, $ids, $statusTypes['incomplete'], $statusType, TRUE, $result);
       }
 
+      // calculates activities which does not have any activity category
       foreach ($statusTypes as $statusType => $statusTypeIds) {
         calculate_activities_for_category(NULL, $ids, $statusTypeIds, $statusType, FALSE, $result);
       }
 
+      // calculates overdue activities which does not have any activity category
       calculate_activities_for_category(NULL, $ids, $statusTypes['incomplete'], $statusType, TRUE, $result);
     }
     // Unread email activity count
@@ -233,6 +240,16 @@ function civicrm_api3_case_getdetails($params) {
   return $resultMetadata + $result;
 }
 
+/**
+ * Calculates the number of activities for the given category
+ *
+ * @param {String} $category
+ * @param {Array} $ids
+ * @param {String} $statusTypeIds
+ * @param {String} $statusType
+ * @param {Boolean} $isOverdue
+ * @param {Array} $result
+ */
 function calculate_activities_for_category($category, $ids, $statusTypeIds, $statusType, $isOverdue, &$result) {
   $isOverdueCondition = $isOverdue ? "AND a.activity_date_time < NOW()" : "";
   $categoryCondition = empty($category) ? "IS NULL" : "LIKE '%$category%'";
@@ -240,13 +257,16 @@ function calculate_activities_for_category($category, $ids, $statusTypeIds, $sta
   $query = "SELECT COUNT(a.id) as count, ca.case_id
   FROM civicrm_activity a, civicrm_case_activity ca
   WHERE ca.activity_id = a.id AND a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id IN (" . implode(',', $ids) . ")
-  AND a.activity_type_id IN (SELECT value FROM civicrm_option_value WHERE grouping ". $categoryCondition ." AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
+  AND a.activity_type_id IN (SELECT value FROM civicrm_option_value WHERE grouping "
+  . $categoryCondition ." AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
   ". $isOverdueCondition ."
   AND is_current_revision = 1
   AND is_deleted = 0
   AND a.status_id IN ($statusTypeIds)
   GROUP BY ca.case_id";
+
   $dao = CRM_Core_DAO::executeQuery($query);
+
   while ($dao->fetch()) {
     $categoryName = empty($category) ? 'none' : $category;
     $statusTypeName = $isOverdue ? "overdue" : $statusType;

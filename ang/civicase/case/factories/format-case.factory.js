@@ -56,8 +56,11 @@
       item.category_count.other = {};
       item.category_count.other.incomplete = 0;
       item.category_count.other.overdue = 0;
+
+      var excludedCategories = ['communication', 'task', 'other'];
+
       _.each(_.keys(item.category_count), function (category) {
-        if (category !== 'communication' && category !== 'task' && category !== 'other') {
+        if (!_.contains(excludedCategories, category)) {
           item.category_count.other.incomplete += item.category_count[category].incomplete || 0;
           item.category_count.other.overdue += item.category_count[category].overdue || 0;
         }

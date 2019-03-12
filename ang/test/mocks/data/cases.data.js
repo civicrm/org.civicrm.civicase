@@ -488,6 +488,8 @@
               }
             ]
           },
+          'api.Activity.getcount.scheduled': 2,
+          'api.Activity.getcount.scheduled_overdue': 3,
           'api.Activity.get.recentCommunication': { 'values': [] },
           'api.Activity.get.tasks': { 'values': [] },
           'api.Activity.get.nextActivitiesWhichIsNotMileStone': {
@@ -1098,6 +1100,8 @@
               }
             ]
           },
+          'api.Activity.getcount.scheduled': 4,
+          'api.Activity.getcount.scheduled_overdue': 5,
           'api.Activity.get.recentCommunication': { 'values': [] },
           'api.Activity.get.tasks': { 'values': [] },
           'api.Activity.get.nextActivitiesWhichIsNotMileStone': {
@@ -1665,6 +1669,8 @@
               }
             ]
           },
+          'api.Activity.getcount.scheduled': 6,
+          'api.Activity.getcount.scheduled_overdue': 7,
           'api.Activity.get.recentCommunication': { 'values': [] },
           'api.Activity.get.tasks': { 'values': [] },
           'api.Activity.get.nextActivitiesWhichIsNotMileStone': {
