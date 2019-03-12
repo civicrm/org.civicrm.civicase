@@ -142,21 +142,21 @@
           <div class="civicase__case-card__activity-count-container">
             <span>Tasks: </span>
             <a class="civicase__case-card__activity-count"
-               ng-if="item.category_count.incomplete.task"
+               ng-if="item.category_count.task.incomplete"
               >
               {{ item.category_count.incomplete.task }}
             </a>
             <span
-              ng-if="item.category_count.incomplete.task && item.category_count.overdue.task"
+              ng-if="item.category_count.task.incomplete && item.category_count.task.overdue"
               class="civicase__pipe">
                |
             </span>
             <a
               class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
-              ng-if="item.category_count.overdue.task"
-            > {{ item.category_count.overdue.task }} </a>
+              ng-if="item.category_count.task.overdue"
+            > {{ item.category_count.task.overdue }} </a>
             <span
-              ng-if="!item.category_count.incomplete.task && !item.category_count.overdue.task"
+              ng-if="!item.category_count.task.incomplete && !item.category_count.task.overdue"
               class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">
               0
             </span>
@@ -164,18 +164,18 @@
           <div class="civicase__case-card__activity-count-container">
             <span>Comms: </span>
             <a class="civicase__case-card__activity-count"
-               ng-if="item.category_count.incomplete.communication"
+               ng-if="item.category_count.communication.incomplete"
             > {{ item.category_count.incomplete.communication }} </a>
             <span
-              ng-if="item.category_count.incomplete.communication && item.category_count.overdue.communication"
+              ng-if="item.category_count.communication.incomplete && item.category_count.communication.overdue"
               class="civicase__pipe"> | </span>
             <a
               class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
-              ng-if="item.category_count.overdue.communication">
-             {{ item.category_count.overdue.communication }}
+              ng-if="item.category_count.communication.overdue">
+             {{ item.category_count.communication.overdue }}
             </a>
             <span
-              ng-if="!item.category_count.incomplete.communication && !item.category_count.overdue.communication"
+              ng-if="!item.category_count.communication.incomplete && !item.category_count.communication.overdue"
               class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">
               0
             </span>
@@ -183,20 +183,20 @@
           <div class="civicase__case-card__activity-count-container">
             <span>Other: </span>
             <a class="civicase__case-card__activity-count"
-               ng-if="item.category_count.incomplete.other"
-            > {{ item.category_count.incomplete.other }} </a>
+               ng-if="item.category_count.other.incomplete"
+            > {{ item.category_count.other.incomplete }} </a>
             <span
-              ng-if="item.category_count.incomplete.other && item.category_count.overdue.other"
+              ng-if="item.category_count.other.incomplete && item.category_count.other.overdue"
               class="civicase__pipe">
                |
              </span>
             <a
               class="civicase__case-card__activity-count civicase__overdue-activity-icon civicase__overdue-activity-icon--before"
-              ng-if="item.category_count.overdue.other">
-              {{ item.category_count.overdue.other }}
+              ng-if="item.category_count.other.overdue">
+              {{ item.category_count.other.overdue }}
             </a>
             <span
-              ng-if="!item.category_count.incomplete.other && !item.category_count.overdue.other"
+              ng-if="!item.category_count.other.incomplete && !item.category_count.other.overdue"
               class="civicase__case-card__activity-count civicase__case-card__activity-count--zero">
               0
             </span>

@@ -13,6 +13,8 @@
       ContactsCache = _ContactsCache_;
       ContactsData = _.cloneDeep(_ContactsData_);
       crmApi = _crmApi_;
+
+      spyOn($rootScope, '$broadcast');
     }));
 
     describe('basic tests', function () {
@@ -71,10 +73,15 @@
           _.extend(expectedApiParams, { 'id': { 'IN': ContactsData.values } });
 
           ContactsCache.add(ContactsData.values);
+          $rootScope.$digest();
         });
 
         it('gets the details of sent contacts', function () {
           expect(crmApi).toHaveBeenCalledWith('Contact', 'get', expectedApiParams);
+        });
+
+        it('broadcasts an event when new contacts are added', function () {
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('civicase::contacts-cache::contacts-added');
         });
       });
 

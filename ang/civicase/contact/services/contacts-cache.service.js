@@ -3,7 +3,7 @@
 
   module.service('ContactsCache', ContactsCache);
 
-  function ContactsCache (crmApi, $q) {
+  function ContactsCache (crmApi, $q, $rootScope) {
     var defer;
     var savedContacts = [];
     var savedContactDetails = {};
@@ -62,6 +62,7 @@
       }).then(function (data) {
         savedContactDetails = _.extend(savedContactDetails, _.indexBy(data.values, 'contact_id'));
         defer.resolve();
+        $rootScope.$broadcast('civicase::contacts-cache::contacts-added');
       });
     };
 
