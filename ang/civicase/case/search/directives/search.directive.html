@@ -21,8 +21,18 @@
         <input class="form-control" type="number" ng-model="filters.id" />
       </div>
       <div ng-if="isEnabled('contact_id')" class="civicase__case-filter-form-elements">
-        <label>{{ ts('Client Name or Email') }}</label>
-        <input class="form-control" class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.contact_id" />
+        <label>{{ ts('Contact Search') }}</label>
+        <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.contact_id" />
+        <input class="form-control"
+          ng-list
+          ng-model="selectedContactRoleFilter"
+          crm-ui-select="{
+            allowClear: true,
+            multiple: true,
+            placeholder: 'Contact role',
+            data: contactRoleFilters
+          }"
+        />
       </div>
       <div class="civicase__case-filter-form-elements" ng-if="checkPerm('administer CiviCase') && isEnabled('is_deleted')">
         <span class="civicase__checkbox" role="checkbox" aria-checked="{{filters.is_deleted}}" tabindex="0" aria-labelledby="Deleted Cases" ng-click="toggleIsDeleted($event)" ng-keydown="toggleIsDeleted($event)">

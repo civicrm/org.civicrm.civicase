@@ -18,7 +18,7 @@
   /**
    * Controller Function for civicase-search directive
    */
-  module.controller('civicaseSearchController', function ($scope, $rootScope, $timeout) {
+  module.controller('civicaseSearchController', function ($scope, $rootScope, $timeout, crmApi) {
     // The ts() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -61,6 +61,10 @@
         'id': 'is_involved'
       }
     ];
+    var contactRoleFilters = [
+      { id: 'all-case-roles', text: 'All Case Roles' },
+      { id: 'client', text: 'Client' }
+    ];
 
     $scope.pageTitle = '';
     $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
@@ -70,12 +74,15 @@
     $scope.checkPerm = CRM.checkPerm;
     $scope.filterDescription = buildDescription();
     $scope.filters = angular.extend({}, $scope.defaults);
+    $scope.contactRoleFilters = contactRoleFilters;
+    $scope.selectedContactRoleFilter = [ contactRoleFilters[0].id ];
 
     (function init () {
       bindRouteParamsToScope();
       initiateWatchers();
       initSubscribers();
       setCustomSearchFieldsAsSearchFilters();
+      requestCaseRoles().then(addCaseRolesToContactRoleFilters);
     }());
 
     /**
@@ -129,6 +136,23 @@
       $scope.filters = {};
       $scope.doSearch();
     };
+
+    /**
+     * Adds the given case roles to the list of contact roles filters.
+     *
+     * @param {Array} caseRoles a list of relationship types as returned by the API.
+     */
+    function addCaseRolesToContactRoleFilters (caseRoles) {
+      _.chain(caseRoles)
+        .sortBy('label_b_a')
+        .forEach(function (caseRole) {
+          $scope.contactRoleFilters.push({
+            id: caseRole.relationship_type_id,
+            text: caseRole.label_b_a
+          });
+        })
+        .value();
+    }
 
     /**
      * Binds all route parameters to scope
@@ -254,6 +278,18 @@
         $scope.relationshipType[0] === 'is_case_manager' ? $scope.filters.case_manager = [CRM.config.user_contact_id] : delete ($scope.filters.case_manager);
         $scope.relationshipType[0] === 'is_involved' ? $scope.filters.contact_involved = [CRM.config.user_contact_id] : delete ($scope.filters.contact_involved);
       }
+    }
+
+    /**
+     * Requests the list of relationship types that have been assigned to case types.
+     *
+     * @return {Promise} resolves to a list of relationship types.
+     */
+    function requestCaseRoles () {
+      return crmApi('RelationshipType', 'getcaseroles')
+        .then(function (caseRolesResponse) {
+          return caseRolesResponse.values;
+        });
     }
 
     /**
