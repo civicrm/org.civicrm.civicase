@@ -60,6 +60,11 @@
     overflow: hidden;
     white-space: nowrap;
   }
+
+  .civicase__contact-name,
+  .civicase__contact-name-additional {
+    max-width: 100px;
+  }
 }
 
 .civicase__case-card--other {
