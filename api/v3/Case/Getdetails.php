@@ -23,6 +23,12 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
     'type' => CRM_Utils_Type::T_INT,
   );
 
+  $spec['has_role'] = [
+    'title' => 'Case has role',
+    'description' => '{ contact, role_type, can_be_client }',
+    'type' => CRM_Utils_Type::T_STRING,
+  ];
+
   $spec['contact_is_deleted'] = array(
     'title' => 'Contact Is Deleted',
     'description' => 'Set FALSE to filter out cases for deleted contacts, TRUE to return only cases of deleted contacts',
@@ -73,6 +79,10 @@ function civicrm_api3_case_getdetails($params) {
     }
     \Civi\CCase\Utils::joinOnRelationship($sql, 'manager');
     $sql->where(CRM_Core_DAO::createSQLFilter('manager.id', $params['case_manager']));
+  }
+
+  if (!empty($params['has_role'])) {
+    _civicrm_api3_case_getdetails_handle_role_filters($params, $sql);
   }
 
   // Add clause to search by non manager role and non client
@@ -350,4 +360,56 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
   }
 
   return $sql;
+}
+
+/**
+ * Filters cases by contacts related to the case and their relationship types.
+ *
+ * @param array $params as provided by the original api action.
+ * @param object $sql a reference to the SQL object.
+ */
+function _civicrm_api3_case_getdetails_handle_role_filters ($params, $sql) {
+  $hasRole = $params['has_role'];
+  $canBeAClient = !isset($hasRole['can_be_client']) || $hasRole['can_be_client'];
+
+  _civicase_prepare_param_for_filtering($hasRole, 'contact');
+
+  $roleContactFilter = CRM_Core_DAO::createSQLFilter('case_relationship.contact_id_b', $hasRole['contact']);
+  $clientFilter = CRM_Core_DAO::createSQLFilter('case_client.contact_id', $hasRole['contact']);
+
+  $sql->join('case_relationship', 'LEFT JOIN civicrm_relationship AS case_relationship
+    ON case_relationship.case_id = a.id');
+  $sql->where('case_relationship.is_active = 1');
+
+  if (!empty($hasRole['role_type'])) {
+    _civicase_prepare_param_for_filtering($hasRole, 'role_type');
+
+    $roleTypeFilter = CRM_Core_DAO::createSQLFilter('case_relationship.relationship_type_id', $hasRole['role_type']);
+    $roleContactFilter = "($roleContactFilter AND $roleTypeFilter)";
+  }
+
+  if ($canBeAClient) {
+    $sql->join('case_client', 'LEFT JOIN civicrm_case_contact AS case_client
+      ON case_client.case_id = a.id');
+    $sql->where("$roleContactFilter OR $clientFilter");
+  } else {
+    $sql->where($roleContactFilter);
+  }
+}
+
+/**
+ * Corrects the param structure if not organized using the array notation.
+ *   From ['paramName' => 'value']
+ *   To ['paramName' => ['=' => 'value']]
+ * The later is the expected format when using `CRM_Core_DAO::createSQLFilter`.
+ *
+ * @param array $params the list of params as provided by the action.
+ * @param string $paramName the name of the specific parameter to fix.
+ */
+function _civicase_prepare_param_for_filtering (&$params, $paramName) {
+  if (!is_array($params[$paramName])) {
+    $params[$paramName] = [
+      '=' => $params[$paramName]
+    ];
+  }
 }
