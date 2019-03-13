@@ -217,10 +217,12 @@ $feed-child-min-height: 400px;
           max-width: 35px;
         }
       }
+    }
+  }
 
-      .civicase__contact-name {
-        max-width: 40px;
-      }
+  .civicase__activity-feed__body__list--details-visible {
+    .civicase__contact-name {
+      max-width: 40px;
     }
   }
 }
