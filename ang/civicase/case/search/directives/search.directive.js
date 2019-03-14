@@ -75,7 +75,10 @@
     $scope.filterDescription = buildDescription();
     $scope.filters = angular.extend({}, $scope.defaults);
     $scope.contactRoleFilters = contactRoleFilters;
-    $scope.selectedContactRoleFilter = [ contactRoleFilters[0].id ];
+    $scope.searchForm = {
+      selectedContacts: [],
+      selectedContactRoles: [ contactRoleFilters[0].id ]
+    };
 
     (function init () {
       bindRouteParamsToScope();
@@ -147,7 +150,7 @@
         .sortBy('label_b_a')
         .forEach(function (caseRole) {
           $scope.contactRoleFilters.push({
-            id: caseRole.relationship_type_id,
+            id: caseRole.id,
             text: caseRole.label_b_a
           });
         })
@@ -206,6 +209,42 @@
     }
 
     /**
+     * Watches changes to the case role filters, prepares the params to be sent
+     * to the API and appends them to the filters object.
+     */
+    function caseRoleWatcher () {
+      var filters = $scope.filters;
+      var selectedContacts = getSelect2ValueAsArray($scope.searchForm.selectedContacts);
+      var selectedContactRoles = getSelect2ValueAsArray($scope.searchForm.selectedContactRoles);
+      var hasAllCaseRolesSelected = selectedContactRoles.indexOf('all-case-roles') >= 0;
+      var hasClientSelected = selectedContactRoles.indexOf('client') >= 0;
+      var caseRoleIds = _.filter(selectedContactRoles, function (roleId) {
+        return parseInt(roleId, 10);
+      });
+
+      if (!selectedContacts.length) {
+        delete filters.has_role;
+
+        return;
+      }
+
+      filters.has_role = {
+        contact: { IN: selectedContacts },
+        can_be_client: true
+      };
+
+      delete filters.contact_id;
+
+      if (caseRoleIds.length) {
+        filters.has_role.role_type = { IN: caseRoleIds };
+      }
+
+      if (!hasAllCaseRolesSelected && !hasClientSelected) {
+        filters.has_role.can_be_client = false;
+      }
+    }
+
+    /**
      * Watcher for expanded state and update tableHeader top offset likewise
      */
     function expandedWatcher () {
@@ -239,6 +278,19 @@
     }
 
     /**
+     * Returns Select2 values as arrays. Select2 returns a single selected value
+     * as an array, but multiple values as a string separated by comas.
+     *
+     * @param {Array|String} value the value as provided by Select2.
+     * @return {Array}
+     */
+    function getSelect2ValueAsArray (value) {
+      return _.isArray(value)
+        ? value
+        : value.split(',');
+    }
+
+    /**
      * All subscribers are initiated here
      */
     function initSubscribers () {
@@ -252,6 +304,7 @@
       $scope.$watch('expanded', expandedWatcher);
       $scope.$watch('relationshipType', relationshipTypeWatcher);
       $scope.$watchCollection('filters', filtersWatcher);
+      $scope.$watchCollection('searchForm', caseRoleWatcher);
     }
 
     /**
@@ -286,7 +339,9 @@
      * @return {Promise} resolves to a list of relationship types.
      */
     function requestCaseRoles () {
-      return crmApi('RelationshipType', 'getcaseroles')
+      return crmApi('RelationshipType', 'getcaseroles', {
+        options: { limit: 0 }
+      })
         .then(function (caseRolesResponse) {
           return caseRolesResponse.values;
         });

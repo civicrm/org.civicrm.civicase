@@ -22,10 +22,15 @@
       </div>
       <div ng-if="isEnabled('contact_id')" class="civicase__case-filter-form-elements">
         <label>{{ ts('Contact Search') }}</label>
-        <input class="form-control" ng-list crm-entityref="{entity: 'Contact', select: {multiple: true}}" ng-model="filters.contact_id" />
         <input class="form-control"
-          ng-list
-          ng-model="selectedContactRoleFilter"
+          ng-model="searchForm.selectedContacts"
+          crm-entityref="{
+            entity: 'Contact',
+            select: { multiple: true }
+          }"
+        />
+        <input class="form-control"
+          ng-model="searchForm.selectedContactRoles"
           crm-ui-select="{
             allowClear: true,
             multiple: true,
