@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 
 (function (_) {
-  fdescribe('ContactPopoverContent', function () {
+  describe('ContactPopoverContent', function () {
     var $controller, $rootScope, $scope, contactsDataServiceMock;
     var expectedContactIcon = 'Individual';
 
