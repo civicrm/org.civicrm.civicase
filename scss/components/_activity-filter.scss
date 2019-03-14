@@ -159,7 +159,7 @@
   }
 }
 
-@media (max-width: 1420px) {
+@media (max-width: $activity-filter-responsive-width-breakpoint) {
   .civicase__case-details-panel:not(.civicase__case-details-panel--focused) {
     .civicase__activity-filter {
       padding: 16px 10px;

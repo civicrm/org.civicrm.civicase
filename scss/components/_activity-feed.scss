@@ -195,7 +195,7 @@ $feed-child-min-height: 400px;
   }
 }
 
-@media (max-width: 1300px) {
+@media (max-width: $activity-feed-responsive-width-breakpoint) {
   .civicase__activity-feed {
     .civicase__activity-card--long {
       .civicase__activity-date__with-year {

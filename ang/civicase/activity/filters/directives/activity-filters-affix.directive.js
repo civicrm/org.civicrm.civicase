@@ -29,7 +29,7 @@
         $feedBodyPanel = $('.civicase__activity-filter ~ .panel-body');
         $tabs = $('.civicase__dashboard').length > 0 ? $('.civicase__dashboard__tab-container ul.nav') : $('.civicase__case-body_tab');
         $toolbarDrawer = $('#toolbar');
-        var FILTER_ORIGINAL_PADDING_TOP = 8;
+        var FEED_BODY_ORIGINAL_PADDING_TOP = 8;
 
         $timeout(function () {
           $filter.affix({
@@ -38,10 +38,10 @@
             }
           }).on('affixed.bs.affix', function () {
             $filter.css('top', $toolbarDrawer.height() + $tabs.height());
-            $feedBodyPanel.css('padding-top', $filter.outerHeight() + FILTER_ORIGINAL_PADDING_TOP);
+            $feedBodyPanel.css('padding-top', $filter.outerHeight() + FEED_BODY_ORIGINAL_PADDING_TOP);
           }).on('affixed-top.bs.affix', function () {
             $filter.css('top', 'auto');
-            $feedBodyPanel.css('padding-top', FILTER_ORIGINAL_PADDING_TOP + 'px');
+            $feedBodyPanel.css('padding-top', FEED_BODY_ORIGINAL_PADDING_TOP + 'px');
           });
         });
       }
