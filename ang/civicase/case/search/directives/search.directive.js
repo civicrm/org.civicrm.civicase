@@ -18,7 +18,8 @@
   /**
    * Controller Function for civicase-search directive
    */
-  module.controller('civicaseSearchController', function ($scope, $rootScope, $timeout) {
+  module.controller('civicaseSearchController', function ($scope, $rootScope, $timeout,
+    crmApi, getSelect2Value) {
     // The ts() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -70,12 +71,21 @@
     $scope.checkPerm = CRM.checkPerm;
     $scope.filterDescription = buildDescription();
     $scope.filters = angular.extend({}, $scope.defaults);
+    $scope.contactRoleFilters = [
+      { id: 'all-case-roles', text: 'All Case Roles' },
+      { id: 'client', text: 'Client' }
+    ];
+    $scope.searchForm = {
+      selectedContacts: [],
+      selectedContactRoles: [ 'all-case-roles' ]
+    };
 
     (function init () {
       bindRouteParamsToScope();
       initiateWatchers();
       initSubscribers();
       setCustomSearchFieldsAsSearchFilters();
+      requestCaseRoles().then(addCaseRolesToContactRoleFilters);
     }());
 
     /**
@@ -131,11 +141,29 @@
     };
 
     /**
+     * Adds the given case roles to the list of contact roles filters.
+     *
+     * @param {Array} caseRoles a list of relationship types as returned by the API.
+     */
+    function addCaseRolesToContactRoleFilters (caseRoles) {
+      _.chain(caseRoles)
+        .sortBy('label_b_a')
+        .forEach(function (caseRole) {
+          $scope.contactRoleFilters.push({
+            id: caseRole.id,
+            text: caseRole.label_b_a
+          });
+        })
+        .value();
+    }
+
+    /**
      * Binds all route parameters to scope
      */
     function bindRouteParamsToScope () {
       $scope.$bindToRoute({expr: 'expanded', param: 'sx', format: 'bool', default: false});
       $scope.$bindToRoute({expr: 'filters', param: 'cf', default: {}});
+      $scope.$bindToRoute({expr: 'searchForm', param: 'searchForm', default: $scope.searchForm});
     }
 
     /**
@@ -179,6 +207,42 @@
         }
       });
       return des;
+    }
+
+    /**
+     * Watches changes to the case role filters, prepares the params to be sent
+     * to the API and appends them to the filters object.
+     */
+    function caseRoleWatcher () {
+      var filters = $scope.filters;
+      var selectedContacts = getSelect2Value($scope.searchForm.selectedContacts);
+      var selectedContactRoles = getSelect2Value($scope.searchForm.selectedContactRoles);
+      var hasAllCaseRolesSelected = selectedContactRoles.indexOf('all-case-roles') >= 0;
+      var hasClientSelected = selectedContactRoles.indexOf('client') >= 0;
+      var caseRoleIds = _.filter(selectedContactRoles, function (roleId) {
+        return parseInt(roleId, 10);
+      });
+
+      if (!selectedContacts.length) {
+        delete filters.has_role;
+
+        return;
+      }
+
+      filters.has_role = {
+        contact: { IN: selectedContacts },
+        can_be_client: true
+      };
+
+      delete filters.contact_id;
+
+      if (caseRoleIds.length) {
+        filters.has_role.role_type = { IN: caseRoleIds };
+      }
+
+      if (!hasAllCaseRolesSelected && !hasClientSelected) {
+        filters.has_role.can_be_client = false;
+      }
     }
 
     /**
@@ -228,6 +292,7 @@
       $scope.$watch('expanded', expandedWatcher);
       $scope.$watch('relationshipType', relationshipTypeWatcher);
       $scope.$watchCollection('filters', filtersWatcher);
+      $scope.$watchCollection('searchForm', caseRoleWatcher);
     }
 
     /**
@@ -254,6 +319,20 @@
         $scope.relationshipType[0] === 'is_case_manager' ? $scope.filters.case_manager = [CRM.config.user_contact_id] : delete ($scope.filters.case_manager);
         $scope.relationshipType[0] === 'is_involved' ? $scope.filters.contact_involved = [CRM.config.user_contact_id] : delete ($scope.filters.contact_involved);
       }
+    }
+
+    /**
+     * Requests the list of relationship types that have been assigned to case types.
+     *
+     * @return {Promise} resolves to a list of relationship types.
+     */
+    function requestCaseRoles () {
+      return crmApi('RelationshipType', 'getcaseroles', {
+        options: { limit: 0 }
+      })
+        .then(function (caseRolesResponse) {
+          return caseRolesResponse.values;
+        });
     }
 
     /**
