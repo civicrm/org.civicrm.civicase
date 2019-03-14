@@ -371,7 +371,7 @@
       $scope.$watchCollection('sort', updateCases);
       $scope.$watchCollection('page.num', function () {
         $('.civicase__case-list-panel').scrollTop(0); // Scrolls the caselist to top once new data loads
-        updateCases();
+        updateCases(arguments);
       });
       $scope.$watch('cases', casesWatcher, true);
     }

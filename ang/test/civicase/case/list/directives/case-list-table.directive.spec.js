@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 
-(function (_) {
+(function (_, $) {
   describe('CivicaseCaseListTable Directive', function () {
     var $compile, $rootScope, $scope, originaljQueryHeightFn;
 
@@ -15,14 +15,14 @@
       $scope = $rootScope.$new();
       $scope.$bindToRoute = jasmine.createSpy('$bindToRoute');
 
-      originaljQueryHeightFn = CRM.$.fn.height;
-      spyOn(CRM.$.fn, 'height');
+      originaljQueryHeightFn = $.fn.height;
+      spyOn($.fn, 'height');
       addAdditionalMarkup();
     }));
 
     afterEach(function () {
       removeAdditionalMarkup();
-      CRM.$.fn.height = originaljQueryHeightFn;
+      $.fn.height = originaljQueryHeightFn;
     });
 
     describe('on init', function () {
@@ -34,7 +34,7 @@
         });
 
         it('resets the height of the case list', function () {
-          expect(CRM.$.fn.height).toHaveBeenCalledWith('auto');
+          expect($.fn.height).toHaveBeenCalledWith('auto');
         });
       });
 
@@ -46,7 +46,7 @@
         });
 
         it('resets the height of the case list', function () {
-          expect(CRM.$.fn.height).toHaveBeenCalledWith('auto');
+          expect($.fn.height).toHaveBeenCalledWith('auto');
         });
       });
 
@@ -59,17 +59,17 @@
           $scope.caseIsFocused = false;
           $scope.$digest();
 
-          var caseList = CRM.$('.civicase__case-list');
-          var crmPageTitle = CRM.$('[crm-page-title]');
+          var caseList = $('.civicase__case-list');
+          var crmPageTitle = $('[crm-page-title]');
           var crmPageTitleHeight = crmPageTitle.outerHeight(true);
-          var caseListFilterPanel = CRM.$('.civicase__case-filter-panel__form');
+          var caseListFilterPanel = $('.civicase__case-filter-panel__form');
           var offsetTop = caseList.offset().top -
             caseListFilterPanel.outerHeight() - crmPageTitleHeight;
           calculatedHeight = 'calc(100vh - ' + offsetTop + 'px)';
         });
 
         it('sets the height of the case list', function () {
-          expect(CRM.$.fn.height).toHaveBeenCalledWith(calculatedHeight);
+          expect($.fn.height).toHaveBeenCalledWith(calculatedHeight);
         });
       });
     });
@@ -94,14 +94,14 @@
         <div class="civicase__case-filter-panel__form"></div>
       </div>`;
 
-      CRM.$(markup).appendTo('body');
+      $(markup).appendTo('body');
     }
 
     /**
      * Remove aditional markup
      */
     function removeAdditionalMarkup () {
-      CRM.$('.civicase-case-list-directive-unit-test').remove();
+      $('.civicase-case-list-directive-unit-test').remove();
     }
   });
 
@@ -159,6 +159,46 @@
       });
     });
 
+    describe('on page number has changed', function () {
+      beforeEach(function () {
+        addAdditionalMarkup();
+        crmApi.and.returnValue($q.resolve([_.cloneDeep(CasesData)]));
+        initController();
+        $scope.$digest();
+        $('.civicase__case-list-panel').scrollTop(20);
+        $scope.page.num = 2;
+        $scope.$digest();
+      });
+
+      afterEach(function () {
+        removeAdditionalMarkup();
+      });
+
+      it('scrolls to the top of case list panel', function () {
+        expect($('.civicase__case-list-panel').scrollTop()).toBe(0);
+      });
+
+      /**
+       * Add aditional markup
+       */
+      function addAdditionalMarkup () {
+        var markup = `<div class='civicase__case-list-panel' style='height: 10px; overflow: scroll'>
+          <br><br><br>
+          <br><br><br>
+          <br><br><br>
+        </div>`;
+
+        $(markup).appendTo('body');
+      }
+
+      /**
+       * Remove aditional markup
+       */
+      function removeAdditionalMarkup () {
+        $('.civicase__case-list-panel').remove();
+      }
+    });
+
     /**
      * Initializes the case list table controller.
      */
@@ -168,4 +208,4 @@
       });
     }
   });
-})(CRM._);
+})(CRM._, CRM.$);
