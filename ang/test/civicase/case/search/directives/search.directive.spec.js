@@ -1,15 +1,23 @@
 /* eslint-env jasmine */
 (function ($) {
   describe('civicaseSearch', function () {
-    var $controller, $rootScope, $scope, CaseFilters, affixOriginalFunction, offsetOriginalFunction, originalDoSearch, orginalParentScope, affixReturnValue, originalBindToRoute;
+    var $controller, $rootScope, $scope, CaseFilters, crmApi, affixOriginalFunction,
+      offsetOriginalFunction, originalDoSearch, orginalParentScope, affixReturnValue,
+      originalBindToRoute;
 
-    beforeEach(module('civicase.templates', 'civicase', 'civicase.data'));
+    beforeEach(module('civicase.templates', 'civicase', 'civicase.data', function ($provide) {
+      crmApi = jasmine.createSpy('crmApi');
 
-    beforeEach(inject(function (_$controller_, _$rootScope_, _CaseFilters_) {
+      $provide.value('crmApi', crmApi);
+    }));
+
+    beforeEach(inject(function (_$controller_, $q, _$rootScope_, _CaseFilters_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       CaseFilters = _CaseFilters_;
+
+      crmApi.and.returnValue($q.resolve({ values: [] }));
     }));
 
     beforeEach(function () {
