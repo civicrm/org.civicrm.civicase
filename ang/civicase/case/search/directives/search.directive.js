@@ -18,7 +18,8 @@
   /**
    * Controller Function for civicase-search directive
    */
-  module.controller('civicaseSearchController', function ($scope, $rootScope, $timeout, crmApi) {
+  module.controller('civicaseSearchController', function ($scope, $rootScope, $timeout,
+    crmApi, getSelect2Value) {
     // The ts() functions help load strings for this module.
     var ts = $scope.ts = CRM.ts('civicase');
     var caseTypes = CRM.civicase.caseTypes;
@@ -214,8 +215,8 @@
      */
     function caseRoleWatcher () {
       var filters = $scope.filters;
-      var selectedContacts = getSelect2ValueAsArray($scope.searchForm.selectedContacts);
-      var selectedContactRoles = getSelect2ValueAsArray($scope.searchForm.selectedContactRoles);
+      var selectedContacts = getSelect2Value($scope.searchForm.selectedContacts);
+      var selectedContactRoles = getSelect2Value($scope.searchForm.selectedContactRoles);
       var hasAllCaseRolesSelected = selectedContactRoles.indexOf('all-case-roles') >= 0;
       var hasClientSelected = selectedContactRoles.indexOf('client') >= 0;
       var caseRoleIds = _.filter(selectedContactRoles, function (roleId) {
@@ -275,19 +276,6 @@
       if (!$scope.expanded) {
         $scope.doSearch();
       }
-    }
-
-    /**
-     * Returns Select2 values as arrays. Select2 returns a single selected value
-     * as an array, but multiple values as a string separated by comas.
-     *
-     * @param {Array|String} value the value as provided by Select2.
-     * @return {Array}
-     */
-    function getSelect2ValueAsArray (value) {
-      return _.isArray(value)
-        ? value
-        : value.split(',');
     }
 
     /**
