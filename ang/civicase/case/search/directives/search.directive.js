@@ -61,14 +61,6 @@
         'id': 'is_involved'
       }
     ];
-    var contactRoleFilters = [
-      { id: 'all-case-roles', text: 'All Case Roles' },
-      { id: 'client', text: 'Client' }
-    ];
-    var defaultSearchFormValues = {
-      selectedContacts: [],
-      selectedContactRoles: [ contactRoleFilters[0].id ]
-    };
 
     $scope.pageTitle = '';
     $scope.caseTypeOptions = _.map(caseTypes, mapSelectOptions);
@@ -78,8 +70,14 @@
     $scope.checkPerm = CRM.checkPerm;
     $scope.filterDescription = buildDescription();
     $scope.filters = angular.extend({}, $scope.defaults);
-    $scope.contactRoleFilters = contactRoleFilters;
-    $scope.searchForm = _.cloneDeep({}, defaultSearchFormValues);
+    $scope.contactRoleFilters = [
+      { id: 'all-case-roles', text: 'All Case Roles' },
+      { id: 'client', text: 'Client' }
+    ];
+    $scope.searchForm = {
+      selectedContacts: [],
+      selectedContactRoles: [ 'all-case-roles' ]
+    };
 
     (function init () {
       bindRouteParamsToScope();
@@ -164,7 +162,7 @@
     function bindRouteParamsToScope () {
       $scope.$bindToRoute({expr: 'expanded', param: 'sx', format: 'bool', default: false});
       $scope.$bindToRoute({expr: 'filters', param: 'cf', default: {}});
-      $scope.$bindToRoute({expr: 'searchForm', param: 'searchForm', default: defaultSearchFormValues});
+      $scope.$bindToRoute({expr: 'searchForm', param: 'searchForm', default: $scope.searchForm});
     }
 
     /**
