@@ -161,7 +161,7 @@ $feed-child-min-height: 400px;
 
 .civicase__activity-feed__body__list {
   flex-grow: 1;
-  max-width: 660px;
+  max-width: 630px;
   min-height: $feed-child-min-height;
   overflow: auto;
 }
@@ -195,7 +195,7 @@ $feed-child-min-height: 400px;
   }
 }
 
-@media (max-width: 1300px) {
+@media (max-width: $activity-feed-responsive-width-breakpoint) {
   .civicase__activity-feed {
     .civicase__activity-card--long {
       .civicase__activity-date__with-year {
@@ -217,10 +217,12 @@ $feed-child-min-height: 400px;
           max-width: 35px;
         }
       }
+    }
+  }
 
-      .civicase__contact-name {
-        max-width: 40px;
-      }
+  .civicase__activity-feed__body__list--details-visible {
+    .civicase__contact-name {
+      max-width: 40px;
     }
   }
 }

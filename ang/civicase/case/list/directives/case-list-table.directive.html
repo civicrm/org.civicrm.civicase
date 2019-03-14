@@ -1,5 +1,5 @@
 <div crm-ui-debug="selectedCases"></div>
-<div class="civicase__case-list">
+<div class="civicase__case-list" ng-class="{'civicase__case-list--summary': viewingCase}">
   <civicase-bulk-actions-message
     selected-items="selectedCases.length" total-count="totalCount"
     is-select-all-available="isSelectAllAvailable" show-checkboxes="showCheckboxes"

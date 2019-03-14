@@ -122,12 +122,6 @@
     }
   }
 
-  > .civicase__pager {
-    bottom: 0;
-    position: absolute;
-    width: 100%;
-  }
-
   .civicase__pager--fixed {
     position: fixed;
   }
@@ -145,9 +139,22 @@
   }
 }
 
+.civicase__case-list--summary {
+  > .civicase__pager {
+    bottom: 0;
+    height: 60px;
+    position: absolute;
+  }
+
+  .civicase__case-list-table-container {
+    overflow-x: hidden;
+  }
+}
+
 .civicase__case-list-panel {
   border-top: 1px solid $crm-grayblue-dark;
   box-shadow: none;
+  margin-bottom: 0;
   overflow: auto;
   padding: 0;
   position: relative;
@@ -156,7 +163,8 @@
 
 .civicase__case-list-panel--summary {
   border-top: 0;
-  bottom: 45px;
+  bottom: 60px;
+  overflow-x: hidden;
   position: absolute;
   top: 65px;
   width: $case-card-width;
@@ -167,6 +175,12 @@
 
   .civicase__case-list-column--first {
     background: $crm-white !important;
+  }
+
+  .civicase__case-list-table {
+    td:first-child {
+      width: 100%;
+    }
   }
 }
 
@@ -191,6 +205,7 @@
 
 .civicase__case-details-panel {
   box-shadow: none;
+  display: none;
   float: right;
   height: 0;
   overflow: hidden;
@@ -203,6 +218,7 @@
 }
 
 .civicase__case-details-panel--summary {
+  display: block;
   height: 100%;
   overflow-y: auto;
   width: calc(100% - #{$case-card-width});

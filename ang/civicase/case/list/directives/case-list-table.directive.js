@@ -280,6 +280,7 @@
           $scope.page.total = Math.ceil(result[1] / $scope.page.size);
           setPageTitle();
           firstLoad = $scope.isLoading = false;
+
           $($window).scrollTop(0); // Scrolls the window to top once new data loads
         });
     }
@@ -368,7 +369,10 @@
      */
     function initiateWatchers () {
       $scope.$watchCollection('sort', updateCases);
-      $scope.$watchCollection('page.num', updateCases);
+      $scope.$watchCollection('page.num', function () {
+        $('.civicase__case-list-panel').scrollTop(0); // Scrolls the caselist to top once new data loads
+        updateCases(arguments);
+      });
       $scope.$watch('cases', casesWatcher, true);
     }
 
