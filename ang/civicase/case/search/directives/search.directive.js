@@ -29,8 +29,8 @@
         label: ts('Case ID'),
         html_type: 'Number'
       },
-      contact_id: {
-        label: ts('Case Client')
+      has_role: {
+        label: ts('Contact Search')
       },
       case_manager: {
         label: ts('Case Manager')
@@ -71,12 +71,12 @@
     $scope.checkPerm = CRM.checkPerm;
     $scope.filterDescription = buildDescription();
     $scope.filters = angular.extend({}, $scope.defaults);
-    $scope.contactRoleFilters = [
+    $scope.contactRoles = [
       { id: 'all-case-roles', text: 'All Case Roles' },
       { id: 'client', text: 'Client' }
     ];
-    $scope.searchForm = {
-      selectedContacts: [],
+    $scope.contactRoleFilter = {
+      selectedContacts: null,
       selectedContactRoles: [ 'all-case-roles' ]
     };
 
@@ -85,7 +85,7 @@
       initiateWatchers();
       initSubscribers();
       setCustomSearchFieldsAsSearchFilters();
-      requestCaseRoles().then(addCaseRolesToContactRoleFilters);
+      requestCaseRoles().then(addCaseRolesToContactRoles);
     }());
 
     /**
@@ -136,20 +136,24 @@
      * Resets filter options and reload search items
      */
     $scope.clearSearch = function () {
+      $scope.contactRoleFilter = {
+        selectedContacts: null,
+        selectedContactRoles: [ 'all-case-roles' ]
+      };
       $scope.filters = {};
       $scope.doSearch();
     };
 
     /**
-     * Adds the given case roles to the list of contact roles filters.
+     * Adds the given case roles to the list of contact roles.
      *
      * @param {Array} caseRoles a list of relationship types as returned by the API.
      */
-    function addCaseRolesToContactRoleFilters (caseRoles) {
+    function addCaseRolesToContactRoles (caseRoles) {
       _.chain(caseRoles)
         .sortBy('label_b_a')
         .forEach(function (caseRole) {
-          $scope.contactRoleFilters.push({
+          $scope.contactRoles.push({
             id: caseRole.id,
             text: caseRole.label_b_a
           });
@@ -163,7 +167,7 @@
     function bindRouteParamsToScope () {
       $scope.$bindToRoute({expr: 'expanded', param: 'sx', format: 'bool', default: false});
       $scope.$bindToRoute({expr: 'filters', param: 'cf', default: {}});
-      $scope.$bindToRoute({expr: 'searchForm', param: 'searchForm', default: $scope.searchForm});
+      $scope.$bindToRoute({expr: 'contactRoleFilter', param: 'crf', default: $scope.contactRoleFilter});
     }
 
     /**
@@ -185,6 +189,8 @@
             d.text = text.join(', ');
           } else if (key === 'case_manager' && $scope.caseManagerIsMe()) {
             d.text = ts('Me');
+          } else if (key === 'has_role') {
+            d.text = ts('%1 selected', {'1': val.contact.IN.length});
           } else if ($.isArray(val)) {
             d.text = ts('%1 selected', {'1': val.length});
           } else if ($.isPlainObject(val)) {
@@ -215,15 +221,15 @@
      */
     function caseRoleWatcher () {
       var filters = $scope.filters;
-      var selectedContacts = getSelect2Value($scope.searchForm.selectedContacts);
-      var selectedContactRoles = getSelect2Value($scope.searchForm.selectedContactRoles);
+      var selectedContacts = getSelect2Value($scope.contactRoleFilter.selectedContacts);
+      var selectedContactRoles = getSelect2Value($scope.contactRoleFilter.selectedContactRoles);
       var hasAllCaseRolesSelected = selectedContactRoles.indexOf('all-case-roles') >= 0;
       var hasClientSelected = selectedContactRoles.indexOf('client') >= 0;
       var caseRoleIds = _.filter(selectedContactRoles, function (roleId) {
         return parseInt(roleId, 10);
       });
 
-      if (!selectedContacts.length) {
+      if (!selectedContacts || !selectedContacts.length) {
         delete filters.has_role;
 
         return;
@@ -292,7 +298,7 @@
       $scope.$watch('expanded', expandedWatcher);
       $scope.$watch('relationshipType', relationshipTypeWatcher);
       $scope.$watchCollection('filters', filtersWatcher);
-      $scope.$watchCollection('searchForm', caseRoleWatcher);
+      $scope.$watchCollection('contactRoleFilter', caseRoleWatcher);
     }
 
     /**

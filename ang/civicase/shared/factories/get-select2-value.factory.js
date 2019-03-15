@@ -13,8 +13,10 @@
    * @return {Array}
    */
   function getSelect2Value (value) {
-    return _.isArray(value)
-      ? value
-      : value.split(',');
+    if (value) {
+      return _.isArray(value)
+        ? value
+        : value.split(',');
+    }
   }
 })(angular, CRM.$, CRM._, CRM);
