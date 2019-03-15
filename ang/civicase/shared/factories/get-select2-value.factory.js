@@ -17,6 +17,8 @@
       return _.isArray(value)
         ? value
         : value.split(',');
+    } else {
+      return [];
     }
   }
 })(angular, CRM.$, CRM._, CRM);
