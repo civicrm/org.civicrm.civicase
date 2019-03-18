@@ -377,11 +377,11 @@ function _civicrm_api3_case_getdetails_handle_role_filters ($params, $sql) {
   $roleContactFilter = CRM_Core_DAO::createSQLFilter('case_relationship.contact_id_b', $hasRole['contact']);
   $clientFilter = CRM_Core_DAO::createSQLFilter('case_client.contact_id', $hasRole['contact']);
 
-  $sql->join('case_relationship', 'LEFT JOIN civicrm_relationship AS case_relationship
-    ON case_relationship.case_id = a.id');
-  $sql->where('case_relationship.is_active = 1');
-
   if (!empty($hasRole['role_type'])) {
+    $sql->join('case_relationship', 'LEFT JOIN civicrm_relationship AS case_relationship
+    ON case_relationship.case_id = a.id');
+    $sql->where('case_relationship.is_active = 1');
+
     _civicase_prepare_param_for_filtering($hasRole, 'role_type');
 
     $roleTypeFilter = CRM_Core_DAO::createSQLFilter('case_relationship.relationship_type_id', $hasRole['role_type']);
@@ -391,7 +391,13 @@ function _civicrm_api3_case_getdetails_handle_role_filters ($params, $sql) {
   if ($canBeAClient) {
     $sql->join('case_client', 'LEFT JOIN civicrm_case_contact AS case_client
       ON case_client.case_id = a.id');
-    $sql->where("$roleContactFilter OR $clientFilter");
+
+    if(empty($hasRole['role_type'])) {
+      $sql->where($clientFilter);
+    } else {
+      $sql->where("$roleContactFilter OR $clientFilter");
+    }
+
   } else {
     $sql->where($roleContactFilter);
   }

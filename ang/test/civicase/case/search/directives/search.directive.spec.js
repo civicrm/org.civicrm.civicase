@@ -173,7 +173,7 @@
 
       beforeEach(function () {
         $scope.expanded = true;
-        $scope.filters.contact_id = [203];
+        $scope.filters.case_manager = [203];
         $scope.doSearch();
       });
 
@@ -182,7 +182,7 @@
       });
 
       it('should build filter description', function () {
-        expect($scope.filterDescription).toEqual([ { label: 'Case Client', text: '1 selected' } ]);
+        expect($scope.filterDescription).toEqual([ { label: 'Case Manager', text: 'Me' } ]);
       });
 
       it('should close the dropdown', function () {
