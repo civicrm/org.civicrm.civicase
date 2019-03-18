@@ -242,12 +242,14 @@
 
       delete filters.contact_id;
 
-      if (caseRoleIds.length) {
-        filters.has_role.role_type = { IN: caseRoleIds };
-      }
+      if (!hasAllCaseRolesSelected) {
+        if (caseRoleIds.length) {
+          filters.has_role.role_type = { IN: caseRoleIds };
+        }
 
-      if (!hasAllCaseRolesSelected && !hasClientSelected) {
-        filters.has_role.can_be_client = false;
+        if (!hasClientSelected) {
+          filters.has_role.can_be_client = false;
+        }
       }
     }
 
