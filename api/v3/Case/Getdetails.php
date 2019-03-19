@@ -82,7 +82,7 @@ function civicrm_api3_case_getdetails($params) {
   }
 
   if (!empty($params['has_role'])) {
-    _civicrm_api3_case_getdetails_handle_role_filters($params, $sql);
+    _civicrm_api3_case_getdetails_handle_role_filters($sql, $params);
   }
 
   // Add clause to search by non manager role and non client
@@ -365,42 +365,81 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
 /**
  * Filters cases by contacts related to the case and their relationship types.
  *
+ * @param CRM_Utils_SQL_Select $sql a reference to the SQL object.
  * @param array $params as provided by the original api action.
- * @param object $sql a reference to the SQL object.
  */
-function _civicrm_api3_case_getdetails_handle_role_filters ($params, $sql) {
+function _civicrm_api3_case_getdetails_handle_role_filters ($sql, $params) {
   $hasRole = $params['has_role'];
   $canBeAClient = !isset($hasRole['can_be_client']) || $hasRole['can_be_client'];
+  $roleSubQuery = new CRM_Utils_SQL_Select('civicrm_case');
 
-  _civicase_prepare_param_for_filtering($hasRole, 'contact');
-
-  $roleContactFilter = CRM_Core_DAO::createSQLFilter('case_relationship.contact_id_b', $hasRole['contact']);
-  $clientFilter = CRM_Core_DAO::createSQLFilter('case_client.contact_id', $hasRole['contact']);
-
-  if (!empty($hasRole['role_type'])) {
-    $sql->join('case_relationship', 'LEFT JOIN civicrm_relationship AS case_relationship
-    ON case_relationship.case_id = a.id');
-    $sql->where('case_relationship.is_active = 1');
-
-    _civicase_prepare_param_for_filtering($hasRole, 'role_type');
-
-    $roleTypeFilter = CRM_Core_DAO::createSQLFilter('case_relationship.relationship_type_id', $hasRole['role_type']);
-    $roleContactFilter = "($roleContactFilter AND $roleTypeFilter)";
-  }
+  $roleSubQuery->select('civicrm_case.id');
+  $roleSubQuery->groupBy('civicrm_case.id');
 
   if ($canBeAClient) {
-    $sql->join('case_client', 'LEFT JOIN civicrm_case_contact AS case_client
-      ON case_client.case_id = a.id');
-
-    if(empty($hasRole['role_type'])) {
-      $sql->where($clientFilter);
-    } else {
-      $sql->where("$roleContactFilter OR $clientFilter");
-    }
-
+    _civicrm_api3_case_getdetails_join_client($roleSubQuery, $hasRole);
+    _civicrm_api3_case_getdetails_join_relationships($roleSubQuery, $hasRole, [
+      'joinType' => 'LEFT JOIN',
+    ]);
+    $roleSubQuery->where('case_relationship.case_id IS NOT NULL
+      OR case_client.case_id IS NOT NULL');
   } else {
-    $sql->where($roleContactFilter);
+    _civicrm_api3_case_getdetails_join_relationships($roleSubQuery, $hasRole, [
+      'joinType' => 'JOIN',
+    ]);
   }
+
+  $roleSubQueryString = $roleSubQuery->toSql();
+
+  $sql->join('case_roles', "
+    JOIN ($roleSubQueryString) AS case_roles
+    ON case_roles.id = a.id
+  ");
+}
+
+/**
+ * Joins the given SQL object with the case clients table.
+ *
+ * @param CRM_Utils_SQL_Select $sql the SQL object reference
+ * @param array $params list of filters to pass to the client join.
+ */
+function _civicrm_api3_case_getdetails_join_client ($sql, $params) {
+  _civicase_prepare_param_for_filtering($params, 'contact');
+
+  $contactFilter = CRM_Core_DAO::createSQLFilter('case_client.contact_id', $params['contact']);
+
+  $sql->join('case_client', "
+    LEFT JOIN civicrm_case_contact AS case_client
+    ON case_client.case_id = civicrm_case.id
+    AND $contactFilter
+  ");
+}
+
+/**
+ * Joins the given SQL object with the relationships table.
+ *
+ * @param CRM_Utils_SQL_Select $sql the SQL object reference
+ * @param array $params list of filters to pass to the relationship join.
+ */
+function _civicrm_api3_case_getdetails_join_relationships ($sql, $params, $options = []) {
+  _civicase_prepare_param_for_filtering($params, 'contact');
+
+  $contactFilter = CRM_Core_DAO::createSQLFilter('case_relationship.contact_id_b', $params['contact']);
+  $joinClause = "
+    {$options['joinType']} civicrm_relationship AS case_relationship
+    ON case_relationship.case_id = civicrm_case.id
+    AND case_relationship.is_active = 1
+    AND $contactFilter
+  ";
+
+  if(!empty($params['role_type'])) {
+    _civicase_prepare_param_for_filtering($params, 'role_type');
+
+    $roleTypeFilter = CRM_Core_DAO::createSQLFilter('case_relationship.relationship_type_id', $params['role_type']);
+    $joinClause .= "AND $roleTypeFilter";
+  }
+
+  $sql->join('civicrm_relationship', $joinClause);
 }
 
 /**
