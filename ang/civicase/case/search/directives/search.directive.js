@@ -237,7 +237,8 @@
 
       filters.has_role = {
         contact: { IN: selectedContacts },
-        can_be_client: true
+        can_be_client: true,
+        all_case_roles_selected: hasAllCaseRolesSelected
       };
 
       delete filters.contact_id;

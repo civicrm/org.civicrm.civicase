@@ -371,6 +371,8 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
 function _civicrm_api3_case_getdetails_handle_role_filters ($sql, $params) {
   $hasRole = $params['has_role'];
   $canBeAClient = !isset($hasRole['can_be_client']) || $hasRole['can_be_client'];
+  $hasOtherRolesThanClient = isset($hasRole['role_type']);
+  $isAllCaseRolesTrue = $hasRole['all_case_roles_selected'];
   $roleSubQuery = new CRM_Utils_SQL_Select('civicrm_case');
 
   $roleSubQuery->select('civicrm_case.id');
@@ -378,11 +380,17 @@ function _civicrm_api3_case_getdetails_handle_role_filters ($sql, $params) {
 
   if ($canBeAClient) {
     _civicrm_api3_case_getdetails_join_client($roleSubQuery, $hasRole);
-    _civicrm_api3_case_getdetails_join_relationships($roleSubQuery, $hasRole, [
-      'joinType' => 'LEFT JOIN',
-    ]);
-    $roleSubQuery->where('case_relationship.case_id IS NOT NULL
+
+    if ($hasOtherRolesThanClient || $isAllCaseRolesTrue) {
+      _civicrm_api3_case_getdetails_join_relationships($roleSubQuery, $hasRole, [
+        'joinType' => 'LEFT JOIN',
+      ]);
+
+      $roleSubQuery->where('case_relationship.case_id IS NOT NULL
       OR case_client.case_id IS NOT NULL');
+    } else {
+      $roleSubQuery->where('case_client.case_id IS NOT NULL');
+    }
   } else {
     _civicrm_api3_case_getdetails_join_relationships($roleSubQuery, $hasRole, [
       'joinType' => 'JOIN',
