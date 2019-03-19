@@ -2,13 +2,12 @@
   border: 1px solid $gray-light;
   border-radius: 2px;
   box-shadow: $box-shadow-tooltip;
-  margin-left: 10px;
   padding: 0;
   white-space: nowrap;
-  z-index: 5;
+  z-index: 10;
 
   .arrow {
-    border-top-color: $gray-light;
+    border-bottom-color: $gray-light;
 
     &.left {
       left: 20px;
