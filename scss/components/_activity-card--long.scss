@@ -31,13 +31,21 @@
     margin-right: 8px;
   }
 
+  .civicase__tooltip {
+    flex: 1;
+    max-width: 300px;
+    min-width: 0;
+  }
+
   .civicase__activity-type {
+    display: block;
     font-size: 16px;
     margin-right: 12px;
   }
 
   .civicase__activity-attachment__icon {
-    margin-top: 2px;
+    position: relative;
+    top: 2px;
   }
 
   .civicase__activity-attachment__file-options {
@@ -48,8 +56,8 @@
     }
   }
 
-  .civicase__activity__tags-container {
-    margin-right: 10px;
+  .civicase__tags-container {
+    margin-right: 5px;
     margin-top: -3px;
   }
 
@@ -60,6 +68,16 @@
 
   .civicase__activity-date {
     margin-left: 5px;
+    margin-top: -1px;
+  }
+
+  .civicase__activity-date__with-year,
+  .civicase__activity-date__without-year {
+    vertical-align: middle;
+  }
+
+  .civicase__activity-date__without-year {
+    display: none;
   }
 
   .civicase__contact-additional__container--avatar {
@@ -70,9 +88,6 @@
     color: $crm-gray-matte;
     font-weight: $font-weight-content;
     margin-left: 30px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .civicase__activity-card-menu.btn-group .btn {
@@ -110,6 +125,11 @@
   .civicase__activity-icon-arrow {
     left: 22px;
     top: 8px;
+  }
+
+  .civicase__activity-card__case-type {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .civicase__activity-card-row--communication {

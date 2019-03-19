@@ -2,7 +2,7 @@
   background: $gray-light;
   padding: 16px 40px;
   width: 100%;
-  z-index: 4;
+  z-index: 11;
 }
 
 .civicase__activity-filter__settings {
@@ -58,7 +58,7 @@
 }
 
 .civicase__activity-filter__contact {
-  margin-left: 16px;
+  margin-left: 8px;
 
   .btn {
     border: 1px solid $crm-grayblue-darker !important;
@@ -87,7 +87,7 @@
 .civicase__activity-filter__timeline,
 .civicase__activity-filter__category {
   display: inline-block;
-  margin-left: 16px;
+  margin-left: 8px;
   padding: 1px 0 !important;
 
   .select2-choice {
@@ -156,5 +156,31 @@
     border-bottom: 1px solid $gray-light;
     display: block;
     margin-top: 5px;
+  }
+}
+
+@media (max-width: $activity-filter-responsive-width-breakpoint) {
+  .civicase__case-details-panel:not(.civicase__case-details-panel--focused) {
+    .civicase__activity-filter {
+      padding: 16px 10px;
+    }
+
+    .civicase__activity-filter__timeline {
+      width: 120px !important;
+    }
+
+    .civicase__activity-filter__category {
+      width: 165px !important;
+    }
+
+    .civicase__activity-filter__more__text {
+      display: none;
+    }
+
+    .civicase__activity-filter__attachment,
+    .civicase__activity-filter__star,
+    .civicase__activity-filter__more {
+      padding: 5px 2px;
+    }
   }
 }

@@ -18,6 +18,11 @@
     white-space: nowrap;
   }
 
+  .civicase__tooltip {
+    flex: 1;
+    min-width: 0;
+  }
+
   .civicase__activity-card__case-type {
     max-width: 150px;
     overflow: hidden;

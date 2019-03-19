@@ -1,5 +1,6 @@
 .civicase__activity-card {
   background: $crm-white;
+  border-radius: $card-border-radius;
   cursor: pointer;
 
   &:hover {
@@ -31,6 +32,14 @@
   .civicase__checkbox {
     margin-right: 5px;
     margin-top: 2px;
+  }
+
+  .panel-footer:hover {
+    background: $gray-light;
+
+    > a:hover {
+      text-decoration: none;
+    }
   }
 }
 
@@ -65,7 +74,7 @@
     white-space: initial;
   }
 
-  .civicase__activity__tags-container {
+  .civicase__tags-container {
     margin-left: 30px;
     margin-top: 2px;
   }
@@ -144,6 +153,7 @@
 
 .civicase__activity__right-container {
   margin-left: auto;
+  white-space: nowrap;
 
   > * {
     display: inline-block !important;
@@ -184,6 +194,7 @@
 
 .civicase__activity-card-row--case-info {
   line-height: 2em;
+  white-space: nowrap;
 
   .civicase__contact-card {
     margin-right: 5px;

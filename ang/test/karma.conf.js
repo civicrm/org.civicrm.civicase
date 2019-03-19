@@ -32,7 +32,7 @@ module.exports = function (config) {
       extPath + '/ang/test/global.js',
 
       // angular templates
-      extPath + '/ang/civicase/*.html',
+      extPath + '/ang/civicase/**/*.html',
 
       // Source Files
       extPath + '/ang/civicase.js',
@@ -47,7 +47,7 @@ module.exports = function (config) {
     ],
     // Used to transform angular templates in JS strings
     preprocessors: (function (obj) {
-      obj[extPath + '/ang/civicase/*.html'] = ['ng-html2js'];
+      obj[extPath + '/ang/civicase/**/*.html'] = ['ng-html2js'];
       return obj;
     })({}),
     ngHtml2JsPreprocessor: {

@@ -1,9 +1,18 @@
+$feed-child-min-height: 400px;
+
 .civicase__activity-feed {
   box-shadow: none;
+  margin-bottom: 0;
 
   .panel-body {
     background: transparent;
     border-top: 0 !important;
+    padding: 15px;
+  }
+
+  > .panel-body {
+    padding-bottom: 0;
+    padding-top: 8px;
   }
 
   .civicase__panel-transparent-header {
@@ -48,13 +57,14 @@
 }
 
 .civicase__activity-feed__list {
-  margin-right: 10px;
   padding-left: 10px;
-  padding-top: 5px;
+  padding-right: 10px;
+  padding-top: 6px;
   position: relative;
 
   &.active {
     background: $activity-feed-active-bg;
+    border-radius: $card-border-radius;
   }
 
   &.civicase__animated-checkbox-card--expanded {
@@ -103,10 +113,6 @@
     margin-bottom: 5px;
     margin-left: auto;
     margin-right: auto;
-    width: calc(100% - 80px); // 80px = difference in size between activity card with ribbon
-  }
-
-  .civicase__activity-card--ribbon {
     width: 100%;
   }
 }
@@ -118,12 +124,25 @@
   vertical-align: top;
 }
 
-.civicase__activity-feed-pager__no-more,
-.civicase__activity-feed-pager__more {
-  > .btn {
+.civicase__activity-feed-pager {
+  .material-icons {
+    font-size: 28px;
+  }
+}
+
+.civicase__activity-feed-pager--down {
+  .civicase__activity-feed-pager__no-more,
+  .civicase__activity-feed-pager__more {
+    > .btn {
+      margin-top: 40px;
+    }
+  }
+
+  .civicase__spinner {
     margin-top: 40px;
   }
 }
+
 
 .civicase__activity-feed-pager__no-more {
   > .btn {
@@ -133,34 +152,77 @@
   }
 }
 
-.civicase__activity-feed__list-container {
+.civicase__activity-feed__body {
   display: flex;
   justify-content: center;
+  margin: auto;
+  max-width: 1330px;
 }
 
-.civicase__activity-feed__list-container__left {
-  min-width: 620px;
+.civicase__activity-feed__body__list {
+  flex-grow: 1;
+  max-width: 630px;
+  min-height: $feed-child-min-height;
   overflow: auto;
-  width: 50%;
 }
 
-.civicase__activity-feed__list-container__right {
-  min-width: 425px;
-  width: 30%;
+.civicase__activity-feed__body__details {
+  box-sizing: content-box;
+  min-height: $feed-child-min-height;
+  min-width: 550px;
+  overflow-y: auto;
+  padding-left: 15px;
+  padding-right: 10px;
+  padding-top: 8px;
+  width: 550px;
+}
+
+.civicase__activity-feed__body__month-nav {
+  margin-left: 15px;
+  min-height: $feed-child-min-height;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 125px;
 }
 
 .civicase__activity-feed__placeholder {
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+
+  .civicase__panel-transparent-header {
+    width: 100%;
+  }
 }
 
-@media screen and (max-width: $activity-feed-breakpoint) {
-  .civicase__activity-feed__list-container__left {
-    width: 60%;
+@media (max-width: $activity-feed-responsive-width-breakpoint) {
+  .civicase__activity-feed {
+    .civicase__activity-card--long {
+      .civicase__activity-date__with-year {
+        display: none;
+      }
+
+      .civicase__activity-date__without-year {
+        display: inline-block;
+      }
+
+      &.civicase__activity-card--ribbon {
+        .panel-body {
+          padding: 15px 10px 15px 15px;
+        }
+      }
+
+      .civicase__tags-container {
+        .badge {
+          max-width: 35px;
+        }
+      }
+    }
   }
 
-  .civicase__activity-feed__list-container__right {
-    width: 40%;
+  .civicase__activity-feed__body__list--details-visible {
+    .civicase__contact-name {
+      max-width: 40px;
+    }
   }
 }

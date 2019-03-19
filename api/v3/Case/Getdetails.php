@@ -23,6 +23,12 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
     'type' => CRM_Utils_Type::T_INT,
   );
 
+  $spec['has_role'] = [
+    'title' => 'Case has role',
+    'description' => '{ contact, role_type, can_be_client }',
+    'type' => CRM_Utils_Type::T_STRING,
+  ];
+
   $spec['contact_is_deleted'] = array(
     'title' => 'Contact Is Deleted',
     'description' => 'Set FALSE to filter out cases for deleted contacts, TRUE to return only cases of deleted contacts',
@@ -73,6 +79,10 @@ function civicrm_api3_case_getdetails($params) {
     }
     \Civi\CCase\Utils::joinOnRelationship($sql, 'manager');
     $sql->where(CRM_Core_DAO::createSQLFilter('manager.id', $params['case_manager']));
+  }
+
+  if (!empty($params['has_role'])) {
+    _civicrm_api3_case_getdetails_handle_role_filters($sql, $params);
   }
 
   // Add clause to search by non manager role and non client
@@ -187,23 +197,28 @@ function civicrm_api3_case_getdetails($params) {
         'incomplete' => implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::INCOMPLETE))),
         'completed' => implode(',', array_keys(\CRM_Activity_BAO_Activity::getStatusesByType(\CRM_Activity_BAO_Activity::COMPLETED))),
       );
+      // Creates category_count object with empty values
       foreach ($result['values'] as &$case) {
-        $case['category_count'] = array_fill_keys(array_keys($statusTypes), array());
+        $case['category_count'] = array_fill_keys(array_values($activityCategories), array());
       }
-      foreach ($statusTypes as $statusType => $statusTypeIds) {
-        foreach ($activityCategories as $category) {
-          $query = "SELECT COUNT(a.id) as count, ca.case_id
-          FROM civicrm_activity a, civicrm_case_activity ca
-          WHERE ca.activity_id = a.id AND a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id IN (" . implode(',', $ids) . ")
-          AND a.activity_type_id IN (SELECT value FROM civicrm_option_value WHERE grouping LIKE '%$category%' AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
-          AND a.status_id IN ($statusTypeIds)
-          GROUP BY ca.case_id";
-          $dao = CRM_Core_DAO::executeQuery($query);
-          while ($dao->fetch()) {
-            $result['values'][$dao->case_id]['category_count'][$statusType][$category] = (int) $dao->count;
-          }
+
+      // fills each category with respective counts
+      foreach ($activityCategories as $category) {
+        // calculates complete and incomplete activities
+        foreach ($statusTypes as $statusType => $statusTypeIds) {
+          calculate_activities_for_category($category, $ids, $statusTypeIds, $statusType, FALSE, $result);
         }
+        // calculates overdue activities
+        calculate_activities_for_category($category, $ids, $statusTypes['incomplete'], $statusType, TRUE, $result);
       }
+
+      // calculates activities which does not have any activity category
+      foreach ($statusTypes as $statusType => $statusTypeIds) {
+        calculate_activities_for_category(NULL, $ids, $statusTypeIds, $statusType, FALSE, $result);
+      }
+
+      // calculates overdue activities which does not have any activity category
+      calculate_activities_for_category(NULL, $ids, $statusTypes['incomplete'], $statusType, TRUE, $result);
     }
     // Unread email activity count
     if (in_array('unread_email_count', $toReturn)) {
@@ -235,6 +250,39 @@ function civicrm_api3_case_getdetails($params) {
   return $resultMetadata + $result;
 }
 
+/**
+ * Calculates the number of activities for the given category
+ *
+ * @param {String} $category
+ * @param {Array} $ids
+ * @param {String} $statusTypeIds
+ * @param {String} $statusType
+ * @param {Boolean} $isOverdue
+ * @param {Array} $result
+ */
+function calculate_activities_for_category($category, $ids, $statusTypeIds, $statusType, $isOverdue, &$result) {
+  $isOverdueCondition = $isOverdue ? "AND a.activity_date_time < NOW()" : "";
+  $categoryCondition = empty($category) ? "IS NULL" : "LIKE '%$category%'";
+
+  $query = "SELECT COUNT(a.id) as count, ca.case_id
+  FROM civicrm_activity a, civicrm_case_activity ca
+  WHERE ca.activity_id = a.id AND a.is_current_revision = 1 AND a.is_test = 0 AND ca.case_id IN (" . implode(',', $ids) . ")
+  AND a.activity_type_id IN (SELECT value FROM civicrm_option_value WHERE grouping "
+  . $categoryCondition ." AND option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'activity_type'))
+  ". $isOverdueCondition ."
+  AND is_current_revision = 1
+  AND is_deleted = 0
+  AND a.status_id IN ($statusTypeIds)
+  GROUP BY ca.case_id";
+
+  $dao = CRM_Core_DAO::executeQuery($query);
+
+  while ($dao->fetch()) {
+    $categoryName = empty($category) ? 'none' : $category;
+    $statusTypeName = $isOverdue ? "overdue" : $statusType;
+    $result['values'][$dao->case_id]['category_count'][$categoryName][$statusTypeName] = (int) $dao->count;
+  }
+}
 /**
  * Support extra sorting in case.getdetails.
  *
@@ -312,4 +360,109 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
   }
 
   return $sql;
+}
+
+/**
+ * Filters cases by contacts related to the case and their relationship types.
+ *
+ * @param CRM_Utils_SQL_Select $sql a reference to the SQL object.
+ * @param array $params as provided by the original api action.
+ */
+function _civicrm_api3_case_getdetails_handle_role_filters ($sql, $params) {
+  $hasRole = $params['has_role'];
+  $canBeAClient = !isset($hasRole['can_be_client']) || $hasRole['can_be_client'];
+  $hasOtherRolesThanClient = isset($hasRole['role_type']);
+  $isAllCaseRolesTrue = $hasRole['all_case_roles_selected'];
+  $roleSubQuery = new CRM_Utils_SQL_Select('civicrm_case');
+
+  $roleSubQuery->select('civicrm_case.id');
+  $roleSubQuery->groupBy('civicrm_case.id');
+
+  if ($canBeAClient) {
+    _civicrm_api3_case_getdetails_join_client($roleSubQuery, $hasRole);
+
+    if ($hasOtherRolesThanClient || $isAllCaseRolesTrue) {
+      _civicrm_api3_case_getdetails_join_relationships($roleSubQuery, $hasRole, [
+        'joinType' => 'LEFT JOIN',
+      ]);
+
+      $roleSubQuery->where('case_relationship.case_id IS NOT NULL
+      OR case_client.case_id IS NOT NULL');
+    } else {
+      $roleSubQuery->where('case_client.case_id IS NOT NULL');
+    }
+  } else {
+    _civicrm_api3_case_getdetails_join_relationships($roleSubQuery, $hasRole, [
+      'joinType' => 'JOIN',
+    ]);
+  }
+
+  $roleSubQueryString = $roleSubQuery->toSql();
+
+  $sql->join('case_roles', "
+    JOIN ($roleSubQueryString) AS case_roles
+    ON case_roles.id = a.id
+  ");
+}
+
+/**
+ * Joins the given SQL object with the case clients table.
+ *
+ * @param CRM_Utils_SQL_Select $sql the SQL object reference
+ * @param array $params list of filters to pass to the client join.
+ */
+function _civicrm_api3_case_getdetails_join_client ($sql, $params) {
+  _civicase_prepare_param_for_filtering($params, 'contact');
+
+  $contactFilter = CRM_Core_DAO::createSQLFilter('case_client.contact_id', $params['contact']);
+
+  $sql->join('case_client', "
+    LEFT JOIN civicrm_case_contact AS case_client
+    ON case_client.case_id = civicrm_case.id
+    AND $contactFilter
+  ");
+}
+
+/**
+ * Joins the given SQL object with the relationships table.
+ *
+ * @param CRM_Utils_SQL_Select $sql the SQL object reference
+ * @param array $params list of filters to pass to the relationship join.
+ */
+function _civicrm_api3_case_getdetails_join_relationships ($sql, $params, $options = []) {
+  _civicase_prepare_param_for_filtering($params, 'contact');
+
+  $contactFilter = CRM_Core_DAO::createSQLFilter('case_relationship.contact_id_b', $params['contact']);
+  $joinClause = "
+    {$options['joinType']} civicrm_relationship AS case_relationship
+    ON case_relationship.case_id = civicrm_case.id
+    AND case_relationship.is_active = 1
+    AND $contactFilter
+  ";
+
+  if(!empty($params['role_type'])) {
+    _civicase_prepare_param_for_filtering($params, 'role_type');
+
+    $roleTypeFilter = CRM_Core_DAO::createSQLFilter('case_relationship.relationship_type_id', $params['role_type']);
+    $joinClause .= "AND $roleTypeFilter";
+  }
+
+  $sql->join('civicrm_relationship', $joinClause);
+}
+
+/**
+ * Corrects the param structure if not organized using the array notation.
+ *   From ['paramName' => 'value']
+ *   To ['paramName' => ['=' => 'value']]
+ * The later is the expected format when using `CRM_Core_DAO::createSQLFilter`.
+ *
+ * @param array $params the list of params as provided by the action.
+ * @param string $paramName the name of the specific parameter to fix.
+ */
+function _civicase_prepare_param_for_filtering (&$params, $paramName) {
+  if (!is_array($params[$paramName])) {
+    $params[$paramName] = [
+      '=' => $params[$paramName]
+    ];
+  }
 }
