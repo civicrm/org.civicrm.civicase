@@ -12,24 +12,28 @@ class CRM_Civicase_Form_CaseWebforms extends CRM_Admin_Form {
    */
   public function buildQuickForm() {
     parent::buildQuickForm();
-    
+
     $webforms = civicrm_api3('Case', 'getwebforms');
     $errorMsg = null;
-    if (isset($webforms['values'])) {
+    $webformids = array();
+
+    if (isset($webforms['values']) && count($webforms['values'])) {
       foreach ($webforms['values'] as $item) {
         $webformids[] = 'webforms_'.$item['nid'];
         $this->add('checkbox', 'webforms_'.$item['nid'], $item['title']);
         $this->webforms[$item['nid']] = $item;
       }
     }
-    else if(isset($webforms['is_error'])) {
-      $errorMsg = $webforms['error_message'];
+
+    if (isset($webforms['warning_message'])) {
+      $errorMsg = $webforms['warning_message'];
     }
-    else {
+    elseif (count($webformids) == 0) {
       $errorMsg = ts('No Webforms with cases exists!');
     }
+
     $this->assign('nids', $webformids);
-    $this->assign('error', $errorMsg);
+    $this->assign('errorMsg', $errorMsg);
 
     $this->addButtons(
       array(

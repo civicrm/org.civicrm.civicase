@@ -114,7 +114,12 @@
   /* stylelint-disable selector-max-compound-selectors, max-nesting-depth */
   .dropdown-menu {
     > li {
-      position: relative;
+      a {
+        max-width: 200px;
+        overflow: hidden;
+        position: relative;
+        text-overflow: ellipsis;
+      }
 
       > .dropdown-menu.sub-menu {
         left: -100%;
