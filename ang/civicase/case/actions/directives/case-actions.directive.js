@@ -1,7 +1,7 @@
 (function (angular, $, _) {
   var module = angular.module('civicase');
 
-  module.directive('civicaseCaseActions', function (dialogService, PrintMergeCaseAction) {
+  module.directive('civicaseCaseActions', function ($window, dialogService, PrintMergeCaseAction) {
     return {
       restrict: 'A',
       templateUrl: '~/civicase/case/actions/directives/case-actions.directive.html',
@@ -78,7 +78,7 @@
               title: action.title,
               buttons: [{
                 text: ts('Save'),
-                icons: {primary: 'fa-check'},
+                icons: { primary: 'fa-check' },
                 click: editTagModalClickEvent
               }]
             });
@@ -91,7 +91,7 @@
               var values = [];
 
               function tagParams (tagIds) {
-                var params = {entity_id: item.id, entity_table: 'civicrm_case'};
+                var params = { entity_id: item.id, entity_table: 'civicrm_case' };
 
                 _.each(tagIds, function (id, i) {
                   params['tag_id_' + i] = id;
@@ -137,19 +137,19 @@
             switch (mode) {
               case 'delete':
                 trash = 0;
-                msg = cases.length === 1 ? ts('Permanently delete selected case? This cannot be undone.') : ts('Permanently delete %1 cases? This cannot be undone.', {'1': cases.length});
+                msg = cases.length === 1 ? ts('Permanently delete selected case? This cannot be undone.') : ts('Permanently delete %1 cases? This cannot be undone.', { '1': cases.length });
                 break;
 
               case 'restore':
-                msg = cases.length === 1 ? ts('Undelete selected case?') : ts('Undelete %1 cases?', {'1': cases.length});
+                msg = cases.length === 1 ? ts('Undelete selected case?') : ts('Undelete %1 cases?', { '1': cases.length });
                 break;
 
               default:
-                msg = cases.length === 1 ? ts('This case and all associated activities will be moved to the trash.') : ts('%1 cases and all associated activities will be moved to the trash.', {'1': cases.length});
+                msg = cases.length === 1 ? ts('This case and all associated activities will be moved to the trash.') : ts('%1 cases and all associated activities will be moved to the trash.', { '1': cases.length });
                 mode = 'delete';
             }
 
-            CRM.confirm({title: action.title, message: msg})
+            CRM.confirm({ title: action.title, message: msg })
               .on('crmConfirm:yes', function () {
                 var calls = [];
 
@@ -172,9 +172,9 @@
               msg += '<br />' + ts('Warning: selected cases belong to different clients.');
             }
 
-            CRM.confirm({title: action.title, message: msg})
+            CRM.confirm({ title: action.title, message: msg })
               .on('crmConfirm:yes', function () {
-                $scope.refresh([['Case', 'merge', {case_id_1: cases[0].id, case_id_2: cases[1].id}]]);
+                $scope.refresh([['Case', 'merge', { case_id_1: cases[0].id, case_id_2: cases[1].id }]]);
               });
           },
 
@@ -210,7 +210,7 @@
               title: action.title,
               message: msg,
               open: function () {
-                $('input[name=change_case_status]', this).crmSelect2({data: statuses});
+                $('input[name=change_case_status]', this).crmSelect2({ data: statuses });
                 CRM.wysiwyg.create('#change_case_status_details').then(function () {
                   alignDialogBoxCenter(dialog);
                 });
@@ -225,11 +225,11 @@
                   _.each(cases, function (item) {
                     var subject = ts('Case status changed from %1 to %2', {
                       1: item.status,
-                      2: _.result(_.find(statuses, {id: status}), 'text')
+                      2: _.result(_.find(statuses, { id: status }), 'text')
                     });
 
-                    calls.push(['Case', 'create', {id: item.id, status_id: status}]);
-                    calls.push(['Activity', 'create', {case_id: item.id, status_id: 'Completed', activity_type_id: 'Change Case Status', subject: subject, details: details}]);
+                    calls.push(['Case', 'create', { id: item.id, status_id: status }]);
+                    calls.push(['Activity', 'create', { case_id: item.id, status_id: 'Completed', activity_type_id: 'Change Case Status', subject: subject, details: details }]);
                   });
 
                   $scope.refresh(calls);
@@ -284,7 +284,7 @@
                 action: 'add',
                 reset: 1,
                 cid: case1.client[0].contact_id,
-                atype: _.findKey(activityTypes, {name: 'Link Cases'}),
+                atype: _.findKey(activityTypes, { name: 'Link Cases' }),
                 caseid: case1.id
               }
             };
@@ -309,23 +309,23 @@
             win.focus();
           },
 
+          /**
+           * Opens the Webform in a new tab
+           *
+           * @param {Object} selectedCase
+           * @param {String} path
+           * @param {Int/String} clientId
+           */
           gotoWebform: function (selectedCase, path, clientId) {
-            var url;
-            if (clientId) {
-              clientId = 'cid' + clientId;
-              url = CRM.url(path, {
-                case1: selectedCase.id,
-                [clientId]: selectedCase.client[0].contact_id
-              });
-            }
-            else {
-              url = CRM.url(path, {
-                case1: selectedCase.id
-              });
-            }
-            var win = window.open(url, '_blank');
+            var window;
+            var urlObject = { case1: selectedCase.id };
 
-            win.focus();
+            if (clientId) {
+              urlObject['cid' + clientId] = selectedCase.client[0].contact_id;
+            }
+
+            window = $window.open(CRM.url(path, urlObject), '_blank');
+            window.focus();
           },
 
           lockCases: function (currentCase) {
@@ -368,14 +368,14 @@
         // Special actions when viewing deleted cases
         if (cases.length && cases[0].is_deleted) {
           $scope.caseActions = [
-            {action: 'deleteCases(cases, "delete")', title: ts('Delete Permanently')},
-            {action: 'deleteCases(cases, "restore")', title: ts('Restore from Trash')}
+            { action: 'deleteCases(cases, "delete")', title: ts('Delete Permanently') },
+            { action: 'deleteCases(cases, "restore")', title: ts('Restore from Trash') }
           ];
         } else {
           $scope.caseActions = _.cloneDeep(CRM.civicase.caseActions);
 
           if (!isBulkMode) {
-            _.remove($scope.caseActions, {action: 'changeStatus(cases)'});
+            _.remove($scope.caseActions, { action: 'changeStatus(cases)' });
           }
         }
       });

@@ -203,12 +203,10 @@ if (isset($webformsToDisplay)) {
       }
       $node = node_load($webform['nid']);
       $data = $node->webform_civicrm['data'];
+      $client = 0;
       if (isset($data['case'][1]['case'][1]['client_id'])) {
         $clients = $data['case'][1]['case'][1]['client_id'];
         $client = reset($clients);
-      }
-      else {
-        $client = 0;
       }
       $items[] = array(
         'title' => $webform['title'],
