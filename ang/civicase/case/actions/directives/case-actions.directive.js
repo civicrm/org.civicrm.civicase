@@ -24,7 +24,7 @@
       var ts = CRM.ts('civicase');
       var isBulkMode = attributes.isBulkMode;
 
-      $scope.isHasSubMenu = function (action) {
+      $scope.hasSubMenu = function (action) {
         return (action.items && action.items.length);
       };
 

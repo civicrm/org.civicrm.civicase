@@ -211,7 +211,7 @@ if (isset($webformsToDisplay)) {
         'icon' => 'fa-link',
       );
     }
-    $options['webforms'] = array(
+    $options['caseActions'][] = array(
       'title' => ts('Webforms'),
       'action' => '',
       'icon' => 'fa-file-text-o',
