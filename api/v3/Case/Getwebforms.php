@@ -11,7 +11,6 @@
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
 function _civicrm_api3_case_getwebforms_spec(&$spec) {
-  //_civicrm_api3_contact_get_spec($spec);
 }
 
 /**
@@ -35,7 +34,9 @@ function civicrm_api3_case_getwebforms($params) {
   }
   if (!module_exists('webform_civicrm')) {
     $out = civicrm_api3_create_success(array());
-    $out['warning_message'] = 'webform_civicrm module is required!';
+    $out['warning_message'] = '<p>Webform CiviCRM Drupal module is not installed</p>
+      <ul><li>In order to link Drupal Webforms directly from CiviCase you need to install the following Drupal module: 
+      <a href="https://www.drupal.org/project/webform_civicrm">webform_civicrm</a>.</li></ul>';
     return $out;
   }
   $query = "SELECT a.nid, a.data, n.title

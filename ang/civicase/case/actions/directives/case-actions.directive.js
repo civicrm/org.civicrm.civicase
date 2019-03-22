@@ -310,11 +310,19 @@
           },
 
           gotoWebform: function (selectedCase, path, clientId) {
-            clientId = 'cid' + clientId;
-            var url = CRM.url(path, {
-              case1: selectedCase.id,
-              [clientId]: selectedCase.client[0].contact_id
-            });
+            var url;
+            if (clientId) {
+              clientId = 'cid' + clientId;
+              url = CRM.url(path, {
+                case1: selectedCase.id,
+                [clientId]: selectedCase.client[0].contact_id
+              });
+            }
+            else {
+              url = CRM.url(path, {
+                case1: selectedCase.id
+              });
+            }
             var win = window.open(url, '_blank');
 
             win.focus();
