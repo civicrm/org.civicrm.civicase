@@ -18,6 +18,12 @@
     z-index: 1;
   }
 
+  thead {
+    tr:nth-child(1) {
+      background-color: transparent;
+    }
+  }
+
   thead .btn {
     font-size: 16px;
     text-transform: none;
@@ -64,6 +70,11 @@
     display: none;
   }
 
+  tr {
+    background-color: $crm-white;
+    padding: 0 5px;
+  }
+
   tr:nth-child(0n+2) th,
   tbody {
     background: $crm-white;
@@ -71,6 +82,8 @@
 
   // week days header
   tr:nth-child(2n) {
+    border-top-left-radius: $card-border-radius;
+    border-top-right-radius: $card-border-radius;
     margin-top: -3px;
   }
 
@@ -102,6 +115,8 @@
   }
 
   tbody {
+    border-bottom-left-radius: $card-border-radius;
+    border-bottom-right-radius: $card-border-radius;
     box-shadow: $box-shadow-block;
     min-height: 205px;
   }
@@ -130,10 +145,10 @@
   }
 
   .uib-day .btn.active {
-    height: 23px;
-    margin-top: 5px;
+    height: 28px;
+    margin-top: 2px;
     padding: 0;
-    width: 23px;
+    width: 28px;
   }
 
   .uib-day .material-icons {

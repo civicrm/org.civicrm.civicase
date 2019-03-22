@@ -79,14 +79,16 @@
     margin-top: 5px;
   }
 
-  .civicase__contact-name-container {
-    span {
-      line-height: 0;
-    }
-
+  .civicase__contact-card--client,
+  .civicase__contact-card--manager {
     .material-icons {
-      vertical-align: middle;
+      line-height: 1;
     }
+  }
+
+  .civicase__contact-card--manager {
+    position: relative;
+    top: 2px;
   }
 
   .list-group-item-info {

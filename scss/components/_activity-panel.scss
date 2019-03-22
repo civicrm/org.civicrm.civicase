@@ -34,6 +34,11 @@
     line-height: 25px;
   }
 
+  .civicase__tooltip {
+    flex: 1;
+    min-width: 0;
+  }
+
   .civicase__activity__right-container {
     .civicase__activity-date {
       font-size: $font-size-base;
@@ -98,6 +103,10 @@
     display: none;
   }
 
+  .crm-activity-form-block-separation {
+    display: none;
+  }
+
   .form-layout,
   .crm-accordion-body {
     tbody {
@@ -127,6 +136,10 @@
 
         .label {
           padding-left: 15px !important;
+        }
+
+        .view-value {
+          padding-right: 15px !important;
         }
       }
     }
@@ -158,7 +171,8 @@
     position: absolute;
     width: 100%;
 
-    .edit {
+    .edit,
+    .cancel {
       @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
     }
 

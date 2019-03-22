@@ -9,6 +9,10 @@
     width: 100%;
     z-index: 10;
   }
+
+  .nav.affix-top {
+    position: relative;
+  }
 }
 
 .civicase__dashboard-activites-feed {

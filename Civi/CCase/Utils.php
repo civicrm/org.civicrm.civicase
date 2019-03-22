@@ -6,12 +6,14 @@ namespace Civi\CCase;
 class Utils {
 
   /**
-   * Gets a list of manager roles for each case type.
+   * Gets a list of case roles (relationship) types foe each case type.
+   *
+   * @param String $type of relationship.
    *
    * @return array
    *   [caseTypeId => relationshipTypeId]
    */
-  public static function getCaseManagerRelationshipTypes() {
+  public static function getRelationshipTypesListByCaseRole($roleName) {
     $ret = array();
     $caseTypes = civicrm_api3('CaseType', 'get', array(
       'options' => array('limit' => 0),
@@ -22,31 +24,49 @@ class Utils {
       'return' => array('name_b_a'),
     ));
     $relationshipTypes = \CRM_Utils_Array::rekey($relationshipTypes['values'], 'name_b_a');
+
     foreach ($caseTypes['values'] as $caseType) {
+      $caseTypeToCaseRolesList = array();
       foreach ($caseType['definition']['caseRoles'] as $role) {
-        if (!empty($role['manager'])) {
-          $ret[$caseType['id']] = $relationshipTypes[$role['name']]['id'];
+        if ($roleName == 'involved') {
+          $caseTypeToCaseRolesList[] =  $relationshipTypes[$role['name']]['id'];
+        } else {
+          if (!empty($role[$roleName])) {
+            $caseTypeToCaseRolesList[] = $relationshipTypes[$role['name']]['id'];
+          }
         }
       }
+      $ret[$caseType['id']] = $caseTypeToCaseRolesList;
     }
+
     return $ret;
   }
 
+
   /**
-   * Add a case_manager join
+   * Adds a join with relationships
+   * This is done to get all records where the relationship is associated with a case.
    *
    * @param \CRM_Utils_SQL_Select $sql
+   * @param String $relationship
    */
-  public static function joinOnManager($sql) {
-    $caseTypeManagers = self::getCaseManagerRelationshipTypes();
-    $managerTypeClause = array();
-    foreach ($caseTypeManagers as $caseTypeId => $relationshipTypeId) {
-      $managerTypeClause[] = "(a.case_type_id = $caseTypeId AND manager_relationship.relationship_type_id = $relationshipTypeId)";
+  public static function joinOnRelationship($sql, $relationship) {
+    $caseTypeToRelationshipList = self::getRelationshipTypesListByCaseRole($relationship);
+    $relationshipTypeClause = array();
+
+    foreach ($caseTypeToRelationshipList as $caseTypeId => $relationshipTypeIds) {
+      foreach ($relationshipTypeIds as $index => $relationshipTypeId) {
+        $relationshipTypeClause[] = "(a.case_type_id = {$caseTypeId} AND {$relationship}_relationship.relationship_type_id = {$relationshipTypeId})";
+      }
     }
-    $managerTypeClause = implode(' OR ', $managerTypeClause);
-    $sql->join('ccc', 'LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id');
-    $sql->join('manager_relationship', "LEFT JOIN civicrm_relationship AS manager_relationship ON ccc.contact_id = manager_relationship.contact_id_a AND manager_relationship.is_active AND ($managerTypeClause) AND manager_relationship.case_id = a.id");
-    $sql->join('manager', 'LEFT JOIN civicrm_contact AS manager ON manager_relationship.contact_id_b = manager.id AND manager.is_deleted <> 1');
+    // Creates  OR relationship string with the casetype <-> relationship list.
+    $relationshipTypeClause = implode(' OR ', $relationshipTypeClause);
+    // Selects uniques cases<->contact link/relationship for each case
+    $sql->join("ccc", "LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id");
+    // Joins (get records) where the relationship type clause (case-type <-> relationship type)  lies in relation a to b)
+    $sql->join("{$relationship}_relationship", "LEFT JOIN civicrm_relationship AS {$relationship}_relationship ON ccc.contact_id = {$relationship}_relationship.contact_id_a AND {$relationship}_relationship.is_active AND ({$relationshipTypeClause}) AND {$relationship}_relationship.case_id = a.id");
+    // Join where selected contact lie in relationship b to a  (case_manager)
+    $sql->join("{$relationship}", "LEFT JOIN civicrm_contact AS {$relationship} ON {$relationship}_relationship.contact_id_b = {$relationship}.id AND {$relationship}.is_deleted <> 1");
   }
 
   /**
