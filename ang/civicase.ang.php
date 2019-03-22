@@ -203,15 +203,18 @@ if (isset($webformsToDisplay)) {
       }
       $node = node_load($webform['nid']);
       $data = $node->webform_civicrm['data'];
-      $clients = $data['case'][1]['case'][1]['client_id'];
-      $client = reset($clients);
+      $client = 0;
+      if (isset($data['case'][1]['case'][1]['client_id'])) {
+        $clients = $data['case'][1]['case'][1]['client_id'];
+        $client = reset($clients);
+      }
       $items[] = array(
         'title' => $webform['title'],
         'action' => 'gotoWebform(cases[0], "' . $webform['path'] . '", '.$client.')',
         'icon' => 'fa-link',
       );
     }
-    $options['webforms'] = array(
+    $options['caseActions'][] = array(
       'title' => ts('Webforms'),
       'action' => '',
       'icon' => 'fa-file-text-o',
