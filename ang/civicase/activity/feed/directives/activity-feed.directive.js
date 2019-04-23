@@ -368,10 +368,17 @@
         ],
         options: options
       };
+      var chainedApiParams = {
+        activity_id :'$value.id',
+        activity_type_id :'$value.activity_type_id',
+        source_record_id: '$value.source_record_id',
+        case_id :'$value.case_id'
+      };
       var params = {
         is_current_revision: 1,
         is_deleted: 0,
         is_test: 0,
+        'api.Activity.getactionlinks' : chainedApiParams,
         options: {}
       };
 
