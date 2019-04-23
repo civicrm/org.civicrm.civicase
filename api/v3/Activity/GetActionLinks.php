@@ -1,5 +1,7 @@
 <?php
 
+const ACTIONS_DEFINED_BY_CIVICASE = ['Delete', 'File on Case', 'Edit'];
+
 /**
  * Activity.GetActionLinks API specification (optional)
  * This is used for documentation and validation.
@@ -47,18 +49,18 @@ function _civicrm_api3_activity_getActivityActionLinks($params) {
 
   $actionMask = array_sum(array_keys($actionLinks));
 
-  $seqLinks = array();
+  $seqLinks = [];
   foreach ($actionLinks as $bit => $link) {
     $link['bit'] = $bit;
     $seqLinks[] = $link;
   }
 
-  $values = array(
+  $values = [
     'id' => $params['activity_id'],
     'cid' => CRM_Core_Session::getLoggedInContactID(),
     'cxt' => '',
     'caseid' => CRM_Utils_Array::value('case_id', $params),
-  );
+  ];
 
   //Invoke hook links for activity tab rows.
   CRM_Utils_Hook::links(
@@ -84,7 +86,7 @@ function _civicrm_api3_activity_GetActionLinks_processLinks($activityActionLinks
   foreach($activityActionLinks as $id => $link) {
 
     //remove action links already added by civicase
-    if (in_array($link['name'], ['Delete', 'File on Case', 'Edit'])) {
+    if (in_array($link['name'], ACTIONS_DEFINED_BY_CIVICASE )) {
       unset($activityActionLinks[$id]);
       continue;
     }
