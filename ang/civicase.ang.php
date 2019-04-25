@@ -235,6 +235,10 @@ foreach (CRM_Contact_Task::$_tasks as $id => $value) {
 $options['allowMultipleCaseClients'] = (bool) Civi::settings()->get('civicaseAllowMultipleClients');
 $options['allowCaseLocks'] = (bool) Civi::settings()->get('civicaseAllowCaseLocks');
 
+// Retrieve civicase webform URL
+$allowCaseWebform = Civi::settings()->get('civicaseAllowCaseWebform');
+$options['newCaseWebformUrl'] = $allowCaseWebform ? Civi::settings()->get('civicaseWebformUrl') : NULL;
+
 if (!function_exists('glob_recursive')) {
   /**
    * Recursive Glob function

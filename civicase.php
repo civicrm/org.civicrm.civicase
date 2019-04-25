@@ -663,6 +663,8 @@ function civicase_civicrm_preProcess($formName, &$form) {
   if ($formName == 'CRM_Admin_Form_Setting_Case') {
     $settings = $form->getVar('_settings');
     $settings['civicaseAllowCaseLocks'] = CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME;
+    $settings['civicaseAllowCaseWebform'] = CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME;
+    $settings['civicaseWebformUrl'] = CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME;
 
     $form->setVar('_settings', $settings);
   }

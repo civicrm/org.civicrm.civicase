@@ -23,6 +23,11 @@
     <i class="material-icons">filter_none</i> {{ ts('Copy to Case') }}
   </a>
 </li>
+<li ng-repeat="link in selectedActivities[0]['api.Activity.getactionlinks']">
+  <a ng-href="{{ link.url }}" class="{{ link.class }}">
+    <i class="material-icons">filter_none</i>{{ link.name }}
+  </a>
+</li>
 <li ng-if="mode === 'case-activity-bulk-action'">
   <a href ng-click="manageTags('add', selectedActivities)">
     <i class="material-icons">add_circle</i> {{ ts('Tag - add to activities') }}
