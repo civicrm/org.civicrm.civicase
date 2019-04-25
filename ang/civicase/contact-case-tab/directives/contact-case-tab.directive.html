@@ -2,10 +2,16 @@
   <!-- Added for SEO purpose (This will be hidden through css) -->
   <h1 crm-page-title class="element-invisible">Related cases to the user</h1>
   <div class="civicase__contact-cases-tab clearfix">
-    <a ng-if="checkPerm('add cases')"
+    <a ng-if="checkPerm('add cases') && !newCaseWebformUrl"
       class="btn-primary btn civicase__contact-cases-tab-add"
       ng-href="{{ 'civicrm/case/add' | civicaseCrmUrl:{civicase_cid: contactId, reset: 1, action: 'add', context: 'standalone'} }}"
       crm-popup-form-success="refresh()">
+      <i class="material-icons">add_circle</i>
+      {{ ts('Add case') }}
+    </a>
+    <a ng-if="checkPerm('add cases') && newCaseWebformUrl"
+       class="btn-primary btn"
+       ng-href="{{ newCaseWebformUrl | civicaseCrmUrl:{cid: contactId} }}">
       <i class="material-icons">add_circle</i>
       {{ ts('Add case') }}
     </a>
