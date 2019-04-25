@@ -237,11 +237,7 @@ $options['allowCaseLocks'] = (bool) Civi::settings()->get('civicaseAllowCaseLock
 
 // Retrieve civicase webform URL
 $allowCaseWebform = Civi::settings()->get('civicaseAllowCaseWebform');
-$webformURl = NULL;
-if ($allowCaseWebform) {
-  $webformURl = Civi::settings()->get('civicaseWebformUrl');
-}
-$options['webformUrl'] = $webformURl;
+$options['newCaseWebformUrl'] = $allowCaseWebform ? Civi::settings()->get('civicaseWebformUrl') : NULL;
 
 if (!function_exists('glob_recursive')) {
   /**
