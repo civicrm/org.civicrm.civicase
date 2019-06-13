@@ -18,7 +18,7 @@
   <version>1.0</version>
   <develStage>alpha</develStage>
   <compatibility>
-    <ver>4.7</ver>
+    <ver>5.13</ver>
   </compatibility>
   <comments></comments>
   <classloader>
@@ -27,7 +27,4 @@
   <civix>
     <namespace>CRM/Civicase</namespace>
   </civix>
-  <requires>
-    <ext>org.civicrm.shoreditch</ext>
-  </requires>
 </extension>
