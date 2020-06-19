@@ -13,7 +13,7 @@ Civi::resources()
     ),
   ));
 // The following changes are only relevant to the full-page app
-if (CRM_Utils_System::getUrlPath() == 'civicrm/case/a') {
+if (CRM_Utils_System::currentPath() === 'civicrm/case/a') {
   // Add shoreditch custom css if not already present
   if (!civicrm_api3('Setting', 'getvalue', array('name' => "customCSSURL"))) {
     Civi::resources()
