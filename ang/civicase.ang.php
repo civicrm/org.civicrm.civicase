@@ -22,15 +22,15 @@ if (CRM_Utils_System::currentPath() === 'civicrm/case/a') {
   CRM_Utils_System::resetBreadCrumb();
   $breadcrumb = array(
     array(
-      'title' => ts('Home'),
+      'title' => E::ts('Home'),
       'url' => CRM_Utils_System::url(),
     ),
     array(
-      'title' => ts('CiviCRM'),
+      'title' => E::ts('CiviCRM'),
       'url' => CRM_Utils_System::url('civicrm', 'reset=1'),
     ),
     array(
-      'title' => ts('Case Dashboard'),
+      'title' => E::ts('Case Dashboard'),
       'url' => CRM_Utils_System::url('civicrm/case/a/#/case'),
     ),
   );
@@ -120,45 +120,45 @@ $options['tagsets'] = CRM_Utils_Array::value('values', civicrm_api3('Tag', 'get'
 // Bulk actions for case list - we put this here so it can be modified by other extensions
 $options['caseActions'] = array(
   array(
-    'title' => ts('Change Case Status'),
+    'title' => E::ts('Change Case Status'),
     'action' => 'changeStatus(cases)',
     'icon' => 'fa-pencil-square-o',
   ),
   array(
-    'title' => ts('Edit Tags'),
+    'title' => E::ts('Edit Tags'),
     'action' => 'editTags(cases[0])',
     'icon' => 'fa-tags',
     'number' => 1,
   ),
   array(
-    'title' => ts('Print Case'),
+    'title' => E::ts('Print Case'),
     'action' => 'print(cases[0])',
     'number' => 1,
     'icon' => 'fa-print',
   ),
   array(
-    'title' => ts('Email Case Manager'),
+    'title' => E::ts('Email Case Manager'),
     'action' => 'emailManagers(cases)',
     'icon' => 'fa-envelope-o',
   ),
   array(
-    'title' => ts('Print/Merge Document'),
+    'title' => E::ts('Print/Merge Document'),
     'action' => 'printMerge(cases)',
     'icon' => 'fa-file-pdf-o',
   ),
   array(
-    'title' => ts('Export Cases'),
+    'title' => E::ts('Export Cases'),
     'action' => 'exportCases(cases)',
     'icon' => 'fa-file-excel-o',
   ),
   array(
-    'title' => ts('Link Cases'),
+    'title' => E::ts('Link Cases'),
     'action' => 'linkCases(cases[0])',
     'number' => 1,
     'icon' => 'fa-link',
   ),
   array(
-    'title' => ts('Link 2 Cases'),
+    'title' => E::ts('Link 2 Cases'),
     'action' => 'linkCases(cases[0], cases[1])',
     'number' => 2,
     'icon' => 'fa-link',
@@ -166,7 +166,7 @@ $options['caseActions'] = array(
 );
 if (CRM_Core_Permission::check('administer CiviCase')) {
   $options['caseActions'][] = array(
-    'title' => ts('Merge 2 Cases'),
+    'title' => E::ts('Merge 2 Cases'),
     'number' => 2,
     'action' => 'mergeCases(cases)',
     'icon' => 'fa-compress',
@@ -174,7 +174,7 @@ if (CRM_Core_Permission::check('administer CiviCase')) {
 }
 if (CRM_Core_Permission::check('delete in CiviCase')) {
   $options['caseActions'][] = array(
-    'title' => ts('Delete Case'),
+    'title' => E::ts('Delete Case'),
     'action' => 'deleteCases(cases)',
     'icon' => 'fa-trash',
   );

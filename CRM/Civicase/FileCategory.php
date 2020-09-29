@@ -15,27 +15,27 @@ class CRM_Civicase_FileCategory {
   public static function getCategoryLabels() {
     return array(
       'archive' => array(
-        'text' => ts('Archive'),
+        'text' => E::ts('Archive'),
         'icon' => 'fa-file-archive-o',
       ),
       'doc' => array(
-        'text' => ts('Document'),
+        'text' => E::ts('Document'),
         'icon' => 'fa-file-text-o',
       ),
       'media' => array(
-        'text' => ts('Media'),
+        'text' => E::ts('Media'),
         'icon' => 'fa-file-image-o',
       ),
       'present' => array(
-        'text' => ts('Presentation'),
+        'text' => E::ts('Presentation'),
         'icon' => 'fa-file-powerpoint-o',
       ),
       'sheet' => array(
-        'text' => ts('Spreadsheet'),
+        'text' => E::ts('Spreadsheet'),
         'icon' => 'fa-file-excel-o',
       ),
       'other' => array(
-        'text' => ts('Other'),
+        'text' => E::ts('Other'),
         'icon' => 'fa-file-o',
       ),
     );

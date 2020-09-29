@@ -58,31 +58,31 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     // Create activity types
     $this->addOptionValue(array(
       'option_group_id' => 'activity_type',
-      'label' => ts('Alert'),
+      'label' => E::ts('Alert'),
       'name' => 'Alert',
       'grouping' => 'alert',
       'is_reserved' => 0,
-      'description' => ts('Alerts to display in cases'),
+      'description' => E::ts('Alerts to display in cases'),
       'component_id' => 'CiviCase',
       'icon' => 'fa-exclamation',
     ));
     $this->addOptionValue(array(
       'option_group_id' => 'activity_type',
-      'label' => ts('File Upload'),
+      'label' => E::ts('File Upload'),
       'name' => 'File Upload',
       // 'grouping' => '',
       'is_reserved' => 0,
-      'description' => ts('Add files to a case'),
+      'description' => E::ts('Add files to a case'),
       'component_id' => 'CiviCase',
       'icon' => 'fa-file',
     ));
     $this->addOptionValue(array(
       'option_group_id' => 'activity_type',
-      'label' => ts('Remove Client From Case'),
+      'label' => E::ts('Remove Client From Case'),
       'name' => 'Remove Client From Case',
       'grouping' => 'system',
       'is_reserved' => 0,
-      'description' => ts('Client removed from multi-client case'),
+      'description' => E::ts('Client removed from multi-client case'),
       'component_id' => 'CiviCase',
       'icon' => 'fa-user-times',
     ));
@@ -90,7 +90,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     // Create activity statuses
     $this->addOptionValue(array(
       'option_group_id' => 'activity_status',
-      'label' => ts('Unread'),
+      'label' => E::ts('Unread'),
       'name' => 'Unread',
       'grouping' => 'communication',
       'is_reserved' => 0,
@@ -98,7 +98,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     ));
     $this->addOptionValue(array(
       'option_group_id' => 'activity_status',
-      'label' => ts('Draft'),
+      'label' => E::ts('Draft'),
       'name' => 'Draft',
       'grouping' => 'communication',
       'is_reserved' => 0,
@@ -171,7 +171,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    */
   private function createManageCasesMenuItem() {
     $this->addNav(array(
-      'label' => ts('Manage Cases', array('domain' => 'org.civicrm.civicase')),
+      'label' => E::ts('Manage Cases', array('domain' => 'org.civicrm.civicase')),
       'name' => 'Manage Cases',
       'url' => 'civicrm/case/a/#/case/list',
       'permission' => 'access my cases and activities,access all cases and activities',
@@ -420,9 +420,9 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
   public function upgrade_4202() {
     $this->ctx->log->info('Planning update 4202'); // PEAR Log interface
 
-    $this->addTask(ts('Process first step'), 'processPart1', $arg1, $arg2);
-    $this->addTask(ts('Process second step'), 'processPart2', $arg3, $arg4);
-    $this->addTask(ts('Process second step'), 'processPart3', $arg5);
+    $this->addTask(E::ts('Process first step'), 'processPart1', $arg1, $arg2);
+    $this->addTask(E::ts('Process second step'), 'processPart2', $arg3, $arg4);
+    $this->addTask(E::ts('Process second step'), 'processPart3', $arg5);
     return TRUE;
   }
   public function processPart1($arg1, $arg2) { sleep(10); return TRUE; }
@@ -444,7 +444,7 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     $maxId = CRM_Core_DAO::singleValueQuery('SELECT coalesce(max(id),0) FROM civicrm_contribution');
     for ($startId = $minId; $startId <= $maxId; $startId += self::BATCH_SIZE) {
       $endId = $startId + self::BATCH_SIZE - 1;
-      $title = ts('Upgrade Batch (%1 => %2)', array(
+      $title = E::ts('Upgrade Batch (%1 => %2)', array(
         1 => $startId,
         2 => $endId,
       ));
