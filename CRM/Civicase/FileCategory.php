@@ -1,5 +1,7 @@
 <?php
 
+use CRM_Civicase_ExtensionUtil as E;
+
 /**
  * Class CRM_Civicase_FileCategory
  *

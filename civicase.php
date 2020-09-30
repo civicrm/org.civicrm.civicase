@@ -1,6 +1,7 @@
 <?php
 
 require_once 'civicase.civix.php';
+use CRM_Civicase_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_tabset().

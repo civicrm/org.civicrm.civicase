@@ -2,6 +2,9 @@
 // This file declares an Angular module which can be autoloaded
 // in CiviCRM. See also:
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
+
+use CRM_Civicase_ExtensionUtil as E;
+
 Civi::resources()
   ->addPermissions(array('administer CiviCase', 'administer CiviCRM',
     'access all cases and activities', 'add cases', 'basic case information'))

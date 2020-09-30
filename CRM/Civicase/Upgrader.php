@@ -1,5 +1,6 @@
 <?php
 
+use CRM_Civicase_ExtensionUtil as E;
 /**
  * Collection of upgrade steps.
  */

@@ -1,5 +1,5 @@
 <?php
-
+use CRM_Civicase_ExtensionUtil as E;
 /**
  * Implements helper methods to obtain list of cases and columns allowed to be
  * viewed on case lists for dashboard, searches and contacts.
