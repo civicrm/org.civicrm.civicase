@@ -4,7 +4,7 @@
   <item>
     <path>civicrm/case/a</path>
     <page_callback>CRM_Civicase_Page_CaseAngular</page_callback>
-    <access_arguments>access all cases and activities,access my cases and activities</access_arguments>
+    <access_arguments>access all cases and activities;access my cases and activities</access_arguments>
   </item>
   <item>
     <path>civicrm/case/contact-case-tab</path>
