@@ -18,21 +18,12 @@ class CRM_Civicase_Page_CaseAngular extends \CRM_Core_Page {
   public function run() {
     $loader = new \Civi\Angular\AngularLoader();
     $loader->setPageName('civicrm/case/a');
-    $loader->setModules(array('crmApp', 'civicase'));
-    $loader->load();
-    \Civi::resources()->addSetting(array(
-      'crmApp' => array(
-        'defaultRoute' => '/case/list',
-      ),
+    $loader->setModules(array('civicase'));
+    $loader->useApp(array(
+      'defaultRoute' => '/case/list',
     ));
+    $loader->load();
     return parent::run();
-  }
-
-  /**
-   * @inheritdoc
-   */
-  public function getTemplateFileName() {
-    return 'Civi/Angular/Page/Main.tpl';
   }
 
 }
