@@ -27,7 +27,4 @@
   <civix>
     <namespace>CRM/Civicase</namespace>
   </civix>
-  <requires>
-    <ext>org.civicrm.shoreditch</ext>
-  </requires>
 </extension>
