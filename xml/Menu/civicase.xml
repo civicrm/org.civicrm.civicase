@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <menu>
-  <!-- TODO: do we use comma or semicolon for boolean OR? -->
   <item>
     <path>civicrm/case/a</path>
     <page_callback>CRM_Civicase_Page_CaseAngular</page_callback>

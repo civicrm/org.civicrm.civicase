@@ -17,12 +17,13 @@ class CRM_Civicase_Page_CaseAngular extends \CRM_Core_Page {
    */
   public function run() {
     $loader = new \Civi\Angular\AngularLoader();
-    $loader->setPageName('civicrm/case/a');
-    $loader->setModules(array('civicase'));
-    $loader->useApp(array(
-      'defaultRoute' => '/case/list',
-    ));
-    $loader->load();
+    $loader
+      ->setPageName('civicrm/case/a')
+      ->setModules(['civicase'])
+      ->useApp([
+        'defaultRoute' => '/case/list',
+      ])
+      ->load();
     return parent::run();
   }
 
