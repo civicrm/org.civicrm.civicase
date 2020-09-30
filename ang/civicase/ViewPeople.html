@@ -41,10 +41,10 @@
     ng-show="rolesCount > 25"
     show-prev-next="true"
     show-first-last="true"
-    text-first="{{ ts('<< First') }}"
-    text-last="{{ ts('Last >>') }}"
-    text-next="{{ ts('Next >') }}"
-    text-prev="{{ ts('< Prev') }}"
+    text-first="{{ ts('&laquo; First') }}"
+    text-last="{{ ts('Last &raquo;') }}"
+    text-next="{{ ts('Next &rsaquo;') }}"
+    text-prev="{{ ts('&lsaquo; Prev') }}"
     >
     </paging>
     <div class="pull-right client-role">
@@ -125,10 +125,10 @@
     ng-show="rolesCount > 25"
     show-prev-next="true"
     show-first-last="true"
-    text-first="{{ ts('<< First') }}"
-    text-last="{{ ts('Last >>') }}"
-    text-next="{{ ts('Next >') }}"
-    text-prev="{{ ts('< Prev') }}"
+    text-first="{{ ts('&laquo; First') }}"
+    text-last="{{ ts('Last &raquo;') }}"
+    text-next="{{ ts('Next &rsaquo;') }}"
+    text-prev="{{ ts('&lsaquo; Prev') }}"
     ></paging>
 </div>
 <div class="civicase-relationships-other case-people-subtab" ng-show="tab == 'relations'">
@@ -169,10 +169,10 @@
     ng-show="relationsCount > 25"
     show-prev-next="true"
     show-first-last="true"
-    text-first="{{ ts('<< First') }}"
-    text-last="{{ ts('Last >>') }}"
-    text-next="{{ ts('Next >') }}"
-    text-prev="{{ ts('< Prev') }}"
+    text-first="{{ ts('&laquo; First') }}"
+    text-last="{{ ts('Last &raquo;') }}"
+    text-next="{{ ts('Next &rsaquo;') }}"
+    text-prev="{{ ts('&lsaquo; Prev') }}"
   ></paging>
   <div class="civicase-alpha-pager">
     <a ng-repeat="a in letters" href ng-class="{active: a === relationsAlphaFilter}" ng-click="setLetterFilter(a, 'relations')">{{ a }}</a>
@@ -236,9 +236,9 @@
     ng-show="relationsCount > 25"
     show-prev-next="true"
     show-first-last="true"
-    text-first="{{ ts('<< First') }}"
-    text-last="{{ ts('Last >>') }}"
-    text-next="{{ ts('Next >') }}"
-    text-prev="{{ ts('< Prev') }}"
+    text-first="{{ ts('&laquo; First') }}"
+    text-last="{{ ts('Last &raquo;') }}"
+    text-next="{{ ts('Next &rsaquo;') }}"
+    text-prev="{{ ts('&lsaquo; Prev') }}"
   ></paging>
 </div>
