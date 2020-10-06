@@ -1,6 +1,7 @@
 <?php
 
 require_once 'civicase.civix.php';
+use CRM_Civicase_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_tabset().
@@ -37,7 +38,7 @@ function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
           'url' => CRM_Utils_System::url('civicrm/case/contact-case-tab', array(
             'cid' => $context['contact_id'],
           )),
-          'title' => ts('Cases'),
+          'title' => E::ts('Cases'),
           'weight' => 20,
           'count' => CRM_Contact_BAO_Contact::getCountComponent('case', $context['contact_id']),
           'class' => 'livePage',
@@ -212,15 +213,15 @@ function civicase_civicrm_buildForm($formName, &$form) {
     ));
     $opts = array();
     if ($form->getVar('_gName') == 'activity_status') {
-      $placeholder = ts('All');
+      $placeholder = E::ts('All');
       // Activity status can also apply to uncategorized activities
       $opts[] = array(
         'id' => 'none',
-        'text' => ts('Uncategorized'),
+        'text' => E::ts('Uncategorized'),
       );
     }
     else {
-      $placeholder = ts('Uncategorized');
+      $placeholder = E::ts('Uncategorized');
     }
     foreach ($options['values'] as $opt) {
       $opts[] = array(
@@ -228,7 +229,7 @@ function civicase_civicrm_buildForm($formName, &$form) {
         'text' => $opt['label'],
       );
     }
-    $form->add('select2', 'grouping', ts('Activity Category'), $opts, FALSE, array('class' => 'crm-select2', 'multiple' => TRUE, 'placeholder' => $placeholder));
+    $form->add('select2', 'grouping', E::ts('Activity Category'), $opts, FALSE, array('class' => 'crm-select2', 'multiple' => TRUE, 'placeholder' => $placeholder));
   }
   // Only show relevant statuses when editing an activity
   if (is_a($form, 'CRM_Activity_Form_Activity') && $form->_action & (CRM_Core_Action::ADD + CRM_Core_Action::UPDATE)) {
@@ -246,7 +247,7 @@ function civicase_civicrm_buildForm($formName, &$form) {
         'options' => array('limit' => 0, 'sort' => 'weight'),
       ));
       $newOptions = $el->_options = array();
-      $newOptions[''] = ts('- select -');
+      $newOptions[''] = E::ts('- select -');
       foreach ($options['values'] as $option) {
         if (empty($option['grouping']) || array_intersect($cat, explode(',', $option['grouping']))) {
           $newOptions[$option['value']] = $option['label'];
@@ -285,7 +286,7 @@ function civicase_civicrm_buildForm($formName, &$form) {
       if ($form->_action & (CRM_Core_Action::ADD + CRM_Core_Action::UPDATE)) {
         $buttonGroup = $form->getElement('buttons');
         $buttons = $buttonGroup->getElements();
-        $buttons[] = $form->createElement('submit', $form->getButtonName('refresh'), ts('Save Draft'), array(
+        $buttons[] = $form->createElement('submit', $form->getButtonName('refresh'), E::ts('Save Draft'), array(
           'crm-icon' => 'fa-pencil-square-o',
           'class' => 'crm-form-submit',
         ));
@@ -304,11 +305,11 @@ function civicase_civicrm_buildForm($formName, &$form) {
             'context' => 'standalone',
             'draft_id' => $id,
           ));
-          $buttonMarkup = '<a class="button" href="' . $composeUrl . '"><i class="crm-i fa-pencil-square-o"></i> &nbsp;' . ts('Continue Editing') . '</a>';
+          $buttonMarkup = '<a class="button" href="' . $composeUrl . '"><i class="crm-i fa-pencil-square-o"></i> &nbsp;' . E::ts('Continue Editing') . '</a>';
           $form->assign('activityTypeDescription', $buttonMarkup);
         }
         else {
-          $form->assign('activityTypeDescription', '<i class="crm-i fa-pencil-square-o"></i> &nbsp;' . ts('Saved as a Draft'));
+          $form->assign('activityTypeDescription', '<i class="crm-i fa-pencil-square-o"></i> &nbsp;' . E::ts('Saved as a Draft'));
         }
       }
     }
@@ -381,7 +382,7 @@ function civicase_civicrm_validateForm($formName, &$fields, &$files, &$form, &$e
       );
       $session = CRM_Core_Session::singleton();
       $session->pushUserContext($url);
-      CRM_Core_Session::setStatus('Activity saved as a draft', ts('Saved'), 'success');
+      CRM_Core_Session::setStatus('Activity saved as a draft', E::ts('Saved'), 'success');
       if (CRM_Utils_Array::value('snippet', $_GET) === 'json') {
         $response = array();
         if (!empty($form->civicase_reload)) {
@@ -426,7 +427,7 @@ function civicase_civicrm_postProcess($formName, &$form) {
 function civicase_civicrm_permission(&$permissions) {
   $permissions['basic case information'] = array(
     'Civicase: basic case information',
-    ts('Allows a user to view only basic information of cases.')
+    E::ts('Allows a user to view only basic information of cases.')
   );
 }
 

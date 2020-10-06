@@ -1,7 +1,7 @@
 <?php
 
 // AUTO-GENERATED FILE -- Civix may overwrite any changes made to this file
-
+use CRM_Civicase_ExtensionUtil as E;
 /**
  * Base class which provides helpers to execute upgrade logic
  */
@@ -199,7 +199,7 @@ class CRM_Civicase_Upgrader_Base {
     $currentRevision = $this->getCurrentRevision();
     foreach ($this->getRevisions() as $revision) {
       if ($revision > $currentRevision) {
-        $title = ts('Upgrade %1 to revision %2', array(
+        $title = E::ts('Upgrade %1 to revision %2', array(
           1 => $this->extensionName,
           2 => $revision,
         ));
