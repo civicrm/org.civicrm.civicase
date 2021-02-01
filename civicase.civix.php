@@ -7,9 +7,9 @@
  * extension.
  */
 class CRM_Civicase_ExtensionUtil {
-  const SHORT_NAME = "civicase";
-  const LONG_NAME = "org.civicrm.civicase";
-  const CLASS_PREFIX = "CRM_Civicase";
+  const SHORT_NAME = 'civicase';
+  const LONG_NAME = 'org.civicrm.civicase';
+  const CLASS_PREFIX = 'CRM_Civicase';
 
   /**
    * Translate a string using the extension's domain.
