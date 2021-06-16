@@ -213,6 +213,7 @@
   background: #F3F6F7;
   border-left: 1px solid #E8EEF0;
   border-top: 1px solid #E8EEF0;
+  border-top-left-radius: 2px;
   content: ' ';
   height: 8px;
   left: 31px;
