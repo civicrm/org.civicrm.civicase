@@ -50,10 +50,8 @@ function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
   }
 
   if ($useAng) {
-    $loader = new \Civi\Angular\AngularLoader();
-    $loader->setPageName('civicrm/case/a');
+    $loader = \Civi::service('angularjs.loader');
     $loader->setModules(array('civicase'));
-    $loader->load();
   }
 }
 
