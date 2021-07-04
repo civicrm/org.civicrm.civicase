@@ -84,6 +84,9 @@ class CRM_Civicase_APIHelpers_CaseList implements API_Wrapper {
       'tag_id.name', 'tag_id.color', 'tag_id.description',
     );
     $params['return'] = (isset($params['return']) ? array_merge($defaultAPIReturnedColumns, $params['return']) : $defaultAPIReturnedColumns);
+    if(isset($params['related_cids'])) {
+      $params['contact_id'] = $params['related_cids'];
+    }
     $cases = civicrm_api3('Case', 'getdetails', $params);
 
     foreach ($cases['values'] as &$case) {

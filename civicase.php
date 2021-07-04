@@ -10,7 +10,6 @@ use CRM_Civicase_ExtensionUtil as E;
  */
 function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
   $useAng = FALSE;
-
   switch ($tabsetName) {
     case 'civicrm/contact/view':
       $caseTabPresent = FALSE;
@@ -45,6 +44,23 @@ function civicase_civicrm_tabset($tabsetName, &$tabs, $context) {
         );
       }
 
+      $rcases = new CRM_Civicase_RelatedCases();
+      if(CRM_Core_Permission::check('basic case information') &&
+        $rcases->getContactType($context['contact_id']) == 'Organization' &&
+        Civi::settings()->get('civicaseRelatedCasesTab', 0)) {
+        $caseTabKey = array_search('case', array_column($tabs, 'id'));
+        $tabs[] = array(
+          'id' => 'related_case',
+          'url' => CRM_Utils_System::url('civicrm/case/contact-case-tab', array(
+            'cid' => $context['contact_id'],
+            'relatedCases' => TRUE,
+          )),
+          'title' => ts('Related Cases'),
+          'weight' => $tabs[$caseTabKey]['weight']+1,
+          'count' => $rcases->getOrganizationRelatedCasesCount($context['contact_id']),
+          'class' => 'livePage',
+        );
+      }
       break;
 
   }
@@ -196,7 +212,6 @@ function civicase_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _civicase_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-
 /**
  * Implements hook_civicrm_buildForm().
  *
@@ -341,6 +356,14 @@ function civicase_civicrm_buildForm($formName, &$form) {
       }
     }
   }
+  if($formName == 'CRM_Admin_Form_Setting_Case') {
+    $form->addYesNo('_qf_civicaseRelatedCasesTab', ts('Display cases from related individuals on organisation contacts'));
+    $form->setDefaults(array('_qf_civicaseRelatedCasesTab' => Civi::settings()->get('civicaseRelatedCasesTab', 0)));
+    $templatePath = realpath(dirname(__FILE__)."/templates");
+    CRM_Core_Region::instance('page-body')->add(array(
+      'template' => "{$templatePath}/RelatedCasesField.tpl"
+    ));
+  }
 }
 
 /**
@@ -415,6 +438,12 @@ function civicase_civicrm_postProcess($formName, &$form) {
     if (!empty($urlParams['draft_id'])) {
       civicrm_api3('Activity', 'delete', array('id' => $urlParams['draft_id']));
     }
+  }
+  if($formName = 'CRM_Admin_Form_Setting_Case' && isset($form->_submitValues['_qf_civicaseRelatedCasesTab'])) {
+    if($form->_submitValues['_qf_civicaseRelatedCasesTab'] == 1)
+      Civi::settings()->set('civicaseRelatedCasesTab', 1);
+    else
+      Civi::settings()->set('civicaseRelatedCasesTab', 0);
   }
 }
 
