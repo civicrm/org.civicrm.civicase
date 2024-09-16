@@ -15,7 +15,7 @@
   function loadCaseApiParams(filters, sort, page) {
     var returnParams = {
       sequential: 1,
-      return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description'],
+      return: ['subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date', 'modified_date', 'contacts', 'activity_summary', 'category_count', 'tag_id.name', 'tag_id.color', 'tag_id.description', 'related_cids'],
       options: {
         sort: sort.field + ' ' + sort.dir,
         limit: page.size,
