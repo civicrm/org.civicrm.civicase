@@ -39,7 +39,7 @@
 
         <div class="row dashboard-case-wrapper">
           <div class="col-md-4">
-            <div class="panel panel-default">
+            <div class="panel panel-default next-milestone-panel">
               <div class="panel-heading">
                 <h3 class="panel-title">{{ ts('Next Milestones') }}
                   <span class="badge badge-primary" ng-class="{'badge-danger': dashboardActivities.nextMilestones[0].is_overdue}">{{ dashboardActivities.nextMilestonesCount }}</span>
@@ -68,7 +68,7 @@
                 </div>
               </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default recent-communication-panel">
               <div class="panel-heading">
                 <h3 class="panel-title">{{ ts('Recent Communications') }}
                   <span class="badge badge-primary">{{ dashboardActivities.recentCommunicationCount }}</span>
