@@ -7,7 +7,7 @@
   <div class="case-people-status">
     <div class="btn-group btn-group-md pull-right">
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-plus"></i> {{ ts('Add Case Role') }}
+        <i class="fa fa-plus" role="img" aria-hidden="true"></i> {{ ts('Add Case Role') }}
       </button>
       <ul class="dropdown-menu dropdown-menu-right">
         <li ng-if="allowMultipleCaseClients">
@@ -87,11 +87,11 @@
         <td>{{ role.email }}</td>
         <td>
           <a href ng-if="!role.contact_id" ng-click="assignRole(role)">
-            <i class="fa fa-user-plus"></i>
+            <i class="fa fa-user-plus" role="img" aria-hidden="true"></i>
           </a>
           <div ng-if="role.contact_id" class="btn-group btn-group-sm">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-ellipsis-v"></i>
+              <i class="fa fa-ellipsis-v" role="img" aria-hidden="true"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-right">
               <li>
@@ -135,10 +135,10 @@
   <div class="case-people-status">
     <div class="btn-group btn-group-md pull-right">
       <a ng-if="item.client.length === 1" class="btn btn-primary crm-popup" crm-popup-form-success="getRelations()" href="{{ CRM.url('civicrm/contact/view/rel', {action: 'add', reset: 1, cid: item.client[0].contact_id}) }}">
-        <i class="fa fa-plus"></i> {{ ts('Relationship') }}
+        <i class="fa fa-plus" role="img" aria-hidden="true"></i> {{ ts('Relationship') }}
       </a>
       <button ng-if="item.client.length > 1" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-plus"></i> {{ ts('Relationship') }} <span class="caret"></span>
+        <i class="fa fa-plus" role="img" aria-hidden="true"></i> {{ ts('Relationship') }} <span class="caret"></span>
       </button>
       <ul ng-if="item.client.length > 1" class="dropdown-menu dropdown-menu-right" crm-popup-form-success="getRelations()">
         <li ng-repeat="client in item.client">
@@ -201,7 +201,7 @@
         <td>
           <div class="btn-group btn-group-sm">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-ellipsis-v"></i>
+              <i class="fa fa-ellipsis-v" role="img" aria-hidden="true"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" crm-popup-form-success="getRelations()">
               <li>

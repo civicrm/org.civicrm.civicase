@@ -10,7 +10,7 @@
     </ul>
     <div class="btn-group btn-group-md pull-right">
       <button type="button" class="btn dropdown-toggle searchable-dropdown" data-toggle="dropdown">
-        <span><i class="fa fa-plus"></i> {{ ts('Timeline') }}</span>
+        <span><i class="fa fa-plus" role="img" aria-hidden="true"></i> {{ ts('Timeline') }}</span>
         <input class="form-control" ng-model="activitySetSearchText" />
       </button>
       <ul class="dropdown-menu">
@@ -23,13 +23,13 @@
     </div>
     <div class="btn-group btn-group-md pull-right">
       <button type="button" class="btn dropdown-toggle searchable-dropdown" data-toggle="dropdown">
-        <span><i class="fa fa-plus"></i> {{ ts('Activity') }}</span>
+        <span><i class="fa fa-plus" role="img" aria-hidden="true"></i> {{ ts('Activity') }}</span>
         <input class="form-control" ng-model="activityTypeSearchText" />
       </button>
       <ul class="dropdown-menu">
         <li ng-repeat="actType in availableActivityTypes | filter:{label: activityTypeSearchText}">
           <a crm-popup-form-success="pushCaseData($data.civicase_reload[0])" class="crm-popup" ng-href="{{ newActivityUrl(actType) }}">
-            <i class="fa fa-fw {{ actType.icon || 'fa-circle' }}">
+            <i class="fa fa-fw {{ actType.icon || 'fa-circle' }}" role="img" aria-hidden="true">
               <span class="civicase-icon-placeholder" ng-if="!actType.icon">{{ actType.label[0] }}</span>
             </i>
             {{ actType.label }}

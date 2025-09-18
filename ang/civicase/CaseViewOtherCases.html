@@ -12,7 +12,7 @@
         <i ng-if="relCase.is_linked" class="pull-right crm-i fa-link crm-is-linked" title="{{ ts('Case is linked') }}"></i>
         <i ng-if="!relCase.is_linked" class="pull-right crm-i fa-user crm-is-linked" title="{{ ts('Case is for the same client(s)') }}"></i>
         <div class="pull-right text-muted">
-          <i class="fa fa-calendar"></i>&nbsp;
+          <i class="fa fa-calendar" role="img" aria-hidden="true"></i>&nbsp;
           <span>{{ CRM.utils.formatDate(relCase.start_date) }}</span>
           <span ng-if="relCase.end_date">- {{ CRM.utils.formatDate(relCase.end_date) }}</span>
           - {{ ts('Ongoing') }}

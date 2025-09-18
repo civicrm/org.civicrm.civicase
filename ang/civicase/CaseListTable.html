@@ -93,7 +93,7 @@
              ng-if="item.category_count.incomplete[category.name]"
              title="{{ ts('%1 upcoming %2', {1: item.category_count.incomplete[category.name], 2: category.label}) }}"
           >
-            <i class="fa {{ category.icon }}"></i>
+            <i class="fa {{ category.icon }}" role="img" aria-hidden="true"></i>
             <span class="badge noti-badge">{{ item.category_count.incomplete[category.name] }}</span>
           </a>
         </div>
@@ -137,7 +137,7 @@
   <tr ng-if="!cases.length && !isLoading" class="civicase-panel-empty">
     <td class="fixed-col"></td>
     <td colspan="3">
-      <i class="fa fa-folder-o fa-big"></i>
+      <i class="fa fa-folder-o fa-big" role="img" aria-hidden="true"></i>
       <div class="empty-label">{{ ts('No cases found matching the search criteria.') }}</div>
     </td>
   </tr>

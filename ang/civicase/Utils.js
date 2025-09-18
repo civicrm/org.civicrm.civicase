@@ -19,7 +19,7 @@
           element.toggleClass('sorting', attrs.civicaseSortheader === scope.sort.field);
           element.find('i.cc-sort-icon').remove();
           if (attrs.civicaseSortheader === scope.sort.field) {
-            element.append('<i class="cc-sort-icon fa fa-arrow-circle-' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + '"></i>');
+            element.append('<i class="cc-sort-icon fa fa-arrow-circle-' + (scope.sort.dir === 'ASC' ? 'up' : 'down') + '" role="img" aria-hidden="true"></i>');
           }
         }
 
@@ -435,7 +435,7 @@
   // Button markup needs to include a label for the button and a search input.
   // Ex:
   // <button type="button" class="btn dropdown-toggle searchable-dropdown" data-toggle="dropdown">
-  //   <span><i class="fa fa-plus"></i> {{ ts('Add Item') }}</span>
+  //   <span><i class="fa fa-plus" role="img" aria-hidden="true"></i> {{ ts('Add Item') }}</span>
   //   <input class="form-control" ng-model="itemSearchText" />
   // </button>
   // <ul class="dropdown-menu" >

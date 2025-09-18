@@ -15,14 +15,14 @@
       title="{{ activity.file_id.length === 1 ? ts('1 Attachment') : ts('%1 Attachments', {1: activity.file_id.length}) }}"
       ng-click="getAttachments(activity)"
     >
-      <i class="crm-i fa-paperclip"></i>
+      <i class="crm-i fa-paperclip" role="img" aria-hidden="true"></i>
     </button>
     <ul class="dropdown-menu" role="menu">
       <li ng-if="!activity.attachments || !activity.attachments.length">
-        <span><i class="crm-i fa-spinner fa-pulse fa-fw"></i> &nbsp;{{ ts('Loading...') }}</span>
+        <span><i class="crm-i fa-spinner fa-pulse fa-fw" role="img" aria-hidden="true"></i> &nbsp;{{ ts('Loading...') }}</span>
       </li>
       <li ng-repeat="file in activity.attachments || []">
-        <a title="{{ file.description || ts('Download File') }}" href="{{ file.url }}"><i class="crm-i {{ file.icon }}"></i> &nbsp;{{ file.name }}</a>
+        <a title="{{ file.description || ts('Download File') }}" href="{{ file.url }}"><i class="crm-i {{ file.icon }}" role="img" aria-hidden="true"></i> &nbsp;{{ file.name }}</a>
       </li>
     </ul>
   </div>
