@@ -62,7 +62,7 @@
                     </li>
                   </ul>
                   <div class="civicase-panel-empty" ng-if="dashboardActivities.nextMilestones && !dashboardActivities.nextMilestones.length">
-                    <i class="fa fa-flag fa-big"></i>
+                    <i class="fa fa-flag fa-big" role="img" aria-hidden="true"></i>
                     <div class="empty-label">{{ ts('There are currently no milestones') }}</div>
                   </div>
                 </div>
@@ -90,7 +90,7 @@
                     </li>
                   </ul>
                   <div class="civicase-panel-empty" ng-if="dashboardActivities.recentCommunication && !dashboardActivities.recentCommunication.length">
-                    <i class="fa fa-comment fa-big"></i>
+                    <i class="fa fa-comment fa-big" role="img" aria-hidden="true"></i>
                     <div class="empty-label">{{ ts('There are no past communications') }}</div>
                   </div>
                 </div>
@@ -138,7 +138,7 @@
           ng-href="{{ url('civicrm/case/add', {reset: 1, action: 'add', context: 'standalone'}) }}"
           class="btn btn-default crm-popup"
           crm-popup-form-success="refresh()">
-          <i class="crm-i fa-plus"></i>
+          <i class="crm-i fa-plus" role="img" aria-hidden="true"></i>
           {{ ts('Add Case') }}
         </a>
       </div>

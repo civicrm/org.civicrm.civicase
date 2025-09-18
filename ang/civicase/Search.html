@@ -4,10 +4,10 @@
     <input class="form-control" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Case Type: Any'), data: caseTypeOptions}" ng-model="filters.case_type_id" />
     <input class="form-control" ng-list crm-ui-select="{allowClear: true, multiple: true, placeholder: ts('Status: All open cases'), data: caseStatusOptions}" ng-model="filters.status_id" />
     <button class="btn btn-primary btn-sm pull-right" ng-click="showMore()" ng-show="!expanded">
-      <i class="fa fa-gear"></i> {{ filterDescription.length ? ts('Edit Search') : ts('Other Criteria') }}
+      <i class="fa fa-gear" role="img" aria-hidden="true"></i> {{ filterDescription.length ? ts('Edit Search') : ts('Other Criteria') }}
     </button>
     <button class="btn btn-primary btn-sm pull-right" ng-click="doSearch()" ng-show="expanded">
-      <i class="fa fa-search"></i> {{ ts('Search') }}
+      <i class="fa fa-search" role="img" aria-hidden="true"></i> {{ ts('Search') }}
     </button>
   </form>
 </div>
@@ -63,13 +63,13 @@
   <hr />
   <div>
     <button class="btn btn-primary btn-sm" ng-click="doSearch()" ng-show="expanded">
-      <i class="fa fa-search"></i> {{ ts('Search') }}
+      <i class="fa fa-search" role="img" aria-hidden="true"></i> {{ ts('Search') }}
     </button>
   </div>
 </form>
 <div class="panel-body" ng-if="!expanded && filterDescription.length">
   <button class="btn btn-danger btn-sm pull-right" ng-click="clearSearch()">
-    <i class="fa fa-ban"></i> {{ ts('Clear Search') }}
+    <i class="fa fa-ban" role="img" aria-hidden="true"></i> {{ ts('Clear Search') }}
   </button>
   <ul class="civicase-search-description">
     <li ng-repeat="des in filterDescription" class="col-lg-6">

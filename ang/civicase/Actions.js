@@ -4,7 +4,7 @@
       restrict: 'A',
       template:
       '<li ng-class="{disabled: !isActionEnabled(action)}" ng-if="isActionAllowed(action)" ng-repeat="action in caseActions">' +
-      '  <a href ng-click="doAction(action)"><i class="fa {{action.icon}}"></i> {{ action.title }}</a>' +
+      '  <a href ng-click="doAction(action)"><i class="fa {{action.icon}}" role="img" aria-hidden="true"></i> {{ action.title }}</a>' +
       '</li>',
       scope: {
         cases: '=civicaseActions',

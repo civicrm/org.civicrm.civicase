@@ -303,11 +303,11 @@ function civicase_civicrm_buildForm($formName, &$form) {
             'context' => 'standalone',
             'draft_id' => $id,
           ));
-          $buttonMarkup = '<a class="button" href="' . $composeUrl . '"><i class="crm-i fa-pencil-square-o"></i> &nbsp;' . E::ts('Continue Editing') . '</a>';
+          $buttonMarkup = '<a class="button" href="' . $composeUrl . '"><i class="crm-i fa-pencil-square-o" role="img" aria-hidden="true"></i> &nbsp;' . E::ts('Continue Editing') . '</a>';
           $form->assign('activityTypeDescription', $buttonMarkup);
         }
         else {
-          $form->assign('activityTypeDescription', '<i class="crm-i fa-pencil-square-o"></i> &nbsp;' . E::ts('Saved as a Draft'));
+          $form->assign('activityTypeDescription', '<i class="crm-i fa-pencil-square-o" role="img" aria-hidden="true"></i> &nbsp;' . E::ts('Saved as a Draft'));
         }
       }
     }

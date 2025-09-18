@@ -40,7 +40,7 @@
             <button type="button" class="btn btn-default cancel" ng-click="deleteActivity()" >
               <span class="btn-icon"></span> {{ts('Cancel')}}</button>
             <button type="button" class="btn btn-primary" ng-click="saveActivity()" >
-              <span class="btn-icon"><i class="fa fa-upload"></i></span> {{ts('Upload')}}</button>
+              <span class="btn-icon"><i class="fa fa-upload" role="img" aria-hidden="true"></i></span> {{ts('Upload')}}</button>
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@
              ng-class="{'cc-uploader-active': !isUploadActive(), 'cc-uploader-inactive': isUploadActive()}"
              nv-file-drop nv-file-over uploader="uploader">
              <label for="cc-uploader-button">
-               <i class="fa fa-cloud-upload"></i><br/>
+               <i class="fa fa-cloud-upload" role="img" aria-hidden="true"></i><br/>
                {{ts('Drop file here')}}<br/>
                <span>{{ts('or click here to browse')}}</span><br/>
              </label>
