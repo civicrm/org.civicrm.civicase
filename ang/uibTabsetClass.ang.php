@@ -7,7 +7,6 @@ return array(
   'js' => array(
     'ang/uibTabsetClass.js',
   ),
-  'settings' => array(),
   'requires' => array('ui.bootstrap'),
   'basePages' => array(),
 );
