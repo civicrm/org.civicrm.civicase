@@ -21,7 +21,7 @@ class CRM_Civicase_ActivityFilter {
    * the `case_filter=...` expression to a concrete list of `case_id=1,2,3,...`.
    *
    * @param \Civi\API\Event\PrepareEvent $e
-   * @throws \API_Exception
+   * @throws \CRM_Core_Exception
    */
   public static function onPrepare(\Civi\API\Event\PrepareEvent $e) {
     $apiRequest = $e->getApiRequest();
@@ -34,7 +34,7 @@ class CRM_Civicase_ActivityFilter {
       return;
     }
     if (isset($apiRequest['params']['case_id'])) {
-      throw new API_Exception("case_filter and case_id are mutually exclusive");
+      throw new CRM_Core_Exception("case_filter and case_id are mutually exclusive");
     }
 
     // Look up matching `case_id`
