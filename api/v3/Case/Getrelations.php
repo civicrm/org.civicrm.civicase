@@ -26,7 +26,7 @@ function _civicrm_api3_case_getrelations_spec(&$spec) {
  *
  * @param array $params
  * @return array API result
- * @throws API_Exception
+ * @throws CRM_Core_Exception
  */
 function civicrm_api3_case_getrelations($params) {
   $relations = array();

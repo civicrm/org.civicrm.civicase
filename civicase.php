@@ -398,7 +398,7 @@ function civicase_civicrm_validateForm($formName, &$fields, &$files, &$form, &$e
  * Implements hook_civicrm_postProcess().
  * @param string $formName
  * @param CRM_Core_Form $form
- * @throws \CiviCRM_API3_Exception
+ * @throws \CRM_Core_Exception
  */
 function civicase_civicrm_postProcess($formName, &$form) {
   if (!empty($form->civicase_reload)) {

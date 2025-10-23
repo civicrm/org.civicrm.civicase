@@ -31,7 +31,7 @@ function _civicrm_api3_case_getdetails_spec(&$spec) {
  *
  * @param array $params
  * @return array API result
- * @throws API_Exception
+ * @throws CRM_Core_Exception
  */
 function civicrm_api3_case_getdetails($params) {
   $resultMetadata = array();
@@ -212,7 +212,7 @@ function civicrm_api3_case_getdetails($params) {
  *
  * @param $params
  * @return \CRM_Utils_SQL_Select
- * @throws \API_Exception
+ * @throws \CRM_Core_Exception
  */
 function _civicrm_api3_case_getdetails_extrasort(&$params) {
   $sql = CRM_Utils_SQL_Select::fragment();
@@ -230,7 +230,7 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
       if ($sortJoin == 'case_manager') {
         // Validate inputs
         if (!array_key_exists($sortField, CRM_Contact_DAO_Contact::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
-          throw new API_Exception("Unknown field specified for sort. Cannot order by '$sortString'");
+          throw new CRM_Core_Exception("Unknown field specified for sort. Cannot order by '$sortString'");
         }
         \Civi\CCase\Utils::joinOnManager($sql);
         $sql->orderBy("manager.$sortField $dir", NULL, $index);
@@ -241,7 +241,7 @@ function _civicrm_api3_case_getdetails_extrasort(&$params) {
         $me = CRM_Core_Session::getLoggedInContactID();
         // Validate inputs
         if (!array_key_exists($sortField, CRM_Contact_DAO_RelationshipType::fieldKeys()) || ($dir != 'ASC' && $dir != 'DESC')) {
-          throw new API_Exception("Unknown field specified for sort. Cannot order by '$sortString'");
+          throw new CRM_Core_Exception("Unknown field specified for sort. Cannot order by '$sortString'");
         }
         $sql->join('ccc', 'LEFT JOIN (SELECT * FROM civicrm_case_contact WHERE id IN (SELECT MIN(id) FROM civicrm_case_contact GROUP BY case_id)) AS ccc ON ccc.case_id = a.id');
         $sql->join('my_relationship', "LEFT JOIN civicrm_relationship AS my_relationship ON ccc.contact_id = my_relationship.contact_id_a AND my_relationship.is_active AND my_relationship.contact_id_b = $me AND my_relationship.case_id = a.id");

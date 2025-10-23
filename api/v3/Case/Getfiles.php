@@ -59,7 +59,7 @@ function _civicrm_api3_case_getfiles_spec(&$spec) {
  * @return array API result descriptor
  * @see civicrm_api3_create_success
  * @see civicrm_api3_create_error
- * @throws API_Exception
+ * @throws CRM_Core_Exception
  */
 function civicrm_api3_case_getfiles($params) {
   // Check authorization.
@@ -169,7 +169,7 @@ function _civicrm_api3_case_getfiles_select($params) {
       $cats = $params['mime_type_cat'][1];
     }
     else {
-      throw new \API_Exception("Field 'mime_type_cat' only supports string or IN values.");
+      throw new \CRM_Core_Exception("Field 'mime_type_cat' only supports string or IN values.");
     }
     $select->where(CRM_Civicase_FileCategory::createSqlFilter('f.mime_type', $cats));
   }
@@ -223,7 +223,7 @@ function _civicrm_api3_case_getfiles_select($params) {
 /**
  * Assert that this request is authorized to access the given Case.
  * @param array $params
- * @throws API_Exception
+ * @throws CRM_Core_Exception
  */
 function _civicrm_api3_case_getfiles_assert_access($params) {
   if (empty($params['check_permissions'])) {
@@ -231,7 +231,7 @@ function _civicrm_api3_case_getfiles_assert_access($params) {
   }
 
   if (empty($params['case_id'])) {
-    throw new API_Exception("Blank case_id cannot be validated");
+    throw new CRM_Core_Exception("Blank case_id cannot be validated");
   }
 
   // Delegate to Case.get to determine if the ID is accessible.
