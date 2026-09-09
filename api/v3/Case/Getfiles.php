@@ -87,7 +87,7 @@ function _civicrm_api3_case_getfiles_format_params($params) {
   // Blerg, option value expansions don't seem to work in non-standard actions.
 
   if (isset($params['activity_type_id'])) {
-    $actTypes = CRM_Core_OptionGroup::values('activity_type', FALSE, FALSE, FALSE, NULL, 'name');;
+    $actTypes = CRM_Core_OptionGroup::values('activity_type', FALSE, FALSE, FALSE, NULL, 'name');
 
     if (isset($params['activity_type_id'][0]) && $params['activity_type_id'][0] === 'IN') {
       $params['activity_type_id'][1] = array_map(function ($type) use ($actTypes) {
