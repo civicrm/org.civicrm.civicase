@@ -1,4 +1,4 @@
-(function (angular, $, _) {
+(function (angular, $) {
   angular.module('uibTabsetClass', CRM.angRequires('uibTabsetClass'));
   angular.module('uibTabsetClass').directive('uibTabsetClass', function ($timeout) {
     return {
@@ -9,4 +9,4 @@
       }
     };
   });
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);

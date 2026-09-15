@@ -248,9 +248,9 @@
             params.options.or = [['subject', 'details']];
           } else if (_.isString(val)) {
             params[key] = {LIKE: '%' + val + '%'};
-          } else if (_.isArray(val) && val.length) {
+          } else if (Array.isArray(val) && val.length) {
             params[key] = val.length === 1 ? val[0] : {IN: val};
-          } else if (!_.isArray(val)) {
+          } else if (!Array.isArray(val)) {
             params[key] = val;
           }
         }

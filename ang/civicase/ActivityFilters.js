@@ -112,7 +112,7 @@
           html_type: 'Text'
         }
       ];
-      if (_.includes(CRM.config.enableComponents, 'CiviCampaign')) {
+      if (CRM.config.enableComponents.includes('CiviCampaign')) {
         $scope.availableFilters.push({
           name: 'campaign_id',
           label: ts('Campaign'),
@@ -177,7 +177,7 @@
       };
 
       $scope.clearFilters = function clearFilters() {
-        _.each(_.keys($scope.filters), function(key){
+        _.each(Object.keys($scope.filters), function(key){
           delete $scope.filters[key];
         });
       };

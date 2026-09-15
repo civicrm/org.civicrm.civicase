@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
 
   function activityView(scope, element, attrs) {
     function loadActivity() {
@@ -53,4 +53,4 @@
     };
   });
 
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);

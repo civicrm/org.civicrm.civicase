@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
 
   function filesize(size) {
     size = parseInt(size); // paranoid
@@ -23,4 +23,4 @@
       }
     };
   });
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);

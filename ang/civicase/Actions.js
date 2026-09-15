@@ -74,8 +74,8 @@
                         values.push(id);
                       });
                     });
-                    var toRemove = _.difference(_.keys(item.tag_id), values);
-                    var toAdd = _.difference(values, _.keys(item.tag_id));
+                    var toRemove = _.difference(Object.keys(item.tag_id), values);
+                    var toAdd = _.difference(values, Object.keys(item.tag_id));
                     if (toRemove.length) {
                       calls.push(['EntityTag', 'delete', tagParams(toRemove)]);
                     }

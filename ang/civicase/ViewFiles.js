@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
   // "civicaseViewFiles" is a basic skeletal directive.
   // Example usage: <div civicase-view-files="{foo: 1, bar: 2}"></div>
   angular.module('civicase').directive('civicaseViewFiles', function() {
@@ -16,4 +16,4 @@
       }
     };
   });
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);
