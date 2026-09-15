@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
 
   angular.module('civicase').directive('civicaseApi3Ctrl', function() {
     return {
@@ -48,4 +48,4 @@
     };
   });
 
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);

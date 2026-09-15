@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
 
   angular.module('civicase').config(function($routeProvider) {
     $routeProvider.when('/case/search', {
@@ -26,4 +26,4 @@
     });
   }
 
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);

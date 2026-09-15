@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
   angular.module('civicase').directive('civicaseTypeDonutChart', function(doNutty, crmApi, civicaseInteger) {
     return {
       restrict: 'AE',
@@ -49,4 +49,4 @@
       }
     };
   });
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);

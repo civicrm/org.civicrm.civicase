@@ -1,4 +1,4 @@
-(function (angular, $, _) {
+(function (angular, $) {
 
   angular.module('civicase').directive('civicaseActivityDot', function () {
     return {
@@ -27,4 +27,4 @@
     };
   });
 
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);

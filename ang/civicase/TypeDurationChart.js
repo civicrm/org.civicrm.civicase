@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
   angular.module('civicase').directive('civicaseTypeDurationChart', function(crmApi) {
     return {
       restrict: 'AE',
@@ -54,4 +54,4 @@
       }
     };
   });
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);
