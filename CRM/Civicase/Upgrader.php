@@ -16,11 +16,11 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     CRM_Core_BAO_ConfigSetting::enableComponent('CiviCase');
 
     // Set activity categories
-    $categories = array(
-      'milestone' => array(
+    $categories = [
+      'milestone' => [
         'Open Case',
-      ),
-      'communication' => array(
+      ],
+      'communication' => [
         'Meeting',
         'Phone Call',
         'Email',
@@ -28,8 +28,8 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
         'Inbound Email',
         'Follow up',
         'Print PDF Letter',
-      ),
-      'system' => array(
+      ],
+      'system' => [
         'Change Case Type',
         'Change Case Status',
         'Change Case Subject',
@@ -42,22 +42,22 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
         'Link Cases',
         'Change Case Tags',
         'Add Client To Case',
-      ),
-    );
+      ],
+    ];
     foreach ($categories as $grouping => $activityTypes) {
-      civicrm_api3('OptionValue', 'get', array(
+      civicrm_api3('OptionValue', 'get', [
         'return' => 'id',
         'option_group_id' => 'activity_type',
-        'name' => array('IN' => $activityTypes),
-        'api.OptionValue.setvalue' => array(
+        'name' => ['IN' => $activityTypes],
+        'api.OptionValue.setvalue' => [
           'field' => 'grouping',
           'value' => $grouping,
-        ),
-      ));
+        ],
+      ]);
     }
 
     // Create activity types
-    $this->addOptionValue(array(
+    $this->addOptionValue([
       'option_group_id' => 'activity_type',
       'label' => E::ts('Alert'),
       'name' => 'Alert',
@@ -66,8 +66,8 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'description' => E::ts('Alerts to display in cases'),
       'component_id' => 'CiviCase',
       'icon' => 'fa-exclamation',
-    ));
-    $this->addOptionValue(array(
+    ]);
+    $this->addOptionValue([
       'option_group_id' => 'activity_type',
       'label' => E::ts('File Upload'),
       'name' => 'File Upload',
@@ -76,8 +76,8 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'description' => E::ts('Add files to a case'),
       'component_id' => 'CiviCase',
       'icon' => 'fa-file',
-    ));
-    $this->addOptionValue(array(
+    ]);
+    $this->addOptionValue([
       'option_group_id' => 'activity_type',
       'label' => E::ts('Remove Client From Case'),
       'name' => 'Remove Client From Case',
@@ -86,28 +86,28 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'description' => E::ts('Client removed from multi-client case'),
       'component_id' => 'CiviCase',
       'icon' => 'fa-user-times',
-    ));
+    ]);
 
     // Create activity statuses
-    $this->addOptionValue(array(
+    $this->addOptionValue([
       'option_group_id' => 'activity_status',
       'label' => E::ts('Unread'),
       'name' => 'Unread',
       'grouping' => 'communication',
       'is_reserved' => 0,
       'color' => '#d9534f',
-    ));
-    $this->addOptionValue(array(
+    ]);
+    $this->addOptionValue([
       'option_group_id' => 'activity_status',
       'label' => E::ts('Draft'),
       'name' => 'Draft',
       'grouping' => 'communication',
       'is_reserved' => 0,
       'color' => '#c2cfd8',
-    ));
+    ]);
 
     // Set grouping for existing statuses
-    $allowedStatuses = array(
+    $allowedStatuses = [
       'Scheduled' => 'none,task,file,communication,milestone,system',
       'Completed' => 'none,task,file,communication,milestone,alert,system',
       'Cancelled' => 'none,communication,milestone,alert',
@@ -116,43 +116,43 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
       'Not Required' => 'none,task,milestone',
       'Available' => 'none,milestone',
       'No_show' => 'none,milestone',
-    );
+    ];
     foreach ($allowedStatuses as $status => $grouping) {
-      civicrm_api3('OptionValue', 'get', array(
+      civicrm_api3('OptionValue', 'get', [
         'option_group_id' => 'activity_status',
         'name' => $status,
         'return' => 'id',
-        'api.OptionValue.setvalue' => array(
+        'api.OptionValue.setvalue' => [
           'field' => 'grouping',
           'value' => $grouping,
-        ),
-      ));
+        ],
+      ]);
     }
 
     // Set status colors
-    $colors = array(
-      'activity_status' => array(
+    $colors = [
+      'activity_status' => [
         'Scheduled' => '#42afcb',
         'Completed' => '#8ec68a',
         'Left Message' => '#eca67f',
         'Available' => '#5bc0de',
-      ),
-      'case_status' => array(
+      ],
+      'case_status' => [
         'Open' => '#42afcb',
         'Closed' => '#4d5663',
         'Urgent' => '#e6807f',
-      ),
-    );
+      ],
+    ];
     foreach ($colors as $optionGroup => $statuses) {
       foreach ($statuses as $status => $color) {
-        civicrm_api3('OptionValue', 'get', array(
+        civicrm_api3('OptionValue', 'get', [
           'option_group_id' => $optionGroup,
           'name' => $status,
-          'api.OptionValue.setvalue' => array(
+          'api.OptionValue.setvalue' => [
             'field' => 'color',
             'value' => $color,
-          ),
-        ));
+          ],
+        ]);
       }
     }
 
@@ -171,15 +171,15 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    * Creates 'Manage Cases' menu item for Cases navigation.
    */
   private function createManageCasesMenuItem() {
-    $this->addNav(array(
-      'label' => E::ts('Manage Cases', array('domain' => 'org.civicrm.civicase')),
+    $this->addNav([
+      'label' => E::ts('Manage Cases', ['domain' => 'org.civicrm.civicase']),
       'name' => 'Manage Cases',
       'url' => 'civicrm/case/a/#/case/list',
       'permission' => 'access my cases and activities,access all cases and activities',
       'operator' => 'OR',
       'separator' => 0,
       'parent_name' => 'Cases',
-    ));
+    ]);
 
     CRM_Core_BAO_Navigation::resetNavigation();
 
@@ -197,52 +197,52 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    */
   public function uninstall() {
     try {
-      civicrm_api3('OptionValue', 'get', array(
-        'return' => array('id'),
+      civicrm_api3('OptionValue', 'get', [
+        'return' => ['id'],
         'option_group_id' => 'activity_category',
-        'options' => array('limit' => 0),
-        'api.OptionValue.delete' => array(),
-      ));
+        'options' => ['limit' => 0],
+        'api.OptionValue.delete' => [],
+      ]);
     }
     catch (Exception $e) {}
     try {
-      civicrm_api3('OptionGroup', 'get', array(
-        'return' => array('id'),
+      civicrm_api3('OptionGroup', 'get', [
+        'return' => ['id'],
         'name' => 'activity_category',
-        'api.OptionGroup.delete' => array(),
-      ));
+        'api.OptionGroup.delete' => [],
+      ]);
     }
     catch (Exception $e) {}
     // Delete unused activity types
-    foreach (array('File', 'Alert') as $type) {
+    foreach (['File', 'Alert'] as $type) {
       try {
-        $acts = civicrm_api3('Activity', 'getcount', array(
+        $acts = civicrm_api3('Activity', 'getcount', [
           'activity_type_id' => $type,
-        ));
+        ]);
         if (empty($acts['result'])) {
-          civicrm_api3('OptionValue', 'get', array(
-            'return' => array('id'),
+          civicrm_api3('OptionValue', 'get', [
+            'return' => ['id'],
             'option_group_id' => 'activity_type',
             'name' => $type,
-            'api.OptionValue.delete' => array(),
-          ));
+            'api.OptionValue.delete' => [],
+          ]);
         }
       }
       catch (Exception $e) {}
     }
     // Delete unused activity statuses
-    foreach (array('Unread', 'Draft') as $status) {
+    foreach (['Unread', 'Draft'] as $status) {
       try {
-        $acts = civicrm_api3('Activity', 'getcount', array(
+        $acts = civicrm_api3('Activity', 'getcount', [
           'status_id' => $status,
-        ));
+        ]);
         if (empty($acts['result'])) {
-          civicrm_api3('OptionValue', 'get', array(
-            'return' => array('id'),
+          civicrm_api3('OptionValue', 'get', [
+            'return' => ['id'],
             'option_group_id' => 'activity_status',
             'name' => $status,
-            'api.OptionValue.delete' => array(),
-          ));
+            'api.OptionValue.delete' => [],
+          ]);
         }
       }
       catch (Exception $e) {}
@@ -276,12 +276,12 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    */
   protected function addOptionValue($params) {
     $optionGroup = $params['option_group_id'];
-    $existing = civicrm_api3('OptionValue', 'get', array(
+    $existing = civicrm_api3('OptionValue', 'get', [
       'option_group_id' => $optionGroup,
       'name' => $params['name'],
       'return' => 'id',
-      'options' => array('limit' => 1),
-    ));
+      'options' => ['limit' => 1],
+    ]);
     if (!empty($existing['id'])) {
       $params['id'] = $existing['id'];
     }
@@ -313,10 +313,10 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    *   The name of the item in `civicrm_navigation`.
    */
   protected function toggleNav($name, $isActive) {
-    CRM_Core_DAO::executeQuery("UPDATE `civicrm_navigation` SET is_active = %2 WHERE name IN (%1)", array(
-      1 => array($name, 'String'),
-      2 => array($isActive ? 1 : 0, 'Int'),
-    ));
+    CRM_Core_DAO::executeQuery("UPDATE `civicrm_navigation` SET is_active = %2 WHERE name IN (%1)", [
+      1 => [$name, 'String'],
+      2 => [$isActive ? 1 : 0, 'Int'],
+    ]);
   }
 
   /**
@@ -324,9 +324,9 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    *   The name of the item in `civicrm_navigation`.
    */
   protected function removeNav($name) {
-    CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN (%1)", array(
-      1 => array($name, 'String'),
-    ));
+    CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN (%1)", [
+      1 => [$name, 'String'],
+    ]);
   }
 
   /**
@@ -360,18 +360,18 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
     }
 
     // Updating 'Find Cases' menu item.
-    civicrm_api3('Navigation', 'create', array(
+    civicrm_api3('Navigation', 'create', [
       'id' => $findCasesMenuItem['id'],
       'weight' => !empty($manageCasesMenuItem['weight']) ? $manageCasesMenuItem['weight'] : NULL,
       'has_separator' => $manageCasesMenuItem['has_separator'],
-    ));
+    ]);
 
     // Updating 'Manage Cases' menu item.
-    civicrm_api3('Navigation', 'create', array(
+    civicrm_api3('Navigation', 'create', [
       'id' => $manageCasesMenuItem['id'],
       'weight' => !empty($findCasesMenuItem['weight']) ? $findCasesMenuItem['weight'] : NULL,
       'has_separator' => $findCasesMenuItem['has_separator'],
-    ));
+    ]);
 
     CRM_Core_BAO_Navigation::resetNavigation();
   }
@@ -385,12 +385,12 @@ class CRM_Civicase_Upgrader extends CRM_Civicase_Upgrader_Base {
    * @return array|NULL
    */
   private function getCaseMenuItem($name) {
-    $result = civicrm_api3('Navigation', 'get', array(
+    $result = civicrm_api3('Navigation', 'get', [
       'sequential' => 1,
       'parent_id' => 'Cases',
       'name' => $name,
-      'options' => array('limit' => 1),
-    ));
+      'options' => ['limit' => 1],
+    ]);
 
     if (empty($result['id'])) {
       return NULL;

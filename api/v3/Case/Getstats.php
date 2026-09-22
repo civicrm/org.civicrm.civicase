@@ -7,11 +7,11 @@
  * @return void
  */
 function _civicrm_api3_case_getstats_spec(&$spec) {
-  $spec['my_cases'] = array(
+  $spec['my_cases'] = [
     'title' => 'My Cases',
     'description' => 'Limit stats to only my cases',
     'type' => CRM_Utils_Type::T_BOOLEAN,
-  );
+  ];
 }
 
 /**
@@ -25,7 +25,7 @@ function _civicrm_api3_case_getstats_spec(&$spec) {
  */
 function civicrm_api3_case_getstats($params) {
   $query = CRM_Utils_SQL_Select::from('civicrm_case a');
-  $query->select(array('a.case_type_id as case_type_id, a.status_id as status_id, COUNT(a.id) as count'));
+  $query->select(['a.case_type_id as case_type_id, a.status_id as status_id, COUNT(a.id) as count']);
   if (!empty($params['my_cases'])) {
     \Civi\CCase\Utils::joinOnManager($query);
     $query->where('manager.id = ' . CRM_Core_Session::getLoggedInContactID());
@@ -42,12 +42,12 @@ function civicrm_api3_case_getstats($params) {
   $query->where('a.is_deleted = ' . $isDeleted);
 
   $result = $query->execute()->fetchAll();
-  $caseTypes = civicrm_api3('CaseType', 'get', array('options' => array('limit' => 0), 'return' => 'id', 'is_active' => 1));
-  $tabulated = array_fill_keys(array_keys($caseTypes['values']), array());
-  $tabulated['all'] = array();
+  $caseTypes = civicrm_api3('CaseType', 'get', ['options' => ['limit' => 0], 'return' => 'id', 'is_active' => 1]);
+  $tabulated = array_fill_keys(array_keys($caseTypes['values']), []);
+  $tabulated['all'] = [];
   foreach ($result as $row) {
     $tabulated[$row['case_type_id']][$row['status_id']] = $row['count'];
-    $tabulated['all'] += array($row['status_id'] => 0);
+    $tabulated['all'] += [$row['status_id'] => 0];
     $tabulated['all'][$row['status_id']] += (int) $row['count'];
   }
   return civicrm_api3_create_success($tabulated, $params, 'Case', 'getstats');

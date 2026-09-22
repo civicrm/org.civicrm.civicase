@@ -9,7 +9,7 @@
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
 function _civicrm_api3_case_getfiles_spec(&$spec) {
-  $spec['case_id'] = array(
+  $spec['case_id'] = [
     'title' => 'Cases',
     'description' => 'Find activities within specified cases.',
     'type' => 1,
@@ -17,20 +17,20 @@ function _civicrm_api3_case_getfiles_spec(&$spec) {
     'FKApiName' => 'Case',
     'name' => 'case_id',
     'api.required' => 1,
-  );
-  $spec['text'] = array(
+  ];
+  $spec['text'] = [
     'name' => 'text',
     'title' => 'Textual filter',
-    'html' => array(
+    'html' => [
       'type' => 'Text',
       'maxlength' => 64,
       'size' => 64,
-    ),
-  );
+    ],
+  ];
 
   $fileFields = CRM_Core_BAO_File::fields();
   $spec['mime_type'] = $fileFields['mime_type'];
-  $spec['mime_type_cat'] = array(
+  $spec['mime_type_cat'] = [
     'name' => 'mime_type_cat',
     'title' => 'General file category',
     'description' => 'A general category. May be a single category ("doc") or multiple (["IN",["doc","sheet"]]).',
@@ -46,7 +46,7 @@ function _civicrm_api3_case_getfiles_spec(&$spec) {
     // 'pseudoconstant' => array(
     //   'callback' => 'CRM_Civicase_FileCategory::getCategoryLabels'
     // ),
-  );
+  ];
 
 }
 
@@ -123,7 +123,7 @@ function _civicrm_api3_case_getfiles_find($params, $options) {
   }
 
   $dao = \CRM_Core_DAO::executeQuery($select->toSQL());
-  $matches = array();
+  $matches = [];
   while ($dao->fetch()) {
     $matches[$dao->id] = $dao->toArray();
   }
@@ -147,23 +147,23 @@ function _civicrm_api3_case_getfiles_select($params) {
 
   if (isset($params['case_id'])) {
     // Isn't there some helper which will let us do more advanced SQL with $params['case_id']?
-    $select->where('caseact.case_id = #caseIDs', array(
+    $select->where('caseact.case_id = #caseIDs', [
       'caseIDs' => $params['case_id'],
-    ));
+    ]);
   }
 
   $select->join('act', 'INNER JOIN civicrm_activity act ON ((caseact.activity_id = act.id OR caseact.activity_id = act.original_id) AND act.is_current_revision=1)');
   if (isset($params['text'])) {
     // The end of the uri contains a hash which we want to ignore. So we match from the start of the file uri as a cheap fix. CRM-20096.
-    $select->where('act.subject LIKE @q OR act.details LIKE @q OR f.description LIKE @q OR f.uri LIKE @s', array(
+    $select->where('act.subject LIKE @q OR act.details LIKE @q OR f.description LIKE @q OR f.uri LIKE @s', [
       'q' => '%' . $params['text'] . '%',
       's' => $params['text'] . '%',
-    ));
+    ]);
   }
 
   if (isset($params['mime_type_cat'])) {
     if (is_string($params['mime_type_cat'])) {
-      $cats = array($params['mime_type_cat']);
+      $cats = [$params['mime_type_cat']];
     }
     elseif (is_array($params['mime_type_cat'][1]) && $params['mime_type_cat'][0] === 'IN') {
       $cats = $params['mime_type_cat'][1];
@@ -179,16 +179,16 @@ function _civicrm_api3_case_getfiles_select($params) {
       $select->where(CRM_Core_DAO::createSqlFilter('f.mime_type', $params['mime_type'], 'String'));
     }
     else {
-      $select->where('f.mime_type LIKE @type', array(
+      $select->where('f.mime_type LIKE @type', [
         '@type' => $params['mime_type'],
-      ));
+      ]);
     }
   }
 
   if (isset($params['activity_type_id.grouping'])) {
     $groupingFilter = is_array($params['activity_type_id.grouping'])
       ? $params['activity_type_id.grouping']
-      : array('=', $params['activity_type_id.grouping']);
+      : ['=', $params['activity_type_id.grouping']];
     $selectActTypes = CRM_Utils_SQL_Select::from('civicrm_option_value cov')
       ->join('cog', 'INNER JOIN civicrm_option_group cog ON cog.id = cov.option_group_id')
       ->where('cog.name = "activity_type"')
@@ -196,9 +196,9 @@ function _civicrm_api3_case_getfiles_select($params) {
       ->select('cov.value, cov.name');
     $actTypes = $selectActTypes->execute()->fetchMap('value', 'name');
     if ($actTypes) {
-      $select->where('act.activity_type_id IN (#type)', array(
+      $select->where('act.activity_type_id IN (#type)', [
         '#type' => array_keys($actTypes),
-      ));
+      ]);
     }
     else {
       $select->where('0 = 1');
@@ -210,13 +210,13 @@ function _civicrm_api3_case_getfiles_select($params) {
       $select->where(CRM_Core_DAO::createSqlFilter('act.activity_type_id', $params['activity_type_id'], 'String'));
     }
     else {
-      $select->where('act.activity_type_id = #type', array(
+      $select->where('act.activity_type_id = #type', [
         '#type' => $params['activity_type_id'],
-      ));
+      ]);
     }
   }
 
-  $select->orderBy(array('act.activity_date_time DESC, act.id DESC, f.id DESC'));
+  $select->orderBy(['act.activity_date_time DESC, act.id DESC, f.id DESC']);
   return $select;
 }
 
@@ -235,11 +235,11 @@ function _civicrm_api3_case_getfiles_assert_access($params) {
   }
 
   // Delegate to Case.get to determine if the ID is accessible.
-  civicrm_api3('Case', 'getsingle', array(
+  civicrm_api3('Case', 'getsingle', [
     'id' => $params['case_id'],
     'check_permissions' => $params['check_permissions'],
     'return' => 'id',
-  ));
+  ]);
 }
 
 /**
@@ -254,22 +254,22 @@ function _civicrm_api3_case_getfiles_assert_access($params) {
  *     $result['file'][789]['mime_type'] = 'text/plain';
  */
 function _civicrm_api3_case_getfiles_xref($matches) {
-  $types = array(
+  $types = [
     // array(string $idField, string $xrefName, string $apiEntity)
-    array('case_id', 'case', 'Case'),
-    array('activity_id', 'activity', 'Activity'),
-    array('id', 'file', 'Attachment'),
-  );
+    ['case_id', 'case', 'Case'],
+    ['activity_id', 'activity', 'Activity'],
+    ['id', 'file', 'Attachment'],
+  ];
 
-  $result = array();
+  $result = [];
   foreach ($types as $typeSpec) {
     list ($idField, $xrefName, $apiEntity) = $typeSpec;
     $ids = array_unique(CRM_Utils_Array::collect($idField, $matches));
     // WISH: $result[$xrefName] = civicrm_api3($apiEntity, 'get', array('id'=>array('IN', $ids)))['values'];
     foreach ($ids as $id) {
-      $result[$xrefName][$id] = civicrm_api3($apiEntity, 'getsingle', array(
+      $result[$xrefName][$id] = civicrm_api3($apiEntity, 'getsingle', [
         'id' => $id,
-      ));
+      ]);
     }
   }
   return $result;

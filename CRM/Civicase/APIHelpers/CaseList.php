@@ -12,58 +12,58 @@ class CRM_Civicase_APIHelpers_CaseList implements API_Wrapper {
    * @return array
    */
   public function getAllowedHeaders() {
-    return array(
-      'values' => array(
-        array(
+    return [
+      'values' => [
+        [
           'name' => 'next_activity',
           'label' => E::ts('Next Activity'),
           'sort' => 'next_activity',
           'display_type' => 'activity_card',
-        ),
-        array(
+        ],
+        [
           'name' => 'subject',
           'label' => E::ts('Subject'),
           'sort' => 'subject',
           'display_type' => 'default',
-        ),
-        array(
+        ],
+        [
           'name' => 'status',
           'label' => E::ts('Status'),
           'sort' => 'status_id.label',
           'display_type' => 'status_badge',
-        ),
-        array(
+        ],
+        [
           'name' => 'case_type',
           'label' => E::ts('Type'),
           'sort' => 'case_type_id.title',
           'display_type' => 'default',
-        ),
-        array(
+        ],
+        [
           'name' => 'manager',
           'label' => E::ts('Case Manager'),
           'sort' => 'case_manager.sort_name',
           'display_type' => 'contact_reference',
-        ),
-        array(
+        ],
+        [
           'name' => 'start_date',
           'label' => E::ts('Start Date'),
           'sort' => 'start_date',
           'display_type' => 'date',
-        ),
-        array(
+        ],
+        [
           'name' => 'modified_date',
           'label' => E::ts('Last Updated'),
           'sort' => 'modified_date',
           'display_type' => 'date',
-        ),
-        array(
+        ],
+        [
           'name' => 'myRole',
           'label' => E::ts('My Role'),
           'sort' => 'my_role.label_b_a',
           'display_type' => 'multiple_values',
-        ),
-      )
-    );
+        ],
+      ]
+    ];
   }
 
   /**
@@ -78,11 +78,11 @@ class CRM_Civicase_APIHelpers_CaseList implements API_Wrapper {
   public function getCaseList($params) {
     $loggedContactID = CRM_Core_Session::singleton()->getLoggedInContactID();
 
-    $defaultAPIReturnedColumns = array(
+    $defaultAPIReturnedColumns = [
       'subject', 'case_type_id', 'status_id', 'is_deleted', 'start_date',
       'modified_date', 'contacts', 'activity_summary', 'category_count',
       'tag_id.name', 'tag_id.color', 'tag_id.description',
-    );
+    ];
     $params['return'] = (isset($params['return']) ? array_merge($defaultAPIReturnedColumns, $params['return']) : $defaultAPIReturnedColumns);
     $cases = civicrm_api3('Case', 'getdetails', $params);
 

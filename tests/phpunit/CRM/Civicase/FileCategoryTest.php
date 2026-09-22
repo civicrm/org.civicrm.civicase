@@ -29,36 +29,36 @@ class CRM_Civicase_FileCategoryTest extends api_v3_Case_BaseTestCase implements 
   }
 
   public function getExamples() {
-    $cases[] = array(
+    $cases[] = [
       0 => 'text/html',
-      1 => array('doc'),
+      1 => ['doc'],
       2 => TRUE,
-    );
-    $cases[] = array(
+    ];
+    $cases[] = [
       0 => 'application/vnd.openxmlformats-officedocument.spreadsheetml.ZOOP',
-      1 => array('doc'),
+      1 => ['doc'],
       2 => FALSE,
-    );
-    $cases[] = array(
+    ];
+    $cases[] = [
       0 => 'text/html',
-      1 => array('doc', 'sheet'),
+      1 => ['doc', 'sheet'],
       2 => TRUE,
-    );
-    $cases[] = array(
+    ];
+    $cases[] = [
       0 => 'application/vnd.openxmlformats-officedocument.spreadsheetml.ZOOP',
-      1 => array('doc', 'sheet'),
+      1 => ['doc', 'sheet'],
       2 => TRUE,
-    );
-    $cases[] = array(
+    ];
+    $cases[] = [
       0 => 'application/foo-bar-whiz-bang',
-      1 => array('other'),
+      1 => ['other'],
       2 => TRUE,
-    );
-    $cases[] = array(
+    ];
+    $cases[] = [
       0 => 'application/foo-bar-whiz-bang',
-      1 => array('doc'),
+      1 => ['doc'],
       2 => FALSE,
-    );
+    ];
     return $cases;
   }
 
