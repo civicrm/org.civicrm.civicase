@@ -3,11 +3,11 @@
 // in CiviCRM. See also:
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 
-return array(
-  'js' => array(
+return [
+  'js' => [
     'ang/uibTabsetClass.js',
-  ),
-  'settings' => array(),
-  'requires' => array('ui.bootstrap'),
-  'basePages' => array(),
-);
+  ],
+  'settings' => [],
+  'requires' => ['ui.bootstrap'],
+  'basePages' => [],
+];

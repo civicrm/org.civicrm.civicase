@@ -12,15 +12,15 @@ class Utils {
    *   [caseTypeId => relationshipTypeId]
    */
   public static function getCaseManagerRelationshipTypes() {
-    $ret = array();
-    $caseTypes = civicrm_api3('CaseType', 'get', array(
-      'options' => array('limit' => 0),
-      'return' => array('name', 'definition'),
-    ));
-    $relationshipTypes = civicrm_api3('RelationshipType', 'get', array(
-      'options' => array('limit' => 0),
-      'return' => array('name_b_a'),
-    ));
+    $ret = [];
+    $caseTypes = civicrm_api3('CaseType', 'get', [
+      'options' => ['limit' => 0],
+      'return' => ['name', 'definition'],
+    ]);
+    $relationshipTypes = civicrm_api3('RelationshipType', 'get', [
+      'options' => ['limit' => 0],
+      'return' => ['name_b_a'],
+    ]);
     $relationshipTypes = \CRM_Utils_Array::rekey($relationshipTypes['values'], 'name_b_a');
     foreach ($caseTypes['values'] as $caseType) {
       foreach ($caseType['definition']['caseRoles'] as $role) {
@@ -39,7 +39,7 @@ class Utils {
    */
   public static function joinOnManager($sql) {
     $caseTypeManagers = self::getCaseManagerRelationshipTypes();
-    $managerTypeClause = array();
+    $managerTypeClause = [];
     foreach ($caseTypeManagers as $caseTypeId => $relationshipTypeId) {
       $managerTypeClause[] = "(a.case_type_id = $caseTypeId AND manager_relationship.relationship_type_id = $relationshipTypeId)";
     }
@@ -54,25 +54,25 @@ class Utils {
    */
   public static function formatCustomSearchField($field) {
     if ($field['html_type'] != 'Autocomplete-Select') {
-      $opts = civicrm_api('Case', 'getoptions', array(
+      $opts = civicrm_api('Case', 'getoptions', [
         'version' => 3,
         'field' => "custom_{$field['id']}",
-      ));
+      ]);
       if (!empty($opts['values'])) {
-        $field['options'] = array();
+        $field['options'] = [];
         // Javascript doesn't like php's fast & loose type switching; ensure everything is a string
         foreach ($opts['values'] as $key => $val) {
-          $field['options'][] = array(
+          $field['options'][] = [
             'id' => (string) $key,
             'text' => (string) $val,
-          );
+          ];
         }
       }
     }
     // For contact ref fields
     elseif ($field['data_type'] == 'ContactReference') {
       $field['entity'] = 'Contact';
-      $field['api_params'] = array();
+      $field['api_params'] = [];
       if (!empty($field['filter'])) {
         parse_str($field['filter'], $field['api_params']);
         unset($field['api_params']['action']);
@@ -83,10 +83,10 @@ class Utils {
     }
     else {
       $field['entity'] = 'OptionValue';
-      $field['api_params'] = array(
+      $field['api_params'] = [
         'option_group_id' => $field['option_group_id'],
         'option_sort' => 'weight',
-      );
+      ];
     }
     unset($field['filter'], $field['option_group_id']);
     $field['name'] = "custom_{$field['id']}";

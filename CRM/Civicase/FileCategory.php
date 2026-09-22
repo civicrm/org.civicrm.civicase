@@ -15,32 +15,32 @@ class CRM_Civicase_FileCategory {
    * @return array
    */
   public static function getCategoryLabels() {
-    return array(
-      'archive' => array(
+    return [
+      'archive' => [
         'text' => E::ts('Archive'),
         'icon' => 'fa-file-archive-o',
-      ),
-      'doc' => array(
+      ],
+      'doc' => [
         'text' => E::ts('Document'),
         'icon' => 'fa-file-text-o',
-      ),
-      'media' => array(
+      ],
+      'media' => [
         'text' => E::ts('Media'),
         'icon' => 'fa-file-image-o',
-      ),
-      'present' => array(
+      ],
+      'present' => [
         'text' => E::ts('Presentation'),
         'icon' => 'fa-file-powerpoint-o',
-      ),
-      'sheet' => array(
+      ],
+      'sheet' => [
         'text' => E::ts('Spreadsheet'),
         'icon' => 'fa-file-excel-o',
-      ),
-      'other' => array(
+      ],
+      'other' => [
         'text' => E::ts('Other'),
         'icon' => 'fa-file-o',
-      ),
-    );
+      ],
+    ];
   }
 
   /**
@@ -51,9 +51,9 @@ class CRM_Civicase_FileCategory {
    * @return array
    */
   public static function getCategories() {
-    $cats = array();
+    $cats = [];
     foreach (self::getCategoryLabels() as $v => $l) {
-      $cats[] = array('id' => $v) + $l;
+      $cats[] = ['id' => $v] + $l;
     }
     return $cats;
   }
@@ -94,8 +94,8 @@ class CRM_Civicase_FileCategory {
       $unionCats = $categories;
     }
 
-    $unionCats = array_diff($unionCats, array('other'));
-    $union = array();
+    $unionCats = array_diff($unionCats, ['other']);
+    $union = [];
     foreach ($unionCats as $unionCat) {
       $union = array_unique(array_merge($prefixes[$unionCat], $union));
     }
@@ -113,19 +113,19 @@ class CRM_Civicase_FileCategory {
    *   Ex: array('doc' => ['application/msword']).
    */
   private static function getPrefixes() {
-    return array(
-      'archive' => array(
+    return [
+      'archive' => [
         'application/gzip',
         'application/zip',
-      ),
-      'media' => array(
+      ],
+      'media' => [
         'image/',
         'application/vnd.oasis.opendocument.graphics',
         'application/vnd.oasis.opendocument.image',
         'audio/',
         'video/',
-      ),
-      'doc' => array(
+      ],
+      'doc' => [
         'application/pdf',
         'application/msword',
         'application/rtf',
@@ -135,18 +135,18 @@ class CRM_Civicase_FileCategory {
         'text/richtext',
         'text/plain',
         'text/html',
-      ),
-      'present' => array(
+      ],
+      'present' => [
         'application/vnd.ms-powerpoint',
         'application/vnd.oasis.opendocument.presentation',
         'application/vnd.openxmlformats-officedocument.presentationml',
-      ),
-      'sheet' => array(
+      ],
+      'sheet' => [
         'application/vnd.ms-excel',
         'application/vnd.oasis.opendocument.spreadsheet',
         'application/vnd.openxmlformats-officedocument.spreadsheetml',
-      ),
-    );
+      ],
+    ];
   }
 
 }

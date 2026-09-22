@@ -38,14 +38,14 @@ class CRM_Civicase_ActivityFilter {
     }
 
     // Look up matching `case_id`
-    $caseParams = array(
+    $caseParams = [
       'is_deleted' => 0,
-      'options' => array(
+      'options' => [
         'offset' => 0,
         'limit' => 0,
-      ),
-      'return' => array('id'),
-    );
+      ],
+      'return' => ['id'],
+    ];
     CRM_Utils_Array::extend($caseParams, $apiRequest['params']['case_filter']);
     if (!empty($apiRequest['params']['check_permissions'])) {
       $caseParams['check_permissions'] = $apiRequest['params']['check_permissions'];
@@ -55,7 +55,7 @@ class CRM_Civicase_ActivityFilter {
     // Revise the Activity.get call
     unset($apiRequest['params']['case_filter']);
     // Add case ids to the query or else a bogus value to ensure no results
-    $apiRequest['params']['case_id'] = empty($caseResult['values']) ? -1 : array('IN' => array_keys($caseResult['values']));
+    $apiRequest['params']['case_id'] = empty($caseResult['values']) ? -1 : ['IN' => array_keys($caseResult['values'])];
     $e->setApiRequest($apiRequest);
   }
 
