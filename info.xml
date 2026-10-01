@@ -18,11 +18,11 @@
   <version>1.1</version>
   <develStage>alpha</develStage>
   <compatibility>
-    <ver>5.13</ver>
+    <ver>5.60</ver>
   </compatibility>
-  <comments></comments>
+  <comments/>
   <classloader>
-    <psr4 prefix="Civi\" path="Civi" />
+    <psr4 prefix="Civi\" path="Civi"/>
   </classloader>
   <civix>
     <namespace>CRM/Civicase</namespace>
